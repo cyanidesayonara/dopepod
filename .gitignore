@@ -106,5 +106,5 @@ db.sqlite3
 /static
 .DS_Store
 **/logs
-intergalac/secret_settings.py
+secret_settings.py
 
