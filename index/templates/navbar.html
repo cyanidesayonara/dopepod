@@ -1,0 +1,101 @@
+{% load account %}
+
+<a class="navbar-brand" href="{% url 'home' %}">dopepod</a>
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="#">blog</a>
+  </li>
+  {% if user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'edit_profile' %}">settings</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link subscriptions" href="{% url 'subscriptions_ext' %}">subscriptions</a>
+  </li>
+  {% endif %}
+</ul>
+<ul class="navbar-nav ml-auto">
+  {% if user.is_authenticated %}
+  <li>
+    <a class="btn btn-primary ajax-logout" href="{% url 'account_logout' %}">
+      logout
+    </a>
+  </li>
+  {% else %}
+  <li>
+    <a class="btn btn-primary ajax-register" href="{% url 'account_signup' %}" data-toggle="modal" data-target="#modal">
+      register
+    </a>
+  </li>
+  <li>
+    <a class="btn btn-primary ajax-login" href="{% url 'account_login' %}" data-toggle="modal" data-target="#modal">
+      login
+    </a>
+  </li>
+  {% endif %}
+</ul>
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+<script type="text/javascript">
+  $(function() {
+    // mousedown?
+    $('.ajax-login').click(function(event) {
+      event.preventDefault();
+      $.ajax({
+        type: "GET",
+        url: "{% url 'account_login' %}",
+        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+        success: function(response) {
+          $(".modal-content").html(response.html);
+        }
+      });
+    });
+    $('.ajax-register').click(function(event) {
+      event.preventDefault();
+      $.ajax({
+        type: "GET",
+        url: "{% url 'account_signup' %}",
+        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+        success: function(response) {
+          $(".modal-content").html(response.html);
+        }
+      });
+    });
+    $('.ajax-logout').click(function(event) {
+      event.preventDefault();
+      $.ajax({
+        type: "GET",
+        url: "{% url 'account_logout' %}",
+        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+        success: function(response) {
+          // refresh navbar (and maybe other stuff as well?)
+          $.ajax({
+            type: "GET",
+            url: "{% url 'navbar' %}",
+            error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+            success: function(response) {
+              // refresh navbar
+              $(".nav-content").html(response);
+              // TODO go to index
+            }
+          });
+        }
+      });
+    });
+    $('.subscriptions').click(function(event) {
+      event.preventDefault();
+      var url = "{% url 'subscriptions' %}";
+      $.ajax({
+        type: "GET",
+        url: url,
+        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+        success: function(response) {
+          $("#results").html(response);
+        }
+      });
+    });
+  });
+</script>

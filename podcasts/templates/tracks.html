@@ -1,0 +1,44 @@
+<div class="col">
+{% for item in items %}
+<div class="row">
+  <a class="col-sm-9" data-toggle="collapse" href="#collapseExample{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">
+    <h6>{{ item.title }}</h6>
+  </a>
+  <div class="col-sm-3">
+    <button class="btn btn-primary play" id="{{ item.url }}" name="{{ item.filetype }}" type="button">Play</button>
+    <a class="btn btn-primary" type="button" href="{{ item.url }}">Download</a>
+  </div>
+</div>
+<div class="row">
+  <div class="collapse" id="collapseExample{{ forloop.counter }}">
+    <div class="col">
+      <p>{{ item.summary|escape }}</p>
+      <p>{{ item.pubDate }}</p>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<script type="text/javascript">
+$(function () {
+    $(".play").click(function() {
+    var url = this.id;
+    var filetype = this.name;
+    var csrftoken = "{{ csrf_token }}";
+    $.ajax({
+      method: "POST",
+      url: "{% url 'play' %}",
+      data: {
+        "url": url,
+        "filetype": filetype,
+        "csrfmiddlewaretoken": csrftoken,
+      },
+      success: function(response) {
+        $("#player").html(response);
+      }
+    })
+  });
+})
+</script>
+

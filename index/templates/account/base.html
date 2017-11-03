@@ -1,0 +1,53 @@
+<script type="text/javascript">
+$(function() {
+  $('.login_form, .signup_form').submit(function (event) {
+    event.preventDefault();
+    var data = $(this).serialize();
+    var method = this.method;
+    var url = this.action;
+    $.ajax({
+      data: data,
+      method: method,
+      url: url,
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        $(".modal-content").html(xhr.responseJSON.html);
+      },
+      success: function() {
+        $("#modal").modal("hide");
+        console.log("logged in!");
+        $.ajax({
+          data: "",
+          method: "GET",
+          url: "{% url 'navbar' %}",
+          error: function(xhr, ajaxOptions, thrownError){console.log(thrownError);},
+          success: function(response) {
+            // refresh navbar
+            $(".nav-content").html(response);
+            // TODO go to index
+          }
+        });
+      }
+    });
+  });
+  $('.login_link, .signup_link').click(function() {
+    event.preventDefault();
+    var type = this.method;
+    var url = this.href;
+    $.ajax({
+      data: "",
+      method: type,
+      url: url,
+      error: function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+      },
+      success: function(response) {
+        $(".modal-content").html(response.html);
+      }
+    });
+  });
+});
+</script>
+
+{% block content %}
+{% endblock %}

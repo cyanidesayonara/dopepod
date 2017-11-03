@@ -1,0 +1,37 @@
+{% for podcast in podcasts %}
+<div class="col-lg-2 col-md-3 col-sm-4 result-box">
+  <div class="container">
+    <div class="row">
+      <a class="col result-image podinfoz" id="{{ podcast.itunesid }}" href="{% url 'podinfo_ext' itunesid=podcast.itunesid %}">
+        <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
+        <div class="col">
+          <div class="row result-title">
+            <h6>{{ podcast.title }}</h6>
+          </div>
+          <div class="row result-genre">
+            <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+$(function() {
+  $('.podinfoz').click(function(event) {
+    event.preventDefault();
+    var itunesid = this.id;
+    var url = this.href + "i";
+    $.ajax({
+      type: "GET",
+      url: url,
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function(response) {
+        $("#results").html(response);
+      }
+    });
+  });
+});
+</script>
