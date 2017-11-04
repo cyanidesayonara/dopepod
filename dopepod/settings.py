@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from dopepod import secret_settings
+import local_settings
 
 AUTH_USER_MODEL = 'auth.User'
 
@@ -24,23 +24,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret_settings.SECRET_KEY
+SECRET_KEY = local_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = secret_settings.DEBUG
+DEBUG = local_settings.DEBUG
 
 # The simplest case: just add the domain name(s) and IP addresses of your Django server
 # ALLOWED_HOSTS = [ 'example.com', '203.0.113.5']
 # To respond to 'example.com' and any subdomains, start the domain with a dot
 # ALLOWED_HOSTS = ['.example.com', '203.0.113.5']
 
-ALLOWED_HOSTS = [
-    'dopepod.tk',
-    '.dopepod.tk',
-    'intergalac.tk',
-    '.intergalac.tk',
-    '165.227.150.146',
-]
+ALLOWED_HOSTS = local_settings.ALLOWED_HOSTS
 
 # Application definition
 
@@ -115,7 +109,7 @@ LOGIN_REDIRECT_URL = '/'
 ROOT_URLCONF = 'dopepod.urls'
 
 SESSION_COOKIE_NAME = 'dopepod'
-SESSION_COOKIE_DOMAIN = '165.227.150.146'
+SESSION_COOKIE_DOMAIN = local_settings.SESSION_COOKIE_DOMAIN
 
 SESSION_COOKIE_SECURE = False
 
@@ -141,7 +135,7 @@ WSGI_APPLICATION = 'dopepod.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = secret_settings.DATABASES
+DATABASES = local_settings.DATABASES
 
 
 # Password validation
@@ -186,10 +180,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = secret_settings.EMAIL_HOST
-EMAIL_HOST_USER = secret_settings.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = secret_settings.EMAIL_HOST_PASSWORD
-EMAIL_PORT = secret_settings.EMAIL_PORT
+EMAIL_HOST = local_settings.EMAIL_HOST
+EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
+EMAIL_PORT = local_settings.EMAIL_PORT
 
 # Email Configuration ==========================================================
 #ADMINS = [('Me', 'my@email'), ]

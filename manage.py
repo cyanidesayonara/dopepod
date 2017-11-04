@@ -1,4 +1,4 @@
-#!~/.veirtualenvs/venv/bin/python
+#!D:\Users\Santtu\Desktop\.virtualenvs\venv\Scripts\python
 
 import os
 import sys
