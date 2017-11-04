@@ -1,5 +1,6 @@
 # Django:
 *.pyc
+*.swp
 *~
 __pycache__
 /venv
@@ -10,3 +11,4 @@ db.sqlite3
 local_settings.py
 manage.py
 */migrations
+.save
