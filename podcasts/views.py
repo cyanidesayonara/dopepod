@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404
 from django.db.models import Q
 import requests
 import xml.etree.ElementTree as ET
-from podcasts.models import Podcast, PodcastSubscription
+from podcasts.models import Podcast, Subscription
 import os
 
 def charts(request):
@@ -134,7 +134,7 @@ def actual_search(q, genre, language, explicit, user):
 
     # get a list of itunesids from user's subscriptions (if not AnonymousUser)
     if user.username:
-        subscriptions = PodcastSubscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
     else:
         subscriptions = []
 
@@ -229,7 +229,7 @@ def subscriptions_ext(request):
     user = request.user
     podcasts = {}
     if user.is_authenticated():
-        podcasts = PodcastSubscription.objects.filter(user=user)
+        podcasts = Subscription.objects.filter(user=user)
     return render(request, 'results_ext.html', {'podcasts': podcasts})
 
 def subscriptions(request):
@@ -239,7 +239,7 @@ def subscriptions(request):
     user = request.user
     podcasts = {}
     if user.is_authenticated():
-        podcasts = PodcastSubscription.objects.filter(user=user)
+        podcasts = Subscription.objects.filter(user=user)
     return render(request, 'results.html', {'podcasts': podcasts})
 
 def subscribe(request):
@@ -262,7 +262,7 @@ def subscribe(request):
 
         # if subscription exists, delete it
         try:
-            subscription = PodcastSubscription.objects.get(itunesid=itunesid, user=request.user)
+            subscription = Subscription.objects.get(itunesid=itunesid, user=request.user)
             podcast.n_subscribers -= 1
             podcast.save()
             subscription.delete()
@@ -270,23 +270,13 @@ def subscribe(request):
             return HttpResponse('Subscribe')
 
         # if subscription doesn't exist, create it
-        # TODO a better way to do this
         except PodcastSubscription.DoesNotExist:
             podcast.n_subscribers += 1
             podcast.save()
-            PodcastSubscription.objects.create(
+            Subscription.objects.create(
                             itunesid=podcast.itunesid,
-                            feedUrl=podcast.feedUrl,
-                            title=podcast.title,
-                            genre=podcast.genre,
-                            explicit=podcast.explicit,
-                            language=podcast.language,
-                            copyrighttext=podcast.copyrighttext,
-                            description=podcast.description,
-                            reviewsUrl=podcast.reviewsUrl,
-                            artworkUrl=podcast.artworkUrl,
-                            podcastUrl=podcast.podcastUrl,
                             user=request.user,
+                            pod=podcast,
             )
         # this goes on button
         return HttpResponse('Unsubscribe')

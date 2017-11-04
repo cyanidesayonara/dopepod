@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class PodcastBase(models.Model):
+class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
     feedUrl = models.URLField(max_length=500)
     title = models.CharField(max_length=255)
@@ -11,12 +11,11 @@ class PodcastBase(models.Model):
     language = models.ForeignKey('podcasts.Language', null=True, blank=True)
     copyrighttext = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
+    n_subscribers = models.IntegerField()
+    subscribed = models.BooleanField(default=False)
     reviewsUrl = models.URLField(max_length=255)
     artworkUrl = models.URLField(max_length=255)
     podcastUrl = models.URLField(max_length=255)
-
-    class Meta:
-        abstract = True
 
     def __str__(self):
         return self.title
@@ -24,17 +23,13 @@ class PodcastBase(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
 
-class Podcast(PodcastBase):
-    n_subscribers = models.IntegerField()
-    subscribed = models.BooleanField(default=False)
-
-class PodcastSubscription(PodcastBase):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Subscription(models.Model):
     itunesid = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pod = models.ForeignKey('podcasts.Podcast')
     last_updated = models.DateTimeField(default=timezone.now)
 
     def update(self):
-        print(timezone.now)
         last_updated = timezone.now
 
 class Filterable(models.Model):
@@ -63,10 +58,10 @@ class Filterable(models.Model):
             obj.save()
 
 class Genre(Filterable):
-    supa = models.ForeignKey('podcasts.Genre', blank=True, null=True)
+    supergenre = models.ForeignKey('podcasts.Genre', blank=True, null=True)
 
     def get_primary_genres(self):
-        return self.objects.filter(supa=None).order_by('name')
+        return self.objects.filter(supergenre=None).order_by('name')
 
 class Language(Filterable):
     pass
