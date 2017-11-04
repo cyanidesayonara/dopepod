@@ -9,3 +9,4 @@ db.sqlite3
 **/logs
 local_settings.py
 manage.py
+**/migrations
