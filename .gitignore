@@ -1,13 +1,9 @@
-./idea
 *.pyc
-*.swp
-*~
+*.pyo
 __pycache__
-/venv
-db.sqlite3
+/.idea
 /static
 .DS_Store
 /logs
 local_settings.py
 manage.py
-*.save*
