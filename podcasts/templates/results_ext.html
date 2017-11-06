@@ -5,7 +5,7 @@
 <div class="col-lg-2 col-md-3 col-sm-4 result-box">
   <div class="container">
     <div class="row">
-      <a class="col result-image podinfoz" href="{% url 'podinfo_ext' itunesid=podcast.itunesid %}">
+      <a class="col result-image show-podinfo" href="{% url 'ajax_podinfo' itunesid=podcast.itunesid %}">
         <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
         <div class="col">
           <div class="row result-title">
@@ -23,9 +23,9 @@
 
 <script>
 $(function() {
-  $('.podinfoz').click(function(event) {
+  $('.show-podinfo').click(function(event) {
     event.preventDefault();
-    var url = this.href + "i";
+    var url = this.href;
     $.ajax({
       type: "GET",
       url: url,
