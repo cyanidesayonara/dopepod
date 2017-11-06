@@ -1,6 +1,19 @@
 <script type="text/javascript">
 $(function() {
-  $('.login_form, .signup_form').submit(function (event) {
+  function refresh_page() {
+    // refresh navbar (and maybe other stuff as well?)
+    $.ajax({
+      type: "GET",
+      url: "{% url 'navbar' %}",
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function(response) {
+        // refresh navbar
+        $(".nav-content").html(response);
+        // TODO go to index
+      }
+    });
+  }
+  $('.login-form, .signup-form').submit(function (event) {
     event.preventDefault();
     var data = $(this).serialize();
     var method = this.method;
@@ -15,28 +28,17 @@ $(function() {
       },
       success: function() {
         $("#modal").modal("hide");
-        console.log("logged in!");
-        $.ajax({
-          data: "",
-          method: "GET",
-          url: "{% url 'navbar' %}",
-          error: function(xhr, ajaxOptions, thrownError){console.log(thrownError);},
-          success: function(response) {
-            // refresh navbar
-            $(".nav-content").html(response);
-            // TODO go to index
-          }
-        });
+        refresh_page();
       }
     });
   });
-  $('.login_link, .signup_link').click(function() {
+  $('.login-link, .signup-link').click(function() {
     event.preventDefault();
-    var type = this.method;
+    var method = this.method;
     var url = this.href;
     $.ajax({
       data: "",
-      method: type,
+      method: method,
       url: url,
       error: function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);

@@ -14,7 +14,7 @@ class WillyPipeline(object):
     def process_item(self, item, spider):
         if type(item) is PodcastItem:
             itunesid = item['itunesid']
-            if not itunesid in self.ids_seen:
+            if itunesid not in self.ids_seen:
                 create_or_update_podcast(item)
                 self.ids_seen.add(itunesid)
         elif type(item) is GenreItem:
@@ -30,7 +30,7 @@ def create_genre(item):
         genre.supergenre = supergenre
         genre.save()
     except Genre.DoesNotExist:
-        genre = Genre.objects.create(name=item['name'],
+        Genre.objects.create(name=item['name'],
                     n_podcasts=0,
                     supergenre=supergenre
                     )

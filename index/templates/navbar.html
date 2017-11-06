@@ -1,4 +1,4 @@
-{% load account %}
+
 
 <a class="navbar-brand" href="{% url 'home' %}">dopepod</a>
 <ul class="navbar-nav mr-auto">
@@ -10,7 +10,7 @@
     <a class="nav-link" href="{% url 'edit_profile' %}">settings</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link subscriptions" href="{% url 'subscriptions_ext' %}">subscriptions</a>
+    <a class="nav-link subscriptions" type="GET" href="{% url 'subscriptions_ext' %}">subscriptions</a>
   </li>
   {% endif %}
 </ul>
@@ -40,62 +40,56 @@
 </form>
 
 <script type="text/javascript">
-  $(function() {
-    // mousedown?
-    $('.ajax-login').click(function(event) {
-      event.preventDefault();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'account_login' %}",
-        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-        success: function(response) {
-          $(".modal-content").html(response.html);
-        }
-      });
+$(function() {
+  function refresh_page() {
+    // refresh navbar (and maybe other stuff as well?)
+    $.ajax({
+      type: "GET",
+      url: "{% url 'navbar' %}",
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function(response) {
+        // refresh navbar
+        $(".nav-content").html(response);
+        // TODO go to index
+      }
     });
-    $('.ajax-register').click(function(event) {
-      event.preventDefault();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'account_signup' %}",
-        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-        success: function(response) {
-          $(".modal-content").html(response.html);
-        }
-      });
-    });
-    $('.ajax-logout').click(function(event) {
-      event.preventDefault();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'account_logout' %}",
-        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-        success: function(response) {
-          // refresh navbar (and maybe other stuff as well?)
-          $.ajax({
-            type: "GET",
-            url: "{% url 'navbar' %}",
-            error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-            success: function(response) {
-              // refresh navbar
-              $(".nav-content").html(response);
-              // TODO go to index
-            }
-          });
-        }
-      });
-    });
-    $('.subscriptions').click(function(event) {
-      event.preventDefault();
-      var url = "{% url 'subscriptions' %}";
-      $.ajax({
-        type: "GET",
-        url: url,
-        error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-        success: function(response) {
-          $("#results").html(response);
-        }
-      });
+  }
+  // mousedown?
+  $('.ajax-login, .ajax-register').click(function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var method = this.method;
+    $.ajax({
+      type: method,
+      url: url,
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function(response) {
+        $(".modal-content").html(response.html);
+      }
     });
   });
+  $('.ajax-logout').click(function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: "GET",
+      url: "{% url 'account_logout' %}",
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function() {
+        refresh_page();
+      }
+    });
+  });
+  $('.subscriptions').click(function(e) {
+    e.preventDefault();
+    var url = "{% url 'subscriptions' %}";
+    $.ajax({
+      type: "GET",
+      url: url,
+      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      success: function(response) {
+        $("#results").html(response);
+      }
+    });
+  });
+});
 </script>

@@ -73,11 +73,9 @@ nav {
   background: rgba(40, 110, 150, 0.6);
   box-shadow: 4px 4px 4px rgba(20, 30, 40, 0.2);
 */
-  margin: 0px 0px;
   border: 1px solid black;
   border-radius: 8px;
   text-align: left;
-  padding: 0px;
 }
 
 .result-title {
@@ -100,13 +98,20 @@ nav {
   width: 156px;
 }
 
+.sub-box {
+  border: 1px solid black;
+  margin: 5px;
+  border-radius: 8px;
+}
+
 .podinfo {
   padding-top: 80px;
   margin: 10px;
 }
 
 .tracks {
-
+  height: 500px;
+  overflow-y: scroll;
 }
 
 .profile {

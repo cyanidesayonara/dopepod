@@ -4,6 +4,7 @@ from django.db.models import Q
 import requests
 import xml.etree.ElementTree as ET
 from podcasts.models import Podcast, Subscription
+from django.views.decorators.csrf import requires_csrf_token
 import os
 
 def charts(request):
@@ -143,35 +144,42 @@ def actual_search(q, genre, language, explicit, user):
             podcast.subscribed = True
     return res
 
-def podinfo_ext(request, itunesid):
-    podcast = Podcast.objects.get(itunesid=itunesid)
+def podinfo(request, itunesid=0):
+    if request.method == 'GET':
+        podcast = Podcast.objects.get(itunesid=itunesid)
 
-    # get a list of itunesids from user's subscriptions (if not AnonymousUser)
-    user = request.user
-    if user.username:
-        subscriptions = PodcastSubscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
+        user = request.user
+        if user.username:
+            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        else:
+            subscriptions = []
+
+        if podcast.itunesid in subscriptions:
+            podcast.subscribed = True
+
+        return render(request, 'podinfo_ext.html', {'podcast': podcast})
     else:
-        subscriptions = []
+        raise Http404()
 
-    if podcast.itunesid in subscriptions:
-        podcast.subscribed = True
+def ajax_podinfo(request):
+    if request.method == 'POST':
+        itunesid = request.POST['itunesid']
+        podcast = Podcast.objects.get(itunesid=itunesid)
 
-    return render(request, 'podinfo_ext.html', {'podcast': podcast})
+        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
+        user = request.user
+        if user.username:
+            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        else:
+            subscriptions = []
 
-def podinfo(request, itunesid):
-    podcast = Podcast.objects.get(itunesid=itunesid)
+        if podcast.itunesid in subscriptions:
+            podcast.subscribed = True
 
-    # get a list of itunesids from user's subscriptions (if not AnonymousUser)
-    user = request.user
-    if user.username:
-        subscriptions = PodcastSubscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        return render(request, 'podinfo.html', {'podcast': podcast})
     else:
-        subscriptions = []
-
-    if podcast.itunesid in subscriptions:
-        podcast.subscribed = True
-
-    return render(request, 'podinfo.html', {'podcast': podcast})
+        raise Http404()
 
 def tracks(request):
     """
@@ -239,8 +247,9 @@ def subscriptions(request):
     user = request.user
     podcasts = {}
     if user.is_authenticated():
-        podcasts = Subscription.objects.filter(user=user)
-    return render(request, 'results.html', {'podcasts': podcasts})
+        subscriptions = Subscription.objects.filter(user=user)
+        print(subscriptions)
+    return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
 
 def subscribe(request):
     """
@@ -251,7 +260,7 @@ def subscribe(request):
     if request.method == 'POST' and request.user.is_authenticated():
         try:
             itunesid = request.POST['itunesid']
-        except:
+        except KeyError:
             raise Http404()
 
         # check whether podcast exists
@@ -270,7 +279,7 @@ def subscribe(request):
             return HttpResponse('Subscribe')
 
         # if subscription doesn't exist, create it
-        except PodcastSubscription.DoesNotExist:
+        except Subscription.DoesNotExist:
             podcast.n_subscribers += 1
             podcast.save()
             Subscription.objects.create(

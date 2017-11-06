@@ -1,7 +1,6 @@
 {% extends 'index/header.html' %}
 
 {% block extra_js %}
-
 <script type="text/javascript">
 $(function() {
   // search when user types into search field (with min "delay" between keypresses)
@@ -56,12 +55,10 @@ $(function() {
   }
 });
 </script>
-
 {% endblock %}
 
 {% block content %}
-
-<div class="row search-bar">
+<div class="row search-bar" id="search-bar">
   <div class="col-sm-3">
     <div class="row">
       <div class="col-sm-6">
@@ -144,5 +141,4 @@ $(function() {
 <div class="row" id="recommendations">
 </div>
 -->
-
 {% endblock %}
