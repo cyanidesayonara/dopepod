@@ -1,19 +1,22 @@
-{% if podcasts %}
+{% extends 'index/index.html' %}
+
+{% block results %}
 {% for podcast in podcasts %}
 <div class="col-lg-2 col-md-3 col-sm-4 result-box">
-  <div class="row">
-    <a class="col result-image show-podinfo" id="{{ podcast.itunesid }}" method="GET" href=
-     "{% url 'podinfo' itunesid=podcast.itunesid %}">
-      <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
-      <div class="col">
-        <div class="row result-title">
-          <h6>{{ podcast.title }}</h6>
+  <div class="container">
+    <div class="row">
+      <a class="col result-image show-podinfo" method="GET" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
+        <div class="col">
+          <div class="row result-title">
+            <h6>{{ podcast.title }}</h6>
+          </div>
+          <div class="row result-genre">
+            <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
+          </div>
         </div>
-        <div class="row result-genre">
-          <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
-        </div>
-      </div>
-    </a>
+      </a>
+    </div>
   </div>
 </div>
 {% endfor %}
@@ -22,24 +25,16 @@
 $(function() {
   $('.show-podinfo').click(function(event) {
     event.preventDefault();
-    var itunesid = this.id;
     var url = "{% url 'ajax_podinfo' %}";
-    var csrftoken = "{{ csrf_token }}";
     $.ajax({
-      type: "POST",
+      type: "GET",
       url: url,
-      data: {
-        "itunesid": itunesid,
-        "csrfmiddlewaretoken": csrftoken,
-      },
       error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
       success: function(response) {
-        $("#search-bar").hide();
-        $("#results").hide();
-        $("#podinfo").html(response);
+        $("#results").html(response);
       }
     });
   });
 });
 </script>
-{% endif %}
+{% endblock %}

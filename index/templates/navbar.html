@@ -10,7 +10,7 @@
     <a class="nav-link" href="{% url 'edit_profile' %}">settings</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link subscriptions" type="GET" href="{% url 'subscriptions_ext' %}">subscriptions</a>
+    <a class="nav-link subscriptions" type="GET" href="{% url 'subscriptions' %}">subscriptions</a>
   </li>
   {% endif %}
 </ul>
@@ -81,12 +81,13 @@ $(function() {
   });
   $('.subscriptions').click(function(e) {
     e.preventDefault();
-    var url = "{% url 'subscriptions' %}";
+    var url = "{% url 'ajax_subscriptions' %}";
     $.ajax({
       type: "GET",
       url: url,
       error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
       success: function(response) {
+        // TODO hide searchbar?
         $("#results").html(response);
       }
     });

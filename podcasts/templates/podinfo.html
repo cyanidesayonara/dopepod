@@ -1,11 +1,13 @@
-{% block podinfo %}
+{% extends 'index/index.html' %}
 
+{% block podinfo %}
 <div class="col">
   <div class="row">
     <div class="col-sm-3">
       <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />       
     </div>
     <div class="col-sm-6">
+      {% lorem %}
       <h3>{{ podcast.title }}</h3>
       <p>{{ podcast.description }}</p>
     </div>
@@ -76,5 +78,4 @@ $(function() {
   });
 });
 </script>
-
 {% endblock %}

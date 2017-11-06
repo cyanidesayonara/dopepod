@@ -85,11 +85,10 @@ def search(request):
 
         # return podcasts matching search terms
         podcasts = actual_search(q, genre, language, explicit, user)
-
     # if query None, return nothing
     else:
         podcasts = {}
-    return render(request, 'results.html', {'podcasts': podcasts})
+    return render(request, 'ajax_results.html', {'podcasts': podcasts})
 
 def actual_search(q, genre, language, explicit, user):
     """
@@ -144,24 +143,6 @@ def actual_search(q, genre, language, explicit, user):
             podcast.subscribed = True
     return res
 
-def podinfo(request, itunesid=0):
-    if request.method == 'GET':
-        podcast = Podcast.objects.get(itunesid=itunesid)
-
-        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
-        user = request.user
-        if user.username:
-            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
-        else:
-            subscriptions = []
-
-        if podcast.itunesid in subscriptions:
-            podcast.subscribed = True
-
-        return render(request, 'podinfo_ext.html', {'podcast': podcast})
-    else:
-        raise Http404()
-
 def ajax_podinfo(request):
     if request.method == 'POST':
         itunesid = request.POST['itunesid']
@@ -177,6 +158,24 @@ def ajax_podinfo(request):
         if podcast.itunesid in subscriptions:
             podcast.subscribed = True
 
+        return render(request, 'ajax_podinfo.html', {'podcast': podcast})
+    else:
+        raise Http404()
+
+def podinfo(request, itunesid):
+    if request.method == 'GET':
+        podcast = Podcast.objects.get(itunesid=itunesid)
+
+        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
+        user = request.user
+        if user.username:
+            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        else:
+            subscriptions = []
+
+        print(podcast)
+        if podcast.itunesid in subscriptions:
+            podcast.subscribed = True
         return render(request, 'podinfo.html', {'podcast': podcast})
     else:
         raise Http404()
@@ -230,25 +229,24 @@ def play(request):
         raise Http404()
     return render(request, 'player.html', {'track': track})
 
-def subscriptions_ext(request):
+def ajax_subscriptions(request):
     """
     returns subscription for user
     """
     user = request.user
-    podcasts = {}
+    subscriptions = {}
     if user.is_authenticated():
-        podcasts = Subscription.objects.filter(user=user)
-    return render(request, 'results_ext.html', {'podcasts': podcasts})
+        subscriptions = Subscription.objects.filter(user=user)
+    return render(request, 'ajax_subscriptions.html', {'subscriptions': subscriptions})
 
 def subscriptions(request):
     """
     returns subscription for user
     """
     user = request.user
-    podcasts = {}
+    subscriptions = {}
     if user.is_authenticated():
         subscriptions = Subscription.objects.filter(user=user)
-        print(subscriptions)
     return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
 
 def subscribe(request):
