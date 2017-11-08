@@ -4,10 +4,13 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from index.models import Profile
-from podcasts.models import Genre, Language
+from podcasts.models import Genre, Language, Subscription
 import logging
 
 logger = logging.getLogger(__name__)
+
+def ajax_home(request):
+    pass
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
@@ -18,6 +21,26 @@ def home(request):
 def navbar(request):
     logger.error('whaddup')
     return render(request, 'navbar.html', {})
+
+def ajax_subscriptions(request):
+    """
+    returns subscription for user
+    """
+    user = request.user
+    subscriptions = {}
+    if user.is_authenticated():
+        subscriptions = Subscription.objects.filter(user=user)
+    return render(request, 'ajax_subscriptions.html', {'subscriptions': subscriptions})
+
+def subscriptions(request):
+    """
+    returns subscription for user
+    """
+    user = request.user
+    subscriptions = {}
+    if user.is_authenticated():
+        subscriptions = Subscription.objects.filter(user=user)
+    return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
 
 @transaction.atomic
 @login_required
@@ -41,4 +64,3 @@ def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = user.profile
     return render(request, 'index/profile.html', {'user': user, 'profile': profile})
-

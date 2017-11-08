@@ -34,26 +34,13 @@
   </li>
   {% endif %}
 </ul>
-<form class="form-inline my-2 my-lg-0">
+<!-- <form class="form-inline my-2 my-lg-0">
   <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-</form>
+</form> -->
 
 <script type="text/javascript">
 $(function() {
-  function refresh_page() {
-    // refresh navbar (and maybe other stuff as well?)
-    $.ajax({
-      type: "GET",
-      url: "{% url 'navbar' %}",
-      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-      success: function(response) {
-        // refresh navbar
-        $(".nav-content").html(response);
-        // TODO go to index
-      }
-    });
-  }
   // mousedown?
   $('.ajax-login, .ajax-register').click(function(e) {
     e.preventDefault();
@@ -88,9 +75,18 @@ $(function() {
       error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
       success: function(response) {
         // TODO hide searchbar?
-        $("#results").html(response);
+        var stateObj = { foo: "bar" };
+        // TODO make sure previous word not is subscriptions
+        history.pushState(stateObj, "page 2", "subscriptions/");
+        $(".site-content").html(response);
       }
     });
+  });
+  $(window).on('popstate', function(event) {
+    var state = event.originalEvent.state;
+    if (state) {
+        console.log(state)
+    }
   });
 });
 </script>

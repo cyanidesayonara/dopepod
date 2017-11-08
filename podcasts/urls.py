@@ -8,7 +8,5 @@ urlpatterns = [
     url(r'^podinfo/(?P<itunesid>\w+)/$', views.podinfo, name='podinfo'),
     url(r'^tracks/$', views.tracks, name='tracks'),
     url(r'^play/$', views.play, name='play'),
-    url(r'^subscriptions/$', views.ajax_subscriptions, name='ajax_subscriptions'),
-    url(r'^subscriptions/i$', views.subscriptions, name='subscriptions'),
     url(r'^subscribe/$', views.subscribe, name='subscribe'),
 ]

@@ -7,10 +7,10 @@ $(function() {
   var delay = 250
   var minlength = 2
   $("#q").keyup(debounce(SearchFunc, delay));
-  
+
   // search when user changes options
   $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
-  
+
   // wait until user stops typing
   // credit: https://remysharp.com/2010/07/21/throttling-function-calls/
   function debounce(fn, delay) {
@@ -23,7 +23,7 @@ $(function() {
       }, delay);
     };
   }
-  
+
   // ajax search function
   function SearchFunc() {
     // gather variables
@@ -51,7 +51,7 @@ $(function() {
     // else show nothing
     else {
       $("#results").html("");
-    } 
+    }
   }
 });
 </script>

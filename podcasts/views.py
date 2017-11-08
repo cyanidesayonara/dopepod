@@ -205,15 +205,21 @@ def tracks(request):
     tree = root.find('channel')
 
     for item in tree.findall('item'):
-        title = item.find('title').text
-        summary = item.find('description').text
-        pubDate = item.find('pubDate').text
+        try:
+            title = item.find('title').text
+            summary = item.find('description').text
+            pubDate = item.find('pubDate').text
 
-        # link to track
-        enclosure = item.find('enclosure')
-        url = enclosure.get('url')
-        filetype = enclosure.get('type')
-        items.append({'title': title, 'summary': summary, 'pubDate': pubDate, 'url': url, 'filetype': filetype})
+            # link to track
+            enclosure = item.find('enclosure')
+            url = enclosure.get('url')
+
+            filetype = enclosure.get('type')
+            items.append({'title': title, 'summary': summary, 'pubDate': pubDate, 'url': url, 'filetype': filetype})
+        except AttributeError:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error('can\'t get tracks')
     return render(request, 'tracks.html', {'items': items})
 
 def play(request):
@@ -228,26 +234,6 @@ def play(request):
     except:
         raise Http404()
     return render(request, 'player.html', {'track': track})
-
-def ajax_subscriptions(request):
-    """
-    returns subscription for user
-    """
-    user = request.user
-    subscriptions = {}
-    if user.is_authenticated():
-        subscriptions = Subscription.objects.filter(user=user)
-    return render(request, 'ajax_subscriptions.html', {'subscriptions': subscriptions})
-
-def subscriptions(request):
-    """
-    returns subscription for user
-    """
-    user = request.user
-    subscriptions = {}
-    if user.is_authenticated():
-        subscriptions = Subscription.objects.filter(user=user)
-    return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
 
 def subscribe(request):
     """
@@ -289,4 +275,3 @@ def subscribe(request):
         return HttpResponse('Unsubscribe')
     else:
         raise Http404()
-

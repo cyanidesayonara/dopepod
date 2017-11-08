@@ -1,6 +1,7 @@
 body {
   background: url("space.jpg");
   background: rgba(255, 255, 255, 1);
+  overflow:visible;
 }
 
 nav {
@@ -14,6 +15,13 @@ nav {
 }
 
 .search-bar {
+  margin-top: 80px;
+  padding: 30px 0px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
+#subscriptions {
   margin-top: 80px;
   padding: 30px 0px;
   border: 1px solid black;
