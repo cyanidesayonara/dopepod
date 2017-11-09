@@ -29,7 +29,8 @@ $(function() {
         $("#podinfo").html(xhr.responseJSON.html);
       },
       success: function(response) {
-        $("#podinfo").html("");
+        $(".modal-content").html("");
+        $("#modal").modal("hide");
       }
     });
   });
