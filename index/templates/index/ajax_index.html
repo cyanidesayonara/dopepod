@@ -1,0 +1,138 @@
+<div class="row search-bar" id="search-bar">
+  <div class="col-sm-3">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="dropdown">
+          <button class="btn btn-sm dropdown-toggle filter-button" type="button" id="dropdownMenuButton"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Genre
+          </button>
+          <div class="dropdown-menu dropdown-filter" aria-labelledby="dropdownMenuButton">
+            <div class="btn-group-vertical" data-toggle="buttons">
+              <label class="btn btn-sm filter-button active">
+                <input type="radio" name="genre-select" id="All" value="All" checked>
+                All
+              </label>
+              {% for genre in genres %}
+              <label class="btn btn-sm filter-button">
+                <input type="radio" name="genre-select" id="{{ genre }}" value="{{ genre }}">
+                {{ genre }} - {{ genre.n_podcasts }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="dropdown">
+          <button class="btn btn-sm dropdown-toggle filter-button" type="button" id="dropdownMenuButton"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Language
+          </button>
+          <div class="dropdown-menu dropdown-filter" aria-labelledby="dropdownMenuButton">
+            <div class="btn-group-vertical" data-toggle="buttons">
+              <label class="btn btn-sm filter-button active">
+                <input type="radio" name="language-select" id="All" value="All" checked>
+                All
+              </label>
+              {% for language in languages %}
+              <label class="btn btn-sm filter-button">
+                <input type="radio" name="language-select" id="{{ language }}" value="{{ language }}" >
+                {{ language }} - {{ language.n_podcasts }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="input-group">
+      <input class="form-control" type="text" id="q" type="search" placeholder="Search for..."
+      aria-label="Search for..." autocomplete="off">
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="row">
+      <div class="col">
+        <div class="btn-group-vertical" data-toggle="buttons">
+          <label class="btn btn-sm filter-button active">
+            <input type="checkbox" name="explicit-select" checked>
+            Show Explicit
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row search-results" id="results">
+  {% block results %}
+  {% endblock %}
+</div>
+
+<div class="row podinfo" id="podinfo">
+  {% block podinfo %}
+  {% endblock %}
+</div>
+
+<!--
+<div class="row" id="recommendations">
+</div>
+-->
+
+<script type="text/javascript">
+$(function() {
+  // search when user types into search field (with min "delay" between keypresses)
+  var delay = 250
+  var minlength = 2
+  $("#q").keyup(debounce(SearchFunc, delay));
+
+  // search when user changes options
+  $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
+
+  // wait until user stops typing
+  // credit: https://remysharp.com/2010/07/21/throttling-function-calls/
+  function debounce(fn, delay) {
+    var timer = null;
+    return function () {
+      var context = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(context, args);
+      }, delay);
+    };
+  }
+
+  // ajax search function
+  function SearchFunc() {
+    // gather variables
+    var q = $("#q").val();
+    var genre = $("input[name=genre-select]:checked").val();
+    var language = $("input[name=language-select]:checked").val();
+    var explicit = $("input[name=explicit-select]").is(":checked");
+    // if input is at least minlength, go ahead and search
+    if(q.length >= minlength) {
+      $.ajax({
+        method: "GET",
+        url: "{% url 'search' %}",
+        data: {
+          "q": q,
+          "genre": genre,
+          "language": language,
+          "explicit": explicit,
+        },
+        error: function(xhr, ajaxOptions, thrownError){ alert(thrownError); },
+        success: function(response) {
+          $("#results").html(response);
+        }
+      });
+    }
+    // else show nothing
+    else {
+      $("#results").html("");
+    }
+  }
+});
+</script>

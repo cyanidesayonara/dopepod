@@ -1,6 +1,3 @@
-{% extends 'index/header.html' %}
-
-{% block content %}
 <div class="row profile">
   <div class="col">
     <h1>My Profile</h1>
@@ -29,10 +26,10 @@ $(function() {
         $("#podinfo").html(xhr.responseJSON.html);
       },
       success: function(response) {
+        console.log(response);
         $("#podinfo").html("");
       }
     });
   });
 });
 </script>
-{% endblock %}

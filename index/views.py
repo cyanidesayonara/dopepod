@@ -9,28 +9,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def ajax_home(request):
-    pass
-
 def home(request):
     genres = Genre.get_primary_genres(Genre)
     languages = Language.objects.all()
     logger.error('whaddup')
-    return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
+    if request.method == 'GET':
+        return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
+    else:
+        return render(request, 'index/ajax_index.html', {'genres': genres, 'languages': languages})
 
 def navbar(request):
     logger.error('whaddup')
     return render(request, 'navbar.html', {})
-
-def ajax_subscriptions(request):
-    """
-    returns subscription for user
-    """
-    user = request.user
-    subscriptions = {}
-    if user.is_authenticated():
-        subscriptions = Subscription.objects.filter(user=user)
-    return render(request, 'ajax_subscriptions.html', {'subscriptions': subscriptions})
 
 def subscriptions(request):
     """
@@ -40,7 +30,10 @@ def subscriptions(request):
     subscriptions = {}
     if user.is_authenticated():
         subscriptions = Subscription.objects.filter(user=user)
-    return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
+    if request.method == 'GET':
+        return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
+    else:
+            return render(request, 'ajax_subscriptions.html', {'subscriptions': subscriptions})
 
 @transaction.atomic
 @login_required
@@ -51,11 +44,11 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('profile', username=request.user)
+            return render(request, 'index/profile.html', {})
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'index/edit_profile.html', {
+    return render(request, 'index/ajax_edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form
         })

@@ -1,18 +1,5 @@
 <script type="text/javascript">
 $(function() {
-  function refresh_page() {
-    // refresh navbar (and maybe other stuff as well?)
-    $.ajax({
-      type: "GET",
-      url: "{% url 'navbar' %}",
-      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
-      success: function(response) {
-        // refresh navbar
-        $(".nav-content").html(response);
-        // TODO go to index
-      }
-    });
-  }
   $('.login-form, .signup-form').submit(function (event) {
     event.preventDefault();
     var data = $(this).serialize();
