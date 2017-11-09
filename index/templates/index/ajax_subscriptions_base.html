@@ -1,0 +1,23 @@
+<div class="row" id="subscriptions">
+</div>
+
+<script type="text/javascript">
+$(function() {
+  // load tracks for podcast after page is loaded
+  var url = "{% url 'ajax_subscriptions' %}";
+  var csrftoken = "{{ csrf_token }}";
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {
+      "csrfmiddlewaretoken": csrftoken,
+    },
+    error: function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    },
+    success: function(response) {
+      $("#subscriptions").html(response);
+    }
+  });
+});
+</script>

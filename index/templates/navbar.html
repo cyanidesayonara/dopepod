@@ -1,19 +1,25 @@
 
 
 <a class="navbar-brand home" href="{% url 'home' %}">dopepod</a>
-<ul class="navbar-nav mr-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="#">blog</a>
-  </li>
-  {% if user.is_authenticated %}
-  <li class="nav-item">
-    <a class="nav-link settings" href="{% url 'edit_profile' %}" data-toggle="modal" data-target="#modal">settings</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link subscriptions" type="GET" href="{% url 'subscriptions' %}">subscriptions</a>
-  </li>
-  {% endif %}
-</ul>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="#">blog</a>
+    </li>
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+      <a class="nav-link settings" href="{% url 'edit_profile' %}" data-toggle="modal" data-target="#modal">settings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link subscriptions" href="{% url 'subscriptions' %}">subscriptions</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
 <ul class="navbar-nav ml-auto">
   {% if user.is_authenticated %}
   <li>
@@ -84,7 +90,7 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = { url: "url" };
+        var stateObj = { url: url };
         // TODO make sure previous word not is subscriptions
         history.pushState(stateObj, "page 2", url);
         $(".site-content").html(response);
@@ -94,13 +100,9 @@ $(function() {
   $('.settings').click(function(e) {
     e.preventDefault();
     var url = "{% url 'edit_profile' %}";
-    var csrftoken = "{{ csrf_token }}";
     $.ajax({
       type: "GET",
       url: url,
-      data: {
-        "csrfmiddlewaretoken": csrftoken,
-      },
       error: function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       },
@@ -111,19 +113,15 @@ $(function() {
   })
   $('.subscriptions').click(function(e) {
     e.preventDefault();
-    var url = "{% url 'subscriptions' %}";
-    var csrftoken = "{{ csrf_token }}";
+    var url = "{% url 'ajax_subscriptions' %}";
     $.ajax({
-      type: "POST",
+      type: "GET",
       url: url,
-      data: {
-        "csrfmiddlewaretoken": csrftoken,
-      },
       error: function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = { url: "url" };
+        var stateObj = { url: url };
         // TODO make sure previous word not is subscriptions
         history.pushState(stateObj, "page 2", url);
         $(".site-content").html(response);

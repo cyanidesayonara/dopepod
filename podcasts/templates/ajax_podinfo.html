@@ -1,35 +1,33 @@
-<div class="col">
-  <div class="row">
-    <div class="col-sm-3">
-      <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />       
-    </div>
-    <div class="col-sm-6">
-      <h3>{{ podcast.title }}</h3>
-      <p>{{ podcast.description }}</p>
-    </div>
-    <div class="col-sm-3">
-      {% if podcast.subscribed %}
-      <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
-        <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
-        {% csrf_token %}
-      </form>
-      {% else %}
-      <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
-        <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
-        {% csrf_token %}
-      </form>
-      {% endif %}         
-      <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
-      <p>{{ podcast.language }}</p>
-      {% if podcast.explicit %}
-        <p>Explicit</p>
-      {% endif %}
-      <p><em>{{ podcast.copyrighttext }}</em></p> 
-    </div>
+<div class="row podinfo" id="podinfo">
+  <div class="col-sm-3">
+    <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
   </div>
-  
-  <div class="row tracks">
+  <div class="col-sm-6">
+    <h3>{{ podcast.title }}</h3>
+    <p>{{ podcast.description }}</p>
   </div>
+  <div class="col-sm-3">
+    {% if podcast.subscribed %}
+    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
+      {% csrf_token %}
+    </form>
+    {% else %}
+    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
+      {% csrf_token %}
+    </form>
+    {% endif %}
+    <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
+    <p>{{ podcast.language }}</p>
+    {% if podcast.explicit %}
+      <p>Explicit</p>
+    {% endif %}
+    <p><em>{{ podcast.copyrighttext }}</em></p>
+  </div>
+</div>
+
+<div class="row tracks">
 </div>
 
 <script type="text/javascript">

@@ -1,11 +1,12 @@
 {% extends 'index/index.html' %}
 
 {% block results %}
+{% if podcasts %}
 {% for podcast in podcasts %}
 <div class="col-lg-2 col-md-3 col-sm-4 result-box">
   <div class="container">
     <div class="row">
-      <a class="col result-image show-podinfo" method="GET" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+      <a class="col result-image show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
         <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
         <div class="col">
           <div class="row result-title">
@@ -25,16 +26,29 @@
 $(function() {
   $('.show-podinfo').click(function(event) {
     event.preventDefault();
-    var url = "{% url 'ajax_podinfo' %}";
+    var itunesid = this.id;
+    var ajax_url = "{% url 'ajax_podinfo' %}";
+    var url = ajax_url + itunesid + "/";
+    var csrftoken = "{{ csrf_token }}";
     $.ajax({
-      type: "GET",
-      url: url,
-      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      type: "POST",
+      url: ajax_url,
+      data: {
+        "itunesid": itunesid,
+        "csrfmiddlewaretoken": csrftoken,
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+      },
       success: function(response) {
-        $("#results").html(response);
+        var stateObj = { url: url };
+        // TODO make sure previous word not is subscriptions
+        history.pushState(stateObj, "page 2", url);
+        $("#site-content").html(response);
       }
     });
   });
 });
 </script>
+{% endif %}
 {% endblock %}

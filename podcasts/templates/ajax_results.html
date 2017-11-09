@@ -2,7 +2,7 @@
 {% for podcast in podcasts %}
 <div class="col-lg-2 col-md-3 col-sm-4 result-box">
   <div class="row">
-    <a class="col result-image show-podinfo" id="{{ podcast.itunesid }}" method="GET" href=
+    <a class="col result-image show-podinfo" id="{{ podcast.itunesid }}" href=
      "{% url 'podinfo' itunesid=podcast.itunesid %}">
       <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
       <div class="col">
@@ -23,20 +23,24 @@ $(function() {
   $('.show-podinfo').click(function(event) {
     event.preventDefault();
     var itunesid = this.id;
-    var url = "{% url 'ajax_podinfo' %}";
+    var ajax_url = "{% url 'ajax_podinfo' %}";
+    var url = ajax_url + itunesid + "/";
     var csrftoken = "{{ csrf_token }}";
     $.ajax({
       type: "POST",
-      url: url,
+      url: ajax_url,
       data: {
         "itunesid": itunesid,
         "csrfmiddlewaretoken": csrftoken,
       },
-      error: function(xhr, ajaxOptions, thrownError){alert(thrownError);},
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+      },
       success: function(response) {
-        $("#search-bar").hide();
-        $("#results").hide();
-        $("#podinfo").html(response);
+        var stateObj = { url: url };
+        // TODO make sure previous word not is subscriptions
+        history.pushState(stateObj, "page 2", url);
+        $("#site-content").html(response);
       }
     });
   });
