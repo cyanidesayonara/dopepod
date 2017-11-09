@@ -173,7 +173,6 @@ def podinfo(request, itunesid):
         else:
             subscriptions = []
 
-        print(podcast)
         if podcast.itunesid in subscriptions:
             podcast.subscribed = True
         return render(request, 'podinfo.html', {'podcast': podcast})
@@ -196,9 +195,9 @@ def tracks(request):
 
     # TODO fix this shit
     feedUrl = podcast.feedUrl
+    # print(feedUrl)
     r = requests.get(feedUrl)
-    data_dict = {}
-    items = []
+    tracks = []
 
 
     root = ET.fromstring(r.text)
@@ -206,21 +205,23 @@ def tracks(request):
 
     for item in tree.findall('item'):
         try:
-            title = item.find('title').text
-            summary = item.find('description').text
-            pubDate = item.find('pubDate').text
+            track = {}
+            track['title'] = item.find('title').text
+            track['summary'] = item.find('description').text
+            track['pubDate'] = item.find('pubDate').text
 
             # link to track
+            # enclosure might be missing, have alternatives
             enclosure = item.find('enclosure')
-            url = enclosure.get('url')
-
-            filetype = enclosure.get('type')
-            items.append({'title': title, 'summary': summary, 'pubDate': pubDate, 'url': url, 'filetype': filetype})
-        except AttributeError:
+            track['url'] = enclosure.get('url')
+            track['type'] = enclosure.get('type')
+            tracks.append(track)
+        except Exception as e:
             import logging
             logger = logging.getLogger(__name__)
-            logger.error('can\'t get tracks')
-    return render(request, 'tracks.html', {'items': items})
+            # figure out exception message
+            logger.error('can\'t get track')
+    return render(request, 'tracks.html', {'tracks': tracks})
 
 def play(request):
     """
@@ -230,7 +231,7 @@ def play(request):
     track = {}
     try:
         track['url'] = request.POST['url']
-        track['filetype'] = request.POST['filetype']
+        track['type'] = request.POST['type']
     except:
         raise Http404()
     return render(request, 'player.html', {'track': track})

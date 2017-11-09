@@ -26,24 +26,23 @@ def subscriptions(request):
     """
     returns subscription for user
     """
-
     if request.method == 'GET':
         user = request.user
         subscriptions = {}
         if user.is_authenticated():
             subscriptions = Subscription.objects.filter(user=user)
         return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-
-def ajax_subscriptions(request):
-    if request.method == 'GET':
-        return render(request, 'index/ajax_subscriptions_base.html', {})
-    else:
-        user = request.user
-        subscriptions = {}
-        if user.is_authenticated():
-            subscriptions = Subscription.objects.filter(user=user)
-        return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
-
+    if request.method == 'POST':
+        try:
+            # kind of a hack, maybe fix
+            request.POST['ajax']
+            return render(request, 'index/ajax_subscriptions_base.html', {})
+        except:
+            user = request.user
+            subscriptions = {}
+            if user.is_authenticated():
+                subscriptions = Subscription.objects.filter(user=user)
+            return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
 
 @transaction.atomic
 @login_required
