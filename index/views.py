@@ -27,7 +27,6 @@ def subscriptions(request):
     """
     returns subscription for user
     """
-
     if request.method == 'GET':
         user = request.user
         subscriptions = {}

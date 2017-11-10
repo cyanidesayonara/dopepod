@@ -37,10 +37,10 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = { url: url };
+        var stateObj = {"context": response};
         // TODO make sure previous word not is subscriptions
-        history.pushState(stateObj, "page 2", url);
-        $("#site-content").html(response);
+        history.pushState(stateObj, "", url);
+        $(".site-content").html(response);
       }
     });
   });
