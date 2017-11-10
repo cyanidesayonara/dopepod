@@ -15,6 +15,9 @@
     <li class="nav-item">
       <a class="nav-link subscriptions" href="{% url 'subscriptions' %}">subscriptions</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link subscriptions" href="{% url 'browse' %}">browse</a>
+    </li>
     {% endif %}
   </ul>
 </div>
@@ -22,7 +25,7 @@
   {% if user.is_authenticated %}
   <li>
     <a class="btn btn-primary ajax-logout" href="{% url 'account_logout' %}">
-      Logout
+      Logout {{ user.username }}
     </a>
   </li>
   {% else %}
@@ -112,6 +115,28 @@ $(function() {
   $('.subscriptions').click(function(e) {
     e.preventDefault();
     var url = "{% url 'subscriptions' %}";
+    var csrftoken = "{{ csrf_token }}";
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        "ajax": "yep",
+        "csrfmiddlewaretoken": csrftoken,
+      },
+      error: function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+      },
+      success: function(response) {
+        var stateObj = {"context": response};
+        // TODO make sure previous word not is subscriptions
+        history.pushState(stateObj, "", url);
+        $(".site-content").html(response);
+      }
+    });
+  });
+  $('.browse').click(function(e) {
+    e.preventDefault();
+    var url = "{% url 'browse' %}";
     var csrftoken = "{{ csrf_token }}";
     $.ajax({
       type: "POST",

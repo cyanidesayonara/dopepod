@@ -20,7 +20,10 @@ def home(request):
 
 def navbar(request):
     logger.error('whaddup')
-    return render(request, 'navbar.html', {})
+    return render(request, 'index/navbar.html', {})
+
+def browse(request):
+    return render(request, 'index/browse.html', {})
 
 def subscriptions(request):
     """
