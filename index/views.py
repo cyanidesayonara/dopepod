@@ -22,6 +22,7 @@ def navbar(request):
     logger.error('whaddup')
     return render(request, 'navbar.html', {})
 
+@login_required
 def subscriptions(request):
     """
     returns subscription for user
@@ -33,17 +34,14 @@ def subscriptions(request):
         if user.is_authenticated():
             subscriptions = Subscription.objects.filter(user=user)
         return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-
-def ajax_subscriptions(request):
-    if request.method == 'GET':
-        return render(request, 'index/ajax_subscriptions_base.html', {})
     else:
-        user = request.user
-        subscriptions = {}
-        if user.is_authenticated():
+        try:
+            ajax = request.POST['ajax']
+            user = request.user
             subscriptions = Subscription.objects.filter(user=user)
-        return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
-
+            return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
+        except:
+            return render(request, 'index/ajax_subscriptions_base.html', {})
 
 @transaction.atomic
 @login_required
@@ -58,6 +56,7 @@ def edit_profile(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
+
     return render(request, 'index/ajax_edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form

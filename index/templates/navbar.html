@@ -113,10 +113,14 @@ $(function() {
   })
   $('.subscriptions').click(function(e) {
     e.preventDefault();
-    var url = "{% url 'ajax_subscriptions' %}";
+    var url = "{% url 'subscriptions' %}";
+    var csrftoken = "{{ csrf_token }}";
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: url,
+      data:{
+        "csrfmiddlewaretoken": csrftoken,
+      },
       error: function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       },

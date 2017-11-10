@@ -99,7 +99,7 @@ def actual_search(q, genre, language, explicit, user):
     podcasts = Podcast.objects.all()
 
     # filter by explicit
-    if explicit == False:
+    if explicit == False or request.user.profile.show_explicit == False:
         podcasts = podcasts.filter(explicit=explicit)
 
     # filter by genre
