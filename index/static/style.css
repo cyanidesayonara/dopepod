@@ -1,6 +1,6 @@
 body {
   background: url("space.jpg");
-  background: rgba(255, 255, 255, 1);
+  /*background: rgba(255, 255, 255, 1);*/
   overflow:visible;
 }
 
@@ -11,7 +11,7 @@ nav {
 }
 
 .site-content {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.5);
   min-height: 100vh;
   border: 1px solid black;
 }
