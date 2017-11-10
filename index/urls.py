@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^browse/$', views.browse, name='browse'),
     url(r'^subscriptions/$', views.subscriptions, name='subscriptions'),
     url(r'^settings/$', views.edit_profile, name='edit_profile'),
-    url(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
+    # url(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
 ]

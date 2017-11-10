@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
+    # show_explicit = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
@@ -19,4 +20,3 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         p = Profile.objects.create(user=instance)
         p.save()
-

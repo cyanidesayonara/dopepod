@@ -173,6 +173,7 @@ def podinfo(request, itunesid):
         else:
             subscriptions = []
 
+        print(podcast)
         if podcast.itunesid in subscriptions:
             podcast.subscribed = True
         return render(request, 'podinfo.html', {'podcast': podcast})
@@ -235,6 +236,7 @@ def play(request):
     except:
         raise Http404()
     return render(request, 'player.html', {'track': track})
+
 
 def subscribe(request):
     """

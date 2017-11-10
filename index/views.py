@@ -25,6 +25,7 @@ def navbar(request):
 def browse(request):
     return render(request, 'index/browse.html', {})
 
+@login_required
 def subscriptions(request):
     """
     returns subscription for user
@@ -35,17 +36,14 @@ def subscriptions(request):
         if user.is_authenticated():
             subscriptions = Subscription.objects.filter(user=user)
         return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-    if request.method == 'POST':
+    else:
         try:
-            # kind of a hack, maybe fix
-            request.POST['ajax']
-            return render(request, 'index/ajax_subscriptions_base.html', {})
-        except:
+            ajax = request.POST['ajax']
             user = request.user
-            subscriptions = {}
-            if user.is_authenticated():
-                subscriptions = Subscription.objects.filter(user=user)
+            subscriptions = Subscription.objects.filter(user=user)
             return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
+        except:
+            return render(request, 'index/ajax_subscriptions_base.html', {})
 
 @transaction.atomic
 @login_required
@@ -60,6 +58,7 @@ def edit_profile(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
+
     return render(request, 'index/ajax_edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form

@@ -11,6 +11,7 @@ $(function() {
     url: url,
     data: {
       "csrfmiddlewaretoken": csrftoken,
+      "ajax": "yep",
     },
     error: function(xhr, ajaxOptions, thrownError){
       console.log(thrownError);
