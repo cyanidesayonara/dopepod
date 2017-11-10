@@ -89,7 +89,6 @@ $(function() {
       },
       success: function(response) {
         var stateObj = {"context": response};
-        // TODO make sure previous word not is subscriptions
         history.pushState(stateObj, "", url);
         $(".site-content").html(response);
       }
@@ -116,12 +115,7 @@ $(function() {
     $.ajax({
       type: "POST",
       url: url,
-<<<<<<< HEAD
-      data:{
-=======
       data: {
-        "ajax": "yep",
->>>>>>> dd0b50e2bcb23172bc7e1a543a345166160a7373
         "csrfmiddlewaretoken": csrftoken,
       },
       error: function(xhr, ajaxOptions, thrownError){
@@ -129,7 +123,6 @@ $(function() {
       },
       success: function(response) {
         var stateObj = {"context": response};
-        // TODO make sure previous word not is subscriptions
         history.pushState(stateObj, "", url);
         $(".site-content").html(response);
       }
@@ -138,7 +131,6 @@ $(function() {
   $(window).on('popstate', function(event) {
     var state = event.originalEvent.state;
     if (state) {
-      console.log(state);
       $(".site-content").html(state.context);
     }
   });
