@@ -91,9 +91,14 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = {"context": response};
-        history.pushState(stateObj, "", url);
+        var title = "dopepod";
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
         $(".site-content").html(response);
+        $("title")[0].innerText = title;
       }
     });
   });
@@ -125,9 +130,14 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = {"context": response};
-        history.pushState(stateObj, "", url);
+        var title = "subscriptions";
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
         $(".site-content").html(response);
+        $("title")[0].innerText = title;
       }
     });
   });
@@ -146,10 +156,14 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = {"context": response};
-        // TODO make sure previous word not is subscriptions
-        history.pushState(stateObj, "", url);
+        var title = "browse";
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
         $(".site-content").html(response);
+        $("title")[0].innerText = title;
       }
     });
   });
@@ -157,6 +171,10 @@ $(function() {
     var state = event.originalEvent.state;
     if (state) {
       $(".site-content").html(state.context);
+      $("title")[0].innerText = state.title;
+      if (state.q) {
+        $("#q").val(q);
+      }
     }
   });
 });

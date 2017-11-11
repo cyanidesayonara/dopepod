@@ -20,7 +20,7 @@ def home(request):
 
 def navbar(request):
     logger.error('whaddup')
-    return render(request, 'index/navbar.html', {})
+    return render(request, 'navbar.html', {})
 
 def browse(request):
     return render(request, 'index/browse.html', {})

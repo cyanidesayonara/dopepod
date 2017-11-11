@@ -37,10 +37,27 @@ $(function() {
         console.log(thrownError);
       },
       success: function(response) {
-        var stateObj = {"context": response};
-        // TODO make sure previous word not is subscriptions
-        history.pushState(stateObj, "", url);
+        // save results + q in current state
+        var curContext = $(".site-content")[0].innerHTML;
+        q = $("#q").val();
+        var curUrl = $(".site-content")[0].baseURI;
+        var curTitle = "dopepod";
+        var curState = {
+          "context": curContext,
+          "title": curTitle,
+          "q": q
+        };
+        history.replaceState(curState, "", curUrl);
+
+        //push new state
+        var title = "podinfo";
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
         $(".site-content").html(response);
+        $("title")[0].innerText = title;
       }
     });
   });
