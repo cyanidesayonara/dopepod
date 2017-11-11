@@ -48,10 +48,15 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <div class="input-group">
-      <input class="form-control" type="text" id="q" type="search" placeholder="Search for..."
-      aria-label="Search for..." autocomplete="off">
-    </div>
+    <form id="search-form" method="GET" action="{% url 'search' %}">
+      <div class="input-group">
+        <input class="form-control" type="text" name="q" id="q" type="search" placeholder="Search for..."
+        aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="submit">Go!</button>
+        </span>
+      </div>
+    </form>
   </div>
   <div class="col-sm-3">
     <div class="row">
@@ -84,6 +89,11 @@ $(function() {
   var minlength = 2
   $("#q").keyup(debounce(SearchFunc, delay));
 
+  $("#search-form").submit(function (event) {
+    event.preventDefault();
+    debounce(SearchFunc, delay);
+  });
+
   // search when user changes options
   $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
 
@@ -110,7 +120,7 @@ $(function() {
     // if input is at least minlength, go ahead and search
     if(q.length >= minlength) {
       $.ajax({
-        method: "GET",
+        method: "POST",
         url: "{% url 'search' %}",
         data: {
           "q": q,

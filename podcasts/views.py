@@ -51,42 +51,52 @@ def search(request):
     """
     set search terms
     """
+    if request.method == 'GET':
+        # get query, if any
+        try:
+            q = request.GET['q']
+        except:
+            q = None
 
-    # get query, if any
+    else:
+        # get query, if any
+        try:
+            q = request.POST['q']
+        except:
+            q = None
+
+    # get genre or 'All'
     try:
-        q = request.GET['q']
+        genre = request.POST['genre']
     except:
-        q = None
+        genre = 'All'
 
-    #if query not None, get search terms or set defaults
+    # get language or 'All'
+    try:
+        language = request.POST['language']
+    except:
+        language = 'All'
+
+    # get explicit or True
+    try:
+        explicit = False if request.POST['explicit'] == 'false' else True
+    except:
+        explicit = True
+
+    # get user
+    user = request.user
+
     if q:
-        # get genre or 'All'
-        try:
-            genre = request.GET['genre']
-        except:
-            genre = 'All'
-
-        # get language or 'All'
-        try:
-            language = request.GET['language']
-        except:
-            language = 'All'
-
-        # get explicit or True
-        try:
-            explicit = False if request.GET['explicit'] == 'false' else True
-        except:
-            explicit = True
-
-        # get user
-        user = request.user
-
         # return podcasts matching search terms
         podcasts = actual_search(q, genre, language, explicit, user)
     # if query None, return nothing
     else:
         podcasts = {}
-    return render(request, 'ajax_results.html', {'podcasts': podcasts})
+
+    if request.method == 'GET':
+        return render(request, 'results.html', {'podcasts': podcasts})
+    else:
+        return render(request, 'ajax_results.html', {'podcasts': podcasts})
 
 def actual_search(q, genre, language, explicit, user):
     """
@@ -171,12 +181,13 @@ def podinfo(request, itunesid):
         else:
             subscriptions = []
 
-        print(podcast)
         if podcast.itunesid in subscriptions:
             podcast.subscribed = True
         return render(request, 'podinfo.html', {'podcast': podcast})
     else:
         raise Http404()
+
+# TODO get tracks into podinfo without ajax
 
 def tracks(request):
     """

@@ -4,20 +4,19 @@
 {% if podcasts %}
 {% for podcast in podcasts %}
 <div class="col-lg-2 col-md-3 col-sm-4 result-box">
-  <div class="container">
-    <div class="row">
-      <a class="col result-image show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-        <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
-        <div class="col">
-          <div class="row result-title">
-            <h6>{{ podcast.title }}</h6>
-          </div>
-          <div class="row result-genre">
-            <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
-          </div>
+  <div class="row">
+    <a class="col result-image show-podinfo" id="{{ podcast.itunesid }}" href=
+     "{% url 'podinfo' itunesid=podcast.itunesid %}">
+      <img src="{{ podcast.artworkUrl }}156x156bb.jpg" />
+      <div class="col">
+        <div class="row result-title">
+          <h6>{{ podcast.title }}</h6>
         </div>
-      </a>
-    </div>
+        <div class="row result-genre">
+          <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
+        </div>
+      </div>
+    </a>
   </div>
 </div>
 {% endfor %}

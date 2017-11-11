@@ -8,6 +8,11 @@ $(function() {
   var minlength = 2
   $("#q").keyup(debounce(SearchFunc, delay));
 
+  $("#search-form").submit(function (event) {
+    event.preventDefault();
+    debounce(SearchFunc, delay);
+  });
+
   // search when user changes options
   $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
 
@@ -44,7 +49,9 @@ $(function() {
           "explicit": explicit,
           "csrfmiddlewaretoken": csrftoken,
         },
-        error: function(xhr, ajaxOptions, thrownError){ alert(thrownError); },
+        error: function(xhr, ajaxOptions, thrownError){
+          console.log(thrownError);
+        },
         success: function(response) {
           $("#results").html(response);
         }
@@ -110,15 +117,15 @@ $(function() {
     </div>
   </div>
   <div class="col-sm-6">
-    <div class="input-group">
-      <form class="" method="GET" href="{% url 'search' %}">
-        <input class="form-control" type="text" id="q" type="search" placeholder="Search for..."
+    <form id="search-form" method="GET" action="{% url 'search' %}">
+      <div class="input-group">
+        <input class="form-control" type="text" name="q" id="q" type="search" placeholder="Search for..."
         aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
         <span class="input-group-btn">
-          <button class="btn btn-secondary" type="submit">Go!</button>
+        <button class="btn btn-secondary" type="submit">Go!</button>
         </span>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
   <div class="col-sm-3">
     <div class="row">
