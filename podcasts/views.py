@@ -47,8 +47,6 @@ def charts(request):
     #         items.append({'title': title, 'summary': summary, 'url': url, 'kind': kind})
     #     return render(request, 'podinfo.html', {'data': data_dict, 'items': items})
 
-
-
 def search(request):
     """
     set search terms

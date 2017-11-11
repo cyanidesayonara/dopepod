@@ -23,6 +23,13 @@ nav {
   border-radius: 8px;
 }
 
+.alphabet {
+  margin-top: 80px;
+  padding: 30px 0px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
 #subscriptions {
   margin-top: 80px;
   padding: 30px 0px;

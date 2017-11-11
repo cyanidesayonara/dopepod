@@ -31,16 +31,18 @@ $(function() {
     var genre = $("input[name=genre-select]:checked").val();
     var language = $("input[name=language-select]:checked").val();
     var explicit = $("input[name=explicit-select]").is(":checked");
+    var csrftoken = "{{ csrf_token }}";
     // if input is at least minlength, go ahead and search
     if(q.length >= minlength) {
       $.ajax({
-        method: "GET",
+        method: "POST",
         url: "{% url 'search' %}",
         data: {
           "q": q,
           "genre": genre,
           "language": language,
           "explicit": explicit,
+          "csrfmiddlewaretoken": csrftoken,
         },
         error: function(xhr, ajaxOptions, thrownError){ alert(thrownError); },
         success: function(response) {
@@ -109,8 +111,13 @@ $(function() {
   </div>
   <div class="col-sm-6">
     <div class="input-group">
-      <input class="form-control" type="text" id="q" type="search" placeholder="Search for..."
-      aria-label="Search for..." autocomplete="off">
+      <form class="" method="GET" href="{% url 'search' %}">
+        <input class="form-control" type="text" id="q" type="search" placeholder="Search for..."
+        aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="submit">Go!</button>
+        </span>
+      </form>
     </div>
   </div>
   <div class="col-sm-3">
