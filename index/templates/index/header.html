@@ -24,10 +24,47 @@
 
 
 
-    {% block extra_js %}
-    {% endblock %}
-    {% block extra_bonus_js %}
-    {% endblock %}
+    <script>
+    function refresh_page(csrftoken) {
+      // refresh navbar (and maybe other stuff as well?)
+      // csrf token gets passed because home needs it (stupid?)
+      $.ajax({
+        type: "GET",
+        url: "{% url 'navbar' %}",
+        error: function(xhr, ajaxOptions, thrownError) {
+          console.log(thrownError);
+        },
+        success: function(response) {
+          // refresh navbar
+          $(".nav-content").html(response);
+          // TODO go to index
+          var url = "{% url 'home' %}";
+          $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+              "csrfmiddlewaretoken": csrftoken,
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+              console.log(thrownError);
+            },
+            success: function(response) {
+              var title = "dopepod";
+              var state = {
+                "context": response,
+                "title": title,
+              };
+              history.pushState(state, "", url);
+              $(".site-content").hide();
+              $(".site-content").html(response);
+              $(".site-content").fadeIn();
+              $("title")[0].innerText = title;
+            }
+          });
+        }
+      });
+    }
+    </script>
   </head>
   <body>
 

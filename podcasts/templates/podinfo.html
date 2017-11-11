@@ -12,12 +12,12 @@
   <div class="col-sm-3">
     <!-- back button refresh this somehow -->
     {% if podcast.subscribed %}
-    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
+    <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
       <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
       {% csrf_token %}
     </form>
     {% else %}
-    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
+    <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
       <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
       {% csrf_token %}
     </form>
@@ -31,16 +31,17 @@
   </div>
 </div>
 
-<div class="row tracks">
+<div class="row tracks" id="tracks">
 {% include 'tracks.html' %}
 </div>
 
 <script type="text/javascript">
 $(function() {
+  // TODO check if subscribed or nah
   var itunesid = "{{ podcast.itunesid }}";
   var csrftoken = "{{ csrf_token }}";
   // subscription button
-  $(".sub-form").submit(function(event) {
+  $("#sub-form").submit(function(event) {
     // Stop form from submitting normally
     event.preventDefault();
     var button = $("#sub-button");
@@ -72,7 +73,9 @@ $(function() {
       console.log(thrownError);
     },
     success: function(response) {
-      $(".tracks").html(response);
+      $("#tracks").hide();
+      $("#tracks").html(response);
+      $("#tracks").fadeIn();
     }
   });
 });

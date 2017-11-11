@@ -35,7 +35,9 @@ $(function () {
         "csrfmiddlewaretoken": csrftoken,
       },
       success: function(response) {
+        $("#player").hide();
         $("#player").html(response);
+        $("#player").fadeIn();
       }
     })
   });

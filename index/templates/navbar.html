@@ -73,7 +73,8 @@ $(function() {
         console.log(thrownError);
       },
       success: function() {
-        refresh_page();
+        var csrftoken = "{{ csrf_token }}";
+        refresh_page(csrftoken);
       }
     });
   });
@@ -97,7 +98,9 @@ $(function() {
           "title": title,
         };
         history.pushState(state, "", url);
+        $(".site-content").hide();
         $(".site-content").html(response);
+        $(".site-content").fadeIn();
         $("title")[0].innerText = title;
       }
     });
@@ -136,7 +139,9 @@ $(function() {
           "title": title,
         };
         history.pushState(state, "", url);
+        $(".site-content").hide();
         $(".site-content").html(response);
+        $(".site-content").fadeIn();
         $("title")[0].innerText = title;
       }
     });
@@ -162,7 +167,9 @@ $(function() {
           "title": title,
         };
         history.pushState(state, "", url);
+        $(".site-content").hide();
         $(".site-content").html(response);
+        $(".site-content").fadeIn();
         $("title")[0].innerText = title;
       }
     });
@@ -170,10 +177,12 @@ $(function() {
   $(window).on('popstate', function(event) {
     var state = event.originalEvent.state;
     if (state) {
+      $(".site-content").hide();
       $(".site-content").html(state.context);
+      $(".site-content").fadeIn();
       $("title")[0].innerText = state.title;
       if (state.q) {
-        $("#q").val(q);
+        $("#q").val(state.q);
       }
     }
   });

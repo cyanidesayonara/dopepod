@@ -5,25 +5,28 @@ from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from index.models import Profile
 from podcasts.models import Genre, Language, Subscription
-import logging
-
-logger = logging.getLogger(__name__)
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
     languages = Language.objects.all()
-    logger.error('whaddup')
+
+    # import logging
+    # logger = logging.getLogger(__name__)
+    # logger.error('whaddup')
+
     if request.method == 'GET':
         return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
     else:
         return render(request, 'index/ajax_index.html', {'genres': genres, 'languages': languages})
 
 def navbar(request):
-    logger.error('whaddup')
     return render(request, 'navbar.html', {})
 
 def browse(request):
-    return render(request, 'index/browse.html', {})
+    if request.method == 'GET':
+        return render(request, 'index/browse.html', {})
+    if request.method == 'POST':
+        return render(request, 'index/ajax_browse.html', {})
 
 @login_required
 def subscriptions(request):

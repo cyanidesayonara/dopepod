@@ -134,13 +134,45 @@ $(function() {
           console.log(thrownError);
         },
         success: function(response) {
+          $("#results").hide();
           $("#results").html(response);
+          $("#results").fadeIn();
+
+          // save results + q in current state
+          // TODO results is still mostly hidden
+          // removing style (hacky)
+          $("#results").removeAttr("style");
+          var curContext = $("#site-content")[0].innerHTML;
+          var curUrl = $("#site-content")[0].baseURI;
+          var curTitle = "dopepod";
+          var curState = {
+            "context": curContext,
+            "title": curTitle,
+            "q": q
+          };
+          history.replaceState(curState, "", curUrl);
         }
       });
     }
     // else show nothing
     else {
+      $("#results").hide();
       $("#results").html("");
+      $("#results").fadeIn();
+
+      // save results + q in current state
+      // TODO results is still mostly hidden
+      // removing style (hacky)
+      $("#results").removeAttr("style");
+      var curContext = $("#site-content")[0].innerHTML;
+      var curUrl = $("#site-content")[0].baseURI;
+      var curTitle = "dopepod";
+      var curState = {
+        "context": curContext,
+        "title": curTitle,
+        "q": q
+      };
+      history.replaceState(curState, "", curUrl);
     }
   }
 });

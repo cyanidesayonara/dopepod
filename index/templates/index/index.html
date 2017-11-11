@@ -1,71 +1,5 @@
 {% extends 'index/header.html' %}
 
-{% block extra_js %}
-<script type="text/javascript">
-$(function() {
-  // search when user types into search field (with min "delay" between keypresses)
-  var delay = 250
-  var minlength = 2
-  $("#q").keyup(debounce(SearchFunc, delay));
-
-  $("#search-form").submit(function (event) {
-    event.preventDefault();
-    debounce(SearchFunc, delay);
-  });
-
-  // search when user changes options
-  $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
-
-  // wait until user stops typing
-  // credit: https://remysharp.com/2010/07/21/throttling-function-calls/
-  function debounce(fn, delay) {
-    var timer = null;
-    return function () {
-      var context = this, args = arguments;
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        fn.apply(context, args);
-      }, delay);
-    };
-  }
-
-  // ajax search function
-  function SearchFunc() {
-    // gather variables
-    var q = $("#q").val();
-    var genre = $("input[name=genre-select]:checked").val();
-    var language = $("input[name=language-select]:checked").val();
-    var explicit = $("input[name=explicit-select]").is(":checked");
-    var csrftoken = "{{ csrf_token }}";
-    // if input is at least minlength, go ahead and search
-    if(q.length >= minlength) {
-      $.ajax({
-        method: "POST",
-        url: "{% url 'search' %}",
-        data: {
-          "q": q,
-          "genre": genre,
-          "language": language,
-          "explicit": explicit,
-          "csrfmiddlewaretoken": csrftoken,
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          console.log(thrownError);
-        },
-        success: function(response) {
-          $("#results").html(response);
-        }
-      });
-    }
-    // else show nothing
-    else {
-      $("#results").html("");
-    }
-  }
-});
-</script>
-{% endblock %}
-
 {% block content %}
 <div class="row search-bar" id="search-bar">
   <div class="col-sm-3">
@@ -150,4 +84,100 @@ $(function() {
 <div class="row" id="recommendations">
 </div>
 -->
+
+<script type="text/javascript">
+$(function() {
+  // search when user types into search field (with min "delay" between keypresses)
+  var delay = 250
+  var minlength = 2
+  $("#q").keyup(debounce(SearchFunc, delay));
+
+  $("#search-form").submit(function (event) {
+    event.preventDefault();
+    debounce(SearchFunc, delay);
+  });
+
+  // search when user changes options
+  $("input[name=genre-select], input[name=explicit-select], input[name=language-select]").change(SearchFunc);
+
+  // wait until user stops typing
+  // credit: https://remysharp.com/2010/07/21/throttling-function-calls/
+  function debounce(fn, delay) {
+    var timer = null;
+    return function () {
+      var context = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(context, args);
+      }, delay);
+    };
+  }
+
+  // ajax search function
+  function SearchFunc() {
+    // gather variables
+    var q = $("#q").val();
+    var genre = $("input[name=genre-select]:checked").val();
+    var language = $("input[name=language-select]:checked").val();
+    var explicit = $("input[name=explicit-select]").is(":checked");
+    var csrftoken = "{{ csrf_token }}";
+    // if input is at least minlength, go ahead and search
+    if(q.length >= minlength) {
+      $.ajax({
+        method: "POST",
+        url: "{% url 'search' %}",
+        data: {
+          "q": q,
+          "genre": genre,
+          "language": language,
+          "explicit": explicit,
+          "csrfmiddlewaretoken": csrftoken,
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          console.log(thrownError);
+        },
+        success: function(response) {
+          $("#results").hide();
+          $("#results").html(response);
+          $("#results").fadeIn();
+
+          // save results + q in current state
+          // TODO results is still mostly hidden
+          // removing style (hacky)
+          $("#results").removeAttr("style");
+          var curContext = $("#site-content")[0].innerHTML;
+          var curUrl = $("#site-content")[0].baseURI;
+          var curTitle = "dopepod";
+          var curState = {
+            "context": curContext,
+            "title": curTitle,
+            "q": q,
+          };
+          history.replaceState(curState, "", curUrl);
+        }
+      });
+    }
+    // else show nothing
+    else {
+      $("#results").hide();
+      $("#results").html("");
+      $("#results").fadeIn();
+
+      // save results + q in current state
+      // TODO results is still mostly hidden
+      // removing style (hacky)
+      $("#results").removeAttr("style");
+      var curContext = $("#site-content")[0].innerHTML;
+      var curUrl = $("#site-content")[0].baseURI;
+      var curTitle = "dopepod";
+      var curState = {
+        "context": curContext,
+        "title": curTitle,
+        "q": q,
+      };
+      history.replaceState(curState, "", curUrl);
+    }
+  }
+});
+</script>
 {% endblock %}

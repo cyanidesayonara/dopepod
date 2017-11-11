@@ -15,7 +15,8 @@ $(function() {
       },
       success: function() {
         $("#modal").modal("hide");
-        refresh_page();
+        var csrftoken = "{{ csrf_token }}";
+        refresh_page(csrftoken);
       }
     });
   });
