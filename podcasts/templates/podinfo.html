@@ -1,5 +1,9 @@
 {% extends 'index/index.html' %}
 
+{% block title %}
+{{ podcast.title }}
+{% endblock %}
+
 {% block content %}
 <div class="row podinfo" id="podinfo">
   <div class="col-sm-3">
@@ -13,13 +17,15 @@
     <!-- back button refresh this somehow -->
     {% if podcast.subscribed %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
-      <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
+      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
       {% csrf_token %}
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
     </form>
     {% else %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
-      <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
       {% csrf_token %}
+      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
     </form>
     {% endif %}
     <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
@@ -61,7 +67,6 @@ $(function() {
       }
     });
   });
-  // load tracks for podcast after page is loaded
   $.ajax({
     method: "POST",
     url: "{% url 'tracks' %}",
@@ -75,6 +80,7 @@ $(function() {
     success: function(response) {
       $("#tracks").hide();
       $("#tracks").html(response);
+      $('#overlay').addClass('hide');
       $("#tracks").fadeIn();
     }
   });

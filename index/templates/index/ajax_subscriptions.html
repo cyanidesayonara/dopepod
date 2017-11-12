@@ -2,11 +2,46 @@
 <div class="col">
 {% for subscription in subscriptions %}
   <div class="row">
-    <div class="col sub-box">
+    <a class="col result-image show-podinfo sub-box" id="{{ subscription.itunesid }}" href=
+     "{% url 'podinfo' itunesid=subscription.itunesid %}">
       <h6>{{ subscription.pod.title }}</h6>
       <p>{{ subscription.last_updated }}</p>
-    </div>
+    </a>
   </div>
 {% endfor %}
 </div>
+
+<script>
+  $('.show-podinfo').click(function(event) {
+    event.preventDefault();
+    var itunesid = this.id;
+    var ajax_url = "{% url 'ajax_podinfo' %}";
+    var url = ajax_url + itunesid + "/";
+    var csrftoken = "{{ csrf_token }}";
+    $.ajax({
+      type: "POST",
+      url: ajax_url,
+      data: {
+        "itunesid": itunesid,
+        "csrfmiddlewaretoken": csrftoken,
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+      },
+      success: function(response) {
+        var title = "podinfo";
+        $("#site-content").hide();
+        $("#site-content").html(response);
+        $("#site-content").fadeIn();
+        $("title")[0].innerText = title;
+
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
+      }
+    });
+  });
+</script>
 {% endif %}

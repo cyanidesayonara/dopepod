@@ -119,6 +119,7 @@ nav {
   border: 1px solid black;
   margin: 5px;
   border-radius: 8px;
+  color: #000;
 }
 
 .podinfo {
@@ -127,8 +128,21 @@ nav {
 }
 
 .tracks {
+  margin: 15px;
+  padding: 15px;
   height: 500px;
   overflow-y: scroll;
+}
+
+#overlay {
+    background: url("loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+}
+.hide {
+    display: none;
 }
 
 .profile {

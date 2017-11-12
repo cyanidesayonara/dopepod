@@ -1,4 +1,5 @@
 <div class="col">
+{% if tracks %}
 {% for track in tracks %}
 <div class="row">
   <a class="col-sm-9" data-toggle="collapse" href="#collapseExample{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">
@@ -18,6 +19,10 @@
   </div>
 </div>
 {% endfor %}
+{% else %}
+ <div class="row" id="overlay">
+ </div>
+ {% endif %}
 </div>
 
 <script type="text/javascript">
