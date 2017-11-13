@@ -8,12 +8,12 @@
   </div>
   <div class="col-sm-3">
     {% if podcast.subscribed %}
-    <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
+    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
       <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
       {% csrf_token %}
     </form>
     {% else %}
-    <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
+    <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
       <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
       {% csrf_token %}
     </form>
@@ -30,50 +30,3 @@
 <div class="row tracks" id="tracks">
 {% include 'tracks.html' %}
 </div>
-
-<script type="text/javascript">
-$(function() {
-  // TODO check if subscribed or nah
-  var itunesid = "{{ podcast.itunesid }}";
-  var csrftoken = "{{ csrf_token }}";
-  // subscription button
-  $("#sub-form").submit(function(event) {
-    // Stop form from submitting normally
-    event.preventDefault();
-    var button = $("#sub-button");
-    var url = "{% url 'subscribe' %}";
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: {
-        "itunesid": itunesid,
-        "csrfmiddlewaretoken": csrftoken,
-      },
-      error: function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      },
-      success: function(data) {
-        button.val(data);
-      }
-    });
-  });
-  // load tracks for podcast
-  $.ajax({
-    method: "POST",
-    url: "{% url 'tracks' %}",
-    data: {
-      "itunesid": itunesid,
-      "csrfmiddlewaretoken": csrftoken,
-    },
-    error: function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    },
-    success: function(response) {
-      $("#tracks").hide();
-      $("#tracks").html(response);
-      $('#overlay').addClass('hide');
-      $("#tracks").fadeIn();
-    }
-  });
-});
-</script>

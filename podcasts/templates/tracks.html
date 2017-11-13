@@ -24,27 +24,3 @@
  </div>
  {% endif %}
 </div>
-
-<script type="text/javascript">
-$(function () {
-    $(".play").click(function() {
-    var url = this.id;
-    var type = this.name;
-    var csrftoken = "{{ csrf_token }}";
-    $.ajax({
-      method: "POST",
-      url: "{% url 'play' %}",
-      data: {
-        "url": url,
-        "type": type,
-        "csrfmiddlewaretoken": csrftoken,
-      },
-      success: function(response) {
-        $("#player").hide();
-        $("#player").html(response);
-        $("#player").fadeIn();
-      }
-    })
-  });
-})
-</script>

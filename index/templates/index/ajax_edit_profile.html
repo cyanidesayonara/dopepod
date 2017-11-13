@@ -9,27 +9,3 @@
     </form>
   </div>
 </div>
-
-<script type="text/javascript">
-$(function() {
-  $('.profile-form').submit(function (event) {
-    event.preventDefault();
-    var data = $(this).serialize();
-    var method = this.method;
-    var url = this.action;
-    $.ajax({
-      data: data,
-      method: method,
-      url: url,
-      error: function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        $("#podinfo").html(xhr.responseJSON.html);
-      },
-      success: function(response) {
-        $(".modal-content").html("");
-        $("#modal").modal("hide");
-      }
-    });
-  });
-});
-</script>

@@ -25,39 +25,5 @@ something
 </div>
 {% endfor %}
 
-<script>
-$(function() {
-  $('.show-podinfo').click(function(event) {
-    event.preventDefault();
-    var itunesid = this.id;
-    var ajax_url = "{% url 'ajax_podinfo' %}";
-    var url = ajax_url + itunesid + "/";
-    var csrftoken = "{{ csrf_token }}";
-    $.ajax({
-      type: "POST",
-      url: ajax_url,
-      data: {
-        "itunesid": itunesid,
-        "csrfmiddlewaretoken": csrftoken,
-      },
-      error: function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-      },
-      success: function(response) {
-        var title = "podinfo";
-        var state = {
-          "context": response,
-          "title": title,
-        };
-        history.pushState(state, "", url);
-        $("#site-content").hide();
-        $("#site-content").html(response);
-        $("#site-content").fadeIn();
-        $("title")[0].innerText = title;
-      }
-    });
-  });
-});
-</script>
 {% endif %}
 {% endblock %}
