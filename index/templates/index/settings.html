@@ -1,11 +1,10 @@
 {% extends 'index/header.html' %}
 
 {% block content %}
-<div class="row profile">
+<div class="row settings">
   <div class="col">
     <h1>My Profile</h1>
-    <form class="profile-form" action="{% url 'edit_profile' %}" method="POST">
-      {% csrf_token %}
+    <form class="settings-form" action="{% url 'settings' %}" method="POST">
       {{ user_form.as_p }}
       {{ profile_form.as_p }}
       <button type="submit">Save changes</button>

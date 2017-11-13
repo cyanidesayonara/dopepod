@@ -1,11 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.db.models import Q
-import requests
-import xml.etree.ElementTree as ET
 from podcasts.models import Podcast, Subscription
-from django.views.decorators.csrf import requires_csrf_token
-import os
 
 def charts(request):
     """
@@ -58,45 +55,38 @@ def search(request):
         except:
             q = None
 
-    else:
-        # get query, if any
-        try:
-            q = request.POST['q']
-        except:
-            q = None
+        if len(q) >= 2:
+            # get genre or 'All'
+            try:
+                genre = request.GET['genre']
+            except:
+                genre = 'All'
 
-    # get genre or 'All'
-    try:
-        genre = request.POST['genre']
-    except:
-        genre = 'All'
+            # get language or 'All'
+            try:
+                language = request.GET['language']
+            except:
+                language = 'All'
 
-    # get language or 'All'
-    try:
-        language = request.POST['language']
-    except:
-        language = 'All'
+            # get explicit or True
+            try:
+                explicit = False if request.GET['explicit'] == 'false' else True
+            except:
+                explicit = True
 
-    # get explicit or True
-    try:
-        explicit = False if request.POST['explicit'] == 'false' else True
-    except:
-        explicit = True
+            # get user
+            user = request.user
 
-    # get user
-    user = request.user
+            # return podcasts matching search terms
+            podcasts = actual_search(q, genre, language, explicit, user)
+        # if query None, return nothing
+        else:
+            podcasts = {}
 
-    if q:
-        # return podcasts matching search terms
-        podcasts = actual_search(q, genre, language, explicit, user)
-    # if query None, return nothing
-    else:
-        podcasts = {}
-
-    if request.method == 'GET':
-        return render(request, 'results.html', {'podcasts': podcasts})
-    else:
-        return render(request, 'ajax_results.html', {'podcasts': podcasts})
+        if request.is_ajax():
+            return render(request, 'ajax_results.html', {'podcasts': podcasts})
+        else:
+            return render(request, 'results.html', {'podcasts': podcasts})
 
 def actual_search(q, genre, language, explicit, user):
     """
@@ -151,109 +141,97 @@ def actual_search(q, genre, language, explicit, user):
             podcast.subscribed = True
     return res
 
-def ajax_podinfo(request):
-    if request.method == 'POST':
-        itunesid = request.POST['itunesid']
-        podcast = Podcast.objects.get(itunesid=itunesid)
+def podinfo(request, itunesid=None):
+    """
+    returns a podinfo page
+    ajax: tracks loaded separately via ajax
+    non-ajax: tracks included
+    required argument: itunesid
+    """
 
-        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
-        user = request.user
-        if user.username:
-            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
-        else:
-            subscriptions = []
+    user = request.user
 
-        if podcast.itunesid in subscriptions:
-            podcast.subscribed = True
-
-        return render(request, 'ajax_podinfo.html', {'podcast': podcast})
-    else:
-        raise Http404()
-
-def podinfo(request, itunesid):
+    # non-ajax using GET
     if request.method == 'GET':
-        podcast = Podcast.objects.get(itunesid=itunesid)
+        podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
-        # get a list of itunesids from user's subscriptions (if not AnonymousUser)
-        user = request.user
-        if user.username:
-            subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        # mark podcast as subscribed
+        podcast.is_subscribed(user)
+
+        # if ajax
+        if request.is_ajax():
+            return render(request, 'ajax_podinfo.html', {'podcast': podcast})
+
+        # if non-ajax
         else:
-            subscriptions = []
+            # returns tracks
+            tracks = podcast.get_tracks()
+            return render(request, 'podinfo.html', {'podcast': podcast, 'tracks': tracks})
 
-        if podcast.itunesid in subscriptions:
-            podcast.subscribed = True
-        return render(request, 'podinfo.html', {'podcast': podcast})
+    # any other method not accepted
     else:
         raise Http404()
-
-# TODO get tracks into podinfo without ajax
 
 def tracks(request):
     """
-    POST request sent from podinfo
-    gets podcast by keyword itunesid
-    requests feeUrl for said podcast
-    returns list of tracks parsed from said request
+    returns html for tracks
+    POST ajax request sent from podinfo
+    required argument: itunesid
     """
-    # validate request
-    try:
-        itunesid = request.POST['itunesid']
-        podcast = Podcast.objects.get(itunesid=itunesid)
-    except:
-        raise Http404()
 
-    # TODO fix this shit
-    feedUrl = podcast.feedUrl
-    # print(feedUrl)
-    r = requests.get(feedUrl)
-    tracks = []
-
-
-    root = ET.fromstring(r.text)
-    tree = root.find('channel')
-
-    for item in tree.findall('item'):
+    # ajax using POST
+    if request.method == 'POST':
         try:
-            track = {}
-            track['title'] = item.find('title').text
-            track['summary'] = item.find('description').text
-            track['pubDate'] = item.find('pubDate').text
+            itunesid = request.POST['itunesid']
+            podcast = Podcast.objects.get(itunesid=itunesid)
+        except:
+            raise Http404()
 
-            # link to track
-            # enclosure might be missing, have alternatives
-            enclosure = item.find('enclosure')
-            track['url'] = enclosure.get('url')
-            track['type'] = enclosure.get('type')
-            tracks.append(track)
-        except Exception as e:
-            import logging
-            logger = logging.getLogger(__name__)
-            # figure out exception message
-            logger.error('can\'t get track')
-    return render(request, 'tracks.html', {'tracks': tracks})
+        tracks = podcast.get_tracks()
+        return render(request, 'tracks.html', {'tracks': tracks})
 
-def play(request):
-    """
-    takes url + filetype, returns an html5 audio element made of same
-    """
-    # TODO: itemize track
-    track = {}
-    try:
-        track['url'] = request.POST['url']
-        track['type'] = request.POST['type']
-    except:
+    # any other method not accepted
+    else:
         raise Http404()
-    return render(request, 'player.html', {'track': track})
 
+def play(request, url=None):
+    """
+    returns html5 audio element
+    POST ajax request
+    GET request in a popup
+    required argument: url
+    """
+    # oops, just use this
+    print(request.is_ajax())
 
+    # GET request, opens in popup
+    if request.method == 'GET':
+        track = {}
+        track['url'] = url
+        return render(request, 'player.html', {'track': track})
+
+    # ajax using POST
+    # TODO: itemize track
+    if request.method == 'POST':
+        track = {}
+        try:
+            track['url'] = request.POST['url']
+        except:
+            raise Http404()
+        return render(request, 'player.html', {'track': track})
+
+    # any other method not accepted
+    else:
+        raise Http404()
+
+@login_required
 def subscribe(request):
     """
     subscribe to podcast
     """
 
     # validate request
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST':
         try:
             itunesid = request.POST['itunesid']
         except KeyError:

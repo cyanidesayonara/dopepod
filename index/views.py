@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
-from index.models import Profile
 from podcasts.models import Genre, Language, Subscription
 
 def home(request):
@@ -14,60 +12,70 @@ def home(request):
     # logger = logging.getLogger(__name__)
     # logger.error('whaddup')
 
-    if request.method == 'GET':
-        return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
+    if request.method == "GET":
+        if request.is_ajax():
+            return render(request, 'index/ajax_index.html', {'genres': genres, 'languages': languages})
+        else:
+            return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
+
+    # any other method not accepted
     else:
-        return render(request, 'index/ajax_index.html', {'genres': genres, 'languages': languages})
+        raise Http404()
 
 def navbar(request):
     return render(request, 'navbar.html', {})
 
 def browse(request):
-    if request.method == 'GET':
-        return render(request, 'index/browse.html', {})
-    if request.method == 'POST':
-        return render(request, 'index/ajax_browse.html', {})
+    if request.method == "GET":
+        if request.is_ajax():
+            return render(request, 'index/ajax_browse.html', {})
+        else:
+            return render(request, 'index/browse.html', {})
 
 @login_required
 def subscriptions(request):
     """
     returns subscription for user
+    GET for non-ajax requests
+    POST request first returns base.html via ajax,
+    then requests subscriptions with keyword ajax
     """
+
     if request.method == 'GET':
         user = request.user
-        subscriptions = {}
-        if user.is_authenticated():
-            subscriptions = Subscription.objects.filter(user=user)
+        subscriptions = Subscription.get_subscriptions(user)
         return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-    else:
+    if request.method == 'POST':
         try:
             ajax = request.POST['ajax']
             user = request.user
-            subscriptions = Subscription.objects.filter(user=user)
+            subscriptions = Subscription.get_subscriptions(user)
             return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
         except:
             return render(request, 'index/ajax_subscriptions_base.html', {})
 
-@transaction.atomic
 @login_required
-def edit_profile(request):
+def settings(request):
+    """
+    GET return settings
+    POST save settings
+    TODO make this work non-ajax
+    """
+
+    if request.method == 'GET':
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        return render(request, 'index/ajax_settings.html', {
+            'user_form': user_form,
+            'profile_form': profile_form
+            })
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return render(request, 'index/profile.html', {})
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-
-    return render(request, 'index/ajax_edit_profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-        })
-
-def profile(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = user.profile
-    return render(request, 'index/profile.html', {'user': user, 'profile': profile})
+            return render(request, 'index/ajax_settings.html', {
+                'user_form': user_form,
+                'profile_form': profile_form
+                })

@@ -3,19 +3,19 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="dropdown">
-          <button class="btn btn-sm dropdown-toggle filter-button" type="button" id="dropdownMenuButton"
+          <button class="btn btn-sm dropdown-toggle filter-button genre-select" type="button" id="dropdownMenuButton"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Genre
           </button>
           <div class="dropdown-menu dropdown-filter" aria-labelledby="dropdownMenuButton">
             <div class="btn-group-vertical" data-toggle="buttons">
               <label class="btn btn-sm filter-button active">
-                <input type="radio" name="genre-select" id="All" value="All" checked>
+                <input type="radio" value="All" checked>
                 All
               </label>
               {% for genre in genres %}
               <label class="btn btn-sm filter-button">
-                <input type="radio" name="genre-select" id="{{ genre }}" value="{{ genre }}">
+                <input type="radio" value="{{ genre }}">
                 {{ genre }} - {{ genre.n_podcasts }}
               </label>
               {% endfor %}
@@ -25,19 +25,19 @@
       </div>
       <div class="col-sm-6">
         <div class="dropdown">
-          <button class="btn btn-sm dropdown-toggle filter-button" type="button" id="dropdownMenuButton"
+          <button class="btn btn-sm dropdown-toggle filter-button language-select" type="button" id="dropdownMenuButton"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Language
           </button>
           <div class="dropdown-menu dropdown-filter" aria-labelledby="dropdownMenuButton">
             <div class="btn-group-vertical" data-toggle="buttons">
               <label class="btn btn-sm filter-button active">
-                <input type="radio" name="language-select" id="All" value="All" checked>
+                <input type="radio" value="All" checked>
                 All
               </label>
               {% for language in languages %}
               <label class="btn btn-sm filter-button">
-                <input type="radio" name="language-select" id="{{ language }}" value="{{ language }}" >
+                <input type="radio" value="{{ language }}" >
                 {{ language }} - {{ language.n_podcasts }}
               </label>
               {% endfor %}
@@ -53,7 +53,7 @@
         <input class="form-control" type="text" name="q" id="q" type="search" placeholder="Search for..."
         aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
         <span class="input-group-btn">
-        <button class="btn btn-secondary" type="submit">Go!</button>
+        <button class="btn btn-secondary" id="search-button" type="submit">Go!</button>
         </span>
       </div>
     </form>
@@ -63,7 +63,7 @@
       <div class="col">
         <div class="btn-group-vertical" data-toggle="buttons">
           <label class="btn btn-sm filter-button active">
-            <input type="checkbox" name="explicit-select" checked>
+            <input class="explicit-select" type="checkbox" checked>
             Show Explicit
           </label>
         </div>

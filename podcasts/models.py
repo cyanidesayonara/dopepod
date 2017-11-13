@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import requests
+import xml.etree.ElementTree as ET
 
 class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
@@ -23,16 +25,77 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
 
+    def is_subscribed(self, user):
+        """
+        get a list of itunesids from user's subscriptions
+        (if not AnonymousUser),
+        if self.itunesid on list, self.subscribed = True
+        """
+        if user.username:
+            subscriptions = Subscription.get_subscriptions_itunesids(user)
+            if self.itunesid in subscriptions:
+                self.subscribed = True
+
+    def get_tracks(self):
+        """
+        returns a list of tracks using requests and ElementTree
+        """
+
+        tracks = []
+
+        # TODO fix this shit
+        feedUrl = self.feedUrl
+        r = requests.get(feedUrl)
+        root = ET.fromstring(r.text)
+        tree = root.find('channel')
+
+        for item in tree.findall('item'):
+            try:
+                track = {}
+                track['title'] = item.find('title').text
+                track['summary'] = item.find('description').text
+                track['pubDate'] = item.find('pubDate').text
+
+                # link to track
+                # enclosure might be missing, have alternatives
+                enclosure = item.find('enclosure')
+                track['url'] = enclosure.get('url')
+                tracks.append(track)
+            except Exception as e:
+                import logging
+                logger = logging.getLogger(__name__)
+                # figure out exception message
+                logger.error('can\'t get track')
+        return tracks
+
 class Subscription(models.Model):
     itunesid = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pod = models.ForeignKey('podcasts.Podcast')
     last_updated = models.DateTimeField(default=timezone.now)
 
+    def get_subscriptions(user):
+        # make sure not AnonymousUser
+        if user.username:
+            return Subscription.objects.filter(user=user)
+        else:
+            return None
+
+    def get_subscriptions_itunesids(user):
+        # make sure not AnonymousUser
+        if user.username:
+            return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        else:
+            return None
+
     def update(self):
         last_updated = timezone.now
 
 class Filterable(models.Model):
+    """
+    meta class for genre and languages
+    """
+
     name = models.CharField(primary_key=True, max_length=50)
     n_podcasts = models.IntegerField()
 
@@ -54,7 +117,7 @@ class Filterable(models.Model):
                     obj.n_podcasts += Podcast.objects.filter(genre__supa=obj).count()
             # if obj doesn't have attr supa, it's a Language
             except AttributeError:
-                obj.n_podcasts = Podcast.objects.filter(language=obj.name).count()    
+                obj.n_podcasts = Podcast.objects.filter(language=obj.name).count()
             obj.save()
 
 class Genre(Filterable):
