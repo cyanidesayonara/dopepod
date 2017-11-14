@@ -1,7 +1,7 @@
 body {
-  background: url("space.jpg");
-  /*background: rgba(255, 255, 255, 1);*/
-  overflow:visible;
+  /*background: url("space.jpg");*/
+  background: rgba(255, 255, 255, 1);
+  /*background: hsla(0, 0%, 100%, 1);*/
 }
 
 nav {
@@ -10,35 +10,55 @@ nav {
   z-index: 99;
 }
 
+#canvas {
+  min-height: 100vh;
+}
+
 .site-content {
   background: rgba(255, 255, 255, 0.5);
-  min-height: 100vh;
-  border: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.texture {
+  background: url("grid.png");
+  height: 100%;
+  padding: 30px;
+  margin: 0px -15px;
 }
 
 .search-bar {
-  margin-top: 80px;
-  padding: 30px 0px;
+  background: #3b6d83;
+  margin: 80px 20px 10px;
+  border-radius: 3px;
   border: 1px solid black;
-  border-radius: 8px;
+}
+
+#search-form {
+  max-width: 40%;
+  margin: auto;
 }
 
 .alphabet {
-  margin-top: 80px;
+  margin: 80px 20px;
   padding: 30px 0px;
   border: 1px solid black;
-  border-radius: 8px;
+  border-radius: .25rem;
 }
 
 #subscriptions {
   margin-top: 80px;
   padding: 30px 0px;
   border: 1px solid black;
-  border-radius: 8px;
+  border-radius: .25rem;
 }
 
 .search-results {
-
+  background: #3b6d83;
+  height: 520px;
+  margin: 10px 20px;
+  border: 1px solid black;
+  border-radius: .25rem;
 }
 
 .filter-button {
@@ -90,8 +110,8 @@ nav {
   background: rgba(40, 110, 150, 0.6);
   box-shadow: 4px 4px 4px rgba(20, 30, 40, 0.2);
 */
-  border: 1px solid black;
-  border-radius: 8px;
+  /*border: 1px solid black;*/
+  border-radius: .25rem;
   text-align: left;
 }
 
@@ -99,26 +119,32 @@ nav {
   padding-top: 4px;
   height: 2.5em;
   overflow: hidden;
-  border: 1px solid black;
-  border-radius: 8px;
+  /*border: 1px solid black;*/
+  border-radius: .25rem;
 }
 
 .result-genre {
   height: 1.5em;
   overflow: hidden;
-  border: 1px solid black;
-  border-radius: 8px;
+  /*border: 1px solid black;*/
+  border-radius: .25rem;
+}
+
+.result-image {
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .result-image img {
-  height: 156px;
-  width: 156px;
+  margin: auto;
+  max-width:100%;
+  max-height:100%;
 }
 
 .sub-box {
   border: 1px solid black;
   margin: 5px;
-  border-radius: 8px;
+  border-radius: .25rem;
   color: #000;
 }
 

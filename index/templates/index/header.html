@@ -28,9 +28,13 @@
       </div>
     </nav>
 
-    <div class="container site-content" id="site-content">
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+      <div class="row" id="canvas">
+        <div class="col site-content" id="site-content">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
     </div>
 
     <!--MODAL-->
