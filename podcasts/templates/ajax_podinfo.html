@@ -9,13 +9,15 @@
   <div class="col-sm-3">
     {% if podcast.subscribed %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
-      <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
       {% csrf_token %}
+      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
     </form>
     {% else %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
-      <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
       {% csrf_token %}
+      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+      <input type="submit" class="btn btn-dark" id="sub-button" value="Subscribe">
     </form>
     {% endif %}
     <p>{% if podcast.genre.supa %}{{ podcast.genre.supa }} - {% endif %}{{ podcast.genre }}</p>
@@ -28,5 +30,5 @@
 </div>
 
 <div class="row tracks" id="tracks">
-{% include 'tracks.html' %}
+  {% include 'tracks.html' %}
 </div>

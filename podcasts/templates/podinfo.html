@@ -17,8 +17,8 @@
     <!-- back button refresh this somehow -->
     {% if podcast.subscribed %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="sub-form" method="POST">
-      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
       {% csrf_token %}
+      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
       <input type="submit" class="btn btn-dark" id="sub-button" value="Unsubscribe">
     </form>
     {% else %}
@@ -38,6 +38,6 @@
 </div>
 
 <div class="row tracks" id="tracks">
-{% include 'tracks.html' %}
+  {% include 'tracks.html' %}
 </div>
 {% endblock %}

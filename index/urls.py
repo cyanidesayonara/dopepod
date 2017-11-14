@@ -1,11 +1,18 @@
 from django.conf.urls import url
-from index import views
+from index import views as index
+from podcasts import views as podcasts
 
 urlpatterns = [
-    # url(r'^x$', views.ajax_home, name='ajax_home'),
-    url(r'^$', views.home, name='home'),
-    url(r'^navbar/$', views.navbar, name='navbar'),
-    url(r'^browse/$', views.browse, name='browse'),
-    url(r'^subscriptions/$', views.subscriptions, name='subscriptions'),
-    url(r'^settings/$', views.settings, name='settings'),
+    url(r'^$', index.home, name='home'),
+    url(r'^navbar/$', index.navbar, name='navbar'),
+    url(r'^browse/$', index.browse, name='browse'),
+    url(r'^subscriptions/$', index.subscriptions, name='subscriptions'),
+    url(r'^settings/$', index.settings, name='settings'),
+    # url(r'^charts/$', podcasts.charts, name="charts"),
+    url(r'^search/$', podcasts.search, name='search'),
+    url(r'^podinfo/(?P<itunesid>\d+)/$', podcasts.podinfo, name='podinfo'),
+    url(r'^tracks/$', podcasts.tracks, name='tracks'),
+    url(r'^play/$', podcasts.play, name='play'),
+    url(r'^play/(?P<url>.+)/$', podcasts.play, name='play'),
+    url(r'^subscribe/$', podcasts.subscribe, name='subscribe'),
 ]

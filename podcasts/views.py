@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
-from django.db.models import Q
+from django.http import Http404, HttpResponse
 from podcasts.models import Podcast, Subscription
 
 def charts(request):
@@ -201,8 +200,6 @@ def play(request, url=None):
     GET request in a popup
     required argument: url
     """
-    # oops, just use this
-    print(request.is_ajax())
 
     # GET request, opens in popup
     if request.method == 'GET':

@@ -93,7 +93,7 @@ class Subscription(models.Model):
 
 class Filterable(models.Model):
     """
-    meta class for genre and languages
+    meta class for genre and language
     """
 
     name = models.CharField(primary_key=True, max_length=50)

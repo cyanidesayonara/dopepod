@@ -25,12 +25,12 @@ function getCookie(name) {
     }
   }
   return cookieValue;
-}
+};
 
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+};
 
 function refreshCookie() {
   // for sending csrf token on every ajax POST request
@@ -67,15 +67,15 @@ function refreshPage() {
           console.log(thrownError);
         })
         .done(function(response) {
+          $(".site-content").hide();
+          $(".site-content").html(response);
+          $(".site-content").fadeIn();
           var title = "dopepod";
           var state = {
             "context": response,
             "title": title,
           };
           history.pushState(state, "", url);
-          $(".site-content").hide();
-          $(".site-content").html(response);
-          $(".site-content").fadeIn();
           $("title")[0].innerText = title;
         });
     });
@@ -105,10 +105,10 @@ function SearchFunc() {
   // var language = $(".site-content .language-select").val();
   // var explicit = $(".site-content .explicit-select").is(":checked");
   // if input is at least minlength, go ahead and search
-  if(q.length >= minlength) {
+  if (q.length >= minlength) {
     $.ajax({
       method: "GET",
-      url: "/podcasts/search/",
+      url: "/search/",
       data: {
         "q": q,
         // "genre": genre,
@@ -180,46 +180,104 @@ $(document)
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
     var url = this.href;
+    var url2 = this.href;
     var itunesid = this.id;
     $.ajax({
       type: "GET",
       url: url,
-      error: function(xhr, ajaxOptions, thrownError) {
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-      },
-      success: function(response) {
-        var title = "podinfo";
+      })
+      .done(function(response) {
+        $("#site-content").hide();
+        $("#site-content").html(response);
+        $("#site-content").fadeIn();
+
+        var title = $(".podinfo h3")[0].innerHTML;
         var state = {
           "context": response,
           "title": title,
         };
-        history.pushState(state, "", url);
-        $("#site-content").hide();
-        $("#site-content").html(response);
-        $("#site-content").fadeIn();
+
         $("title")[0].innerText = title;
+        history.pushState(state, "", url2);
 
         // load tracks for podcast
         // TODO also load on back button
-        var url = "/podcasts/tracks/";
+        var url = "/tracks/";
         $.ajax({
           method: "POST",
           url: url,
           data: {
             "itunesid": itunesid,
           },
-          error: function(xhr, ajaxOptions, thrownError){
+        })
+          .fail(function(xhr, ajaxOptions, thrownError){
             console.log(thrownError);
-          },
-          success: function(response) {
+          })
+          .done(function(response) {
             $("#tracks").hide();
             $("#tracks").html(response);
             $('#overlay').addClass('hide');
             $("#tracks").fadeIn();
-          }
-        });
-      }
-    });
+          });
+      });
+  })
+  // open login or register in modal
+  .on("click", ".ajax-login, .ajax-register", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var method = this.method;
+    $.ajax({
+      type: method,
+      url: url,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+      })
+      .done(function(response) {
+        $(".modal-content").html(response.html);
+      });
+  })
+  // go to home view
+  .on("click", ".home", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    $.ajax({
+      type: "GET",
+      url: url,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+      })
+      .done(function(response) {
+        var title = "dopepod";
+        var state = {
+          "context": response,
+          "title": title,
+        };
+        history.pushState(state, "", url);
+        $(".site-content").hide();
+        $(".site-content").html(response);
+        $(".site-content").fadeIn();
+        $("title")[0].innerText = title;
+      });
+  })
+  // open settings in modal
+  .on("click", ".settings", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    $.ajax({
+      type: "GET",
+      url: url,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+      })
+      .done(function(response) {
+        $(".modal-content").html(response);
+      });
   })
   // save settings, empty and hide modal
   .on("submit", ".settings-form", function (e) {
@@ -231,82 +289,28 @@ $(document)
       data: data,
       method: method,
       url: url,
-      error: function(xhr, ajaxOptions, thrownError) {
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         $(".modal-content").html(xhr.responseJSON.html);
-      },
-      success: function(response) {
+      })
+      .done(function(response) {
         $(".modal-content").html("");
         $("#modal").modal("hide");
-      }
-    });
-  })
-  // open login or register in modal
-  .on("click", ".ajax-login, .ajax-register", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    var method = this.method;
-    $.ajax({
-      type: method,
-      url: url,
-      error: function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      },
-      success: function(response) {
-        $(".modal-content").html(response.html);
-      }
-    });
-  })
-  // go to home view
-  .on("click", ".home", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-      error: function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      },
-      success: function(response) {
-        var title = "dopepod";
-        var state = {
-          "context": response,
-          "title": title,
-        };
-        history.pushState(state, "", url);
-        $(".site-content").hide();
-        $(".site-content").html(response);
-        $(".site-content").fadeIn();
-        $("title")[0].innerText = title;
-      }
-    });
-  })
-  // open settings in modal
-  .on("click", ".settings", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-      error: function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      },
-      success: function(response) {
-        $(".modal-content").html(response);
-      }
-    });
+      });
   })
   // open subscriptions
   .on("click", ".subscriptions", function(e) {
     e.preventDefault();
     var url = this.href;
     $.ajax({
-      type: "POST",
+      type: "GET",
       url: url,
-      error: function(xhr, ajaxOptions, thrownError){
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function(response) {
+      })
+      .done(function(response) {
         var title = "subscriptions";
         var state = {
           "context": response,
@@ -322,18 +326,14 @@ $(document)
         $.ajax({
           type: "POST",
           url: url,
-          data: {
-            "ajax": "yep",
-          },
-          error: function(xhr, ajaxOptions, thrownError){
+        })
+          .fail(function(xhr, ajaxOptions, thrownError){
             console.log(thrownError);
-          },
-          success: function(response) {
+          })
+          .done(function(response) {
             $("#subscriptions").html(response);
-          }
-        });
-      }
-    });
+          });
+      });
   })
   // open browse
   .on("click", ".browse", function(e) {
@@ -342,13 +342,11 @@ $(document)
     $.ajax({
       type: "GET",
       url: url,
-      data: {
-        "ajax": "yep",
-      },
-      error: function(xhr, ajaxOptions, thrownError){
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function(response) {
+      })
+      .done(function(response) {
         var title = "browse";
         var state = {
           "context": response,
@@ -359,50 +357,49 @@ $(document)
         $(".site-content").html(response);
         $(".site-content").fadeIn();
         $("title")[0].innerText = title;
-      }
-    });
+      });
   })
   // put track in player
   .on("click", ".play", function(e) {
     e.preventDefault();
     var url = this.id;
+    var method = this.method;
     $.ajax({
-      method: "POST",
-      url: "/podcasts/play/",
+      method: method,
+      url: "/play/",
       data: {
         "url": url,
+
       },
-      error: function(xhr, ajaxOptions, thrownError){
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function(response) {
+      })
+      .done(function(response) {
         $("#player").hide();
         $("#player").html(response);
         $("#player").fadeIn();
-      }
-    })
+      });
   })
   // TODO check if subscribed or nah
   // subscription button
   .on("submit", "#sub-form", function(e) {
     // Stop form from submitting normally
     e.preventDefault();
-    var itunesid = this.id;
-    var button = $("#sub-button");
-    var url = "/subscribe/";
+    var data = $(this).serialize();
+    var url = this.action;
+    var method = this.method;
     $.ajax({
-      method: "POST",
+      method: method,
       url: url,
-      data: {
-        "itunesid": itunesid,
-      },
-      error: function(xhr, ajaxOptions, thrownError){
+      data: data,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function(data) {
-        button.val(data);
-      }
-    });
+      })
+      .done(function(data) {
+        $("#sub-button").val(data);
+      });
   })
   // login or signup link (in modal)
   .on("click", ".login-link, .signup-link", function(e) {
@@ -410,13 +407,13 @@ $(document)
     var url = this.href;
     $.ajax({
       url: url,
-      error: function(xhr, ajaxOptions, thrownError){
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function(response) {
+      })
+      .done(function(response) {
         $(".modal-content").html(response.html);
-      }
-    });
+      });
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -428,29 +425,30 @@ $(document)
       data: data,
       method: method,
       url: url,
-      error: function(xhr, ajaxOptions, thrownError) {
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         $(".modal-content").html(xhr.responseJSON.html);
-      },
-      success: function() {
+      })
+      .done(function() {
+        $(".modal-content").html("");
         $("#modal").modal("hide");
         refreshCookie();
         refreshPage();
-      }
-    });
+      });
   })
-  // logout
+  // logout, refresh after
   .on("click", ".ajax-logout", function(e) {
     e.preventDefault();
     $.ajax({
       type: "POST",
       url: "/account/logout/",
-      error: function(xhr, ajaxOptions, thrownError){
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-      },
-      success: function() {
+      })
+      .done(function() {
         refreshCookie();
         refreshPage();
-      }
-    });
+      });
   });

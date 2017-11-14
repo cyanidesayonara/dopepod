@@ -18,8 +18,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('index.urls'), name='index'),
+    url(r'^', include('index.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('allauth.urls')),
-    url(r'^podcasts/', include('podcasts.urls')),
 ]

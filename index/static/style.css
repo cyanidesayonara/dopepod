@@ -16,8 +16,8 @@ nav {
 
 .site-content {
   background: rgba(255, 255, 255, 0.5);
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
 }
 
 .texture {
@@ -29,9 +29,10 @@ nav {
 
 .search-bar {
   background: #3b6d83;
-  margin: 80px 20px 10px;
+  margin: 80px 8rem 2rem;
   border-radius: 3px;
   border: 1px solid black;
+
 }
 
 #search-form {

@@ -37,45 +37,56 @@ def subscriptions(request):
     """
     returns subscription for user
     GET for non-ajax requests
-    POST request first returns base.html via ajax,
-    then requests subscriptions with keyword ajax
+    GET ajax request first returns base.html,
+    then requests subscriptions via POST
     """
 
     if request.method == 'GET':
-        user = request.user
-        subscriptions = Subscription.get_subscriptions(user)
-        return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-    if request.method == 'POST':
-        try:
-            ajax = request.POST['ajax']
+        if request.is_ajax():
+            return render(request, 'index/ajax_subscriptions_base.html', {})
+        else:
             user = request.user
             subscriptions = Subscription.get_subscriptions(user)
-            return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
-        except:
-            return render(request, 'index/ajax_subscriptions_base.html', {})
+            return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
+
+    if request.method == 'POST':
+        user = request.user
+        subscriptions = Subscription.get_subscriptions(user)
+        return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
+
+    else:
+        raise Http404()
 
 @login_required
 def settings(request):
     """
-    GET return settings
-    POST save settings
-    TODO make this work non-ajax
+    GET return settings form
+    POST save settings form
     """
 
     if request.method == 'GET':
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-        return render(request, 'index/ajax_settings.html', {
-            'user_form': user_form,
-            'profile_form': profile_form
-            })
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
+        if request.is_ajax():
+            user_form = UserForm(instance=request.user)
+            profile_form = ProfileForm(instance=request.user.profile)
             return render(request, 'index/ajax_settings.html', {
                 'user_form': user_form,
                 'profile_form': profile_form
                 })
+        else:
+            # TODO non-ajax
+            pass
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            user_form = UserForm(request.POST, instance=request.user)
+            profile_form = ProfileForm(request.POST, instance=request.user.profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                return render(request, 'index/ajax_settings.html', {
+                    'user_form': user_form,
+                    'profile_form': profile_form
+                    })
+        else:
+            # TODO non-ajax            
+            pass
