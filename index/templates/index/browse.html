@@ -7,7 +7,13 @@ browse
 {% block content %}
 <div class="row alphabet" id="alphabet">
   <div class="col">
-
+    {% for podcast in podcasts %}
+    <div class="row">
+      <div class="col">
+        <p>{{ podcast.title }}</p>
+      </div>
+    </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

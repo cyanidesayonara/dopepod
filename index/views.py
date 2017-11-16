@@ -2,7 +2,18 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Subscription
+from podcasts.models import Genre, Language, Subscription, Podcast
+from django.views.generic import ListView
+
+class IndexListView(ListView):
+    queryset = Podcast.objects.filter(title__istartswith='a').order_by('title')
+    context_object_name = 'podcasts'
+
+    def get(self, request):
+        if request.is_ajax():
+            return render(request, 'index/ajax_browse.html', {})
+        else:
+            return render(request, 'index/browse.html', {})
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
@@ -88,5 +99,5 @@ def settings(request):
                     'profile_form': profile_form
                     })
         else:
-            # TODO non-ajax            
+            # TODO non-ajax
             pass
