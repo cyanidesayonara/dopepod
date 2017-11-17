@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
 from django.views.generic import ListView
+import string
 
 class IndexListView(ListView):
     queryset = Podcast.objects.filter(title__istartswith='a').order_by('title')
@@ -11,13 +12,15 @@ class IndexListView(ListView):
 
     def get(self, request):
         if request.is_ajax():
-            return render(request, 'index/ajax_browse.html', {})
+            return render(request, 'index/ajax_browse.html', context)
         else:
-            return render(request, 'index/browse.html', {})
+            return render(request, 'index/browse.html', context)
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
     languages = Language.objects.all()
+    abc = string.ascii_uppercase
+    context = {'genres': genres, 'languages': languages, 'abc': abc}
 
     # import logging
     # logger = logging.getLogger(__name__)
@@ -25,9 +28,9 @@ def home(request):
 
     if request.method == "GET":
         if request.is_ajax():
-            return render(request, 'index/ajax_index.html', {'genres': genres, 'languages': languages})
+            return render(request, 'index/ajax_index.html', context)
         else:
-            return render(request, 'index/index.html', {'genres': genres, 'languages': languages})
+            return render(request, 'index/index.html', context)
 
     # any other method not accepted
     else:

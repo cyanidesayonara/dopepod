@@ -56,8 +56,8 @@ nav {
 
 .search-results {
   background: #3b6d83;
-  height: 520px;
-  margin: 10px 20px;
+  height: 450px;
+  /*margin: 10px 20px;*/
   border: 1px solid black;
   border-radius: .25rem;
 }

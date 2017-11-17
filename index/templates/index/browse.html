@@ -7,13 +7,19 @@ browse
 {% block content %}
 <div class="row alphabet" id="alphabet">
   <div class="col">
-    {% for podcast in podcasts %}
-    <div class="row">
-      <div class="col">
-        <p>{{ podcast.title }}</p>
-      </div>
-    </div>
-    {% endfor %}
+    <ul class="ml-auto">
+      {% for a in abc %}
+      <li style="display: inline;">{{ a }}</li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 {% endblock %}
+
+<!-- {% for podcast in podcasts %}
+<div class="row">
+  <div class="col">
+    <p>{{ podcast.title }}</p>
+  </div>
+</div>
+{% endfor %} -->

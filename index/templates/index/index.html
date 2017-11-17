@@ -10,7 +10,7 @@ dopepod
 
 <!-- SEARCH BAR -->
     <div class="row">
-      <div class="col search-bar" id="search-bar">
+      <div class="col-sm- search-bar" id="search-bar">
         <div class="texture">
           <div class="row">
             <div class="col">
@@ -30,16 +30,31 @@ dopepod
     </div>
 
 <!-- RESULTS -->
-    <div class="row">
-      <div class="col search-results">
-        <div class="texture">
-          <div class="row" id="results">
-            {% block results %}
-            {% endblock %}
-          </div>
-        </div>
+<div class="row">
+  <div class="col-sm-2" style="background-color: #3b6d83;">
+    <div class="texture">
+      <div class="row">
+        <nav aria-label="...">
+          <ul class="pagination">
+            {% for a in abc %}
+            <li class="page-item">
+              <a class="page-link" href="#">{{ a }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
       </div>
     </div>
+  </div>
+  <div class="col-sm-10 search-results">
+    <div class="texture">
+      <div class="row" id="results">
+        {% block results %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- RECOMMENDATIONS -->
 
