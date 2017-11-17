@@ -213,6 +213,7 @@ def play(request, url=None):
         track = {}
         try:
             track['url'] = request.POST['url']
+            track['type'] = request.POST['type']
         except:
             raise Http404()
         return render(request, 'player.html', {'track': track})

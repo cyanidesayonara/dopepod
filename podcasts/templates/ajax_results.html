@@ -1,6 +1,6 @@
 {% if podcasts %}
-<div class="col">
-  <div class="row">
+<div class="col" id="search-results">
+  <div class="row texture">
     {% for podcast in podcasts %}
     <a class="col-lg-2 col-md-3 col-sm-4 result-image show-podinfo" id="{{ podcast.itunesid }}" href=
      "{% url 'podinfo' itunesid=podcast.itunesid %}">

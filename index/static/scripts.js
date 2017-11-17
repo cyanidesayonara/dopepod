@@ -101,8 +101,8 @@ function SearchFunc() {
   // gather variables
   var q = $("#site-content #q").val();
   // TODO fix these selectors
-  // var genre = $("#site-content .genre-select").val();
-  // var language = $("#site-content .language-select").val();
+  var genre = $("#site-content .genre-buttons");
+  var language = $("#site-content .language-buttons");
   // var explicit = $("#site-content .explicit-select").is(":checked");
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
@@ -170,10 +170,10 @@ $(document)
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#q", debounce(SearchFunc, delay))
   // search when "search" button is clicked
-  // .on("submit", "#search-button", function (e) {
-  //  e.preventDefault();
-  //  debounce(SearchFunc, delay);
-  //})
+  .on("submit", "#search-form", function (e) {
+   e.preventDefault();
+   debounce(SearchFunc, delay);
+  })
   // search when user changes options
   // .on("change", ".genre-select, .language-select, .explicit-select", SearchFunc)
   // show podinfo
@@ -363,13 +363,14 @@ $(document)
   .on("click", ".play", function(e) {
     e.preventDefault();
     var url = this.id;
+    var type = this.name;
     var method = this.method;
     $.ajax({
       method: method,
       url: "/play/",
       data: {
         "url": url,
-
+        "type": type,
       },
     })
       .fail(function(xhr, ajaxOptions, thrownError){

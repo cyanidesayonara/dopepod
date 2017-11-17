@@ -1,30 +1,31 @@
 <div class="col">
 {% if tracks %}
-{% for track in tracks %}
-<div class="row">
-  <a class="col-sm-9" data-toggle="collapse" href="#collapseExample{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">
-    <h6>{{ track.title }}</h6>
-  </a>
-  <div class="col-sm-3">
-    <form class="play" id="{{ track.url }}" action="{% url 'play' url=track.url %}" method="POST" target="_blank">
-      <button class="btn btn-primary" type="submit">Play</button>
-    </form>
-    <a class="btn btn-primary" href="{{ track.url }}">
-      Download
-    </a>
-  </div>
-</div>
-<div class="row">
-  <div class="collapse" id="collapseExample{{ forloop.counter }}">
-    <div class="col">
-      <p>{{ track.summary|escape }}</p>
-      <p>{{ track.pubDate }}</p>
-    </div>
-  </div>
-</div>
-{% endfor %}
+  <table>
+    <tbody>
+    {% for track in tracks %}
+      <tr>
+        <td>
+          <button class="btn btn-primary" data-toggle="collapse" href="#collapseExample{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">More</button>
+        </td>
+        <td style="width:100%;">
+          <h6>{{ track.title }}</h6>
+        </td>
+        <td>
+          <form class="play" id="{{ track.url }}" name="{{ track.type }}" action="{% url 'play' url=track.url %}" method="POST" target="_blank">
+            <button class="btn btn-primary" type="submit">Play</button>
+          </form>
+        </td>
+        <td>
+          <a class="btn btn-primary" href="{{ track.url }}">
+            Download
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% else %}
- <div class="row" id="overlay">
- </div>
+  <div class="row" id="overlay">
+  </div>
  {% endif %}
 </div>

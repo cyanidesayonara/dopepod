@@ -20,27 +20,21 @@ dopepod
 
     <div class="row">
       <div class="col-sm-8 search-bar" id="search-bar">
-        <div class="texture">
-          <div class="row">
-            <div class="col">
-              <form id="search-form" method="GET" action="{% url 'search' %}">
-                <div class="input-group">
-                  <input class="form-control" type="text" name="q" id="q" type="search" placeholder="Search for..."
-                  aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
-                  <span class="input-group-btn">
-                    <button class="btn btn-secondary" type="submit">Go!</button>
-                  </span>
-                </div>
-              </form>
-            </div>
+        <div class="row texture">
+          <div class="col">
+            <form id="search-form" method="GET" action="{% url 'search' %}">
+              <div class="input-group">
+                <input class="form-control" type="text" name="q" id="q" type="search" placeholder="Search for..."
+                aria-label="Search for..." autocomplete="off" accept-charset="utf-8">
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="submit">Go!</button>
+                </span>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <div class="col-sm-4" style="background-color: #3b6d83;">
-        <div class="texture">
-          <div class="row">
-          </div>
-        </div>
+      <div class="col-sm-4">
       </div>
     </div>
 
@@ -49,64 +43,57 @@ dopepod
       <!-- SIDE OPTIONS -->
 
       <div class="col-sm-2" id="options">
-        <div class="texture">
-          <div class="row">
-            <div class="col">
-              <div class="btn-group-vertical btn-group-sm">
-                {% for genre in genres %}
-                <button type="button" class="btn btn-secondary">{{ genre.name }}</button>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="btn-group-vertical btn-group-sm">
-                {% for language in languages %}
-                <button type="button" class="btn btn-secondary">{{ language.name }}</button>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
+        <div class="btn-group-vertical btn-group-sm genre-buttons" data-toggle="buttons">
+          <label class="btn btn-outline-primary filter-button active">
+            <input type="radio" name="options" id="All" autocomplete="off">All
+          </label>
+          {% for genre in genres %}
+          <label class="btn btn-outline-primary filter-button">
+            <input type="radio" name="options" id="{{ genre.name }}" autocomplete="off">{{ genre.name }}
+          </label>
+          {% endfor %}
+        </div>
+        <div class="btn-group-vertical btn-group-sm language-buttons" data-toggle="buttons">
+          <label class="btn btn-outline-primary filter-button active">
+            <input type="radio" name="options" id="All" autocomplete="off">All
+          </label>
+          {% for language in languages %}
+          <label class="btn btn-outline-primary filter-button">
+            <input type="radio" name="options" id="{{ language.name }}" autocomplete="off">{{ language.name }}
+          </label>
+          {% endfor %}
         </div>
       </div>
-      
+
       <!-- MAIN -->
 
       <div class="col-sm-10" id="main">
-        <div class="texture">
 
-          <!-- ALPHABET -->
+        <!-- ALPHABET -->
 
-          <div class="row">
-            <div class="col" id="alphabet">
-              <div class="texture">
-                <div class="row">
-                  <nav class="ml-auto" aria-label="...">
-                    <ul class="pagination">
-                      {% for a in abc %}
-                      <li class="page-item">
-                        <a class="page-link" href="#">{{ a }}</a>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                  </nav>
-                </div>
-              </div>
+        <div class="row">
+          <div class="col" id="alphabet">
+            <div class="btn-group btn-group-sm alphabet-buttons" data-toggle="buttons">
+              {% for a in abc %}
+              <label class="btn btn-outline-primary alphabet-button">
+                <input type="radio" name="options">{{ a }}
+              </label>
+              {% endfor %}
             </div>
           </div>
+        </div>
 
-          <!-- RESULTS -->
+        <!-- RESULTS -->
 
-          <div class="row" id="results">
-            {% block results %}
-            {% endblock %}
-          </div>
+        <div class="row" id="results">
+          {% block results %}
+          {% endblock %}
+        </div>
 
-          <!-- RECOMMENDATIONS -->
+        <!-- RECOMMENDATIONS -->
 
-          <div class="row" id="recommendations">
-          </div>
+        <div class="row" id="recommendations">
+        </div>
 
         </div>
       </div>

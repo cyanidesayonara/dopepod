@@ -60,6 +60,7 @@ class Podcast(models.Model):
                 # enclosure might be missing, have alternatives
                 enclosure = item.find('enclosure')
                 track['url'] = enclosure.get('url')
+                track['type'] = enclosure.get('type')
                 tracks.append(track)
             except Exception as e:
                 import logging
