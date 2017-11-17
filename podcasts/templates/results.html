@@ -11,7 +11,7 @@ results
     {% for podcast in podcasts %}
     <a class="col-lg-2 col-md-3 col-sm-4 result-image show-podinfo" id="{{ podcast.itunesid }}" href=
      "{% url 'podinfo' itunesid=podcast.itunesid %}">
-      <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
+      <img src="{{ podcast.artworkUrl }}150x150bb.jpg" />
       <div class="row">
         <div class="col">
           <div class="row result-title">

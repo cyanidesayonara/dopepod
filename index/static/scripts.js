@@ -1,9 +1,9 @@
 $(window).on('popstate', function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $(".site-content").hide();
-    $(".site-content").html(state.context);
-    $(".site-content").fadeIn();
+    $("#site-content").hide();
+    $("#site-content").html(state.context);
+    $("#site-content").fadeIn();
     $("title")[0].innerText = state.title;
     if (state.q) {
       $("#q").val(state.q);
@@ -55,7 +55,7 @@ function refreshPage() {
     })
     .done(function(response) {
       // refresh navbar
-      $(".nav-content").html(response);
+      $("#nav-content").html(response);
       // TODO go to index
       // REPETITION
       var url = "/";
@@ -67,9 +67,9 @@ function refreshPage() {
           console.log(thrownError);
         })
         .done(function(response) {
-          $(".site-content").hide();
-          $(".site-content").html(response);
-          $(".site-content").fadeIn();
+          $("#site-content").hide();
+          $("#site-content").html(response);
+          $("#site-content").fadeIn();
           var title = "dopepod";
           var state = {
             "context": response,
@@ -99,11 +99,11 @@ function SearchFunc() {
   // minlength for search string
   var minlength = 2
   // gather variables
-  var q = $(".site-content #q").val();
+  var q = $("#site-content #q").val();
   // TODO fix these selectors
-  // var genre = $(".site-content .genre-select").val();
-  // var language = $(".site-content .language-select").val();
-  // var explicit = $(".site-content .explicit-select").is(":checked");
+  // var genre = $("#site-content .genre-select").val();
+  // var language = $("#site-content .language-select").val();
+  // var explicit = $("#site-content .explicit-select").is(":checked");
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     $.ajax({
@@ -258,9 +258,9 @@ $(document)
           "title": title,
         };
         history.pushState(state, "", url);
-        $(".site-content").hide();
-        $(".site-content").html(response);
-        $(".site-content").fadeIn();
+        $("#site-content").hide();
+        $("#site-content").html(response);
+        $("#site-content").fadeIn();
         $("title")[0].innerText = title;
       });
   })
@@ -317,9 +317,9 @@ $(document)
           "title": title,
         };
         history.pushState(state, "", url);
-        $(".site-content").hide();
-        $(".site-content").html(response);
-        $(".site-content").fadeIn();
+        $("#site-content").hide();
+        $("#site-content").html(response);
+        $("#site-content").fadeIn();
         $("title")[0].innerText = title;
 
         // load subscriptions
@@ -353,9 +353,9 @@ $(document)
           "title": title,
         };
         history.pushState(state, "", url);
-        $(".site-content").hide();
-        $(".site-content").html(response);
-        $(".site-content").fadeIn();
+        $("#site-content").hide();
+        $("#site-content").html(response);
+        $("#site-content").fadeIn();
         $("title")[0].innerText = title;
       });
   })

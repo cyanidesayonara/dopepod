@@ -5,21 +5,28 @@ browse
 {% endblock %}
 
 {% block content %}
-<div class="row alphabet" id="alphabet">
+<div class="row">
   <div class="col">
-    <ul class="ml-auto">
-      {% for a in abc %}
-      <li style="display: inline;">{{ a }}</li>
-      {% endfor %}
-    </ul>
+
+    <!-- BUMPER -->
+
+    <div class="row">
+      <div class="col" id="bumper">
+      </div>
+    </div>
+
+    <div class="row" id="browse">
+      <div class="col">
+        {% for podcast in podcasts %}
+        <div class="row">
+          <a class="col show-podinfo" id="{{ podcast.itunesid }}" href=
+           "{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <h6>{{ podcast.title }}</h6>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
-
-<!-- {% for podcast in podcasts %}
-<div class="row">
-  <div class="col">
-    <p>{{ podcast.title }}</p>
-  </div>
-</div>
-{% endfor %} -->

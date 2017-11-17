@@ -11,10 +11,12 @@ class IndexListView(ListView):
     context_object_name = 'podcasts'
 
     def get(self, request):
+        podcasts = Podcast.objects.filter(title__istartswith='a').order_by('title')
+
         if request.is_ajax():
-            return render(request, 'index/ajax_browse.html', context)
+            return render(request, 'index/ajax_browse.html', {'podcasts': podcasts})
         else:
-            return render(request, 'index/browse.html', context)
+            return render(request, 'index/browse.html', {'podcasts': podcasts})
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)

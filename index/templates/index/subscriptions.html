@@ -5,19 +5,35 @@ subscriptions
 {% endblock %}
 
 {% block content %}
-<div class="row" id="subscriptions">
-  {% if subscriptions %}
+<div class="row">
   <div class="col">
-  {% for subscription in subscriptions %}
+
+    <!-- BUMPER -->
+
     <div class="row">
-      <a class="col result-image show-podinfo sub-box" id="{{ subscription.itunesid }}" href=
-       "{% url 'podinfo' itunesid=subscription.itunesid %}">
-        <h6>{{ subscription.pod.title }}</h6>
-        <p>{{ subscription.last_updated }}</p>
-      </a>
+      <div class="col" id="bumper">
+
+      </div>
     </div>
-  {% endfor %}
+
+    <!-- SUBSCRIPTIONS -->
+
+    <div class="row" id="subscriptions">
+      {% if subscriptions %}
+      <div class="col">
+      {% for subscription in subscriptions %}
+        <div class="row">
+          <a class="col result-image show-podinfo sub-box" id="{{ subscription.itunesid }}" href=
+           "{% url 'podinfo' itunesid=subscription.itunesid %}">
+            <h6>{{ subscription.pod.title }}</h6>
+            <p>{{ subscription.last_updated }}</p>
+          </a>
+        </div>
+      {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
   </div>
-  {% endif %}
 </div>
 {% endblock %}

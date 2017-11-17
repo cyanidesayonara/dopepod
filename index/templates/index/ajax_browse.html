@@ -1,11 +1,24 @@
-<div class="row alphabet" id="alphabet">
+<div class="row">
   <div class="col">
-    {% for podcast in podcasts %}
+
+    <!-- BUMPER -->
+
     <div class="row">
-      <div class="col">
-        <p>{{ podcast.title }}</p>
+      <div class="col" id="bumper">
       </div>
     </div>
-    {% endfor %}
+
+    <div class="row" id="browse">
+      <div class="col">
+        {% for podcast in podcasts %}
+        <div class="row">
+          <a class="col show-podinfo" id="{{ podcast.itunesid }}" href=
+           "{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <h6>{{ podcast.title }}</h6>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
