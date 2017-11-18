@@ -1,4 +1,8 @@
-{% extends 'index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
+
+{% block title %}
+settings
+{% endblock %}
 
 {% block content %}
 <div class="modal-header">

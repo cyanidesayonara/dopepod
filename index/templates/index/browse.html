@@ -1,32 +1,24 @@
-{% extends 'index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
 
 {% block title %}
 browse
 {% endblock %}
 
-{% block content %}
-<div class="row">
-  <div class="col">
-
-    <!-- BUMPER -->
-
-    <div class="row">
-      <div class="col" id="bumper">
+{% block results %}
+{% if podcasts %}
+<div class="col" id="browse-results">
+  <div class="row">
+    <div class="col">
+      {% for podcast in podcasts %}
+      <div class="row">
+        <a class="col show-podinfo" id="{{ podcast.itunesid }}" href=
+         "{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <h6>{{ podcast.title }}</h6>
+        </a>
       </div>
-    </div>
-
-    <div class="row" id="browse">
-      <div class="col">
-        {% for podcast in podcasts %}
-        <div class="row">
-          <a class="col show-podinfo" id="{{ podcast.itunesid }}" href=
-           "{% url 'podinfo' itunesid=podcast.itunesid %}">
-            <h6>{{ podcast.title }}</h6>
-          </a>
-        </div>
-        {% endfor %}
-      </div>
+      {% endfor %}
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock %}

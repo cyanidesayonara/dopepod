@@ -1,4 +1,4 @@
-{% extends 'index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
 
 {% block title %}
 dopepod

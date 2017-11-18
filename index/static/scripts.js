@@ -44,6 +44,29 @@ function refreshCookie() {
   });
 };
 
+function goHome() {
+  var url = "/";
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#site-content").hide();
+      $("#site-content").html(response);
+      $("#site-content").fadeIn();
+      var title = "dopepod";
+      var state = {
+        "context": response,
+        "title": title,
+      };
+      history.pushState(state, "", url);
+      $("title")[0].innerText = title;
+    });
+};
+
 function refreshPage() {
   // refresh navbar (and maybe other stuff as well?)
   $.ajax({
@@ -58,26 +81,7 @@ function refreshPage() {
       $("#nav-content").html(response);
       // TODO go to index
       // REPETITION
-      var url = "/";
-      $.ajax({
-        type: "GET",
-        url: url,
-      })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-          console.log(thrownError);
-        })
-        .done(function(response) {
-          $("#site-content").hide();
-          $("#site-content").html(response);
-          $("#site-content").fadeIn();
-          var title = "dopepod";
-          var state = {
-            "context": response,
-            "title": title,
-          };
-          history.pushState(state, "", url);
-          $("title")[0].innerText = title;
-        });
+      goHome();
     });
 };
 
@@ -159,6 +163,21 @@ function SearchFunc() {
     };
     history.replaceState(curState, "", curUrl);
   }
+};
+
+function getSubscriptions() {
+  // load subscriptions
+  var url = "/subscriptions/";
+  $.ajax({
+    type: "POST",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#subscriptions").html(response);
+    });
 };
 
 var delay = 250
@@ -243,26 +262,7 @@ $(document)
   // go to home view
   .on("click", ".home", function(e) {
     e.preventDefault();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        var title = "dopepod";
-        var state = {
-          "context": response,
-          "title": title,
-        };
-        history.pushState(state, "", url);
-        $("#site-content").hide();
-        $("#site-content").html(response);
-        $("#site-content").fadeIn();
-        $("title")[0].innerText = title;
-      });
+    goHome();
   })
   // open settings in modal
   .on("click", ".settings", function(e) {
@@ -321,23 +321,12 @@ $(document)
         $("#site-content").html(response);
         $("#site-content").fadeIn();
         $("title")[0].innerText = title;
-
-        // load subscriptions
-        $.ajax({
-          type: "POST",
-          url: url,
-        })
-          .fail(function(xhr, ajaxOptions, thrownError){
-            console.log(thrownError);
-          })
-          .done(function(response) {
-            $("#subscriptions").html(response);
-          });
-      });
-  })
+  });
+})
   // open browse
   .on("click", ".browse", function(e) {
     e.preventDefault();
+    goHome();
     var url = this.href;
     $.ajax({
       type: "GET",
@@ -353,9 +342,9 @@ $(document)
           "title": title,
         };
         history.pushState(state, "", url);
-        $("#site-content").hide();
-        $("#site-content").html(response);
-        $("#site-content").fadeIn();
+        $("#results").hide();
+        $("#results").html(response);
+        $("#results").fadeIn();
         $("title")[0].innerText = title;
       });
   })

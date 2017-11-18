@@ -11,12 +11,12 @@ class IndexListView(ListView):
     context_object_name = 'podcasts'
 
     def get(self, request):
+        genres = Genre.get_primary_genres(Genre)
+        languages = Language.objects.all()
+        abc = string.ascii_uppercase
         podcasts = Podcast.objects.filter(title__istartswith='a').order_by('title')
-
-        if request.is_ajax():
-            return render(request, 'index/ajax_browse.html', {'podcasts': podcasts})
-        else:
-            return render(request, 'index/browse.html', {'podcasts': podcasts})
+        context = {'genres': genres, 'languages': languages, 'abc': abc, 'podcasts': podcasts}
+        return render(request, 'index/browse.html', context)
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
@@ -29,10 +29,7 @@ def home(request):
     # logger.error('whaddup')
 
     if request.method == "GET":
-        if request.is_ajax():
-            return render(request, 'index/ajax_index.html', context)
-        else:
-            return render(request, 'index/index.html', context)
+        return render(request, 'index/index.html', context)
 
     # any other method not accepted
     else:
@@ -40,13 +37,6 @@ def home(request):
 
 def navbar(request):
     return render(request, 'navbar.html', {})
-
-def browse(request):
-    if request.method == "GET":
-        if request.is_ajax():
-            return render(request, 'index/ajax_browse.html', {})
-        else:
-            return render(request, 'index/browse.html', {})
 
 @login_required
 def subscriptions(request):
@@ -58,20 +48,9 @@ def subscriptions(request):
     """
 
     if request.method == 'GET':
-        if request.is_ajax():
-            return render(request, 'index/ajax_subscriptions_base.html', {})
-        else:
-            user = request.user
-            subscriptions = Subscription.get_subscriptions(user)
-            return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
-
-    if request.method == 'POST':
         user = request.user
         subscriptions = Subscription.get_subscriptions(user)
-        return render(request, 'index/ajax_subscriptions.html', {'subscriptions': subscriptions})
-
-    else:
-        raise Http404()
+        return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
 
 @login_required
 def settings(request):
@@ -81,28 +60,26 @@ def settings(request):
     """
 
     if request.method == 'GET':
-        if request.is_ajax():
-            user_form = UserForm(instance=request.user)
-            profile_form = ProfileForm(instance=request.user.profile)
-            return render(request, 'index/ajax_settings.html', {
-                'user_form': user_form,
-                'profile_form': profile_form
-                })
-        else:
-            # TODO non-ajax
-            pass
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        return render(request, 'index/settings.html', {
+            'user_form': user_form,
+            'profile_form': profile_form
+            })
 
     if request.method == 'POST':
-        if request.is_ajax():
             user_form = UserForm(request.POST, instance=request.user)
             profile_form = ProfileForm(request.POST, instance=request.user.profile)
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
-                return render(request, 'index/ajax_settings.html', {
+                return render(request, 'index/settings.html', {
                     'user_form': user_form,
                     'profile_form': profile_form
                     })
-        else:
-            # TODO non-ajax
-            pass
+
+            else:
+                return render(request, 'index/settings.html', {
+                    'user_form': user_form,
+                    'profile_form': profile_form
+                    })

@@ -1,4 +1,4 @@
-{% extends 'index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
 
 {% block title %}
 subscriptions
@@ -21,7 +21,7 @@ subscriptions
     <div class="row" id="subscriptions">
       {% if subscriptions %}
       <div class="col">
-      {% for subscription in subscriptions %}
+        {% for subscription in subscriptions %}
         <div class="row">
           <a class="col result-image show-podinfo sub-box" id="{{ subscription.itunesid }}" href=
            "{% url 'podinfo' itunesid=subscription.itunesid %}">
@@ -29,7 +29,7 @@ subscriptions
             <p>{{ subscription.last_updated }}</p>
           </a>
         </div>
-      {% endfor %}
+        {% endfor %}
       </div>
       {% endif %}
     </div>

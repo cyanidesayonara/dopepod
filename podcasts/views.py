@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from podcasts.models import Podcast, Subscription
+from .models import Genre, Language, Podcast, Subscription
+import string
 
 def charts(request):
     """
@@ -55,6 +56,7 @@ def search(request):
             q = None
 
         if len(q) >= 2:
+            context = {}
             # get genre or 'All'
             try:
                 genre = request.GET['genre']
@@ -77,15 +79,14 @@ def search(request):
             user = request.user
 
             # return podcasts matching search terms
-            podcasts = actual_search(q, genre, language, explicit, user)
+            context['podcasts'] = actual_search(q, genre, language, explicit, user)
         # if query None, return nothing
-        else:
-            podcasts = {}
 
-        if request.is_ajax():
-            return render(request, 'ajax_results.html', {'podcasts': podcasts})
-        else:
-            return render(request, 'results.html', {'podcasts': podcasts})
+        if not request.is_ajax():
+            context['genres'] = Genre.get_primary_genres(Genre)
+            context['languages'] = Language.objects.all()
+            context['abc'] = string.ascii_uppercase
+        return render(request, 'results.html', context)
 
 def actual_search(q, genre, language, explicit, user):
     """
@@ -150,26 +151,17 @@ def podinfo(request, itunesid=None):
 
     user = request.user
 
-    # non-ajax using GET
     if request.method == 'GET':
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
         # mark podcast as subscribed
         podcast.is_subscribed(user)
 
-        # if ajax
         if request.is_ajax():
-            return render(request, 'ajax_podinfo.html', {'podcast': podcast})
-
-        # if non-ajax
+            return render(request, 'podinfo.html', {'podcast': podcast})
         else:
-            # returns tracks
             tracks = podcast.get_tracks()
             return render(request, 'podinfo.html', {'podcast': podcast, 'tracks': tracks})
-
-    # any other method not accepted
-    else:
-        raise Http404()
 
 def tracks(request):
     """
@@ -188,10 +180,6 @@ def tracks(request):
 
         tracks = podcast.get_tracks()
         return render(request, 'tracks.html', {'tracks': tracks})
-
-    # any other method not accepted
-    else:
-        raise Http404()
 
 def play(request, url=None):
     """
