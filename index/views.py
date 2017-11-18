@@ -14,7 +14,7 @@ class IndexListView(ListView):
         genres = Genre.get_primary_genres(Genre)
         languages = Language.objects.all()
         abc = string.ascii_uppercase
-        podcasts = Podcast.objects.filter(title__istartswith='a').order_by('title')
+        podcasts = Podcast.objects.filter(title__istartswith='a').order_by('title')[:50]
         context = {'genres': genres, 'languages': languages, 'abc': abc, 'podcasts': podcasts}
         return render(request, 'index/browse.html', context)
 

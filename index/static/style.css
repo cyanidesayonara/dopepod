@@ -41,7 +41,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
-  margin-bottom: 30px; 
+  margin-bottom: 30px;
 }
 
 #main {
@@ -49,7 +49,7 @@ body {
 }
 
 #results {
-  height: 450px;
+  min-height: 450px;
   border: 1px solid black;
 }
 
@@ -86,6 +86,11 @@ body {
 }
 
 .language-buttons {
+  width: 100%;
+  padding-top: 15px;
+}
+
+.explicit-buttons {
   width: 100%;
   padding-top: 15px;
 }
@@ -177,13 +182,11 @@ body {
 #recommendations{
   height: 400px;
   border: 1px solid black;
-  border-radius: .25rem;
 }
 
 .sub-box {
   border: 1px solid black;
   margin: 5px;
-  border-radius: .25rem;
   color: #000;
 }
 

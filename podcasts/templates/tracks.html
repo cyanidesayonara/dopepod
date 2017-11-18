@@ -11,9 +11,9 @@
           <h6>{{ track.title }}</h6>
         </td>
         <td>
-          <form class="play" id="{{ track.url }}" name="{{ track.type }}" action="{% url 'play' url=track.url %}" method="POST" target="_blank">
-            <button class="btn btn-primary" type="submit">Play</button>
-          </form>
+          <a class="btn btn-primary play" id="{{ track.url }}" name="{{ track.type }}" href="{% url 'play' url=track.url %}" target="_blank">
+            Play
+          </a>
         </td>
         <td>
           <a class="btn btn-primary" href="{{ track.url }}">

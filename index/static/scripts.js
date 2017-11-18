@@ -105,9 +105,9 @@ function SearchFunc() {
   // gather variables
   var q = $("#site-content #q").val();
   // TODO fix these selectors
-  var genre = $("#site-content .genre-buttons");
-  var language = $("#site-content .language-buttons");
-  // var explicit = $("#site-content .explicit-select").is(":checked");
+  var genre = $("input[name='genre-button']:checked").val();
+  var language = $("input[name='language-button']:checked").val();
+  var explicit = $("input[name='explicit-button']").is(":checked");
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     $.ajax({
@@ -115,9 +115,9 @@ function SearchFunc() {
       url: "/search/",
       data: {
         "q": q,
-        // "genre": genre,
-        // "language": language,
-        // "explicit": explicit,
+        "genre": genre,
+        "language": language,
+        "explicit": explicit,
       },
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
@@ -194,7 +194,7 @@ $(document)
    debounce(SearchFunc, delay);
   })
   // search when user changes options
-  // .on("change", ".genre-select, .language-select, .explicit-select", SearchFunc)
+  .on("change", ".genre-buttons, .language-buttons, .explicit-buttons", SearchFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
@@ -353,9 +353,8 @@ $(document)
     e.preventDefault();
     var url = this.id;
     var type = this.name;
-    var method = this.method;
     $.ajax({
-      method: method,
+      method: "POST",
       url: "/play/",
       data: {
         "url": url,
@@ -366,6 +365,7 @@ $(document)
         console.log(thrownError);
       })
       .done(function(response) {
+        console.log("whadup");
         $("#player").hide();
         $("#player").html(response);
         $("#player").fadeIn();

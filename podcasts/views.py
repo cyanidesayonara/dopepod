@@ -74,7 +74,6 @@ def search(request):
                 explicit = False if request.GET['explicit'] == 'false' else True
             except:
                 explicit = True
-
             # get user
             user = request.user
 
