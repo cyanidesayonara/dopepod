@@ -1,7 +1,7 @@
 {% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
 
 {% block title %}
-dopepod
+search
 {% endblock %}
 
 {% block content %}
@@ -45,7 +45,7 @@ dopepod
       <div class="col-sm-2" id="options">
         <div class="btn-group-vertical btn-group-sm genre-buttons" id="genre-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="genre-button" id="All" value="All">All
+            <input type="radio" name="genre-button" id="All" value="All" checked>All
           </label>
           {% for genre in genres %}
           <label class="btn btn-outline-primary filter-button">
@@ -55,7 +55,7 @@ dopepod
         </div>
         <div class="btn-group-vertical btn-group-sm language-buttons" id="language-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="language-button" id="All" value="All">All
+            <input type="radio" name="language-button" id="All" value="All" checked>All
           </label>
           {% for language in languages %}
           <label class="btn btn-outline-primary filter-button">
@@ -65,7 +65,7 @@ dopepod
         </div>
         <div class="btn-group-vertical btn-group-sm explicit-buttons" id="language-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="checkbox" name="explicit-button" id="All" value="All" checked>Show Explicit
+            <input type="checkbox" name="explicit-button" checked>Show Explicit
           </label>
         </div>
       </div>
@@ -73,23 +73,6 @@ dopepod
       <!-- MAIN -->
 
       <div class="col-sm-10" id="main">
-
-        <!-- ALPHABET -->
-
-        <div class="row">
-          <div class="col" id="alphabet">
-            <div class="btn-group btn-group-sm alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
-              <label class="btn btn-outline-primary alphabet-button active">
-                <input type="radio" name="alphabet-button" id="Browse" value="Browse" checked>Browse
-              </label>
-              {% for a in abc %}
-              <label class="btn btn-outline-primary alphabet-button">
-                <input type="radio" name="alphabet-button" id="{{ a }}" value="{{ a }}">{{ a }}
-              </label>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
 
         <!-- RESULTS -->
 
@@ -103,7 +86,6 @@ dopepod
         <div class="row" id="recommendations">
         </div>
 
-        </div>
       </div>
     </div>
 

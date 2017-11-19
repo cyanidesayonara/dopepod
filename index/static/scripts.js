@@ -67,6 +67,29 @@ function goHome() {
     });
 };
 
+function goBrowse() {
+  var url = "/browse/";
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#site-content").hide();
+      $("#site-content").html(response);
+      $("#site-content").fadeIn();
+      var title = "dopepod";
+      var state = {
+        "context": response,
+        "title": title,
+      };
+      history.pushState(state, "", url);
+      $("title")[0].innerText = title;
+    });
+};
+
 function refreshPage() {
   // refresh navbar (and maybe other stuff as well?)
   $.ajax({
@@ -104,7 +127,6 @@ function SearchFunc() {
   var minlength = 2
   // gather variables
   var q = $("#site-content #q").val();
-  // TODO fix these selectors
   var genre = $("input[name='genre-button']:checked").val();
   var language = $("input[name='language-button']:checked").val();
   var explicit = $("input[name='explicit-button']").is(":checked");
@@ -118,6 +140,7 @@ function SearchFunc() {
         "genre": genre,
         "language": language,
         "explicit": explicit,
+        // "show": show,
       },
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
@@ -167,14 +190,19 @@ function SearchFunc() {
 
 function BrowseFunc() {
   var abc = $("input[name='alphabet-button']:checked").val();
-  var url = "/browse/";
+  var genre = $("input[name='genre-button']:checked").val();
+  var language = $("input[name='language-button']:checked").val();
+  var explicit = $("input[name='explicit-button']").is(":checked");
   var show = 25;
   $.ajax({
     method: "GET",
-    url: url,
+    url: "/browse/",
     data: {
       "abc": abc,
       "show": show,
+      "genre": genre,
+      "language": language,
+      "explicit": explicit,
     },
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
@@ -363,27 +391,7 @@ $(document)
   // open browse
   .on("click", ".browse", function(e) {
     e.preventDefault();
-    goHome();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        var title = "browse";
-        var state = {
-          "context": response,
-          "title": title,
-        };
-        history.pushState(state, "", url);
-        $("#results").hide();
-        $("#results").html(response);
-        $("#results").fadeIn();
-        $("title")[0].innerText = title;
-      });
+    goBrowse();
   })
   // put track in player
   .on("click", ".play", function(e) {

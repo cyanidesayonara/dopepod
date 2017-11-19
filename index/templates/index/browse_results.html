@@ -1,10 +1,17 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/browse.html' %}
 
 {% block title %}
 browse
 {% endblock %}
 
 {% block results %}
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    {% for crumb in breadcrumbs %}
+    <li class="breadcrumb-item active"><a href="#">{{ crumb }}</a></li>
+    {% endfor %}
+  </ol>
+</nav>
 {% if podcasts %}
 <div class="col" id="browse-results">
   <div class="row">

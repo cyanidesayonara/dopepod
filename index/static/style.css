@@ -76,6 +76,14 @@ body {
   font-size: 1rem;
 }
 
+.breadcrumb-item+.breadcrumb-item::before {
+    display: inline-block;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    color: #868e96;
+    content: ">>";
+}
+
 #options {
   border: 1px solid black;
 }

@@ -49,14 +49,15 @@ def search(request):
     set search terms
     """
     if request.method == 'GET':
+        context = {}
+
         # get query, if any
         try:
             q = request.GET['q']
         except:
             q = None
 
-        if len(q) >= 2:
-            context = {}
+        if q and len(q) >= 2:
             # get genre or 'All'
             try:
                 genre = request.GET['genre']
@@ -77,15 +78,20 @@ def search(request):
             # get user
             user = request.user
 
+            if not request.is_ajax():
+                context['genres'] = Genre.get_primary_genres(Genre)
+                context['languages'] = Language.objects.all()
+                context['abc'] = string.ascii_uppercase
+
             # return podcasts matching search terms
             context['podcasts'] = actual_search(q, genre, language, explicit, user)
-        # if query None, return nothing
 
-        if not request.is_ajax():
+            return render(request, 'search_results.html', context)
+        else:
             context['genres'] = Genre.get_primary_genres(Genre)
             context['languages'] = Language.objects.all()
             context['abc'] = string.ascii_uppercase
-        return render(request, 'results.html', context)
+            return render(request, 'index/search_base.html', context)
 
 def actual_search(q, genre, language, explicit, user):
     """

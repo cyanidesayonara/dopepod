@@ -5,27 +5,33 @@ from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
 import string
 
-def home(request):
-    genres = Genre.get_primary_genres(Genre)
-    languages = Language.objects.all()
-    abc = string.ascii_uppercase
-    context = {'genres': genres, 'languages': languages, 'abc': abc}
-
-    # import logging
-    # logger = logging.getLogger(__name__)
-    # logger.error('whaddup')
-
-    if request.method == "GET":
-        return render(request, 'index/index.html', context)
-
-    # any other method not accepted
-    else:
-        raise Http404()
+# def home(request):
+#     context = {}
+#     context['genres'] = Genre.get_primary_genres(Genre)
+#     context['languages'] = Language.objects.all()
+#
+#     # import logging
+#     # logger = logging.getLogger(__name__)
+#     # logger.error('whaddup')
+#
+#     if request.method == "GET":
+#         return render(request, 'index/index.html', context)
+#
+#     # any other method not accepted
+#     else:
+#         raise Http404()
 
 def navbar(request):
     return render(request, 'navbar.html', {})
 
 def browse(request):
+    context = {}
+    context['genres'] = Genre.get_primary_genres(Genre)
+    context['languages'] = Language.objects.all()
+    context['abc'] = string.ascii_uppercase
+    return render(request, 'index/browse_base.html', context)
+
+def browse_results(request):
     try:
         abc = request.GET['abc']
     except KeyError:
@@ -36,14 +42,32 @@ def browse(request):
     except KeyError:
         show = 10
 
+    try:
+        genre = request.GET['genre']
+    except KeyError:
+        genre = 'All'
+
+    try:
+        language = request.GET['language']
+    except KeyError:
+        language = 'All'
+
+    try:
+        explicit = False if request.GET['explicit'] == 'false' else True
+    except:
+        explicit = True
+
+
     context = {}
     if not request.is_ajax():
+        context = {}
         context['genres'] = Genre.get_primary_genres(Genre)
         context['languages'] = Language.objects.all()
         context['abc'] = string.ascii_uppercase
         context['selected_abc'] = abc
+    context['breadcrumbs'] = [genre, abc]
     context['podcasts'] = Podcast.objects.filter(title__istartswith=abc).order_by('title')[:show]
-    return render(request, 'index/browse.html', context)
+    return render(request, 'index/browse_results.html', context)
 
 @login_required
 def subscriptions(request):
