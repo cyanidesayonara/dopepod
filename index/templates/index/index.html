@@ -79,9 +79,12 @@ dopepod
         <div class="row">
           <div class="col" id="alphabet">
             <div class="btn-group btn-group-sm alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
+              <label class="btn btn-outline-primary alphabet-button active">
+                <input type="radio" name="alphabet-button" id="Browse" value="Browse" checked>Browse
+              </label>
               {% for a in abc %}
               <label class="btn btn-outline-primary alphabet-button">
-                <input type="radio" name="options">{{ a }}
+                <input type="radio" name="alphabet-button" id="{{ a }}" value="{{ a }}">{{ a }}
               </label>
               {% endfor %}
             </div>

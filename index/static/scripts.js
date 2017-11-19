@@ -141,7 +141,7 @@ function SearchFunc() {
           "q": q,
         };
         history.replaceState(curState, "", curUrl);
-      })
+      });
   }
   // else show nothing
   else {
@@ -163,6 +163,42 @@ function SearchFunc() {
     };
     history.replaceState(curState, "", curUrl);
   }
+};
+
+function BrowseFunc() {
+  var abc = $("input[name='alphabet-button']:checked").val();
+  var url = "/browse/";
+  var show = 25;
+  $.ajax({
+    method: "GET",
+    url: url,
+    data: {
+      "abc": abc,
+      "show": show,
+    },
+  })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      console.log(thrownError);
+    })
+    .done(function(response) {
+
+      $("#results").hide();
+      $("#results").html(response);
+      $("#results").fadeIn();
+
+      // save results + q in current state
+      // TODO results is still mostly hidden
+      // removing style (hacky)
+      $("#results").removeAttr("style");
+      var curContext = $("#site-content")[0].innerHTML;
+      var curUrl = $("#site-content")[0].baseURI;
+      var curTitle = "dopepod";
+      var curState = {
+        "context": curContext,
+        "title": curTitle,
+      };
+      history.replaceState(curState, "", curUrl);
+    });
 };
 
 function getSubscriptions() {
@@ -195,6 +231,7 @@ $(document)
   })
   // search when user changes options
   .on("change", ".genre-buttons, .language-buttons, .explicit-buttons", SearchFunc)
+  .on("change", ".alphabet-buttons", BrowseFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();

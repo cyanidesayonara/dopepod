@@ -3,20 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
-from django.views.generic import ListView
 import string
-
-class IndexListView(ListView):
-    queryset = Podcast.objects.filter(title__istartswith='a').order_by('title')
-    context_object_name = 'podcasts'
-
-    def get(self, request):
-        genres = Genre.get_primary_genres(Genre)
-        languages = Language.objects.all()
-        abc = string.ascii_uppercase
-        podcasts = Podcast.objects.filter(title__istartswith='a').order_by('title')[:50]
-        context = {'genres': genres, 'languages': languages, 'abc': abc, 'podcasts': podcasts}
-        return render(request, 'index/browse.html', context)
 
 def home(request):
     genres = Genre.get_primary_genres(Genre)
@@ -37,6 +24,26 @@ def home(request):
 
 def navbar(request):
     return render(request, 'navbar.html', {})
+
+def browse(request):
+    try:
+        abc = request.GET['abc']
+    except KeyError:
+        abc = 'A'
+
+    try:
+        show = int(request.GET['show'])
+    except KeyError:
+        show = 10
+
+    context = {}
+    if not request.is_ajax():
+        context['genres'] = Genre.get_primary_genres(Genre)
+        context['languages'] = Language.objects.all()
+        context['abc'] = string.ascii_uppercase
+        context['selected_abc'] = abc
+    context['podcasts'] = Podcast.objects.filter(title__istartswith=abc).order_by('title')[:show]
+    return render(request, 'index/browse.html', context)
 
 @login_required
 def subscriptions(request):
