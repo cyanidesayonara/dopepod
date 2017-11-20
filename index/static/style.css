@@ -5,7 +5,7 @@ body {
 }
 
 #nav-bar {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .5);
   z-index: 99;
   height: 80px;
@@ -62,8 +62,13 @@ body {
 }
 
 #alphabet {
-  border: 1px solid black;
+  background: #3b6d83;
 }
+
+#podinfo {
+  background: #3b6d83;
+}
+
 
 .alphabet-buttons {
   padding: 15px 0px;
@@ -73,7 +78,7 @@ body {
   /*color: #000;
   background-color: #fff;
   border-color: #000;*/
-  font-size: 1rem;
+  /*font-size: 1rem;*/
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
@@ -88,51 +93,25 @@ body {
   border: 1px solid black;
 }
 
-.genre-buttons {
+.filter-buttons {
   width: 100%;
   padding-top: 15px;
 }
 
-.language-buttons {
+.show-button {
   width: 100%;
-  padding-top: 15px;
+  margin: 0;
+  border-radius: 0;
 }
 
-.explicit-buttons {
-  width: 100%;
-  padding-top: 15px;
+#show-buttons {
+  min-width: 0;
+  z-index: 97;
 }
 
 .btn.filter-button {
-  /*color: #000;
-  background-color: #fff;
-  border-color: #000;*/
   text-align: left;
   font-size: 0.7rem;
-}
-
-/*.btn.filter-button:hover {
-  color: #fff;
-  background-color: #000;
-  border-color: #fff;
-}
-
-.btn.filter-button.active {
-  color: #fff;
-  background-color: #000;
-  border-color: #fff;
-}*/
-
-.footer {
-  margin-bottom: 50px;
-}
-
-.input-group {
-  margin-left: 10px;
-}
-
-.input-group-btn {
-  margin-right: 20px;
 }
 
 .navbar-collapse {
@@ -190,12 +169,11 @@ body {
   color: #000;
 }
 
-.podinfo {
-  /*margin-top: 80px;
-  padding: 10px;*/
+#tracks {
+  min-height: 270px;
 }
 
-.tracks {
+#subscriptions {
   min-height: 270px;
 }
 
@@ -239,4 +217,8 @@ body {
 
 .login {
 
+}
+.footer {
+  background: #3b6d83;
+  text-align: center;
 }

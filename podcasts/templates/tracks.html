@@ -1,12 +1,9 @@
 <div class="col">
-{% if tracks %}
-  <table style="width:100%;">
+  {% if tracks %}
+  <table class="table table-bordered table-hover">
     <tbody>
     {% for track in tracks %}
-      <tr>
-        <td>
-          <button class="btn btn-primary show-more" id="{{ track.summary }}" name="{{ podcast.artworkUrl }}170x170bb.jpg">More</button>
-        </td>
+      <tr data-toggle="tooltip" title="{{ track.summary }}">
         <td>{{ track.title }}</td>
         <td>{{ track.pubDate }}</td>
         <td>
@@ -24,8 +21,8 @@
     {% endfor %}
     </tbody>
   </table>
-{% else %}
+  {% else %}
   <div class="row" id="overlay">
   </div>
- {% endif %}
+  {% endif %}
 </div>

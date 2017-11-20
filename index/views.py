@@ -9,41 +9,65 @@ def navbar(request):
     return render(request, 'navbar.html', {})
 
 def browse(request):
-    if request.method == 'GET':
-        context = {}
+    context = {}
+    context['genres'] = Genre.get_primary_genres(Genre)
+    context['languages'] = Language.objects.all()
+    context['abc'] = string.ascii_uppercase
 
+    if request.method == 'GET':
+        if request.is_ajax():
+            context['selected_abc'] = 'A'
+            return render(request, 'index/browse_base.html', context)
+        else:
+            try:
+                abc = request.GET['abc']
+            except KeyError:
+                abc = 'A'
+            try:
+                show = int(request.GET['show'])
+            except KeyError:
+                show = 25
+            try:
+                genre = request.GET['genre']
+            except KeyError:
+                genre = 'All'
+            try:
+                language = request.GET['language']
+            except KeyError:
+                language = 'All'
+            try:
+                explicit = False if request.GET['explicit'] == 'false' else True
+            except:
+                explicit = True
+            context['selected_abc'] = abc
+            context['podcasts'] = Podcast.objects.filter(title__istartswith=abc).order_by('title')[:show]
+            context['breadcrumbs'] = [genre, abc]
+            return render(request, 'index/browse_results.html', context)
+
+    if request.method == 'POST':
+        context = {}
         try:
-            abc = request.GET['abc']
+            abc = request.POST['abc']
         except KeyError:
             abc = 'A'
-
         try:
-            show = int(request.GET['show'])
+            show = int(request.POST['show'])
         except KeyError:
             show = 10
-
         try:
-            genre = request.GET['genre']
+            genre = request.POST['genre']
         except KeyError:
             genre = 'All'
-
         try:
-            language = request.GET['language']
+            language = request.POST['language']
         except KeyError:
             language = 'All'
-
         try:
-            explicit = False if request.GET['explicit'] == 'false' else True
+            explicit = False if request.POST['explicit'] == 'false' else True
         except:
             explicit = True
-
-        if not request.is_ajax():
-            context['genres'] = Genre.get_primary_genres(Genre)
-            context['languages'] = Language.objects.all()
-            context['abc'] = string.ascii_uppercase
-            context['selected_abc'] = abc
-        context['breadcrumbs'] = [genre, abc]
         context['podcasts'] = Podcast.objects.filter(title__istartswith=abc).order_by('title')[:show]
+        context['breadcrumbs'] = [genre, abc]
         return render(request, 'index/browse_results.html', context)
 
 @login_required
@@ -57,8 +81,16 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
+        if request.is_ajax():
+            subscriptions = {}
+        else:
+            subscriptions = Subscription.get_subscriptions(user)
+        return render(request, 'index/subscriptions_base.html', {'subscriptions': subscriptions})
+
+    if request.method == 'POST':
+        user = request.user
         subscriptions = Subscription.get_subscriptions(user)
-        return render(request, 'index/subscriptions.html', {'subscriptions': subscriptions})
+        return render(request, 'index/subscriptions_results.html', {'subscriptions': subscriptions})
 
 @login_required
 def settings(request):

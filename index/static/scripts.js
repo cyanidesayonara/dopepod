@@ -8,6 +8,12 @@ $(window).on('popstate', function(event) {
     if (state.q) {
       $("#q").val(state.q);
     }
+    if (state.abc) {
+      $("input[name='alphabet'][value='" + state.abc + "']").prop("checked", true);
+    }
+    if (state.show) {
+      $("input[name='show'][value='" + state.show + "']").prop("checked", true);
+    }
   }
 });
 
@@ -56,7 +62,9 @@ function goToHome() {
     .done(function(response) {
       $("#site-content").hide();
       $("#site-content").html(response);
-      $("#site-content").fadeIn();
+      $("#podinfo").ready(function() {
+        $("#site-content").fadeIn();
+      });
       var title = "dopepod";
       var state = {
         "context": response,
@@ -172,9 +180,9 @@ function SearchFunc() {
   var minlength = 2
   // gather variables
   var q = $("#site-content #q").val();
-  var genre = $("input[name='genre-button']:checked").val();
-  var language = $("input[name='language-button']:checked").val();
-  var explicit = $("input[name='explicit-button']").is(":checked");
+  var genre = $("input[name='search-genre']:checked").val();
+  var language = $("input[name='search-language']:checked").val();
+  var explicit = $("input[name='search-explicit']").is(":checked");
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     $.ajax({
@@ -195,7 +203,6 @@ function SearchFunc() {
         $("#results").hide();
         $("#results").html(response);
         $("#results").fadeIn();
-
         // save results + q in current state
         // TODO results is still mostly hidden
         // removing style (hacky)
@@ -234,16 +241,15 @@ function SearchFunc() {
 };
 
 function BrowseFunc() {
-  var abc = $("input[name='alphabet-button']:checked").val();
-  var genre = $("input[name='genre-button']:checked").val();
-  var language = $("input[name='language-button']:checked").val();
-  var explicit = $("input[name='explicit-button']").is(":checked");
-  var show = 25;
+  var abc = $("input[name='alphabet']:checked").val();
+  var show = $("input[name='show']:checked").val();
+  var genre = $("input[name='browse-genre']:checked").val();
+  var language = $("input[name='browse-language']:checked").val();
+  var explicit = $("input[name='browse-explicit-button']").is(":checked");
   $.ajax({
-    method: "GET",
+    method: "POST",
     url: "/browse/",
     data: {
-      "xxx": "",
       "abc": abc,
       "show": show,
       "genre": genre,
@@ -255,7 +261,6 @@ function BrowseFunc() {
       console.log(thrownError);
     })
     .done(function(response) {
-
       $("#results").hide();
       $("#results").html(response);
       $("#results").fadeIn();
@@ -270,6 +275,8 @@ function BrowseFunc() {
       var curState = {
         "context": curContext,
         "title": curTitle,
+        "abc": abc,
+        "show": show,
       };
       history.replaceState(curState, "", curUrl);
     });
@@ -296,17 +303,23 @@ var delay = 250
 $(document)
   // refresh cookie
   .ready(refreshCookie())
+  // initialize bootstrap tooltips
+  .ready($('[data-toggle="tooltip"]').tooltip())
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#q", debounce(SearchFunc, delay))
   // search when "search" button is clicked
   .on("submit", "#search-form", function (e) {
     e.preventDefault();
-    debounce(SearchFunc, delay);
+    SearchFunc();
+  })
+  // remove focus from button (focus would be saved on state)
+  .on("click", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", function() {
+    $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", ".genre-buttons, .language-buttons, .explicit-buttons", SearchFunc)
+  .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons", SearchFunc)
   // browse when user changes options
-  .on("change", ".alphabet-buttons", BrowseFunc)
+  .on("change", "#alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
@@ -333,26 +346,6 @@ $(document)
 
         $("title")[0].innerText = title;
         history.pushState(state, "", url2);
-
-        // load tracks for podcast
-        // TODO also load on back button
-        var url = "/tracks/";
-        $.ajax({
-          method: "POST",
-          url: url,
-          data: {
-            "itunesid": itunesid,
-          },
-        })
-          .fail(function(xhr, ajaxOptions, thrownError){
-            console.log(thrownError);
-          })
-          .done(function(response) {
-            $("#tracks").hide();
-            $("#tracks").html(response);
-            $('#overlay').addClass('hide');
-            $("#tracks").fadeIn();
-          });
       });
   })
   // go to home view
@@ -393,13 +386,6 @@ $(document)
       .done(function(response) {
         goToHome();
       });
-  })
-  .on("click", ".show-more", function() {
-    var pic = this.name;
-    var summary = this.id;
-    $("#player-content").hide();
-    $("#trackinfo-content").html("<div class'row'><img src='" + pic + "' /><p>" + summary + "</p></div>");
-    $("#player-content").fadeIn();
   })
   // put track in player
   .on("click", ".play", function(e) {

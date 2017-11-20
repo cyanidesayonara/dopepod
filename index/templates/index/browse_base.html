@@ -5,84 +5,106 @@ browse
 {% endblock %}
 
 {% block content %}
-<div class="row">
+<!-- BUMPER -->
+<div class="row" id="bumper">
   <div class="col">
-
-    <!-- BUMPER -->
-
-    <div class="row" id="bumper">
-      <div class="col">
-
-      </div>
-    </div>
-
-    <!-- ALPHABET -->
-
-    <div class="row">
-      <div class="col" id="alphabet">
-        <div class="btn-group btn-group-sm alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
-          <button class="input-group-addon" id="btnGroupAddon">Browse</button>
-
-          {% for a in abc %}
-          <label class="btn btn-outline-primary alphabet-button">
-            <input type="radio" name="alphabet-button" id="{{ a }}" value="{{ a }}">{{ a }}
-          </label>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-
-      <!-- SIDE OPTIONS -->
-
-      <div class="col-sm-2" id="options">
-        <div class="btn-group-vertical btn-group-sm genre-buttons" id="genre-buttons" data-toggle="buttons">
-          <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="genre-button" id="All" value="All" checked>All
-          </label>
-          {% for genre in genres %}
-          <label class="btn btn-outline-primary filter-button">
-            <input type="radio" name="genre-button" id="{{ genre.name }}" value="{{ genre.name }}">{{ genre.name }}
-          </label>
-          {% endfor %}
-        </div>
-        <div class="btn-group-vertical btn-group-sm language-buttons" id="language-buttons" data-toggle="buttons">
-          <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="language-button" id="All" value="All" checked>All
-          </label>
-          {% for language in languages %}
-          <label class="btn btn-outline-primary filter-button">
-            <input type="radio" name="language-button" id="{{ language.name }}" value="{{ language.name }}">{{ language.name }}
-          </label>
-          {% endfor %}
-        </div>
-        <div class="btn-group-vertical btn-group-sm explicit-buttons" id="language-buttons" data-toggle="buttons">
-          <label class="btn btn-outline-primary filter-button active">
-            <input type="checkbox" name="explicit-button" checked>Show Explicit
-          </label>
-        </div>
-      </div>
-
-      <!-- MAIN -->
-
-      <div class="col-sm-10" id="main">
-
-        <!-- RESULTS -->
-
-        <div class="row" id="results">
-          {% block results %}
-          {% endblock %}
-        </div>
-
-        <!-- RECOMMENDATIONS -->
-
-        <div class="row" id="recommendations">
-        </div>
-
-      </div>
-    </div>
-
   </div>
 </div>
+<!-- BROWSE BAR -->
+<div class="row">
+  <div class="col alphabet" id="alphabet">
+    <div class="row texture">
+      <div class="col">
+        <!-- ALPHABET -->
+        <div class="btn-group btn-group alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
+          {% for a in abc %}
+          {% if a == selected_abc %}
+          <label class="btn btn-outline-primary alphabet-button active">
+            <input type="radio" name="alphabet" id="{{ a }}" value="{{ a }}" checked>{{ a }}
+          </label>
+          {% else %}
+          <label class="btn btn-outline-primary alphabet-button">
+            <input type="radio" name="alphabet" id="{{ a }}" value="{{ a }}">{{ a }}
+          </label>
+          {% endif %}
+          {% endfor %}
+        </div>
+        <!-- DROPDOWN -->
+        <div class="btn-group btn-group" data-toggle="buttons">
+          <button type="button"
+          class="btn btn-outline-primary dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">Show 25 Results</button>
+          <div class="dropdown-menu dropdown-menu-right show-buttons" id="show-buttons">
+            <label class="btn btn-outline-primary show-button active">
+              <input type="radio" name="show" id="25" value="25" checked>
+              25
+            </label>
+            <label class="btn btn-outline-primary show-button">
+              <input type="radio" name="show" id="50" value="50">
+              50
+            </label>
+            <label class="btn btn-outline-primary show-button">
+              <input type="radio" name="show" id="75" value="75">
+              75
+            </label>
+            <label class="btn btn-outline-primary show-button">
+              <input type="radio" name="show" id="100" value="100">
+              100
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <!-- SIDE OPTIONS -->
+  <div class="col-sm-2" id="options">
+    <div class="btn-group-vertical btn-group-sm filter-buttons" id="browse-genre-buttons" data-toggle="buttons">
+      <label class="btn btn-outline-primary filter-button active">
+        <input type="radio" name="browse-genre" id="All" value="All" checked>All
+      </label>
+      {% for genre in genres %}
+      <label class="btn btn-outline-primary filter-button">
+        <input type="radio" name="browse-genre" id="{{ genre.name }}" value="{{ genre.name }}">{{ genre.name }}
+      </label>
+      {% endfor %}
+    </div>
+    <div class="btn-group-vertical btn-group-sm filter-buttons" id="browse-language-buttons" data-toggle="buttons">
+      <label class="btn btn-outline-primary filter-button active">
+        <input type="radio" name="browse-language" id="All" value="All" checked>All
+      </label>
+      {% for language in languages %}
+      <label class="btn btn-outline-primary filter-button">
+        <input type="radio" name="browse-language" id="{{ language.name }}" value="{{ language.name }}">{{ language.name }}
+      </label>
+      {% endfor %}
+    </div>
+    <div class="btn-group-vertical btn-group-sm filter-buttons" id="browse-explicit-buttons" data-toggle="buttons">
+      <label class="btn btn-outline-primary filter-button active">
+        <input type="checkbox" name="browse-explicit" checked>Show Explicit
+      </label>
+    </div>
+  </div>
+  <!-- MAIN -->
+  <div class="col-sm-10" id="main">
+    <!-- RESULTS -->
+    <div class="row" id="results">
+      {% block results %}
+      {% endblock %}
+    </div>
+    <!-- RECOMMENDATIONS -->
+    <div class="row" id="recommendations">
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(window).ready(function() {
+  BrowseFunc();
+});
+</script>
 {% endblock %}

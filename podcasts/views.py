@@ -154,19 +154,18 @@ def podinfo(request, itunesid=None):
     required argument: itunesid
     """
 
-    user = request.user
-
     if request.method == 'GET':
+        user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
         # mark podcast as subscribed
         podcast.is_subscribed(user)
 
         if request.is_ajax():
-            return render(request, 'podinfo.html', {'podcast': podcast})
+            tracks = {}
         else:
             tracks = podcast.get_tracks()
-            return render(request, 'podinfo.html', {'podcast': podcast, 'tracks': tracks})
+        return render(request, 'podinfo.html', {'podcast': podcast, 'tracks': tracks})
 
 def tracks(request):
     """

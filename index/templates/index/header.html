@@ -10,7 +10,6 @@
       {% block title %}
       {% endblock %}
     </title>
-
     <!--Font Awesome-->
     <!--<script src="https://use.fontawesome.com/793ac32e1c.js"></script>-->
     <!-- Bootstrap CSS -->
@@ -19,17 +18,13 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
   <body>
-
     <!--HERE BE NAVBAR-->
-
     <nav class="navbar navbar-light fixed-top navbar-expand-lg" id="nav-bar">
       <div class="container" id="nav-content">
         {% include 'navbar.html' %}
       </div>
     </nav>
-
     <!-- CONTENT -->
-
     <div class="container">
       <div class="row" id="canvas">
         <div class="col" id="site-content">
@@ -38,28 +33,23 @@
         </div>
       </div>
     </div>
-
     <!--MODAL-->
-
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content" id="modal-content">
         </div>
       </div>
     </div>
-
     <!--FOOTER-->
-
     <footer class="footer">
-      <div class="container">
-        <div class="row">
+      <div class="container-fluid footer" id="footer">
+        <div class="row texture">
           <div class="col">
             dopepod 2017
           </div>
         </div>
       </div>
     </footer>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

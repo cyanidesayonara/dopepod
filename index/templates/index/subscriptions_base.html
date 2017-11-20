@@ -1,0 +1,44 @@
+{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
+
+{% block title %}
+subscriptions
+{% endblock %}
+
+{% block content %}
+<!-- BUMPER -->
+<div class="row" id="bumper">
+  <div class="col">
+  </div>
+</div>
+<!-- SUBSCRIPTIONS -->
+<div class="row" id="subscriptions">
+  {% include 'index/subscriptions_results.html' %}
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(window).ready(function() {
+  // load tracks for podcast
+  // TODO also load on back button
+  var url = "/subscriptions/";
+  $.ajax({
+    method: "POST",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+      $("#subscriptions").hide();
+      $("#subscriptions").html("<p>No results :p</p>");
+      $('#overlay').addClass('hide');
+      $("#subscriptions").fadeIn();
+    })
+    .done(function(response) {
+      $("#subscriptions").hide();
+      $("#subscriptions").html(response);
+      $('#overlay').addClass('hide');
+      $("#subscriptions").fadeIn();
+    });
+});
+</script>
+{% endblock %}
