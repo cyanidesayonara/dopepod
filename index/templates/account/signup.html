@@ -1,5 +1,12 @@
+{% extends request.is_ajax|yesno:'ajax.html,account/base.html' %}
+
 {% load i18n %}
 
+{% block title %}
+register
+{% endblock %}
+
+{% block account %}
 <h1>{% trans "Sign Up" %}</h1>
 
 <p>{% blocktrans %}Already have an account? Then please <a class="login-link" href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
@@ -9,3 +16,4 @@
   {{ form.as_p }}
   <button type="submit">{% trans "Sign Up" %} &raquo;</button>
 </form>
+{% endblock %}

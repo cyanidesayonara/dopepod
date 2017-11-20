@@ -5,15 +5,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="row podinfo" id="podinfo">
-  <div class="col-sm-3">
+<!-- BUMPER -->
+
+<div class="row" id="bumper">
+  <div class="col">
+
+  </div>
+</div>
+
+<!-- PODINFO -->
+
+<div class="row podinfo"id="podinfo">
+  <div class="col-sm-2">
     <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
     <h3>{{ podcast.title }}</h3>
     <p>{{ podcast.description }}</p>
   </div>
-  <div class="col-sm-3">
+  <div class="col-sm-2">
     {% if podcast.subscribed %}
     <form class="sub-form" action="{% url 'subscribe' %}" id="{{ podcast.itunesid }}" method="POST">
       {% csrf_token %}
@@ -34,7 +44,11 @@
     {% endif %}
     <p><em>{{ podcast.copyrighttext }}</em></p>
   </div>
+  <div class="col-sm-4" id="player">
+  </div>
 </div>
+
+<!-- TRACKS -->
 
 <div class="row tracks" id="tracks">
   {% include 'tracks.html' %}

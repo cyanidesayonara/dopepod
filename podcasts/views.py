@@ -91,7 +91,7 @@ def search(request):
             context['genres'] = Genre.get_primary_genres(Genre)
             context['languages'] = Language.objects.all()
             context['abc'] = string.ascii_uppercase
-            return render(request, 'index/search_base.html', context)
+            return render(request, 'search_base.html', context)
 
 def actual_search(q, genre, language, explicit, user):
     """
@@ -207,6 +207,7 @@ def play(request, url=None):
         try:
             track['url'] = request.POST['url']
             track['type'] = request.POST['type']
+            # track['title'] = request.POST['title']
         except:
             raise Http404()
         return render(request, 'player.html', {'track': track})

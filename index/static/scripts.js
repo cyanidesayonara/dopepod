@@ -44,7 +44,7 @@ function refreshCookie() {
   });
 };
 
-function goHome() {
+function goToHome() {
   var url = "/";
   $.ajax({
     type: "GET",
@@ -67,7 +67,7 @@ function goHome() {
     });
 };
 
-function goBrowse() {
+function goToBrowse() {
   var url = "/browse/";
   $.ajax({
     type: "GET",
@@ -80,7 +80,53 @@ function goBrowse() {
       $("#site-content").hide();
       $("#site-content").html(response);
       $("#site-content").fadeIn();
-      var title = "dopepod";
+      var title = "browse";
+      var state = {
+        "context": response,
+        "title": title,
+      };
+      history.pushState(state, "", url);
+      $("title")[0].innerText = title;
+    });
+};
+
+function goToSubscriptions() {
+  var url = "/subscriptions/";
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#site-content").hide();
+      $("#site-content").html(response);
+      $("#site-content").fadeIn();
+      var title = "subscriptions";
+      var state = {
+        "context": response,
+        "title": title,
+      };
+      history.pushState(state, "", url);
+      $("title")[0].innerText = title;
+    });
+};
+
+function goToSettings() {
+  var url = "/settings/";
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#site-content").hide();
+      $("#site-content").html(response);
+      $("#site-content").fadeIn();
+      var title = "settings";
       var state = {
         "context": response,
         "title": title,
@@ -102,9 +148,8 @@ function refreshPage() {
     .done(function(response) {
       // refresh navbar
       $("#nav-content").html(response);
-      // TODO go to index
-      // REPETITION
-      goHome();
+      // go to index
+      goToHome();
     });
 };
 
@@ -198,6 +243,7 @@ function BrowseFunc() {
     method: "GET",
     url: "/browse/",
     data: {
+      "xxx": "",
       "abc": abc,
       "show": show,
       "genre": genre,
@@ -254,11 +300,12 @@ $(document)
   .on("keyup", "#q", debounce(SearchFunc, delay))
   // search when "search" button is clicked
   .on("submit", "#search-form", function (e) {
-   e.preventDefault();
-   debounce(SearchFunc, delay);
+    e.preventDefault();
+    debounce(SearchFunc, delay);
   })
   // search when user changes options
   .on("change", ".genre-buttons, .language-buttons, .explicit-buttons", SearchFunc)
+  // browse when user changes options
   .on("change", ".alphabet-buttons", BrowseFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
@@ -308,41 +355,25 @@ $(document)
           });
       });
   })
-  // open login or register in modal
-  .on("click", ".ajax-login, .ajax-register", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    var method = this.method;
-    $.ajax({
-      type: method,
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        $(".modal-content").html(response.html);
-      });
-  })
   // go to home view
   .on("click", ".home", function(e) {
     e.preventDefault();
-    goHome();
+    goToHome();
+  })
+  // open browse
+  .on("click", ".browse", function(e) {
+    e.preventDefault();
+    goToBrowse();
+  })
+  // open subscriptions
+  .on("click", ".subscriptions", function(e) {
+    e.preventDefault();
+    goToSubscriptions();
   })
   // open settings in modal
   .on("click", ".settings", function(e) {
     e.preventDefault();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        $(".modal-content").html(response);
-      });
+    goToSettings();
   })
   // save settings, empty and hide modal
   .on("submit", ".settings-form", function (e) {
@@ -357,63 +388,39 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $(".modal-content").html(xhr.responseJSON.html);
+        $("#site-content").html(xhr.responseJSON.html);
       })
       .done(function(response) {
-        $(".modal-content").html("");
-        $("#modal").modal("hide");
+        goToHome();
       });
   })
-  // open subscriptions
-  .on("click", ".subscriptions", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        var title = "subscriptions";
-        var state = {
-          "context": response,
-          "title": title,
-        };
-        history.pushState(state, "", url);
-        $("#site-content").hide();
-        $("#site-content").html(response);
-        $("#site-content").fadeIn();
-        $("title")[0].innerText = title;
-  });
-})
-  // open browse
-  .on("click", ".browse", function(e) {
-    e.preventDefault();
-    goBrowse();
+  .on("click", ".show-more", function() {
+    var pic = this.name;
+    var summary = this.id;
+    $("#player-content").hide();
+    $("#trackinfo-content").html("<div class'row'><img src='" + pic + "' /><p>" + summary + "</p></div>");
+    $("#player-content").fadeIn();
   })
   // put track in player
   .on("click", ".play", function(e) {
     e.preventDefault();
     var url = this.id;
     var type = this.name;
+    console.log(this);
     $.ajax({
       method: "POST",
       url: "/play/",
       data: {
         "url": url,
         "type": type,
+        // "title": title,
       },
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       })
       .done(function(response) {
-        console.log("whadup");
-        $("#player").hide();
         $("#player").html(response);
-        $("#player").fadeIn();
       });
   })
   // TODO check if subscribed or nah
@@ -436,19 +443,20 @@ $(document)
         $("#sub-button").val(data);
       });
   })
-  // login or signup link (in modal)
-  .on("click", ".login-link, .signup-link", function(e) {
+  // open login register or password reset in modal
+  .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
     $.ajax({
+      type: "GET",
       url: url,
     })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-      })
-      .done(function(response) {
-        $(".modal-content").html(response.html);
-      });
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#modal-content").html(response.html);
+    });
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -463,10 +471,10 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $(".modal-content").html(xhr.responseJSON.html);
+        $("#modal-content").html(xhr.responseJSON.html);
       })
       .done(function() {
-        $(".modal-content").html("");
+        $("#modal-content").html("");
         $("#modal").modal("hide");
         refreshCookie();
         refreshPage();
@@ -475,15 +483,15 @@ $(document)
   // logout, refresh after
   .on("click", ".ajax-logout", function(e) {
     e.preventDefault();
+      var url = this.href;
     $.ajax({
       type: "POST",
-      url: "/account/logout/",
+      url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       })
       .done(function() {
-        refreshCookie();
         refreshPage();
       });
   });

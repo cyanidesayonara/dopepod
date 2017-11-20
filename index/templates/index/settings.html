@@ -5,21 +5,34 @@ settings
 {% endblock %}
 
 {% block content %}
-<div class="modal-header">
-  <h5>My Profile</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<!-- BUMPER -->
+
+<div class="row" id="bumper">
+  <div class="col">
+
+  </div>
 </div>
-<div class="modal-body">
-  <form class="settings-form" action="{% url 'settings' %}" method="POST">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    <div class="modal-footer">
+
+<!-- SETTINGS -->
+
+<div class="row">
+  <div class="col">
+    <h5>My Profile</h5>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <form class="settings-form" action="{% url 'settings' %}" method="POST">
+      {% csrf_token %}
+      {{ user_form.as_p }}
+      {{ profile_form.as_p }}
       <button class="btn btn-primary" type="submit">Save changes</button>
-      <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-    </div>
-  </form>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <a class="password-link" href="{% url 'account_reset_password' %}" data-toggle="modal" data-target="#modal">Reset Password</a>
+  </div>
 </div>
 {% endblock %}

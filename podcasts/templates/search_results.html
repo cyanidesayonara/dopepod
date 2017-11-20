@@ -1,4 +1,4 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/search.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/search_base.html' %}
 
 {% block title %}
 results
@@ -30,5 +30,7 @@ results
     {% endfor %}
   </div>
 </div>
+{% else %}
+<p>No results :p</p>
 {% endif %}
 {% endblock %}

@@ -10,8 +10,8 @@ browse
 
     <!-- BUMPER -->
 
-    <div class="row">
-      <div class="col" id="bumper">
+    <div class="row" id="bumper">
+      <div class="col">
 
       </div>
     </div>
@@ -39,7 +39,7 @@ browse
       <div class="col-sm-2" id="options">
         <div class="btn-group-vertical btn-group-sm genre-buttons" id="genre-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="genre-button" id="All" value="All">All
+            <input type="radio" name="genre-button" id="All" value="All" checked>All
           </label>
           {% for genre in genres %}
           <label class="btn btn-outline-primary filter-button">
@@ -49,7 +49,7 @@ browse
         </div>
         <div class="btn-group-vertical btn-group-sm language-buttons" id="language-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="language-button" id="All" value="All">All
+            <input type="radio" name="language-button" id="All" value="All" checked>All
           </label>
           {% for language in languages %}
           <label class="btn btn-outline-primary filter-button">
@@ -59,7 +59,7 @@ browse
         </div>
         <div class="btn-group-vertical btn-group-sm explicit-buttons" id="language-buttons" data-toggle="buttons">
           <label class="btn btn-outline-primary filter-button active">
-            <input type="checkbox" name="explicit-button" id="All" value="All" checked>Show Explicit
+            <input type="checkbox" name="explicit-button" checked>Show Explicit
           </label>
         </div>
       </div>

@@ -1,4 +1,4 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/browse.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/browse_base.html' %}
 
 {% block title %}
 browse
@@ -27,5 +27,7 @@ browse
     </div>
   </div>
 </div>
+{% else %}
+<p>No results :p</p>
 {% endif %}
 {% endblock %}

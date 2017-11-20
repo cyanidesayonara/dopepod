@@ -1,6 +1,13 @@
+{% extends request.is_ajax|yesno:'ajax.html,account/base.html' %}
+
 {% load i18n %}
 {% load account socialaccount %}
 
+{% block title %}
+login
+{% endblock %}
+
+{% block account %}
 <h1>{% trans "Sign In" %}</h1>
 
 {% get_providers as socialaccount_providers %}
@@ -30,6 +37,7 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
 <form class="login-form" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}
   {{ form.as_p }}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+  <a class="password-link" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
   <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
 </form>
+{% endblock %}

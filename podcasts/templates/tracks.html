@@ -1,24 +1,24 @@
 <div class="col">
 {% if tracks %}
-  <table>
+  <table style="width:100%;">
     <tbody>
     {% for track in tracks %}
       <tr>
         <td>
-          <button class="btn btn-primary" data-toggle="collapse" href="#collapseExample{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">More</button>
+          <button class="btn btn-primary show-more" id="{{ track.summary }}" name="{{ podcast.artworkUrl }}170x170bb.jpg">More</button>
         </td>
-        <td style="width:100%;">
-          <h6>{{ track.title }}</h6>
-        </td>
+        <td>{{ track.title }}</td>
+        <td>{{ track.pubDate }}</td>
         <td>
           <a class="btn btn-primary play" id="{{ track.url }}" name="{{ track.type }}" href="{% url 'play' url=track.url %}" target="_blank">
             Play
+            <!-- ADDTL TRACK INFO HERE -->
+            <span class="hidden" id="{{ track.title }}" name="{{ podcast.title }}">
+            </span>
           </a>
         </td>
         <td>
-          <a class="btn btn-primary" href="{{ track.url }}">
-            Download
-          </a>
+          <a class="btn btn-primary" href="{{ track.url }}">Download</a>
         </td>
       </tr>
     {% endfor %}

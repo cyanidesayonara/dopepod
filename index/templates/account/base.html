@@ -1,0 +1,23 @@
+{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+
+    <!-- BUMPER -->
+
+    <div class="row">
+      <div class="col" id="bumper">
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+      {% block account %}
+      {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
