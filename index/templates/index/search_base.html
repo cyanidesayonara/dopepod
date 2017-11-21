@@ -1,7 +1,7 @@
 {% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
 
 {% block title %}
-browse
+search
 {% endblock %}
 
 {% block content %}
@@ -10,62 +10,29 @@ browse
   <div class="col">
   </div>
 </div>
-<!-- BROWSE BAR -->
-<form id="search-form" method="GET" action="{% url 'browse' %}">
+<!-- SEARCH BAR -->
+<form id="search-form" method="GET" action="{% url 'search' %}">
   <div class="row">
-    <div class="col alphabet" id="alphabet">
+    <div class="col search-bar" id="search-bar">
       <div class="row texture">
         <div class="col">
-          <!-- ALPHABET -->
-          <div class="btn-group alphabet-buttons" id="alphabet-buttons"
-          data-toggle="buttons">
-            {% for letter in alphabet %}
-              {% if letter == selected_alphabet %}
-                <label class="btn btn-outline-primary alphabet-button active">
-                  <input type="radio" name="alphabet" id="{{ letter }}"
-                  value="{{ letter }}" checked>
-                  {{ letter }}
-                </label>
-                {% else %}
-                <label class="btn btn-outline-primary alphabet-button">
-                  <input type="radio" name="alphabet" id="{{ letter }}"
-                  value="{{ letter }}">
-                  {{ letter }}
-                </label>
-              {% endif %}
-            {% endfor %}
-          </div>
-          <!-- DROPDOWN -->
-          <div class="btn-group">
-            <button type="submit" class="btn btn-outline-primary">
-              Show
-            </button>
-            <button type="button"
-            class="btn btn-outline-primary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-              25
-            </button>
-            <div class="dropdown-menu dropdown-menu-right show-buttons"
-            id="show-buttons">
-              <div class="btn-group" data-toggle="buttons">
-                {% for num in show %}
-                  {% if selected_show == num %}
-                    <label class="btn btn-outline-primary show-button active">
-                      <input type="radio" name="show" id="{{ num }}"
-                      value="{{ num }}" checked>
-                      {{ num }}
-                    </label>
-                  {% else %}
-                    <label class="btn btn-outline-primary show-button">
-                      <input type="radio" name="show" id="{{ num }}"
-                      value="{{ num }}">
-                      {{ num }}
-                    </label>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
+          <div class="input-group">
+            {% if selected_q %}
+              <input class="form-control" type="text" name="q" id="q"
+              type="search" placeholder="Search for..."
+              aria-label="Search for..." autocomplete="off"
+              accept-charset="utf-8" value="{{ selected_q }}">
+            {% else %}
+              <input class="form-control" type="text" name="q" id="q"
+              type="search" placeholder="Search for..."
+              aria-label="Search for..." autocomplete="off"
+              accept-charset="utf-8">
+            {% endif %}
+            <span class="input-group-btn">
+              <button class="btn btn-outline-primary" type="submit">
+                Go!
+              </button>
+            </span>
           </div>
         </div>
       </div>
@@ -138,15 +105,15 @@ browse
       id="search-explicit-buttons" data-toggle="buttons">
         <!-- EXPLICIT -->
         {% if selected_explicit == True or selected_explicit == None %}
-        <label class="btn btn-outline-primary filter-button">
-          <input type="checkbox" name="explicit" value="false">
-          Hide Explicit
-        </label>
+          <label class="btn btn-outline-primary filter-button">
+            <input type="checkbox" name="explicit" value="false">
+            Hide Explicit
+          </label>
         {% else %}
-        <label class="btn btn-outline-primary filter-button active">
-          <input type="checkbox" name="explicit" value="false" checked>
-          Hide Explicit
-        </label>
+          <label class="btn btn-outline-primary filter-button active">
+            <input type="checkbox" name="explicit" value="false" checked>
+            Hide Explicit
+          </label>
         {% endif %}
       </div>
     </div>
@@ -163,12 +130,4 @@ browse
     </div>
   </div>
 </form>
-{% endblock %}
-
-{% block extrajs %}
-<script>
-$(window).ready(function() {
-  BrowseFunc();
-});
-</script>
 {% endblock %}

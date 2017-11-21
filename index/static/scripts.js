@@ -306,20 +306,20 @@ $(document)
   // initialize bootstrap tooltips
   .ready($('[data-toggle="tooltip"]').tooltip())
   // search when user types into search field (with min "delay" between keypresses)
-  .on("keyup", "#q", debounce(SearchFunc, delay))
+  // .on("keyup", "#q", debounce(SearchFunc, delay))
   // search when "search" button is clicked
-  .on("submit", "#search-form", function (e) {
-    e.preventDefault();
-    SearchFunc();
-  })
+  // .on("submit", "#search-form", function (e) {
+  //   e.preventDefault();
+  //   SearchFunc();
+  // })
   // remove focus from button (focus would be saved on state)
   .on("click", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", function() {
     $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons", SearchFunc)
+  // .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons", SearchFunc)
   // browse when user changes options
-  .on("change", "#alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
+  // .on("change", "#alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
