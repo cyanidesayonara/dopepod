@@ -3,8 +3,8 @@ from index import views as index
 from podcasts import views as podcasts
 
 urlpatterns = [
-    url(r'^$', podcasts.search, name='home'),
-    url(r'^search/$', podcasts.search, name='search'),
+    url(r'^$', index.search, name='home'),
+    url(r'^search/$', index.search, name='search'),
     url(r'^navbar/$', index.navbar, name='navbar'),
     url(r'^browse/$', index.browse, name='browse'),
     url(r'^subscriptions/$', index.subscriptions, name='subscriptions'),

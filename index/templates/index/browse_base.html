@@ -16,7 +16,7 @@ browse
     <div class="row texture">
       <div class="col">
         <!-- ALPHABET -->
-        <div class="btn-group btn-group alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
+        <div class="btn-group alphabet-buttons" id="alphabet-buttons" data-toggle="buttons">
           {% for a in abc %}
           {% if a == selected_abc %}
           <label class="btn btn-outline-primary alphabet-button active">
@@ -30,12 +30,12 @@ browse
           {% endfor %}
         </div>
         <!-- DROPDOWN -->
-        <div class="btn-group btn-group" data-toggle="buttons">
-          <button type="button"
-          class="btn btn-outline-primary dropdown-toggle"
-          data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">Show 25 Results</button>
-          <div class="dropdown-menu dropdown-menu-right show-buttons" id="show-buttons">
+        <button type="button"
+        class="btn btn-outline-primary dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">Show 25 Results</button>
+        <div class="dropdown-menu dropdown-menu-right show-buttons" id="show-buttons">
+          <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-outline-primary show-button active">
               <input type="radio" name="show" id="25" value="25" checked>
               25

@@ -74,11 +74,17 @@ body {
   padding: 15px 0px;
 }
 
-.btn.alphabet-button {
-  /*color: #000;
+.btn-outline-primary {
+  color: #000;
   background-color: #fff;
-  border-color: #000;*/
-  /*font-size: 1rem;*/
+  background-image: none;
+  border-color: #007bff;
+}
+
+.btn-outline-primary.active {
+    color: #fff;
+    background-color: #cccccc;
+    border-color: #007bff;
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
@@ -112,6 +118,7 @@ body {
 .btn.filter-button {
   text-align: left;
   font-size: 0.7rem;
+  white-space: normal;
 }
 
 .navbar-collapse {
