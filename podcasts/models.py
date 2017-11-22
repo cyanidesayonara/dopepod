@@ -41,6 +41,9 @@ class Podcast(models.Model):
         returns a list of tracks using requests and ElementTree
         """
 
+        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0-dtd',
+              'atom': 'http://www.w3.org/2005/Atom'}
+
         tracks = []
 
         # TODO fix this shit
@@ -48,25 +51,42 @@ class Podcast(models.Model):
         r = requests.get(feedUrl)
         root = ET.fromstring(r.text)
         tree = root.find('channel')
+        podcast = tree.find('title').text
 
         for item in tree.findall('item'):
+            track = {}
+            track['podcast'] = podcast
+            track['pubDate'] = item.find('pubDate').text
+
+            # try these
             try:
-                track = {}
                 track['title'] = item.find('title').text
                 track['summary'] = item.find('description').text
-                track['pubDate'] = item.find('pubDate').text
-
-                # link to track
-                # enclosure might be missing, have alternatives
-                enclosure = item.find('enclosure')
-                track['url'] = enclosure.get('url')
-                track['type'] = enclosure.get('type')
-                tracks.append(track)
-            except Exception as e:
+            except AttributeError:
+                # or try with itunes namespace
+                try:
+                    track['title'] = item.find('itunes:title', ns).text
+                    track['summary'] = item.find('itunes:summary', ns).text
+                # if track data not found, skip
+                except AttributeError as e:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error('can\'t get track data')
+                    continue
+            # try to get length (EXPERIMENTAL)S
+            try:
+                track['length'] = item.find('itunes:duration', ns).text
+            except AttributeError as e:
                 import logging
                 logger = logging.getLogger(__name__)
-                # figure out exception message
-                logger.error('can\'t get track')
+                logger.error('can\'t get length')
+
+            # link to track
+            # enclosure might be missing, have alternatives
+            enclosure = item.find('enclosure')
+            track['url'] = enclosure.get('url')
+            track['type'] = enclosure.get('type')
+            tracks.append(track)
         return tracks
 
 class Subscription(models.Model):

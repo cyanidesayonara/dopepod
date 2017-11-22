@@ -1,6 +1,22 @@
 <div class="col">
   {% if tracks %}
     <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td>
+            Episode
+          </td>
+          <td>
+            Released
+          </td>
+          <td>
+            Play
+          </td>
+          <td>
+            Download
+          </td>
+        </tr>
+      </thead>
       <tbody>
       {% for track in tracks %}
         <tr data-toggle="tooltip" title="{{ track.summary }}">
@@ -10,6 +26,9 @@
           <td>
             {{ track.pubDate }}
           </td>
+          <!-- <td>
+            {{ track.length }}
+          </td> -->
           <td>
             <a class="btn btn-primary play" id="{{ track.url }}"
             name="{{ track.type }}" href="{% url 'play' url=track.url %}"
