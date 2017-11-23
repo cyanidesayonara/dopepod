@@ -1,9 +1,7 @@
 $(window).on('popstate', function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $("#site-content").hide();
     $("#site-content").html(state.context);
-    $("#site-content").slideDown();
     $("title")[0].innerText = state.title;
     if (state.q) {
       $("#q").val(state.q);
@@ -50,33 +48,7 @@ function refreshCookie() {
   });
 };
 
-function goToHome() {
-  var url = "/";
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#site-content").hide();
-      $("#site-content").html(response);
-      $("#podinfo").ready(function() {
-        $("#site-content").slideDown();
-      });
-      var title = "dopepod";
-      var state = {
-        "context": response,
-        "title": title,
-      };
-      history.pushState(state, "", url);
-      $("title")[0].innerText = title;
-    });
-};
-
-function goToBrowse() {
-  var url = "/browse/";
+function goToPage(url) {
   $.ajax({
     type: "GET",
     url: url,
@@ -85,56 +57,8 @@ function goToBrowse() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#site-content").hide();
       $("#site-content").html(response);
-      $("#site-content").slideDown();
       var title = "browse";
-      var state = {
-        "context": response,
-        "title": title,
-      };
-      history.pushState(state, "", url);
-      $("title")[0].innerText = title;
-    });
-};
-
-function goToSubscriptions() {
-  var url = "/subscriptions/";
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#site-content").hide();
-      $("#site-content").html(response);
-      $("#site-content").slideDown();
-      var title = "subscriptions";
-      var state = {
-        "context": response,
-        "title": title,
-      };
-      history.pushState(state, "", url);
-      $("title")[0].innerText = title;
-    });
-};
-
-function goToSettings() {
-  var url = "/settings/";
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#site-content").hide();
-      $("#site-content").html(response);
-      $("#site-content").slideDown();
-      var title = "settings";
       var state = {
         "context": response,
         "title": title,
@@ -157,7 +81,7 @@ function refreshPage() {
       // refresh navbar
       $("#nav-content").html(response);
       // go to index
-      goToHome();
+      goToPage("/");
     });
 };
 
@@ -179,10 +103,11 @@ function SearchFunc() {
   // minlength for search string
   var minlength = 2
   // gather variables
-  var q = $("#site-content #q").val();
+  var q = $("#q").val();
   var genre = $("input[name='search-genre']:checked").val();
   var language = $("input[name='search-language']:checked").val();
-  var explicit = $("input[name='search-explicit']").is(":checked");
+  var show = $("input[name='search-show']:checked").val();
+  var explicit = !($("input[name='search-explicit']").is(":checked"));
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     $.ajax({
@@ -193,20 +118,15 @@ function SearchFunc() {
         "genre": genre,
         "language": language,
         "explicit": explicit,
-        // "show": show,
+        "show": show,
       },
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#results").hide();
         $("#results").html(response);
-        $("#results").slideDown();
         // save results + q in current state
-        // TODO results is still mostly hidden
-        // removing style (hacky)
-        $("#results").removeAttr("style");
         var curContext = $("#site-content")[0].innerHTML;
         var curUrl = $("#site-content")[0].baseURI;
         var curTitle = "dopepod";
@@ -220,14 +140,9 @@ function SearchFunc() {
   }
   // else show nothing
   else {
-    $("#results").hide();
     $("#results").html("");
-    $("#results").slideDown();
 
     // save results + q in current state
-    // TODO results is still mostly hidden
-    // removing style (hacky)
-    $("#results").removeAttr("style");
     var curContext = $("#site-content")[0].innerHTML;
     var curUrl = $("#site-content")[0].baseURI;
     var curTitle = "dopepod";
@@ -261,14 +176,9 @@ function BrowseFunc() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#results").hide();
       $("#results").html(response);
-      $("#results").slideDown();
 
       // save results + q in current state
-      // TODO results is still mostly hidden
-      // removing style (hacky)
-      $("#results").removeAttr("style");
       var curContext = $("#site-content")[0].innerHTML;
       var curUrl = $("#site-content")[0].baseURI;
       var curTitle = "dopepod";
@@ -349,24 +259,24 @@ $(document)
       });
   })
   // go to home view
-  .on("click", ".home", function(e) {
+  .on("click", ".home-link", function(e) {
     e.preventDefault();
-    goToHome();
+    goToPage("/");
   })
   // open browse
-  .on("click", ".browse", function(e) {
+  .on("click", ".browse-link", function(e) {
     e.preventDefault();
-    goToBrowse();
+    goToPage("/browse/");
   })
   // open subscriptions
-  .on("click", ".subscriptions", function(e) {
+  .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
-    goToSubscriptions();
+    goToPage("/subscriptions/");
   })
   // open settings in modal
-  .on("click", ".settings", function(e) {
+  .on("click", ".settings-link", function(e) {
     e.preventDefault();
-    goToSettings();
+    goToPage("/settings/");
   })
   // save settings, empty and hide modal
   .on("submit", ".settings-form", function (e) {
@@ -384,7 +294,7 @@ $(document)
         $("#site-content").html(xhr.responseJSON.html);
       })
       .done(function(response) {
-        goToHome();
+        goToPage("/");
       });
   })
   // put track in player
@@ -392,7 +302,6 @@ $(document)
     e.preventDefault();
     var url = this.id;
     var type = this.name;
-    console.log(this);
     $.ajax({
       method: "POST",
       url: "/play/",

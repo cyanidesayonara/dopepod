@@ -5,14 +5,19 @@ subscriptions
 {% endblock %}
 
 {% block content %}
-<!-- BUMPER -->
-<div class="row" id="bumper">
-  <div class="col">
+  <!-- MULTI BAR -->
+<div class="container" id="multi-bar">
+  <div class="row" id="podinfo">
+    <div class="col texture">
+    </div>
   </div>
 </div>
-<!-- SUBSCRIPTIONS -->
-<div class="row" id="subscriptions">
-  {% include 'index/subscriptions_results.html' %}
+
+<div class="container">
+  <!-- SUBSCRIPTIONS -->
+  <div class="row" id="subscriptions">
+    {% include 'index/subscriptions_results.html' %}
+  </div>
 </div>
 {% endblock %}
 

@@ -5,153 +5,152 @@ browse
 {% endblock %}
 
 {% block content %}
-<!-- BUMPER -->
-<div class="row" id="bumper">
-  <div class="col">
-  </div>
-</div>
-<!-- BROWSE BAR -->
-<form id="search-form" method="GET" action="{% url 'browse' %}">
-  <div class="row">
-    <div class="col alphabet" id="alphabet">
-      <div class="row texture">
-        <div class="col">
-          <!-- ALPHABET -->
-          <div class="btn-group alphabet-buttons" id="alphabet-buttons"
-          data-toggle="buttons">
-            {% for letter in alphabet %}
-              {% if letter == selected_alphabet %}
-                <label class="btn btn-outline-primary alphabet-button active">
-                  <input type="radio" name="alphabet" id="{{ letter }}"
-                  value="{{ letter }}" checked>
-                  {{ letter }}
-                </label>
-                {% else %}
-                <label class="btn btn-outline-primary alphabet-button">
-                  <input type="radio" name="alphabet" id="{{ letter }}"
-                  value="{{ letter }}">
-                  {{ letter }}
-                </label>
-              {% endif %}
-            {% endfor %}
-          </div>
-          <!-- DROPDOWN -->
-          <div class="btn-group">
-            <button type="submit" class="btn btn-outline-primary">
-              Show
-            </button>
-            <button type="button"
-            class="btn btn-outline-primary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-              25
-            </button>
-            <div class="dropdown-menu dropdown-menu-right show-buttons"
-            id="show-buttons">
-              <div class="btn-group" data-toggle="buttons">
-                {% for num in show %}
-                  {% if selected_show == num %}
-                    <label class="btn btn-outline-primary show-button active">
-                      <input type="radio" name="show" id="{{ num }}"
-                      value="{{ num }}" checked>
-                      {{ num }}
-                    </label>
-                  {% else %}
-                    <label class="btn btn-outline-primary show-button">
-                      <input type="radio" name="show" id="{{ num }}"
-                      value="{{ num }}">
-                      {{ num }}
-                    </label>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-          </div>
+<!-- MULTI BAR -->
+<div class="container" id="multi-bar">
+  <form id="browse-form" method="GET" action="{% url 'browse' %}">
+    <!-- BROWSE BAR -->
+    <div class="row" id="browse-bar">
+      <div class="col texture">
+        <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
+          {% for letter in alphabet %}
+            {% if letter == selected_alphabet %}
+              <label class="btn btn-outline-primary alphabet-button active">
+                <input type="radio" name="alphabet" id="{{ letter }}"
+                value="{{ letter }}" checked>
+                {{ letter }}
+              </label>
+              {% else %}
+              <label class="btn btn-outline-primary alphabet-button">
+                <input type="radio" name="alphabet" id="{{ letter }}"
+                value="{{ letter }}">
+                {{ letter }}
+              </label>
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <!-- SIDE OPTIONS -->
-    <div class="col-sm-2" id="search-options">
-      <div class="btn-group-vertical btn-group-sm filter-buttons"
-      id="search-genre-buttons" data-toggle="buttons">
+    <!-- OPTIONS -->
+    <div class="row" id="options">
+      <div class="col texture">
         <!-- GENRES -->
-        {% if selected_genre == 'All' or selected_genre == None %}
-          <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="genre" id="All" value="All" checked>
-            All
-          </label>
-        {% else %}
-          <label class="btn btn-outline-primary filter-button">
-            <input type="radio" name="genre" id="All" value="All">
-            All
-          </label>
-        {% endif %}
-        {% for genre in genres %}
-          {% if genre.name == selected_genre %}
-            <label class="btn btn-outline-primary filter-button active">
-              <input type="radio" name="genre" id="{{ genre.name }}"
-              value="{{ genre.name }}" checked>
-              {{ genre.name }}
-            </label>
-          {% else %}
-            <label class="btn btn-outline-primary filter-button">
-              <input type="radio" name="genre" id="{{ genre.name }}"
-              value="{{ genre.name }}">
-              {{ genre.name }}
-            </label>
-          {% endif %}
-        {% endfor %}
-      </div>
-      <div class="btn-group-vertical btn-group-sm filter-buttons"
-      id="search-language-buttons" data-toggle="buttons">
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Genre
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical btn-group filter-buttons" id="search-genre-buttons" data-toggle="buttons">
+              {% if selected_genre == 'All' or selected_genre == None %}
+                <label class="btn btn-outline-primary filter-button active">
+                  <input type="radio" name="genre" id="All" value="All" checked>
+                  All
+                </label>
+              {% else %}
+                <label class="btn btn-outline-primary filter-button">
+                  <input type="radio" name="genre" id="All" value="All">
+                  All
+                </label>
+              {% endif %}
+              {% for genre in genres %}
+                {% if genre.name == selected_genre %}
+                  <label class="btn btn-outline-primary filter-button active">
+                    <input type="radio" name="genre" id="{{ genre.name }}" value="{{ genre.name }}" checked>
+                    {{ genre.name }}
+                  </label>
+                {% else %}
+                  <label class="btn btn-outline-primary filter-button">
+                    <input type="radio" name="genre" id="{{ genre.name }}" value="{{ genre.name }}">
+                    {{ genre.name }}
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
         <!-- LANGUAGES -->
-        {% if selected_language == 'All' or selected_language == None %}
-          <label class="btn btn-outline-primary filter-button active">
-            <input type="radio" name="language" id="All" value="All" checked>
-            All
-          </label>
-        {% else %}
-          <label class="btn btn-outline-primary filter-button">
-            <input type="radio" name="language" id="All" value="All">
-            All
-          </label>
-        {% endif %}
-        {% for language in languages %}
-          {% if language.name == selected_language %}
-            <label class="btn btn-outline-primary filter-button active">
-              <input type="radio" name="language" id="{{ language.name }}"
-              value="{{ language.name }}" checked>
-              {{ language.name }}
-            </label>
-          {% else %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Language
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical btn-group filter-buttons" id="search-language-buttons" data-toggle="buttons">
+              {% if selected_language == 'All' or selected_language == None %}
+                <label class="btn btn-outline-primary filter-button active">
+                  <input type="radio" name="language" id="All" value="All" checked>
+                  All
+                </label>
+              {% else %}
+                <label class="btn btn-outline-primary filter-button">
+                  <input type="radio" name="language" id="All" value="All">
+                  All
+                </label>
+              {% endif %}
+              {% for language in languages %}
+                {% if language.name == selected_language %}
+                  <label class="btn btn-outline-primary filter-button active">
+                    <input type="radio" name="language" id="{{ language.name }}"
+                    value="{{ language.name }}" checked>
+                    {{ language.name }}
+                  </label>
+                {% else %}
+                  <label class="btn btn-outline-primary filter-button">
+                    <input type="radio" name="language" id="{{ language.name }}"
+                    value="{{ language.name }}">
+                    {{ language.name }}
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- SHOW -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            25
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical" id="search-show-buttons" data-toggle="buttons">
+              {% for num in show %}
+                {% if selected_show == num %}
+                  <label class="btn btn-outline-primary show-button active">
+                    <input type="radio" name="show" id="{{ num }}"
+                    value="{{ num }}" checked>
+                    {{ num }}
+                  </label>
+                {% else %}
+                  <label class="btn btn-outline-primary show-button">
+                    <input type="radio" name="show" id="{{ num }}"
+                    value="{{ num }}">
+                    {{ num }}
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- EXPLICIT -->
+        <div class="btn-group" id="search-explicit-buttons" data-toggle="buttons">
+          {% if selected_explicit == True or selected_explicit == None %}
             <label class="btn btn-outline-primary filter-button">
-              <input type="radio" name="language" id="{{ language.name }}"
-              value="{{ language.name }}">
-              {{ language.name }}
+              <input type="checkbox" name="explicit" value="false">
+              Hide Explicit
+            </label>
+            {% else %}
+            <label class="btn btn-outline-primary filter-button active">
+              <input type="checkbox" name="explicit" value="false" checked>
+              Hide Explicit
             </label>
           {% endif %}
-        {% endfor %}
-      </div>
-      <div class="btn-group-vertical btn-group-sm filter-buttons"
-      id="search-explicit-buttons" data-toggle="buttons">
-        <!-- EXPLICIT -->
-        {% if selected_explicit == True or selected_explicit == None %}
-        <label class="btn btn-outline-primary filter-button">
-          <input type="checkbox" name="explicit" value="false">
-          Hide Explicit
-        </label>
-        {% else %}
-        <label class="btn btn-outline-primary filter-button active">
-          <input type="checkbox" name="explicit" value="false" checked>
-          Hide Explicit
-        </label>
-        {% endif %}
+        </div>
       </div>
     </div>
-    <!-- MAIN -->
-    <div class="col-sm-10" id="main">
+  </form>
+</div>
+
+<div class="container">
+  <!-- MAIN -->
+  <div class="row" id="main">
+    <div class="col">
       <!-- RESULTS -->
       <div class="row" id="results">
         {% block results %}
@@ -162,7 +161,7 @@ browse
       </div>
     </div>
   </div>
-</form>
+</div>
 {% endblock %}
 
 {% block extrajs %}

@@ -4,60 +4,101 @@ body {
   /*background: hsla(0, 0%, 100%, 1);*/
 }
 
-#nav-bar {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .5);
-  z-index: 99;
-  height: 80px;
-}
-
-#canvas {
-  min-height: 100vh;
-}
-
-#bumper {
-  height: 80px;
-}
-
-#site-content {
-  background: rgba(255, 255, 255, 0.5);
-  border-left: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-}
-
 .texture {
   background: url("grid.png");
-  height: 100%;
-  /*padding: 30px;
-  margin: 0px -15px;*/
 }
 
-#search-bar {
-  background: #3b6d83;
-}
-
-#search-form {
-}
-
-#q {
-  max-width: 60%;
-  margin: 30px 0px 30px 50px;
+#nav-bar {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .5);
+  z-index: 99;
+  /*height: 80px;*/
 }
 
 #main {
-  border: 1px solid black;
+  min-height: 100vh;
+  margin-top: 15px;
+}
+#tracks {
+  margin-top: 250px;
+  min-height: 100vh;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+#subscriptions {
+  min-height: 100vh;
+  margin-top: 200px;
 }
 
-#results {
-  min-height: 450px;
-  border: 1px solid black;
+#site-content {
+
+}
+
+/* MULTI BAR */
+#multi-bar {
+  margin-top: 80px;
+  /*position: fixed;
+  top: 56px;
+  right: 0;
+  left: 0;
+  z-index: 97;*/
+}
+#options {
+  padding-right: 0;
+}
+#options-bar {
+  background: #3b6d83;
+}
+#options-list {
+  display: flex;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+#search-bar {
+  background: #3b6d83;
+}
+#browse-bar {
+  background: #3b6d83;
+}
+#search-form {
+}
+#search-field {
+ padding: 20px;
+}
+#q {
+
+}
+.filter-buttons {
+  width: 100%;
+}
+.show-button {
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+#search-show-buttons {
+  min-width: 0;
+  z-index: 97;
+}
+.btn.filter-button {
+  text-align: left;
+  /*white-space: normal;*/
+}
+.dropdown-menu {
+  min-width: 0;
+}
+
+/* PODINFO BAR */
+#podinfo-bar {
+  position: fixed;
+  top: 56px;
+  right: 0;
+  left: 0;
+  z-index: 97;
 }
 
 #browse {
-  border: 1px solid black;
-}
-
-#subscriptions {
   border: 1px solid black;
 }
 
@@ -95,37 +136,21 @@ body {
     content: ">>";
 }
 
-#options {
-  border: 1px solid black;
-}
-
-.filter-buttons {
-  width: 100%;
-  padding-top: 15px;
-}
-
-.show-button {
-  width: 100%;
-  margin: 0;
-  border-radius: 0;
-}
-
-#show-buttons {
-  min-width: 0;
-  z-index: 97;
-}
-
-.btn.filter-button {
-  text-align: left;
-  white-space: normal;
-}
-
 .navbar-collapse {
   flex-basis: auto;
 }
 
-#search-results {
-  background: #3b6d83;
+#results {
+  padding-bottom: 5px;
+  padding-right: 5px;
+  min-height: 450px;
+  border: 1px solid black;
+}
+
+.result-wrapper {
+  padding-left: 5px;
+  padding-right: 0px;
+  padding-top: 5px;
 }
 
 .result-box {
@@ -133,38 +158,29 @@ body {
   background: rgba(40, 110, 150, 0.6);
   box-shadow: 4px 4px 4px rgba(20, 30, 40, 0.2);
 */
-  /*border: 1px solid black;*/
+  border: 1px solid black;
   border-radius: .25rem;
   text-align: left;
+  padding: 5px;
 }
-
-.result-title {
-  padding-top: 4px;
-  height: 2.5em;
-  overflow: hidden;
-  /*border: 1px solid black;*/
-  border-radius: .25rem;
-}
-
-.result-genre {
-  height: 1.5em;
-  overflow: hidden;
-  /*border: 1px solid black;*/
-  border-radius: .25rem;
-}
-
-.result-image {
-  padding-left: 6px;
-  padding-right: 6px;
-}
-
 .result-image img {
   margin: auto;
   max-width:100%;
   max-height:100%;
 }
+.result-title {
+  padding-top: 5px;
+  height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-genre {
+  text-decoration: none;
+}
 
 #recommendations{
+  margin-top: 15px;
   height: 400px;
   border: 1px solid black;
 }
@@ -173,14 +189,6 @@ body {
   border: 1px solid black;
   margin: 5px;
   color: #000;
-}
-
-#tracks {
-  min-height: 270px;
-}
-
-#subscriptions {
-  min-height: 270px;
 }
 
 /* PLAYER */

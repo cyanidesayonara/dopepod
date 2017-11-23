@@ -21,6 +21,7 @@ def search(request):
         context['genres'] = Genre.get_primary_genres(Genre)
         context['languages'] = Language.objects.all()
         context['alphabet'] = string.ascii_uppercase
+        context['show'] = [25, 50, 75, 100]
 
         # if query string return results
         if q:
