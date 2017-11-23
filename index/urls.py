@@ -13,6 +13,5 @@ urlpatterns = [
     url(r'^podinfo/(?P<itunesid>\d+)/$', podcasts.podinfo, name='podinfo'),
     url(r'^tracks/$', podcasts.tracks, name='tracks'),
     url(r'^play/$', podcasts.play, name='play'),
-    url(r'^play/(?P<url>.+)/$', podcasts.play, name='play'),
     url(r'^subscribe/$', podcasts.subscribe, name='subscribe'),
 ]

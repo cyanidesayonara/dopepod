@@ -104,22 +104,33 @@ function SearchFunc() {
   var minlength = 2
   // gather variables
   var q = $("#q").val();
-  var genre = $("input[name='search-genre']:checked").val();
-  var language = $("input[name='search-language']:checked").val();
-  var show = $("input[name='search-show']:checked").val();
-  var explicit = !($("input[name='search-explicit']").is(":checked"));
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
+    data = {};
+    data['q'] = q;
+
+    var genre = $("input[name='search-genre']:checked").val();
+    var language = $("input[name='search-language']:checked").val();
+    var show = $("input[name='search-show']:checked").val();
+    var explicit = !($("input[name='search-explicit']").is(":checked"));
+
+    if (language != 'All') {
+      data['language'] = language;
+    }
+    if (genre != 'All') {
+      data['genre'] = genre;
+    }
+    if (show != 25) {
+      data['show'] = show;
+    }
+    if (language === false) {
+      data['explicit'] = false;
+    }
+
     $.ajax({
       method: "GET",
       url: "/search/",
-      data: {
-        "q": q,
-        "genre": genre,
-        "language": language,
-        "explicit": explicit,
-        "show": show,
-      },
+      data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
@@ -223,13 +234,13 @@ $(document)
     SearchFunc();
   })
   // remove focus from button (focus would be saved on state)
-  .on("click", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", function() {
+  .on("click", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #alphabet-buttons, #search-show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", function() {
     $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons", SearchFunc)
+  .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #search-show-buttons", SearchFunc)
   // browse when user changes options
-  .on("change", "#alphabet-buttons, #show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
+  .on("change", "#alphabet-buttons, #browse-show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
@@ -244,11 +255,9 @@ $(document)
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#site-content").hide();
         $("#site-content").html(response);
-        $("#site-content").slideDown();
 
-        var title = $(".podinfo h3")[0].innerHTML;
+        var title = $("#podinfo h3")[0].innerHTML;
         var state = {
           "context": response,
           "title": title,
@@ -300,22 +309,20 @@ $(document)
   // put track in player
   .on("click", ".play", function(e) {
     e.preventDefault();
-    var url = this.id;
-    var type = this.name;
+    var data = $(this).serialize();
+    var url = this.action;
+    var method = this.method;
     $.ajax({
       method: "POST",
       url: "/play/",
-      data: {
-        "url": url,
-        "type": type,
-        // "title": title,
-      },
+      data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       })
       .done(function(response) {
         $("#player").html(response);
+        $("#footer").css("padding-bottom", "104px");
       });
   })
   // TODO check if subscribed or nah

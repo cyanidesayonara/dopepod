@@ -44,7 +44,7 @@ def charts(request):
     #         items.append({'title': title, 'summary': summary, 'url': url, 'kind': kind})
     #     return render(request, 'podinfo.html', {'data': data_dict, 'items': items})
 
-def podinfo(request, itunesid=None):
+def podinfo(request, itunesid):
     """
     returns a podinfo page
     ajax: tracks loaded separately via ajax
@@ -53,17 +53,17 @@ def podinfo(request, itunesid=None):
     """
 
     if request.method == 'GET':
+        context = {}
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
         # mark podcast as subscribed
         podcast.is_subscribed(user)
+        context['podcast'] = podcast
 
-        if request.is_ajax():
-            tracks = {}
-        else:
-            tracks = podcast.get_tracks()
-        return render(request, 'podinfo.html', {'podcast': podcast, 'tracks': tracks})
+        if not request.is_ajax():
+            context['tracks'] = podcast.get_tracks()
+        return render(request, 'podinfo.html', context)
 
 def tracks(request):
     """
@@ -74,39 +74,30 @@ def tracks(request):
 
     # ajax using POST
     if request.method == 'POST':
+        itunesid = request.POST.get('itunesid', None)
         try:
-            itunesid = request.POST['itunesid']
             podcast = Podcast.objects.get(itunesid=itunesid)
         except:
             raise Http404()
+        context = {}
+        context['tracks'] = podcast.get_tracks()
+        return render(request, 'tracks.html', context)
 
-        tracks = podcast.get_tracks()
-        return render(request, 'tracks.html', {'tracks': tracks})
-
-def play(request, url=None):
+def play(request):
     """
     returns html5 audio element
-    POST ajax request
-    GET request in a popup
-    required argument: url
+    POST request in a popup
+    POST ajax request, bottom of page (#player)
     """
 
-    # GET request, opens in popup
-    if request.method == 'GET':
-        track = {}
-        track['url'] = url
-        return render(request, 'player.html', {'track': track})
-
-    # ajax using POST
     # TODO: itemize track
     if request.method == 'POST':
         track = {}
-        try:
-            track['url'] = request.POST['url']
-            track['type'] = request.POST['type']
-            # track['title'] = request.POST['title']
-        except:
-            raise Http404()
+        track['url'] = request.POST.get('url')
+        track['type'] = request.POST.get('type')
+        track['title'] = request.POST.get('title')
+        track['podcast'] = request.POST.get('podcast')
+        track['artwork'] = request.POST.get('artwork')
         return render(request, 'player.html', {'track': track})
 
     # any other method not accepted

@@ -15,33 +15,28 @@ body {
   /*height: 80px;*/
 }
 
-#main {
+/*#main {
   min-height: 100vh;
-  margin-top: 15px;
-}
+}*/
 #tracks {
-  margin-top: 250px;
-  min-height: 100vh;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  min-height: 100%;
+  margin-top: 15px;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid black;
 }
 #subscriptions {
   min-height: 100vh;
   margin-top: 200px;
 }
 
-#site-content {
-
+#main-content {
+  min-height: 100vh;
 }
 
 /* MULTI BAR */
 #multi-bar {
-  margin-top: 80px;
-  /*position: fixed;
-  top: 56px;
-  right: 0;
-  left: 0;
-  z-index: 97;*/
+  padding-top: 80px;
 }
 #options {
   padding-right: 0;
@@ -62,6 +57,7 @@ body {
   background: #3b6d83;
 }
 #search-form {
+  padding-top: 80px;
 }
 #search-field {
  padding: 20px;
@@ -91,11 +87,13 @@ body {
 
 /* PODINFO BAR */
 #podinfo-bar {
-  position: fixed;
-  top: 56px;
-  right: 0;
-  left: 0;
-  z-index: 97;
+  background: #3b6d83;
+  margin-top: 80px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#podinfo {
+  min-height: 100vh;
 }
 
 #browse {
@@ -105,11 +103,6 @@ body {
 #alphabet {
   background: #3b6d83;
 }
-
-#podinfo {
-  background: #3b6d83;
-}
-
 
 .alphabet-buttons {
   padding: 15px 0px;
@@ -141,30 +134,36 @@ body {
 }
 
 #results {
-  padding-bottom: 5px;
-  padding-right: 5px;
-  min-height: 450px;
-  border: 1px solid black;
-}
-
-.result-wrapper {
-  padding-left: 5px;
+  /*padding-bottom: 5px;*/
   padding-right: 0px;
-  padding-top: 5px;
+  /*min-height: 450px;*/
+  /*border: 1px solid black;*/
 }
-
+#results-row {
+  margin-top: 15px;
+}
+.result-wrapper {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+}
 .result-box {
 /*
-  background: rgba(40, 110, 150, 0.6);
   box-shadow: 4px 4px 4px rgba(20, 30, 40, 0.2);
 */
   border: 1px solid black;
   border-radius: .25rem;
   text-align: left;
-  padding: 5px;
+  margin: 5px;
+}
+.result-image {
+  min-width: 100%;
+  min-height: 100%;
 }
 .result-image img {
   margin: auto;
+  min-width: 100%;
+  min-height: 100%;
   max-width:100%;
   max-height:100%;
 }
@@ -192,9 +191,11 @@ body {
 }
 
 /* PLAYER */
-
 #player {
-  background: #3b6d83;
+  position: fixed;
+  bottom: 0;
+  z-index: 98;
+  padding-top: 4px;
 }
 
 #trackinfo-content {
@@ -202,24 +203,15 @@ body {
   background: #3b6d83;
 }
 
-#player-content {
-  min-height: 100%
-}
-
-#bottom-thing {
-  position: fixed;
-  bottom: 800px;
-  width: 100%;
-  /*height: 60px;*/
-  z-index: 98;
+#player-bar {
+  background: #3b6d83;
 }
 
 #overlay {
     background: url("loading.gif");
     background-repeat: no-repeat;
     background-position: center;
-    height: 100%;
-    width: 100%;
+    height: 240px;
 }
 .hide {
     display: none;

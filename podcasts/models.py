@@ -84,9 +84,14 @@ class Podcast(models.Model):
             # link to track
             # enclosure might be missing, have alternatives
             enclosure = item.find('enclosure')
-            track['url'] = enclosure.get('url')
-            track['type'] = enclosure.get('type')
-            tracks.append(track)
+            try:
+                track['url'] = enclosure.get('url')
+                track['type'] = enclosure.get('type')
+                tracks.append(track)
+            except AttributeError as e:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error('can\'t get track url')
         return tracks
 
 class Subscription(models.Model):

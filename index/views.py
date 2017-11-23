@@ -81,18 +81,18 @@ def actual_search(genre, language, explicit, user, q=None, alphabet=None):
 
     # last but not least, filter by title
     # always return n_results
+    res = {}
     if q:
-        res = podcasts.filter(title__istartswith=q)
+        res1 = podcasts.filter(title__istartswith=q)
+        res2 = podcasts.filter(title__icontains=q)
+        res = res1.union(res2)
     elif alphabet:
         res = podcasts.filter(title__istartswith=alphabet).order_by('title')
-    else:
-        res = {}
 
     # get a list of itunesids from user's subscriptions (if not AnonymousUser)
+    subscriptions = []
     if user.username:
         subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
-    else:
-        subscriptions = []
 
     for podcast in res:
         if podcast.itunesid in subscriptions:
