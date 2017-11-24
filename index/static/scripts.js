@@ -67,6 +67,22 @@ function goToPage(url, title) {
     });
 };
 
+function goToModal(url) {
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+  .fail(function(xhr, ajaxOptions, thrownError){
+    console.log(thrownError);
+  })
+  .done(function(response) {
+    if ($("#modal").css('display') == 'none') {
+      $("#modal").modal("show");
+    }
+    $("#modal-content").html(response.html);
+  });
+}
+
 function refreshPage() {
   // refresh navbar (and maybe other stuff as well?)
   $.ajax({
@@ -371,11 +387,12 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
+        // probably not logged in
+        goToModal("/account/login/");
       })
       .done(function(response) {
         $("#sub-button").html(response);
 
-        // save results + q in current state
         var url = $("#main-content")[0].baseURI;
         var context = $("#main-content")[0].innerHTML;
         var title = $("#podinfo-bar h3")[0].innerHTML;
@@ -390,16 +407,7 @@ $(document)
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    $.ajax({
-      type: "GET",
-      url: url,
-    })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#modal-content").html(response.html);
-    });
+    goToModal(url);
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {

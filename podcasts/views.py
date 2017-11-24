@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription
@@ -9,6 +9,13 @@ def charts(request):
     returns podcast charts
     """
     pass
+    # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
+    # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+    ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0-dtd',
+          'atom': 'http://www.w3.org/2005/Atom',
+          'im': 'http://itunes.apple.com/rss',
+      }
+
     # try:
     #     genre = request.GET['genre']
     # except:
@@ -105,7 +112,6 @@ def play(request):
     else:
         raise Http404()
 
-@login_required
 def subscribe(request):
     """
     subscribe to podcast
@@ -113,36 +119,43 @@ def subscribe(request):
 
     # validate request
     if request.method == 'POST':
-        try:
-            itunesid = request.POST['itunesid']
-        except KeyError:
-            raise Http404()
+        if request.user.is_authenticated:
+            try:
+                itunesid = request.POST['itunesid']
+            except KeyError:
+                raise Http404()
 
-        # check whether podcast exists
-        try:
-            podcast = Podcast.objects.get(itunesid=itunesid)
-        except Podcast.DoesNotExist:
-            raise Http404()
+            # check whether podcast exists
+            try:
+                podcast = Podcast.objects.get(itunesid=itunesid)
+            except Podcast.DoesNotExist:
+                raise Http404()
 
-        # if subscription exists, delete it
-        try:
-            subscription = Subscription.objects.get(itunesid=itunesid, user=request.user)
-            podcast.n_subscribers -= 1
-            podcast.save()
-            subscription.delete()
-            # this goes on button
-            return HttpResponse('Subscribe')
+            # if subscription exists, delete it
+            try:
+                subscription = Subscription.objects.get(itunesid=itunesid, user=request.user)
+                podcast.n_subscribers -= 1
+                podcast.save()
+                subscription.delete()
+                # this goes on button
+                return HttpResponse('Subscribe')
 
-        # if subscription doesn't exist, create it
-        except Subscription.DoesNotExist:
-            podcast.n_subscribers += 1
-            podcast.save()
-            Subscription.objects.create(
-                            itunesid=podcast.itunesid,
-                            user=request.user,
-                            pod=podcast,
-            )
-        # this goes on button
-        return HttpResponse('Unsubscribe')
-    else:
-        raise Http404()
+            # if subscription doesn't exist, create it
+            except Subscription.DoesNotExist:
+                podcast.n_subscribers += 1
+                podcast.save()
+                Subscription.objects.create(
+                                itunesid=podcast.itunesid,
+                                user=request.user,
+                                pod=podcast,
+                )
+            if request.is_ajax():
+                # this goes on button
+                return HttpResponse('Unsubscribe')
+            else:
+                return redirect('/podinfo/' + itunesid + '/')
+        else:
+            if request.is_ajax():
+                raise Http404()
+            else:
+                return redirect('/account/login/?next=/podinfo/' + itunesid + '/')

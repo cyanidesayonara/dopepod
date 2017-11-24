@@ -16,6 +16,7 @@ def home(request):
     context['alphabet'] = string.ascii_uppercase
     context['search'] = True
     context['selected_show'] = 'detail'
+    context['selected_alphabet'] = 'A'
     return render(request, 'index/search_base.html', context)
 
 def search(request):
@@ -32,6 +33,7 @@ def search(request):
             context['genres'] = Genre.get_primary_genres(Genre)
             context['languages'] = Language.objects.all()
             context['alphabet'] = string.ascii_uppercase
+            context['search'] = True
 
             genre = request.GET.get('genre', 'all').capitalize()
             language = request.GET.get('language', 'all').capitalize()
@@ -41,6 +43,7 @@ def search(request):
             show = request.GET.get('show', 'detail')
             page = request.GET.get('page', 1)
 
+            context['selected_alphabet'] = 'A'
             context['selected_show'] = show
 
             # if not ajax, include all selected values
@@ -193,7 +196,6 @@ def browse(request):
         else:
             return render(request, 'index/browse_results.html', context)
 
-@login_required
 def subscriptions(request):
     """
     returns subscription for user
@@ -202,18 +204,22 @@ def subscriptions(request):
     then requests subscriptions via POST
     """
 
-    if request.method == 'GET':
-        user = request.user
-        if request.is_ajax():
-            subscriptions = {}
-        else:
-            subscriptions = Subscription.get_subscriptions(user)
-        return render(request, 'index/subscriptions_base.html', {'subscriptions': subscriptions})
+    user = request.user
+    if user.is_authenticated:
+        if request.method == 'GET':
+            context = {}
+            context['search'] = True
+            
+            if not request.is_ajax():
+                context['subscriptions'] = Subscription.get_subscriptions(user)
+            return render(request, 'index/subscriptions_base.html', context)
 
-    if request.method == 'POST':
-        user = request.user
-        subscriptions = Subscription.get_subscriptions(user)
-        return render(request, 'index/subscriptions_results.html', {'subscriptions': subscriptions})
+        if request.method == 'POST':
+            context = {}
+            context['subscriptions']  = Subscription.get_subscriptions(user)
+            return render(request, 'index/subscriptions_results.html', context)
+    else:
+        raise Http404()
 
 @login_required
 def settings(request):

@@ -5,18 +5,17 @@ subscriptions
 {% endblock %}
 
 {% block content %}
-  <!-- MULTI BAR -->
-<div class="container" id="multi-bar">
-  <div class="row">
-    <div class="col texture">
-    </div>
-  </div>
-</div>
-
-<div class="container">
+<!-- MULTI BAR -->
+<form class="row" id="search-form" method="GET" action="{% url 'search' %}">
+  {% include 'multibar.html' %}
+</form>
+<!-- MAIN -->
+<div class="row" id="main">
+  <div class="col">
   <!-- SUBSCRIPTIONS -->
-  <div class="row" id="subscriptions">
-    {% include 'index/subscriptions_results.html' %}
+    <div class="row" id="results">
+      {% include 'index/subscriptions_results.html' %}
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -33,16 +32,9 @@ $(window).ready(function() {
   })
     .fail(function(xhr, ajaxOptions, thrownError){
       console.log(thrownError);
-      $("#subscriptions").hide();
-      $("#subscriptions").html("<p>No results :p</p>");
-      $('#overlay').addClass('hide');
-      $("#subscriptions").fadeIn();
     })
     .done(function(response) {
-      $("#subscriptions").hide();
-      $("#subscriptions").html(response);
-      $('#overlay').addClass('hide');
-      $("#subscriptions").fadeIn();
+      $("#results").html(response);
     });
 });
 </script>

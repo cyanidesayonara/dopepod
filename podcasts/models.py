@@ -31,7 +31,7 @@ class Podcast(models.Model):
         (if not AnonymousUser),
         if self.itunesid on list, self.subscribed = True
         """
-        if user.username:
+        if user.is_authenticated:
             subscriptions = Subscription.get_subscriptions_itunesids(user)
             if self.itunesid in subscriptions:
                 self.subscribed = True
@@ -104,20 +104,20 @@ class Subscription(models.Model):
 
     def get_subscriptions(user):
         # make sure not AnonymousUser
-        if user.username:
+        if user.is_authenticated:
             return Subscription.objects.filter(user=user)
         else:
             return None
 
     def get_subscriptions_itunesids(user):
         # make sure not AnonymousUser
-        if user.username:
+        if user.is_authenticated:
             return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
         else:
             return None
 
     def update(self):
-        last_updated = timezone.now
+        last_updated = timezone.now()
 
 class Filterable(models.Model):
     """

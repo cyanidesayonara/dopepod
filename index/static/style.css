@@ -56,6 +56,9 @@ body {
 #subscriptions {
 
 }
+#subscriptions-row {
+  margin-top: 15px;
+}
 
 #main-content {
   background-color: #fff;
@@ -95,11 +98,11 @@ body {
   padding-right: 4px;
 }
 #search-field {
-  width: 300px;
+  width: 400px;
 }
 #search-button {
   position: absolute;
-  left: 254px;
+  left: 354px;
   top: 4px;
   z-index: 50;
   border-radius: 20px;
@@ -173,10 +176,10 @@ body {
   padding-top: 0px;
 }
 .result-box {
-  /*-webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
-  box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);*/
-  border: 1px solid black;
+  box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+  /*border: 1px solid black;*/
   text-align: left;
   margin: 4px;
 }
