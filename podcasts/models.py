@@ -55,7 +55,6 @@ class Podcast(models.Model):
 
         for item in tree.findall('item'):
             track = {}
-            track['podcast'] = podcast
             track['pubDate'] = item.find('pubDate').text
 
             # try these
@@ -81,6 +80,8 @@ class Podcast(models.Model):
                 logger = logging.getLogger(__name__)
                 logger.error('can\'t get length')
 
+            track['podcast'] = self
+            
             # link to track
             # enclosure might be missing, have alternatives
             enclosure = item.find('enclosure')

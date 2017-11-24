@@ -7,11 +7,12 @@ search
 {% block content %}
 <!-- MULTI BAR -->
 <form class="row" id="search-form" method="GET" action="{% url 'search' %}">
-  <div class="col">
+  <div class="col color" id="multi-bar">
     <!-- SEARCH BAR -->
-    <div class="row" id="search-bar">
-      <div class="col-auto texture">
+    <div class="row texture" id="search-bar">
+      <div class="col-auto">
         <div class="input-group" id="search-field">
+          <label for="q" class="sr-only">Search</label>
           {% if selected_q %}
             <input class="form-control" type="text" name="q" id="q"
             type="search" placeholder="Search for..."
@@ -23,147 +24,168 @@ search
             aria-label="Search for..." autocomplete="off"
             accept-charset="utf-8">
           {% endif %}
-          <span class="input-group-btn">
-            <button class="btn btn-outline-primary" type="submit">
-              Go!
+            <button class="btn btn-outline-primary" id="search-button" type="submit">
+              <i class="fa fa-search"></i>
             </button>
-          </span>
         </div>
       </div>
-      <div class="col texture">
+      <div class="col">
       </div>
-      <div class="col-auto texture">
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-          Options
-        </button>
+      <a class="col-auto search-toggle">
+        <h1>Browse</h1>
+      </a>
+    </div>
+    <!-- BROWSE BAR -->
+    <div class="row texture" id="browse-bar" style="display: none;">
+      <div class="col-auto search-toggle">
+        <h1>Search</h1>
+      </div>
+      <div class="col">
+      </div>
+      <div class="col-auto">
+        <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
+          {% for letter in alphabet %}
+            {% if letter == selected_alphabet %}
+              <label class="btn btn-outline-primary alphabet-button active">
+                <input type="radio" name="alphabet" id="{{ letter }}"
+                value="{{ letter }}" checked>
+                {{ letter }}
+              </label>
+              {% else %}
+              <label class="btn btn-outline-primary alphabet-button">
+                <input type="radio" name="alphabet" id="{{ letter }}"
+                value="{{ letter }}">
+                {{ letter }}
+              </label>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
     <!-- OPTIONS -->
-    <div class="row" id="options-bar">
-      <div class="col texture">
+    <div class="row texture" id="options-bar">
+      <div class="col">
       </div>
-      <div class="collapse" id="collapseExample">
-        <div class="col-auto texture" id="options">
-          <ul id="options-list">
-            <!-- GENRES -->
-            <li>
-              <div class="btn-group">
-                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Genre
-                </button>
-                <div class="dropdown-menu">
-                  <div class="btn-group-vertical btn-group-sm filter-buttons" id="search-genre-buttons" data-toggle="buttons">
-                    {% if selected_genre == 'All' or selected_genre == None %}
-                    <label class="btn btn-outline-primary filter-button active">
-                      <input type="radio" name="search-genre" id="All" value="All" checked>
-                      All
-                    </label>
-                    {% else %}
-                    <label class="btn btn-outline-primary filter-button">
-                      <input type="radio" name="search-genre" id="All" value="All">
-                      All
-                    </label>
-                    {% endif %}
-                    {% for genre in genres %}
-                    {% if genre.name == selected_genre %}
-                    <label class="btn btn-outline-primary filter-button active">
-                      <input type="radio" name="search-genre" id="{{ genre.name }}" value="{{ genre.name }}" checked>
-                      {{ genre.name }}
-                    </label>
-                    {% else %}
-                    <label class="btn btn-outline-primary filter-button">
-                      <input type="radio" name="search-genre" id="{{ genre.name }}" value="{{ genre.name }}">
-                      {{ genre.name }}
-                    </label>
-                    {% endif %}
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </li>
-            <!-- LANGUAGES -->
-            <li>
-              <div class="btn-group">
-                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Language
-                </button>
-                <div class="dropdown-menu">
-                  <div class="btn-group-vertical btn-group filter-buttons" id="search-language-buttons" data-toggle="buttons">
-                    {% if selected_language == 'All' or selected_language == None %}
-                      <label class="btn btn-outline-primary filter-button active">
-                        <input type="radio" name="search-language" id="All" value="All" checked>
-                        All
-                      </label>
-                    {% else %}
-                      <label class="btn btn-outline-primary filter-button">
-                        <input type="radio" name="search-language" id="All" value="All">
-                        All
-                      </label>
-                    {% endif %}
-                    {% for language in languages %}
-                      {% if language.name == selected_language %}
-                        <label class="btn btn-outline-primary filter-button active">
-                          <input type="radio" name="search-language" id="{{ language.name }}"
-                          value="{{ language.name }}" checked>
-                          {{ language.name }}
-                        </label>
-                      {% else %}
-                        <label class="btn btn-outline-primary filter-button">
-                          <input type="radio" name="search-language" id="{{ language.name }}"
-                          value="{{ language.name }}">
-                          {{ language.name }}
-                        </label>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </li>
-            <!-- SHOW -->
-            <li>
-              <div class="btn-group">
-                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  25
-                </button>
-                <div class="dropdown-menu">
-                  <div class="btn-group-vertical" id="search-show-buttons" data-toggle="buttons">
-                    {% for num in show %}
-                      {% if selected_show == num %}
-                        <label class="btn btn-outline-primary show-button active">
-                          <input type="radio" name="search-show" id="{{ num }}"
-                          value="{{ num }}" checked>
-                          {{ num }}
-                        </label>
-                      {% else %}
-                        <label class="btn btn-outline-primary show-button">
-                          <input type="radio" name="search-show" id="{{ num }}"
-                          value="{{ num }}">
-                          {{ num }}
-                        </label>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </li>
-            <!-- EXPLICIT -->
-            <li>
-              <div class="btn-group" id="search-explicit-buttons" data-toggle="buttons">
-                {% if selected_explicit == True or selected_explicit == None %}
-                  <label class="btn btn-outline-primary filter-button">
-                    <input type="checkbox" name="search-explicit" value="false">
-                    Hide Explicit
+      <div class="col-auto" id="options">
+        <ul id="options-list">
+          <!-- GENRES -->
+          <li>
+            <div class="btn-group">
+              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Genre
+              </button>
+              <div class="dropdown-menu">
+                <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
+                  {% if selected_genre == 'All' or selected_genre == None %}
+                  <label class="btn btn-outline-primary active">
+                    <input type="radio" name="genre" id="All" value="All" checked>
+                    All
                   </label>
                   {% else %}
-                  <label class="btn btn-outline-primary filter-button active">
-                    <input type="checkbox" name="search-explicit" value="false" checked>
-                    Hide Explicit
+                  <label class="btn btn-outline-primary">
+                    <input type="radio" name="genre" id="All" value="All">
+                    All
                   </label>
-                {% endif %}
+                  {% endif %}
+                  {% for genre in genres %}
+                  {% if genre.name == selected_genre %}
+                  <label class="btn btn-outline-primary active">
+                    <input type="radio" name="genre" id="{{ genre.name }}" value="{{ genre.name }}" checked>
+                    {{ genre.name }}
+                  </label>
+                  {% else %}
+                  <label class="btn btn-outline-primary">
+                    <input type="radio" name="genre" id="{{ genre.name }}" value="{{ genre.name }}">
+                    {{ genre.name }}
+                  </label>
+                  {% endif %}
+                  {% endfor %}
+                </div>
               </div>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </li>
+          <!-- LANGUAGES -->
+          <li>
+            <div class="btn-group">
+              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Language
+              </button>
+              <div class="dropdown-menu">
+                <div class="btn-group-vertical btn-group" id="language-buttons" data-toggle="buttons">
+                  {% if selected_language == 'All' or selected_language == None %}
+                    <label class="btn btn-outline-primary active">
+                      <input type="radio" name="language" id="All" value="All" checked>
+                      All
+                    </label>
+                  {% else %}
+                    <label class="btn btn-outline-primary">
+                      <input type="radio" name="language" id="All" value="All">
+                      All
+                    </label>
+                  {% endif %}
+                  {% for language in languages %}
+                    {% if language.name == selected_language %}
+                      <label class="btn btn-outline-primary active">
+                        <input type="radio" name="language" id="{{ language.name }}"
+                        value="{{ language.name }}" checked>
+                        {{ language.name }}
+                      </label>
+                    {% else %}
+                      <label class="btn btn-outline-primary">
+                        <input type="radio" name="language" id="{{ language.name }}"
+                        value="{{ language.name }}">
+                        {{ language.name }}
+                      </label>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- SHOW -->
+          <li>
+            <div class="btn-group">
+              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                25
+              </button>
+              <div class="dropdown-menu">
+                <div class="btn-group-vertical" id="show-buttons" data-toggle="buttons">
+                  {% for num in show %}
+                    {% if selected_show == num %}
+                      <label class="btn btn-outline-primary show-button active">
+                        <input type="radio" name="show" id="{{ num }}"
+                        value="{{ num }}" checked>
+                        {{ num }}
+                      </label>
+                    {% else %}
+                      <label class="btn btn-outline-primary show-button">
+                        <input type="radio" name="show" id="{{ num }}"
+                        value="{{ num }}">
+                        {{ num }}
+                      </label>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- EXPLICIT -->
+          <li>
+            <div class="btn-group" id="explicit-button" data-toggle="buttons">
+              {% if selected_explicit == True or selected_explicit == None %}
+                <label class="btn btn-outline-primary">
+                  <input type="checkbox" name="explicit" value="false">
+                  Hide Explicit
+                </label>
+                {% else %}
+                <label class="btn btn-outline-primary active">
+                  <input type="checkbox" name="explicit" value="false" checked>
+                  Hide Explicit
+                </label>
+              {% endif %}
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

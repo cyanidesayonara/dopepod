@@ -8,28 +8,6 @@ browse
 <!-- MULTI BAR -->
 <div class="container" id="multi-bar">
   <form id="browse-form" method="GET" action="{% url 'browse' %}">
-    <!-- BROWSE BAR -->
-    <div class="row" id="browse-bar">
-      <div class="col texture">
-        <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
-          {% for letter in alphabet %}
-            {% if letter == selected_alphabet %}
-              <label class="btn btn-outline-primary alphabet-button active">
-                <input type="radio" name="alphabet" id="{{ letter }}"
-                value="{{ letter }}" checked>
-                {{ letter }}
-              </label>
-              {% else %}
-              <label class="btn btn-outline-primary alphabet-button">
-                <input type="radio" name="alphabet" id="{{ letter }}"
-                value="{{ letter }}">
-                {{ letter }}
-              </label>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    </div>
     <!-- OPTIONS -->
     <div class="row" id="options">
       <div class="col texture">

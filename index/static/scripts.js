@@ -1,7 +1,7 @@
 $(window).on('popstate', function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $("#site-content").html(state.context);
+    $("#main-content").html(state.context);
     $("title")[0].innerText = state.title;
     if (state.q) {
       $("#q").val(state.q);
@@ -57,7 +57,7 @@ function goToPage(url) {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#site-content").html(response);
+      $("#main-content").html(response);
       var title = "browse";
       var state = {
         "context": response,
@@ -106,13 +106,13 @@ function SearchFunc() {
   var q = $("#q").val();
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
+    var genre = $("input[name='genre']:checked").val();
+    var language = $("input[name='language']:checked").val();
+    var show = $("input[name='show']:checked").val();
+    var explicit = !($("input[name='explicit']").is(":checked"));
+
     data = {};
     data['q'] = q;
-
-    var genre = $("input[name='search-genre']:checked").val();
-    var language = $("input[name='search-language']:checked").val();
-    var show = $("input[name='search-show']:checked").val();
-    var explicit = !($("input[name='search-explicit']").is(":checked"));
 
     if (language != 'All') {
       data['language'] = language;
@@ -138,8 +138,8 @@ function SearchFunc() {
       .done(function(response) {
         $("#results").html(response);
         // save results + q in current state
-        var curContext = $("#site-content")[0].innerHTML;
-        var curUrl = $("#site-content")[0].baseURI;
+        var curContext = $("#main-content")[0].innerHTML;
+        var curUrl = $("#main-content")[0].baseURI;
         var curTitle = "dopepod";
         var curState = {
           "context": curContext,
@@ -154,8 +154,8 @@ function SearchFunc() {
     $("#results").html("");
 
     // save results + q in current state
-    var curContext = $("#site-content")[0].innerHTML;
-    var curUrl = $("#site-content")[0].baseURI;
+    var curContext = $("#main-content")[0].innerHTML;
+    var curUrl = $("#main-content")[0].baseURI;
     var curTitle = "dopepod";
     var curState = {
       "context": curContext,
@@ -169,19 +169,30 @@ function SearchFunc() {
 function BrowseFunc() {
   var alphabet = $("input[name='alphabet']:checked").val();
   var show = $("input[name='show']:checked").val();
-  var genre = $("input[name='browse-genre']:checked").val();
-  var language = $("input[name='browse-language']:checked").val();
-  var explicit = $("input[name='browse-explicit-button']").is(":checked");
+  var genre = $("input[name='genre']:checked").val();
+  var language = $("input[name='language']:checked").val();
+  var explicit = $("input[name='explicit-button']").is(":checked");
+
+  data = {};
+  data['alphabet'] = alphabet;
+
+  if (language != 'All') {
+    data['language'] = language;
+  }
+  if (genre != 'All') {
+    data['genre'] = genre;
+  }
+  if (show != 25) {
+    data['show'] = show;
+  }
+  if (language === false) {
+    data['explicit'] = false;
+  }
+
   $.ajax({
     method: "POST",
     url: "/browse/",
-    data: {
-      "alphabet": alphabet,
-      "show": show,
-      "genre": genre,
-      "language": language,
-      "explicit": explicit,
-    },
+    data: data,
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
       console.log(thrownError);
@@ -190,8 +201,8 @@ function BrowseFunc() {
       $("#results").html(response);
 
       // save results + q in current state
-      var curContext = $("#site-content")[0].innerHTML;
-      var curUrl = $("#site-content")[0].baseURI;
+      var curContext = $("#main-content")[0].innerHTML;
+      var curUrl = $("#main-content")[0].baseURI;
       var curTitle = "dopepod";
       var curState = {
         "context": curContext,
@@ -229,18 +240,29 @@ $(document)
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#q", debounce(SearchFunc, delay))
   // search when "search" button is clicked
-  .on("submit", "#search-form", function (e) {
+  .on("submit", "#search-form", function(e) {
     e.preventDefault();
     SearchFunc();
   })
   // remove focus from button (focus would be saved on state)
-  .on("click", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #alphabet-buttons, #search-show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", function() {
+  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #explicit-button, #show-buttons", function() {
     $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", "#search-genre-buttons, #search-language-buttons, #search-explicit-buttons, #search-show-buttons", SearchFunc)
-  // browse when user changes options
-  .on("change", "#alphabet-buttons, #browse-show-buttons, #browse-genre-buttons, #browse-language-buttons, #browse-explicit-buttons", BrowseFunc)
+  .on("change", "#genre-buttons, #language-buttons, #explicit-button, #show-buttons", function() {
+    if ($("#q").css('display') == 'none') {
+      SearchFunc();
+    }
+    else {
+      BrowseFunc();
+    }
+  })
+  .on("change", "#alphabet-buttons", function() {
+    BrowseFunc();
+  })
+  .on("click", "#search-button", function() {
+    SearchFunc();
+  })
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
@@ -255,9 +277,9 @@ $(document)
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#site-content").html(response);
+        $("#main-content").html(response);
 
-        var title = $("#podinfo h3")[0].innerHTML;
+        var title = $("#podinfo-bar h3")[0].innerHTML;
         var state = {
           "context": response,
           "title": title,
@@ -276,6 +298,11 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     goToPage("/browse/");
+  })
+  .on("mouseover", ".search-toggle", function(e) {
+    e.preventDefault();
+    $("#search-bar").toggle();
+    $("#browse-bar").toggle();
   })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
@@ -300,7 +327,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#site-content").html(xhr.responseJSON.html);
+        $("#main-content").html(xhr.responseJSON.html);
       })
       .done(function(response) {
         goToPage("/");
@@ -322,11 +349,15 @@ $(document)
       })
       .done(function(response) {
         $("#player").html(response);
-        $("#footer").css("padding-bottom", "104px");
+        $("#footer").css("padding-bottom", "106px");
       });
   })
   // TODO check if subscribed or nah
   // subscription button
+  .on("click", "#player-close", function(e) {
+    $("#player").empty();
+    $("#footer").css("padding-bottom", "0px");
+  })
   .on("submit", "#sub-form", function(e) {
     // Stop form from submitting normally
     e.preventDefault();

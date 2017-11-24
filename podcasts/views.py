@@ -98,6 +98,7 @@ def play(request):
         track['title'] = request.POST.get('title')
         track['podcast'] = request.POST.get('podcast')
         track['artwork'] = request.POST.get('artwork')
+        track['date'] = request.POST.get('date')
         return render(request, 'player.html', {'track': track})
 
     # any other method not accepted

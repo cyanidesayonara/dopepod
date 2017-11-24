@@ -33,11 +33,12 @@
             <form class="play" action="{% url 'play' %}" method="POST" target="_blank">
               <!-- ADDTL TRACK INFO HERE -->
               {% csrf_token %}
-              <input type="hidden" name="artwork" value="{{ podcast.artworkUrl }}">
+              <input type="hidden" name="artwork" value="{{ track.podcast.artworkUrl }}">
               <input type="hidden" name="url" value="{{ track.url }}">
               <input type="hidden" name="type" value="{{ track.type }}">
               <input type="hidden" name="title" value="{{ track.title }}">
-              <input type="hidden" name="podcast" value="{{ podcast.title }}">
+              <input type="hidden" name="podcast" value="{{ track.podcast.title }}">
+              <input type="hidden" name="date" value="{{ track.pubDate }}">
               <button class="btn btn-outline-primary" type="submit">
                 Play
               </button>

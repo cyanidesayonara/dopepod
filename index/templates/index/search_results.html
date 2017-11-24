@@ -12,28 +12,21 @@
       <a class="col-lg-2 col-md-3 col-sm-4 col-6 result-wrapper show-podinfo" id="{{ podcast.itunesid }}" href=
        "{% url 'podinfo' itunesid=podcast.itunesid %}">
        <div class="result-box">
-         <div class="row result-image">
-           <div class="col">
-             <img src="{{ podcast.artworkUrl }}180x180bb.jpg" />
-           </div>
+         <div class="result-image">
+           <img src="{{ podcast.artworkUrl }}180x180bb.jpg" />
          </div>
-         <div class="row">
-           <div class="col result-title">
-             <h6>{{ podcast.title }}</h6>
-           </div>
+         <div class="result-title">
+           <h6>{{ podcast.title }}</h6>
          </div>
-         <div class="row">
-           <div class="col result-genre">
-             <p>
-               {% if podcast.genre.supa %}
-               {{ podcast.genre.supa }} -
-               {% endif %}
-               {{ podcast.genre }}
-             </p>
-           </div>
+         <div class="result-genre">
+           <p>
+             {% if podcast.genre.supa %}
+             {{ podcast.genre.supa }} -
+             {% endif %}
+             {{ podcast.genre }}
+           </p>
          </div>
-
-       </div>
+     </div>
       </a>
     {% endfor %}
   {% else %}

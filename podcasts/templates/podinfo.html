@@ -6,65 +6,65 @@
 
 {% block content %}
 <!-- PODINFO BAR -->
-<div class="container" id="podinfo">
-  <div class="row" id="podinfo-bar">
-    <div class="col-auto texture">
-      <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
-    </div>
-    <div class="col texture">
-      <h3>
-        {{ podcast.title }}
-      </h3>
-      <p>
-        {{ podcast.description }}<
-        /p>
-    </div>
-    <div class="col-auto texture">
-      {% if podcast.subscribed %}
-        <form class="sub-form" action="{% url 'subscribe' %}"
-        id="{{ podcast.itunesid }}" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-          <input type="submit" class="btn btn-outline-primary" id="sub-button"
-          value="Unsubscribe">
-        </form>
-      {% else %}
-        <form class="sub-form" action="{% url 'subscribe' %}"
-        id="{{ podcast.itunesid }}" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-          <input type="submit" class="btn btn-outline-primary" id="sub-button"
-          value="Subscribe">
-        </form>
-      {% endif %}
-      <p>
-        {% if podcast.genre.supa %}
-          {{ podcast.genre.supa }} -
-        {% endif %}
-        {{ podcast.genre }}
-      </p>
-      <p>
-        {{ podcast.language }}
-      </p>
-      {% if podcast.explicit %}
+<form class="row" id="podinfo-form" method="GET" action="{% url 'subscribe' %}">
+  <div class="col color" id="podinfo-bar">
+    <div class="row texture" id="podinfo">
+      <div class="col-auto" id="podinfo-image">
+        <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
+      </div>
+      <div class="col">
+        <h3>
+          {{ podcast.title }}
+        </h3>
         <p>
-          Explicit
+          {{ podcast.description }}<
+          /p>
+      </div>
+      <div class="col-auto">
+        {% if podcast.subscribed %}
+          <form class="sub-form" action="{% url 'subscribe' %}"
+          id="{{ podcast.itunesid }}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+            <input type="submit" class="btn btn-outline-primary" id="sub-button"
+            value="Unsubscribe">
+          </form>
+        {% else %}
+          <form class="sub-form" action="{% url 'subscribe' %}"
+          id="{{ podcast.itunesid }}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+            <input type="submit" class="btn btn-outline-primary" id="sub-button"
+            value="Subscribe">
+          </form>
+        {% endif %}
+        <p>
+          {% if podcast.genre.supa %}
+            {{ podcast.genre.supa }} -
+          {% endif %}
+          {{ podcast.genre }}
         </p>
-      {% endif %}
-      <p>
-        <em>
-          {{ podcast.copyrighttext }}
-        </em>
-      </p>
+        <p>
+          {{ podcast.language }}
+        </p>
+        {% if podcast.explicit %}
+          <p>
+            Explicit
+          </p>
+        {% endif %}
+        <p>
+          <em>
+            {{ podcast.copyrighttext }}
+          </em>
+        </p>
+      </div>
     </div>
   </div>
-</div>
+</form>
 <!-- TRACKS -->
-<div class="container">
   <div class="row" id="tracks">
     {% include 'tracks.html' %}
   </div>
-</div>
 {% endblock %}
 
 {% block extrajs %}
@@ -85,8 +85,8 @@ $(window).ready(function() {
       console.log(thrownError);
     })
     .done(function(response) {
-      // $("#tracks").html(response);
-      // $('#overlay').hide();
+      $("#tracks").html(response);
+      $('#overlay').hide();
     });
 });
 </script>
