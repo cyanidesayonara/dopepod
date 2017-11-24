@@ -76,12 +76,13 @@ class Podcast(models.Model):
             try:
                 track['length'] = item.find('itunes:duration', ns).text
             except AttributeError as e:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error('can\'t get length')
+                pass
+                # import logging
+                # logger = logging.getLogger(__name__)
+                # logger.error('can\'t get length')
 
             track['podcast'] = self
-            
+
             # link to track
             # enclosure might be missing, have alternatives
             enclosure = item.find('enclosure')

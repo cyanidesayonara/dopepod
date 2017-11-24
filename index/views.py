@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
@@ -9,6 +9,15 @@ import string
 def navbar(request):
     return render(request, 'navbar.html', {})
 
+def home(request):
+    context = {}
+    context['genres'] = Genre.get_primary_genres(Genre)
+    context['languages'] = Language.objects.all()
+    context['alphabet'] = string.ascii_uppercase
+    context['search'] = True
+    context['selected_show'] = 'detail'
+    return render(request, 'index/search_base.html', context)
+
 def search(request):
     """
     set search terms
@@ -18,20 +27,21 @@ def search(request):
 
         q = request.GET.get('q', None)
 
-        context['genres'] = Genre.get_primary_genres(Genre)
-        context['languages'] = Language.objects.all()
-        context['alphabet'] = string.ascii_uppercase
-        context['show'] = [25, 50, 75, 100]
-
         # if query string return results
         if q:
-            genre = request.GET.get('genre', 'All')
-            language = request.GET.get('language', 'All')
+            context['genres'] = Genre.get_primary_genres(Genre)
+            context['languages'] = Language.objects.all()
+            context['alphabet'] = string.ascii_uppercase
+
+            genre = request.GET.get('genre', 'all').capitalize()
+            language = request.GET.get('language', 'all').capitalize()
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
             # TODO add switches for these
-            show = request.GET.get('show', '24')
+            show = request.GET.get('show', 'detail')
             page = request.GET.get('page', 1)
+
+            context['selected_show'] = show
 
             # if not ajax, include all selected values
             if not request.is_ajax():
@@ -44,7 +54,11 @@ def search(request):
             user = request.user
             podcasts = actual_search(genre, language, explicit, user, q=q)
 
-            paginator = Paginator(podcasts, show)
+            if show == 'detail':
+                paginator = Paginator(podcasts, 24)
+            else:
+                paginator = Paginator(podcasts, 50)
+
             try:
                 context['podcasts'] = paginator.page(page)
             except PageNotAnInteger:
@@ -53,11 +67,15 @@ def search(request):
             except EmptyPage:
                 # If page is out of range (e.g. 9999), deliver last page of results.
                 context['podcasts'] = paginator.page(paginator.num_pages)
-            return render(request, 'index/search_results.html', context)
+
+            if show == 'detail':
+                return render(request, 'index/search_results.html', context)
+            else:
+                return render(request, 'index/browse_results.html', context)
 
         # else return base
         else:
-            return render(request, 'index/search_base.html', context)
+            return redirect('/')
 
 def actual_search(genre, language, explicit, user, q=None, alphabet=None):
     """
@@ -85,7 +103,7 @@ def actual_search(genre, language, explicit, user, q=None, alphabet=None):
     if q:
         res1 = podcasts.filter(title__istartswith=q)
         res2 = podcasts.filter(title__icontains=q)
-        res = res1.union(res2)
+        res = res1.union(res2).order_by('title')
     elif alphabet:
         res = podcasts.filter(title__istartswith=alphabet).order_by('title')
 
@@ -110,16 +128,17 @@ def browse(request):
         context['genres'] = Genre.get_primary_genres(Genre)
         context['languages'] = Language.objects.all()
         context['alphabet'] = string.ascii_uppercase
-        context['show'] = [25, 50, 75, 100]
+        context['browse'] = True
 
         if request.is_ajax():
             context['selected_alphabet'] = 'A'
-            return render(request, 'index/browse_base.html', context)
+            context['selected_show'] = 'list'
+            return render(request, 'index/search_base.html', context)
         else:
-            alphabet = request.GET.get('alphabet', 'A')
-            show = int(request.GET.get('show', '25'))
-            genre = request.GET.get('genre', 'All')
-            language = request.GET.get('language', 'All')
+            alphabet = request.GET.get('alphabet', 'a').upper()
+            genre = request.GET.get('genre', 'all').capitalize()
+            language = request.GET.get('language', 'all').capitalize()
+            show = request.GET.get('show', 'list')
             page = request.GET.get('page', 1)
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
@@ -132,7 +151,11 @@ def browse(request):
 
             podcasts = actual_search(genre, language, explicit, user, alphabet=alphabet)
 
-            paginator = Paginator(podcasts, show)
+            if show == 'detail':
+                paginator = Paginator(podcasts, 24)
+            else:
+                paginator = Paginator(podcasts, 50)
+
             try:
                 context['podcasts'] = paginator.page(page)
             except PageNotAnInteger:
@@ -141,22 +164,34 @@ def browse(request):
             except EmptyPage:
                 # If page is out of range (e.g. 9999), deliver last page of results.
                 context['podcasts'] = paginator.page(paginator.num_pages)
-            return render(request, 'index/browse_results.html', context)
+
+            if show == 'detail':
+                return render(request, 'index/search_results.html', context)
+            else:
+                return render(request, 'index/browse_results.html', context)
 
     if request.method == 'POST':
-        alphabet = request.POST.get('alphabet', 'A')
-        show = request.POST.get('show', '25')
-        genre = request.POST.get('genre', 'All')
-        language = request.POST.get('language', 'All')
+        alphabet = request.POST.get('alphabet', 'A').upper()
+        genre = request.POST.get('genre', 'all').capitalize()
+        language = request.POST.get('language', 'all').capitalize()
+        show = request.POST.get('show', 'list')
         page = request.POST.get('page', 1)
         is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
         explicit = is_true(request.POST.get('explicit', 'true'))
-
         context['selected_alphabet'] = alphabet
         podcasts = actual_search(genre, language, explicit, user, alphabet=alphabet)
-        paginator = Paginator(podcasts, show)
+
+        if show == 'detail':
+            paginator = Paginator(podcasts, 24)
+        else:
+            paginator = Paginator(podcasts, 50)
+
         context['podcasts'] = paginator.page(page)
-        return render(request, 'index/browse_results.html', context)
+
+        if show == 'detail':
+            return render(request, 'index/search_results.html', context)
+        else:
+            return render(request, 'index/browse_results.html', context)
 
 @login_required
 def subscriptions(request):

@@ -48,7 +48,7 @@ function refreshCookie() {
   });
 };
 
-function goToPage(url) {
+function goToPage(url, title) {
   $.ajax({
     type: "GET",
     url: url,
@@ -58,7 +58,6 @@ function goToPage(url) {
     })
     .done(function(response) {
       $("#main-content").html(response);
-      var title = "browse";
       var state = {
         "context": response,
         "title": title,
@@ -104,6 +103,10 @@ function SearchFunc() {
   var minlength = 2
   // gather variables
   var q = $("#q").val();
+
+  data = {};
+  data['q'] = q;
+
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     var genre = $("input[name='genre']:checked").val();
@@ -111,16 +114,14 @@ function SearchFunc() {
     var show = $("input[name='show']:checked").val();
     var explicit = !($("input[name='explicit']").is(":checked"));
 
-    data = {};
-    data['q'] = q;
 
-    if (language != 'All') {
-      data['language'] = language;
+    if (language != 'all') {
+      data['language'] = language.toLowerCase();
     }
-    if (genre != 'All') {
-      data['genre'] = genre;
+    if (genre != 'all') {
+      data['genre'] = genre.toLowerCase();
     }
-    if (show != 25) {
+    if (show != 'detail') {
       data['show'] = show;
     }
     if (language === false) {
@@ -137,16 +138,17 @@ function SearchFunc() {
       })
       .done(function(response) {
         $("#results").html(response);
+
         // save results + q in current state
-        var curContext = $("#main-content")[0].innerHTML;
-        var curUrl = $("#main-content")[0].baseURI;
-        var curTitle = "dopepod";
-        var curState = {
-          "context": curContext,
-          "title": curTitle,
-          "q": q,
+        var context = $("#main-content")[0].innerHTML;
+        var url = "/search/" + "?" + $.param(data);
+        var title = "dopepod";
+        var state = {
+          "context": context,
+          "title": title,
+          "data": data,
         };
-        history.replaceState(curState, "", curUrl);
+        history.replaceState(state, "", url);
       });
   }
   // else show nothing
@@ -154,15 +156,15 @@ function SearchFunc() {
     $("#results").html("");
 
     // save results + q in current state
-    var curContext = $("#main-content")[0].innerHTML;
-    var curUrl = $("#main-content")[0].baseURI;
-    var curTitle = "dopepod";
-    var curState = {
-      "context": curContext,
-      "title": curTitle,
-      "q": q,
+    var context = $("#main-content")[0].innerHTML;
+    var url = "/search/";
+    var title = "dopepod";
+    var state = {
+      "context": context,
+      "title": title,
+      "data": data,
     };
-    history.replaceState(curState, "", curUrl);
+    history.replaceState(state, "", url);
   }
 };
 
@@ -174,15 +176,15 @@ function BrowseFunc() {
   var explicit = $("input[name='explicit-button']").is(":checked");
 
   data = {};
-  data['alphabet'] = alphabet;
+  data['alphabet'] = alphabet.toLowerCase();
 
-  if (language != 'All') {
-    data['language'] = language;
+  if (language != 'all') {
+    data['language'] = language.toLowerCase();
   }
-  if (genre != 'All') {
-    data['genre'] = genre;
+  if (genre != 'all') {
+    data['genre'] = genre.toLowerCase();
   }
-  if (show != 25) {
+  if (show != 'list') {
     data['show'] = show;
   }
   if (language === false) {
@@ -201,16 +203,15 @@ function BrowseFunc() {
       $("#results").html(response);
 
       // save results + q in current state
-      var curContext = $("#main-content")[0].innerHTML;
-      var curUrl = $("#main-content")[0].baseURI;
-      var curTitle = "dopepod";
-      var curState = {
-        "context": curContext,
-        "title": curTitle,
-        "alphabet": alphabet,
-        "show": show,
+      var context = $("#main-content")[0].innerHTML;
+      var url = "/browse/" + "?" + $.param(data);
+      var title = "dopepod";
+      var state = {
+        "context": context,
+        "title": title,
+        "data": data,
       };
-      history.replaceState(curState, "", curUrl);
+      history.replaceState(state, "", url);
     });
 };
 
@@ -250,11 +251,11 @@ $(document)
   })
   // search when user changes options
   .on("change", "#genre-buttons, #language-buttons, #explicit-button, #show-buttons", function() {
-    if ($("#q").css('display') == 'none') {
-      SearchFunc();
+    if ($("#search-bar").css('display') == 'none') {
+      BrowseFunc();
     }
     else {
-      BrowseFunc();
+      SearchFunc();
     }
   })
   .on("change", "#alphabet-buttons", function() {
@@ -292,14 +293,14 @@ $(document)
   // go to home view
   .on("click", ".home-link", function(e) {
     e.preventDefault();
-    goToPage("/");
+    goToPage("/", "dopepod");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
-    goToPage("/browse/");
+    goToPage("/browse/", "dopepod");
   })
-  .on("mouseover", ".search-toggle", function(e) {
+  .on("click", ".search-toggle", function(e) {
     e.preventDefault();
     $("#search-bar").toggle();
     $("#browse-bar").toggle();
@@ -307,12 +308,12 @@ $(document)
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
-    goToPage("/subscriptions/");
+    goToPage("/subscriptions/", "subscriptions");
   })
   // open settings in modal
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
-    goToPage("/settings/");
+    goToPage("/settings/", "settings");
   })
   // save settings, empty and hide modal
   .on("submit", ".settings-form", function (e) {
@@ -352,7 +353,6 @@ $(document)
         $("#footer").css("padding-bottom", "106px");
       });
   })
-  // TODO check if subscribed or nah
   // subscription button
   .on("click", "#player-close", function(e) {
     $("#player").empty();
@@ -372,8 +372,18 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
       })
-      .done(function(data) {
-        $("#sub-button").val(data);
+      .done(function(response) {
+        $("#sub-button").html(response);
+
+        // save results + q in current state
+        var url = $("#main-content")[0].baseURI;
+        var context = $("#main-content")[0].innerHTML;
+        var title = $("#podinfo-bar h3")[0].innerHTML;
+        var state = {
+          "context": context,
+          "title": title,
+        };
+        history.replaceState(state, "", url);
       });
   })
   // open login register or password reset in modal
