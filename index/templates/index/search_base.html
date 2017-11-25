@@ -6,20 +6,24 @@ dopepod
 
 {% block content %}
 <!-- MULTI BAR -->
-<form class="row" id="search-form" method="GET" action="{% url 'search' %}">
-  {% include 'multibar.html' %}
-</form>
+<div class="container" id="bar">
+   <form class="row" id="search-form" method="GET" action="{% url 'search' %}">
+     {% include 'multibar.html' %}
+   </form>
+</div>
 <!-- MAIN -->
-<div class="row" id="main">
-  <div class="col">
-    <!-- RESULTS -->
-    <div class="row" id="results">
-      {% block results %}
-      {% endblock %}
+<div class="container">
+  <div class="row" id="main">
+    <div class="col">
+      <!-- RESULTS -->
+      <div class="row" id="results">
+        {% block results %}
+        {% endblock %}
+      </div>
+      <!-- RECOMMENDATIONS -->
+      <div class="row" id="recommendations">
+      </div>
     </div>
   </div>
-</div>
-<!-- RECOMMENDATIONS -->
-<div class="row" id="recommendations">
 </div>
 {% endblock %}

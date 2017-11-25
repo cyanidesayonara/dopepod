@@ -5,8 +5,6 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col">
-  <div class="row" id="results-row">
   {% if podcasts %}
     {% for podcast in podcasts %}
       <a class="col-lg-2 col-md-3 col-sm-4 col-6 result-wrapper show-podinfo" id="{{ podcast.itunesid }}" href=
@@ -34,6 +32,4 @@ dopepod
       No results :p
     </p>
   {% endif %}
-  </div>
-</div>
 {% endblock %}

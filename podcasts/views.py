@@ -11,10 +11,10 @@ def charts(request):
     pass
     # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
     # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-    ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0-dtd',
-          'atom': 'http://www.w3.org/2005/Atom',
-          'im': 'http://itunes.apple.com/rss',
-      }
+    # ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0-dtd',
+    #       'atom': 'http://www.w3.org/2005/Atom',
+    #       'im': 'http://itunes.apple.com/rss',
+    #   }
 
     # try:
     #     genre = request.GET['genre']

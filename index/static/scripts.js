@@ -446,3 +446,15 @@ $(document)
   //     refreshPage();
   //   });
   // });
+
+
+var mb = $("#search-form");
+
+$(window).scroll(function() {
+  if ($(this).scrollTop() > 50) {
+    mb.addClass("fixed");
+  }
+  else {
+    mb.removeClass("fixed");
+  }
+})

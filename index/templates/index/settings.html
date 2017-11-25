@@ -5,37 +5,24 @@ settings
 {% endblock %}
 
 {% block content %}
-<!-- BUMPER -->
-<div class="row" id="bumper">
-  <div class="col">
-  </div>
-</div>
 <!-- SETTINGS -->
-<div class="row">
-  <div class="col">
-    <h5>
-      My Profile
-    </h5>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <form class="settings-form" action="{% url 'settings' %}" method="POST">
+<div class="container">
+  <form class="row" id="settings-form" action="{% url 'settings' %}" method="POST">
+    <div class="col">
+      <h5>
+        My Profile
+      </h5>
       {% csrf_token %}
       {{ user_form.as_p }}
       {{ profile_form.as_p }}
       <button class="btn btn-primary" type="submit">
         Save changes
       </button>
-    </form>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <a class="password-link" href="{% url 'account_reset_password' %}"
-    data-toggle="modal" data-target="#modal">
-      Reset Password
-    </a>
-  </div>
+      <a class="password-link" href="{% url 'account_reset_password' %}"
+      data-toggle="modal" data-target="#modal">
+        Reset Password
+      </a>
+    </div>
+  </form>
 </div>
 {% endblock %}

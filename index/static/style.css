@@ -69,6 +69,7 @@ body {
 
 /* MULTI BAR */
 #multi-bar {
+  padding-top: 80px;
   border-radius: 8px;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -88,12 +89,18 @@ body {
 }
 #search-bar {
   padding: 20px;
+  padding-top: 60px;
 }
 #browse-bar {
 
 }
+#bar {
+  top: -80px;
+  position: sticky;
+  z-index: 97;
+}
+
 #search-form {
-  padding-top: 80px;
   padding-left: 4px;
   padding-right: 4px;
 }
@@ -133,7 +140,7 @@ body {
 
 /* PODINFO BAR */
 #podinfo-bar {
-  margin-top: 80px;
+  padding-top: 80px;
   border-radius: 8px;
 }
 #podinfo {
@@ -149,6 +156,10 @@ body {
   border: 1px solid black;
 }
 
+#settings-form {
+  padding-top: 80px;
+}
+
 .breadcrumb-item+.breadcrumb-item::before {
     display: inline-block;
     padding-right: .5rem;
@@ -162,13 +173,14 @@ body {
 }
 
 #results {
+  margin-top: 15px;
   /*padding-bottom: 5px;*/
   padding-right: 0px;
   /*min-height: 450px;*/
   /*border: 1px solid black;*/
 }
 #results-row {
-  margin-top: 15px;
+
 }
 .result-wrapper {
   padding-left: 0px;
