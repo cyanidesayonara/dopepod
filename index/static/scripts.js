@@ -132,11 +132,11 @@ function SearchFunc() {
       var show = $("input[name='show']:checked").val();
       var explicit = !($("input[name='explicit']").is(":checked"));
 
-      if (language != 'all') {
-        data['language'] = language.toLowerCase();
+      if (language != 'All') {
+        data['language'] = language;
       }
-      if (genre != 'all') {
-        data['genre'] = genre.toLowerCase();
+      if (genre != 'All') {
+        data['genre'] = genre;
       }
       if (show != 'detail') {
         data['show'] = show;
@@ -189,7 +189,7 @@ function SearchFunc() {
 function BrowseFunc() {
   var alphabet = $("input[name='alphabet']:checked").val();
   data = {};
-  data['alphabet'] = alphabet.toLowerCase();
+  data['alphabet'] = alphabet;
 
   if ($("#options").length) {
     var show = $("input[name='show']:checked").val();
@@ -197,11 +197,11 @@ function BrowseFunc() {
     var language = $("input[name='language']:checked").val();
     var explicit = $("input[name='explicit-button']").is(":checked");
 
-    if (language != 'all') {
-      data['language'] = language.toLowerCase();
+    if (language != 'All') {
+      data['language'] = language;
     }
-    if (genre != 'all') {
-      data['genre'] = genre.toLowerCase();
+    if (genre != 'All') {
+      data['genre'] = genre;
     }
     if (show != 'list') {
       data['show'] = show;

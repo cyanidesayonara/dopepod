@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import requests
-import xml.etree.ElementTree as ET
 from lxml import etree
 
 class Podcast(models.Model):
@@ -42,19 +41,22 @@ class Podcast(models.Model):
         """
 
         ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-              'atom': 'http://www.w3.org/2005/Atom'}
+              'atom': 'http://www.w3.org/2005/Atom',
+              'im': 'http://itunes.apple.com/rss',
+        }
 
         tracks = []
 
         feedUrl = self.feedUrl
         r = requests.get(feedUrl)
+
         try:
             r.raise_for_status()
 
             root = etree.XML(r.content)
 
             ns.update(root.nsmap)
-
+            print(ns)
             tree = root.find('channel')
             podcast = tree.findtext('title')
 
@@ -69,8 +71,8 @@ class Podcast(models.Model):
                 except AttributeError:
                     # or try with itunes namespace
                     try:
-                        track['title'] = item.xpath('./itunes:title/text()', namespaces=ns)[0]
-                        track['summary'] = item.xpath('./itunes:summary/text()', namespaces=ns)[0]
+                        track['title'] = item.find('itunes:title', ns).text
+                        track['summary'] = item.xpath('itunes:summary', ns).text
                     # if track data not found, skip
                     except AttributeError as e:
                         import logging
@@ -78,8 +80,9 @@ class Podcast(models.Model):
                         logger.error('can\'t get track data')
                         continue
                 # try to get length
+                print(ns['itunes'])
                 try:
-                    track['length'] = item.xpath('./itunes:duration/text()', namespaces=ns)[0]
+                    track['length'] = item.find('itunes:duration', ns).text
                 except AttributeError as e:
                     import logging
                     logger = logging.getLogger(__name__)

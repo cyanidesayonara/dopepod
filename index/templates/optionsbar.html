@@ -51,7 +51,7 @@
         {% endif %}
       </ul>
     </nav>
-    
+
   </div>
   <div class="col-auto texture" id="options">
     <ul id="options-list">
@@ -65,12 +65,12 @@
             <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
               {% if selected_genre == 'All' or selected_genre == None %}
               <label class="btn btn-outline-primary active">
-                <input type="radio" name="genre" value="all" checked>
+                <input type="radio" name="genre" value="All" checked>
                 All
               </label>
               {% else %}
               <label class="btn btn-outline-primary">
-                <input type="radio" name="genre" value="all">
+                <input type="radio" name="genre" value="All">
                 All
               </label>
               {% endif %}
@@ -101,12 +101,12 @@
             <div class="btn-group-vertical btn-group" id="language-buttons" data-toggle="buttons">
               {% if selected_language == 'All' or selected_language == None %}
                 <label class="btn btn-outline-primary active">
-                  <input type="radio" name="language" value="all" checked>
+                  <input type="radio" name="language" value="All" checked>
                   All
                 </label>
               {% else %}
                 <label class="btn btn-outline-primary">
-                  <input type="radio" name="language" value="all">
+                  <input type="radio" name="language" value="All">
                   All
                 </label>
               {% endif %}
@@ -146,11 +146,11 @@
               </label>
             {% else %}
               <label class="btn btn-outline-primary show-button">
-                <input type="radio" name="show" value="detail" checked>
+                <input type="radio" name="show" value="detail">
                 Detail
               </label>
               <label class="btn btn-outline-primary show-button active">
-                <input type="radio" name="show" value="list">
+                <input type="radio" name="show" value="list" checked>
                 List
               </label>
             {% endif %}

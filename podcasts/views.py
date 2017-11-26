@@ -3,53 +3,41 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription
 import string
+import requests
+from lxml import etree
 
 def charts(request):
     """
     returns podcast charts
     """
-    pass
+
     # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
     # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-    # ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0-dtd',
-    #       'atom': 'http://www.w3.org/2005/Atom',
-    #       'im': 'http://itunes.apple.com/rss',
-    #   }
 
-    # try:
-    #     genre = request.GET['genre']
-    # except:
-    #     genre = 'All'
-    #
-    # try:
-    #     genre = request.GET['genre']
-    # except:
-    #     genre = 'All'
-    #
-    # try:
-    #     explicit = False if request.GET['explicit'] == 'false' else True
-    # except:
-    #     explicit = True
+    ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+          'atom': 'http://www.w3.org/2005/Atom',
+          'im': 'http://itunes.apple.com/rss',
+    }
 
-    # r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1316/xml')
-    # data_dict = {}
-    # items = []
-    # root = ET.fromstring(r.text)
-    #
-    #     tree = root.find('channel')
-    #     data_dict['title'] = tree.find('title').text
-    #     data_dict['description'] = tree.find('description').text
-    #
-    #     ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'}
-    #
-    #     for item in tree.findall('item'):
-    #         title = item.find('title').text
-    #         summary = item.find('description').text
-    #         enclosure = item.find('enclosure')
-    #         url = enclosure.get('url')
-    #         kind = enclosure.get('type')
-    #         items.append({'title': title, 'summary': summary, 'url': url, 'kind': kind})
-    #     return render(request, 'podinfo.html', {'data': data_dict, 'items': items})
+    r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=10/genre=1316/xml')
+
+    try:
+        r.raise_for_status()
+
+        root = etree.XML(r.content)
+
+        ns.update(root.nsmap)
+        # delete None from namespaces, use atom instead
+        del ns[None]
+
+        for entry in root.findall('atom:entry', ns):
+            x = entry.find('atom:id', ns)
+            itunesid = x.xpath('./@im:id', namespaces=ns)[0]
+            print(itunesid)
+
+    except requests.exceptions.HTTPError as e:
+        print(str(e))
+
 
 def podinfo(request, itunesid):
     """
