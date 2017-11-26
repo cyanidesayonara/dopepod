@@ -125,23 +125,25 @@ function SearchFunc() {
 
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
-    var genre = $("input[name='genre']:checked").val();
-    var language = $("input[name='language']:checked").val();
-    var show = $("input[name='show']:checked").val();
-    var explicit = !($("input[name='explicit']").is(":checked"));
+    // if options exists, get values
+    if ( $("#options").length ) {
+      var genre = $("input[name='genre']:checked").val();
+      var language = $("input[name='language']:checked").val();
+      var show = $("input[name='show']:checked").val();
+      var explicit = !($("input[name='explicit']").is(":checked"));
 
-
-    if (language != 'all') {
-      data['language'] = language.toLowerCase();
-    }
-    if (genre != 'all') {
-      data['genre'] = genre.toLowerCase();
-    }
-    if (show != 'detail') {
-      data['show'] = show;
-    }
-    if (language === false) {
-      data['explicit'] = false;
+      if (language != 'all') {
+        data['language'] = language.toLowerCase();
+      }
+      if (genre != 'all') {
+        data['genre'] = genre.toLowerCase();
+      }
+      if (show != 'detail') {
+        data['show'] = show;
+      }
+      if (language === false) {
+        data['explicit'] = false;
+      }
     }
 
     $.ajax({
@@ -186,26 +188,30 @@ function SearchFunc() {
 
 function BrowseFunc() {
   var alphabet = $("input[name='alphabet']:checked").val();
-  var show = $("input[name='show']:checked").val();
-  var genre = $("input[name='genre']:checked").val();
-  var language = $("input[name='language']:checked").val();
-  var explicit = $("input[name='explicit-button']").is(":checked");
-
   data = {};
   data['alphabet'] = alphabet.toLowerCase();
 
-  if (language != 'all') {
-    data['language'] = language.toLowerCase();
+  if ( $("#options").length ) {
+    var show = $("input[name='show']:checked").val();
+    var genre = $("input[name='genre']:checked").val();
+    var language = $("input[name='language']:checked").val();
+    var explicit = $("input[name='explicit-button']").is(":checked");
+
+    if (language != 'all') {
+      data['language'] = language.toLowerCase();
+    }
+    if (genre != 'all') {
+      data['genre'] = genre.toLowerCase();
+    }
+    if (show != 'list') {
+      data['show'] = show;
+    }
+    if (language === false) {
+      data['explicit'] = false;
+    }
   }
-  if (genre != 'all') {
-    data['genre'] = genre.toLowerCase();
-  }
-  if (show != 'list') {
-    data['show'] = show;
-  }
-  if (language === false) {
-    data['explicit'] = false;
-  }
+
+
 
   $.ajax({
     method: "POST",

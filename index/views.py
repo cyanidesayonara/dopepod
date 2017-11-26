@@ -11,7 +11,7 @@ def navbar(request):
 
 def home(request):
     context = {}
-    context['genres'] = Genre.get_primary_genres(Genre)
+    context['genres'] = Genre.get_primary_genres()
     context['languages'] = Language.objects.all()
     context['alphabet'] = string.ascii_uppercase
     context['search'] = True
@@ -30,7 +30,7 @@ def search(request):
 
         # if query string return results
         if q:
-            context['genres'] = Genre.get_primary_genres(Genre)
+            context['genres'] = Genre.get_primary_genres()
             context['languages'] = Language.objects.all()
             context['alphabet'] = string.ascii_uppercase
             context['search'] = True
@@ -128,7 +128,7 @@ def browse(request):
     user = request.user
 
     if request.method == 'GET':
-        context['genres'] = Genre.get_primary_genres(Genre)
+        context['genres'] = Genre.get_primary_genres()
         context['languages'] = Language.objects.all()
         context['alphabet'] = string.ascii_uppercase
         context['browse'] = True
@@ -209,7 +209,7 @@ def subscriptions(request):
         if request.method == 'GET':
             context = {}
             context['search'] = True
-            
+
             if not request.is_ajax():
                 context['subscriptions'] = Subscription.get_subscriptions(user)
             return render(request, 'index/subscriptions_base.html', context)

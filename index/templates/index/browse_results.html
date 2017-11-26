@@ -5,80 +5,31 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col">
-  {% if podcasts %}
-  <div class="row">
-    <nav aria-label="...">
-      <ul class="pagination browse-page">
-        {% if podcasts.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ podcasts.previous_page_number }}"
-            tabindex="-1">
-            &laquo;
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">
-              &laquo;
-            </a>
-          </li>
-        {% endif %}
-        {% for i in podcasts.paginator.page_range %}
-        {% if podcasts.number == i %}
-          <li class="page-item active">
-            <a class="page-link" href="#">
-              {{ i }}
-              <span class="sr-only">
-                (current)
-              </span>
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ i }}">
-              {{ i }}
-            </a>
-          </li>
-        {% endif %}
-        {% endfor %}
-        {% if podcasts.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ podcasts.next_page_number }}"
-            tabindex="-1">
-            &raquo;
-          </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">
-              &raquo;
-            </a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
-  <div class="row">
-    <div class="col" id="browse-results">
-      <div class="row">
-        <div class="col">
-          {% for podcast in podcasts %}
-            <div class="row">
-              <a class="col show-podinfo" id="{{ podcast.itunesid }}"
-              href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-              <h6>{{ podcast.title }}</h6>
-              </a>
-            </div>
-          {% endfor %}
+{% include 'optionsbar.html' %}
+<div class="row">
+  <div class="col">
+    {% if podcasts %}
+    <div class="row">
+      <div class="col" id="browse-results">
+        <div class="row">
+          <div class="col">
+            {% for podcast in podcasts %}
+              <div class="row">
+                <a class="col show-podinfo" id="{{ podcast.itunesid }}"
+                href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+                <h6>{{ podcast.title }}</h6>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
+    {% else %}
+    <p>
+      No results :p
+    </p>
+    {% endif %}
   </div>
-  {% else %}
-  <p>
-    No results :p
-  </p>
-  {% endif %}
 </div>
 {% endblock %}

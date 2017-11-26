@@ -20,6 +20,10 @@ class WillyPipeline(object):
         elif type(item) is GenreItem:
             create_genre(item)
 
+    def close_spider(self, spider):
+        Genre.count_n_podcasts()
+        Language.count_n_podcasts()
+
 def create_genre(item):
     supergenre = None
     if item['supergenre']:
@@ -30,7 +34,9 @@ def create_genre(item):
         genre.supergenre = supergenre
         genre.save()
     except Genre.DoesNotExist:
-        Genre.objects.create(name=item['name'],
+        Genre.objects.create(
+                    name=item['name'],
+                    itunesid=item['itunesid'],
                     n_podcasts=0,
                     supergenre=supergenre
                     )
@@ -46,14 +52,14 @@ def create_or_update_podcast(item):
             podcast.genre = genre
             podcast.explicit = item['explicit']
             podcast.language = language
-            podcast.copyrighttexttext = item['copyrighttexttext']
+            podcast.copyrighttext = item['copyrighttext']
             podcast.description = item['description']
             podcast.reviewsUrl = item['reviewsUrl']
             podcast.artworkUrl = item['artworkUrl']
             podcast.podcastUrl = item['podcastUrl']
             podcast.save()
         except Podcast.DoesNotExist:
-            podcast = Podcast(
+            Podcast.objects.create(
                 itunesid=item['itunesid'],
                 feedUrl=item['feedUrl'],
                 title=item['title'],
@@ -67,15 +73,13 @@ def create_or_update_podcast(item):
                 artworkUrl=item['artworkUrl'],
                 podcastUrl=item['podcastUrl'],
             )
-            podcast.save()
 
 def create_or_get_language(name):
     try:
         language = Language.objects.get(name=name)
     except Language.DoesNotExist:
-        language = Language(
+        language = Language.objects.create(
                     name=name,
                     n_podcasts=0,
                     )
-        language.save()
     return language

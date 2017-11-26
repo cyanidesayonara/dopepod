@@ -15,17 +15,21 @@ class WillyTheSpider(scrapy.Spider):
     def parse(self, response):
         for genre in response.xpath('//div[@id="genre-nav"]/div[@class="grid3-column"]/ul/li'):
             supergenre = genre.xpath('a/text()').extract_first()
+            itunesid = genre.xpath('a/@href').re_first(r'/id(\d+)')
             yield GenreItem (
                 name=supergenre,
+                itunesid=itunesid,
                 n_podcasts=0,
                 supergenre=None,
             )
             for subgenre in genre.xpath('ul/li'):
                 name = subgenre.xpath('a/text()').extract_first()
+                itunesid = subgenre.xpath('a/@href').re_first(r'/id(\d+)')
                 yield GenreItem (
                     name=name,
                     n_podcasts=0,
                     supergenre=supergenre,
+                    itunesid=itunesid,
                 )
 
         for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/a'):
@@ -111,6 +115,8 @@ class WillyTheSpider(scrapy.Spider):
             r = requests.get(feedUrl)
             try:
                 r.raise_for_status()
+                # maybe take stuff from feedUrl
+                # and add to Podcast
                 return PodcastItem (
                     itunesid=itunesid,
                     feedUrl=feedUrl,

@@ -1,0 +1,179 @@
+<!-- OPTIONS -->
+<div class="row color" id="options-bar">
+  <div class="col texture">
+    <nav aria-label="...">
+      <ul class="pagination browse-page">
+        {% if podcasts.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ podcasts.previous_page_number }}"
+            tabindex="-1">
+            &laquo;
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">
+              &laquo;
+            </a>
+          </li>
+        {% endif %}
+        {% for i in podcasts.paginator.page_range %}
+        {% if podcasts.number == i %}
+          <li class="page-item active">
+            <a class="page-link" href="#">
+              {{ i }}
+              <span class="sr-only">
+                (current)
+              </span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ i }}">
+              {{ i }}
+            </a>
+          </li>
+        {% endif %}
+        {% endfor %}
+        {% if podcasts.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ podcasts.next_page_number }}"
+            tabindex="-1">
+            &raquo;
+          </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">
+              &raquo;
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+    
+  </div>
+  <div class="col-auto texture" id="options">
+    <ul id="options-list">
+      <!-- GENRES -->
+      <li>
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Genre
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
+              {% if selected_genre == 'All' or selected_genre == None %}
+              <label class="btn btn-outline-primary active">
+                <input type="radio" name="genre" value="all" checked>
+                All
+              </label>
+              {% else %}
+              <label class="btn btn-outline-primary">
+                <input type="radio" name="genre" value="all">
+                All
+              </label>
+              {% endif %}
+              {% for genre in genres %}
+              {% if genre.name == selected_genre %}
+              <label class="btn btn-outline-primary active">
+                <input type="radio" name="genre" value="{{ genre.name }}" checked>
+                {{ genre.name }}
+              </label>
+              {% else %}
+              <label class="btn btn-outline-primary">
+                <input type="radio" name="genre" value="{{ genre.name }}">
+                {{ genre.name }}
+              </label>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </li>
+      <!-- LANGUAGES -->
+      <li>
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Language
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical btn-group" id="language-buttons" data-toggle="buttons">
+              {% if selected_language == 'All' or selected_language == None %}
+                <label class="btn btn-outline-primary active">
+                  <input type="radio" name="language" value="all" checked>
+                  All
+                </label>
+              {% else %}
+                <label class="btn btn-outline-primary">
+                  <input type="radio" name="language" value="all">
+                  All
+                </label>
+              {% endif %}
+              {% for language in languages %}
+                {% if language.name == selected_language %}
+                  <label class="btn btn-outline-primary active">
+                    <input type="radio" name="language" value="{{ language.name }}" checked>
+                    {{ language.name }}
+                  </label>
+                {% else %}
+                  <label class="btn btn-outline-primary">
+                    <input type="radio" name="language" value="{{ language.name }}">
+                    {{ language.name }}
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </li>
+      <!-- SHOW -->
+      <li>
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Show
+          </button>
+          <div class="dropdown-menu">
+            <div class="btn-group-vertical" id="show-buttons" data-toggle="buttons">
+            {% if selected_show == 'detail' %}
+              <label class="btn btn-outline-primary show-button active">
+                <input type="radio" name="show" value="detail" checked>
+                Detail
+              </label>
+              <label class="btn btn-outline-primary show-button">
+                <input type="radio" name="show" value="list">
+                List
+              </label>
+            {% else %}
+              <label class="btn btn-outline-primary show-button">
+                <input type="radio" name="show" value="detail" checked>
+                Detail
+              </label>
+              <label class="btn btn-outline-primary show-button active">
+                <input type="radio" name="show" value="list">
+                List
+              </label>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      </li>
+      <!-- EXPLICIT -->
+      <li>
+        <div class="btn-group" id="explicit-button" data-toggle="buttons">
+          {% if selected_explicit == True or selected_explicit == None %}
+            <label class="btn btn-outline-primary">
+              <input type="checkbox" name="explicit" value="false">
+              Hide Explicit
+            </label>
+            {% else %}
+            <label class="btn btn-outline-primary active">
+              <input type="checkbox" name="explicit" value="false" checked>
+              Hide Explicit
+            </label>
+          {% endif %}
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

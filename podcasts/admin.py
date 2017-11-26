@@ -13,11 +13,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'n_podcasts', 'supergenre',)
-    fields = ('name', 'n_podcasts', 'supergenre',)
+    list_display = ('name', 'itunesid', 'n_podcasts', 'supergenre',)
+    fields = ('name', 'itunesid', 'n_podcasts', 'supergenre',)
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'n_podcasts',)
     fields = ('name', 'n_podcasts',)
-

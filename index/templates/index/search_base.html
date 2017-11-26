@@ -14,15 +14,13 @@ dopepod
 <!-- MAIN -->
 <div class="container">
   <div class="row" id="main">
-    <div class="col">
+    <div class="col" id="results">
       <!-- RESULTS -->
-      <div class="row" id="results">
-        {% block results %}
-        {% endblock %}
-      </div>
+      {% block results %}
+      {% endblock %}
       <!-- RECOMMENDATIONS -->
-      <div class="row" id="recommendations">
-      </div>
+      {% block recommendations %}
+      {% endblock %}
     </div>
   </div>
 </div>
