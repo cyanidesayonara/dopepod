@@ -11,13 +11,10 @@ def navbar(request):
 
 def home(request):
     context = {}
-    context['genres'] = Genre.get_primary_genres()
-    context['languages'] = Language.objects.all()
     context['alphabet'] = string.ascii_uppercase
     context['search'] = True
-    context['selected_show'] = 'detail'
     context['selected_alphabet'] = 'A'
-    return render(request, 'index/search_base.html', context)
+    return render(request, 'index/index.html', context)
 
 def search(request):
     """
@@ -28,7 +25,7 @@ def search(request):
 
         q = request.GET.get('q', None)
 
-        # if query string return results
+        # if query string, return results
         if q:
             context['genres'] = Genre.get_primary_genres()
             context['languages'] = Language.objects.all()
@@ -39,7 +36,6 @@ def search(request):
             language = request.GET.get('language', 'all').capitalize()
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
-            # TODO add switches for these
             show = request.GET.get('show', 'detail')
             page = request.GET.get('page', 1)
 
@@ -72,9 +68,9 @@ def search(request):
                 context['podcasts'] = paginator.page(paginator.num_pages)
 
             if show == 'detail':
-                return render(request, 'index/search_results.html', context)
+                return render(request, 'index/results_detail.html', context)
             else:
-                return render(request, 'index/browse_results.html', context)
+                return render(request, 'index/results_list.html', context)
 
         # else return base
         else:
@@ -136,7 +132,7 @@ def browse(request):
         if request.is_ajax():
             context['selected_alphabet'] = 'A'
             context['selected_show'] = 'list'
-            return render(request, 'index/search_base.html', context)
+            return render(request, 'index/index.html', context)
         else:
             alphabet = request.GET.get('alphabet', 'a').upper()
             genre = request.GET.get('genre', 'all').capitalize()
@@ -169,11 +165,12 @@ def browse(request):
                 context['podcasts'] = paginator.page(paginator.num_pages)
 
             if show == 'detail':
-                return render(request, 'index/search_results.html', context)
+                return render(request, 'index/results_detail.html', context)
             else:
-                return render(request, 'index/browse_results.html', context)
+                return render(request, 'index/results_list.html', context)
 
     if request.method == 'POST':
+        print(request.POST)
         alphabet = request.POST.get('alphabet', 'A').upper()
         genre = request.POST.get('genre', 'all').capitalize()
         language = request.POST.get('language', 'all').capitalize()
@@ -192,9 +189,9 @@ def browse(request):
         context['podcasts'] = paginator.page(page)
 
         if show == 'detail':
-            return render(request, 'index/search_results.html', context)
+            return render(request, 'index/results_detail.html', context)
         else:
-            return render(request, 'index/browse_results.html', context)
+            return render(request, 'index/results_list.html', context)
 
 def subscriptions(request):
     """
@@ -210,14 +207,16 @@ def subscriptions(request):
             context = {}
             context['search'] = True
 
-            if not request.is_ajax():
+            if request.is_ajax():
+                return render(request, 'index/index.html', context)
+            else:
                 context['subscriptions'] = Subscription.get_subscriptions(user)
-            return render(request, 'index/subscriptions_base.html', context)
+                return render(request, 'index/subscriptions.html', context)
 
         if request.method == 'POST':
             context = {}
             context['subscriptions']  = Subscription.get_subscriptions(user)
-            return render(request, 'index/subscriptions_results.html', context)
+            return render(request, 'index/subscriptions.html', context)
     else:
         raise Http404()
 

@@ -38,7 +38,7 @@ class Podcast(models.Model):
 
     def get_tracks(self):
         """
-        returns a list of tracks using requests and ElementTree
+        returns a list of tracks using requests and lxml etree
         """
 
         ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
@@ -46,7 +46,6 @@ class Podcast(models.Model):
 
         tracks = []
 
-        # TODO fix this shit
         feedUrl = self.feedUrl
         r = requests.get(feedUrl)
         try:

@@ -1,0 +1,35 @@
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
+
+{% block title %}
+dopepod
+{% endblock %}
+
+{% block results %}
+{% include 'optionsbar.html' %}
+<div class="row" id="subscriptions-row">
+  {% if subscriptions %}
+    <div class="col">
+      {% for subscription in subscriptions %}
+        <div class="row">
+          <a class="col show-podinfo sub-box"
+          id="{{ subscription.itunesid }}" href=
+           "{% url 'podinfo' itunesid=subscription.itunesid %}">
+            <h6>
+              {{ subscription.pod.title }}
+            </h6>
+            <p>
+              {{ subscription.last_updated }}
+            </p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="col">
+      <p>
+        No results :p
+      </p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

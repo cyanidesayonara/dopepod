@@ -191,7 +191,7 @@ function BrowseFunc() {
   data = {};
   data['alphabet'] = alphabet.toLowerCase();
 
-  if ( $("#options").length ) {
+  if ($("#options").length) {
     var show = $("input[name='show']:checked").val();
     var genre = $("input[name='genre']:checked").val();
     var language = $("input[name='language']:checked").val();
@@ -210,8 +210,6 @@ function BrowseFunc() {
       data['explicit'] = false;
     }
   }
-
-
 
   $.ajax({
     method: "POST",
@@ -248,7 +246,7 @@ function getSubscriptions() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#subscriptions").html(response);
+      $("#results").html(response);
     });
 };
 
@@ -321,6 +319,7 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     goToPage("/browse/", "dopepod");
+    BrowseFunc();
   })
   .on("click", ".search-toggle", function(e) {
     e.preventDefault();
@@ -331,6 +330,7 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     goToPage("/subscriptions/", "subscriptions");
+    getSubscriptions();
   })
   // open settings in modal
   .on("click", ".settings-link", function(e) {
