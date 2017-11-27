@@ -10,10 +10,13 @@ def navbar(request):
     return render(request, 'navbar.html', {})
 
 def home(request):
+    user = request.user
     context = {}
     context['alphabet'] = string.ascii_uppercase
     context['search'] = True
     context['selected_alphabet'] = 'A'
+    context['chart'] = Podcast.get_chart(user)
+
     return render(request, 'index/index.html', context)
 
 def search(request):

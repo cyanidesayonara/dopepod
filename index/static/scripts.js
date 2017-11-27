@@ -155,7 +155,7 @@ function SearchFunc() {
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#results").html(response);
+        $("#results-content").html(response);
 
         // save results + q in current state
         var context = $("#main-content")[0].innerHTML;
@@ -171,7 +171,7 @@ function SearchFunc() {
   }
   // else show nothing
   else {
-    $("#results").html("");
+    $("#results-content").html("");
 
     // save results + q in current state
     var context = $("#main-content")[0].innerHTML;
@@ -220,7 +220,7 @@ function BrowseFunc() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#results").html(response);
+      $("#results-content").html(response);
 
       // save results + q in current state
       var context = $("#main-content")[0].innerHTML;
@@ -246,7 +246,7 @@ function getSubscriptions() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#results").html(response);
+      $("#results-content").html(response);
     });
 };
 

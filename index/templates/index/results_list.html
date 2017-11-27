@@ -5,25 +5,27 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% include 'optionsbar.html' %}
-<div class="row">
-  {% if podcasts %}
-    <div class="col" id="results-list">
-      {% for podcast in podcasts %}
-        <div class="row">
-          <a class="col show-podinfo" id="{{ podcast.itunesid }}"
-          href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-          <h6>{{ podcast.title }}</h6>
-          </a>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="col">
-      <p>
-        No results :p
-      </p>
-    </div>
-  {% endif %}
+<div class="col" id="results">
+  {% include 'optionsbar.html' %}
+  <div class="row">
+    {% if podcasts %}
+      <div class="col" id="results-list">
+        {% for podcast in podcasts %}
+          <div class="row">
+            <a class="col show-podinfo" id="{{ podcast.itunesid }}"
+            href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <h6>{{ podcast.title }}</h6>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="col">
+        <p>
+          No results :p
+        </p>
+      </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

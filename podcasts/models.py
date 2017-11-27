@@ -27,9 +27,9 @@ class Podcast(models.Model):
 
     def is_subscribed(self, user):
         """
-        get a list of itunesids from user's subscriptions
-        if self.itunesid on list, self.subscribed = True
+        sets self.subscribed = True if subscribed
         """
+
         if user.is_authenticated:
             subscriptions = Subscription.get_subscriptions_itunesids(user)
             if self.itunesid in subscriptions:
@@ -103,6 +103,50 @@ class Podcast(models.Model):
                     logger = logging.getLogger(__name__)
                     logger.error('can\'t get track url')
             return tracks
+
+        except requests.exceptions.HTTPError as e:
+            print(str(e))
+
+    def get_chart(user):
+        """
+        returns podcast charts
+        """
+
+        # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
+        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+
+        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+              'atom': 'http://www.w3.org/2005/Atom',
+              'im': 'http://itunes.apple.com/rss',
+        }
+
+        r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1316/xml')
+
+        try:
+            r.raise_for_status()
+
+            root = etree.XML(r.content)
+
+            ns.update(root.nsmap)
+            # delete None from namespaces, use atom instead
+            del ns[None]
+
+            chart = []
+            for entry in root.findall('atom:entry', ns):
+                element = entry.find('atom:id', ns)
+                itunesid = element.xpath('./@im:id', namespaces=ns)[0]
+                try:
+                    podcast = Podcast.objects.get(itunesid=itunesid)
+                    podcast.is_subscribed(user)
+                    chart.append(podcast)
+                # TODO if podcast don't exists, scrape it and create it
+                except Podcast.DoesNotExist:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error('can\'t get pod')
+                    # url = 'https://itunes.apple.com/lookup?id=' + itunesid
+                    # json = requests.get(url)
+            return chart
 
         except requests.exceptions.HTTPError as e:
             print(str(e))

@@ -51,20 +51,17 @@ body {
   margin-top: 15px;
   padding-top: 15px;
   margin-bottom: 15px;
-  border: 1px solid black;
 }
 #subscriptions {
 
 }
-#subscriptions-row {
-  margin-top: 15px;
+#subscriptions-list {
+
 }
 
 #main-content {
   background-color: #fff;
   min-height: 100vh;
-  /*border-left: 1px solid black;
-  border-right: 1px solid black;*/
 }
 
 /* MULTI BAR */
@@ -171,11 +168,9 @@ body {
 
 #results {
   margin-top: 15px;
-  /*padding-bottom: 5px;
-  padding-right: 0px;
-  min-height: 450px;*/
   border: 1px solid black;
 }
+
 #results-row {
 
 }
@@ -185,22 +180,15 @@ body {
   padding-top: 0px;
 }
 .result-box {
-  -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+  /*-webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
-  box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
-  /*border: 1px solid black;*/
-  text-align: left;
-  margin: 4px;
+  box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);*/
+  padding: 4px;
 }
 .result-image {
-height: 180px;
-}
-.result-image img {
-  margin: auto;
-  min-width: 100%;
-  min-height: 100%;
-  max-width:100%;
-  max-height:100%;
+  width:200px;
+  height:200px;
+  background: transparent url("loading.gif") center no-repeat;
 }
 .result-title {
   overflow: hidden;
@@ -220,6 +208,8 @@ h6, p, a {
 
 #recommendations{
   margin-top: 15px;
+  min-height: 0px;
+  border: 1px solid black;
 }
 
 .sub-box {

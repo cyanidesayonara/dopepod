@@ -2,42 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription
-import string
-import requests
-from lxml import etree
-
-def charts(request):
-    """
-    returns podcast charts
-    """
-
-    # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
-    # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-
-    ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-          'atom': 'http://www.w3.org/2005/Atom',
-          'im': 'http://itunes.apple.com/rss',
-    }
-
-    r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=10/genre=1316/xml')
-
-    try:
-        r.raise_for_status()
-
-        root = etree.XML(r.content)
-
-        ns.update(root.nsmap)
-        # delete None from namespaces, use atom instead
-        del ns[None]
-
-        for entry in root.findall('atom:entry', ns):
-            x = entry.find('atom:id', ns)
-            itunesid = x.xpath('./@im:id', namespaces=ns)[0]
-            print(itunesid)
-
-    except requests.exceptions.HTTPError as e:
-        print(str(e))
-
 
 def podinfo(request, itunesid):
     """
