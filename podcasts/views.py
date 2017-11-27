@@ -86,9 +86,9 @@ def subscribe(request):
             # if subscription exists, delete it
             try:
                 subscription = Subscription.objects.get(itunesid=itunesid, user=request.user)
+                subscription.delete()
                 podcast.n_subscribers -= 1
                 podcast.save()
-                subscription.delete()
 
                 if request.is_ajax():
                     # this goes on button
@@ -97,13 +97,25 @@ def subscribe(request):
 
             # if subscription doesn't exist, create it
             except Subscription.DoesNotExist:
-                podcast.n_subscribers += 1
-                podcast.save()
                 Subscription.objects.create(
                                 itunesid=podcast.itunesid,
+                                feedUrl=podcast.feedUrl,
+                                title=podcast.title,
+                                artist=podcast.artist,
+                                genre=podcast.genre,
+                                n_subscribers=podcast.n_subscribers,
+                                explicit=podcast.explicit,
+                                language=podcast.language,
+                                copyrighttext=podcast.copyrighttext,
+                                description=podcast.description,
+                                reviewsUrl=podcast.reviewsUrl,
+                                artworkUrl=podcast.artworkUrl,
+                                podcastUrl=podcast.podcastUrl,
                                 user=request.user,
                                 pod=podcast,
                 )
+                podcast.n_subscribers += 1
+                podcast.save()
 
                 if request.is_ajax():
                     # this goes on button

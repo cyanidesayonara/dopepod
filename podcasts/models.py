@@ -65,8 +65,8 @@ class Podcast(models.Model):
         sets self.subscribed = True if subscribed
         """
 
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions_itunesids(user)
+        subscriptions = Subscription.get_subscriptions_itunesids(user)
+        if subscriptions:
             if self.itunesid in subscriptions:
                 self.subscribed = True
 
@@ -266,19 +266,17 @@ class Podcast(models.Model):
         except requests.exceptions.HTTPError as e:
             print('no response from itunes')
 
-class Subscription(models.Model):
-    itunesid = models.IntegerField()
+class Subscription(Podcast):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    pod = models.ForeignKey('podcasts.Podcast')
+    pod = models.ForeignKey('podcasts.Podcast', related_name='podcast')
     last_updated = models.DateTimeField(default=timezone.now)
 
     def get_subscriptions(user):
-        if user.is_authenticated:
-            return Subscription.objects.filter(user=user)
+        subscriptions = Subscription.objects.filter(user=user)
+        return subscriptions
 
     def get_subscriptions_itunesids(user):
-        if user.is_authenticated:
-            return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+        return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
 
     def update(self):
         self.last_updated = timezone.now()

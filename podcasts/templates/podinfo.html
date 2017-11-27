@@ -17,7 +17,9 @@
           <h1>
             {{ podcast.title }}
           </h1>
-          <h2>By {{ podcast.artist }}</h2>
+          <h2>
+            By {{ podcast.artist }}
+          </h2>
           <p>
             {{ podcast.description }}
           </p>
@@ -28,13 +30,11 @@
             {% csrf_token %}
             <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
             {% if podcast.subscribed %}
-            <button type="submit" class="btn btn-outline-primary" id="sub-button"
-            value="Unsubscribe">
-              Unsubscribe
+            <button type="submit" class="btn btn-outline-primary active sub-button">
+            Unsubscribe
             {% else %}
-            <button type="submit" class="btn btn-outline-primary" id="sub-button"
-            value="Subscribe">
-              Subscribe
+            <button type="submit" class="btn btn-outline-primary sub-button">
+            Subscribe
             {% endif %}
             </button>
           </form>
