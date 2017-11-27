@@ -2,7 +2,6 @@ import scrapy
 import json
 import requests
 import sys
-
 from willy.items import PodcastItem, GenreItem
 
 class WillyTheSpider(scrapy.Spider):
@@ -38,23 +37,23 @@ class WillyTheSpider(scrapy.Spider):
                       'dont_redirect': True,
                   }, callback=self.parse_podcasts, dont_filter=True)
 
-        # for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/a'):
-        #     url = link.xpath('@href').extract_first().split('?')[0]
-        #     yield scrapy.Request(url, meta = {
-        #               'dont_redirect': True,
-        #           }, callback=self.parse_abc, dont_filter=True)
+        for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/a'):
+            url = link.xpath('@href').extract_first().split('?')[0]
+            yield scrapy.Request(url, meta = {
+                      'dont_redirect': True,
+                  }, callback=self.parse_abc, dont_filter=True)
 
-        # for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/ul/li/a'):
-        #     url = link.xpath('@href').extract_first().split('?')[0]
-        #     yield scrapy.Request(url, meta = {
-        #               'dont_redirect': True,
-        #           }, callback=self.parse_podcasts, dont_filter=True)
+        for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/ul/li/a'):
+            url = link.xpath('@href').extract_first().split('?')[0]
+            yield scrapy.Request(url, meta = {
+                      'dont_redirect': True,
+                  }, callback=self.parse_podcasts, dont_filter=True)
 
-        # for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/ul/li/a'):
-        #     url = link.xpath('@href').extract_first().split('?')[0]
-        #     yield scrapy.Request(url, meta = {
-        #               'dont_redirect': True,
-        #           }, callback=self.parse_abc, dont_filter=True)
+        for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/ul/li/a'):
+            url = link.xpath('@href').extract_first().split('?')[0]
+            yield scrapy.Request(url, meta = {
+                      'dont_redirect': True,
+                  }, callback=self.parse_abc, dont_filter=True)
 
     def parse_abc(self, response):
         for link in response.xpath('//div[@id="selectedgenre"]/ul/li/a'):
@@ -107,20 +106,21 @@ class WillyTheSpider(scrapy.Spider):
             itunesid = data['collectionId']
             feedUrl = data['feedUrl']
             title = data['collectionName']
+            artist = data['artistName']
             artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')
             genre = data['primaryGenreName']
             explicit = True if data['collectionExplicitness'] == 'explicit' else False
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
 
+            # make sure feedUrl works
             r = requests.get(feedUrl)
             try:
                 r.raise_for_status()
-                # maybe take stuff from feedUrl
-                # and add to Podcast
                 return PodcastItem (
                     itunesid=itunesid,
                     feedUrl=feedUrl,
                     title=title,
+                    artist=artist,
                     genre=genre,
                     n_subscribers=0,
                     explicit=explicit,
@@ -131,8 +131,8 @@ class WillyTheSpider(scrapy.Spider):
                     artworkUrl=artworkUrl,
                     podcastUrl=podcastUrl,
                 )
-            except requests.exceptions.HTTPError as e:
-                print(str(e))
+            except requests.exceptions.HTTPError:
+                print('no response from feedUrl')
 
         except KeyError as e:
             print('Missing data: ' + str(e))

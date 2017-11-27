@@ -6,8 +6,8 @@ from .models import Genre, Language, Podcast, Subscription
 def podinfo(request, itunesid):
     """
     returns a podinfo page
-    ajax: tracks loaded separately via ajax
-    non-ajax: tracks included
+    ajax: episodes loaded separately via ajax
+    non-ajax: episodes included
     required argument: itunesid
     """
 
@@ -21,12 +21,12 @@ def podinfo(request, itunesid):
         context['podcast'] = podcast
 
         if not request.is_ajax():
-            context['tracks'] = podcast.get_tracks()
+            context['episodes'] = podcast.get_episodes()
         return render(request, 'podinfo.html', context)
 
-def tracks(request):
+def episodes(request):
     """
-    returns html for tracks
+    returns html for episodes
     POST ajax request sent from podinfo
     required argument: itunesid
     """
@@ -39,8 +39,8 @@ def tracks(request):
         except:
             raise Http404()
         context = {}
-        context['tracks'] = podcast.get_tracks()
-        return render(request, 'tracks.html', context)
+        context['episodes'] = podcast.get_episodes()
+        return render(request, 'episodes.html', context)
 
 def play(request):
     """
@@ -49,24 +49,24 @@ def play(request):
     POST ajax request, bottom of page (#player)
     """
 
-    # TODO: itemize track
+    # TODO: itemize episode
     if request.method == 'POST':
-        track = {}
-        track['url'] = request.POST.get('url')
-        track['type'] = request.POST.get('type')
-        track['title'] = request.POST.get('title')
-        track['podcast'] = request.POST.get('podcast')
-        track['artwork'] = request.POST.get('artwork')
-        track['date'] = request.POST.get('date')
-        return render(request, 'player.html', {'track': track})
-
-    # any other method not accepted
-    else:
-        raise Http404()
+        episode = {}
+        episode['url'] = request.POST.get('url')
+        episode['type'] = request.POST.get('type')
+        episode['title'] = request.POST.get('title')
+        episode['podcast'] = request.POST.get('podcast')
+        episode['artwork'] = request.POST.get('artwork')
+        episode['date'] = request.POST.get('date')
+        return render(request, 'player.html', {'episode': episode})
 
 def subscribe(request):
     """
-    subscribe to podcast
+    subscribe to podcast via POST request
+    delete existing subscription or create a new one
+    ajax update button with appropriate value
+    non-ajax redirects to current page
+    if not logged in, redirects to login
     """
 
     # validate request
@@ -89,8 +89,11 @@ def subscribe(request):
                 podcast.n_subscribers -= 1
                 podcast.save()
                 subscription.delete()
-                # this goes on button
-                return HttpResponse('Subscribe')
+
+                if request.is_ajax():
+                    # this goes on button
+                    return HttpResponse('Subscribe')
+                return redirect('/podinfo/' + itunesid + '/')
 
             # if subscription doesn't exist, create it
             except Subscription.DoesNotExist:
@@ -101,13 +104,13 @@ def subscribe(request):
                                 user=request.user,
                                 pod=podcast,
                 )
-            if request.is_ajax():
-                # this goes on button
-                return HttpResponse('Unsubscribe')
-            else:
+
+                if request.is_ajax():
+                    # this goes on button
+                    return HttpResponse('Unsubscribe')
                 return redirect('/podinfo/' + itunesid + '/')
+
         else:
             if request.is_ajax():
                 raise Http404()
-            else:
-                return redirect('/account/login/?next=/podinfo/' + itunesid + '/')
+            return redirect('/account/login/?next=/podinfo/' + itunesid + '/')

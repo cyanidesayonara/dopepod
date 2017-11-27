@@ -46,7 +46,7 @@ body {
 #main {
 
 }
-#tracks {
+#episodes {
   min-height: 100%;
   margin-top: 15px;
   padding-top: 15px;
@@ -199,7 +199,7 @@ body {
 h6, p, a {
   text-decoration: none;
 }
-.result-genre, .result-genre:hover {
+.result-artist, .result-artist:hover {
   color: #000;
   overflow: hidden;
   height: 3rem;
@@ -223,11 +223,6 @@ h6, p, a {
   position: fixed;
   bottom: 0;
   z-index: 98;
-}
-
-#trackinfo-content {
-  min-height: 50px;
-  background: #3b6d83;
 }
 
 #player-bar {

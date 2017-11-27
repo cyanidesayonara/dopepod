@@ -2,15 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import requests
-from lxml import etree
+from lxml import etree, html
 
 class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
     feedUrl = models.URLField(max_length=500)
     title = models.CharField(max_length=255)
+    artist = models.CharField(max_length=255)
     genre = models.ForeignKey('podcasts.Genre')
     explicit = models.BooleanField()
-    language = models.ForeignKey('podcasts.Language', null=True, blank=True)
+    language = models.ForeignKey('podcasts.Language')
     copyrighttext = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     n_subscribers = models.IntegerField()
@@ -18,6 +19,40 @@ class Podcast(models.Model):
     reviewsUrl = models.URLField(max_length=255)
     artworkUrl = models.URLField(max_length=255)
     podcastUrl = models.URLField(max_length=255)
+
+    def create_or_update_podcast(item):
+        genre = Genre.objects.get(name=item['genre'])
+        language = Language.create_or_get_language(item['language'])
+        try:
+            podcast = Podcast.objects.get(itunesid=item['itunesid'])
+            podcast.feedUrl = item['feedUrl']
+            podcast.title = item['title']
+            podcast.artist = item['artist']
+            podcast.genre = genre
+            podcast.explicit = item['explicit']
+            podcast.language = language
+            podcast.copyrighttext = item['copyrighttext']
+            podcast.description = item['description']
+            podcast.reviewsUrl = item['reviewsUrl']
+            podcast.artworkUrl = item['artworkUrl']
+            podcast.podcastUrl = item['podcastUrl']
+            podcast.save()
+        except Podcast.DoesNotExist:
+            Podcast.objects.create(
+                itunesid=item['itunesid'],
+                feedUrl=item['feedUrl'],
+                title=item['title'],
+                artist=item['artist'],
+                genre=genre,
+                n_subscribers=0,
+                explicit=item['explicit'],
+                language=language,
+                copyrighttext=item['copyrighttext'],
+                description=item['description'],
+                reviewsUrl=item['reviewsUrl'],
+                artworkUrl=item['artworkUrl'],
+                podcastUrl=item['podcastUrl'],
+            )
 
     def __str__(self):
         return self.title
@@ -35,9 +70,9 @@ class Podcast(models.Model):
             if self.itunesid in subscriptions:
                 self.subscribed = True
 
-    def get_tracks(self):
+    def get_episodes(self):
         """
-        returns a list of tracks using requests and lxml etree
+        returns a list of episodes using requests and lxml etree
         """
 
         ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
@@ -45,7 +80,7 @@ class Podcast(models.Model):
               'im': 'http://itunes.apple.com/rss',
         }
 
-        tracks = []
+        episodes = []
 
         feedUrl = self.feedUrl
         r = requests.get(feedUrl)
@@ -56,53 +91,51 @@ class Podcast(models.Model):
             root = etree.XML(r.content)
 
             ns.update(root.nsmap)
-            print(ns)
             tree = root.find('channel')
             podcast = tree.findtext('title')
 
             for item in tree.findall('item'):
-                track = {}
-                track['pubDate'] = item.findtext('pubDate')
+                episode = {}
+                episode['pubDate'] = item.findtext('pubDate')
 
                 # try these
                 try:
-                    track['title'] = item.findtext('title')
-                    track['summary'] = item.findtext('description')
+                    episode['title'] = item.findtext('title')
+                    episode['summary'] = item.findtext('description')
                 except AttributeError:
                     # or try with itunes namespace
                     try:
-                        track['title'] = item.find('itunes:title', ns).text
-                        track['summary'] = item.xpath('itunes:summary', ns).text
-                    # if track data not found, skip
+                        episode['title'] = item.find('itunes:title', ns).text
+                        episode['summary'] = item.xpath('itunes:summary', ns).text
+                    # if episode data not found, skip
                     except AttributeError as e:
                         import logging
                         logger = logging.getLogger(__name__)
-                        logger.error('can\'t get track data')
+                        logger.error('can\'t get episode data')
                         continue
                 # try to get length
-                print(ns['itunes'])
                 try:
-                    track['length'] = item.find('itunes:duration', ns).text
+                    episode['length'] = item.find('itunes:duration', ns).text
                 except AttributeError as e:
                     import logging
                     logger = logging.getLogger(__name__)
                     logger.error('can\'t get length')
                     pass
 
-                track['podcast'] = self
+                episode['podcast'] = self
 
-                # link to track
+                # link to episode
                 # enclosure might be missing, have alternatives
                 enclosure = item.find('enclosure')
                 try:
-                    track['url'] = enclosure.get('url')
-                    track['type'] = enclosure.get('type')
-                    tracks.append(track)
+                    episode['url'] = enclosure.get('url')
+                    episode['type'] = enclosure.get('type')
+                    episodes.append(episode)
                 except AttributeError as e:
                     import logging
                     logger = logging.getLogger(__name__)
-                    logger.error('can\'t get track url')
-            return tracks
+                    logger.error('can\'t get episode url')
+            return episodes
 
         except requests.exceptions.HTTPError as e:
             print(str(e))
@@ -139,17 +172,99 @@ class Podcast(models.Model):
                     podcast = Podcast.objects.get(itunesid=itunesid)
                     podcast.is_subscribed(user)
                     chart.append(podcast)
-                # TODO if podcast don't exists, scrape it and create it
+                # if podcast don't exists, scrape it and create it
                 except Podcast.DoesNotExist:
                     import logging
                     logger = logging.getLogger(__name__)
                     logger.error('can\'t get pod')
-                    # url = 'https://itunes.apple.com/lookup?id=' + itunesid
-                    # json = requests.get(url)
+
+                    podcast = Podcast.scrape_podcast(itunesid)
+                    chart.append(podcast)
+
             return chart
 
         except requests.exceptions.HTTPError as e:
             print(str(e))
+
+    def scrape_podcast(itunesid):
+        """
+        scrapes and returns podcast
+        """
+
+        # get data from itunes lookup
+        url = 'https://itunes.apple.com/lookup?id=' + itunesid
+        r = requests.get(url)
+        try:
+            r.raise_for_status()
+            jsonresponse = r.json()
+            data = jsonresponse['results'][0]
+            itunesUrl = data['collectionViewUrl'].split('?')[0]
+        except requests.exceptions.HTTPError as e:
+            print('no response from lookup')
+            return
+
+        # get more data from itunes artist page
+        r = requests.get(itunesUrl)
+        try:
+            r.raise_for_status()
+
+            tree = html.fromstring(r.text)
+            language = tree.xpath('//li[@class="language"]/text()')[0]
+            podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
+
+            try:
+                description = tree.xpath('//div[@class="product-review"]/p/text()')[0]
+            except IndexError:
+                description = ''
+
+            try:
+                copyrighttext = tree.xpath('//li[@class="copyright"]/text()')[0]
+            except IndexError:
+                copyrighttext = '© All rights reserved'
+
+            try:
+                itunesid = data['collectionId']
+                feedUrl = data['feedUrl']
+                title = data['collectionName']
+                artist = data['artistName']
+                artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')
+                genre = data['primaryGenreName']
+                explicit = True if data['collectionExplicitness'] == 'explicit' else False
+                reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
+
+                genre = Genre.objects.get(name=genre)
+                language = Language.create_or_get_language(language)
+
+                # make sure feedUrl works
+                r = requests.get(feedUrl)
+                try:
+                    r.raise_for_status()
+                    try:
+                        return Podcast.objects.get(itunesid=itunesid)
+                    except Podcast.DoesNotExist:
+                        return Podcast.objects.create(
+                            itunesid=itunesid,
+                            feedUrl=feedUrl,
+                            title=title,
+                            artist=artist,
+                            genre=genre,
+                            n_subscribers=0,
+                            explicit=explicit,
+                            language=language,
+                            copyrighttext=copyrighttext,
+                            description=description,
+                            reviewsUrl=reviewsUrl,
+                            artworkUrl=artworkUrl,
+                            podcastUrl=podcastUrl,
+                        )
+                except requests.exceptions.HTTPError as e:
+                    print('no response from feedUrl')
+                    return
+            except KeyError as e:
+                print('Missing data: ' + str(e))
+
+        except requests.exceptions.HTTPError as e:
+            print('no response from itunes')
 
 class Subscription(models.Model):
     itunesid = models.IntegerField()
@@ -158,12 +273,10 @@ class Subscription(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
 
     def get_subscriptions(user):
-        # make sure not AnonymousUser
         if user.is_authenticated:
             return Subscription.objects.filter(user=user)
 
     def get_subscriptions_itunesids(user):
-        # make sure not AnonymousUser
         if user.is_authenticated:
             return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
 
@@ -188,22 +301,51 @@ class Genre(Filterable):
     itunesid = models.IntegerField()
     supergenre = models.ForeignKey('podcasts.Genre', blank=True, null=True)
 
+    def create_or_update_genre(item):
+        name = item['name']
+        itunesid = item['itunesid']
+        supergenre = item['supergenre']
+
+        if supergenre:
+            supergenre = Genre.objects.get(name=supergenre)
+        try:
+            genre = Genre.objects.get(name=name)
+            genre.itunesid = itunesid
+            genre.n_podcasts = 0
+            genre.supergenre = supergenre
+            genre.save()
+        except Genre.DoesNotExist:
+            Genre.objects.create(
+                name=name,
+                itunesid=itunesid,
+                n_podcasts=0,
+                supergenre=supergenre
+            )
+
     def get_primary_genres():
         return Genre.objects.filter(supergenre=None).order_by('name')
 
-    # after updating podcast database, count n_podcasts
+    # after updating podcast database with scrapy, count n_podcasts
     def count_n_podcasts():
         genres = Genre.objects.all()
         for genre in genres:
-            supergenre = genre.supergenre
-            print(Podcast.objects.filter(genre=genre).count())
             genre.n_podcasts = Podcast.objects.filter(genre=genre).count()
-            if supergenre == None:
+            if genre.supergenre == None:
                 genre.n_podcasts += Podcast.objects.filter(genre__supergenre=genre).count()
             genre.save()
 
 class Language(Filterable):
 
+    def create_or_get_language(name):
+        try:
+            return Language.objects.get(name=name)
+        except Language.DoesNotExist:
+            return Language.objects.create(
+                name=name,
+                n_podcasts=0,
+            )
+
+    # after updating podcast database with scrapy, count n_podcasts
     def count_n_podcasts():
         languages = Language.objects.all()
         for language in languages:

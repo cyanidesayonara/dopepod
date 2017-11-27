@@ -13,11 +13,8 @@ dopepod
       <a class="col-lg-2 col-md-3 col-sm-4 col-6 result-box show-podinfo" id="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
         <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
         <h6 class="result-title">{{ podcast.title }}</h6>
-        <p class="result-genre">
-         {% if podcast.genre.supergenre %}
-         {{ podcast.genre.supergenre }} -
-         {% endif %}
-         {{ podcast.genre }}
+        <p class="result-artist">
+         {{ podcast.artist }}
         </p>
       </a>
       {% endfor %}

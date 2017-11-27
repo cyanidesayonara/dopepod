@@ -1,4 +1,4 @@
-{% if tracks %}
+{% if episodes %}
   <div class="col">
     <table class="table table-bordered table-hover">
       <caption>List of podcast episodes</caption>
@@ -22,34 +22,34 @@
         </tr>
       </thead>
       <tbody>
-      {% for track in tracks %}
-        <tr data-toggle="tooltip" title="{{ track.summary }}">
+      {% for episode in episodes %}
+        <tr data-toggle="tooltip" title="{{ episode.summary }}">
           <td>
-            {{ track.title }}
+            {{ episode.title }}
           </td>
           <td>
-            {{ track.pubDate }}
+            {{ episode.pubDate }}
           </td>
           <td>
-            {{ track.length }}
+            {{ episode.length }}
           </td>
           <td>
             <form class="play" action="{% url 'play' %}" method="POST" target="_blank">
-              <!-- ADDTL TRACK INFO HERE -->
+              <!-- ADDTL episode INFO HERE -->
               {% csrf_token %}
-              <input type="hidden" name="artwork" value="{{ track.podcast.artworkUrl }}">
-              <input type="hidden" name="url" value="{{ track.url }}">
-              <input type="hidden" name="type" value="{{ track.type }}">
-              <input type="hidden" name="title" value="{{ track.title }}">
-              <input type="hidden" name="podcast" value="{{ track.podcast.title }}">
-              <input type="hidden" name="date" value="{{ track.pubDate }}">
+              <input type="hidden" name="artwork" value="{{ episode.podcast.artworkUrl }}">
+              <input type="hidden" name="url" value="{{ episode.url }}">
+              <input type="hidden" name="type" value="{{ episode.type }}">
+              <input type="hidden" name="title" value="{{ episode.title }}">
+              <input type="hidden" name="podcast" value="{{ episode.podcast.title }}">
+              <input type="hidden" name="date" value="{{ episode.pubDate }}">
               <button class="btn btn-outline-primary" type="submit">
                 Play
               </button>
             </form>
           </td>
           <td>
-            <a class="btn btn-outline-primary" href="{{ track.url }}">
+            <a class="btn btn-outline-primary" href="{{ episode.url }}">
               Download
             </a>
           </td>

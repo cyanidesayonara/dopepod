@@ -14,9 +14,10 @@
           <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
         </div>
         <div class="col">
-          <h3>
+          <h1>
             {{ podcast.title }}
-          </h3>
+          </h1>
+          <h2>By {{ podcast.artist }}</h2>
           <p>
             {{ podcast.description }}
           </p>
@@ -61,10 +62,10 @@
     </div>
   </div>
 </div>
-<!-- TRACKS -->
+<!-- EPISODES -->
 <div class="container">
-  <div class="row" id="tracks">
-    {% include 'tracks.html' %}
+  <div class="row" id="episodes">
+    {% include 'episodes.html' %}
   </div>
 </div>
 {% endblock %}
@@ -72,9 +73,9 @@
 {% block extrajs %}
 <script>
 $(window).ready(function() {
-  // load tracks for podcast
+  // load episodes for podcast
   // TODO also load on back button
-  var url = "/tracks/";
+  var url = "/episodes/";
   var itunesid = "{{ podcast.itunesid }}";
   $.ajax({
     method: "POST",
@@ -87,7 +88,7 @@ $(window).ready(function() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#tracks").html(response);
+      $("#episodes").html(response);
       $('#overlay').hide();
     });
 });

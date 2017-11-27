@@ -356,7 +356,7 @@ $(document)
         goToPage("/");
       });
   })
-  // put track in player
+  // put episode in player
   .on("click", ".play", function(e) {
     e.preventDefault();
     var data = $(this).serialize();
