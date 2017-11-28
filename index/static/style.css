@@ -191,19 +191,28 @@ body {
   background: transparent url("loading.gif") center no-repeat;
 }
 .result-title {
-  overflow: hidden;
-  margin-top: 0.5rem;
-  height: 3.8rem;
   color: #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-height: 1.5;        /* fallback */
+  max-height: 3.0;       /* fallback */
 }
 h6, p, a {
   text-decoration: none;
 }
 .result-artist, .result-artist:hover {
   color: #000;
+  color: #000;
   overflow: hidden;
-  height: 3rem;
-  text-decoration: none;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-height: 1.5;        /* fallback */
+  max-height: 3.0;       /* fallback */
 }
 
 #recommendations{
@@ -246,6 +255,7 @@ h6, p, a {
 .login {
 
 }
-.footer {
+#footer {
+  margin-top: 15px;
   text-align: center;
 }

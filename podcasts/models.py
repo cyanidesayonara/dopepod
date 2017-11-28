@@ -83,7 +83,7 @@ class Podcast(models.Model):
         episodes = []
 
         feedUrl = self.feedUrl
-        r = requests.get(feedUrl, timeout=0.001)
+        r = requests.get(feedUrl, timeout=1)
 
         try:
             r.raise_for_status()

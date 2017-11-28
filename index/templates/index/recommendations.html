@@ -25,9 +25,13 @@
           </form>
           <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
-            <h6 class="result-title">{{ podcast.title }}</h6>
+            <h6 class="result-title">
+              <strong>
+                {{ podcast.title }}
+              </strong>
+            </h6>            
             <p class="result-artist">
-             {{ podcast.artist }}
+              by {{ podcast.artist }}
             </p>
           </a>
         </div>

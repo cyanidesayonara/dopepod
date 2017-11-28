@@ -30,10 +30,13 @@ def search(request):
 
         # if query string, return results
         if q:
+            user = request.user
+
             context['genres'] = Genre.get_primary_genres()
             context['languages'] = Language.objects.all()
             context['alphabet'] = string.ascii_uppercase
             context['search'] = True
+            context['chart'] = Podcast.get_chart(user)
 
             genre = request.GET.get('genre', 'All')
             language = request.GET.get('language', 'All')
@@ -53,7 +56,6 @@ def search(request):
                 context['selected_q'] = q
 
             # return podcasts matching search terms
-            user = request.user
             podcasts = actual_search(genre, language, explicit, user, q=q)
 
             if show == 'detail':
@@ -91,13 +93,15 @@ def actual_search(genre, language, explicit, user, q=None, alphabet=None):
     if explicit == False:
         podcasts = podcasts.filter(explicit=explicit)
 
-    # filter by genre
-    if genre != 'All':
-        podcasts = podcasts.filter(genre__name=genre)
-
     # filter by language
     if language != 'All':
         podcasts = podcasts.filter(language__name=language)
+
+    # filter by genre
+    if genre != 'All':
+        res1 = podcasts.filter(genre__name=genre)
+        res2 = podcasts.filter(genre__supergenre__name=genre)
+        podcasts = res1.union(res2)
 
     # last but not least, filter by title
     # always return n_results
@@ -111,8 +115,8 @@ def actual_search(genre, language, explicit, user, q=None, alphabet=None):
 
     # get a list of itunesids from user's subscriptions (if not AnonymousUser)
     subscriptions = []
-    if user.username:
-        subscriptions = Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+    if user.is_authenticated:
+        subscriptions = Subscription.get_subscriptions_itunesids(user)
 
     for podcast in res:
         if podcast.itunesid in subscriptions:
@@ -130,6 +134,8 @@ def browse(request):
         # show browse bar
         context['browse'] = True
         context['alphabet'] = string.ascii_uppercase
+        context['chart'] = Podcast.get_chart(user)
+
 
         # for ajax, just return base
         if request.is_ajax():
@@ -163,7 +169,7 @@ def browse(request):
 
             try:
                 context['podcasts'] = paginator.page(page)
-            except PageNotAnInteger:
+            except KTPageNotAnInteger:
                 # If page is not an integer, deliver first page.
                 context['podcasts'] = paginator.page(1)
             except EmptyPage:
