@@ -44,7 +44,10 @@ body {
 }
 
 #main {
-
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding: 15px 30px;
+  background-color: #fff;
 }
 #episodes {
   min-height: 100%;
@@ -60,7 +63,7 @@ body {
 }
 
 #main-content {
-  background-color: #fff;
+  background-color: #ccc;
   min-height: 100vh;
 }
 
@@ -89,6 +92,7 @@ body {
 
 }
 #bar {
+  background-color: #fff;
   top: -150px;
   position: sticky;
   z-index: 97;
@@ -167,12 +171,11 @@ body {
 }
 
 #results {
-  margin-top: 15px;
-  border: 1px solid black;
+
 }
 
-#results-row {
-
+#results-wrapper {
+  border: 1px solid black;
 }
 .result-wrapper {
   padding-left: 0px;

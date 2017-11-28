@@ -153,38 +153,43 @@ class Podcast(models.Model):
               'im': 'http://itunes.apple.com/rss',
         }
 
-        r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1316/xml', timeout=5)
+        # Genre.objects.all()
+        genres = []
+        for genre in genres:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=' + str(genre.itunesid) + '/xml'
 
-        try:
-            r.raise_for_status()
+            r = requests.get(url, timeout=5)
 
-            root = etree.XML(r.content)
+            try:
+                r.raise_for_status()
 
-            ns.update(root.nsmap)
-            # delete None from namespaces, use atom instead
-            del ns[None]
+                root = etree.XML(r.content)
 
-            chart = []
-            for entry in root.findall('atom:entry', ns):
-                element = entry.find('atom:id', ns)
-                itunesid = element.xpath('./@im:id', namespaces=ns)[0]
-                try:
-                    podcast = Podcast.objects.get(itunesid=itunesid)
-                    podcast.is_subscribed(user)
-                    chart.append(podcast)
-                # if podcast don't exists, scrape it and create it
-                except Podcast.DoesNotExist:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error('can\'t get pod')
+                ns.update(root.nsmap)
+                # delete None from namespaces, use atom instead
+                del ns[None]
 
-                    podcast = Podcast.scrape_podcast(itunesid)
-                    chart.append(podcast)
+                chart = []
+                for entry in root.findall('atom:entry', ns):
+                    element = entry.find('atom:id', ns)
+                    itunesid = element.xpath('./@im:id', namespaces=ns)[0]
+                    try:
+                        podcast = Podcast.objects.get(itunesid=itunesid)
+                        podcast.is_subscribed(user)
+                        chart.append(podcast)
+                    # if podcast don't exists, scrape it and create it
+                    except Podcast.DoesNotExist:
+                        import logging
+                        logger = logging.getLogger(__name__)
+                        logger.error('can\'t get pod')
 
-            return chart
+                        podcast = Podcast.scrape_podcast(itunesid)
+                        chart.append(podcast)
 
-        except requests.exceptions.HTTPError as e:
-            print(str(e))
+                return chart
+
+            except requests.exceptions.HTTPError as e:
+                print(str(e))
 
     def scrape_podcast(itunesid):
         """

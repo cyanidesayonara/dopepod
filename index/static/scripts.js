@@ -58,6 +58,7 @@ function goToPage(url, title) {
     })
     .done(function(response) {
       $("#main-content").html(response);
+      $(window).scrollTop(0);
       var state = {
         "context": response,
         "title": title,
@@ -151,7 +152,7 @@ function SearchFunc() {
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#results-content").html(response);
+        $("#results").html(response);
 
         // save results + q in current state
         var context = $("#main-content")[0].innerHTML;
@@ -212,7 +213,7 @@ function BrowseFunc() {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#results-content").html(response);
+      $("#results").html(response);
 
       // save results + q in current state
       var context = $("#main-content")[0].innerHTML;

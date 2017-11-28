@@ -5,7 +5,7 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col" id="results">
+<div class="col" id="results-wrapper">
   {% include 'optionsbar.html' %}
   <div class="row">
     {% if podcasts %}
@@ -30,7 +30,7 @@ dopepod
               <strong>
                 {{ podcast.title }}
               </strong>
-            </h6>            
+            </h6>
             <p class="result-artist">
               by {{ podcast.artist }}
             </p>
