@@ -126,11 +126,10 @@ function SearchFunc() {
   // if input is at least minlength, go ahead and search
   if (q.length >= minlength) {
     // if options exists, get values
-    if ( $("#options").length ) {
+    if ($("#options").length) {
       var genre = $("input[name='genre']:checked").val();
       var language = $("input[name='language']:checked").val();
       var show = $("input[name='show']:checked").val();
-      var explicit = !($("input[name='explicit']").is(":checked"));
 
       if (language != 'All') {
         data['language'] = language;
@@ -140,9 +139,6 @@ function SearchFunc() {
       }
       if (show != 'detail') {
         data['show'] = show;
-      }
-      if (language === false) {
-        data['explicit'] = false;
       }
     }
 
@@ -195,7 +191,6 @@ function BrowseFunc() {
     var show = $("input[name='show']:checked").val();
     var genre = $("input[name='genre']:checked").val();
     var language = $("input[name='language']:checked").val();
-    var explicit = $("input[name='explicit-button']").is(":checked");
 
     if (language != 'All') {
       data['language'] = language;
@@ -205,9 +200,6 @@ function BrowseFunc() {
     }
     if (show != 'list') {
       data['show'] = show;
-    }
-    if (language === false) {
-      data['explicit'] = false;
     }
   }
 
@@ -266,11 +258,11 @@ $(document)
     SearchFunc();
   })
   // remove focus from button (focus would be saved on state)
-  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #explicit-button, #show-buttons", function() {
+  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #show-buttons", function() {
     $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons, #explicit-button, #show-buttons", function() {
+  .on("change", "#genre-buttons, #language-buttons, #show-buttons", function() {
     if ($("#search-bar").css('display') == 'none') {
       BrowseFunc();
     }
@@ -300,7 +292,11 @@ $(document)
       .done(function(response) {
         $("#main-content").html(response);
 
-        var title = $("#podinfo-bar h3")[0].innerHTML;
+        var title = "dopepod";
+        if ($("#podinfo").length) {
+          title = $("#podinfo h1")[0].innerHTML;
+        }
+
         var state = {
           "context": response,
           "title": title,
@@ -375,7 +371,7 @@ $(document)
         $("#footer").css("padding-bottom", "106px");
       });
   })
-  // subscription button
+  // close player
   .on("click", "#player-close", function(e) {
     $("#player").empty();
     $("#footer").css("padding-bottom", "0px");
@@ -383,6 +379,10 @@ $(document)
   .on("submit", "#sub-form", function(e) {
     // Stop form from submitting normally
     e.preventDefault();
+
+    // button, gets new value
+    var button = $(this).find(".sub-button");
+
     var data = $(this).serialize();
     var url = this.action;
     var method = this.method;
@@ -397,11 +397,14 @@ $(document)
         goToModal("/account/login/");
       })
       .done(function(response) {
-        $("#sub-button").html(response);
+        button.html(response);
 
         var url = $("#main-content")[0].baseURI;
         var context = $("#main-content")[0].innerHTML;
-        var title = $("#podinfo-bar h3")[0].innerHTML;
+        if ($("#podinfo").length) {
+          var title = $("#podinfo h1")[0].innerHTML;
+        }
+
         var state = {
           "context": context,
           "title": title,

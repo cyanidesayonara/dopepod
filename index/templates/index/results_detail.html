@@ -10,13 +10,28 @@ dopepod
   <div class="row">
     {% if podcasts %}
       {% for podcast in podcasts %}
-      <a class="col-lg-2 col-md-3 col-sm-4 col-6 result-box show-podinfo" id="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-        <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
-        <h6 class="result-title">{{ podcast.title }}</h6>
-        <p class="result-artist">
-         {{ podcast.artist }}
-        </p>
-      </a>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box" id="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <form id="sub-form" action="{% url 'subscribe' %}"
+          id="{{ podcast.itunesid }}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+            {% if podcast.subscribed %}
+            <button type="submit" class="btn btn-outline-primary active sub-button">
+            Unsubscribe
+            {% else %}
+            <button type="submit" class="btn btn-outline-primary sub-button">
+            Subscribe
+            {% endif %}
+            </button>
+          </form>
+          <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
+            <h6 class="result-title">{{ podcast.title }}</h6>
+            <p class="result-artist">
+             {{ podcast.artist }}
+            </p>
+          </a>
+        </div>
       {% endfor %}
     {% else %}
       <div class="col">

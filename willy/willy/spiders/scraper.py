@@ -133,10 +133,11 @@ class WillyTheSpider(scrapy.Spider):
                 )
             except requests.exceptions.HTTPError:
                 print('no response from feedUrl')
-                with open('logs.txt', 'a') as f:
+                with open('logs.txt', 'a', encoding='utf-8') as f:
                     f.write('No response from feedUrl' + ' -- ' + str(data) + '\n\n')
+
 
         except KeyError as e:
             print('Missing data: ' + str(e))
-            with open('logs.txt', 'a') as f:
+            with open('logs.txt', 'a', encoding='utf-8') as f:
                 f.write('Missing data: ' + str(e) + ' -- ' + str(data) + '\n\n')

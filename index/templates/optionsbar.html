@@ -51,7 +51,6 @@
         {% endif %}
       </ul>
     </nav>
-
   </div>
   <div class="col-auto texture" id="options">
     <ul id="options-list">
@@ -156,22 +155,6 @@
             {% endif %}
             </div>
           </div>
-        </div>
-      </li>
-      <!-- EXPLICIT -->
-      <li>
-        <div class="btn-group" id="explicit-button" data-toggle="buttons">
-          {% if selected_explicit == True or selected_explicit == None %}
-            <label class="btn btn-outline-primary">
-              <input type="checkbox" name="explicit" value="false">
-              Hide Explicit
-            </label>
-            {% else %}
-            <label class="btn btn-outline-primary active">
-              <input type="checkbox" name="explicit" value="false" checked>
-              Hide Explicit
-            </label>
-          {% endif %}
         </div>
       </li>
     </ul>
