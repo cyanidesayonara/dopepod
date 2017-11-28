@@ -113,7 +113,7 @@ class WillyTheSpider(scrapy.Spider):
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
 
             # make sure feedUrl works
-            r = requests.get(feedUrl)
+            r = requests.get(feedUrl, timeout=5)
             try:
                 r.raise_for_status()
                 return PodcastItem (

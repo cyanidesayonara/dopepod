@@ -83,7 +83,7 @@ class Podcast(models.Model):
         episodes = []
 
         feedUrl = self.feedUrl
-        r = requests.get(feedUrl)
+        r = requests.get(feedUrl, timeout=0.001)
 
         try:
             r.raise_for_status()
@@ -153,7 +153,7 @@ class Podcast(models.Model):
               'im': 'http://itunes.apple.com/rss',
         }
 
-        r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1316/xml')
+        r = requests.get('https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1316/xml', timeout=5)
 
         try:
             r.raise_for_status()
@@ -193,7 +193,7 @@ class Podcast(models.Model):
 
         # get data from itunes lookup
         url = 'https://itunes.apple.com/lookup?id=' + itunesid
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         try:
             r.raise_for_status()
             jsonresponse = r.json()
@@ -204,7 +204,7 @@ class Podcast(models.Model):
             return
 
         # get more data from itunes artist page
-        r = requests.get(itunesUrl)
+        r = requests.get(itunesUrl, timeout=5)
         try:
             r.raise_for_status()
 
@@ -236,7 +236,7 @@ class Podcast(models.Model):
                 language = Language.create_or_get_language(language)
 
                 # make sure feedUrl works
-                r = requests.get(feedUrl)
+                r = requests.get(feedUrl, timeout=5)
                 try:
                     r.raise_for_status()
                     try:
