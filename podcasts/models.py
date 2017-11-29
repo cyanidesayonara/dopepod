@@ -153,8 +153,8 @@ class Podcast(models.Model):
               'im': 'http://itunes.apple.com/rss',
         }
 
-        # Genre.objects.all()
-        genres = []
+        genres = Genre.objects.filter(name='Sports & Recreation')
+
         for genre in genres:
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=' + str(genre.itunesid) + '/xml'
 

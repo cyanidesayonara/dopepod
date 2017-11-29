@@ -1,4 +1,12 @@
-<div class="col" id="recommendations">
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
+
+{% block title %}
+dopepod
+{% endblock %}
+
+{% block results %}
+<div class="col" id="results-wrapper">
+  {% include 'optionsbar.html' %}
   <div class="row">
     <div class="col">
       <h2>
@@ -29,7 +37,7 @@
               <strong>
                 {{ podcast.title }}
               </strong>
-            </h6>            
+            </h6>
             <p class="result-artist">
               by {{ podcast.artist }}
             </p>
@@ -45,3 +53,4 @@
     {% endif %}
   </div>
 </div>
+{% endblock %}

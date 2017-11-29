@@ -189,12 +189,12 @@ body {
   padding: 4px;
 }
 .result-image {
-  width:200px;
-  height:200px;
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
   background: transparent url("loading.gif") center no-repeat;
 }
-.result-title {
-  color: #000;
+.result-title, .result-title:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -203,12 +203,12 @@ body {
   line-height: 1.5;        /* fallback */
   max-height: 3.0;       /* fallback */
 }
-h6, p, a {
+a, a:hover {
+  cursor: pointer;
+  color: #000;
   text-decoration: none;
 }
 .result-artist, .result-artist:hover {
-  color: #000;
-  color: #000;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
