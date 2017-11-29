@@ -113,7 +113,11 @@ class WillyTheSpider(scrapy.Spider):
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
 
             # make sure feedUrl works
-            r = requests.get(feedUrl, timeout=5)
+                    # useragent for requests
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+            }
+            r = requests.get(feedUrl, headers=headers, timeout=60)
             try:
                 r.raise_for_status()
                 return PodcastItem (
@@ -132,10 +136,12 @@ class WillyTheSpider(scrapy.Spider):
                     podcastUrl=podcastUrl,
                 )
             except requests.exceptions.HTTPError:
-                print('no response from feedUrl')
                 with open('logs.txt', 'a', encoding='utf-8') as f:
                     f.write('No response from feedUrl' + ' -- ' + str(data) + '\n\n')
-
+            except requests.exceptions.ReadTimeout as e:
+                with open('logs.txt', 'a', encoding='utf-8') as f:
+                    f.write('feedUrl timed out' + ' -- ' + str(data) + '\n\n')    
+                            
 
         except KeyError as e:
             print('Missing data: ' + str(e))

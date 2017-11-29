@@ -19,6 +19,7 @@ class Podcast(models.Model):
     reviewsUrl = models.URLField(max_length=255)
     artworkUrl = models.URLField(max_length=255)
     podcastUrl = models.URLField(max_length=255)
+    chart = models.ForeignKey('podcasts.Chart', on_delete=models.SET_NULL, null=True, blank=True, related_name='pods')
 
     def create_or_update_podcast(item):
         genre = Genre.objects.get(name=item['genre'])
@@ -144,11 +145,16 @@ class Podcast(models.Model):
         """
         scrapes and returns podcast
         """
+        
+        # useragent for requests
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        }
 
         # get data from itunes lookup
         url = 'https://itunes.apple.com/lookup?id=' + itunesid
-        r = requests.get(url, timeout=5)
         try:
+            r = requests.get(url, headers=headers, timeout=30)
             r.raise_for_status()
             jsonresponse = r.json()
             data = jsonresponse['results'][0]
@@ -158,13 +164,14 @@ class Podcast(models.Model):
             return
 
         # get more data from itunes artist page
-        r = requests.get(itunesUrl, timeout=5)
         try:
+            r = requests.get(itunesUrl, headers=headers, timeout=30)
             r.raise_for_status()
 
             tree = html.fromstring(r.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
             podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
+
 
             try:
                 description = tree.xpath('//div[@class="product-review"]/p/text()')[0]
@@ -190,8 +197,8 @@ class Podcast(models.Model):
                 language = Language.create_or_get_language(language)
 
                 # make sure feedUrl works
-                r = requests.get(feedUrl, timeout=5)
                 try:
+                    r = requests.get(feedUrl, headers=headers, timeout=60)
                     r.raise_for_status()
                     try:
                         return Podcast.objects.get(itunesid=itunesid)
@@ -212,7 +219,10 @@ class Podcast(models.Model):
                             podcastUrl=podcastUrl,
                         )
                 except requests.exceptions.HTTPError as e:
-                    print('no response from feedUrl')
+                    print('no response from feedUrl:', feedUrl)
+                    return
+                except requests.exceptions.ReadTimeout as e:
+                    print('timed out:', feedUrl)
                     return
             except KeyError as e:
                 print('Missing data: ' + str(e))
@@ -222,7 +232,7 @@ class Podcast(models.Model):
 
 class Subscription(Podcast):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    pod = models.ForeignKey('podcasts.Podcast', related_name='podcast')
+    pod = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE, related_name='podcast')
     last_updated = models.DateTimeField(default=timezone.now)
 
     def get_subscriptions(user):
@@ -236,16 +246,21 @@ class Subscription(Podcast):
         self.last_updated = timezone.now()
 
 class Chart(models.Model):
-    genre = models.ForeignKey('podcasts.Genre')
-    pods = models.ManyToManyField('podcasts.Podcast')
+    name = models.CharField(max_length=50)
+    genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.genre.name
+        return self.name
 
     def make_charts():
         """
         returns podcast charts
         """
+        
+        # get rid of old charts
+        charts = Chart.objects.all()
+        for chart in charts:
+            chart.delete()
 
         # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=/language=4/xml
         # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
@@ -256,15 +271,12 @@ class Chart(models.Model):
         }
 
         genres = Genre.objects.all()
-        chart = {}
-
+        
         for genre in genres:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1468/xml'
-
-            r = requests.get(url, timeout=5)
-            podcasts = []
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=' + str(genre.itunesid) + '/xml'
 
             try:
+                r = requests.get(url, timeout=5)
                 r.raise_for_status()
 
                 root = etree.XML(r.content)
@@ -272,6 +284,11 @@ class Chart(models.Model):
                 ns.update(root.nsmap)
                 # delete None from namespaces, use atom instead
                 del ns[None]
+
+                chart = Chart.objects.create(
+                    name=genre.name,
+                    genre=genre,
+                )
 
                 for entry in root.findall('atom:entry', ns):
                     element = entry.find('atom:id', ns)
@@ -285,14 +302,14 @@ class Chart(models.Model):
                         logger.error('can\'t get pod')
 
                         podcast = Podcast.scrape_podcast(itunesid)
-                    podcasts.append(podcast)
-
-                chart[genre] = podcasts
-                print(chart)
+                    if podcast:
+                        podcast.chart = chart
+                        podcast.save()
 
             except requests.exceptions.HTTPError as e:
                 print(str(e))
-
+            except requests.exceptions.ReadTimeout as e:
+                print('timed out')
 
 class Filterable(models.Model):
     """
@@ -310,7 +327,7 @@ class Filterable(models.Model):
 
 class Genre(Filterable):
     itunesid = models.IntegerField()
-    supergenre = models.ForeignKey('podcasts.Genre', blank=True, null=True)
+    supergenre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, blank=True, null=True)
 
     def create_or_update_genre(item):
         name = item['name']
