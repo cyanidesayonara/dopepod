@@ -23,11 +23,9 @@ dopepod
             Subscribe
             {% endif %}
             </button>
-          </form>   
+          </form>
           <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-            <div class="result-image">
-            </div>
-            <img class="img-fluid" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
+            <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
           </a>
           <h6 class="result-title">
             <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">

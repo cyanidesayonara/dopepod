@@ -15,7 +15,7 @@ def home(request):
     context['alphabet'] = string.ascii_uppercase
     context['search'] = True
     context['selected_alphabet'] = 'A'
-    context['chart'] = Podcast.get_chart(user)
+    # context['chart'] = Podcast.get_chart(user)
 
     return render(request, 'index/recommendations.html', context)
 

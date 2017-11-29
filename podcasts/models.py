@@ -140,57 +140,6 @@ class Podcast(models.Model):
         except requests.exceptions.HTTPError as e:
             print(str(e))
 
-    def get_chart(user):
-        """
-        returns podcast charts
-        """
-
-        # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/gene=1468/language=4/xml
-        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-
-        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-              'atom': 'http://www.w3.org/2005/Atom',
-              'im': 'http://itunes.apple.com/rss',
-        }
-
-        genres = Genre.objects.filter(name='Sports & Recreation')
-
-        for genre in genres:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=' + str(genre.itunesid) + '/xml'
-
-            r = requests.get(url, timeout=5)
-
-            try:
-                r.raise_for_status()
-
-                root = etree.XML(r.content)
-
-                ns.update(root.nsmap)
-                # delete None from namespaces, use atom instead
-                del ns[None]
-
-                chart = []
-                for entry in root.findall('atom:entry', ns):
-                    element = entry.find('atom:id', ns)
-                    itunesid = element.xpath('./@im:id', namespaces=ns)[0]
-                    try:
-                        podcast = Podcast.objects.get(itunesid=itunesid)
-                        podcast.is_subscribed(user)
-                        chart.append(podcast)
-                    # if podcast don't exists, scrape it and create it
-                    except Podcast.DoesNotExist:
-                        import logging
-                        logger = logging.getLogger(__name__)
-                        logger.error('can\'t get pod')
-
-                        podcast = Podcast.scrape_podcast(itunesid)
-                        chart.append(podcast)
-
-                return chart
-
-            except requests.exceptions.HTTPError as e:
-                print(str(e))
-
     def scrape_podcast(itunesid):
         """
         scrapes and returns podcast
@@ -285,6 +234,65 @@ class Subscription(Podcast):
 
     def update(self):
         self.last_updated = timezone.now()
+
+class Chart(models.Model):
+    genre = models.ForeignKey('podcasts.Genre')
+    pods = models.ManyToManyField('podcasts.Podcast')
+
+    def __str__(self):
+        return self.genre.name
+
+    def make_charts():
+        """
+        returns podcast charts
+        """
+
+        # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=/language=4/xml
+        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+
+        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+              'atom': 'http://www.w3.org/2005/Atom',
+              'im': 'http://itunes.apple.com/rss',
+        }
+
+        genres = Genre.objects.all()
+        chart = {}
+
+        for genre in genres:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1468/xml'
+
+            r = requests.get(url, timeout=5)
+            podcasts = []
+
+            try:
+                r.raise_for_status()
+
+                root = etree.XML(r.content)
+
+                ns.update(root.nsmap)
+                # delete None from namespaces, use atom instead
+                del ns[None]
+
+                for entry in root.findall('atom:entry', ns):
+                    element = entry.find('atom:id', ns)
+                    itunesid = element.xpath('./@im:id', namespaces=ns)[0]
+                    try:
+                        podcast = Podcast.objects.get(itunesid=itunesid)
+                    # if podcast don't exists, scrape it and create it
+                    except Podcast.DoesNotExist:
+                        import logging
+                        logger = logging.getLogger(__name__)
+                        logger.error('can\'t get pod')
+
+                        podcast = Podcast.scrape_podcast(itunesid)
+                    podcasts.append(podcast)
+
+                chart[genre] = podcasts
+                print(chart)
+
+            except requests.exceptions.HTTPError as e:
+                print(str(e))
+
 
 class Filterable(models.Model):
     """

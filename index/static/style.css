@@ -58,9 +58,6 @@ body {
 #subscriptions {
 
 }
-#subscriptions-list {
-
-}
 
 #main-content {
   background-color: #ccc;
@@ -170,10 +167,6 @@ body {
   flex-basis: auto;
 }
 
-#results {
-
-}
-
 #results-wrapper {
   border: 1px solid black;
 }
@@ -190,8 +183,8 @@ body {
 }
 .result-image {
   object-fit: cover;
-  width: 200px;
-  height: 200px;
+  /*width: 200px;
+  height: 200px;*/
   background: transparent url("loading.gif") center no-repeat;
 }
 .result-title, .result-title:hover {
