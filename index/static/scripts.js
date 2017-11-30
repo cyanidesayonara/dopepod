@@ -9,8 +9,8 @@ $(window).on('popstate', function(event) {
     if (state.alphabet) {
       $("input[name='alphabet'][value='" + state.alphabet + "']").prop("checked", true);
     }
-    if (state.show) {
-      $("input[name='show'][value='" + state.show + "']").prop("checked", true);
+    if (state.view) {
+      $("input[name='view'][value='" + state.view + "']").prop("checked", true);
     }
   }
 });
@@ -48,7 +48,9 @@ function refreshCookie() {
   });
 };
 
-function goToPage(url, title) {
+function goToIndex() {
+  var url = "/"
+  var title = "dopepod"
   $.ajax({
     type: "GET",
     url: url,
@@ -63,6 +65,27 @@ function goToPage(url, title) {
         "context": response,
         "title": title,
       };
+      history.pushState(state, "", url);
+      $("title")[0].innerText = title;
+    });
+};
+
+function goToPage(url) {
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#results").html(response);
+      $(window).scrollTop(0);
+      var state = {
+        "context": response,
+        "title": 'dopepod',
+      };
+      var url = '/';
       history.pushState(state, "", url);
       $("title")[0].innerText = title;
     });
@@ -130,7 +153,7 @@ function SearchFunc() {
     if ($("#options").length) {
       var genre = $("input[name='genre']:checked").val();
       var language = $("input[name='language']:checked").val();
-      var show = $("input[name='show']:checked").val();
+      var view = $("input[name='view']:checked").val();
 
       if (language != 'All') {
         data['language'] = language;
@@ -138,8 +161,8 @@ function SearchFunc() {
       if (genre != 'All') {
         data['genre'] = genre;
       }
-      if (show != 'detail') {
-        data['show'] = show;
+      if (view != 'detail') {
+        data['view'] = view;
       }
     }
 
@@ -189,7 +212,7 @@ function BrowseFunc() {
   data['alphabet'] = alphabet;
 
   if ($("#options").length) {
-    var show = $("input[name='show']:checked").val();
+    var view = $("input[name='view']:checked").val();
     var genre = $("input[name='genre']:checked").val();
     var language = $("input[name='language']:checked").val();
 
@@ -199,8 +222,8 @@ function BrowseFunc() {
     if (genre != 'All') {
       data['genre'] = genre;
     }
-    if (show != 'list') {
-      data['show'] = show;
+    if (view != 'list') {
+      data['view'] = view;
     }
   }
 
@@ -259,11 +282,11 @@ $(document)
     SearchFunc();
   })
   // remove focus from button (focus would be saved on state)
-  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #show-buttons", function() {
+  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
     $(this.children).removeClass("focus");
   })
   // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons, #show-buttons", function() {
+  .on("change", "#genre-buttons, #language-buttons, #view-buttons", function() {
     if ($("#search-bar").css('display') == 'none') {
       BrowseFunc();
     }
@@ -310,13 +333,15 @@ $(document)
   // go to home view
   .on("click", ".home-link", function(e) {
     e.preventDefault();
-    goToPage("/", "dopepod");
+    goToIndex();
+    goToPage("/charts/");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
-    goToPage("/browse/", "dopepod");
-    BrowseFunc();
+    goToIndex();
+    goToPage("/browse/");
+    // BrowseFunc();
   })
   .on("click", ".search-toggle", function(e) {
     e.preventDefault();

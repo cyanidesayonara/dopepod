@@ -17,7 +17,7 @@ dopepod
   <div class="row">
     {% if chart %}
       {% for podcast in chart %}
-        <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box" id="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box" id="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <form id="sub-form" action="{% url 'subscribe' %}"
           id="{{ podcast.itunesid }}" method="POST">
             {% csrf_token %}
@@ -33,15 +33,18 @@ dopepod
           </form>
           <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
-            <h6 class="result-title">
-              <strong>
-                {{ podcast.title }}
-              </strong>
-            </h6>
-            <p class="result-artist">
-              by {{ podcast.artist }}
-            </p>
           </a>
+          <h6 class="result-title">
+            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </h6>
+          <p class="result-artist">
+            <span>by </span>
+            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+              {{ podcast.artist }}
+            </a>
+          </p>
         </div>
       {% endfor %}
     {% else %}

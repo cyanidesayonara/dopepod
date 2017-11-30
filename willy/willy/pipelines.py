@@ -4,8 +4,8 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from willy.items import GenreItem, PodcastItem, LanguageItem
-from podcasts.models import Genre, Podcast, Language
+from willy.items import GenreItem, PodcastItem
+from podcasts.models import Genre, Podcast, Filterable
 
 class WillyPipeline(object):
     def __init__(self):
@@ -21,5 +21,4 @@ class WillyPipeline(object):
             Genre.create_or_update_genre(item)
 
     def close_spider(self, spider):
-        Genre.count_n_podcasts()
-        Language.count_n_podcasts()
+        Filterable.count_n_podcasts()

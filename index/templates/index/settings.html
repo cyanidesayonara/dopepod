@@ -1,12 +1,12 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
 
 {% block title %}
 settings
 {% endblock %}
 
-{% block content %}
+{% block results %}
 <!-- SETTINGS -->
-<div class="container">
+<div class="col">
   <form class="row" id="settings-form" action="{% url 'settings' %}" method="POST">
     <div class="col">
       <h5>
@@ -34,7 +34,7 @@ settings
         data-toggle="modal" data-target="#modal">
         Reset Password
       </a>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 {% endblock %}

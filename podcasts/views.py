@@ -16,8 +16,8 @@ def podinfo(request, itunesid):
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
-        # mark podcast as subscribed
-        podcast.is_subscribed(user)
+        # mark podcast as subscribed if subscribed
+        podcast.set_subscribed(user)
         context['podcast'] = podcast
 
         if not request.is_ajax():
@@ -33,8 +33,8 @@ def episodes(request):
 
     # ajax using POST
     if request.method == 'POST':
-        itunesid = request.POST.get('itunesid', None)
         try:
+            itunesid = request.POST['itunesid']
             podcast = Podcast.objects.get(itunesid=itunesid)
         except:
             raise Http404()
@@ -52,13 +52,16 @@ def play(request):
     # TODO: itemize episode
     if request.method == 'POST':
         episode = {}
-        episode['url'] = request.POST.get('url')
-        episode['type'] = request.POST.get('type')
-        episode['title'] = request.POST.get('title')
-        episode['podcast'] = request.POST.get('podcast')
-        episode['artwork'] = request.POST.get('artwork')
-        episode['date'] = request.POST.get('date')
-        return render(request, 'player.html', {'episode': episode})
+        try:
+            episode['url'] = request.POST['url']
+            episode['type'] = request.POST['type']
+            episode['title'] = request.POST['title']
+            episode['podcast'] = request.POST['podcast']
+            episode['artwork'] = request.POST['artwork']
+            episode['date'] = request.POST['date']
+            return render(request, 'player.html', {'episode': episode})
+        except KeyError:
+            raise Http404()
 
 def subscribe(request):
     """
@@ -71,7 +74,8 @@ def subscribe(request):
 
     # validate request
     if request.method == 'POST':
-        if request.user.is_authenticated:
+        user = request.user
+        if user.is_authenticated:
             try:
                 itunesid = request.POST['itunesid']
             except KeyError:
@@ -83,44 +87,14 @@ def subscribe(request):
             except Podcast.DoesNotExist:
                 raise Http404()
 
-            # if subscription exists, delete it
-            try:
-                subscription = Subscription.objects.get(itunesid=itunesid, user=request.user)
-                subscription.delete()
-                podcast.n_subscribers -= 1
-                podcast.save()
+            subscribed = podcast.subscribe(user)
 
-                if request.is_ajax():
-                    # this goes on button
-                    return HttpResponse('Subscribe')
-                return redirect('/podinfo/' + itunesid + '/')
-
-            # if subscription doesn't exist, create it
-            except Subscription.DoesNotExist:
-                Subscription.objects.create(
-                                itunesid=podcast.itunesid,
-                                feedUrl=podcast.feedUrl,
-                                title=podcast.title,
-                                artist=podcast.artist,
-                                genre=podcast.genre,
-                                n_subscribers=podcast.n_subscribers,
-                                explicit=podcast.explicit,
-                                language=podcast.language,
-                                copyrighttext=podcast.copyrighttext,
-                                description=podcast.description,
-                                reviewsUrl=podcast.reviewsUrl,
-                                artworkUrl=podcast.artworkUrl,
-                                podcastUrl=podcast.podcastUrl,
-                                user=request.user,
-                                pod=podcast,
-                )
-                podcast.n_subscribers += 1
-                podcast.save()
-
-                if request.is_ajax():
-                    # this goes on button
+            if request.is_ajax():
+                # this goes on button
+                if subscribed:
                     return HttpResponse('Unsubscribe')
-                return redirect('/podinfo/' + itunesid + '/')
+                return HttpResponse('Subscribe')
+            return redirect('/podinfo/' + itunesid + '/')
 
         else:
             if request.is_ajax():

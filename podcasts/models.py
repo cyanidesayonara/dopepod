@@ -1,59 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.urls import reverse
 import requests
 from lxml import etree, html
 
 class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
     feedUrl = models.URLField(max_length=500)
-    title = models.CharField(max_length=255)
-    artist = models.CharField(max_length=255)
+    title = models.CharField(max_length=500)
+    artist = models.CharField(max_length=500)
     genre = models.ForeignKey('podcasts.Genre')
     explicit = models.BooleanField()
     language = models.ForeignKey('podcasts.Language')
-    copyrighttext = models.CharField(max_length=255)
+    copyrighttext = models.CharField(max_length=500)
     description = models.TextField(null=True, blank=True)
-    n_subscribers = models.IntegerField()
+    n_subscribers = models.IntegerField(default=0)
     subscribed = models.BooleanField(default=False)
-    reviewsUrl = models.URLField(max_length=255)
-    artworkUrl = models.URLField(max_length=255)
-    podcastUrl = models.URLField(max_length=255)
-    chart = models.ForeignKey('podcasts.Chart', on_delete=models.SET_NULL, null=True, blank=True, related_name='pods')
-
-    def create_or_update_podcast(item):
-        genre = Genre.objects.get(name=item['genre'])
-        language = Language.create_or_get_language(item['language'])
-        try:
-            podcast = Podcast.objects.get(itunesid=item['itunesid'])
-            podcast.feedUrl = item['feedUrl']
-            podcast.title = item['title']
-            podcast.artist = item['artist']
-            podcast.genre = genre
-            podcast.explicit = item['explicit']
-            podcast.language = language
-            podcast.copyrighttext = item['copyrighttext']
-            podcast.description = item['description']
-            podcast.reviewsUrl = item['reviewsUrl']
-            podcast.artworkUrl = item['artworkUrl']
-            podcast.podcastUrl = item['podcastUrl']
-            podcast.save()
-        except Podcast.DoesNotExist:
-            Podcast.objects.create(
-                itunesid=item['itunesid'],
-                feedUrl=item['feedUrl'],
-                title=item['title'],
-                artist=item['artist'],
-                genre=genre,
-                n_subscribers=0,
-                explicit=item['explicit'],
-                language=language,
-                copyrighttext=item['copyrighttext'],
-                description=item['description'],
-                reviewsUrl=item['reviewsUrl'],
-                artworkUrl=item['artworkUrl'],
-                podcastUrl=item['podcastUrl'],
-            )
+    reviewsUrl = models.URLField(max_length=500)
+    artworkUrl = models.URLField(max_length=500)
+    podcastUrl = models.URLField(max_length=500)
+    genre_rank = models.IntegerField(null=True, blank=True)
+    global_rank = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -61,7 +29,155 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
 
-    def is_subscribed(self, user):
+    def search(genre, language, explicit, user, q=None, alphabet=None):
+        """
+        return matching podcasts, set subscribed to True on subscribed ones
+        """
+
+        podcasts = Podcast.objects.all()
+
+        # filter by explicit
+        if explicit == False:
+            podcasts = podcasts.filter(explicit=explicit)
+
+        # filter by language
+        if language:
+            podcasts = podcasts.filter(language__name=language)
+
+        # filter by genre
+        if genre:
+            res1 = podcasts.filter(genre__name=genre)
+            res2 = podcasts.filter(genre__supergenre__name=genre)
+            podcasts = res1.union(res2)
+        print(alphabet)
+        # last but not least, filter by title
+        if q:
+            res1 = podcasts.filter(title__istartswith=q)
+            res2 = podcasts.filter(title__icontains=q)
+            podcasts = res1.union(res2).order_by('title')
+        elif alphabet:
+            podcasts = podcasts.filter(title__istartswith=alphabet).order_by('title')
+
+        for podcast in podcasts:
+            podcast.set_subscribed(user)
+        return podcasts
+
+    def set_ranks():
+        """
+        sets genre_rank and global_rank for top ranking podcasts
+        """
+
+        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+
+        genres = Genre.get_primary_genres()
+        
+        # null all genre_ranks
+        res1 = Podcast.objects.filter(genre_rank__isnull=False)
+        res2 = Podcast.objects.filter(global_rank__isnull=False)
+        podcasts = res1.union(res2)
+
+        for podcast in podcasts:
+            podcast.global_rank = None
+            podcast.genre_rank = None
+            podcast.save()
+
+        for genre in genres:
+            Podcast.parse_itunes_charts(genre)
+        Podcast.parse_itunes_charts(None)
+
+    def parse_itunes_charts(genre):
+        if genre:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=' + str(genre.itunesid) + '/xml'
+        else:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/xml'
+
+        try:
+            r = requests.get(url, timeout=30)
+            r.raise_for_status()
+
+            root = etree.XML(r.content)
+
+            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+                    'atom': 'http://www.w3.org/2005/Atom',
+                    'im': 'http://itunes.apple.com/rss',
+            }
+
+            ns.update(root.nsmap)
+            # delete None from namespaces, use atom instead
+            del ns[None]
+
+            for i, entry in enumerate(root.findall('atom:entry', ns)):
+                element = entry.find('atom:id', ns)
+                itunesid = element.xpath('./@im:id', namespaces=ns)[0]
+
+                try:
+                    podcast = Podcast.objects.get(itunesid=itunesid)
+                # if podcast don't exists, scrape it and create it
+                except Podcast.DoesNotExist:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error('can\'t get pod, scraping')
+                    podcast = Podcast.scrape_podcast(itunesid)
+
+                if podcast:
+                    if genre:
+                        podcast.genre_rank = i
+                    else:
+                        podcast.global_rank = i
+                    podcast.save()
+                else:
+                    i = i -1
+
+        except requests.exceptions.HTTPError as e:
+            print(str(e))
+        except requests.exceptions.ReadTimeout as e:
+            print('timed out')
+
+    def get_ranks(user, genre=None):
+
+        if genre:
+            podcasts = Podcast.objects.filter(genre=genre, genre_rank__isnull=False).order_by('genre_rank')
+        else:
+            podcasts = Podcast.objects.filter(global_rank__isnull=False) .order_by('global_rank')
+
+        for podcast in podcasts:
+            podcast.set_subscribed(user)
+
+        return podcasts
+
+    def subscribe(self, user):
+        # if subscription exists, delete it
+        try:
+            subscription = Subscription.objects.get(parent=self, user=user)
+            subscription.delete()
+            self.t.n_subscribers -= 1
+            self.save()
+            return False
+
+        # if subscription doesn't exist, create it
+        except Subscription.DoesNotExist:
+            Subscription.objects.create(
+                            itunesid=podcast.itunesid,
+                            feedUrl=podcast.feedUrl,
+                            title=podcast.title,
+                            artist=podcast.artist,
+                            genre=podcast.genre,
+                            n_subscribers=podcast.n_subscribers,
+                            explicit=podcast.explicit,
+                            language=podcast.language,
+                            copyrighttext=podcast.copyrighttext,
+                            description=podcast.description,
+                            reviewsUrl=podcast.reviewsUrl,
+                            artworkUrl=podcast.artworkUrl,
+                            podcastUrl=podcast.podcastUrl,
+                            user=request.user,
+                            pod=podcast,
+            )
+            self.n_subscribers += 1
+            self.save()
+            return True
+
+    def set_subscribed(self, user):
         """
         sets self.subscribed = True if subscribed
         """
@@ -77,14 +193,14 @@ class Podcast(models.Model):
         """
 
         ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-              'atom': 'http://www.w3.org/2005/Atom',
-              'im': 'http://itunes.apple.com/rss',
+            'atom': 'http://www.w3.org/2005/Atom',
+            'im': 'http://itunes.apple.com/rss',
         }
 
         episodes = []
 
         feedUrl = self.feedUrl
-        r = requests.get(feedUrl, timeout=1)
+        r = requests.get(feedUrl, timeout=5)
 
         try:
             r.raise_for_status()
@@ -140,6 +256,40 @@ class Podcast(models.Model):
 
         except requests.exceptions.HTTPError as e:
             print(str(e))
+
+    def create_or_update_podcast(item):
+        genre = Genre.objects.get(name=item['genre'])
+        language = Language.create_or_get_language(item['language'])
+        try:
+            podcast = Podcast.objects.get(itunesid=item['itunesid'])
+            podcast.feedUrl = item['feedUrl']
+            podcast.title = item['title']
+            podcast.artist = item['artist']
+            podcast.genre = genre
+            podcast.explicit = item['explicit']
+            podcast.language = language
+            podcast.copyrighttext = item['copyrighttext']
+            podcast.description = item['description']
+            podcast.reviewsUrl = item['reviewsUrl']
+            podcast.artworkUrl = item['artworkUrl']
+            podcast.podcastUrl = item['podcastUrl']
+            podcast.save()
+        except Podcast.DoesNotExist:
+            Podcast.objects.create(
+                itunesid=item['itunesid'],
+                feedUrl=item['feedUrl'],
+                title=item['title'],
+                artist=item['artist'],
+                genre=genre,
+                n_subscribers=0,
+                explicit=item['explicit'],
+                language=language,
+                copyrighttext=item['copyrighttext'],
+                description=item['description'],
+                reviewsUrl=item['reviewsUrl'],
+                artworkUrl=item['artworkUrl'],
+                podcastUrl=item['podcastUrl'],
+            )
 
     def scrape_podcast(itunesid):
         """
@@ -203,6 +353,10 @@ class Podcast(models.Model):
                     try:
                         return Podcast.objects.get(itunesid=itunesid)
                     except Podcast.DoesNotExist:
+                        print(title)
+                        print(artist)
+                        print(copyrighttext)
+                        print(podcastUrl)
                         return Podcast.objects.create(
                             itunesid=itunesid,
                             feedUrl=feedUrl,
@@ -231,85 +385,20 @@ class Podcast(models.Model):
             print('no response from itunes')
 
 class Subscription(Podcast):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    pod = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE, related_name='podcast')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE, related_name='podcast')
     last_updated = models.DateTimeField(default=timezone.now)
-
-    def get_subscriptions(user):
-        subscriptions = Subscription.objects.filter(user=user)
-        return subscriptions
-
-    def get_subscriptions_itunesids(user):
-        return Subscription.objects.filter(user=user).values_list('itunesid', flat=True)
+    new_episodes = models.IntegerField(default=0)
 
     def update(self):
         self.last_updated = timezone.now()
 
-class Chart(models.Model):
-    name = models.CharField(max_length=50)
-    genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, null=True, blank=True)
+    def get_subscriptions(user):
+        subscriptions = Subscription.objects.filter(owner=user)
+        return subscriptions
 
-    def __str__(self):
-        return self.name
-
-    def make_charts():
-        """
-        returns podcast charts
-        """
-        
-        # get rid of old charts
-        charts = Chart.objects.all()
-        for chart in charts:
-            chart.delete()
-
-        # charts https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=/language=4/xml
-        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-
-        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-              'atom': 'http://www.w3.org/2005/Atom',
-              'im': 'http://itunes.apple.com/rss',
-        }
-
-        genres = Genre.objects.all()
-        
-        for genre in genres:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=' + str(genre.itunesid) + '/xml'
-
-            try:
-                r = requests.get(url, timeout=5)
-                r.raise_for_status()
-
-                root = etree.XML(r.content)
-
-                ns.update(root.nsmap)
-                # delete None from namespaces, use atom instead
-                del ns[None]
-
-                chart = Chart.objects.create(
-                    name=genre.name,
-                    genre=genre,
-                )
-
-                for entry in root.findall('atom:entry', ns):
-                    element = entry.find('atom:id', ns)
-                    itunesid = element.xpath('./@im:id', namespaces=ns)[0]
-                    try:
-                        podcast = Podcast.objects.get(itunesid=itunesid)
-                    # if podcast don't exists, scrape it and create it
-                    except Podcast.DoesNotExist:
-                        import logging
-                        logger = logging.getLogger(__name__)
-                        logger.error('can\'t get pod')
-
-                        podcast = Podcast.scrape_podcast(itunesid)
-                    if podcast:
-                        podcast.chart = chart
-                        podcast.save()
-
-            except requests.exceptions.HTTPError as e:
-                print(str(e))
-            except requests.exceptions.ReadTimeout as e:
-                print('timed out')
+    def get_subscriptions_itunesids(user):
+        return Subscription.objects.filter(owner=user).values_list('itunesid', flat=True)
 
 class Filterable(models.Model):
     """
@@ -317,7 +406,7 @@ class Filterable(models.Model):
     """
 
     name = models.CharField(primary_key=True, max_length=50)
-    n_podcasts = models.IntegerField()
+    n_podcasts = models.IntegerField(default=0)
 
     class Meta:
         abstract = True
@@ -325,9 +414,29 @@ class Filterable(models.Model):
     def __str__(self):
         return self.name
 
+    def count_n_podcasts():
+        """
+        after updating podcast database with scrapy, count and set n_podcasts
+        """
+
+        genres = Genre.objects.all()
+        for genre in genres:
+            genre.n_podcasts = Podcast.objects.filter(genre=genre).count()
+            if genre.supergenre == None:
+                genre.n_podcasts += Podcast.objects.filter(genre__supergenre=genre).count()
+            genre.save()
+
+        languages = Language.objects.all()
+        for language in languages:
+            language.n_podcasts = Podcast.objects.filter(language=language).count()
+            language.save()
+
 class Genre(Filterable):
     itunesid = models.IntegerField()
     supergenre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_primary_genres():
+        return Genre.objects.filter(supergenre=None).order_by('name')
 
     def create_or_update_genre(item):
         name = item['name']
@@ -346,21 +455,8 @@ class Genre(Filterable):
             Genre.objects.create(
                 name=name,
                 itunesid=itunesid,
-                n_podcasts=0,
                 supergenre=supergenre
             )
-
-    def get_primary_genres():
-        return Genre.objects.filter(supergenre=None).order_by('name')
-
-    # after updating podcast database with scrapy, count n_podcasts
-    def count_n_podcasts():
-        genres = Genre.objects.all()
-        for genre in genres:
-            genre.n_podcasts = Podcast.objects.filter(genre=genre).count()
-            if genre.supergenre == None:
-                genre.n_podcasts += Podcast.objects.filter(genre__supergenre=genre).count()
-            genre.save()
 
 class Language(Filterable):
 
@@ -370,12 +466,4 @@ class Language(Filterable):
         except Language.DoesNotExist:
             return Language.objects.create(
                 name=name,
-                n_podcasts=0,
             )
-
-    # after updating podcast database with scrapy, count n_podcasts
-    def count_n_podcasts():
-        languages = Language.objects.all()
-        for language in languages:
-            language.n_podcasts = Podcast.objects.filter(language=language).count()
-            language.save()
