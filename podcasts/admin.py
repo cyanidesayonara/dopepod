@@ -3,8 +3,8 @@ from podcasts.models import Podcast, Subscription, Genre, Language
 
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
-    list_display = ('title', 'artist', 'itunesid', 'genre', 'language', 'feedUrl', 'n_subscribers')
-    fields = ('title', 'artist', 'itunesid', 'genre', 'language', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl',)
+    list_display = ('title', 'artist', 'itunesid', 'genre', 'language', 'genre_rank', 'global_rank', 'feedUrl', 'n_subscribers')
+    fields = ('title', 'artist', 'itunesid', 'genre', 'language', 'genre_rank', 'global_rank', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl',)
 
 @admin.register(Subscription)
 class SubscriptionAdmin(PodcastAdmin):
@@ -20,4 +20,3 @@ class GenreAdmin(admin.ModelAdmin):
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'n_podcasts',)
     fields = ('name', 'n_podcasts',)
-

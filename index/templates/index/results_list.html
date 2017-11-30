@@ -12,8 +12,7 @@ dopepod
       <div class="col" id="results-list">
         {% for podcast in podcasts %}
           <div class="row">
-            <a class="col show-podinfo" id="{{ podcast.itunesid }}"
-            href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <a class="col show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <h6>{{ podcast.title }}</h6>
             </a>
           </div>

@@ -2,7 +2,12 @@
 <div class="row color" id="options-bar">
   <div class="col texture">
     <nav aria-label="...">
-      <form id="search-form" method="GET" action="{% url 'search' %}">
+      <form id="result-form" method="GET" action="{% url 'search' %}">
+        {% if selected_q %}
+        <input type="hidden" name="q" value="{{ selected_q }}" />
+        {% else %}
+        <input type="hidden" name="alphabet" value="{{ selected_alphabet }}" />
+        {% endif %}
         <ul class="pagination browse-page">
           {% if podcasts.has_previous %}
             <li class="page-item">

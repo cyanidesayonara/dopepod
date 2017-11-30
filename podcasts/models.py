@@ -49,7 +49,7 @@ class Podcast(models.Model):
             res1 = podcasts.filter(genre__name=genre)
             res2 = podcasts.filter(genre__supergenre__name=genre)
             podcasts = res1.union(res2)
-        print(alphabet)
+
         # last but not least, filter by title
         if q:
             res1 = podcasts.filter(title__istartswith=q)
@@ -70,7 +70,7 @@ class Podcast(models.Model):
         # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
 
         genres = Genre.get_primary_genres()
-        
+
         # null all genre_ranks
         res1 = Podcast.objects.filter(genre_rank__isnull=False)
         res2 = Podcast.objects.filter(global_rank__isnull=False)
@@ -106,7 +106,7 @@ class Podcast(models.Model):
             # delete None from namespaces, use atom instead
             del ns[None]
 
-            for i, entry in enumerate(root.findall('atom:entry', ns)):
+            for i, entry in enumerate(root.findall('atom:entry', ns), 1):
                 element = entry.find('atom:id', ns)
                 itunesid = element.xpath('./@im:id', namespaces=ns)[0]
 
@@ -140,8 +140,9 @@ class Podcast(models.Model):
         else:
             podcasts = Podcast.objects.filter(global_rank__isnull=False) .order_by('global_rank')
 
-        for podcast in podcasts:
-            podcast.set_subscribed(user)
+        if user.is_authenticated:
+            for podcast in podcasts:
+                podcast.set_subscribed(user)
 
         return podcasts
 
@@ -295,7 +296,7 @@ class Podcast(models.Model):
         """
         scrapes and returns podcast
         """
-        
+
         # useragent for requests
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
@@ -348,15 +349,11 @@ class Podcast(models.Model):
 
                 # make sure feedUrl works
                 try:
-                    r = requests.get(feedUrl, headers=headers, timeout=60)
+                    r = requests.get(feedUrl, headers=headers, timeout=30)
                     r.raise_for_status()
                     try:
                         return Podcast.objects.get(itunesid=itunesid)
                     except Podcast.DoesNotExist:
-                        print(title)
-                        print(artist)
-                        print(copyrighttext)
-                        print(podcastUrl)
                         return Podcast.objects.create(
                             itunesid=itunesid,
                             feedUrl=feedUrl,

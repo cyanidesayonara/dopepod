@@ -13,15 +13,28 @@ def navbar(request):
 
 def index(request):
     if request.method == 'GET':
+        context = {
+        'alphabet': ALPHABET,
+        'selected_alphabet': 'A',
+        }
+
         if request.is_ajax():
-            context = {
-                'alphabet': ALPHABET,
-                'search': True, 
-                'selected_alphabet': 'A',
-            }
+            mode = request.GET['mode']
+            if mode == 'search':
+                context['search'] = True
+            elif mode == 'browse':
+                context['browse'] = True
             return render(request, 'index/index.html', context)
 
-        return redirect('/charts/')
+        user = request.user
+        genres = Genre.get_primary_genres()
+        chart = Podcast.get_ranks(user)
+
+        context['genres'] = genres
+        context['chart'] = chart
+        context['search'] = True
+
+        return render(request, 'index/charts.html', context)
 
 def charts(request):
     if request.method == 'GET':
@@ -41,7 +54,7 @@ def search(request):
     """
     set search terms
     """
-    
+
     if request.method == 'GET':
 
         q = request.GET.get('q', None)
@@ -52,10 +65,10 @@ def search(request):
 
             context = {
                 'alphabet': ALPHABET,
-                'search': True, 
+                'search': True,
                 'selected_alphabet': 'A',
             }
-
+            print(q)
             context['genres'] = Genre.get_primary_genres()
             context['languages'] = Language.objects.all()
 
@@ -107,80 +120,30 @@ def browse(request):
     user = request.user
 
     if request.method == 'GET':
-        # show browse bar
-        context = {
-            'alphabet': ALPHABET,
-            'browse': True, 
-            'selected_alphabet': 'A',
-        }
-
-        # for ajax, just return base
-        if request.is_ajax():
-            return render(request, 'index/index.html', context)
-        else:
-            genres = Genre.get_primary_genres()
-            languages = Language.objects.all()
-            context = {
-                'genres': genres,
-                'languages': languages,
-            }
-
-            alphabet = request.GET.get('alphabet', 'A')
-            genre = request.GET.get('genre', 'All')
-            language = request.GET.get('language', 'All')
-            view = request.GET.get('view', 'list')
-            page = request.GET.get('page', 1)
-            is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
-            explicit = is_true(request.GET.get('explicit', 'true'))
-
-            context['selected_alphabet'] = alphabet
-            context['selected_genre'] = genre
-            context['selected_language'] = language
-            context['selected_explicit'] = explicit
-            context['selected_view'] = view
-
-            podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
-
-            if view == 'detail':
-                paginator = Paginator(podcasts, 24)
-            else:
-                paginator = Paginator(podcasts, 50)
-
-            try:
-                context['podcasts'] = paginator.page(page)
-            except KTPageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                context['podcasts'] = paginator.page(1)
-            except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of results.
-                context['podcasts'] = paginator.page(paginator.num_pages)
-
-            if view == 'detail':
-                return render(request, 'index/results_detail.html', context)
-            else:
-                return render(request, 'index/results_list.html', context)
-
-    if request.method == 'POST':
         genres = Genre.get_primary_genres()
         languages = Language.objects.all()
+        alphabet = request.GET.get('alphabet', 'A')
+        genre = request.GET.get('genre', None)
+        language = request.GET.get('language', None)
+        view = request.GET.get('view', 'list')
+        page = request.GET.get('page', 1)
+        is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
+        explicit = is_true(request.GET.get('explicit', 'true'))
+
         context = {
             'genres': genres,
             'languages': languages,
+            'selected_alphabet': alphabet,
+            'selected_genre': genre,
+            'selected_language': language,
+            'selected_view': view,
         }
 
-        alphabet = request.POST.get('alphabet', 'A')
-        genre = request.POST.get('genre', 'All')
-        language = request.POST.get('language', 'All')
-        view = request.POST.get('view', 'list')
-        page = request.POST.get('page', 1)
-        is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
-        explicit = is_true(request.POST.get('explicit', 'true'))
-
-        context['selected_alphabet'] = alphabet
-        context['selected_genre'] = genre
-        context['selected_language'] = language
-        context['selected_explicit'] = explicit
-        context['selected_view'] = view
+        if not request.is_ajax():
+            # show browse bar
+            context['alphabet'] = ALPHABET
+            context['browse'] = True
+            context['selected_alphabet'] = 'A'
 
         podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
 
@@ -214,18 +177,13 @@ def subscriptions(request):
     user = request.user
     if user.is_authenticated:
         if request.method == 'GET':
-            context = {}
-            context['search'] = True
+            subscriptions = Subscription.get_subscriptions(user)
+            context = {
+                'subscriptions': subscriptions,
+            }
 
-            if request.is_ajax():
-                return render(request, 'index/index.html', context)
-            else:
-                context['subscriptions'] = Subscription.get_subscriptions(user)
-                return render(request, 'index/subscriptions.html', context)
-
-        if request.method == 'POST':
-            context = {}
-            context['subscriptions']  = Subscription.get_subscriptions(user)
+            if not request.is_ajax():
+                context['search'] = True
             return render(request, 'index/subscriptions.html', context)
     else:
         raise Http404()
@@ -243,7 +201,7 @@ def settings(request):
             return render(request, 'index/settings.html', {
                 'user_form': user_form,
                 'profile_form': profile_form
-                })
+            })
 
         if request.method == 'POST':
                 user_form = UserForm(request.POST, instance=request.user)
@@ -254,12 +212,12 @@ def settings(request):
                     return render(request, 'index/settings.html', {
                         'user_form': user_form,
                         'profile_form': profile_form
-                        })
+                    })
 
                 else:
                     return render(request, 'index/settings.html', {
                         'user_form': user_form,
                         'profile_form': profile_form
-                        })
+                    })
     else:
         raise Http404()

@@ -31,7 +31,9 @@
         <h1>Browse</h1>
       </a>
     </div>
-    <!-- BROWSE BAR -->
+  </form>
+  <!-- BROWSE BAR -->
+  <form id="browse-form" method="GET" action="{% url 'browse' %}">
     {% if browse %}
     <div class="row texture" id="browse-bar">
     {% else %}
@@ -62,4 +64,3 @@
     </div>
   </form>
 </div>
-
