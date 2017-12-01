@@ -1,4 +1,4 @@
-$(window).on('popstate', function(event) {
+$(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
     $("#main-content").html(state.context);
@@ -8,22 +8,22 @@ $(window).on('popstate', function(event) {
       $("#q").val(state.q);
     }
     if (state.alphabet) {
-      $("input[name='alphabet'][value='" + state.alphabet + "']").prop("checked", true);
+      $("input[name='alphabet'][value=' + state.alphabet + ']").prop("checked", true);
     }
     if (state.view) {
-      $("input[name='view'][value='" + state.view + "']").prop("checked", true);
+      $("input[name='view'][value=' + state.view + ']").prop("checked", true);
     }
   }
 });
 
 function getCookie(name) {
   var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    var cookies = document.cookie.split(';');
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
     for (var i = 0; i < cookies.length; i++) {
       var cookie = jQuery.trim(cookies[i]);
       // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
@@ -39,7 +39,7 @@ function csrfSafeMethod(method) {
 
 function refreshCookie() {
   // for sending csrf token on every ajax POST request
-  var csrftoken = getCookie('csrftoken');
+  var csrftoken = getCookie("csrftoken");
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
       if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -71,7 +71,7 @@ function goToIndex(mode) {
         "title": title,
       };
 
-      url = '/';
+      url = "/";
       history.replaceState(state, "", url);
       $("title")[0].innerText = title;
     });
@@ -89,13 +89,13 @@ function loadContent(url) {
       $("#results").html(response);
       $(window).scrollTop(0);
 
-      var title = 'dopepod';
+      var title = "dopepod";
       var state = {
         "context": response,
         "title": title,
       };
 
-      url = '/';
+      url = "/";
       history.replaceState(state, "", url);
       $("title")[0].innerText = title;
     });
@@ -110,7 +110,7 @@ function goToModal(url) {
     console.log(thrownError);
   })
   .done(function(response) {
-    if ($("#modal").css('display') == 'none') {
+    if ($("#modal").css("display") == "none") {
       $("#modal").modal("show");
     }
     $("#modal-content").html(response.html);
@@ -135,13 +135,28 @@ function refreshPage() {
 };
 
 // ye ajax search function
-function SearchFunc(url, data) {
+function SearchFunc(url) {
   /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
-  url2 = url;
+
+  console.log(url);
+  data = {}
+
+  if (url = "/search/") {
+    data["q"] = $("#q").val();
+  }
+  if (url = "/browse/") {
+    data["alphabet"] = $("input[name=alphabet]:checked").val();
+  }
+  if ($("options-bar").css("display") != "none") {
+    console.log("whaddup");
+  }
+
+  copyurl = url;
+
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -154,7 +169,7 @@ function SearchFunc(url, data) {
       $("#results").html(response);
 
       var context = $("#main-content")[0].innerHTML;
-      var url = url2 + "?" + data;
+      var url = copyurl + "?" + $.param(data);
       var title = "dopepod";
       var state = {
         "context": context,
@@ -171,7 +186,7 @@ $(document)
     // refresh cookie
     refreshCookie();
     // initialize bootstrap tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    $("[data-toggle='tooltip']").tooltip();
     xhr = null;
     timeout = 0;
   })
@@ -182,42 +197,36 @@ $(document)
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
     var url = $("#search-form")[0].action;
-    var data = $("#search-form").serialize();
 
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      SearchFunc(url, data);
+      SearchFunc(url);
     }, 250);
   })
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
     var url = $("#search-form")[0].action;
-    var data = $("#search-form").serialize();
-    SearchFunc(url, data);
+    SearchFunc(url);
   })
   .on("submit", "#browse-form", function(e) {
     e.preventDefault();
     var url = $("#browse-form")[0].action;
-    var data = $("#browse-form").serialize();
-    SearchFunc(url, data);
+    SearchFunc(url);
   })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
-    var data = $("#browse-form").serialize();
-    SearchFunc(url, data);
+    SearchFunc(url);
   })
   .on("submit", "#result-form", function(e) {
     e.preventDefault();
     var url = $("#result-form")[0].action;
-    var data = $("#result-form").serialize();
-    SearchFunc(url, form);
+    SearchFunc(url);
   })
   // search when user changes options
   .on("change", "#genre-buttons, #language-buttons, #view-buttons", function() {
     var url = $("#result-form")[0].action;
-    var data = $("#result-form").serialize();
-    SearchFunc(url, data);
+    SearchFunc(url);
   })
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
@@ -247,14 +256,15 @@ $(document)
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
-    goToIndex('search');
+    goToIndex("search");
     loadContent("/charts/");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
-    goToIndex('browse');
-    loadContent("/browse/");
+    goToIndex("browse");
+    SearchFunc("/browse/");
+    // loadContent("/browse/");
   })
   .on("click", ".search-toggle", function(e) {
     e.preventDefault();
@@ -264,13 +274,13 @@ $(document)
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
-    goToIndex('search');
+    goToIndex("search");
     loadContent("/subscriptions/");
   })
   // open settings in modal
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
-    goToIndex('search');
+    goToIndex("search");
     loadContent("/settings/");
   })
   // save settings, empty and hide modal
@@ -289,7 +299,7 @@ $(document)
         $("#results").html(xhr.responseJSON.html);
       })
       .done(function(response) {
-        goToIndex('search');
+        goToIndex("search");
         loadContent("/charts/");
       });
   })

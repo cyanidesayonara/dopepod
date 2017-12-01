@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+from django.db.models import Q
 import requests
 from lxml import etree, html
 
@@ -41,20 +42,22 @@ class Podcast(models.Model):
             podcasts = podcasts.filter(explicit=explicit)
 
         # filter by language
-        if language:
+        if language != 'All':
             podcasts = podcasts.filter(language__name=language)
 
         # filter by genre
-        if genre:
-            res1 = podcasts.filter(genre__name=genre)
-            res2 = podcasts.filter(genre__supergenre__name=genre)
-            podcasts = res1.union(res2)
+        if genre != 'All':
+            podcasts = podcasts.filter(
+                Q(genre__name=genre) |
+                Q(genre__supergenre__name=genre)
+            )
 
         # last but not least, filter by title
         if q:
-            res1 = podcasts.filter(title__istartswith=q)
-            res2 = podcasts.filter(title__icontains=q)
-            podcasts = res1.union(res2).order_by('title')
+            podcasts = podcasts.filter(
+                Q(title__istartswith=q) |
+                Q(title__icontains=q)
+            )
         elif alphabet:
             podcasts = podcasts.filter(title__istartswith=alphabet).order_by('title')
 

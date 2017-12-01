@@ -2,10 +2,11 @@
 <div class="row color" id="options-bar">
   <div class="col texture">
     <nav aria-label="...">
-      <form id="result-form" method="GET" action="{% url 'search' %}">
         {% if selected_q %}
+        <form id="result-form" method="GET" action="{% url 'search' %}">
         <input type="hidden" name="q" value="{{ selected_q }}" />
         {% else %}
+        <form id="result-form" method="GET" action="{% url 'browse' %}">
         <input type="hidden" name="alphabet" value="{{ selected_alphabet }}" />
         {% endif %}
         <ul class="pagination browse-page">
@@ -58,6 +59,7 @@
         </ul>
         <ul id="options-list">
           <!-- GENRES -->
+          {% if genres %}
           <li>
             <div class="btn-group">
               <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,7 +95,9 @@
               </div>
             </div>
           </li>
+          {% endif %}
           <!-- LANGUAGES -->
+          {% if languages %}
           <li>
             <div class="btn-group">
               <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,6 +133,7 @@
               </div>
             </div>
           </li>
+          {% endif %}
           <!-- VIEW -->
           <li>
             <div class="btn-group">

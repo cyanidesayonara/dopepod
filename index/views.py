@@ -66,20 +66,21 @@ def search(request):
             context = {
                 'alphabet': ALPHABET,
                 'search': True,
-                'selected_alphabet': 'A',
+
             }
-            print(q)
+
             context['genres'] = Genre.get_primary_genres()
             context['languages'] = Language.objects.all()
 
-            genre = request.GET.get('genre', None)
-            language = request.GET.get('language', None)
+            genre = request.GET.get('genre', 'All')
+            language = request.GET.get('language', 'All')
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
             view = request.GET.get('view', 'detail')
             page = request.GET.get('page', 1)
+            alphabet = request.GET.get('alphabet', 'A')
 
-            context['selected_alphabet'] = 'A'
+            context['selected_alphabet'] = alphabet
             context['selected_view'] = view
             context['selected_genre'] = genre
             context['selected_language'] = language
@@ -123,8 +124,8 @@ def browse(request):
         genres = Genre.get_primary_genres()
         languages = Language.objects.all()
         alphabet = request.GET.get('alphabet', 'A')
-        genre = request.GET.get('genre', None)
-        language = request.GET.get('language', None)
+        genre = request.GET.get('genre', 'All')
+        language = request.GET.get('language', 'All')
         view = request.GET.get('view', 'list')
         page = request.GET.get('page', 1)
         is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
