@@ -54,9 +54,6 @@ function goToIndex(mode) {
   $.ajax({
     type: "GET",
     url: url,
-    data: {
-      "mode": mode,
-    }
   })
     .fail(function(xhr, ajaxOptions, thrownError){
       console.log(thrownError);
@@ -65,13 +62,28 @@ function goToIndex(mode) {
       $("#main-content").html(response);
       $(window).scrollTop(0);
 
+      if (mode == "search") {
+        loadContent("/charts/");
+      }
+      if (mode == "browse") {
+        toggleBars();
+        SearchFunc(false);
+      }
+      if (mode == "subs") {
+        loadContent("/subscriptions/");
+      }
+      if (mode == "settings") {
+        loadContent("/settings/");
+      }
+      
+      
+      var context = $("#main-content")[0].innerHTML;
       var title = "dopepod";
       var state = {
-        "context": response,
+        "context": context,
         "title": title,
       };
 
-      url = "/";
       history.replaceState(state, "", url);
       $("title")[0].innerText = title;
     });
@@ -89,13 +101,13 @@ function loadContent(url) {
       $("#results").html(response);
       $(window).scrollTop(0);
 
+      var context = $("#main-content")[0].innerHTML;
       var title = "dopepod";
       var state = {
-        "context": response,
+        "context": context,
         "title": title,
       };
 
-      url = "/";
       history.replaceState(state, "", url);
       $("title")[0].innerText = title;
     });
@@ -135,24 +147,47 @@ function refreshPage() {
 };
 
 // ye ajax search function
-function SearchFunc(url) {
+function SearchFunc(page) {
   /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
-
-  console.log(url);
+  
   data = {}
-
-  if (url = "/search/") {
-    data["q"] = $("#q").val();
+  if ($("#search-bar").css("display") != "none") {
+    url = $("#search-form")[0].action;
+    var q = $("#q").val();
+    if (q) {
+      data["q"] = q;
+    }
   }
-  if (url = "/browse/") {
-    data["alphabet"] = $("input[name=alphabet]:checked").val();
+  if ($("#browse-bar").css("display") != "none") {
+    url = $("#browse-form")[0].action;
+    var alphabet = $("input[name=alphabet]:checked").val();
+    if (alphabet) {
+      data["alphabet"] = $("input[name=alphabet]:checked").val();
+    }
   }
-  if ($("options-bar").css("display") != "none") {
-    console.log("whaddup");
+  if ($("#options-bar").length) {
+    if ($("#genre-buttons").length) {
+      var genre = $("input[name=genre]:checked").val();
+      if (genre != "All") {
+        data["genre"] = genre;
+      }
+    }
+    if ($("#language-buttons").length) {
+      var language = $("input[name=language]:checked").val();
+      if (language != "All") {
+        data["language"] = language;
+      }
+    }
+    if (page) {
+      if ($("#page-buttons").length) {
+        var page = $("input[name=page]:checked").val();
+        data["page"] = page;
+      }
+    }
   }
 
   copyurl = url;
@@ -180,6 +215,11 @@ function SearchFunc(url) {
     });
 };
 
+function toggleBars() {
+  $("#search-bar").toggle();
+  $("#browse-bar").toggle();
+};
+
 // after page loads
 $(document)
   .ready(function() {
@@ -196,37 +236,29 @@ $(document)
   })
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
-    var url = $("#search-form")[0].action;
 
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      SearchFunc(url);
+      SearchFunc(false);
     }, 250);
   })
   // search when "search" button is clicked
-  .on("submit", "#search-form", function(e) {
-    e.preventDefault();
-    var url = $("#search-form")[0].action;
-    SearchFunc(url);
-  })
-  .on("submit", "#browse-form", function(e) {
-    e.preventDefault();
-    var url = $("#browse-form")[0].action;
-    SearchFunc(url);
+  .on("submit", "#search-form, #browse-form", function(e) {
+    e.preventDefault(false);
+    SearchFunc();
   })
   .on("change", "#alphabet-buttons", function() {
-    var url = $("#browse-form")[0].action;
-    SearchFunc(url);
+    SearchFunc(false);
   })
   .on("submit", "#result-form", function(e) {
     e.preventDefault();
-    var url = $("#result-form")[0].action;
-    SearchFunc(url);
+    var form = $(this).serialize();
+    console.log(form);
+    SearchFunc(true);
   })
   // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons, #view-buttons", function() {
-    var url = $("#result-form")[0].action;
-    SearchFunc(url);
+  .on("change", "#page-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
+    SearchFunc(true);
   })
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
@@ -240,7 +272,10 @@ $(document)
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#main-content").html(response);
+        $("#stage").html(response);
+        $("#stage").css("height", "100vh");
+        $("#stage").css("padding-top", "100px");
+        $("#bar").css("top", "-100vh");
 
         var title = $("#podinfo h1")[0].innerHTML;
 
@@ -257,31 +292,25 @@ $(document)
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     goToIndex("search");
-    loadContent("/charts/");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     goToIndex("browse");
-    SearchFunc("/browse/");
-    // loadContent("/browse/");
-  })
+   })
   .on("click", ".search-toggle", function(e) {
     e.preventDefault();
-    $("#search-bar").toggle();
-    $("#browse-bar").toggle();
+    toggleBars();
   })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
-    goToIndex("search");
-    loadContent("/subscriptions/");
+    goToIndex("subs");
   })
   // open settings in modal
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
-    goToIndex("search");
-    loadContent("/settings/");
+    goToIndex("settings");
   })
   // save settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {

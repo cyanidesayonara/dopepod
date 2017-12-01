@@ -66,8 +66,10 @@ body {
 
 /* MULTI BAR */
 #multi-bar {
-  padding-top: 200px;
-  border-radius: 8px;
+  overflow: hidden;
+  height: 120px;
+  padding-top: 40px;
+  border-radius: 0px 0px 30px 30px;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -88,11 +90,16 @@ body {
 #browse-bar {
 
 }
+
 #bar {
   background-color: #fff;
-  top: -150px;
-  position: sticky;
+  top: 0px;
   z-index: 97;
+  margin-top: -120px;
+}
+
+#stage {
+  overflow: hidden;
 }
 
 #search-form {

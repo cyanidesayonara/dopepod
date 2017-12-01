@@ -152,7 +152,7 @@ class Podcast(models.Model):
     def subscribe(self, user):
         # if subscription exists, delete it
         try:
-            subscription = Subscription.objects.get(parent=self, user=user)
+            subscription = Subscription.objects.get(parent=self, owner=user)
             subscription.delete()
             self.t.n_subscribers -= 1
             self.save()
@@ -161,21 +161,21 @@ class Podcast(models.Model):
         # if subscription doesn't exist, create it
         except Subscription.DoesNotExist:
             Subscription.objects.create(
-                            itunesid=podcast.itunesid,
-                            feedUrl=podcast.feedUrl,
-                            title=podcast.title,
-                            artist=podcast.artist,
-                            genre=podcast.genre,
-                            n_subscribers=podcast.n_subscribers,
-                            explicit=podcast.explicit,
-                            language=podcast.language,
-                            copyrighttext=podcast.copyrighttext,
-                            description=podcast.description,
-                            reviewsUrl=podcast.reviewsUrl,
-                            artworkUrl=podcast.artworkUrl,
-                            podcastUrl=podcast.podcastUrl,
-                            user=request.user,
-                            pod=podcast,
+                itunesid=self.itunesid,
+                feedUrl=self.feedUrl,
+                title=self.title,
+                artist=self.artist,
+                genre=self.genre,
+                n_subscribers=self.n_subscribers,
+                explicit=self.explicit,
+                language=self.language,
+                copyrighttext=self.copyrighttext,
+                description=self.description,
+                reviewsUrl=self.reviewsUrl,
+                artworkUrl=self.artworkUrl,
+                podcastUrl=self.podcastUrl,
+                owner=user,
+                parent=self,
             )
             self.n_subscribers += 1
             self.save()

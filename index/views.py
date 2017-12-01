@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#']
 
@@ -16,14 +16,10 @@ def index(request):
         context = {
         'alphabet': ALPHABET,
         'selected_alphabet': 'A',
+        'search': True,
         }
 
         if request.is_ajax():
-            mode = request.GET['mode']
-            if mode == 'search':
-                context['search'] = True
-            elif mode == 'browse':
-                context['browse'] = True
             return render(request, 'index/index.html', context)
 
         user = request.user
@@ -32,7 +28,6 @@ def index(request):
 
         context['genres'] = genres
         context['chart'] = chart
-        context['search'] = True
 
         return render(request, 'index/charts.html', context)
 
@@ -77,7 +72,7 @@ def search(request):
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
             view = request.GET.get('view', 'detail')
-            page = request.GET.get('page', 1)
+            page = int(request.GET.get('page', '1'))
             alphabet = request.GET.get('alphabet', 'A')
 
             context['selected_alphabet'] = alphabet
@@ -127,7 +122,7 @@ def browse(request):
         genre = request.GET.get('genre', 'All')
         language = request.GET.get('language', 'All')
         view = request.GET.get('view', 'list')
-        page = request.GET.get('page', 1)
+        page = int(request.GET.get('page', '1'))
         is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
         explicit = is_true(request.GET.get('explicit', 'true'))
 
