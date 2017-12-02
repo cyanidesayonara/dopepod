@@ -6,13 +6,15 @@ dopepod
 
 {% block results %}
 <div class="col">
-  {% include 'optionsbar.html' %}
+  <form id="result-form" method="GET" action="{% url 'subscriptions' %}">
+    {% include 'optionsbar.html' %}
+  </form>
   <div class="row" id="subscriptions-list">
     {% if subscriptions %}
       <div class="col">
         {% for subscription in subscriptions %}
           <div class="row">
-            <a class="col show-podinfo sub-box" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
+            <a class="col show-podinfo sub-box" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
               <h6>
                 {{ subscription.title }}
               </h6>

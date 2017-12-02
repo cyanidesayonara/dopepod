@@ -6,6 +6,8 @@
     {% else %}
     <div class="row" id="search-bar" style="display: none;">
     {% endif %}
+      <div class="col">
+      </div>
       <div class="col-auto">
         <div class="input-group" id="search-field">
           <label for="q" class="sr-only">Search</label>
@@ -27,9 +29,6 @@
       </div>
       <div class="col">
       </div>
-      <a class="col-auto search-toggle">
-        <h1>Browse</h1>
-      </a>
     </div>
   </form>
   <!-- BROWSE BAR -->
@@ -39,9 +38,6 @@
     {% else %}
     <div class="row" id="browse-bar" style="display: none;">
     {% endif %}
-      <div class="col-auto search-toggle">
-        <h1>Search</h1>
-      </div>
       <div class="col">
       </div>
       <div class="col-auto">
@@ -61,6 +57,11 @@
           {% endfor %}
         </div>
       </div>
+      <div class="col">
+      </div>
     </div>
   </form>
+  <div class="row" id="player">
+    
+  </div>
 </div>

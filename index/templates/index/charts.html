@@ -6,7 +6,9 @@ dopepod
 
 {% block results %}
 <div class="col" id="results-wrapper">
-  {% include 'optionsbar.html' %}
+  <form id="result-form" method="GET" action="{% url 'charts' %}">
+    {% include 'optionsbar.html' %}
+  </form>
   <div class="row">
     <div class="col">
       <h2>
@@ -31,17 +33,17 @@ dopepod
             {% endif %}
             </button>
           </form>
-          <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
           </a>
           <h6 class="result-title">
-            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
               {{ podcast.title }}
             </a>
           </h6>
           <p class="result-artist">
             <span>by </span>
-            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
               {{ podcast.artist }}
             </a>
           </p>

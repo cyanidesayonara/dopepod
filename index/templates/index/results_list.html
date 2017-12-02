@@ -6,13 +6,19 @@ dopepod
 
 {% block results %}
 <div class="col" id="results">
-  {% include 'optionsbar.html' %}
+  {% if search %}
+    <form id="result-form" method="GET" action="{% url 'search' %}">
+  {% else %}
+    <form id="result-form" method="GET" action="{% url 'browse' %}">
+  {% endif %}
+    {% include 'optionsbar.html' %}
+  </form>
   <div class="row">
     {% if podcasts %}
       <div class="col" id="results-list">
         {% for podcast in podcasts %}
           <div class="row">
-            <a class="col show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            <a class="col show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <h6>{{ podcast.title }}</h6>
             </a>
           </div>

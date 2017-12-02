@@ -6,7 +6,13 @@ dopepod
 
 {% block results %}
 <div class="col" id="results-wrapper">
-  {% include 'optionsbar.html' %}
+  {% if search %}
+    <form id="result-form" method="GET" action="{% url 'search' %}">
+  {% else %}
+    <form id="result-form" method="GET" action="{% url 'browse' %}">
+  {% endif %}
+    {% include 'optionsbar.html' %}
+  </form>
   <div class="row">
     {% if podcasts %}
       {% for podcast in podcasts %}
@@ -24,17 +30,17 @@ dopepod
             {% endif %}
             </button>
           </form>
-          <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
           </a>
           <h6 class="result-title">
-            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
               {{ podcast.title }}
             </a>
           </h6>
           <p class="result-artist">
             <span>by </span>
-            <a class="show-podinfo" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
               {{ podcast.artist }}
             </a>
           </p>

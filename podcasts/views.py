@@ -12,15 +12,16 @@ def podinfo(request, itunesid):
     """
 
     if request.method == 'GET':
-        context = {}
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
-        # mark podcast as subscribed if subscribed
         podcast.set_subscribed(user)
-        context['podcast'] = podcast
+        context = {
+            'podcast': podcast,
+        }
 
         if not request.is_ajax():
+            context['search'] = True
             context['episodes'] = podcast.get_episodes()
         return render(request, 'podinfo.html', context)
 

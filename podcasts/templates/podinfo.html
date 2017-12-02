@@ -1,21 +1,21 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/header.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
 
 {% block title %}
 {{ podcast.title }}
 {% endblock %}
 
-{% block content %}
+{% block results %}
 <div class="container">
   <div class="row">
     <div class="col-sm-3" id="podinfo">
       <!-- PODINFO -->
       <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
-      <h1>
+      <h3>
         {{ podcast.title }}
-      </h1>
-      <h2>
+      </h3>
+      <h4>
         By {{ podcast.artist }}
-      </h2>
+      </h4>
       <p>
         {{ podcast.description }}
       </p>

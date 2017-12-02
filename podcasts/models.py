@@ -48,24 +48,28 @@ class Podcast(models.Model):
         # filter by genre
         if genre != 'All':
             podcasts = podcasts.filter(
-                Q(genre__name=genre) |
+                Q(genre__name=genre) | 
                 Q(genre__supergenre__name=genre)
             )
 
         # last but not least, filter by title
         if q:
             podcasts = podcasts.filter(
-                Q(title__istartswith=q) |
+                Q(title__istartswith=q) | 
                 Q(title__icontains=q)
             )
         elif alphabet:
-            podcasts = podcasts.filter(title__istartswith=alphabet).order_by('title')
+            the = 'the ' + alphabet
+            podcasts = podcasts.filter(
+                Q(title__istartswith=alphabet) | 
+                Q(title__istartswith=the)
+            ).order_by('title')
 
         for podcast in podcasts:
             podcast.set_subscribed(user)
         return podcasts
 
-    def set_ranks():
+    def set_charts():
         """
         sets genre_rank and global_rank for top ranking podcasts
         """
@@ -136,12 +140,16 @@ class Podcast(models.Model):
         except requests.exceptions.ReadTimeout as e:
             print('timed out')
 
-    def get_ranks(user, genre=None):
+    def get_charts(user, genre=None):
 
         if genre:
-            podcasts = Podcast.objects.filter(genre=genre, genre_rank__isnull=False).order_by('genre_rank')
+            podcasts = Podcast.objects.filter(
+                Q(genre=genre) | 
+                Q(genre__supergenre=genre), 
+                genre_rank__isnull=False
+            ).order_by('genre_rank')
         else:
-            podcasts = Podcast.objects.filter(global_rank__isnull=False) .order_by('global_rank')
+            podcasts = Podcast.objects.filter(global_rank__isnull=False).order_by('global_rank')
 
         if user.is_authenticated:
             for podcast in podcasts:

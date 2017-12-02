@@ -8,6 +8,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#']
 
 def navbar(request):
+    """
+    returns navbar (for refreshing)
+    """
+
     if request.method == 'GET':
         return render(request, 'navbar.html', {})
 
@@ -24,7 +28,7 @@ def index(request):
 
         user = request.user
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_ranks(user)
+        chart = Podcast.get_charts(user)
 
         context['genres'] = genres
         context['chart'] = chart
@@ -36,12 +40,18 @@ def charts(request):
         genre = request.GET.get('genre', None)
         user = request.user
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_ranks(user, genre)
+        chart = Podcast.get_charts(user, genre)
 
         context = {
-            'genres': genres,
             'chart': chart,
+            'genres': genres,
+            'selected_genre': genre,
         }
+
+        if not request.is_ajax():
+            context['alphabet'] = ALPHABET
+            context['selected_alphabet'] = 'A'
+            context['search'] = True
 
         return render(request, 'index/charts.html', context)
 
@@ -137,9 +147,8 @@ def browse(request):
 
         if not request.is_ajax():
             # show browse bar
-            context['alphabet'] = ALPHABET
             context['browse'] = True
-            context['selected_alphabet'] = 'A'
+            context['alphabet'] = ALPHABET
 
         podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
 
@@ -179,6 +188,8 @@ def subscriptions(request):
             }
 
             if not request.is_ajax():
+                context['alphabet'] = ALPHABET
+                context['selected_alphabet'] = 'A'
                 context['search'] = True
             return render(request, 'index/subscriptions.html', context)
     else:

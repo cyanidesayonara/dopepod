@@ -3,51 +3,49 @@
   <div class="col texture">
     <nav aria-label="...">
       {% if selected_q %}
-        <form id="result-form" method="GET" action="{% url 'search' %}">
-          <input type="hidden" name="q" value="{{ selected_q }}" />
-      {% else %}
-        <form id="result-form" method="GET" action="{% url 'browse' %}">
-          <input type="hidden" name="alphabet" value="{{ selected_alphabet }}">
+        <input type="hidden" name="q" value="{{ selected_q }}" />
+      {% elif selected_alphabet %}
+        <input type="hidden" name="alphabet" value="{{ selected_alphabet }}">
       {% endif %}
-          {% if podcasts.has_other_pages %}
-            <div class="btn-group" id="page-buttons" data-toggle="buttons">
-            {% if podcasts.has_previous %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
-                &laquo;
-              </label>
-            {% else %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio">
-                &laquo;
-              </label>
-            {% endif %}
-            {% for i in podcasts.paginator.page_range %}
-            {% if podcasts.number == i %}
-              <label class="btn btn-outline-primary page-button active">
-                <input type="radio" name="page" value="{{ i }}" checked>
-                {{ i }}
-              </label>
-            {% else %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ i }}">
-                {{ i }}
-              </label>
-            {% endif %}
-            {% endfor %}
-            {% if podcasts.has_next %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
-                &raquo;
-              </label>
-            {% else %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio">
-                &raquo;
-              </label>
-            {% endif %}
-            </div>
+        {% if podcasts.has_other_pages %}
+          <div class="btn-group" id="page-buttons" data-toggle="buttons">
+          {% if podcasts.has_previous %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
+              &laquo;
+            </label>
+          {% else %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio">
+              &laquo;
+            </label>
           {% endif %}
+          {% for i in podcasts.paginator.page_range %}
+          {% if podcasts.number == i %}
+            <label class="btn btn-outline-primary page-button active">
+              <input type="radio" name="page" value="{{ i }}" checked>
+              {{ i }}
+            </label>
+          {% else %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ i }}">
+              {{ i }}
+            </label>
+          {% endif %}
+          {% endfor %}
+          {% if podcasts.has_next %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
+              &raquo;
+            </label>
+          {% else %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio">
+              &raquo;
+            </label>
+          {% endif %}
+          </div>
+        {% endif %}
       <ul id="options-list">
         <!-- GENRES -->
         {% if genres %}
@@ -86,9 +84,9 @@
               </div>
             </div>
           </li>
-          {% endif %}
-          <!-- LANGUAGES -->
-          {% if languages %}
+        {% endif %}
+      <!-- LANGUAGES -->
+        {% if languages %}
           <li>
             <div class="btn-group">
               <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -124,8 +122,9 @@
               </div>
             </div>
           </li>
-          {% endif %}
-          <!-- VIEW -->
+        {% endif %}
+        <!-- VIEW -->
+        {% if view %}
           <li>
             <div class="btn-group">
               <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -156,8 +155,8 @@
               </div>
             </div>
           </li>
-        </ul>
-      </form>
+        {% endif %}
+      </ul>
     </nav>
   </div>
 </div>
