@@ -273,9 +273,33 @@ $(document)
       })
       .done(function(response) {
         $("#stage").html(response);
-        $("#stage").css("height", "100vh");
-        $("#stage").css("padding-top", "100px");
-        $("#bar").css("top", "-100vh");
+        $("#stage").addClass("open");
+        $("#bar").addClass("extended");
+        // $(window).scrollTop($("#multi-bar").offset());
+        $('html, body').animate({
+          scrollTop: $("#multi-bar").offset().top
+        }, 0);
+        $('html, body').animate({
+          scrollTop: $("#bar").offset().top
+        }, 1000);
+
+        // load episodes for podcast
+        // TODO also load on back button
+        var itunesid = $("input[name=itunesid]").val();
+        $.ajax({
+          method: "POST",
+          url: "/episodes/",
+          data: {
+            "itunesid": itunesid,
+          },
+        })
+          .fail(function(xhr, ajaxOptions, thrownError){
+            console.log(thrownError);
+          })
+          .done(function(response) {
+            $("#episodes").html(response);
+            $('#overlay').hide();
+          });
 
         var title = $("#podinfo h1")[0].innerHTML;
 

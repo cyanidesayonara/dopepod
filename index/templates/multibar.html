@@ -1,10 +1,10 @@
-<div class="col color">
+<div class="col texture">
   <!-- SEARCH BAR -->
   <form id="search-form" method="GET" action="{% url 'search' %}">
     {% if search %}
-    <div class="row texture" id="search-bar">
+    <div class="row" id="search-bar">
     {% else %}
-    <div class="row texture" id="search-bar" style="display: none;">
+    <div class="row" id="search-bar" style="display: none;">
     {% endif %}
       <div class="col-auto">
         <div class="input-group" id="search-field">
@@ -35,9 +35,9 @@
   <!-- BROWSE BAR -->
   <form id="browse-form" method="GET" action="{% url 'browse' %}">
     {% if browse %}
-    <div class="row texture" id="browse-bar">
+    <div class="row" id="browse-bar">
     {% else %}
-    <div class="row texture" id="browse-bar" style="display: none;">
+    <div class="row" id="browse-bar" style="display: none;">
     {% endif %}
       <div class="col-auto search-toggle">
         <h1>Search</h1>

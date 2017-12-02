@@ -5,92 +5,59 @@
 {% endblock %}
 
 {% block content %}
-<!-- PODINFO BAR -->
 <div class="container">
   <div class="row">
-    <div class="col color" id="podinfo-bar">
-      <div class="row texture" id="podinfo">
-        <div class="col-auto" id="podinfo-image">
-          <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
-        </div>
-        <div class="col">
-          <h1>
-            {{ podcast.title }}
-          </h1>
-          <h2>
-            By {{ podcast.artist }}
-          </h2>
-          <p>
-            {{ podcast.description }}
-          </p>
-        </div>
-        <div class="col-auto">
-          <form id="sub-form" action="{% url 'subscribe' %}"
-          id="{{ podcast.itunesid }}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-            {% if podcast.subscribed %}
-            <button type="submit" class="btn btn-outline-primary active sub-button">
-            Unsubscribe
-            {% else %}
-            <button type="submit" class="btn btn-outline-primary sub-button">
-            Subscribe
-            {% endif %}
-            </button>
-          </form>
-          <p>
-            {% if podcast.genre.supergenre %}
-              {{ podcast.genre.supergenre }} -
-            {% endif %}
-            {{ podcast.genre }}
-          </p>
-          <p>
-            {{ podcast.language }}
-          </p>
-          {% if podcast.explicit %}
-            <p>
-              Explicit
-            </p>
-          {% endif %}
-          <p>
-            <em>
-              {{ podcast.copyrighttext }}
-            </em>
-          </p>
-        </div>
+    <div class="col-sm-3" id="podinfo">
+      <!-- PODINFO -->
+      <img src="{{ podcast.artworkUrl }}170x170bb.jpg" />
+      <h1>
+        {{ podcast.title }}
+      </h1>
+      <h2>
+        By {{ podcast.artist }}
+      </h2>
+      <p>
+        {{ podcast.description }}
+      </p>
+      <form id="sub-form" action="{% url 'subscribe' %}"
+      id="{{ podcast.itunesid }}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+        {% if podcast.subscribed %}
+        <button type="submit" class="btn btn-outline-primary active sub-button">
+        Unsubscribe
+        {% else %}
+        <button type="submit" class="btn btn-outline-primary sub-button">
+        Subscribe
+        {% endif %}
+        </button>
+      </form>
+      <p>
+        {% if podcast.genre.supergenre %}
+          {{ podcast.genre.supergenre }} -
+        {% endif %}
+        {{ podcast.genre }}
+      </p>
+      <p>
+        {{ podcast.language }}
+      </p>
+      {% if podcast.explicit %}
+        <p>
+          Explicit
+        </p>
+      {% endif %}
+      <p>
+        <em>
+          {{ podcast.copyrighttext }}
+        </em>
+      </p>
+    </div>
+    <div class="col-sm-9">
+      <div class="row" id="episodes">
+        <!-- EPISODES -->
+        {% include 'episodes.html' %}
       </div>
     </div>
   </div>
 </div>
-<!-- EPISODES -->
-<div class="container">
-  <div class="row" id="episodes">
-    {% include 'episodes.html' %}
-  </div>
-</div>
-{% endblock %}
-
-{% block extrajs %}
-<script>
-$(window).ready(function() {
-  // load episodes for podcast
-  // TODO also load on back button
-  var url = "/episodes/";
-  var itunesid = "{{ podcast.itunesid }}";
-  $.ajax({
-    method: "POST",
-    url: url,
-    data: {
-      "itunesid": itunesid,
-    },
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#episodes").html(response);
-      $('#overlay').hide();
-    });
-});
-</script>
 {% endblock %}

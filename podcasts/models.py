@@ -154,7 +154,7 @@ class Podcast(models.Model):
         try:
             subscription = Subscription.objects.get(parent=self, owner=user)
             subscription.delete()
-            self.t.n_subscribers -= 1
+            self.n_subscribers -= 1
             self.save()
             return False
 

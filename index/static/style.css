@@ -67,9 +67,9 @@ body {
 /* MULTI BAR */
 #multi-bar {
   overflow: hidden;
-  height: 120px;
-  padding-top: 40px;
-  border-radius: 0px 0px 30px 30px;
+  height: 200px;
+   margin-left: -50px;
+  margin-right: -50px;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -85,7 +85,7 @@ body {
   list-style: none;
 }
 #search-bar {
-  padding: 20px;
+  padding: 70px;
 }
 #browse-bar {
 
@@ -95,7 +95,22 @@ body {
   background-color: #fff;
   top: 0px;
   z-index: 97;
-  margin-top: -120px;
+}
+
+#stage.open {
+  height: calc(100vh - 200px);
+  height: -o-calc(100vh - 200px); /* opera */
+  height: -webkit-calc(100vh - 200px); /* google, safari */
+  height: -moz-calc(100vh - 200px); /* firefox */
+  overflow-y: scroll;
+  padding-top: 40px;
+}
+
+#bar.extended{
+  top: calc(-100vh + 200px);
+  top: -o-calc(-100vh + 200px); /* opera */
+  top: -webkit-calc(-100vh + 200px); /* google, safari */
+  top: -moz-calc(-100vh + 200px); /* firefox */
 }
 
 #stage {
@@ -139,17 +154,8 @@ body {
   min-width: 0;
 }
 
-/* PODINFO BAR */
-#podinfo-bar {
-  padding-top: 80px;
-  border-radius: 8px;
-}
+/* PODINFO */
 #podinfo {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-#podinfo-image {
 
 }
 
