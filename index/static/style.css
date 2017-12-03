@@ -68,8 +68,6 @@ body {
 #multi-bar {
   overflow: hidden;
   margin-top: 56px;
-  margin-left: -50px;
-  margin-right: -50px;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -98,18 +96,18 @@ body {
 }
 
 #stage.open {
-  height: calc(100vh - 126px);
-  height: -o-calc(100vh - 126px); /* opera */
-  height: -webkit-calc(100vh - 126px); /* google, safari */
-  height: -moz-calc(100vh - 126px); /* firefox */
+  height: calc(50vh - 126px);
+  height: -o-calc(50vh - 126px); /* opera */
+  height: -webkit-calc(50vh - 126px); /* google, safari */
+  height: -moz-calc(50vh - 126px); /* firefox */
   padding-top: 56px;
 }
 
 #bar.extended{
-  top: calc(-100vh + 126px);
-  top: -o-calc(-100vh + 126px); /* opera */
-  top: -webkit-calc(-100vh + 126px); /* google, safari */
-  top: -moz-calc(-100vh + 126px); /* firefox */
+  top: calc(-50vh + 126px);
+  top: -o-calc(-50vh + 126px); /* opera */
+  top: -webkit-calc(-50vh + 126px); /* google, safari */
+  top: -moz-calc(-50vh + 126px); /* firefox */
 }
 
 #stage {
@@ -119,7 +117,7 @@ body {
 }
 
 #search-form {
- 
+
 }
 #search-field {
   width: 400px;
