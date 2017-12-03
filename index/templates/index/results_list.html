@@ -5,7 +5,8 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col" id="results">
+{% if podcasts %}
+<div class="col" id="results-wrapper">
   {% if search %}
     <form id="result-form" method="GET" action="{% url 'search' %}">
   {% else %}
@@ -14,23 +15,23 @@ dopepod
     {% include 'optionsbar.html' %}
   </form>
   <div class="row">
-    {% if podcasts %}
-      <div class="col" id="results-list">
-        {% for podcast in podcasts %}
-          <div class="row">
-            <a class="col show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-            <h6>{{ podcast.title }}</h6>
-            </a>
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="col">
-        <p>
-          No results :p
-        </p>
-      </div>
-    {% endif %}
+    <div class="col" id="results-list">
+      {% for podcast in podcasts %}
+        <div class="row">
+          <a class="col show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <h6>{{ podcast.title }}</h6>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
+{% else %}
+<div class="col" id="results-wrapper">
+  {% include 'optionsbar.html' %}
+    <p>
+      No results :p
+    </p>
+</div>
+{% endif %}
 {% endblock %}

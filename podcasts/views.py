@@ -39,8 +39,14 @@ def episodes(request):
             podcast = Podcast.objects.get(itunesid=itunesid)
         except:
             raise Http404()
-        context = {}
-        context['episodes'] = podcast.get_episodes()
+
+        episodes = podcast.get_episodes()
+
+        context = {
+            'episodes': episodes,
+            'podcast': podcast,
+        }
+
         return render(request, 'episodes.html', context)
 
 def play(request):
@@ -52,15 +58,23 @@ def play(request):
 
     # TODO: itemize episode
     if request.method == 'POST':
-        episode = {}
         try:
-            episode['url'] = request.POST['url']
-            episode['type'] = request.POST['type']
-            episode['title'] = request.POST['title']
-            episode['podcast'] = request.POST['podcast']
-            episode['artwork'] = request.POST['artwork']
-            episode['date'] = request.POST['date']
-            return render(request, 'player.html', {'episode': episode})
+            url = request.POST['url']
+            kind = request.POST['type']
+            title = request.POST['title']
+            date = request.POST['date']
+            itunesid = request.POST['itunesid']
+            podcast = Podcast.objects.get(itunesid=itunesid)
+            
+            context = {
+                'url': url,
+                'type': kind,
+                'title': title,
+                'date': date,
+                'podcast': podcast,
+            }
+            
+            return render(request, 'player.html', context)
         except KeyError:
             raise Http404()
 

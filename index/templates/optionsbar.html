@@ -1,6 +1,11 @@
 <!-- OPTIONS -->
 <div class="row color" id="options-bar">
-  <div class="col texture">
+  <div class="col">
+    <h6>
+      {{ results_info }}
+    </h6>
+  </div>
+  <div class="col-auto texture">
     <nav aria-label="...">
       {% if selected_q %}
         <input type="hidden" name="q" value="{{ selected_q }}" />

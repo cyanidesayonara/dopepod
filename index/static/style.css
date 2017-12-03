@@ -43,6 +43,11 @@ body {
   /*height: 80px;*/
 }
 
+#nav-row {
+  width: 100%;
+  text-align: center;
+}
+
 #main {
   border-left: 1px solid black;
   border-right: 1px solid black;
@@ -184,6 +189,9 @@ body {
 
 #results-wrapper {
   border: 1px solid black;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 15px;
 }
 .result-wrapper {
   padding-left: 0px;
