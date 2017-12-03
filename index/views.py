@@ -23,17 +23,14 @@ def index(request):
         'search': True,
         }
 
-        if request.is_ajax():
-            return render(request, 'index/index.html', context)
+        if not request.is_ajax():
+            user = request.user
+            genres = Genre.get_primary_genres()
+            chart = Podcast.get_charts(user)
+            context['genres'] = genres
+            context['chart'] = chart
 
-        user = request.user
-        genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts(user)
-
-        context['genres'] = genres
-        context['chart'] = chart
-
-        return render(request, 'index/charts.html', context)
+        return render(request, 'index/index.html', context)
 
 def charts(request):
     if request.method == 'GET':
@@ -41,11 +38,13 @@ def charts(request):
         user = request.user
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts(user, genre)
+        results_info = 'top podcasts in ' + ('All' if genre == None else genre)
 
         context = {
             'chart': chart,
             'genres': genres,
             'selected_genre': genre,
+            'results_info': results_info,
         }
 
         if not request.is_ajax():
@@ -68,32 +67,34 @@ def search(request):
         if q:
             user = request.user
 
-            context = {
-                'alphabet': ALPHABET,
-                'search': True,
-
-            }
-
-            context['genres'] = Genre.get_primary_genres()
-            context['languages'] = Language.objects.all()
-
             genre = request.GET.get('genre', 'All')
             language = request.GET.get('language', 'All')
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
             view = request.GET.get('view', 'detail')
             page = int(request.GET.get('page', '1'))
-            alphabet = request.GET.get('alphabet', 'A')
-
-            context['selected_alphabet'] = alphabet
-            context['selected_view'] = view
-            context['selected_genre'] = genre
-            context['selected_language'] = language
-            context['selected_explicit'] = explicit
-            context['selected_q'] = q
+            languages = Language.objects.all()
+            genres = Genre.get_primary_genres()
 
             # return podcasts matching search terms
             podcasts = Podcast.search(genre, language, explicit, user, q=q)
+
+            results_info = str(podcasts.count()) + ' results for "' + q + '"' 
+
+            context = {
+                'genres': genres,
+                'languages': languages,
+                'selected_q': q,
+                'selected_genre': genre,
+                'selected_language': language,
+                'selected_view': view,
+                'results_info': results_info,
+            }
+
+            if not request.is_ajax():
+                context['chart'] = Podcast.get_charts(user)
+                context['alphabet'] = ALPHABET
+                context['search'] = True
 
             if view == 'detail':
                 paginator = Paginator(podcasts, 24)
@@ -126,7 +127,6 @@ def browse(request):
     user = request.user
 
     if request.method == 'GET':
-        genres = Genre.get_primary_genres()
         languages = Language.objects.all()
         alphabet = request.GET.get('alphabet', 'A')
         genre = request.GET.get('genre', 'All')
@@ -135,7 +135,12 @@ def browse(request):
         page = int(request.GET.get('page', '1'))
         is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
         explicit = is_true(request.GET.get('explicit', 'true'))
+        genres = Genre.get_primary_genres()
 
+        podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
+        
+        results_info = str(podcasts.count()) + ' results for "' + alphabet + '"' 
+        
         context = {
             'genres': genres,
             'languages': languages,
@@ -143,14 +148,14 @@ def browse(request):
             'selected_genre': genre,
             'selected_language': language,
             'selected_view': view,
-        }
+            'results_info': results_info,
+        }        
 
         if not request.is_ajax():
-            # show browse bar
-            context['browse'] = True
+            context['chart'] = Podcast.get_charts(user)
             context['alphabet'] = ALPHABET
+            context['browse'] = True
 
-        podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
 
         if view == 'detail':
             paginator = Paginator(podcasts, 24)
@@ -183,11 +188,18 @@ def subscriptions(request):
     if user.is_authenticated:
         if request.method == 'GET':
             subscriptions = Subscription.get_subscriptions(user)
+            results_info = str(subscriptions.count()) + ' subscriptions'
+            
             context = {
+                'results_info': results_info,
                 'subscriptions': subscriptions,
             }
 
             if not request.is_ajax():
+                genres = Genre.get_primary_genres()
+                chart = Podcast.get_charts(user)
+                context['genres'] = genres
+                context['chart'] = chart
                 context['alphabet'] = ALPHABET
                 context['selected_alphabet'] = 'A'
                 context['search'] = True
@@ -202,29 +214,26 @@ def settings(request):
     """
     user = request.user
     if user.is_authenticated:
+        context = {}
+        if not request.is_ajax():
+            genres = Genre.get_primary_genres()
+            chart = Podcast.get_charts(user)
+            context['genres'] = genres
+            context['chart'] = chart
+
         if request.method == 'GET':
-            user_form = UserForm(instance=request.user)
-            profile_form = ProfileForm(instance=request.user.profile)
-            return render(request, 'index/settings.html', {
-                'user_form': user_form,
-                'profile_form': profile_form
-            })
+            context['user_form'] = UserForm(instance=request.user)
+            context['profile_form'] = ProfileForm(instance=request.user.profile)
+            return render(request, 'index/settings.html', context)
 
         if request.method == 'POST':
-                user_form = UserForm(request.POST, instance=request.user)
-                profile_form = ProfileForm(request.POST, instance=request.user.profile)
-                if user_form.is_valid() and profile_form.is_valid():
-                    user_form.save()
-                    profile_form.save()
-                    return render(request, 'index/settings.html', {
-                        'user_form': user_form,
-                        'profile_form': profile_form
-                    })
-
-                else:
-                    return render(request, 'index/settings.html', {
-                        'user_form': user_form,
-                        'profile_form': profile_form
-                    })
+            context['user_form'] = UserForm(instance=request.user)
+            context['profile_form'] = ProfileForm(instance=request.user.profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                return render(request, 'index/settings.html', context)
+            else:
+                return render(request, 'index/settings.html', context)
     else:
         raise Http404()

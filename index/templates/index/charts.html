@@ -1,25 +1,12 @@
-{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
-
-{% block title %}
-dopepod
-{% endblock %}
-
-{% block results %}
+{% if chart %}
 <div class="col" id="results-wrapper">
   <form id="result-form" method="GET" action="{% url 'charts' %}">
     {% include 'optionsbar.html' %}
   </form>
   <div class="row">
-    <div class="col">
-      <h2>
-        Charting
-      </h2>
-    </div>
-  </div>
-  <div class="row">
     {% if chart %}
       {% for podcast in chart %}
-      <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box">
           <form id="sub-form" action="{% url 'subscribe' %}"
           id="{{ podcast.itunesid }}" method="POST">
             {% csrf_token %}
@@ -58,4 +45,13 @@ dopepod
     {% endif %}
   </div>
 </div>
-{% endblock %}
+{% else %}
+<div class="col" id="results-wrapper">
+  {% include 'optionsbar.html' %}
+  <p>
+    No results :p
+  </p>
+</div>
+{% endif %}
+
+

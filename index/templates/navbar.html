@@ -1,51 +1,57 @@
-<ul class="navbar-nav">
-  <li class="nav-item">
+<div class="row" id="nav-row">
+  <div class="col-sm-1">
     <a class="navbar-brand index-link" href="{% url 'index' %}">
       dopepod
     </a>
-  </li>
-  <li class="nav-item">
+  </div>
+  <div class="col-sm-1">
     <a class="nav-link" href="#">
       blog
     </a>
-  </li>
-  <li class="nav-item">
+  </div>
+  <div class="col-sm-1">
     <a class="nav-link browse-link" href="{% url 'browse' %}">
       browse
     </a>
-  </li>
+  </div>
   {% if user.is_authenticated %}
-    <li class="nav-item">
+    <div class="col-sm-1">
       <a class="nav-link settings-link" href="{% url 'settings' %}">
         settings
       </a>
-    </li>
-    <li class="nav-item">
+    </div>
+    <div class="col-sm-1">
       <a class="nav-link subscriptions-link" href="{% url 'subscriptions' %}">
         subscriptions
       </a>
-    </li>
+    </div>
+  {% else %}
+    <div class="col-sm-2">
+    </div>
   {% endif %}
-</ul>
-<ul class="navbar-nav ml-auto">
+  <div class="col-sm-5">
+  </div>
   {% if user.is_authenticated %}
-    <li>
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-1">
       <a class="btn btn-outline-primary ajax-logout" href="{% url 'account_logout' %}">
         Logout
       </a>
-    </li>
+    </div>
   {% else %}
-    <li>
-      <a class="btn btn-outline-primary ajax-register" href="{% url 'account_signup' %}"
+  <div class="col-sm-1">
+    <a class="btn btn-outline-primary ajax-register" href="{% url 'account_signup' %}"
       data-toggle="modal" data-target="#modal">
-        Register
-      </a>
-    </li>
-    <li>
-      <a class="btn btn-outline-primary ajax-login" href="{% url 'account_login' %}"
+      Register
+    </a>
+  </div>
+  <div class="col-sm-1">
+    <a class="btn btn-outline-primary ajax-login" href="{% url 'account_login' %}"
       data-toggle="modal" data-target="#modal">
-        Login
-      </a>
-    </li>
+      Login
+    </a>  
+  </div>
   {% endif %}
-</ul>
+</div>
+
