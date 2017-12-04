@@ -5,7 +5,7 @@ __pycache__
 /static
 .DS_Store
 /logs
-/logs.txt
+logs.txt
 /.vscode
 local_settings.py
 manage.py
