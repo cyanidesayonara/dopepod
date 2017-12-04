@@ -365,7 +365,7 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
-    loadResults("/settings/", true);
+    loadStage("/settings/");
   })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {

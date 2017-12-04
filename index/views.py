@@ -89,7 +89,7 @@ def search(request):
                 'selected_language': language,
                 'selected_view': view,
                 'results_info': results_info,
-                'search' = True,
+                'search': True,
             }
 
             if not request.is_ajax():
@@ -150,7 +150,7 @@ def browse(request):
             'selected_language': language,
             'selected_view': view,
             'results_info': results_info,
-            'browse' = True,
+            'browse': True,
         }
 
         if not request.is_ajax():
@@ -193,7 +193,7 @@ def subscriptions(request):
             context = {
                 'results_info': results_info,
                 'subscriptions': subscriptions,
-                'search' = True
+                'search': True
             }
 
             if not request.is_ajax():
@@ -215,7 +215,7 @@ def settings(request):
     user = request.user
     if user.is_authenticated:
         context = {
-            'search' = True
+            'search': True
         }
         if not request.is_ajax():
             genres = Genre.get_primary_genres()

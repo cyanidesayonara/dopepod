@@ -3,7 +3,7 @@
   <form id="result-form" method="GET" action="{% url 'charts' %}">
     {% include 'optionsbar.html' %}
   </form>
-  <div class="row">
+  <div class="row results-row">
     {% if chart %}
       {% for podcast in chart %}
         <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box">
@@ -53,5 +53,3 @@
   </p>
 </div>
 {% endif %}
-
-

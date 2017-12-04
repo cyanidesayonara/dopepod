@@ -99,25 +99,28 @@ body {
 #bar {
   background-color: #fff;
   top: 0px;
-  z-index: 97;
+  z-index: 75;
 }
 
 #stage.open {
-  height: calc(50vh - 126px);
-  height: -o-calc(50vh - 126px); /* opera */
-  height: -webkit-calc(50vh - 126px); /* google, safari */
-  height: -moz-calc(50vh - 126px); /* firefox */
+  height: calc(50vh);
+  height: -o-calc(50vh); /* opera */
+  height: -webkit-calc(50vh); /* google, safari */
+  height: -moz-calc(50vh); /* firefox */
   padding-top: 56px;
+  padding-bottom: 14px;
+  margin-bottom: -70px;
 }
 
 #bar.extended{
-  top: calc(-50vh + 126px);
-  top: -o-calc(-50vh + 126px); /* opera */
-  top: -webkit-calc(-50vh + 126px); /* google, safari */
-  top: -moz-calc(-50vh + 126px); /* firefox */
+  top: calc(-50vh + 70px);
+  top: -o-calc(-50vh + 70px); /* opera */
+  top: -webkit-calc(-50vh + 70px); /* google, safari */
+  top: -moz-calc(-50vh + 70px); /* firefox */
 }
 
 #stage {
+  z-index: 90;
   overflow: hidden;
 }
 
@@ -162,7 +165,11 @@ body {
 
 /* PODINFO */
 #podinfo {
+  padding: 15px;
+}
 
+.results-row {
+  padding: 10px;
 }
 
 #browse {
@@ -170,7 +177,7 @@ body {
 }
 
 #settings-form {
-  padding-top: 80px;
+
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
@@ -183,6 +190,14 @@ body {
 
 .navbar-collapse {
   flex-basis: auto;
+}
+
+#episodes-wrapper {
+  border: 1px solid #e6ecf0;
+  /*border-radius: 8px;*/
+  overflow: hidden;
+  margin-top: 15px;
+  background-color: #FFFFFF;
 }
 
 #results-wrapper {

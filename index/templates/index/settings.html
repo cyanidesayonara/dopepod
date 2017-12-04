@@ -4,37 +4,38 @@
 settings
 {% endblock %}
 
-{% block results %}
+{% block stage %}
 <!-- SETTINGS -->
-<div class="col">
-  <form class="row" id="settings-form" action="{% url 'settings' %}" method="POST">
+<div class="col-sm-3">
+
+</div>
+<div class="col-sm-6">
+  <div class="row">
     <div class="col">
       <h5>
         My Profile
       </h5>
-      {% csrf_token %}
-      {{ user_form.as_p }}
-      {{ profile_form.as_p }}
-      <button class="btn btn-primary" type="submit">
-        Save changes
-      </button>
-      <!-- EXPLICIT -->
-      {% if selected_explicit == True or selected_explicit == None %}
-        <label class="btn btn-outline-primary">
-          <input type="checkbox" name="explicit" id="explicit-button" value="false">
-          Hide Explicit
-        </label>
-      {% else %}
-        <label class="btn btn-outline-primary active">
-          <input type="checkbox" name="explicit" id="explicit-button" value="false" checked>
-          Hide Explicit
-        </label>
-      {% endif %}
-        <a class="password-link" href="{% url 'account_reset_password' %}"
-        data-toggle="modal" data-target="#modal">
-        Reset Password
-      </a>
     </div>
-  </form>
+  </div>
+  <div class="row">
+    <!-- <form id="settings-form" action="{% url 'settings' %}" method="POST"> -->
+      <div class="col-sm-6">
+        {% csrf_token %}
+        {{ user_form }}
+      </div>
+      <div class="col-sm-6">
+        {{ profile_form.location.label_tag }}
+        {{ profile_form.location }}
+        {{ profile_form.show_explicit.label_tag }}
+        {{ profile_form.show_explicit }}
+        <button class="btn btn-outline-primary" type="submit">
+          Save changes
+        </button>
+      </div>
+    <!-- </form> -->
+  </div>
+</div>
+<div class="col-sm-3">
+
 </div>
 {% endblock %}

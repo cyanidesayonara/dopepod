@@ -15,7 +15,8 @@ def podinfo(request, itunesid):
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
-        podcast.set_subscribed(user)
+        if user.is_authenticated:
+            podcast.set_subscribed(user)
         context = {
             'podcast': podcast,
         }
@@ -65,7 +66,7 @@ def play(request):
             date = request.POST['date']
             itunesid = request.POST['itunesid']
             podcast = Podcast.objects.get(itunesid=itunesid)
-            
+
             context = {
                 'url': url,
                 'type': kind,
@@ -73,7 +74,7 @@ def play(request):
                 'date': date,
                 'podcast': podcast,
             }
-            
+
             return render(request, 'player.html', context)
         except KeyError:
             raise Http404()
