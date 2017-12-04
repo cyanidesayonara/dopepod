@@ -79,7 +79,7 @@ def search(request):
             # return podcasts matching search terms
             podcasts = Podcast.search(genre, language, explicit, user, q=q)
 
-            results_info = str(podcasts.count()) + ' results for "' + q + '"' 
+            results_info = str(podcasts.count()) + ' results for "' + q + '"'
 
             context = {
                 'genres': genres,
@@ -115,9 +115,10 @@ def search(request):
             else:
                 return render(request, 'index/results_list.html', context)
 
-        # else return charts
         else:
-            return redirect('/charts/')
+            if request.is_ajax():
+                return render(request, 'index/results_detail.html', {})
+            return redirect('index')
 
 def browse(request):
     """
@@ -127,8 +128,8 @@ def browse(request):
     user = request.user
 
     if request.method == 'GET':
-        languages = Language.objects.all()
         alphabet = request.GET.get('alphabet', 'A')
+        languages = Language.objects.all()
         genre = request.GET.get('genre', 'All')
         language = request.GET.get('language', 'All')
         view = request.GET.get('view', 'list')
@@ -138,9 +139,9 @@ def browse(request):
         genres = Genre.get_primary_genres()
 
         podcasts = Podcast.search(genre, language, explicit, user, alphabet=alphabet)
-        
-        results_info = str(podcasts.count()) + ' results for "' + alphabet + '"' 
-        
+
+        results_info = str(podcasts.count()) + ' results for "' + alphabet + '"'
+
         context = {
             'genres': genres,
             'languages': languages,
@@ -149,7 +150,7 @@ def browse(request):
             'selected_language': language,
             'selected_view': view,
             'results_info': results_info,
-        }        
+        }
 
         if not request.is_ajax():
             context['chart'] = Podcast.get_charts(user)
@@ -189,7 +190,7 @@ def subscriptions(request):
         if request.method == 'GET':
             subscriptions = Subscription.get_subscriptions(user)
             results_info = str(subscriptions.count()) + ' subscriptions'
-            
+
             context = {
                 'results_info': results_info,
                 'subscriptions': subscriptions,

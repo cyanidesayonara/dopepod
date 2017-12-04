@@ -1,9 +1,12 @@
+<div class="col">
+
+</div>
 <div class="col-auto">
   <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
     <img src="{{ podcast.artworkUrl }}100x100bb.jpg" />
   </a>
 </div>
-<div class="col">
+<div class="col-auto">
   <div class="row">
     <div class="col">
       <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
@@ -28,4 +31,7 @@
       </audio>
     </div>
   </div>
+</div>
+<div class="col">
+
 </div>

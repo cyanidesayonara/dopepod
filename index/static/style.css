@@ -49,10 +49,7 @@ body {
 }
 
 #main {
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  padding: 15px 30px;
-  background-color: #fff;
+  padding: 30px;
 }
 #episodes {
   min-height: 100%;
@@ -65,17 +62,22 @@ body {
 }
 
 #main-content {
-  background-color: #ccc;
+  background-color: #E6ECF0;
   min-height: 100vh;
+}
+.btn-group-vertical {
+  z-index: 1000;
 }
 
 /* MULTI BAR */
 #multi-bar {
   overflow: hidden;
-  margin-top: 56px;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+}
+#multi-bar-scroll {
+  padding-top: 56px;
 }
 #options {
 }
@@ -117,8 +119,6 @@ body {
 
 #stage {
   overflow: hidden;
-  margin-left: -50px;
-  margin-right: -50px;
 }
 
 #search-form {
@@ -186,10 +186,11 @@ body {
 }
 
 #results-wrapper {
-  border: 1px solid black;
-  border-radius: 8px;
+  border: 1px solid #e6ecf0;
+  /*border-radius: 8px;*/
   overflow: hidden;
   margin-top: 15px;
+  background-color: #FFFFFF;
 }
 .result-wrapper {
   padding-left: 0px;

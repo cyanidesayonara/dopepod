@@ -1,4 +1,4 @@
-<div class="col texture">
+<div class="col color" id="multi-bar">
   <!-- SEARCH BAR -->
   <form id="search-form" method="GET" action="{% url 'search' %}">
     {% if search %}
@@ -34,9 +34,9 @@
   <!-- BROWSE BAR -->
   <form id="browse-form" method="GET" action="{% url 'browse' %}">
     {% if browse %}
-    <div class="row" id="browse-bar">
+    <div class="row texture" id="browse-bar">
     {% else %}
-    <div class="row" id="browse-bar" style="display: none;">
+    <div class="row texture" id="browse-bar" style="display: none;">
     {% endif %}
       <div class="col">
       </div>
@@ -61,7 +61,7 @@
       </div>
     </div>
   </form>
-  <div class="row" id="player">
-    
+  <div class="row texture" id="player">
+
   </div>
 </div>

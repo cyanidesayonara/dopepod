@@ -89,7 +89,7 @@ function replaceState(url) {
 function loadEpisodes(itunesid) {
   // load episodes for podcast
   // TODO also load on back button
-
+  $('#results').html("<div class='col' id='overlay'></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -101,7 +101,7 @@ function loadEpisodes(itunesid) {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#episodes").html(response);
+      $("#results").html(response);
       $('#overlay').hide();
       var url = $("#main-content")[0].baseURI;
       replaceState(url);
@@ -114,8 +114,8 @@ function openStage() {
   $("#main").toggle();
 }
 
-function loadContent(url, stage) {
-  xhr = $.ajax({
+function loadResults(url) {
+  $.ajax({
     type: "GET",
     url: url,
   })
@@ -124,9 +124,35 @@ function loadContent(url, stage) {
     })
     .done(function(response) {
       $("#results").html(response);
-      $(window).scrollTop(0);
       replaceState(url);
     });
+}
+
+function loadStage(url) {
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#stage").html(response);
+
+      replaceState(url);
+    });
+}
+
+function scrollToTop() {
+  $('html, body').animate({
+    scrollTop: $("#main-content").offset().top
+  }, 200);
+}
+
+function scrollToBar() {
+  $('html, body').animate({
+    scrollTop: $("#multi-bar-scroll").offset().top
+  }, 200);
 }
 
 function goToModal(url) {
@@ -158,7 +184,7 @@ function refreshPage() {
       // refresh navbar
       $("#nav-content").html(response);
       // go to index
-      loadContent("/charts/");
+      loadResults("/charts/");
       showSearch();
     });
 }
@@ -170,7 +196,7 @@ function SearchFunc(url, page) {
     xhr.abort();
     xhr = null;
   }
-  
+
   data = {}
   if ($("#search-bar").css("display") != "none") {
     var q = $("#q").val();
@@ -265,6 +291,7 @@ $(document)
       pushState();
       SearchFunc(url, false);
     }, 250);
+    scrollToBar()
   })
   // search when "search" button is clicked
   .on("submit", "#search-form, #browse-form", function(e) {
@@ -272,11 +299,13 @@ $(document)
     var url = this.action;
     pushState();
     SearchFunc(url, false);
+    scrollToBar()
   })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     pushState();
     SearchFunc(url, false);
+    scrollToBar()
   })
   .on("submit", "#result-form", function(e) {
     e.preventDefault();
@@ -299,22 +328,24 @@ $(document)
     var itunesid = $(this).data("itunesid");
     pushState();
     showSearch();
-    loadContent(url);
+    loadStage(url);
+    scrollToTop();
     loadEpisodes(itunesid);
+
   })
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
     showSearch();
-    loadContent("/charts/");
+    loadResults("/charts/");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
     showBrowse();
-    loadContent("/browse/");
+    loadResults("/browse/");
    })
   .on("click", ".search-toggle", function(e) {
     e.preventDefault();
@@ -327,14 +358,14 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
-    loadContent("/subscriptions/");
+    loadResults("/subscriptions/");
   })
   // open settings in modal
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
     showSearch();
-    loadContent("/settings/", true);
+    loadResults("/settings/", true);
   })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
@@ -353,7 +384,7 @@ $(document)
       })
       .done(function(response) {
         showSearch();
-        loadContent("/charts/");
+        loadResults("/charts/");
       });
   })
   // put episode in player
@@ -442,6 +473,6 @@ $(document)
         $("#modal").modal("hide");
         refreshCookie();
         refreshPage();
-        loadContent("/charts/");
+        loadResults("/charts/");
       });
   })

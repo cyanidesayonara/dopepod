@@ -1,167 +1,150 @@
 <!-- OPTIONS -->
 <div class="row color" id="options-bar">
   <div class="col">
-    <h6>
-      {{ results_info }}
-    </h6>
+    {{ podcasts.paginator.num_pages }}
   </div>
-  <div class="col-auto texture">
-    <nav aria-label="...">
-      {% if selected_q %}
-        <input type="hidden" name="q" value="{{ selected_q }}" />
-      {% elif selected_alphabet %}
-        <input type="hidden" name="alphabet" value="{{ selected_alphabet }}">
-      {% endif %}
-        {% if podcasts.has_other_pages %}
-          <div class="btn-group" id="page-buttons" data-toggle="buttons">
-          {% if podcasts.has_previous %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
-              &laquo;
-            </label>
-          {% else %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio">
-              &laquo;
-            </label>
-          {% endif %}
-          {% for i in podcasts.paginator.page_range %}
+    <div class="col-auto texture">
+      {% if podcasts.has_other_pages %}
+      <div class="btn-group" id="page-buttons" data-toggle="buttons">
+        {% if podcasts.has_previous %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
+            &laquo;
+          </label>
+        {% else %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="xxx">
+            &laquo;
+          </label>
+        {% endif %}
+        {% for i in podcasts.paginator.page_range %}
           {% if podcasts.number == i %}
             <label class="btn btn-outline-primary page-button active">
               <input type="radio" name="page" value="{{ i }}" checked>
               {{ i }}
             </label>
-          {% else %}
+          {% elif i > podcasts.number|add:'-4' and i < podcasts.number|add:'4' %}
             <label class="btn btn-outline-primary page-button">
               <input type="radio" name="page" value="{{ i }}">
               {{ i }}
             </label>
           {% endif %}
-          {% endfor %}
-          {% if podcasts.has_next %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
-              &raquo;
+        {% endfor %}
+        {% if podcasts.has_next %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
+            &raquo;
+          </label>
+        {% else %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="xxx">
+            &raquo;
+          </label>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-auto texture">
+      <!-- GENRES -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Genre
+        </button>
+        <div class="dropdown-menu">
+          <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
+            {% if selected_genre == None %}
+            <label class="btn btn-outline-primary active">
+              <input type="radio" name="genre" value="All" checked>
+              All
+            </label>
+            {% else %}
+            <label class="btn btn-outline-primary">
+              <input type="radio" name="genre" value="All">
+              All
+            </label>
+            {% endif %}
+            {% for genre in genres %}
+            {% if genre.name == selected_genre %}
+            <label class="btn btn-outline-primary active">
+              <input type="radio" name="genre" value="{{ genre.name }}" checked>
+              {{ genre.name }}
+            </label>
+            {% else %}
+            <label class="btn btn-outline-primary">
+              <input type="radio" name="genre" value="{{ genre.name }}">
+              {{ genre.name }}
+            </label>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto">
+      <!-- LANGUAGES -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Language
+        </button>
+        <div class="dropdown-menu">
+          <div class="btn-group-vertical btn-group" id="language-buttons" data-toggle="buttons">
+            {% if selected_language == None %}
+              <label class="btn btn-outline-primary active">
+                <input type="radio" name="language" value="All" checked>
+                All
+              </label>
+            {% else %}
+              <label class="btn btn-outline-primary">
+                <input type="radio" name="language" value="All">
+                All
+              </label>
+            {% endif %}
+            {% for language in languages %}
+              {% if language.name == selected_language %}
+                <label class="btn btn-outline-primary active">
+                  <input type="radio" name="language" value="{{ language.name }}" checked>
+                  {{ language.name }}
+                </label>
+              {% else %}
+                <label class="btn btn-outline-primary">
+                  <input type="radio" name="language" value="{{ language.name }}">
+                  {{ language.name }}
+                </label>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto">
+      <!-- VIEW -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          View
+        </button>
+        <div class="dropdown-menu">
+          <div class="btn-group-vertical" id="view-buttons" data-toggle="buttons">
+          {% if selected_view == 'detail' %}
+            <label class="btn btn-outline-primary view-button active">
+              <input type="radio" name="view" value="detail" checked>
+              Detail
+            </label>
+            <label class="btn btn-outline-primary view-button">
+              <input type="radio" name="view" value="list">
+              List
             </label>
           {% else %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio">
-              &raquo;
+            <label class="btn btn-outline-primary view-button">
+              <input type="radio" name="view" value="detail">
+              Detail
+            </label>
+            <label class="btn btn-outline-primary view-button active">
+              <input type="radio" name="view" value="list" checked>
+              List
             </label>
           {% endif %}
           </div>
-        {% endif %}
-      <ul id="options-list">
-        <!-- GENRES -->
-        {% if genres %}
-          <li>
-            <div class="btn-group">
-              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Genre
-              </button>
-              <div class="dropdown-menu">
-                <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
-                  {% if selected_genre == 'All' or selected_genre == None %}
-                  <label class="btn btn-outline-primary active">
-                    <input type="radio" name="genre" value="All" checked>
-                    All
-                  </label>
-                  {% else %}
-                  <label class="btn btn-outline-primary">
-                    <input type="radio" name="genre" value="All">
-                    All
-                  </label>
-                  {% endif %}
-                  {% for genre in genres %}
-                  {% if genre.name == selected_genre %}
-                  <label class="btn btn-outline-primary active">
-                    <input type="radio" name="genre" value="{{ genre.name }}" checked>
-                    {{ genre.name }}
-                  </label>
-                  {% else %}
-                  <label class="btn btn-outline-primary">
-                    <input type="radio" name="genre" value="{{ genre.name }}">
-                    {{ genre.name }}
-                  </label>
-                  {% endif %}
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </li>
-        {% endif %}
-      <!-- LANGUAGES -->
-        {% if languages %}
-          <li>
-            <div class="btn-group">
-              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Language
-              </button>
-              <div class="dropdown-menu">
-                <div class="btn-group-vertical btn-group-sm" id="language-buttons" data-toggle="buttons">
-                  {% if selected_language == 'All' or selected_language == None %}
-                    <label class="btn btn-outline-primary active">
-                      <input type="radio" name="language" value="All" checked>
-                      All
-                    </label>
-                  {% else %}
-                    <label class="btn btn-outline-primary">
-                      <input type="radio" name="language" value="All">
-                      All
-                    </label>
-                  {% endif %}
-                  {% for language in languages %}
-                    {% if language.name == selected_language %}
-                      <label class="btn btn-outline-primary active">
-                        <input type="radio" name="language" value="{{ language.name }}" checked>
-                        {{ language.name }}
-                      </label>
-                    {% else %}
-                      <label class="btn btn-outline-primary">
-                        <input type="radio" name="language" value="{{ language.name }}">
-                        {{ language.name }}
-                      </label>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </li>
-        {% endif %}
-        <!-- VIEW -->
-        {% if view %}
-          <li>
-            <div class="btn-group">
-              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                View
-              </button>
-              <div class="dropdown-menu">
-                <div class="btn-group-vertical" id="view-buttons" data-toggle="buttons">
-                {% if selected_view == 'detail' %}
-                  <label class="btn btn-outline-primary view-button active">
-                    <input type="radio" name="view" value="detail" checked>
-                    Detail
-                  </label>
-                  <label class="btn btn-outline-primary view-button">
-                    <input type="radio" name="view" value="list">
-                    List
-                  </label>
-                {% else %}
-                  <label class="btn btn-outline-primary view-button">
-                    <input type="radio" name="view" value="detail">
-                    Detail
-                  </label>
-                  <label class="btn btn-outline-primary view-button active">
-                    <input type="radio" name="view" value="list" checked>
-                    List
-                  </label>
-                {% endif %}
-                </div>
-              </div>
-            </div>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
+        </div>
+      </div>
+    </div>
 </div>
