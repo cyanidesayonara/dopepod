@@ -89,12 +89,12 @@ def search(request):
                 'selected_language': language,
                 'selected_view': view,
                 'results_info': results_info,
+                'search' = True,
             }
 
             if not request.is_ajax():
                 context['chart'] = Podcast.get_charts(user)
                 context['alphabet'] = ALPHABET
-                context['search'] = True
 
             if view == 'detail':
                 paginator = Paginator(podcasts, 24)
@@ -150,13 +150,12 @@ def browse(request):
             'selected_language': language,
             'selected_view': view,
             'results_info': results_info,
+            'browse' = True,
         }
 
         if not request.is_ajax():
             context['chart'] = Podcast.get_charts(user)
             context['alphabet'] = ALPHABET
-            context['browse'] = True
-
 
         if view == 'detail':
             paginator = Paginator(podcasts, 24)
@@ -194,6 +193,7 @@ def subscriptions(request):
             context = {
                 'results_info': results_info,
                 'subscriptions': subscriptions,
+                'search' = True
             }
 
             if not request.is_ajax():
@@ -203,7 +203,6 @@ def subscriptions(request):
                 context['chart'] = chart
                 context['alphabet'] = ALPHABET
                 context['selected_alphabet'] = 'A'
-                context['search'] = True
             return render(request, 'index/subscriptions.html', context)
     else:
         raise Http404()
@@ -215,7 +214,9 @@ def settings(request):
     """
     user = request.user
     if user.is_authenticated:
-        context = {}
+        context = {
+            'search' = True
+        }
         if not request.is_ajax():
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts(user)

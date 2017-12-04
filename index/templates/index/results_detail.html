@@ -32,6 +32,7 @@ dopepod
         </form>
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <img class="img-fluid result-image" src="{{ podcast.artworkUrl }}200x200bb.jpg" />
+          <!--<img class="img-fluid result-image" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg" />-->
         </a>
         <h6 class="result-title">
           <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
