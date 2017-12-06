@@ -51,7 +51,7 @@ def charts(request):
             context['alphabet'] = ALPHABET
             context['selected_alphabet'] = 'A'
             context['search'] = True
-
+            return render(request, 'index/index.html', context)
         return render(request, 'index/charts.html', context)
 
 def search(request):
@@ -90,6 +90,7 @@ def search(request):
                 'selected_view': view,
                 'results_info': results_info,
                 'search': True,
+                'view': True,
             }
 
             if not request.is_ajax():
@@ -151,6 +152,7 @@ def browse(request):
             'selected_view': view,
             'results_info': results_info,
             'browse': True,
+            'view': True,
         }
 
         if not request.is_ajax():

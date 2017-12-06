@@ -7,7 +7,6 @@ body {
   background: url("grid.png");
 }
 
-
 .btn-outline-primary {
   color: #000;
   background-color: #fff;
@@ -34,18 +33,27 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cdeb5', endColorstr='#91c2ba', GradientType=1 );
 }
 
+.navbar {
+  padding: 0px;
+}
+
 #nav-bar {
   background: rgba(255, 255, 255, 1);
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   z-index: 99;
-  /*height: 80px;*/
 }
 
-#nav-row {
-  width: 100%;
-  text-align: center;
+.nav-fade li {
+  padding: 8px 8px;
+  transition: background .25s ease-in-out;
+  -moz-transition: background .25s ease-in-out;
+  -webkit-transition: background .25s ease-in-out;
+}
+
+.nav-fade li:hover {
+  background: #ddd;
 }
 
 #main {
@@ -153,10 +161,10 @@ body {
   background: #3b6d83;
 }
 #alphabet-buttons {
- padding: .75rem 1rem;
+ padding: 1rem 1rem;
 }
 .alphabet-button {
- padding: .5rem .7rem;
+ padding: .5rem .75rem;
 }
 
 .dropdown-menu {
