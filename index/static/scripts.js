@@ -137,8 +137,12 @@ function loadStage(url) {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#stage").html(response);
-
+      if (response.html) {
+        $("#stage").html(response.html);
+      }
+      else {
+        $("#stage").html(response);
+      }
       replaceState(url);
     });
 }
@@ -153,22 +157,6 @@ function scrollToBar() {
   $('html, body').animate({
     scrollTop: $("#multi-bar-scroll").offset().top
   }, 200);
-}
-
-function goToModal(url) {
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-  .fail(function(xhr, ajaxOptions, thrownError){
-    console.log(thrownError);
-  })
-  .done(function(response) {
-    if ($("#modal").css("display") == "none") {
-      $("#modal").modal("show");
-    }
-    $("#modal-content").html(response.html);
-  });
 }
 
 function refreshPage() {
@@ -360,7 +348,7 @@ $(document)
     showSearch();
     loadResults("/subscriptions/");
   })
-  // open settings in modal
+  // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
@@ -380,7 +368,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#results").html(xhr.responseJSON.html);
+        $("#stage").html(xhr.responseJSON.html);
       })
       .done(function(response) {
         showSearch();
@@ -403,13 +391,11 @@ $(document)
       })
       .done(function(response) {
         $("#player").html(response);
-        // $("#footer").css("padding-bottom", "106px");
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
     $("#player").empty();
-    // $("#footer").css("padding-bottom", "0px");
   })
   .on("submit", "#sub-form", function(e) {
     // Stop form from submitting normally
@@ -429,7 +415,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
         // probably not logged in
-        goToModal("/account/login/");
+        loadStage("/account/login/");
       })
       .done(function(response) {
         button.html(response);
@@ -451,7 +437,7 @@ $(document)
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    goToModal(url);
+    loadStage(url);
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -466,11 +452,10 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#modal-content").html(xhr.responseJSON.html);
+        $("#stage").html(xhr.responseJSON.html);
       })
       .done(function() {
-        $("#modal-content").html("");
-        $("#modal").modal("hide");
+        $("#stage").html("");
         refreshCookie();
         refreshPage();
         loadResults("/charts/");

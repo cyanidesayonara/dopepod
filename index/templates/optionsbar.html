@@ -1,150 +1,146 @@
 <!-- OPTIONS -->
 <div class="row color" id="options-bar">
-  <div class="col">
-    {{ podcasts.paginator.num_pages }}
-  </div>
-    <div class="col-auto texture">
-      {% if podcasts.has_other_pages %}
+  <div class="col-auto texture">
+    {% if podcasts.has_other_pages %}
+    <!-- PAGINATION -->
       <div class="btn-group" id="page-buttons" data-toggle="buttons">
         {% if podcasts.has_previous %}
-          <label class="btn btn-outline-primary page-button">
-            <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
-            &laquo;
-          </label>
+        <label class="btn btn-outline-primary page-button">
+          <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
+          &laquo;
+        </label>
         {% else %}
-          <label class="btn btn-outline-primary page-button">
-            <input type="radio" name="page" value="xxx">
-            &laquo;
-          </label>
+        <label class="btn btn-outline-primary page-button">
+          <input type="radio" name="page" value="xxx">
+          &laquo;
+        </label>
         {% endif %}
         {% for i in podcasts.paginator.page_range %}
-          {% if podcasts.number == i %}
-            <label class="btn btn-outline-primary page-button active">
-              <input type="radio" name="page" value="{{ i }}" checked>
-              {{ i }}
-            </label>
-          {% elif i > podcasts.number|add:'-4' and i < podcasts.number|add:'4' %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio" name="page" value="{{ i }}">
-              {{ i }}
-            </label>
-          {% endif %}
+        {% if podcasts.number == i %}
+        <label class="btn btn-outline-primary page-button active">
+          <input type="radio" name="page" value="{{ i }}" checked>
+          {{ i }}
+        </label>
+        {% elif i > podcasts.number|add:'-4' and i < podcasts.number|add:'4' %}
+        <label class="btn btn-outline-primary page-button">
+          <input type="radio" name="page" value="{{ i }}">
+          {{ i }}
+        </label>
+        {% endif %}
         {% endfor %}
         {% if podcasts.has_next %}
-          <label class="btn btn-outline-primary page-button">
-            <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
-            &raquo;
-          </label>
+        <label class="btn btn-outline-primary page-button">
+          <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
+          &raquo;
+        </label>
         {% else %}
-          <label class="btn btn-outline-primary page-button">
-            <input type="radio" name="page" value="xxx">
-            &raquo;
-          </label>
+        <label class="btn btn-outline-primary page-button">
+          <input type="radio" name="page" value="xxx">
+          &raquo;
+        </label>
         {% endif %}
       </div>
-      {% endif %}
-    </div>
-    <div class="col-auto texture">
+      {{ podcasts.paginator.count }} results
+      {{ podcasts.paginator.num_pages }} pages
+    {% endif %}
+  </div>
+  <div class="col texture">
+    {{ results_info }}
+  </div>
+  <div class="col-auto texture">
+    <ul class="nav nav-fade">
+      {% if genres %}
       <!-- GENRES -->
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
           Genre
-        </button>
-        <div class="dropdown-menu">
-          <div class="btn-group-vertical btn-group-sm" id="genre-buttons" data-toggle="buttons">
-            {% if selected_genre == None %}
-            <label class="btn btn-outline-primary active">
-              <input type="radio" name="genre" value="All" checked>
-              All
-            </label>
-            {% else %}
-            <label class="btn btn-outline-primary">
-              <input type="radio" name="genre" value="All">
-              All
-            </label>
-            {% endif %}
-            {% for genre in genres %}
-            {% if genre.name == selected_genre %}
-            <label class="btn btn-outline-primary active">
-              <input type="radio" name="genre" value="{{ genre.name }}" checked>
-              {{ genre.name }}
-            </label>
-            {% else %}
-            <label class="btn btn-outline-primary">
-              <input type="radio" name="genre" value="{{ genre.name }}">
-              {{ genre.name }}
-            </label>
-            {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-auto">
+        </a>
+      </li>
+      {% endif %}
+      {% if languages %}
       <!-- LANGUAGES -->
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Language
-        </button>
-        <div class="dropdown-menu">
-          <div class="btn-group-vertical btn-group" id="language-buttons" data-toggle="buttons">
-            {% if selected_language == None %}
-              <label class="btn btn-outline-primary active">
-                <input type="radio" name="language" value="All" checked>
-                All
-              </label>
-            {% else %}
-              <label class="btn btn-outline-primary">
-                <input type="radio" name="language" value="All">
-                All
-              </label>
-            {% endif %}
-            {% for language in languages %}
-              {% if language.name == selected_language %}
-                <label class="btn btn-outline-primary active">
-                  <input type="radio" name="language" value="{{ language.name }}" checked>
-                  {{ language.name }}
-                </label>
-              {% else %}
-                <label class="btn btn-outline-primary">
-                  <input type="radio" name="language" value="{{ language.name }}">
-                  {{ language.name }}
-                </label>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-auto">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" data-target="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+          Language
+        </a>
+      </li>
+      {% endif %}
       <!-- VIEW -->
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          View
-        </button>
-        <div class="dropdown-menu">
-          <div class="btn-group-vertical" id="view-buttons" data-toggle="buttons">
+      {% if view %}
+      <li class="nav-item">
+        <label class="nav-link view-button active">
           {% if selected_view == 'detail' %}
-            <label class="btn btn-outline-primary view-button active">
-              <input type="radio" name="view" value="detail" checked>
-              Detail
-            </label>
-            <label class="btn btn-outline-primary view-button">
-              <input type="radio" name="view" value="list">
-              List
-            </label>
+          <input type="checkbox" name="view" value="detail">
+          Detail
           {% else %}
-            <label class="btn btn-outline-primary view-button">
-              <input type="radio" name="view" value="detail">
-              Detail
-            </label>
-            <label class="btn btn-outline-primary view-button active">
-              <input type="radio" name="view" value="list" checked>
-              List
-            </label>
+          <input type="checkbox" name="view" value="list">
+          List
           {% endif %}
-          </div>
-        </div>
-      </div>
+        </label>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+<div class="row options-select">
+  {% if genres %}
+  <div class="collapse" id="language-collapse">
+    <div class="btn-group-vertical btn-group-sm" id="language-buttons" data-toggle="buttons">
+      {% if selected_language == None %}
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="language" value="All" checked>
+        All
+      </label>
+      {% else %}
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="language" value="All">
+        All
+      </label>
+      {% endif %}
+      {% for language in languages %}
+      {% if language.name == selected_language %}
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="language" value="{{ language.name }}" checked>
+        {{ language.name }}
+      </label>
+      {% else %}
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="language" value="{{ language.name }}">
+        {{ language.name }}
+      </label>
+      {% endif %}
+      {% endfor %}
     </div>
+  </div>
+  {% endif %}
+  {% if languages %}
+  <div class="collapse" id="genre-collapse">
+    <div class="btn-group-vertical btn-group-sm" id="genre-buttons{{ podcasts.paginator.count }}" data-toggle="buttons">
+      {% if selected_genre == None %}
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="genre" value="All" checked>
+        All
+      </label>
+      {% else %}
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="genre" value="All">
+        All
+      </label>
+      {% endif %}
+      {% for genre in genres %}
+      {% if genre.name == selected_genre %}
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="genre" value="{{ genre.name }}" checked>
+        {{ genre.name }}
+      </label>
+      {% else %}
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="genre" value="{{ genre.name }}">
+        {{ genre.name }}
+      </label>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 </div>
