@@ -18,10 +18,10 @@ def episodes(request):
         except:
             raise Http404()
 
-        episodes = podcast.get_episodes()
+        eps = podcast.get_episodes()
 
         context = {
-            'episodes': episodes,
+            'episodes': eps,
             'podcast': podcast,
         }
 
@@ -31,10 +31,10 @@ def play(request):
     """
     returns html5 audio element
     POST request in a popup
-    POST ajax request, bottom of page (#player)
+    POST ajax request, in multibar (#player)
     """
 
-    # TODO: itemize episode
+    # TODO: itemize episode, get url after redirections
     if request.method == 'POST':
         try:
             url = request.POST['url']
@@ -60,7 +60,7 @@ def subscribe(request):
     """
     subscribe to podcast via POST request
     delete existing subscription or create a new one
-    ajax update button with appropriate value
+    ajax update subscribers with correct value
     non-ajax redirects to current page
     if not logged in, redirects to login
     """

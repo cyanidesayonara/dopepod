@@ -9,9 +9,7 @@ login
 
 {% block stage %}
 <div class="container" id="settings">
-  <div class="row">
-    <div class="col">
-    </div>
+  <div class="row justify-content-center">
     <div class="col-auto">
       <h1>{% trans "Sign In" %}</h1>
 
@@ -45,8 +43,6 @@ login
         <a class="password-link" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
         <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
       </form>
-    </div>
-    <div class="col">
     </div>
   </div>
 </div>

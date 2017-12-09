@@ -5,7 +5,7 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% if podcasts1 %}
+{% if podcasts %}
 <div class="col" id="results-wrapper">
   <form id="result-form" method="GET" action="{% url 'browse' %}">
     {% include 'optionsbar.html' %}
