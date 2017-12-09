@@ -443,7 +443,14 @@ $(document)
         loadStage("/account/login/");
       })
       .done(function(response) {
-        button.html(response);
+        if (button[0].innerText == "Subscribe") {
+          button.html("Unsubscribe");
+        }
+        else {
+          button.html("Subscribe");
+        }
+
+        $("#n_subscribers").html(response);
 
         var url = $("#main-content")[0].baseURI;
         var context = $("#main-content")[0].innerHTML;

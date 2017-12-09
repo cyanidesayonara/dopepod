@@ -161,7 +161,6 @@ class Podcast(models.Model):
             subscription.delete()
             self.n_subscribers -= 1
             self.save()
-            return False
 
         # if subscription doesn't exist, create it
         except Subscription.DoesNotExist:
@@ -184,7 +183,8 @@ class Podcast(models.Model):
             )
             self.n_subscribers += 1
             self.save()
-            return True
+            
+        return self.n_subscribers
 
     def set_subscribed(self, user):
         """

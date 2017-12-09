@@ -15,17 +15,22 @@
       id="{{ podcast.itunesid }}" method="POST">
       {% csrf_token %}
       <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-      <span>
-        {{ podcast.n_subscribers }} subscribers
-      </span>
-      {% if podcast.subscribed %}
-      <button type="submit" class="btn btn-outline-primary active sub-button">
-        Unsubscribe
+      <p>
+        <span id="n_subscribers">
+          {{ podcast.n_subscribers }}
+        </span>
+        <span>
+          subscribers
+        </span>
+        {% if podcast.subscribed %}
+          <button type="submit" class="btn btn-outline-primary active sub-button">
+            Unsubscribe
         {% else %}
-        <button type="submit" class="btn btn-outline-primary sub-button">
-          Subscribe
-          {% endif %}
+          <button type="submit" class="btn btn-outline-primary sub-button">
+            Subscribe
+        {% endif %}
         </button>
+      </p>
       </form>
       <p>
         {% if podcast.genre.supergenre %}

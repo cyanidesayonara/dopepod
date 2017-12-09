@@ -99,17 +99,14 @@ def subscribe(request):
 
             # check whether podcast exists
             try:
-                podcast = Podcast.objects.get(itunesid=itunesid)
+                podcast = Podcast.objects.get(itunesid=int(itunesid))
             except Podcast.DoesNotExist:
                 raise Http404()
 
-            subscribed = podcast.subscribe(user)
-
+            n_subscribers = podcast.subscribe(user)
+            
             if request.is_ajax():
-                # this goes on button
-                if subscribed:
-                    return HttpResponse('Unsubscribe')
-                return HttpResponse('Subscribe')
+                return HttpResponse(str(n_subscribers))
             return redirect('/podinfo/' + itunesid + '/')
 
         else:
