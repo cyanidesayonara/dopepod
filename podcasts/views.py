@@ -3,29 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription
 
-def podinfo(request, itunesid):
-    """
-    returns a podinfo page
-    ajax: episodes loaded separately via ajax
-    non-ajax: episodes included
-    required argument: itunesid
-    """
-
-    if request.method == 'GET':
-        user = request.user
-        podcast = get_object_or_404(Podcast, itunesid=itunesid)
-
-        if user.is_authenticated:
-            podcast.set_subscribed(user)
-        context = {
-            'podcast': podcast,
-        }
-
-        if not request.is_ajax():
-            context['search'] = True
-            context['episodes'] = podcast.get_episodes()
-        return render(request, 'podinfo.html', context)
-
 def episodes(request):
     """
     returns html for episodes

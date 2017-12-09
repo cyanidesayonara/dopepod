@@ -205,6 +205,35 @@ def subscriptions(request):
     else:
         raise Http404()
 
+def podinfo(request, itunesid):
+    """
+    returns a podinfo page
+    ajax: episodes loaded separately via ajax
+    non-ajax: episodes included
+    required argument: itunesid
+    """
+
+    if request.method == 'GET':
+        user = request.user
+        podcast = get_object_or_404(Podcast, itunesid=itunesid)
+
+        if user.is_authenticated:
+            podcast.set_subscribed(user)
+        context = {
+            'podcast': podcast,
+        }
+
+        if not request.is_ajax():
+            genres = Genre.get_primary_genres()
+            chart = Podcast.get_charts(user)
+            context['genres'] = genres
+            context['chart'] = chart
+            context['alphabet'] = ALPHABET
+            context['selected_alphabet'] = 'A'
+            context['search'] = True
+            context['episodes'] = podcast.get_episodes()
+        return render(request, 'podinfo.html', context)
+
 def settings(request):
     """
     GET return settings form
