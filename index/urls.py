@@ -2,6 +2,7 @@ from django.conf.urls import url
 from index import views as index
 from podcasts import views as podcasts
 
+
 urlpatterns = [
     url(r'^$', index.index, name='index'),
     url(r'^search/$', index.search, name='search'),

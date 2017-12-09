@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect, Http404
+from django.shortcuts import render, redirect, Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import requests
+
 
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#']
 
@@ -27,6 +29,7 @@ def index(request):
             user = request.user
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts(user)
+            context['results_info'] = 'top podcasts in All'
             context['genres'] = genres
             context['chart'] = chart
 
@@ -67,11 +70,10 @@ def search(request):
         if q:
             user = request.user
 
-            genre = request.GET.get('genre', 'All')
-            language = request.GET.get('language', 'All')
+            genre = request.GET.get('genre', None)
+            language = request.GET.get('language', None)
             is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
             explicit = is_true(request.GET.get('explicit', 'true'))
-            view = request.GET.get('view', 'detail')
             page = int(request.GET.get('page', '1'))
             languages = Language.objects.all()
             genres = Genre.get_primary_genres()
@@ -87,34 +89,31 @@ def search(request):
                 'selected_q': q,
                 'selected_genre': genre,
                 'selected_language': language,
-                'selected_view': view,
                 'results_info': results_info,
                 'search': True,
-                'view': True,
             }
 
             if not request.is_ajax():
                 context['chart'] = Podcast.get_charts(user)
                 context['alphabet'] = ALPHABET
 
-            if view == 'detail':
-                paginator = Paginator(podcasts, 24)
-            else:
-                paginator = Paginator(podcasts, 50)
+            paginator = Paginator(podcasts, 24)
 
             try:
-                context['podcasts'] = paginator.page(page)
+                podcasts = paginator.page(page)
             except PageNotAnInteger:
                 # If page is not an integer, deliver first page.
-                context['podcasts'] = paginator.page(1)
+                podcasts = paginator.page(1)
             except EmptyPage:
                 # If page is out of range (e.g. 9999), deliver last page of results.
-                context['podcasts'] = paginator.page(paginator.num_pages)
+                podcasts = paginator.page(paginator.num_pages)
 
-            if view == 'detail':
-                return render(request, 'index/results_detail.html', context)
-            else:
-                return render(request, 'index/results_list.html', context)
+            if user.is_authenticated:
+                for podcast in podcasts:
+                    podcast.set_subscribed(user)
+
+            context['podcasts'] = podcasts
+            return render(request, 'index/results_detail.html', context)
 
         else:
             if request.is_ajax():
@@ -131,9 +130,8 @@ def browse(request):
     if request.method == 'GET':
         alphabet = request.GET.get('alphabet', 'A')
         languages = Language.objects.all()
-        genre = request.GET.get('genre', 'All')
-        language = request.GET.get('language', 'All')
-        view = request.GET.get('view', 'list')
+        genre = request.GET.get('genre', None)
+        language = request.GET.get('language', None)
         page = int(request.GET.get('page', '1'))
         is_true = lambda value: bool(value) and value.lower() not in ('false', '0')
         explicit = is_true(request.GET.get('explicit', 'true'))
@@ -149,34 +147,32 @@ def browse(request):
             'selected_alphabet': alphabet,
             'selected_genre': genre,
             'selected_language': language,
-            'selected_view': view,
             'results_info': results_info,
             'browse': True,
-            'view': True,
         }
 
         if not request.is_ajax():
             context['chart'] = Podcast.get_charts(user)
             context['alphabet'] = ALPHABET
 
-        if view == 'detail':
-            paginator = Paginator(podcasts, 24)
-        else:
-            paginator = Paginator(podcasts, 50)
+        paginator = Paginator(podcasts, 120)
+
 
         try:
-            context['podcasts'] = paginator.page(page)
+            podcasts = paginator.page(page)
         except PageNotAnInteger:
             # If page is not an integer, deliver first page.
-            context['podcasts'] = paginator.page(1)
+            podcasts = paginator.page(1)
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
-            context['podcasts'] = paginator.page(paginator.num_pages)
+            podcasts = paginator.page(paginator.num_pages)
 
-        if view == 'detail':
-            return render(request, 'index/results_detail.html', context)
-        else:
-            return render(request, 'index/results_list.html', context)
+        context['podcasts'] = podcasts
+        context['podcasts1'] = podcasts[:40]
+        context['podcasts2'] = podcasts[40:80]
+        context['podcasts3'] = podcasts[80:120]
+
+        return render(request, 'index/results_list.html', context)
 
 def subscriptions(request):
     """
@@ -224,6 +220,8 @@ def settings(request):
             chart = Podcast.get_charts(user)
             context['genres'] = genres
             context['chart'] = chart
+            context['alphabet'] = ALPHABET
+            context['selected_alphabet'] = 'A'
 
         if request.method == 'GET':
             context['user_form'] = UserForm(instance=request.user)
@@ -231,13 +229,15 @@ def settings(request):
             return render(request, 'index/settings.html', context)
 
         if request.method == 'POST':
-            context['user_form'] = UserForm(instance=request.user)
-            context['profile_form'] = ProfileForm(instance=request.user.profile)
+            user_form = UserForm(instance=request.user)
+            profile_form = ProfileForm(instance=request.user.profile)
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
-                return render(request, 'index/settings.html', context)
+                return redirect('/')
             else:
+                context['user_form'] = user_form
+                context['profile_form'] = profile_form
                 return render(request, 'index/settings.html', context)
     else:
         raise Http404()

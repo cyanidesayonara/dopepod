@@ -42,11 +42,11 @@ class Podcast(models.Model):
             podcasts = podcasts.filter(explicit=explicit)
 
         # filter by language
-        if language != 'All':
+        if language:
             podcasts = podcasts.filter(language__name=language)
 
         # filter by genre
-        if genre != 'All':
+        if genre:
             podcasts = podcasts.filter(
                 Q(genre__name=genre) |
                 Q(genre__supergenre__name=genre)
@@ -64,10 +64,6 @@ class Podcast(models.Model):
                 Q(title__istartswith=alphabet) |
                 Q(title__istartswith=the)
             ).order_by('title')
-
-        if user.is_authenticated:
-            for podcast in podcasts:
-                podcast.set_subscribed(user)
         return podcasts
 
     def set_charts():
@@ -218,54 +214,60 @@ class Podcast(models.Model):
         try:
             r.raise_for_status()
 
-            root = etree.XML(r.content)
+            try:
+                root = etree.XML(r.content)
 
-            ns.update(root.nsmap)
-            tree = root.find('channel')
-            podcast = tree.findtext('title')
+                ns.update(root.nsmap)
+                tree = root.find('channel')
+                podcast = tree.findtext('title')
 
-            for item in tree.findall('item'):
-                episode = {}
-                episode['pubDate'] = item.findtext('pubDate')
+                for item in tree.findall('item'):
+                    episode = {}
+                    episode['pubDate'] = item.findtext('pubDate')
 
-                # try these
-                try:
-                    episode['title'] = item.findtext('title')
-                    episode['summary'] = item.findtext('description')
-                except AttributeError:
-                    # or try with itunes namespace
+                    # try these
                     try:
-                        episode['title'] = item.find('itunes:title', ns).text
-                        episode['summary'] = item.xpath('itunes:summary', ns).text
-                    # if episode data not found, skip
+                        episode['title'] = item.findtext('title')
+                        episode['summary'] = item.findtext('description')
+                    except AttributeError:
+                        # or try with itunes namespace
+                        try:
+                            episode['title'] = item.find('itunes:title', ns).text
+                            episode['summary'] = item.xpath('itunes:summary', ns).text
+                        # if episode data not found, skip
+                        except AttributeError as e:
+                            import logging
+                            logger = logging.getLogger(__name__)
+                            logger.error('can\'t get episode data')
+                            continue
+                    # try to get length
+                    try:
+                        episode['length'] = item.find('itunes:duration', ns).text
                     except AttributeError as e:
                         import logging
                         logger = logging.getLogger(__name__)
-                        logger.error('can\'t get episode data')
-                        continue
-                # try to get length
-                try:
-                    episode['length'] = item.find('itunes:duration', ns).text
-                except AttributeError as e:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error('can\'t get length')
-                    pass
+                        logger.error('can\'t get length')
+                        pass
 
-                episode['podcast'] = self
+                    episode['podcast'] = self
 
-                # link to episode
-                # enclosure might be missing, have alternatives
-                enclosure = item.find('enclosure')
-                try:
-                    episode['url'] = enclosure.get('url')
-                    episode['type'] = enclosure.get('type')
-                    episodes.append(episode)
-                except AttributeError as e:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error('can\'t get episode url')
-            return episodes
+                    # link to episode
+                    # enclosure might be missing, have alternatives
+                    enclosure = item.find('enclosure')
+                    try:
+                        episode['url'] = enclosure.get('url')
+                        episode['type'] = enclosure.get('type')
+                        episodes.append(episode)
+                    except AttributeError as e:
+                        import logging
+                        logger = logging.getLogger(__name__)
+                        logger.error('can\'t get episode url')
+                return episodes
+
+            except etree.XMLSyntaxError:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error('trouble with xml')
 
         except requests.exceptions.HTTPError as e:
             print(str(e))

@@ -8,8 +8,8 @@ dopepod
 <!-- MULTI BAR -->
 <div class="container-fluid sticky-top extended" id="bar">
   <div class="row open" id="stage">
-  {% block stage %}
-  {% endblock %}
+    {% block stage %}
+    {% endblock %}
   </div>
   <div class="row" id="multi-bar-scroll">
     {% include 'multibar.html' %}
@@ -17,11 +17,13 @@ dopepod
 </div>
 <!-- MAIN -->
 <div class="container"id="main">
+  <div class="row" id="episodes">
+    {% include 'episodes.html' %}
+  </div>
   <!-- RESULTS -->
   <div class="row" id="results">
     {% block results %}
     {% endblock %}
-    {% include 'episodes.html' %}
   </div>
   <!-- CHARTS -->
   <div class="row" id="charts">

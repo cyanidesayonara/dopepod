@@ -89,7 +89,7 @@ function replaceState(url) {
 function loadEpisodes(itunesid) {
   // load episodes for podcast
   // TODO also load on back button
-  $('#results').html("<div class='col' id='overlay'></div>");
+  $('#episodes').html("<div class='col' id='overlay'></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -101,7 +101,7 @@ function loadEpisodes(itunesid) {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#results").html(response);
+      $("#episodes").html(response);
       $('#overlay').hide();
       var url = $("#main-content")[0].baseURI;
       replaceState(url);
@@ -201,13 +201,13 @@ function SearchFunc(url, page) {
   if ($("#options-bar").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
-      if (genre != "All") {
+      if (genre) {
         data["genre"] = genre;
       }
     }
     if ($("#language-buttons").length) {
       var language = $("input[name=language]:checked").val();
-      if (language != "All") {
+      if (language) {
         data["language"] = language;
       }
     }
@@ -237,23 +237,18 @@ function SearchFunc(url, page) {
       }
       replaceState(url);
     });
+
+    return xhr;
 }
 
 function showSearch() {
-  if ($("#search-bar").css("display") == "none") {
-    toggleBars();
-  }
+  $("#browse-bar").hide();
+  $("#search-bar").show();
 }
 
 function showBrowse() {
-  if ($("#browse-bar").css("display") == "none") {
-    toggleBars();
-  }
-}
-
-function toggleBars() {
-  $("#search-bar").toggle();
-  $("#browse-bar").toggle();
+  $("#search-bar").hide();
+  $("#browse-bar").show();
 }
 
 // after page loads
@@ -280,6 +275,9 @@ $(document)
       SearchFunc(url, false);
     }, 250);
     scrollToBar()
+    $("#stage").html("");
+    $("#episodes").html("");
+    $("#charts").show();
   })
   // search when "search" button is clicked
   .on("submit", "#search-form, #browse-form", function(e) {
@@ -288,13 +286,18 @@ $(document)
     pushState();
     SearchFunc(url, false);
     scrollToBar()
+    $("#stage").html("");
+    $("#episodes").html("");
+    $("#charts").show();
   })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     pushState();
     SearchFunc(url, false);
     scrollToBar()
-  })
+    $("#stage").html("");
+    $("#episodes").html("");
+ })
   .on("submit", "#result-form", function(e) {
     e.preventDefault();
     var url = this.action;
@@ -302,9 +305,10 @@ $(document)
     console.log(form);
     pushState();
     SearchFunc(url, true);
+
   })
   // search when user changes options
-  .on("change", "#page-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
+  .on("change", "#page-buttons, #genre-buttons, #language-buttons", function() {
     var url = $("#result-form")[0].action;
     pushState();
     SearchFunc(url, true);
@@ -315,7 +319,6 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
-    showSearch();
     loadStage(url);
     scrollToTop();
     loadEpisodes(itunesid);
@@ -326,13 +329,22 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
-    loadResults("/charts/");
+    scrollToTop();
+    $("#charts").show();
+    $("#stage").html("");
+    $("#results").html("");
+    $("#episodes").html("");
+    replaceState("/");
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
     showBrowse();
+    scrollToBar();
+    $("#charts").hide();
+    $("#stage").html("");
+    $("#episodes").html("");
     loadResults("/browse/");
    })
   .on("click", ".search-toggle", function(e) {
@@ -346,6 +358,10 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
+    scrollToBar();
+    $("#charts").hide();
+    $("#stage").html("");
+    $("#episodes").html("");
     loadResults("/subscriptions/");
   })
   // open settings
@@ -353,6 +369,10 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
+    scrollToTop();
+    $("#charts").hide();
+    $("#stage").html("");
+    $("#episodes").html("");
     loadStage("/settings/");
   })
   // replace settings, empty and hide modal
@@ -368,11 +388,16 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
+        pushState();
         $("#stage").html(xhr.responseJSON.html);
       })
       .done(function(response) {
+        pushState();
         showSearch();
-        loadResults("/charts/");
+        scrollToTop();
+        $("#charts").show();
+        $("#stage").html("");
+        $("#episodes").html("");
       });
   })
   // put episode in player

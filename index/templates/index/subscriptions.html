@@ -14,15 +14,24 @@ dopepod
     <div class="col">
       {% for subscription in subscriptions %}
         <div class="row">
-          <a class="col show-podinfo sub-box" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
+          <div class="col-auto">
+            <a class="show-podinfo" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
+              <img class="img-fluid" src="//images.weserv.nl/?url={{ subscription.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+            </a>
+          </div>
+          <div class="col">
             <h6>
-              {{ subscription.title }}
+              <a class="show-podinfo" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
+                {{ subscription.title }}
+              </a>
             </h6>
             <p>
               {{ subscription.last_updated }}
             </p>
+          </div>
           </a>
         </div>
+        <hr />
       {% endfor %}
     </div>
   </div>
@@ -31,7 +40,7 @@ dopepod
 <div class="col" id="results-wrapper">
   {% include 'optionsbar.html' %}
   <p>
-    No results :p
+    No subscriptions :p
   </p>
 </div>
 {% endif %}

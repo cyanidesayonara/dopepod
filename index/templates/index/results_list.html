@@ -5,23 +5,37 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% if podcasts %}
+{% if podcasts1 %}
 <div class="col" id="results-wrapper">
-  {% if search %}
-    <form id="result-form" method="GET" action="{% url 'search' %}">
-  {% else %}
-    <form id="result-form" method="GET" action="{% url 'browse' %}">
-  {% endif %}
+  <form id="result-form" method="GET" action="{% url 'browse' %}">
     {% include 'optionsbar.html' %}
   </form>
-  <div class="row">
-    <div class="col" id="results-list">
-      {% for podcast in podcasts %}
-        <div class="row">
-          <a class="col show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-          <h6>{{ podcast.title }}</h6>
+  <div class="row results-row">
+    <div class="col-sm-4">
+      {% for podcast in podcasts1 %}
+        <h6 class="browse-result-title">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            {{ podcast.title }}
           </a>
-        </div>
+        </h6>
+      {% endfor %}
+    </div>
+    <div class="col-sm-4">
+      {% for podcast in podcasts2 %}
+        <h6 class="browse-result-title">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            {{ podcast.title }}
+          </a>
+        </h6>
+      {% endfor %}
+    </div>
+    <div class="col-sm-4">
+      {% for podcast in podcasts3 %}
+        <h6 class="browse-result-title">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            {{ podcast.title }}
+          </a>
+        </h6>
       {% endfor %}
     </div>
   </div>
