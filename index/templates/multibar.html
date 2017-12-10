@@ -1,38 +1,38 @@
-<div class="col color" id="multi-bar">
-    <div class="row texture">
-      <div class="col">
+<div class="col texture" id="multi-bar">
+  <div class="container">
+    <div class="row">
+      <!-- PLAYA -->
+      <div class="col-sm-8" id="player">
       </div>
       <!-- SEARCH BAR -->
-      {% if search %}
-      <div class="col-auto" id="search-bar">
-      {% else %}
-      <div class="col-auto" id="search-bar" style="display: none;">
-      {% endif %}
+      <div class="col-sm-4">
         <form id="search-form" method="GET" action="{% url 'search' %}">
           <div class="input-group" id="search-field">
             <label for="q" class="sr-only">Search</label>
             {% if selected_q %}
-              <input class="form-control" type="text" name="q" id="q"
-              type="search" placeholder="Search for..."
-              aria-label="Search for..." autocomplete="off"
-              accept-charset="utf-8" value="{{ selected_q }}">
+            <input class="form-control" type="text" name="q" id="q"
+            type="search" placeholder="Search for..."
+            aria-label="Search for..." autocomplete="off"
+            accept-charset="utf-8" value="{{ selected_q }}">
             {% else %}
-              <input class="form-control" type="text" name="q" id="q"
-              type="search" placeholder="Search for..."
-              aria-label="Search for..." autocomplete="off"
-              accept-charset="utf-8">
+            <input class="form-control" type="text" name="q" id="q"
+            type="search" placeholder="Search for..."
+            aria-label="Search for..." autocomplete="off"
+            accept-charset="utf-8">
             {% endif %}
-              <button class="btn btn-outline-primary" id="search-button" type="submit">
-                <i class="fa fa-search"></i>
-              </button>
+            <button class="btn btn-outline-primary" id="search-button" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </form>
       </div>
+    </div>
+    <div class="row">
       <!-- BROWSE BAR -->
       {% if browse %}
-      <div class="col-auto" id="browse-bar">
+      <div class="col" id="browse-bar">
       {% else %}
-      <div class="col-auto" id="browse-bar" style="display: none;">
+      <div class="col" id="browse-bar" style="display: none;">
       {% endif %}
         <form id="browse-form" method="GET" action="{% url 'browse' %}">
           <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
@@ -52,10 +52,6 @@
           </div>
         </form>
       </div>
-      <div class="col">
-      </div>
     </div>
-    <!-- PLAYA -->
-    <div class="row texture" id="player">
-    </div>
+  </div>
 </div>

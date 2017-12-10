@@ -12,8 +12,14 @@ settings
     </div>
     <div class="col-auto">
       <form id="settings-form" action="{% url 'settings' %}" method="POST">
+      {{ user_form }}
+      {{ profile_form }}
+      <button class="btn btn-outline-primary" type="submit">
+        Save changes
+      </button>
       {% csrf_token %}
-      <p>
+      </form>
+      <!-- <p>
         {{ user_form.email.label_tag }}
       </p>
       <p>
@@ -28,11 +34,7 @@ settings
       <p>
         {{ profile_form.show_explicit.label_tag }}
         {{ profile_form.show_explicit }}
-      </p>
-      <button class="btn btn-outline-primary" type="submit">
-        Save changes
-      </button>
-      </form>
+      </p> -->
     </div>
     <div class="col">
     </div>
