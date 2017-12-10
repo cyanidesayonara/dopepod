@@ -267,18 +267,17 @@ $(document)
   })
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
-
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
       pushState();
       SearchFunc(url, false);
     }, 250);
-    scrollToBar()
+    scrollToTop();
     $("#stage").html("");
     $("#episodes").html("");
     $("#charts").show();
-  })
+   })
   // search when "search" button is clicked
   .on("submit", "#search-form, #browse-form", function(e) {
     e.preventDefault();
@@ -294,7 +293,7 @@ $(document)
     var url = $("#browse-form")[0].action;
     pushState();
     SearchFunc(url, false);
-    scrollToBar()
+    scrollToTop()
     $("#stage").html("");
     $("#episodes").html("");
  })
@@ -451,6 +450,13 @@ $(document)
         }
 
         $("#n_subscribers").html(response);
+        
+        if (response == "1") {
+          $("#subscriber").html("subscriber");
+        }
+        else {
+          $("#subscriber").html("subscribers");
+        }
 
         var url = $("#main-content")[0].baseURI;
         var context = $("#main-content")[0].innerHTML;
