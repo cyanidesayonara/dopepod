@@ -12,14 +12,15 @@ body {
   border-color: rgba(76,222,181,1);
 }
 
-.btn-outline-primary.active, .btn-outline-primary:hover, .btn-outline-primary:focus {
-    color: #fff;
-    background-color: rgba(76,222,181,1);
-    border-color: rgba(76,222,181,1);
-    box-shadow: 0 0 0 3px rgba(76,222,181,.5);
+.btn-outline-primary.active, .btn-outline-primary:hover {
+  color: #fff;
+  background-color: rgba(76,222,181,1);
+  border-color: rgba(76,222,181,1);
 }
-
-/*$brand-primary: ;*/
+  
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 3px rgba(76,222,181,.5);
+}
 
 .color {
   background: rgba(76,222,181,1);
@@ -35,6 +36,17 @@ body {
 .navbar {
   padding: 0px;
 }
+
+#brand {
+  text-align: center;
+  display: inline-block;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  font-size: 1.5rem;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
 
 #nav-bar {
   background: rgba(255, 255, 255, 1);
@@ -56,7 +68,7 @@ body {
 }
 
 #main {
-  padding: 30px;
+  padding: 15px;
   min-height: 100vh;
 }
 #episodes {
@@ -140,15 +152,15 @@ body {
 }
 #search-button {
   position: absolute;
-  left: 340px;
+  left: 342px;
   top: 16px;
   z-index: 50;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   height: 38px;
   width: 38px;
 }
 #q {
-  border-radius: 22px;
+  /* border-radius: 22px; */
   padding: .75rem 1rem;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -173,10 +185,19 @@ body {
 #podinfo {
   padding: 15px 0px;
   height: 100%;
+  background-color: #fff;
+}
+
+#podinfo-image {
+  text-align: center;
 }
 
 .results-row {
   padding: 15px;
+}
+
+.results-info {
+  text-align: center;
 }
 
 #browse {

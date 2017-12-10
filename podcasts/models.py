@@ -5,6 +5,10 @@ from django.urls import reverse
 from django.db.models import Q
 import requests
 from lxml import etree, html
+import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
@@ -125,8 +129,6 @@ class Podcast(models.Model):
                     podcast = Podcast.objects.get(itunesid=itunesid)
                 # if podcast don't exists, scrape it and create it
                 except Podcast.DoesNotExist:
-                    import logging
-                    logger = logging.getLogger(__name__)
                     logger.error('can\'t get pod, scraping')
                     podcast = Podcast.scrape_podcast(itunesid)
 
@@ -220,15 +222,14 @@ class Podcast(models.Model):
         episodes = []
 
         try:
-            r = requests.get(self.feedUrl, timeout=5)
-            r.raise_for_status()
+            response = requests.get(self.feedUrl, timeout=5)
+            response.raise_for_status()
 
             try:
-                root = etree.XML(r.content)
+                root = etree.XML(response.content)
 
                 ns.update(root.nsmap)
                 tree = root.find('channel')
-                podcast = tree.findtext('title')
 
                 for item in tree.findall('item'):
                     episode = {}
@@ -245,19 +246,17 @@ class Podcast(models.Model):
                             episode['summary'] = item.xpath('itunes:summary', ns).text
                         # if episode data not found, skip
                         except AttributeError as e:
-                            import logging
-                            logger = logging.getLogger(__name__)
                             logger.error('can\'t get episode data')
                             continue
 
-                    # try to get length
+                    # try to get length TODO also called "length", "fileSizequit()"
                     try:
-                        episode['length'] = item.find('itunes:duration', ns).text
+                        length = item.find('itunes:duration', ns).text
+                        if ':' not in length:
+                            length = str(datetime.timedelta(seconds=int(length)))
+                        episode['length'] = length
                     except AttributeError as e:
-                        import logging
-                        logger = logging.getLogger(__name__)
                         logger.error('can\'t get length')
-                        pass
 
                     episode['podcast'] = self
 
@@ -269,14 +268,10 @@ class Podcast(models.Model):
                         episode['type'] = enclosure.get('type')
                         episodes.append(episode)
                     except AttributeError as e:
-                        import logging
-                        logger = logging.getLogger(__name__)
                         logger.error('can\'t get episode url')
                 return episodes
 
             except etree.XMLSyntaxError:
-                import logging
-                logger = logging.getLogger(__name__)
                 logger.error('trouble with xml')
 
         except requests.exceptions.HTTPError as e:
@@ -330,24 +325,23 @@ class Podcast(models.Model):
         # get data from itunes lookup
         url = 'https://itunes.apple.com/lookup?id=' + itunesid
         try:
-            r = requests.get(url, headers=headers, timeout=30)
-            r.raise_for_status()
-            jsonresponse = r.json()
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            jsonresponse = response.json()
             data = jsonresponse['results'][0]
             itunesUrl = data['collectionViewUrl'].split('?')[0]
         except requests.exceptions.HTTPError as e:
-            print('no response from lookup')
+            logger.error('no response from lookup')
             return
 
         # get more data from itunes artist page
         try:
-            r = requests.get(itunesUrl, headers=headers, timeout=30)
-            r.raise_for_status()
+            response = requests.get(itunesUrl, headers=headers, timeout=30)
+            response.raise_for_status()
 
             tree = html.fromstring(r.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
             podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
-
 
             try:
                 description = tree.xpath('//div[@class="product-review"]/p/text()')[0]
@@ -374,8 +368,8 @@ class Podcast(models.Model):
 
                 # make sure feedUrl works
                 try:
-                    r = requests.get(feedUrl, headers=headers, timeout=30)
-                    r.raise_for_status()
+                    response = requests.get(feedUrl, headers=headers, timeout=30)
+                    response.raise_for_status()
                     try:
                         return Podcast.objects.get(itunesid=itunesid)
                     except Podcast.DoesNotExist:

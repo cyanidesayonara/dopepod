@@ -149,8 +149,8 @@ class WillyTheSpider(scrapy.Spider):
 
             try:
                 # make sure feedUrl works
-                r = requests.get(feedUrl, headers=headers, timeout=60)
-                r.raise_for_status()
+                response = requests.get(feedUrl, headers=headers, timeout=60)
+                response.raise_for_status()
 
                 return PodcastItem (
                     itunesid=itunesid,

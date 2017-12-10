@@ -8,10 +8,13 @@
 <div class="container">
   <div class="row" id="podinfo">
     <!-- PODINFO -->
-    <div class="col-sm-3" id="podinfo-image">
+    <div class="col-sm-3 col-6" id="podinfo-image">
       <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
+      <a class="btn btn-primary" data-toggle="collapse" href="#episodeCollapse" aria-expanded="false" aria-controls="episodeCollapse">
+        Show episodes
+      </a>
     </div>
-    <div class="col-sm-6" id="podinfo-main">
+    <div class="col-6" id="podinfo-main">
       <h3>
         {{ podcast.title }}
       </h3>

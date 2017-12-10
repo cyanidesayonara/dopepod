@@ -10,9 +10,6 @@ $(window).on("popstate", function(event) {
     // if (state.alphabet) {
     //   $("input[name='alphabet'][value=' + state.alphabet + ']").prop("checked", true);
     // }
-    // if (state.view) {
-    //   $("input[name='view'][value=' + state.view + ']").prop("checked", true);
-    // }
   }
 })
 
@@ -89,7 +86,6 @@ function replaceState(url) {
 function loadEpisodes(itunesid) {
   // load episodes for podcast
   // TODO also load on back button
-  $('#episodes').html("<div class='col' id='overlay'></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -101,17 +97,12 @@ function loadEpisodes(itunesid) {
       console.log(thrownError);
     })
     .done(function(response) {
-      $("#episodes").html(response);
-      $('#overlay').hide();
-      var url = $("#main-content")[0].baseURI;
-      replaceState(url);
+      if ($("#podinfo").length) {
+        $("#episodes").html(response);
+        var url = $("#main-content")[0].baseURI;
+        replaceState(url);
+      }
     });
-}
-
-function openStage() {
-  $("#stage").addClass("open");
-  $("#bar").addClass("extended");
-  $("#main").toggle();
 }
 
 function loadResults(url) {
@@ -198,6 +189,7 @@ function SearchFunc(url, page) {
       data["alphabet"] = $("input[name=alphabet]:checked").val();
     }
   }
+
   if ($("#options-bar").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
@@ -219,8 +211,6 @@ function SearchFunc(url, page) {
     }
   }
 
-  copyurl = url;
-
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -233,7 +223,7 @@ function SearchFunc(url, page) {
       $("#results").html(response);
 
       if (!jQuery.isEmptyObject(data)) {
-        var url = copyurl + "?" + $.param(data);
+        url = url + "?" + $.param(data);
       }
       replaceState(url);
     });
@@ -249,6 +239,18 @@ function showSearch() {
 function showBrowse() {
   $("#search-bar").hide();
   $("#browse-bar").show();
+}
+
+function showStage() {
+  $("#stage").html("");
+  $("#stage").addClass("open");
+  $("#bar").addClass("extended");
+}
+
+function hideStage() {
+  $("#stage").html("");
+  $("#stage").removeClass("open");
+  $("#bar").removeClass("extended");
 }
 
 // after page loads
@@ -273,44 +275,51 @@ $(document)
       pushState();
       SearchFunc(url, false);
     }, 250);
-    scrollToTop();
-    $("#stage").html("");
+    hideStage();
     $("#episodes").html("");
-    $("#charts").show();
+    $("#charts").hide();
    })
   // search when "search" button is clicked
   .on("submit", "#search-form, #browse-form", function(e) {
     e.preventDefault();
     var url = this.action;
-    pushState();
-    SearchFunc(url, false);
-    scrollToBar()
-    $("#stage").html("");
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      pushState();
+      SearchFunc(url, false);
+    }, 250);
+    hideStage();
     $("#episodes").html("");
-    $("#charts").show();
+    $("#charts").hide();
   })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     pushState();
     SearchFunc(url, false);
-    scrollToTop()
-    $("#stage").html("");
+    hideStage();
     $("#episodes").html("");
  })
   .on("submit", "#result-form", function(e) {
     e.preventDefault();
-    var url = this.action;
-    var form = $(this).serialize();
-    console.log(form);
-    pushState();
-    SearchFunc(url, true);
-
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = this.action;
+      pushState();
+      SearchFunc(url, true);
+    }, 250);
+    hideStage();
+    $("#episodes").html("");
   })
   // search when user changes options
   .on("change", "#page-buttons, #genre-buttons, #language-buttons", function() {
-    var url = $("#result-form")[0].action;
-    pushState();
-    SearchFunc(url, true);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = $("#result-form")[0].action;
+      pushState();
+      SearchFunc(url, true);
+    }, 250);
+    hideStage();
+    $("#episodes").html("");
   })
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
@@ -318,10 +327,9 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
+    showStage();
     loadStage(url);
-    scrollToTop();
     loadEpisodes(itunesid);
-
   })
   // go to home view
   .on("click", ".index-link", function(e) {
@@ -330,7 +338,7 @@ $(document)
     showSearch();
     scrollToTop();
     $("#charts").show();
-    $("#stage").html("");
+    showStage();
     $("#results").html("");
     $("#episodes").html("");
     replaceState("/");
@@ -340,10 +348,9 @@ $(document)
     e.preventDefault();
     pushState();
     showBrowse();
-    scrollToBar();
     $("#charts").hide();
-    $("#stage").html("");
     $("#episodes").html("");
+    hideStage();
     loadResults("/browse/");
    })
   .on("click", ".search-toggle", function(e) {
@@ -357,10 +364,9 @@ $(document)
     e.preventDefault();
     pushState();
     showSearch();
-    scrollToBar();
     $("#charts").hide();
-    $("#stage").html("");
     $("#episodes").html("");
+    hideStage();
     loadResults("/subscriptions/");
   })
   // open settings
@@ -370,7 +376,7 @@ $(document)
     showSearch();
     scrollToTop();
     $("#charts").hide();
-    $("#stage").html("");
+    showStage();
     $("#episodes").html("");
     loadStage("/settings/");
   })
@@ -395,8 +401,7 @@ $(document)
         showSearch();
         scrollToTop();
         $("#charts").show();
-        $("#stage").html("");
-        $("#episodes").html("");
+        hideStage();
       });
   })
   // put episode in player
@@ -475,6 +480,7 @@ $(document)
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
+    openStage();
     loadStage(url);
   })
   // login or signup, refresh after
@@ -493,9 +499,9 @@ $(document)
         $("#stage").html(xhr.responseJSON.html);
       })
       .done(function() {
-        $("#stage").html("");
         refreshCookie();
         refreshPage();
+        openStage();
         loadResults("/charts/");
       });
   })

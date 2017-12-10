@@ -291,10 +291,10 @@ def settings(request):
                     return render(request, 'index/settings.html', {})
                 return redirect('/')
             else:
-                context.update({
+                context = {
                     'user_form': user_form,
                     'profile_form': profile_form,
-                })
+                }
 
                 if request.is_ajax():
                     return render(request, 'index/settings.html', context)
