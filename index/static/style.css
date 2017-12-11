@@ -59,7 +59,7 @@ body {
   background-color: rgba(76,222,181,1);
   border-color: rgba(76,222,181,1);
 }
-  
+
 .btn-outline-primary:focus {
   box-shadow: 0 0 0 3px rgba(76,222,181,.5);
 }
@@ -113,9 +113,7 @@ body {
   padding: 15px;
   min-height: 100vh;
 }
-#episodes {
 
-}
 #subscriptions {
 
 }
@@ -135,7 +133,8 @@ body {
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
 }
 #multi-bar-scroll {
-  padding-top: 56px;
+  margin-top: 56px;
+  z-index: 95;
 }
 #options {
 }
@@ -162,20 +161,14 @@ body {
 }
 
 #stage.open {
-  height: calc(50vh);
-  height: -o-calc(50vh); /* opera */
-  height: -webkit-calc(50vh); /* google, safari */
-  height: -moz-calc(50vh); /* firefox */
+  height: 500px;
   padding-top: 56px;
   padding-bottom: 14px;
   margin-bottom: -70px;
 }
 
 #bar.extended{
-  top: calc(-50vh + 70px);
-  top: -o-calc(-50vh + 70px); /* opera */
-  top: -webkit-calc(-50vh + 70px); /* google, safari */
-  top: -moz-calc(-50vh + 70px); /* firefox */
+  top: -430px;
 }
 
 #stage {
@@ -185,24 +178,21 @@ body {
 }
 
 #search-form {
-
 }
 #search-field {
-  width: 400px;
-  margin: 0px;
   padding: .75rem 1rem;
 }
 #search-button {
   position: absolute;
-  left: 342px;
+  left: 292px;
   top: 16px;
   z-index: 50;
-  /* border-radius: 20px; */
+   border-radius: 20px;
   height: 38px;
   width: 38px;
 }
 #q {
-  /* border-radius: 22px; */
+   border-radius: 22px;
   padding: .75rem 1rem;
   -webkit-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
@@ -226,12 +216,24 @@ body {
 /* PODINFO */
 #podinfo {
   padding: 15px 0px;
-  height: 100%;
+  height: 385px;
   background-color: #fff;
+}
+#podinfo-bottom {
+  height: 45px;
+}
+
+#show-episodes {
+  background-color: #888;
+  text-align: center;
 }
 
 #podinfo-image {
   text-align: center;
+}
+
+#sub-form {
+    padding-top: 15px;
 }
 
 .results-row {
@@ -277,12 +279,14 @@ body {
 #episodes-wrapper {
   min-height: 100%;
   margin-top: 15px;
-  padding-top: 15px;
   margin-bottom: 15px;
   border: 1px solid #e6ecf0;
   /*border-radius: 8px;*/
   overflow: hidden;
   background-color: #FFFFFF;
+}
+#episodes {
+
 }
 
 #results-wrapper {
@@ -359,7 +363,8 @@ a, a:hover {
 
 /* PLAYER */
 #player {
-
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 #overlay {

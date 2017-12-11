@@ -1,48 +1,57 @@
 {% if episodes %}
-<div class="col" id="episodes-wrapper">
+<div class="col">
   <div class="collapse" id="episodeCollapse">
-    <div id="exampleAccordion" data-children=".item">
-    {% for episode in episodes %}
-      <div class="item">
-        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion{{ forloop.counter }}" aria-expanded="false" aria-controls="exampleAccordion{ forloop.counter }}">
-          <div class="row">
-            <div class="col">
-              {{ episode.title }}
+    <div class="row">
+      <div class="col" id="episodes-wrapper">
+        <div id="episode-accordion" data-children=".item">
+          {% for episode in episodes %}
+            <div class="item">
+              <div class="row">
+                <div class="col-auto">
+                  <a class="btn btn-primary" data-toggle="collapse" data-parent="#episode-accordion" href="#episode-accordion{{ forloop.counter }}" aria-expanded="false" aria-controls="episode-accordion{ forloop.counter }}">
+                    Show more
+                  </a>
+                </div>
+                <div class="col">
+                  {{ episode.title }}
+                </div>
+                <div class="col-auto">
+                  {{ episode.pubDate }}
+                </div>
+                <div class="col-auto">
+                  {{ episode.length }}
+                </div>
+                <div class="col-auto">
+                  <form class="play" action="{% url 'play' %}" method="POST" target="_blank">
+                    {% csrf_token %}
+                    <input type="hidden" name="url" value="{{ episode.url }}">
+                    <input type="hidden" name="type" value="{{ episode.type }}">
+                    <input type="hidden" name="title" value="{{ episode.title }}">
+                    <input type="hidden" name="date" value="{{ episode.pubDate }}">
+                    <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+                    <button class="btn btn-outline-primary" type="submit">
+                      Play
+                    </button>
+                  </form>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-outline-primary">
+                    Download
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div id="episode-accordion{{ forloop.counter }}" class="collapse" role="tabpanel">
+                  <p class="mb-3">
+                    {{ episode.summary }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="col-auto">
-              {{ episode.pubDate }}
-            </div>
-            <div class="col-auto">
-              {{ episode.length }}
-            </div>
-            <div class="col-auto">
-              <form class="play" action="{% url 'play' %}" method="POST" target="_blank">
-                {% csrf_token %}
-                <input type="hidden" name="url" value="{{ episode.url }}">
-                <input type="hidden" name="type" value="{{ episode.type }}">
-                <input type="hidden" name="title" value="{{ episode.title }}">
-                <input type="hidden" name="date" value="{{ episode.pubDate }}">
-                <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-                <button class="btn btn-outline-primary" type="submit">
-                  Play
-                </button>
-              </form>
-            </div>
-            <div class="col-auto">
-              <button class="btn btn-outline-primary">
-                Download
-              </button>
-            </div>
-          </div>
-        </a>
-        <div id="exampleAccordion{{ forloop.counter }}" class="collapse" role="tabpanel">
-          <p class="mb-3">
-            {{ episode.summary }}
-          </p>
+            <hr />
+          {% endfor %}
         </div>
       </div>
-      <hr />
-    {% endfor %}
     </div>
   </div>
 </div>

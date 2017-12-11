@@ -455,7 +455,7 @@ $(document)
         }
 
         $("#n_subscribers").html(response);
-        
+
         if (response == "1") {
           $("#subscriber").html("subscriber");
         }
@@ -480,7 +480,7 @@ $(document)
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    openStage();
+    showStage();
     loadStage(url);
   })
   // login or signup, refresh after
@@ -501,7 +501,7 @@ $(document)
       .done(function() {
         refreshCookie();
         refreshPage();
-        openStage();
+        showStage();
         loadResults("/charts/");
       });
   })
