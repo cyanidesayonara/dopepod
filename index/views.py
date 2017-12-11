@@ -54,7 +54,7 @@ def charts(request):
         results_info = 'top podcasts ' + ('on itunes' if genre == None else 'in ' + str(genre))
 
         context = {
-            'chart': chart,
+            'chart': chart[50],
             'chart_genres': genres,
             'chart_selected_genre': genre,
             'chart_results_info': results_info,

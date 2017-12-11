@@ -101,16 +101,20 @@ class Podcast(models.Model):
         parses itunes chart xml data    
         """
 
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        }
+
         if genre:
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=' + str(genre.itunesid) + '/xml'
         else:
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/xml'
 
         try:
-            r = requests.get(url, timeout=30)
-            r.raise_for_status()
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
 
-            root = etree.XML(r.content)
+            root = etree.XML(response.content)
 
             ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
                     'atom': 'http://www.w3.org/2005/Atom',
@@ -339,7 +343,7 @@ class Podcast(models.Model):
             response = requests.get(itunesUrl, headers=headers, timeout=30)
             response.raise_for_status()
 
-            tree = html.fromstring(r.text)
+            tree = html.fromstring(response.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
             podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
 
@@ -358,7 +362,7 @@ class Podcast(models.Model):
                 feedUrl = data['feedUrl']
                 title = data['collectionName']
                 artist = data['artistName']
-                artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')
+                artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')[7:]
                 genre = data['primaryGenreName']
                 explicit = True if data['collectionExplicitness'] == 'explicit' else False
                 reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'

@@ -137,7 +137,7 @@ class WillyTheSpider(scrapy.Spider):
             feedUrl = data['feedUrl']
             title = data['collectionName']
             artist = data['artistName']
-            artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')
+            artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')[7:]
             genre = data['primaryGenreName']
             explicit = True if data['collectionExplicitness'] == 'explicit' else False
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
