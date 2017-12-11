@@ -169,38 +169,30 @@ function refreshPage() {
 }
 
 // ye ajax search function
-function SearchFunc(url, page) {
+function SearchFunc(url, q, page) {
   /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
 
-  data = {}
-  if ($("#search-bar").css("display") != "none") {
-    var q = $("#q").val();
-    if (q) {
-      data["q"] = q;
-    }
-  }
-  else if ($("#browse-bar").css("display") != "none") {
-    var alphabet = $("input[name=alphabet]:checked").val();
-    if (alphabet) {
-      data["alphabet"] = $("input[name=alphabet]:checked").val();
-    }
+  data = {
+    "q": q,
   }
 
   if ($("#options-bar").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
-      if (genre) {
+      if (genre && genre != 'All') {
         data["genre"] = genre;
+        console.log(genre);
       }
     }
     if ($("#language-buttons").length) {
       var language = $("input[name=language]:checked").val();
-      if (language) {
+      if (language && language != 'All') {
         data["language"] = language;
+        console.log(language);
       }
     }
     if (page) {
@@ -210,7 +202,7 @@ function SearchFunc(url, page) {
       }
     }
   }
-
+  
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -221,7 +213,6 @@ function SearchFunc(url, page) {
     })
     .done(function(response) {
       $("#results").html(response);
-
       if (!jQuery.isEmptyObject(data)) {
         url = url + "?" + $.param(data);
       }
@@ -272,30 +263,47 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
+      var q = $("#q").val();
       pushState();
-      SearchFunc(url, false);
+      SearchFunc(url, q, false);
     }, 250);
     hideStage();
     $("#episodes").html("");
     $("#charts").hide();
    })
   // search when "search" button is clicked
-  .on("submit", "#search-form, #browse-form", function(e) {
+  .on("submit", "#search-form", function(e) {
     e.preventDefault();
     var url = this.action;
+    var q = $("#q").val();
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       pushState();
-      SearchFunc(url, false);
+      SearchFunc(url, q, false);
     }, 250);
     hideStage();
     $("#episodes").html("");
     $("#charts").hide();
   })
+  // browse when "browse" button is clicked
+  .on("submit", "#browse-form", function(e) {
+      e.preventDefault();
+      var url = this.action;
+      var q = $("input[name=alphabet]:checked").val();
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        pushState();
+        SearchFunc(url, q, false);
+      }, 250);
+      hideStage();
+      $("#episodes").html("");
+      $("#charts").hide();
+    })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
+    var q = $("input[name=alphabet]:checked").val();
     pushState();
-    SearchFunc(url, false);
+    SearchFunc(url, q, false);
     hideStage();
     $("#episodes").html("");
  })
@@ -304,19 +312,48 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = this.action;
+      if ($("#selected_alphabet").length) {
+        var q = $("#selected_alphabet").val();
+      }
+      else {
+        var q = $("#selected_q").val();
+      }
       pushState();
-      SearchFunc(url, true);
+      SearchFunc(url, q, true);
     }, 250);
     hideStage();
     $("#episodes").html("");
   })
   // search when user changes options
-  .on("change", "#page-buttons, #genre-buttons, #language-buttons", function() {
+    .on("change", "#page-buttons", function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        var url = $("#result-form")[0].action;
+        if ($("#selected_alphabet").length) {
+          var q = $("#selected_alphabet").val();
+        }
+        else {
+          var q = $("#selected_q").val();
+        }
+        pushState();
+        SearchFunc(url, q, true);
+      }, 250);
+      hideStage();
+      $("#episodes").html("");
+    })
+  // search when user changes options
+  .on("change", "#genre-buttons, #language-buttons", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#result-form")[0].action;
+      if ($("#selected_alphabet").length) {
+        var q = $("#selected_alphabet").val();
+      }
+      else {
+        var q = $("#q").val();
+      }
       pushState();
-      SearchFunc(url, true);
+      SearchFunc(url, q, false);
     }, 250);
     hideStage();
     $("#episodes").html("");

@@ -106,8 +106,8 @@ def search(request):
                 'genres': genres,
                 'languages': languages,
                 'selected_q': q,
-                'selected_genre': genre,
-                'selected_language': language,
+                'selected_genre': genre if genre else 'All',
+                'selected_language': language if language else 'All',
                 'results_info': results_info,
                 'podcasts': podcasts,
             }
@@ -140,7 +140,7 @@ def browse(request):
         page = int(request.GET.get('page', '1'))
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
-        alphabet = request.GET.get('alphabet', 'A')
+        alphabet = request.GET.get('q', 'A')
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 120)
@@ -159,8 +159,8 @@ def browse(request):
             'genres': genres,
             'languages': languages,
             'selected_alphabet': alphabet,
-            'selected_genre': genre,
-            'selected_language': language,
+            'selected_genre': genre if genre else 'All',
+            'selected_language': language if language else 'All',
             'results_info': results_info,
             'podcasts': podcasts,
             'podcasts1': podcasts[:40],

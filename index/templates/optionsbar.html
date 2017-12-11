@@ -71,30 +71,22 @@
   </div>
 </div>
 <div class="row options-select">
-  {% if languages %}
-    <div class="collapse" id="language-collapse">
-      <div class="btn-group btn-group-sm" id="language-buttons" data-toggle="buttons">
-        {% for language in languages %}
-          {% if language.name == selected_language %}
-            <label class="btn btn-outline-primary active">
-              <input type="radio" name="language" value="{{ language.name }}" checked>
-              {{ language.name }}
-            </label>
-          {% else %}
-            <label class="btn btn-outline-primary">
-              <input type="radio" name="language" value="{{ language.name }}">
-              {{ language.name }}
-            </label>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
   {% if genres %}
     <div class="collapse" id="genre-collapse">
       <div class="btn-group btn-group-sm" id="genre-buttons" data-toggle="buttons">
+        {% if selected_genre == 'All' %}
+          <label class="btn btn-outline-primary active">
+            <input type="radio" name="genre" value="All" checked>
+            All
+          </label>
+        {% else %}
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="genre" value="All">
+            All
+          </label>
+        {% endif %}
         {% for genre in genres %}
-          {% if genre.name == selected_genre %}
+          {% if selected_genre == genre.name %}
             <label class="btn btn-outline-primary active">
               <input type="radio" name="genre" value="{{ genre.name }}" checked>
               {{ genre.name }}
@@ -103,6 +95,36 @@
             <label class="btn btn-outline-primary">
               <input type="radio" name="genre" value="{{ genre.name }}">
               {{ genre.name }}
+            </label>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  {% if languages %}
+    <div class="collapse" id="language-collapse">
+      <div class="btn-group btn-group-sm" id="language-buttons" data-toggle="buttons">
+        {% if selected_language == 'All' %}
+          <label class="btn btn-outline-primary active">
+            <input type="radio" name="language" value="All" checked>
+            All
+          </label>
+        {% else %}
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="language" value="All">
+            All
+          </label>
+        {% endif %}
+        {% for language in languages %}
+          {% if selected_language == language.name %}
+            <label class="btn btn-outline-primary active">
+              <input type="radio" name="language" value="{{ language.name }}" checked>
+              {{ language.name }}
+            </label>
+          {% else %}
+            <label class="btn btn-outline-primary">
+              <input type="radio" name="language" value="{{ language.name }}">
+              {{ language.name }}
             </label>
           {% endif %}
         {% endfor %}

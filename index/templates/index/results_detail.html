@@ -8,6 +8,7 @@ dopepod
 {% if podcasts %}
 <div class="col" id="results-wrapper">
   <form id="result-form" method="GET" action="{% url 'search' %}">
+    <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
     {% include 'optionsbar.html' %}
   </form>
   <div class="row results-row">
@@ -35,10 +36,17 @@ dopepod
 </div>
 {% else %}
 <div class="col" id="results-wrapper">
-  {% include 'optionsbar.html' %}
-  <p>
-    No results :p
-  </p>
+  <form id="result-form" method="GET" action="{% url 'search' %}">
+    <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
+    {% include 'optionsbar.html' %}
+  </form>
+  <div class="row results-row">
+    <div class="col">
+      <p>
+        No results :p
+      </p>
+    </div>
+  </div>
 </div>
 {% endif %}
 {% endblock %}
