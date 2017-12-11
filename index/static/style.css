@@ -1,3 +1,45 @@
+@keyframes fadeIn {
+  0% {
+    color: rgba(0, 0, 0, 0);
+  }
+  100% {
+    color: rgba(0, 0, 0, 1);
+  }
+}
+
+.x {
+  animation-duration: 3s;
+  animation-name: fadeIn;
+}
+
+.a {
+}
+
+.b {
+  
+}
+
+.c {
+  
+}
+
+.d {
+  
+}
+
+.e {
+  
+}
+
+.f {
+  
+}
+
+
+.g {
+  
+}
+
 body {
   background: rgba(255, 255, 255, 1);
 }
