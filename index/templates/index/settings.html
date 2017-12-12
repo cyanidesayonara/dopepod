@@ -6,37 +6,32 @@ settings
 
 {% block stage %}
 <!-- SETTINGS -->
-<div class="container" id="settings">
-  <div class="row">
-    <div class="col">
+<div class="container">
+  <div class="row" id="settings">
+    <div class="col-sm-3">
+      <h2>
+        Settings
+      </h2>
     </div>
-    <div class="col-auto">
+    <div class="col-sm-9">
       <form id="settings-form" action="{% url 'settings' %}" method="POST">
-      {{ user_form }}
-      {{ profile_form }}
+      {% if user_form.errors %}
+      {{ user_form.errors }}
+      {% endif %}
+      <table>
+        {{ user_form.as_table }}
+      </table>
+      {% if profile_form.errors %}
+      {{ profile_form.errors }}
+      {% endif %}
+      <table>
+        {{ profile_form.as_table }}
+      </table>
       <button class="btn btn-outline-primary" type="submit">
         Save changes
       </button>
       {% csrf_token %}
       </form>
-      <!-- <p>
-        {{ user_form.email.label_tag }}
-      </p>
-      <p>
-        {{ user_form.email }}
-      </p>
-      <p>
-        {{ profile_form.location.label_tag }}
-      </p>
-      <p>
-        {{ profile_form.location }}
-      </p>
-      <p>
-        {{ profile_form.show_explicit.label_tag }}
-        {{ profile_form.show_explicit }}
-      </p> -->
-    </div>
-    <div class="col">
     </div>
   </div>
 </div>

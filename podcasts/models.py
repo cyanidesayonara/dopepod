@@ -70,7 +70,7 @@ class Podcast(models.Model):
                 Q(title__istartswith=alphabet) |
                 Q(title__istartswith=the)
             ).order_by('title')
-            
+
         return podcasts
 
     def set_charts():
@@ -98,7 +98,7 @@ class Podcast(models.Model):
 
     def parse_itunes_charts(genre=None):
         """
-        parses itunes chart xml data    
+        parses itunes chart xml data
         """
 
         headers = {
@@ -146,9 +146,9 @@ class Podcast(models.Model):
                     i = i -1
 
         except requests.exceptions.HTTPError as e:
-            print(str(e))
+            logger.error(str(e))
         except requests.exceptions.ReadTimeout as e:
-            print('timed out')
+            logger.error('timed out')
 
     def get_charts(genre=None):
         """
@@ -171,7 +171,7 @@ class Podcast(models.Model):
         subscribes to or unsubscribes from podcast
         returns n_subscribers
         """
-        
+
         # if subscription exists, delete it
         try:
             subscription = Subscription.objects.get(parent=self, owner=user)
@@ -200,7 +200,7 @@ class Podcast(models.Model):
             )
             self.n_subscribers += 1
             self.save()
-            
+
         return self.n_subscribers
 
     def set_subscribed(self, user):
@@ -279,7 +279,7 @@ class Podcast(models.Model):
                 logger.error('trouble with xml')
 
         except requests.exceptions.HTTPError as e:
-            print(str(e))
+            logger.error(str(e))
 
     def create_or_update_podcast(item):
         genre = Genre.objects.get(name=item['genre'])
@@ -299,7 +299,7 @@ class Podcast(models.Model):
             podcast.artworkUrl = item['artworkUrl']
             podcast.podcastUrl = item['podcastUrl']
             podcast.save()
-        
+
         except Podcast.DoesNotExist:
             Podcast.objects.create(
                 itunesid=item['itunesid'],
@@ -393,16 +393,16 @@ class Podcast(models.Model):
                             podcastUrl=podcastUrl,
                         )
                 except requests.exceptions.HTTPError as e:
-                    print('no response from feedUrl:', feedUrl)
+                    logger.error('no response from feedUrl:', feedUrl)
                     return
                 except requests.exceptions.ReadTimeout as e:
-                    print('timed out:', feedUrl)
+                    logger.error('timed out:', feedUrl)
                     return
             except KeyError as e:
-                print('Missing data: ' + str(e))
+                logger.error('Missing data: ' + str(e))
 
         except requests.exceptions.HTTPError as e:
-            print('no response from itunes')
+            logger.error('no response from itunes')
 
 class Subscription(Podcast):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)

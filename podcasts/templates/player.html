@@ -1,33 +1,37 @@
-<div class="row">
-<div class="col-auto">
-  <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=100&h=100&t=absolute" />
-  </a>
-</div>
-<div class="col">
-  <div class="row">
-    <div class="col">
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-        <h6>
-          {{ podcast.title }}
-        </h6>
-      </a>
-      <p>
-        {{ title }} | {{ date }}
-      </p>
-    </div>
-    <div class="col-auto">
-      <button type="button" id="player-close" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+<div class="row texture" id="player-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-auto">
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=100&h=100&t=absolute" />
+        </a>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+              <h6>
+                {{ podcast.title }}
+              </h6>
+            </a>
+            <p>
+              {{ title }} | {{ date }}
+            </p>
+          </div>
+          <div class="col-auto">
+            <button type="button" id="player-close" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <audio controls preload="metadata" autoplay>
+              <source src="{{ url }}" type="{{ type }}"/>
+            </audio>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <audio controls preload="metadata" autoplay>
-        <source src="{{ url }}" type="{{ type }}"/>
-      </audio>
-    </div>
-  </div>
-</div>
 </div>

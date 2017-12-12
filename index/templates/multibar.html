@@ -1,11 +1,8 @@
 <div class="col texture" id="multi-bar">
   <div class="container">
     <div class="row">
-      <!-- PLAYA -->
-      <div class="col-sm-8" id="player">
-      </div>
       <!-- SEARCH BAR -->
-      <div class="col-sm-4">
+      <div class="col-auto ml-auto">
         <form id="search-form" method="GET" action="{% url 'search' %}">
           <div class="input-group" id="search-field">
             <label for="q" class="sr-only">Search</label>
@@ -20,7 +17,7 @@
             aria-label="Search for..." autocomplete="off"
             accept-charset="utf-8">
             {% endif %}
-            <button class="btn btn-outline-primary" id="search-button" type="submit">
+            <button id="search-button" type="submit">
               <i class="fa fa-search"></i>
             </button>
           </div>

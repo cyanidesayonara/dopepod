@@ -35,7 +35,6 @@ def index(request):
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,
-            'search': True,
         }
 
         return render(request, 'index/index.html', context)
@@ -54,7 +53,7 @@ def charts(request):
         results_info = 'top podcasts ' + ('on itunes' if genre == None else 'in ' + str(genre))
 
         context = {
-            'chart': chart[50],
+            'chart': chart[:50],
             'chart_genres': genres,
             'chart_selected_genre': genre,
             'chart_results_info': results_info,
@@ -66,7 +65,6 @@ def charts(request):
         # search bar for non-ajax
         context.update({
             'alphabet': ALPHABET,
-            'search': True,
         })
 
         return render(request, 'index/index.html', context)
@@ -116,7 +114,6 @@ def search(request):
                 return render(request, 'index/results_detail.html', context)
 
             context.update({
-                'search': True,
                 'chart': Podcast.get_charts(),
                 'alphabet': ALPHABET,
                 'chart_results_info': 'top podcasts on itunes',
@@ -204,7 +201,6 @@ def subscriptions(request):
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
             context.update({
-                'search': True,
                 'genres': genres,
                 'chart': chart,
                 'alphabet': ALPHABET,
@@ -246,7 +242,6 @@ def podinfo(request, itunesid):
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,
-            'search': True,
             'episodes': podcast.get_episodes(),
         })
         return render(request, 'podinfo.html', context)
@@ -261,7 +256,6 @@ def settings(request):
     user = request.user
     if user.is_authenticated:
         if request.method == 'GET':
-
             context = {
                 'user_form': UserForm(instance=request.user),
                 'profile_form': ProfileForm(instance=request.user.profile),
@@ -277,13 +271,12 @@ def settings(request):
                 'chart_genres': genres,
                 'chart': chart,
                 'alphabet': ALPHABET,
-                'search': True,
             })
             return render(request, 'index/settings.html', context)
 
         if request.method == 'POST':
-            user_form = UserForm(request.POST)
-            profile_form = ProfileForm(request.POST)
+            user_form = UserForm(instance=request.user, data=request.POST)
+            profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
@@ -306,7 +299,6 @@ def settings(request):
                     'chart_genres': genres,
                     'chart': chart,
                     'alphabet': ALPHABET,
-                    'search': True,
                 })
                 return render(request, 'index/settings.html', context)
     else:

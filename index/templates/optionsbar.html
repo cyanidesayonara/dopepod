@@ -44,12 +44,10 @@
         <li class="nav-item">
           <a class="nav-link" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
             Genre
-            {% if selected_genre %}
             <br />
             <span>
               {{ selected_genre }}
             </span>
-            {% endif %}
           </a>
         </li>
       {% endif %}
@@ -58,12 +56,10 @@
         <li class="nav-item">
           <a class="nav-link" data-toggle="collapse" data-target="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
             Language
-            {% if selected_language %}
             <br />
             <span>
               {{ selected_language }}
             </span>
-            {% endif %}
           </a>
         </li>
       {% endif %}
@@ -73,26 +69,26 @@
 <div class="row options-select">
   {% if genres %}
     <div class="collapse" id="genre-collapse">
-      <div class="btn-group btn-group-sm" id="genre-buttons" data-toggle="buttons">
+      <div class="btn-group options-group" id="genre-buttons" data-toggle="buttons">
         {% if selected_genre == 'All' %}
-          <label class="btn btn-outline-primary active">
+          <label class="btn options-button active">
             <input type="radio" name="genre" value="All" checked>
             All
           </label>
         {% else %}
-          <label class="btn btn-outline-primary">
+          <label class="btn options-button">
             <input type="radio" name="genre" value="All">
             All
           </label>
         {% endif %}
         {% for genre in genres %}
           {% if selected_genre == genre.name %}
-            <label class="btn btn-outline-primary active">
+            <label class="btn options-button active">
               <input type="radio" name="genre" value="{{ genre.name }}" checked>
               {{ genre.name }}
             </label>
           {% else %}
-            <label class="btn btn-outline-primary">
+            <label class="btn options-button">
               <input type="radio" name="genre" value="{{ genre.name }}">
               {{ genre.name }}
             </label>
@@ -103,26 +99,26 @@
   {% endif %}
   {% if languages %}
     <div class="collapse" id="language-collapse">
-      <div class="btn-group btn-group-sm" id="language-buttons" data-toggle="buttons">
+      <div class="btn-group options-group" id="language-buttons" data-toggle="buttons">
         {% if selected_language == 'All' %}
-          <label class="btn btn-outline-primary active">
+          <label class="btn options-button mx-auto active">
             <input type="radio" name="language" value="All" checked>
             All
           </label>
         {% else %}
-          <label class="btn btn-outline-primary">
+          <label class="btn options-button mx-auto">
             <input type="radio" name="language" value="All">
             All
           </label>
         {% endif %}
         {% for language in languages %}
           {% if selected_language == language.name %}
-            <label class="btn btn-outline-primary active">
+            <label class="btn options-button mx-auto active">
               <input type="radio" name="language" value="{{ language.name }}" checked>
               {{ language.name }}
             </label>
           {% else %}
-            <label class="btn btn-outline-primary">
+            <label class="btn options-button mx-auto">
               <input type="radio" name="language" value="{{ language.name }}">
               {{ language.name }}
             </label>

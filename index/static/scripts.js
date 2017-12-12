@@ -56,7 +56,7 @@ function pushState() {
   };
 
   if ($("#podinfo").length) {
-    title = $("#podinfo h3")[0].innerHTML;
+    title = $("#podinfo-title")[0].innerText;
   }
 
   history.pushState(state, "", url);
@@ -76,7 +76,7 @@ function replaceState(url) {
   }
 
   if ($("#podinfo").length) {
-    title = $("#podinfo h3")[0].innerHTML;
+    title = $("#podinfo-title")[0].innerText;
   }
 
   history.replaceState(state, "", url);
@@ -202,7 +202,7 @@ function SearchFunc(url, q, page) {
       }
     }
   }
-  
+
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -235,13 +235,13 @@ function showBrowse() {
 function showStage() {
   $("#stage").html("");
   $("#stage").addClass("open");
-  $("#bar").addClass("extended");
+  $("#flap").addClass("extended");
 }
 
 function hideStage() {
   $("#stage").html("");
   $("#stage").removeClass("open");
-  $("#bar").removeClass("extended");
+  $("#flap").removeClass("extended");
 }
 
 // after page loads
@@ -249,8 +249,6 @@ $(document)
   .ready(function() {
     // refresh cookie
     refreshCookie();
-    // initialize bootstrap tooltips
-    $("[data-toggle='tooltip']").tooltip();
     xhr = null;
     timeout = 0;
   })
@@ -270,7 +268,7 @@ $(document)
     hideStage();
     $("#episodes").html("");
     $("#charts").hide();
-   })
+  })
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
@@ -367,6 +365,7 @@ $(document)
     showStage();
     loadStage(url);
     loadEpisodes(itunesid);
+    scrollToTop();
   })
   // go to home view
   .on("click", ".index-link", function(e) {
@@ -503,7 +502,7 @@ $(document)
         var url = $("#main-content")[0].baseURI;
         var context = $("#main-content")[0].innerHTML;
         if ($("#podinfo").length) {
-          var title = $("#podinfo h3")[0].innerHTML;
+          var title = $("#podinfo-title")[0].innerText;
         }
 
         var state = {
