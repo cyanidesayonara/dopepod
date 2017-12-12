@@ -13,7 +13,7 @@ dopepod
   </form>
   <div class="row results-row">
     {% for podcast in podcasts %}
-      <div class="col-lg-2 col-md-3 col-sm-4 col-6 result-box">
+      <div class="col-lg-2 col-md-3 result-box">
         <a class="show-podinfo result-image" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
         </a>
