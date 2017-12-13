@@ -2,19 +2,19 @@
   <div class="container">
     <div class="row">
       <!-- SEARCH BAR -->
-      <div class="col-auto ml-auto">
+      <div class="col-auto ml-auto pr-0">
         <form id="search-form" method="GET" action="{% url 'search' %}">
           <div class="input-group" id="search-field">
             <label for="q" class="sr-only">Search</label>
             {% if selected_q %}
             <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for..."
-            aria-label="Search for..." autocomplete="off"
+            type="search" placeholder="Search for podcast"
+            aria-label="Search for podcast" autocomplete="off"
             accept-charset="utf-8" value="{{ selected_q }}">
             {% else %}
             <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for..."
-            aria-label="Search for..." autocomplete="off"
+            type="search" placeholder="Search for podcast"
+            aria-label="Search for podcast" autocomplete="off"
             accept-charset="utf-8">
             {% endif %}
             <button id="search-button" type="submit">

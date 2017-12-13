@@ -8,11 +8,12 @@
 <div class="container">
   <div class="row" id="podinfo">
     <!-- PODINFO -->
-    <div class="col-4" id="podinfo-image">
-      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
-        <form id="sub-form" action="{% url 'subscribe' %}"
-        id="{{ podcast.itunesid }}" method="POST">
-        <p>
+    <div class="col-3 px-0">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}250x250bb.jpg&w=250&h=250&t=absolute" />
+      <ul id="podinfo-side">
+        <li>
+          <form id="sub-form" action="{% url 'subscribe' %}"
+          id="{{ podcast.itunesid }}" method="POST">
           <span id="n_subscribers">
             {{ podcast.n_subscribers }}
           </span>
@@ -24,55 +25,47 @@
           {% if podcast.subscribed %}
           <button type="submit" class="btn btn-outline-primary active sub-button">
             Unsubscribe
-          {% else %}
-          <button type="submit" class="btn btn-outline-primary sub-button">
-            Subscribe
+            {% else %}
+            <button type="submit" class="btn btn-outline-primary sub-button">
+              Subscribe
+              {% endif %}
+            </button>
+          </form>
+        </li>
+        <li>
+          {% if podcast.genre.supergenre %}
+          {{ podcast.genre.supergenre }} -
           {% endif %}
-          </button>
-        </p>
-      </form>
+          {{ podcast.genre }}
+        </li>
+        <li>
+          {{ podcast.language }}
+        </li>
+        {% if podcast.explicit %}
+          <li>
+            Explicit content
+          </li>
+        {% endif %}
+        <li id="copyright">
+          <em>
+            {{ podcast.copyrighttext }}
+          </em>
+        </li>
+      </ul>
     </div>
-    <div class="col-8" id="podinfo-main">
-      <h4 id="podinfo-title">
+    <div class="col-9" id="podinfo-main">
+      <h5 id="podinfo-title">
         {{ podcast.title }}
-      </h4>
-      <h5>
+      </h5>
+      <h6>
         <span>
           By
         </span>
         {{ podcast.artist }}
-      </h5>
+      </h6>
       <p>
-        {{ podcast.description|linebreaksbr }}
+        {{ podcast.description|linebreaks }}
       </p>
-      <p>
-        {% if podcast.genre.supergenre %}
-        {{ podcast.genre.supergenre }} -
-        {% endif %}
-        {{ podcast.genre }}
-      </p>
-      <p>
-        {{ podcast.language }}
-      </p>
-      {% if podcast.explicit %}
-      <p>
-        Explicit
-      </p>
-      {% endif %}
-      <p>
-        <em>
-          {{ podcast.copyrighttext }}
-        </em>
-      </p>
-    </div>
-  </div>
-  <div class="row" id="podinfo-bottom">
-    <div class="col">
-      <a id="show-episodes" data-toggle="collapse" href="#episodeCollapse" aria-expanded="false" aria-controls="episodeCollapse">
-        <span>
-          Show episodes
-        </span>
-      </a>
     </div>
   </div>
 </div>

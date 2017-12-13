@@ -2,13 +2,6 @@
 <div class="row color" id="options-bar">
   <div class="col texture">
     <div class="row">
-      <div class="col results-info">
-        <h3>
-          {{ results_info }}
-        </h3>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-auto">
         {% if podcasts.has_other_pages %}
         <!-- PAGINATION -->
@@ -41,7 +34,12 @@
           </div>
         {% endif %}
       </div>
-      <div class="col-auto ml-auto">
+      <div class="col results-info">
+        <h5>
+          {{ results_info }}
+        </h5>
+      </div>
+      <div class="col-auto">
         <ul class="nav nav-fade">
           {% if genres %}
             <!-- GENRES -->
@@ -62,7 +60,7 @@
         </ul>
       </div>
     </div>
-  </div>    
+  </div>
 </div>
 <div class="row options-select">
   <div id="options-accordion" data-children=".item">
@@ -96,7 +94,7 @@
             {% endfor %}
           </div>
         {% endif %}
-      </div>        
+      </div>
     </div>
     <div class="item">
       <div id="options-accordion2" class="collapse" role="tabpanel">
@@ -132,4 +130,3 @@
     </div>
   </div>
 </div>
-

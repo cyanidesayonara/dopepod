@@ -183,7 +183,7 @@ function refreshPage() {
     })
     .done(function(response) {
       // refresh navbar
-      $("#nav-content").html(response);
+      $("#navbar-drop").html(response);
       // go to index
       loadResults("/charts/");
       showSearch();
