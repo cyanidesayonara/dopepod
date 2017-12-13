@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from index.models import Profile
+from .models import Profile
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)

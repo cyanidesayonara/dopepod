@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from .models import Genre, Language, Podcast, Subscription
+from .models import Genre, Language, Podcast, Subscription, Episode
+from .forms import EpisodeForm
+import logging
+
+logger = logging.getLogger(__name__)
 
 def episodes(request):
     """
@@ -19,6 +23,10 @@ def episodes(request):
             raise Http404()
 
         eps = podcast.get_episodes()
+        episodes = []
+        for ep in eps:
+            ep = EpisodeForm(ep)
+            # print(ep.errors)
 
         context = {
             'episodes': eps,

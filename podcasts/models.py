@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.db.models import Q
 import requests
 from lxml import etree, html
-import datetime
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -237,7 +237,10 @@ class Podcast(models.Model):
 
                 for item in tree.findall('item'):
                     episode = {}
-                    episode['pubDate'] = item.findtext('pubDate')
+                    pubdate = item.findtext('pubDate')
+                    # pubdate = datetime(pubdate)
+                    print(pubdate)
+                    episode['pubDate'] = pubdate
 
                     # try these
                     try:
@@ -262,7 +265,7 @@ class Podcast(models.Model):
                     except AttributeError as e:
                         logger.error('can\'t get length')
 
-                    episode['podcast'] = self
+                    episode['parent'] = self.itunesid
 
                     # link to episode
                     # enclosure might be missing, have alternatives
@@ -418,6 +421,16 @@ class Subscription(Podcast):
 
     def get_subscriptions_itunesids(user):
         return Subscription.objects.filter(owner=user).values_list('itunesid', flat=True)
+
+class Episode(models.Model):
+    parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)
+    pubDate = models.DateTimeField()
+    title = models.CharField(max_length=500)
+    summary = models.TextField(null=True, blank=True)
+    length = models.DateTimeField(null=True, blank=True)
+    url = models.URLField(max_length=500)
+    kind = models.CharField(max_length=16)
+
 
 class Filterable(models.Model):
     """

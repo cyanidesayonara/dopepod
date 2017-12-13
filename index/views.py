@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from index.forms import ProfileForm, UserForm
+from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
