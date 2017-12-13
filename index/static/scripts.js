@@ -138,6 +138,28 @@ function loadStage(url) {
     });
 }
 
+function loadChart() {
+  var url = "/charts/";
+  var genre = $("input[name=chart-genre]:checked").val();
+  if (genre != "All") {
+    data = {
+      "genre": genre,
+    };
+    url = url + "?" + $.param(data);
+  }
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#charts").html(response);
+      replaceState(url);
+    });
+}
+
 function scrollToTop() {
   $('html, body').animate({
     scrollTop: $("#main-content").offset().top
@@ -320,6 +342,15 @@ $(document)
       SearchFunc(url, q, true);
     }, 250);
     hideStage();
+    $("#episodes").html("");
+  })
+  .on("submit", "#chart-form", function(e) {
+    e.preventDefault();
+    loadChart();
+    $("#episodes").html("");
+  })
+  .on("change", "#chart-genre-buttons", function() {
+    loadChart();
     $("#episodes").html("");
   })
   // search when user changes options

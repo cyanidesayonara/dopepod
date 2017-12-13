@@ -5,11 +5,7 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% if subscriptions %}
-<div class="col-lg" id="results-wrapper">
-  <form id="result-form" method="GET" action="{% url 'subscriptions' %}">
-    {% include 'optionsbar.html' %}
-  </form>
+<div class="col" id="results-wrapper">
   <div class="row" id="subscriptions-list">
     <div class="col">
       {% for subscription in subscriptions %}
@@ -26,22 +22,22 @@ dopepod
               </a>
             </h6>
             <p>
+              <span>
+                Last updated: 
+              </span>
               {{ subscription.last_updated }}
             </p>
           </div>
-          </a>
         </div>
-        <hr />
+        {% if not forloop.last %}
+          <hr />
+        {% endif %}
+      {% empty %}
+        <p>
+          No subscriptions :p
+        </p>
       {% endfor %}
     </div>
   </div>
 </div>
-{% else %}
-<div class="col" id="results-wrapper">
-  {% include 'optionsbar.html' %}
-  <p>
-    No subscriptions :p
-  </p>
-</div>
-{% endif %}
 {% endblock %}

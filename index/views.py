@@ -31,9 +31,11 @@ def index(request):
 
         # chart and search bar for non-ajax
         context = {
+            'selected_alphabet': 'A',
             'chart_results_info': 'top podcasts on itunes',
             'chart_genres': genres,
-            'chart': chart,
+            'chart_selected_genre': 'All',
+            'chart': chart[:50],
             'alphabet': ALPHABET,
         }
 
@@ -55,7 +57,7 @@ def charts(request):
         context = {
             'chart': chart[:50],
             'chart_genres': genres,
-            'chart_selected_genre': genre,
+            'chart_selected_genre': genre if genre else 'All',
             'chart_results_info': results_info,
         }
 
@@ -64,6 +66,7 @@ def charts(request):
 
         # search bar for non-ajax
         context.update({
+            'selected_alphabet': 'A',
             'alphabet': ALPHABET,
         })
 
@@ -113,9 +116,14 @@ def search(request):
             if request.is_ajax():
                 return render(request, 'index/results_detail.html', context)
 
+            chart = Podcast.get_charts()
+
             context.update({
-                'chart': Podcast.get_charts(),
+                'selected_alphabet': 'A',
+                'chart_genres': genres,
+                'chart': chart[:50],
                 'alphabet': ALPHABET,
+                'chart_selected_genre': 'All',
                 'chart_results_info': 'top podcasts on itunes',
             })
 
@@ -169,10 +177,14 @@ def browse(request):
             return render(request, 'index/results_list.html', context)
 
         # chart & browse bar for non-ajax
+        chart = Podcast.get_charts()
+
         context.update({
             'browse': True,
-            'chart': Podcast.get_charts(),
+            'chart': chart[:50],
+            'chart_genres': genres,
             'alphabet': ALPHABET,
+            'chart_selected_genre': 'All',
             'chart_results_info': 'top podcasts on itunes',
         })
         return render(request, 'index/results_list.html', context)
@@ -201,8 +213,11 @@ def subscriptions(request):
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
             context.update({
+                'selected_alphabet': 'A',
                 'genres': genres,
-                'chart': chart,
+                'chart_genres': genres,
+                'chart': chart[:50],
+                'chart_selected_genre': 'All',
                 'alphabet': ALPHABET,
                 'chart_results_info': 'top podcasts on itunes',
             })
@@ -239,10 +254,13 @@ def podinfo(request, itunesid):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         context.update({
+            'selected_alphabet': 'A',
             'chart_genres': genres,
-            'chart': chart,
+            'chart': chart[:50],
+            'chart_selected_genre': 'All',
             'alphabet': ALPHABET,
             'episodes': podcast.get_episodes(),
+            'chart_results_info': 'top podcasts on itunes',
         })
         return render(request, 'podinfo.html', context)
 
@@ -268,8 +286,11 @@ def settings(request):
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
             context.update({
+                'selected_alphabet': 'A',
+                'chart_selected_genre': 'All',
                 'chart_genres': genres,
-                'chart': chart,
+                'chart': chart[:50],
+                'chart_results_info': 'top podcasts on itunes',
                 'alphabet': ALPHABET,
             })
             return render(request, 'index/settings.html', context)
@@ -296,9 +317,12 @@ def settings(request):
                 genres = Genre.get_primary_genres()
                 chart = Podcast.get_charts()
                 context.update({
+                    'selected_alphabet': 'A',
                     'chart_genres': genres,
-                    'chart': chart,
+                    'chart': chart[:50],
+                    'chart_selected_genre': 'All',
                     'alphabet': ALPHABET,
+                    'chart_results_info': 'top podcasts on itunes',
                 })
                 return render(request, 'index/settings.html', context)
     else:

@@ -17,11 +17,7 @@
             {{ podcast.n_subscribers }}
           </span>
           <span id="subscriber">
-            {% if podcast.n_subscribers == 1 %}
-            subsciber
-            {% else %}
-            subscribers
-            {% endif %}
+            subsciber{{ podcast.n_subscribers|pluralize }}
           </span>
           {% csrf_token %}
           <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">

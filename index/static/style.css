@@ -189,13 +189,13 @@ body {
 }
 
 .options-group {
-  display: block;
+  padding: 8px;
+  background-color: #eee;
 }
 
 .options-button {
   border: 1px solid #ddd;
   border-radius: 5px;
-  margin-top: 4px;
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;

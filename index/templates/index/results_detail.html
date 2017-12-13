@@ -5,7 +5,6 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% if podcasts %}
 <div class="col" id="results-wrapper">
   <form id="result-form" method="GET" action="{% url 'search' %}">
     <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
@@ -13,7 +12,7 @@ dopepod
   </form>
   <div class="row results-row">
     {% for podcast in podcasts %}
-      <div class="col-lg-2 col-md-3 result-box">
+      <div class="col-lg-2 col-md-3 col-4 result-box">
         <a class="show-podinfo result-image" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
         </a>
@@ -31,22 +30,13 @@ dopepod
           </a>
         </p>
       </div>
+    {% empty %}
+      <div class="col">
+        <p>
+          No results :p
+        </p>
+      </div>
     {% endfor %}
   </div>
 </div>
-{% else %}
-<div class="col" id="results-wrapper">
-  <form id="result-form" method="GET" action="{% url 'search' %}">
-    <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
-    {% include 'optionsbar.html' %}
-  </form>
-  <div class="row results-row">
-    <div class="col">
-      <p>
-        No results :p
-      </p>
-    </div>
-  </div>
-</div>
-{% endif %}
 {% endblock %}
