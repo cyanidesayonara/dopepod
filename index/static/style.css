@@ -350,13 +350,13 @@ body {
 }
 
 #episodes-wrapper {
-  min-height: 100%;
+  min-width: 100%;
   margin-top: 15px;
   margin-bottom: 15px;
   border: 1px solid #e6ecf0;
   /*border-radius: 8px;*/
   overflow: hidden;
-  background-color: #FFFFFF;
+  /*background-color: #FFFFFF;*/
 }
 #episodes {
 

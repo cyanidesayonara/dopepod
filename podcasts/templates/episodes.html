@@ -1,26 +1,29 @@
 {% if episodes %}
-<div class="collapse" id="episodeCollapse">
-  <div class="col">
-    <div class="row">
-      <div class="col" id="episodes-wrapper">
-        <div id="episode-accordion" role="tablist">
-        {% for episode in episodes %}
-          <div class="row">
-            <div class="col-auto" role="tab" id="show-more{{ forloop.counter }}">
-              <a data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
-                Show more
-              </a>
-            </div>
-            <div class="col">
-              {{ episode.title }}
-            </div>
-            <div class="col-auto">
-              {{ episode.pubDate }}                 
-            </div>
-            <div class="col-auto">
-              {{ episode.length }}
-            </div>
-            <div class="col-auto">
+<div class="col" id="episodes-wrapper">
+  <a id="show-episodes" data-toggle="collapse" href="#episodeCollapse" aria-expanded="false" aria-controls="episodeCollapse">
+    <span>
+      Show episodes
+    </span>
+  </a>
+  <div class="collapse" id="episodeCollapse">
+    <div id="episode-accordion" role="tablist">
+      {% for episode in episodes %}
+        <div class="row">
+          <div class="col-auto">
+            <button class="btn btn-primary" type="button" role="tab" id="show-more{{ forloop.counter }}" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+              Show more
+            </button>
+          </div>
+          <div class="col">
+            {{ episode.title }}
+          </div>
+          <div class="col-auto">
+            {{ episode.pubDate }}
+          </div>
+          <div class="col-auto">
+            {{ episode.length }}
+          </div>
+          <div class="col-auto">
             <form class="play" action="{% url 'play' %}" method="POST" target="_blank">
               {% csrf_token %}
               <input type="hidden" name="url" value="{{ episode.url }}">
@@ -38,14 +41,18 @@
               Download
             </button>
           </div>
-            <div id="collapse{{ forloop.counter }}" class="collapse" role="tabpanel" aria-labelledby="show-more{{ forloop.counter }}" data-parent="#episode-accordion">
+        </div>
+        <div class="row">
+          <div id="collapse{{ forloop.counter }}" class="collapse" role="tabpanel" aria-labelledby="show-more{{ forloop.counter }}" data-parent="#episode-accordion">
+            <div class="col">
               {{ episode.summary }}
             </div>
           </div>
-          <hr />
-          {% endfor %}
         </div>
-      </div>
+        {% if not forloop.last %}
+          <hr />
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 </div>
