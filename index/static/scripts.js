@@ -1,7 +1,7 @@
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $("#results").html(state.context);
+    $("#main-content").html(state.context);
     $("title")[0].innerText = state.title;
 
     // if (state.q) {
@@ -47,8 +47,9 @@ function refreshCookie() {
 }
 
 function pushState() {
-  var context = $("#results")[0].innerHTML;
-  var url = $("#results")[0].baseURI;
+  var el = $("#main-content")[0];
+  var context = el.innerHTML;
+  var url = el.baseURI;
   var title = "dopepod";
   var state = {
     "context": context,
@@ -64,7 +65,7 @@ function pushState() {
 }
 
 function replaceState(url) {
-  var context = $("#results")[0].innerHTML;
+  var context = $("#main-content")[0].innerHTML;
   var title = "dopepod";
   var state = {
     "context": context,
@@ -207,14 +208,12 @@ function SearchFunc(url, q, page) {
       var genre = $("input[name=genre]:checked").val();
       if (genre && genre != 'All') {
         data["genre"] = genre;
-        console.log(genre);
       }
     }
     if ($("#language-buttons").length) {
       var language = $("input[name=language]:checked").val();
       if (language && language != 'All') {
         data["language"] = language;
-        console.log(language);
       }
     }
     if (page) {
@@ -240,18 +239,7 @@ function SearchFunc(url, q, page) {
       }
       replaceState(url);
     });
-
-    return xhr;
-}
-
-function showSearch() {
-  $("#browse-bar").hide();
-  $("#search-bar").show();
-}
-
-function showBrowse() {
-  $("#search-bar").hide();
-  $("#browse-bar").show();
+  return xhr;
 }
 
 function showStage() {
@@ -282,7 +270,7 @@ $(document)
   .on("keyup", "#search-form", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#search-form")[0].action;
+      var url = "/search/";
       var q = $("#q").val();
       pushState();
       SearchFunc(url, q, false);
@@ -294,10 +282,10 @@ $(document)
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
-    var url = this.action;
-    var q = $("#q").val();
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      var url = this.action;
+      var q = $("#q").val();
       pushState();
       SearchFunc(url, q, false);
     }, 250);
@@ -308,10 +296,10 @@ $(document)
   // browse when "browse" button is clicked
   .on("submit", "#browse-form", function(e) {
       e.preventDefault();
-      var url = this.action;
-      var q = $("input[name=alphabet]:checked").val();
       clearTimeout(timeout);
       timeout = setTimeout(function() {
+        var url = this.action;
+        var q = $("input[name=alphabet]:checked").val();
         pushState();
         SearchFunc(url, q, false);
       }, 250);
@@ -343,33 +331,35 @@ $(document)
     }, 250);
     hideStage();
     $("#episodes").html("");
+    $("#charts").hide();
+  })
+  // search when user changes options
+  .on("change", "#page-buttons", function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = $("#result-form")[0].action;
+      if ($("#selected_alphabet").length) {
+        var q = $("#selected_alphabet").val();
+      }
+      else {
+        var q = $("#selected_q").val();
+      }
+      pushState();
+      SearchFunc(url, q, true);
+    }, 250);
+    hideStage();
+    $("#episodes").html("");
+    $("#charts").hide();
   })
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
-    loadChart();
-    $("#episodes").html("");
+    pushState();
+    loadChart();    
   })
   .on("change", "#chart-genre-buttons", function() {
+    pushState();   
     loadChart();
-    $("#episodes").html("");
   })
-  // search when user changes options
-    .on("change", "#page-buttons", function() {
-      clearTimeout(timeout);
-      timeout = setTimeout(function() {
-        var url = $("#result-form")[0].action;
-        if ($("#selected_alphabet").length) {
-          var q = $("#selected_alphabet").val();
-        }
-        else {
-          var q = $("#selected_q").val();
-        }
-        pushState();
-        SearchFunc(url, q, true);
-      }, 250);
-      hideStage();
-      $("#episodes").html("");
-    })
   // search when user changes options
   .on("change", "#genre-buttons, #language-buttons", function() {
     clearTimeout(timeout);
@@ -394,18 +384,18 @@ $(document)
     var itunesid = $(this).data("itunesid");
     pushState();
     showStage();
+    scrollToTop();
     loadStage(url);
     loadEpisodes(itunesid);
-    scrollToTop();
   })
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
-    showSearch();
+    $("#browse-bar").hide();
+    showStage();
     scrollToTop();
     $("#charts").show();
-    showStage();
     $("#results").html("");
     $("#episodes").html("");
     replaceState("/");
@@ -414,38 +404,35 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
-    showBrowse();
     $("#charts").hide();
+    $("#results").html("");
     $("#episodes").html("");
-    hideStage();
     loadResults("/browse/");
+    hideStage();
+    scrollToTop();
+    $("#browse-bar").show();
    })
-  .on("click", ".search-toggle", function(e) {
-    e.preventDefault();
-    pushState();
-    toggleBars();
-    replaceState();
-  })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     pushState();
-    showSearch();
     $("#charts").hide();
+    $("#results").html("");
     $("#episodes").html("");
-    hideStage();
     loadResults("/subscriptions/");
+    hideStage();
+    scrollToTop();
+    $("#browse-bar").hide();
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
-    showSearch();
-    scrollToTop();
-    $("#charts").hide();
-    showStage();
     $("#episodes").html("");
     loadStage("/settings/");
+    showStage();
+    scrollToTop();
+    $("#browse-bar").hide();
   })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
@@ -465,7 +452,6 @@ $(document)
       })
       .done(function(response) {
         pushState();
-        showSearch();
         scrollToTop();
         $("#charts").show();
         hideStage();
@@ -494,12 +480,9 @@ $(document)
     $("#player").empty();
   })
   .on("submit", "#sub-form", function(e) {
-    // Stop form from submitting normally
     e.preventDefault();
-
     // button, gets new value
     var button = $(this).find(".sub-button");
-
     var data = $(this).serialize();
     var url = this.action;
     var method = this.method;
@@ -514,41 +497,33 @@ $(document)
         loadStage("/account/login/");
       })
       .done(function(response) {
-        if (button[0].innerText == "Subscribe") {
-          button.html("Unsubscribe");
+        if (button.innerText == "Subscribe") {
+          button.text("Unsubscribe");
         }
         else {
-          button.html("Subscribe");
+          button.text("Subscribe");
         }
 
-        $("#n_subscribers").html(response);
+        $("#n_subscribers").text(response);
 
         if (response == "1") {
-          $("#subscriber").html("subscriber");
+          $("#subscriber").text("subscriber");
         }
         else {
-          $("#subscriber").html("subscribers");
+          $("#subscriber").text("subscribers");
         }
 
         var url = $("#main-content")[0].baseURI;
-        var context = $("#main-content")[0].innerHTML;
-        if ($("#podinfo").length) {
-          var title = $("#podinfo-title")[0].innerText;
-        }
-
-        var state = {
-          "context": context,
-          "title": title,
-        };
-        history.replaceState(state, "", url);
+        replaceState(url);
       });
   })
   // open login register or password reset in modal
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    showStage();
     loadStage(url);
+    showStage();
+    scrollToTop();
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -568,7 +543,8 @@ $(document)
       .done(function() {
         refreshCookie();
         refreshPage();
-        showStage();
         loadResults("/charts/");
+        showStage();
+        scrollToTop();
       });
   })
