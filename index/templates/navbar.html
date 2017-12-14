@@ -1,19 +1,19 @@
 
   <ul class="nav nav-fade">
     <li class="nav-item">
-      <!-- <a class="nav-link blog-link" href="#">
-        blog
-      </a> -->
+      <a class="nav-link blog-link" href="#">
+        Blog
+      </a>
     </li>
     <li class="nav-item">
       <a class="nav-link browse-link" href="{% url 'browse' %}">
-        browse
+        Browse
       </a>
     </li>
     {% if user.is_authenticated %}
     <li class="nav-item">
       <a class="nav-link subscriptions-link" href="{% url 'subscriptions' %}">
-        subscriptions
+        Subscriptions
       </a>
     </li>
     {% endif %}
@@ -45,7 +45,7 @@
     {% if user.is_authenticated %}
     <li class="nav-item ml-auto">
       <a class="nav-link settings-link" href="{% url 'settings' %}">
-        settings
+        Settings
       </a>
     </li>
     <li class="nav-item">

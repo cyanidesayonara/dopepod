@@ -87,6 +87,7 @@ function replaceState(url) {
 function loadEpisodes(itunesid) {
   // load episodes for podcast
   // TODO also load on back button
+  $("#episodes").html("Loading episodes...");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -203,7 +204,7 @@ function SearchFunc(url, q, page) {
     "q": q,
   }
 
-  if ($("#options-bar").length) {
+  if ($("#results-form").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
       if (genre && genre != 'All') {
@@ -270,42 +271,48 @@ $(document)
   .on("keyup", "#search-form", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = "/search/";
+      var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      pushState();
-      SearchFunc(url, q, false);
+      if (q) {
+        pushState();
+        SearchFunc(url, q, false);
+        hideStage();
+        $("#episodes").html("");
+        $("#charts").hide();
+      }
     }, 250);
-    hideStage();
-    $("#episodes").html("");
-    $("#charts").hide();
   })
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = this.action;
+      var url = $("#browse-form")[0].action;
       var q = $("#q").val();
-      pushState();
-      SearchFunc(url, q, false);
+      if (q) {
+        pushState();
+        SearchFunc(url, q, false);
+        hideStage();
+        $("#episodes").html("");
+        $("#charts").hide();
+      }
     }, 250);
-    hideStage();
-    $("#episodes").html("");
-    $("#charts").hide();
   })
   // browse when "browse" button is clicked
   .on("submit", "#browse-form", function(e) {
       e.preventDefault();
       clearTimeout(timeout);
       timeout = setTimeout(function() {
-        var url = this.action;
+        var url = $("#browse-form")[0].action;
         var q = $("input[name=alphabet]:checked").val();
-        pushState();
-        SearchFunc(url, q, false);
+        if (q) {
+          pushState();
+          SearchFunc(url, q, false);
+          hideStage();
+          $("#episodes").html("");
+          $("#charts").hide();
+        }
       }, 250);
-      hideStage();
-      $("#episodes").html("");
-      $("#charts").hide();
     })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
@@ -315,41 +322,65 @@ $(document)
     hideStage();
     $("#episodes").html("");
  })
-  .on("submit", "#result-form", function(e) {
+  .on("submit", "#results-form", function(e) {
     e.preventDefault();
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = this.action;
+      var url = $("#results-form")[0].action;
       if ($("#selected_alphabet").length) {
         var q = $("#selected_alphabet").val();
       }
       else {
         var q = $("#selected_q").val();
       }
-      pushState();
-      SearchFunc(url, q, true);
+      if (q) {
+        pushState();
+        SearchFunc(url, q, false);
+        hideStage();
+        $("#episodes").html("");
+        $("#charts").hide();
+      }
     }, 250);
-    hideStage();
-    $("#episodes").html("");
-    $("#charts").hide();
   })
   // search when user changes options
   .on("change", "#page-buttons", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#result-form")[0].action;
+      var url = $("#results-form")[0].action;
       if ($("#selected_alphabet").length) {
         var q = $("#selected_alphabet").val();
       }
       else {
         var q = $("#selected_q").val();
       }
-      pushState();
-      SearchFunc(url, q, true);
+      if (q) {
+        pushState();
+        SearchFunc(url, q, true);
+        hideStage();
+        $("#episodes").html("");
+        $("#charts").hide();
+      }
     }, 250);
-    hideStage();
-    $("#episodes").html("");
-    $("#charts").hide();
+  })
+  // search when user changes options
+  .on("change", "#genre-buttons, #language-buttons", function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = $("#results-form")[0].action;
+      if ($("#selected_alphabet").length) {
+        var q = $("#selected_alphabet").val();
+      }
+      else {
+        var q = $("#q").val();
+      }
+      if (q) {
+        pushState();
+        SearchFunc(url, q, false);
+        hideStage();
+        $("#episodes").html("");
+        $("#charts").hide();
+      }
+    }, 250);
   })
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
@@ -359,23 +390,6 @@ $(document)
   .on("change", "#chart-genre-buttons", function() {
     pushState();   
     loadChart();
-  })
-  // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons", function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = $("#result-form")[0].action;
-      if ($("#selected_alphabet").length) {
-        var q = $("#selected_alphabet").val();
-      }
-      else {
-        var q = $("#q").val();
-      }
-      pushState();
-      SearchFunc(url, q, false);
-    }, 250);
-    hideStage();
-    $("#episodes").html("");
   })
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
@@ -497,11 +511,13 @@ $(document)
         loadStage("/account/login/");
       })
       .done(function(response) {
-        if (button.innerText == "Subscribe") {
+        if (button[0].innerText == "Subscribe") {
           button.text("Unsubscribe");
+          button.addClass("active");          
         }
         else {
           button.text("Subscribe");
+          button.removeClass("active");
         }
 
         $("#n_subscribers").text(response);

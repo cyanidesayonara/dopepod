@@ -27,8 +27,10 @@ def episodes(request):
         for ep in eps:
             ep = EpisodeForm(ep)
             # print(ep.errors)
+        episodes_info = str(len(eps)) + ' episodes'
 
         context = {
+            'episodes_info': episodes_info,
             'episodes': eps,
             'podcast': podcast,
         }

@@ -1,28 +1,17 @@
-<div class="col" id="results-wrapper">
+<div class="col results-wrapper">
   <form id="chart-form" method="GET" action="{% url 'charts' %}">
     <!-- OPTIONS -->
-    <div class="row color" id="options-bar">
-      <div class="col texture">
-        <div class="row">
-          <div class="col results-info">
-            <h3>
-              {{ chart_results_info }}
-            </h3>
-          </div>
-          <div class="col-auto ml-auto">
-            <ul class="nav nav-fade">
-              {% if chart_genres %}
-                <!-- GENRES -->
-                <li class="nav-item">
-                  <a class="nav-link" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                    Genre
-                  </a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </div>    
+    <div class="row color">
+      <div class="col texture results-bar">
+        <nav class="nav">
+          <span>
+            {{ chart_results_info }}
+          </span>
+          <a class="ml-auto" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+            Genre
+          </a>
+        </nav>
+      </div>
     </div>
     <div class="row options-select">
       <div id="options-accordion" data-children=".item">
@@ -61,7 +50,7 @@
       </div>
     </div>
   </form>
-  <div class="row results-row">
+  <div class="row results-list">
     <div class="col">
       {% for podcast in chart %}
         <div class="row">

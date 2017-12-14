@@ -1,65 +1,57 @@
-<!-- OPTIONS -->
-<div class="row color" id="options-bar">
-  <div class="col texture">
-    <div class="row">
-      <div class="col-auto">
-        {% if podcasts.has_other_pages %}
-        <!-- PAGINATION -->
-          <div class="btn-group" id="page-buttons" data-toggle="buttons">
-            {% if podcasts.has_previous %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
-                <i class="fas fa-chevron-left"></i>
-              </label>
-            {% endif %}
-            {% for i in podcasts.paginator.page_range %}
-            {% if podcasts.number == i %}
-              <label class="btn btn-outline-primary page-button active">
-                <input type="radio" name="page" value="{{ i }}" checked>
-                {{ i }}
-              </label>
-            {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ i }}">
-                {{ i }}
-              </label>
-            {% endif %}
-            {% endfor %}
-            {% if podcasts.has_next %}
-              <label class="btn btn-outline-primary page-button">
-                <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
-                <i class="fas fa-chevron-right"></i>
-              </label>
-            {% endif %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col results-info">
-        <h5>
+<div class="row color">
+  <div class="col texture results-bar">
+    <ul class="nav">
+      {% if podcasts.has_other_pages %}
+      <li class="nav-item">
+        <div class="btn-group" id="page-buttons" data-toggle="buttons">
+          {% if podcasts.has_previous %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
+              <i class="fas fa-chevron-left"></i>
+            </label>
+          {% endif %}
+          {% for i in podcasts.paginator.page_range %}
+          {% if podcasts.number == i %}
+            <label class="btn btn-outline-primary page-button active">
+              <input type="radio" name="page" value="{{ i }}" checked>
+              {{ i }}
+            </label>
+          {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ i }}">
+              {{ i }}
+            </label>
+          {% endif %}
+          {% endfor %}
+          {% if podcasts.has_next %}
+            <label class="btn btn-outline-primary page-button">
+              <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
+              <i class="fas fa-chevron-right"></i>
+            </label>
+          {% endif %}
+        </div>
+      </li>
+      {% endif %}
+      <li class="nav-item mx-auto">
+        <span class="nav-link results-info">
           {{ results_info }}
-        </h5>
-      </div>
-      <div class="col-auto">
-        <ul class="nav nav-fade">
-          {% if genres %}
-            <!-- GENRES -->
-            <li class="nav-item">
-              <a class="nav-link" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Genre
-              </a>
-            </li>
-          {% endif %}
-          {% if languages %}
-            <!-- LANGUAGES -->
-            <li class="nav-item">
-              <a class="nav-link" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Language
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
+        </span>
+      </li>
+      {% if genres %}
+      <li class="nav-item">
+        <a class="nav-link" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+          Genre
+        </a>
+      </li>
+      {% endif %}
+      {% if languages %}
+      <li class="nav-item">
+        <a class="nav-link" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+          Language
+        </a>
+      </li>
+      {% endif %}
+      </ul>
   </div>
 </div>
 <div class="row options-select">

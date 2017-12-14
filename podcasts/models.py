@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.urls import reverse
 from django.db.models import Q
 import requests
@@ -239,22 +240,24 @@ class Podcast(models.Model):
                     episode = {}
                     pubdate = item.findtext('pubDate')
                     # pubdate = datetime(pubdate)
-                    print(pubdate)
                     episode['pubDate'] = pubdate
 
                     # try these
                     try:
                         episode['title'] = item.findtext('title')
-                        episode['summary'] = item.findtext('description')
+                        summary = item.findtext('description')
                     except AttributeError:
                         # or try with itunes namespace
                         try:
                             episode['title'] = item.find('itunes:title', ns).text
-                            episode['summary'] = item.xpath('itunes:summary', ns).text
+                            summary = item.xpath('itunes:summary', ns).text
                         # if episode data not found, skip
                         except AttributeError as e:
                             logger.error('can\'t get episode data')
                             continue
+
+                    # strip html tags, split and join by single space
+                    episode['summary'] = ' '.join(strip_tags(summary).split())                        
 
                     # try to get length TODO also called "length", "fileSizequit()"
                     try:

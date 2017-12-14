@@ -8,47 +8,66 @@
 <div class="container">
   <div class="row" id="podinfo">
     <!-- PODINFO -->
-    <div class="col-3 px-0">
+    <div class="col-3 px-0" id="podinfo-side">
       <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}250x250bb.jpg&w=250&h=250&t=absolute" />
-      <ul id="podinfo-side">
+      <ul id="podinfo-side-list">
         <li>
-          <form id="sub-form" action="{% url 'subscribe' %}"
+          <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
           id="{{ podcast.itunesid }}" method="POST">
-          <span id="n_subscribers">
-            {{ podcast.n_subscribers }}
-          </span>
-          <span id="subscriber">
-            subsciber{{ podcast.n_subscribers|pluralize }}
-          </span>
-          {% csrf_token %}
-          <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-          {% if podcast.subscribed %}
-          <button type="submit" class="btn btn-outline-primary active sub-button">
-            Unsubscribe
+            <span id="n_subscribers">
+              {{ podcast.n_subscribers }}
+            </span>
+            <span id="subscriber">
+              subsciber{{ podcast.n_subscribers|pluralize }}
+            </span>
+            {% csrf_token %}
+            <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+            {% if podcast.subscribed %}
+            <button type="submit" class="btn btn-outline-primary active sub-button">
+              Unsubscribe
             {% else %}
             <button type="submit" class="btn btn-outline-primary sub-button">
               Subscribe
-              {% endif %}
+            {% endif %}
             </button>
           </form>
         </li>
         <li>
-          {% if podcast.genre.supergenre %}
-          {{ podcast.genre.supergenre }} -
-          {% endif %}
-          {{ podcast.genre }}
+          <span>
+            Genre:
+          </span>
+          <span id="podinfo-genre">
+            {% if podcast.genre.supergenre %}
+            {{ podcast.genre.supergenre }} -
+            {% endif %}
+            {{ podcast.genre }}
+          </span>
         </li>
         <li>
-          {{ podcast.language }}
+          <span>
+            Language:
+          </span>
+          <span id="podinfo-language">
+            {{ podcast.language }}
+          </span>
         </li>
-        {% if podcast.explicit %}
-          <li>
-            Explicit content
-          </li>
-        {% endif %}
-        <li id="copyright">
+        <li>
+          <span>
+            Content:
+          </span>
+          <span id="podinfo-explicit">
+            {% if podcast.explicit %}
+              explicit
+            {% else %}
+              clean
+            {% endif %}
+          </span>
+        </li>
+        <li>
           <em>
-            {{ podcast.copyrighttext }}
+            <span id="podinfo-copyright">
+              {{ podcast.copyrighttext }}
+            </span>
           </em>
         </li>
       </ul>
@@ -57,14 +76,14 @@
       <h5 id="podinfo-title">
         {{ podcast.title }}
       </h5>
-      <h6>
+      <h6 id="podinfo-artist">
         <span>
           By
         </span>
         {{ podcast.artist }}
       </h6>
-      <p>
-        {{ podcast.description|linebreaks }}
+      <p id="podinfo-description">
+        {{ podcast.description }}
       </p>
     </div>
   </div>

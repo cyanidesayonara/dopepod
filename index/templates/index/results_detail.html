@@ -5,12 +5,12 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col" id="results-wrapper">
-  <form id="result-form" method="GET" action="{% url 'search' %}">
+<div class="col results-wrapper">
+  <form id="results-form" method="GET" action="{% url 'search' %}">
     <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
     {% include 'optionsbar.html' %}
   </form>
-  <div class="row results-row">
+  <div class="row results-list">
     {% for podcast in podcasts %}
       <div class="col-lg-2 col-md-3 col-4 result-box">
         <a class="show-podinfo result-image" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">

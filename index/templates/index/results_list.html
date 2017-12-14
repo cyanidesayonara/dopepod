@@ -6,13 +6,13 @@ dopepod
 
 {% block results %}
 {% if podcasts %}
-<div class="col" id="results-wrapper">
-  <form id="result-form" method="GET" action="{% url 'browse' %}">
+<div class="col results-wrapper">
+  <form id="results-form" method="GET" action="{% url 'browse' %}">
     <input type="hidden" id="selected_alphabet" name="selected_alphabet" value="{{ selected_alphabet }}">
     {% include 'optionsbar.html' %}
   </form>
-  <div class="row results-row">
-    <div class="col-sm-4">
+  <div class="row results-list">
+    <div class="col-sm-3">
       {% for podcast in podcasts1 %}
         <h6 class="browse-result-title">
           <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
@@ -21,7 +21,7 @@ dopepod
         </h6>
       {% endfor %}
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       {% for podcast in podcasts2 %}
         <h6 class="browse-result-title">
           <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
@@ -30,8 +30,17 @@ dopepod
         </h6>
       {% endfor %}
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       {% for podcast in podcasts3 %}
+        <h6 class="browse-result-title">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+            {{ podcast.title }}
+          </a>
+        </h6>
+      {% endfor %}
+    </div>
+    <div class="col-sm-3">
+      {% for podcast in podcasts4 %}
         <h6 class="browse-result-title">
           <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
             {{ podcast.title }}

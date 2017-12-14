@@ -8,13 +8,13 @@
             <label for="q" class="sr-only">Search</label>
             {% if selected_q %}
             <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for podcast"
-            aria-label="Search for podcast" autocomplete="off"
+            type="search" placeholder="Search for podcasts"
+            aria-label="Search for podcasts" autocomplete="off"
             accept-charset="utf-8" value="{{ selected_q }}">
             {% else %}
             <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for podcast"
-            aria-label="Search for podcast" autocomplete="off"
+            type="search" placeholder="Search for podcasts"
+            aria-label="Search for podcasts" autocomplete="off"
             accept-charset="utf-8">
             {% endif %}
             <button id="search-button" type="submit">
@@ -29,7 +29,7 @@
       {% if browse %}
       <div class="col" id="browse-bar">
       {% else %}
-      <div class="col" id="browse-bar" style="display: none;">
+      <div class="col d-none" id="browse-bar">
       {% endif %}
         <form id="browse-form" method="GET" action="{% url 'browse' %}">
           <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
