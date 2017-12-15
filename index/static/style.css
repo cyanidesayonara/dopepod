@@ -1,18 +1,18 @@
 @keyframes fadeIn {
   0% {
-    color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0);
   }
   100% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
   }
 }
 
 @keyframes moveLeft {
   0% {
-    color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0);
   }
   100% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
     transform: translateX(-20px);
     -webkit-transform: translateX(-20px); /** Chrome & Safari **/
     -o-transform: translateX(-20px); /** Opera **/
@@ -22,10 +22,10 @@
 
 @-webkit-keyframes moveLeft {
   0% {
-    color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0);
   }
   100% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
     transform: translateX(-20px);
     -webkit-transform: translateX(-20px); /** Chrome & Safari **/
     -o-transform: translateX(-20px); /** Opera **/
@@ -35,10 +35,10 @@
 
 @keyframes moveRight {
   0% {
-    color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0);
   }
   100% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
     transform: translateX(20px);
     -webkit-transform: translateX(20px); /** Chrome & Safari **/
     -o-transform: translateX(20px); /** Opera **/
@@ -48,14 +48,14 @@
 
 @-webkit-keyframes moveRight {
   0% {
-    color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0);
     transform: translateX(20px);
     -webkit-transform: translateX(20px); /** Chrome & Safari **/
     -o-transform: translateX(20px); /** Opera **/
     -moz-transform: translateX(20px); /** Firefox **/
   }
   100% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
     transform: translateX(0px);
     -webkit-transform: translateX(0px); /** Chrome & Safari **/
     -o-transform: translateX(0px); /** Opera **/
@@ -66,7 +66,7 @@
 .x {
   /* top: 10px; */
   /* position: absolute;   */
-  color: rgba(0, 0, 0, 0);
+  color: rgba(255, 255, 255, 0);
 }
 
 .a {
@@ -112,19 +112,16 @@
 
 #logo {
   text-align: center;
-  font-size: 1.75rem;
-}
-
-#brand {
-  text-align: center;
-  display: inline-block;
-  padding-bottom: .25rem;
-  font-size: 1.5rem;
-  line-height: inherit;
-  white-space: nowrap;
+  font-size: 22px;
+  padding-top: 4px;
+  padding-bottom: 10px;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #2e2e2e;
   background: rgba(255, 255, 255, 1);
 }
 
@@ -136,6 +133,7 @@ body {
   color: #000;
   background-color: #fff;
   border-color: rgba(76,222,181,1);
+  padding: .5rem .5rem;
 }
 
 .btn-outline-primary.active, .btn-outline-primary:hover {
@@ -145,7 +143,7 @@ body {
 }
 
 .btn-outline-primary:focus {
-  box-shadow: 0 0 0 3px rgba(76,222,181,.5);
+  box-shadow: none;
 }
 
 .color {
@@ -165,11 +163,18 @@ body {
 
 #navbar {
   padding: 0px;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(50, 50, 50, 1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   z-index: 99;
+}
+.navbar-dropdown {
+    background: rgba(50, 50, 50, 1);
+}
+
+a.nav-link {
+  color: rgba(255, 255, 255, 1);
 }
 
 .nav-link {
@@ -177,6 +182,7 @@ body {
 }
 
 .nav-fade li {
+  border-radius: .25rem;
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
@@ -215,13 +221,23 @@ body {
 /* MULTI BAR */
 #multi-bar {
   overflow: hidden;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+
+
 }
 #multi-bar-scroll {
   margin-top: 44px;
   z-index: 95;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  background: rgba(76,222,181,1);
+  background: -moz-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(76,222,181,.8)), color-stop(100%, rgba(145,194,186,.8)));
+  background: -webkit-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
+  background: -o-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
+  background: -ms-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
+  background: linear-gradient(to right, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cdeb5', endColorstr='#91c2ba', GradientType=1 );
 }
 #options {
 }
@@ -239,21 +255,20 @@ body {
 }
 
 #flap {
-  background-color: #fff;
   top: 0px;
   z-index: 75;
   /* background: url("space.jpg"); */
 }
 
 #stage.open {
-  height: 600px;
+  height: 594px;
   padding-top: 44px;
   /* padding-bottom: 14px; */
   margin-bottom: -44px;
 }
 
 #flap.extended{
-  top: -556px;
+  top: -550px;
 }
 
 #stage {
@@ -306,30 +321,35 @@ body {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  margin-top: 15px;
-  margin-bottom: 15px;
   padding: 15px;
-  height: 526px;
+  height: 550px;
   background-color: #fff;
   border-radius: .25rem;
 }
 #podinfo-main {
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
 }
 #podinfo-side {
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
+}
+#podinfo-side img {
+  border: 1px solid black;
+  border-radius: .25rem;
 }
 #show-episodes {
   background-color: #888;
   text-align: center;
 }
-
 #podinfo-side-list {
   list-style: none;
   padding: 0;
-  margin-top: 1rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#podinfo-side-list li {
+margin-bottom: 5px;
 }
 
 #podinfo-copyright {
@@ -358,12 +378,9 @@ body {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  margin-top: 15px;
-  margin-bottom: 15px;
   padding: 15px;
-  height: 526px;
+  height: 550px;
   background-color: #fff;
-  border-radius: .25rem;
 }
 .results-wrapper {
   border: 1px solid #e6ecf0;

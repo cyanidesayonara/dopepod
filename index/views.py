@@ -34,7 +34,7 @@ def index(request):
         chart = Podcast.get_charts()
         chart_selected_genre = 'All'
         chart_results_info = 'Top 50 podcasts on iTunes'
-        
+
         context = {
             'selected_alphabet': 'A',
             'chart_results_info': chart_results_info,
@@ -233,7 +233,7 @@ def subscriptions(request):
                 'chart_selected_genre': chart_selected_genre,
                 'chart_results_info': chart_results_info,
             })
-
+            return render(request, 'index/subscriptions.html', context)
         else:
             if request.is_ajax():
                 raise Http404()

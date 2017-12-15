@@ -8,29 +8,31 @@
 <div class="container">
   <div class="row" id="podinfo">
     <!-- PODINFO -->
-    <div class="col-3 px-0" id="podinfo-side">
-      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}250x250bb.jpg&w=250&h=250&t=absolute" />
+    <div class="col-4 col-sm-3 px-0" id="podinfo-side">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
       <ul id="podinfo-side-list">
         <li>
           <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
           id="{{ podcast.itunesid }}" method="POST">
-            <span id="n_subscribers">
-              {{ podcast.n_subscribers }}
-            </span>
-            <span id="subscriber">
-              subsciber{{ podcast.n_subscribers|pluralize }}
-            </span>
             {% csrf_token %}
             <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
             {% if podcast.subscribed %}
-            <button type="submit" class="btn btn-outline-primary active sub-button">
+            <button type="submit" class="btn btn-outline-primary sub-button">
               Unsubscribe
             {% else %}
-            <button type="submit" class="btn btn-outline-primary sub-button">
+            <button type="submit" class="btn btn-outline-primary active sub-button">
               Subscribe
             {% endif %}
             </button>
           </form>
+        </li>
+        <li>
+          <span id="n_subscribers">
+            {{ podcast.n_subscribers }}
+          </span>
+          <span id="subscriber">
+            subsciber{{ podcast.n_subscribers|pluralize }}
+          </span>
         </li>
         <li>
           <span>
@@ -72,7 +74,7 @@
         </li>
       </ul>
     </div>
-    <div class="col-9" id="podinfo-main">
+    <div class="col-8 col-sm-9 pr-0" id="podinfo-main">
       <h5 id="podinfo-title">
         {{ podcast.title }}
       </h5>

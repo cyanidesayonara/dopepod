@@ -385,10 +385,10 @@ $(document)
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
     pushState();
-    loadChart();    
+    loadChart();
   })
   .on("change", "#chart-genre-buttons", function() {
-    pushState();   
+    pushState();
     loadChart();
   })
   // show podinfo
@@ -406,7 +406,7 @@ $(document)
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#browse-bar").hide();
+    $("#browse-bar").addClass("d-none");
     showStage();
     scrollToTop();
     $("#charts").show();
@@ -424,7 +424,7 @@ $(document)
     loadResults("/browse/");
     hideStage();
     scrollToTop();
-    $("#browse-bar").show();
+    $("#browse-bar").removeClass("d-none");
    })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
@@ -436,7 +436,7 @@ $(document)
     loadResults("/subscriptions/");
     hideStage();
     scrollToTop();
-    $("#browse-bar").hide();
+    $("#browse-bar").addClass("d-none");
   })
   // open settings
   .on("click", ".settings-link", function(e) {
@@ -446,7 +446,7 @@ $(document)
     loadStage("/settings/");
     showStage();
     scrollToTop();
-    $("#browse-bar").hide();
+    $("#browse-bar").addClass("d-none");
   })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
@@ -513,11 +513,11 @@ $(document)
       .done(function(response) {
         if (button[0].innerText == "Subscribe") {
           button.text("Unsubscribe");
-          button.addClass("active");          
+          button.removeClass("active");
         }
         else {
           button.text("Subscribe");
-          button.removeClass("active");
+          button.addClass("active");
         }
 
         $("#n_subscribers").text(response);
