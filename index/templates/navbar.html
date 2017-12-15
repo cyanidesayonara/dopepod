@@ -1,3 +1,4 @@
+<div class="col">
 <a class="nav-link navbar-toggler" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   <i class="fas fa-bars"></i>
 </a>
@@ -28,48 +29,52 @@
   </ul>
 </div>
 
-  <ul class="nav nav-fade">
-    <li class="nav-item">
-      <a class="nav-link blog-link d-none d-md-block" href="#">
-        Blog
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link browse-link d-none d-md-block" href="{% url 'browse' %}">
-        Browse
-      </a>
-    </li>
-    {% if user.is_authenticated %}
-    <li class="nav-item">
-      <a class="nav-link subscriptions-link d-none d-md-block" href="{% url 'subscriptions' %}">
-        Subscriptions
-      </a>
-    </li>
-    {% endif %}
-  </ul>
-  <a class="index-link" id="logo" href="{% url 'index' %}">
-    <span class="x a">
-      d
-    </span>
-    <span class="x b">
-      o
-    </span>
-    <span class="x c">
-      p
-    </span>
-    <span class="x d">
-      e
-    </span>
-    <span class="x e">
-      p
-    </span>
-    <span class="x f">
-      o
-    </span>
-    <span class="x g">
-      d
+<ul class="nav nav-fade">
+  <li class="nav-item">
+    <a class="nav-link blog-link d-none d-md-block" href="#">
+      Blog
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link browse-link d-none d-md-block" href="{% url 'browse' %}">
+      Browse
+    </a>
+  </li>
+  {% if user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link subscriptions-link d-none d-md-block" href="{% url 'subscriptions' %}">
+      Subscriptions
+    </a>
+  </li>
+  {% endif %}
+</ul>
+</div>
+<div class="col" id="logo" >
+<a class="index-link" href="{% url 'index' %}">
+  <span class="x a">
+    d
+  </span>
+  <span class="x b">
+    o
+  </span>
+  <span class="x c">
+    p
+  </span>
+  <span class="x d">
+    e
+  </span>
+  <span class="x e">
+    p
+  </span>
+  <span class="x f">
+    o
+  </span>
+  <span class="x g">
+    d
     </span>
   </a>
+</div>
+<div class="col">
   <ul class="nav nav-fade">
     {% if user.is_authenticated %}
     <li class="nav-item ml-auto">
@@ -105,3 +110,4 @@
     <i class="fas fa-sign-in-alt"></i>
   </a>
   {% endif %}
+</div>

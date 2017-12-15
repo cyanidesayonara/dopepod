@@ -1,27 +1,36 @@
-<div class="col texture" id="multi-bar">
-  <div class="container">
+<div class="texture">
+  <div class="container" id="multibar">
     <div class="row">
       <!-- SEARCH BAR -->
-      <div class="col-auto ml-auto pr-0">
-        <form id="search-form" method="GET" action="{% url 'search' %}">
-          <div class="input-group" id="search-field">
-            <label for="q" class="sr-only">Search</label>
-            {% if selected_q %}
-            <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for podcasts"
-            aria-label="Search for podcasts" autocomplete="off"
-            accept-charset="utf-8" value="{{ selected_q }}">
-            {% else %}
-            <input class="form-control" type="text" name="q" id="q"
-            type="search" placeholder="Search for podcasts"
-            aria-label="Search for podcasts" autocomplete="off"
-            accept-charset="utf-8">
-            {% endif %}
-            <button id="search-button" type="submit">
-              <i class="fa fa-search"></i>
-            </button>
-          </div>
-        </form>
+      <div class="col">
+        <ul class="nav nav-fade">
+          <li class="nav-item">
+            <a class="nav-link" id="browse-toggle" href="{% url 'browse' %}">
+              Browse
+            </a>
+          </li>
+          <span class="ml-auto">
+            <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
+              <div class="input-group" id="search-field">
+                <label for="q" class="sr-only">Search</label>
+                {% if selected_q %}
+                <input class="form-control" type="text" name="q" id="q"
+                type="search" placeholder="Search for podcasts"
+                aria-label="Search for podcasts" autocomplete="off"
+                accept-charset="utf-8" value="{{ selected_q }}">
+                {% else %}
+                <input class="form-control" type="text" name="q" id="q"
+                type="search" placeholder="Search for podcasts"
+                aria-label="Search for podcasts" autocomplete="off"
+                accept-charset="utf-8">
+                {% endif %}
+                <button id="search-button" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </form>
+          </span>
+        </ul>
       </div>
     </div>
     <div class="row">

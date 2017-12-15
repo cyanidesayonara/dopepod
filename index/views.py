@@ -266,16 +266,18 @@ def podinfo(request, itunesid):
         chart = Podcast.get_charts()
         eps = podcast.get_episodes()
         episodes_info = str(len(eps)) + ' episodes'
+        chart_results_info = 'Top 50 podcasts on iTunes'
+        chart_selected_genre = 'All'
 
         context.update({
             'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
-            'chart_selected_genre': 'All',
+            'chart_selected_genre': chart_selected_genre,
             'alphabet': ALPHABET,
             'episodes': eps,
             'episodes_info': episodes_info,
-            'chart_results_info': 'top podcasts on itunes',
+            'chart_results_info': chart_results_info,
         })
         return render(request, 'podinfo.html', context)
 

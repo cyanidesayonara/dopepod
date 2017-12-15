@@ -170,11 +170,11 @@ function scrollToTop() {
 
 function scrollToBar() {
   $('html, body').animate({
-    scrollTop: $("#multi-bar-scroll").offset().top
+    scrollTop: $("#multibar-scroll").offset().top
   }, 200);
 }
 
-function refreshPage() {
+function refreshNavbar() {
   // refresh navbar (and maybe other stuff as well?)
   $.ajax({
     type: "GET",
@@ -186,9 +186,6 @@ function refreshPage() {
     .done(function(response) {
       // refresh navbar
       $("#navbar-drop").html(response);
-      // go to index
-      loadResults("/charts/");
-      showSearch();
     });
 }
 
@@ -448,6 +445,16 @@ $(document)
     scrollToTop();
     $("#browse-bar").addClass("d-none");
   })
+  .on("click", "#browse-toggle", function(e) {
+    e.preventDefault();
+    if ($("#browse-bar").hasClass("d-none")) {
+      $("#browse-bar").removeClass("d-none");     
+    }
+    else {
+      $("#browse-bar").addClass("d-none");
+    }
+    
+  })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
@@ -558,9 +565,13 @@ $(document)
       })
       .done(function() {
         refreshCookie();
-        refreshPage();
+        refreshNavbar();
         loadResults("/charts/");
         showStage();
         scrollToTop();
+        $("#results").html("");
+        $("#episodes").html("");
+        $("#charts").show();
+        $("#browse-bar").addClass("d-none");
       });
   })
