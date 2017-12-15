@@ -72,6 +72,11 @@
             </span>
           </em>
         </li>
+        <li>
+          {% if subscription %}
+            {{ subscription.last_updated }}
+          {% endif %}
+        </li>
       </ul>
     </div>
     <div class="col-8 col-sm-9 pr-0" id="podinfo-main">

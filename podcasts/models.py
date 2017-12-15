@@ -6,14 +6,16 @@ from django.urls import reverse
 from django.db.models import Q
 import requests
 from lxml import etree, html
-from datetime import datetime
+from datetime import time, timedelta, datetime
+from dateutil.parser import parse
 import logging
+from django import forms
 
 logger = logging.getLogger(__name__)
 
 class Podcast(models.Model):
     itunesid = models.IntegerField(primary_key=True)
-    feedUrl = models.URLField(max_length=500)
+    feedUrl = models.CharField(max_length=500)
     title = models.CharField(max_length=500)
     artist = models.CharField(max_length=500)
     genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE)
@@ -23,9 +25,9 @@ class Podcast(models.Model):
     description = models.TextField(null=True, blank=True)
     n_subscribers = models.IntegerField(default=0)
     subscribed = models.BooleanField(default=False)
-    reviewsUrl = models.URLField(max_length=500)
-    artworkUrl = models.URLField(max_length=500)
-    podcastUrl = models.URLField(max_length=500)
+    reviewsUrl = models.CharField(max_length=500)
+    artworkUrl = models.CharField(max_length=500)
+    podcastUrl = models.CharField(max_length=500)
     genre_rank = models.IntegerField(null=True, blank=True)
     global_rank = models.IntegerField(null=True, blank=True)
 
@@ -239,8 +241,7 @@ class Podcast(models.Model):
                 for item in tree.findall('item'):
                     episode = {}
                     pubdate = item.findtext('pubDate')
-                    # pubdate = datetime(pubdate)
-                    episode['pubDate'] = pubdate
+                    episode['pubDate'] = parse(pubdate)
 
                     # try these
                     try:
@@ -262,9 +263,23 @@ class Podcast(models.Model):
                     # try to get length TODO also called "length", "fileSizequit()"
                     try:
                         length = item.find('itunes:duration', ns).text
-                        if ':' not in length:
-                            length = str(datetime.timedelta(seconds=int(length)))
-                        episode['length'] = length
+
+                        if length.isdigit():
+                            episode['length'] = timedelta(seconds=int(length))
+                        else:
+                            if '.' in length:
+                                length = length.replace('.', ':')                       
+                            try:
+                                dt = datetime.strptime(length, '%H:%M:%S')
+                                length = timedelta(hours=dt.hour, minutes=dt.minute, seconds=dt.second)
+                                episode['length'] = length
+                            except ValueError:
+                                try:
+                                    dt = datetime.strptime(length, '%M:%S')
+                                    length = timedelta(minutes=dt.minute, seconds=dt.second)
+                                    episode['length'] = length                                  
+                                except ValueError:
+                                    logger.error('can\'t parse length')
                     except AttributeError as e:
                         logger.error('can\'t get length')
 
@@ -430,10 +445,10 @@ class Episode(models.Model):
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=500)
     summary = models.TextField(null=True, blank=True)
-    length = models.DateTimeField(null=True, blank=True)
-    url = models.URLField(max_length=500)
+    length = models.DurationField(null=True, blank=True)
+    url = models.CharField(max_length=500)
     kind = models.CharField(max_length=16)
-
+    is_new = models.BooleanField(default=False)
 
 class Filterable(models.Model):
     """
