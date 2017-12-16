@@ -10,7 +10,7 @@ settings
     Settings
   </h2>
 </div>
-<div class="col-sm-9">
+<div class="col-sm-9" id="settings-main">
   <form id="settings-form" action="{% url 'settings' %}" method="POST">
   {% if user_form.errors %}
   {{ user_form.errors }}

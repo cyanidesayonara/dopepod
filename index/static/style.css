@@ -332,7 +332,6 @@ a, a:hover {
 }
 
 #screen {
-
   height: 100%;
   background-color: #fff;
 }
@@ -347,10 +346,14 @@ a, a:hover {
   background-color: #fff;
 }
 #podinfo-main {
+  padding-top: 15px;
+  padding-bottom: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 #podinfo-side {
+  padding-top: 15px;
+  padding-bottom: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
 }

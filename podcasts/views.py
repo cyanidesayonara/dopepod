@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from .models import Genre, Language, Podcast, Subscription, Episode
+from .models import Genre, Language, Podcast, Subscription
 import logging
 
 logger = logging.getLogger(__name__)

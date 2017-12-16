@@ -271,9 +271,8 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
+        $("#screen").addClass("d-none");
         hideStage();
-        $("#episodes").html("");
-        $("#charts").hide();
       }
     }, 250);
   })
@@ -287,9 +286,8 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
+        $("#screen").addClass("d-none");
         hideStage();
-        $("#episodes").html("");
-        $("#charts").hide();
       }
     }, 250);
   })
@@ -303,9 +301,8 @@ $(document)
         if (q) {
           pushState();
           SearchFunc(url, q, false);
+          $("#screen").addClass("d-none");
           hideStage();
-          $("#episodes").html("");
-          $("#charts").hide();
         }
       }, 250);
     })
@@ -314,8 +311,8 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q, false);
+    $("#screen").addClass("d-none");    
     hideStage();
-    $("#episodes").html("");
  })
   .on("submit", "#results-form", function(e) {
     e.preventDefault();
@@ -331,9 +328,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        hideStage();
-        $("#episodes").html("");
-        $("#charts").hide();
       }
     }, 250);
   })
@@ -351,9 +345,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, true);
-        hideStage();
-        $("#episodes").html("");
-        $("#charts").hide();
       }
     }, 250);
   })
@@ -371,9 +362,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        hideStage();
-        $("#episodes").html("");
-        $("#charts").hide();
       }
     }, 250);
   })
@@ -392,9 +380,12 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
+    $("#browse-bar").addClass("d-none");
+    $("#screen").removeClass("d-none");
     showStage();
     scrollToTop();
     loadScreen(url);
+    $("#episodes").html("");
     loadEpisodes(itunesid);
   })
   // go to home view
