@@ -357,10 +357,6 @@ a, a:hover {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#podinfo-side img {
-  border: 1px solid black;
-  border-radius: .25rem;
-}
 #show-episodes {
   background-color: #888;
   text-align: center;
@@ -369,22 +365,37 @@ a, a:hover {
   list-style: none;
   padding: 0;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 #podinfo-side-list li {
-margin-bottom: 5px;
+margin-bottom: 4px;
 }
-
+#podinfo-top {
+  height:506px;
+}
+#podinfo-bottom {
+  height: 44px;
+}
 #podinfo-copyright {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  line-height: 1.5;
+  -webkit-line-clamp: 2;
+}
+#podinfo-artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 #podinfo-description {
-  font-size: .9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 20;
 }
 #episodes-wrapper {
   border: 1px solid #e6ecf0;
@@ -396,6 +407,12 @@ margin-bottom: 5px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+}
+.hidden-row {
+  padding: 0 !important;
+}
+.table tbody tr.hover:hover {
+  background-color: rgba(0,0,0,.075);
 }
 .results-wrapper {
   border: 1px solid #e6ecf0;
@@ -409,6 +426,7 @@ margin-bottom: 5px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 .results-bar {
+  text-align: center;
   padding-top: 8px;
   padding-bottom: 8px;
 }

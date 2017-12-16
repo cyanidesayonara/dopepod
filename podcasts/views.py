@@ -29,7 +29,6 @@ def episodes(request):
             'episodes': eps,
             'podcast': podcast,
         }
-
         return render(request, 'episodes.html', context)
 
 def play(request):

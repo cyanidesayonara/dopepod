@@ -226,10 +226,15 @@ class Podcast(models.Model):
             'im': 'http://itunes.apple.com/rss',
         }
 
+        # useragent for requests
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        }
+
         episodes = []
 
         try:
-            response = requests.get(self.feedUrl, timeout=5)
+            response = requests.get(self.feedUrl, headers=headers, timeout=5)
             response.raise_for_status()
 
             try:
@@ -240,30 +245,45 @@ class Podcast(models.Model):
 
                 for item in tree.findall('item'):
                     episode = {}
-                    pubdate = item.findtext('pubDate')
-                    episode['pubDate'] = parse(pubdate)
 
-                    # try these
+                    # try to get pubdate + parse & convert it to datetime
                     try:
-                        episode['title'] = item.findtext('title')
-                        summary = item.findtext('description')
+                        pubdate = item.find('pubDate').text
+                        episode['pubDate'] = parse(pubdate)
+                    # if episode data not found, skip episode
+                    except AttributeError as e:
+                        logger.error('can\'t get episode data', self.feedUrl)
+                        continue
+
+                    # try to get title & summary
+                    try:
+                        episode['title'] = item.find('title').text
+                        summary = item.find('description').text
                     except AttributeError:
                         # or try with itunes namespace
                         try:
-                            episode['title'] = item.find('itunes:title', ns).text
-                            summary = item.xpath('itunes:summary', ns).text
-                        # if episode data not found, skip
+                            summary = item.find('itunes:summary', ns).text
+                        # if episode data not found, skip episode
                         except AttributeError as e:
-                            logger.error('can\'t get episode data')
+                            logger.error('can\'t get episode data', self.feedUrl)
                             continue
 
-                    # strip html tags, split and join by single space
+                    # strip html tags+ split + join again by single space
                     episode['summary'] = ' '.join(strip_tags(summary).split())                        
 
-                    # try to get length TODO also called "length", "fileSizequit()"
+                    # try to get length
+                    length = None
                     try:
                         length = item.find('itunes:duration', ns).text
-
+                    except AttributeError as e:
+                        try:
+                            length = item.find('duration').text
+                        except AttributeError as e:
+                            logger.error('can\'t get length', self.feedUrl)
+                    
+                    if length:
+                        length = str(length)
+                        # convert length to timedelta
                         if length.isdigit():
                             episode['length'] = timedelta(seconds=int(length))
                         else:
@@ -279,9 +299,7 @@ class Podcast(models.Model):
                                     length = timedelta(minutes=dt.minute, seconds=dt.second)
                                     episode['length'] = length                                  
                                 except ValueError:
-                                    logger.error('can\'t parse length')
-                    except AttributeError as e:
-                        logger.error('can\'t get length')
+                                    logger.error('can\'t parse length', self.feedUrl)
 
                     episode['parent'] = self.itunesid
 
@@ -293,7 +311,7 @@ class Podcast(models.Model):
                         episode['type'] = enclosure.get('type')
                         episodes.append(episode)
                     except AttributeError as e:
-                        logger.error('can\'t get episode url')
+                        logger.error('can\'t get episode url', self.feedUrl)
                 return episodes
 
             except etree.XMLSyntaxError:

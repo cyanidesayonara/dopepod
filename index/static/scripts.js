@@ -99,7 +99,7 @@ function loadEpisodes(itunesid) {
       console.log(thrownError);
     })
     .done(function(response) {
-      if ($("#podinfo").length) {
+      if ($("#podinfo-main").length) {
         $("#episodes").html(response);
         var url = $("#main-content")[0].baseURI;
         replaceState(url);
@@ -257,6 +257,9 @@ $(document)
     refreshCookie();
     xhr = null;
     timeout = 0;
+  })
+  .on("show.bs.collapse", function () {
+    $(".more-collapse.show").collapse("hide");
   })
   // remove focus from button (focus would be saved on state)
   .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {

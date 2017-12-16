@@ -6,6 +6,13 @@ dopepod
 
 {% block results %}
 <div class="col results-wrapper">
+  <div class="row color">
+    <div class="col texture results-bar">
+      <span class="results-info">
+        {{ results_info }}
+      </span>
+    </div>
+  </div>
   <form id="results-form" method="GET" action="{% url 'search' %}">
     <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">
     {% include 'optionsbar.html' %}

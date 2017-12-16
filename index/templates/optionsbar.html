@@ -1,8 +1,8 @@
-<div class="row color">
-  <div class="col texture results-bar">
+<div class="row">
+  <div class="col results-bar">
     <ul class="nav">
       {% if podcasts.has_other_pages %}
-      <li class="nav-item">
+      <li>
         <div class="btn-group" id="page-buttons" data-toggle="buttons">
           {% if podcasts.has_previous %}
             <label class="btn btn-outline-primary page-button">
@@ -32,21 +32,16 @@
         </div>
       </li>
       {% endif %}
-      <li class="nav-item mx-auto">
-        <span class="nav-link results-info">
-          {{ results_info }}
-        </span>
-      </li>
       {% if genres %}
-      <li class="nav-item">
-        <a class="nav-link" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+      <li>
+        <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
           Genre
         </a>
       </li>
       {% endif %}
       {% if languages %}
-      <li class="nav-item">
-        <a class="nav-link" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+      <li>
+        <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
           Language
         </a>
       </li>
@@ -59,7 +54,7 @@
     <div class="item">
       <div id="options-accordion1" class="collapse" role="tabpanel">
         {% if genres %}
-          <div class="btn-group btn-group-justified options-group" id="genre-buttons" data-toggle="buttons">
+          <div class="options-group" id="genre-buttons" data-toggle="buttons">
             {% if selected_genre == 'All' %}
               <label class="btn options-button active">
                 <input type="radio" name="genre" value="All" checked>
