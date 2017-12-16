@@ -6,10 +6,19 @@ dopepod
 
 {% block content %}
 <!-- MULTI BAR -->
+{% if stage_open %}
 <div class="container-fluid sticky-top extended" id="flap">
   <div class="row open" id="stage">
-    {% block stage %}
-    {% endblock %}
+{% else %}
+<div class="container-fluid sticky-top" id="flap">
+  <div class="row" id="stage">
+{% endif %}
+    <div class="container">
+      <div class="row" id="screen">
+        {% block stage %}
+        {% endblock %}
+      </div>
+    </div>
   </div>
   <div class="row" id="multibar-scroll">
     {% include 'multibar.html' %}

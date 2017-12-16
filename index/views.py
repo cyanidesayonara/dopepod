@@ -36,6 +36,7 @@ def index(request):
         chart_results_info = 'Top 50 podcasts on iTunes'
 
         context = {
+            'stage_open': True,
             'selected_alphabet': 'A',
             'chart_results_info': chart_results_info,
             'chart_genres': genres,
@@ -71,6 +72,7 @@ def charts(request):
 
         # search bar for non-ajax
         context.update({
+            'stage_open': True,
             'selected_alphabet': 'A',
             'alphabet': ALPHABET,
         })
@@ -126,6 +128,7 @@ def search(request):
             chart_selected_genre = 'All'
 
             context.update({
+                'stage_open': False,
                 'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
@@ -190,6 +193,7 @@ def browse(request):
         chart_selected_genre = 'All'
 
         context.update({
+            'stage_open': False,
             'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
@@ -226,6 +230,7 @@ def subscriptions(request):
             chart_selected_genre = 'All'
 
             context.update({
+                'stage_open': False,
                 'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
@@ -251,7 +256,7 @@ def podinfo(request, itunesid):
         user = request.user
 
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
-        
+
         if user.is_authenticated:
             try:
                 subscription = Subscription.objects.get(owner=user, parent=podcast)
@@ -275,6 +280,7 @@ def podinfo(request, itunesid):
         chart_selected_genre = 'All'
 
         context.update({
+            'stage_open': True,
             'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
@@ -311,6 +317,7 @@ def settings(request):
             chart_selected_genre = 'All'
 
             context.update({
+                'stage_open': True,
                 'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
@@ -342,6 +349,7 @@ def settings(request):
                 genres = Genre.get_primary_genres()
                 chart = Podcast.get_charts()
                 context.update({
+                    'stage_open': True,
                     'selected_alphabet': 'A',
                     'chart_genres': genres,
                     'chart': chart[:50],

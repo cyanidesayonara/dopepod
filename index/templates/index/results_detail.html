@@ -7,7 +7,7 @@ dopepod
 {% block results %}
 <div class="col results-wrapper">
   <form id="results-form" method="GET" action="{% url 'search' %}">
-    <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">      
+    <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">
     {% include 'optionsbar.html' %}
   </form>
   <div class="row results-list">
@@ -23,7 +23,7 @@ dopepod
         </h6>
         <p class="result-artist">
           <span>
-            by 
+            by
           </span>
           <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
             {{ podcast.artist }}

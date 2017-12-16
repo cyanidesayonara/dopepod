@@ -121,7 +121,7 @@ function loadResults(url) {
     });
 }
 
-function loadStage(url) {
+function loadScreen(url) {
   $.ajax({
     type: "GET",
     url: url,
@@ -131,10 +131,10 @@ function loadStage(url) {
     })
     .done(function(response) {
       if (response.html) {
-        $("#stage").html(response.html);
+        $("#screen").html(response.html);
       }
       else {
-        $("#stage").html(response);
+        $("#screen").html(response);
       }
       replaceState(url);
     });
@@ -241,13 +241,11 @@ function SearchFunc(url, q, page) {
 }
 
 function showStage() {
-  $("#stage").html("");
   $("#stage").addClass("open");
   $("#flap").addClass("extended");
 }
 
 function hideStage() {
-  $("#stage").html("");
   $("#stage").removeClass("open");
   $("#flap").removeClass("extended");
 }
@@ -396,7 +394,7 @@ $(document)
     pushState();
     showStage();
     scrollToTop();
-    loadStage(url);
+    loadScreen(url);
     loadEpisodes(itunesid);
   })
   // go to home view
@@ -404,9 +402,10 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-bar").addClass("d-none");
+    $("#screen").removeClass("d-none");
     showStage();
     scrollToTop();
-    $("#charts").show();
+    $("#charts").removeClass("d-none");
     $("#results").html("");
     $("#episodes").html("");
     replaceState("/");
@@ -415,45 +414,50 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#charts").hide();
-    $("#results").html("");
-    $("#episodes").html("");
-    loadResults("/browse/");
+    $("#browse-bar").removeClass("d-none");
+    $("#screen").addClass("d-none");
     hideStage();
     scrollToTop();
-    $("#browse-bar").removeClass("d-none");
+    $("#charts").addClass("d-none");
+    $("#episodes").html("");
+    $("#results").html("");
+    loadResults("/browse/");
    })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#charts").hide();
-    $("#results").html("");
-    $("#episodes").html("");
-    loadResults("/subscriptions/");
+    $("#browse-bar").addClass("d-none");
+    $("#screen").addClass("d-none");
     hideStage();
     scrollToTop();
-    $("#browse-bar").addClass("d-none");
+    $("#charts").addClass("d-none");
+    $("#episodes").html("");
+    $("#results").html("");
+    loadResults("/subscriptions/");
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#episodes").html("");
-    loadStage("/settings/");
+    $("#browse-bar").addClass("d-none");
+    $("#screen").removeClass("d-none");
     showStage();
     scrollToTop();
-    $("#browse-bar").addClass("d-none");
+    $("#charts").removeClass("d-none");
+    $("#results").html("");
+    $("#episodes").html("");
+    loadScreen("/settings/");
   })
   .on("click", "#browse-toggle", function(e) {
     e.preventDefault();
     if ($("#browse-bar").hasClass("d-none")) {
-      $("#browse-bar").removeClass("d-none");     
+      $("#browse-bar").removeClass("d-none");
     }
     else {
       $("#browse-bar").addClass("d-none");
     }
-    
+
   })
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
@@ -469,13 +473,17 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         pushState();
-        $("#stage").html(xhr.responseJSON.html);
+        $("#screen").html(xhr.responseJSON.html);
       })
       .done(function(response) {
         pushState();
+        $("#browse-bar").addClass("d-none");
+        $("#screen").removeClass("d-none");
+        showStage();
         scrollToTop();
-        $("#charts").show();
-        hideStage();
+        $("#charts").removeClass("d-none");
+        $("#results").html("");
+        $("#episodes").html("");
       });
   })
   // put episode in player
@@ -515,7 +523,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
         // probably not logged in
-        loadStage("/account/login/");
+        loadScreen("/account/login/");
       })
       .done(function(response) {
         if (button[0].innerText == "Subscribe") {
@@ -544,9 +552,9 @@ $(document)
   .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    loadStage(url);
     showStage();
     scrollToTop();
+    loadScreen(url);
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -561,17 +569,17 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#stage").html(xhr.responseJSON.html);
+        $("#screen").html(xhr.responseJSON.html);
       })
       .done(function() {
         refreshCookie();
         refreshNavbar();
-        loadResults("/charts/");
+        $("#browse-bar").addClass("d-none");
+        $("#screen").removeClass("d-none");
         showStage();
         scrollToTop();
+        $("#charts").removeClass("d-none");
         $("#results").html("");
         $("#episodes").html("");
-        $("#charts").show();
-        $("#browse-bar").addClass("d-none");
       });
   })

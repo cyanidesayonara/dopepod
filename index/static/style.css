@@ -125,6 +125,12 @@ body {
   background: rgba(255, 255, 255, 1);
 }
 
+a, a:hover {
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
+}
+
 .texture {
   background: url("grid.png");
   width: 100%;
@@ -165,9 +171,9 @@ body {
 #navbar {
   padding: 0px;
   background: rgba(50, 50, 50, 1);
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
+  -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
+  box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   z-index: 99;
 }
 .navbar-dropdown {
@@ -230,7 +236,7 @@ body {
 
 /* MULTI BAR */
 #multibar {
-  
+
 }
 #multibar-scroll {
   margin-top: 44px;
@@ -245,7 +251,6 @@ body {
   background: -o-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
   background: -ms-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
   background: linear-gradient(to right, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cdeb5', endColorstr='#91c2ba', GradientType=1 );
 }
 #options {
 }
@@ -263,30 +268,22 @@ body {
 }
 
 #flap {
-  top: 0px;
   z-index: 75;
-  /* background: url("space.jpg"); */
 }
-
-#stage.open {
-  height: 594px;
-  padding-top: 44px;
-  /* padding-bottom: 14px; */
-  margin-bottom: -44px;
-}
-
 #flap.extended{
   top: -550px;
 }
-
 #stage {
   background-color: #E6ECF0;
   z-index: 90;
   overflow: hidden;
 }
-
-#search-form {
+#stage.open {
+  height: 594px;
+  padding-top: 44px;
+  margin-bottom: -44px;
 }
+
 #search-field {
   padding: .5rem 0 .5rem .5rem;
   width: 250px;
@@ -298,16 +295,26 @@ body {
   z-index: 50;
   background-color: inherit;
   border: 0;
+  transition: color 1s ease-in-out;
+  -moz-transition: color 1s ease-in-out;
+  -webkit-transition: color 1s ease-in-out;
 }
 #search-button:focus {
   outline: 1px #fff;
 }
+#search-button:hover {
+  color: #ddd;
+}
 #q {
+  font-size: 14px;
   border-radius: .25rem;
-  padding: .25rem .5rem;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  padding: 5px 8px;
+  border: 1px solid rgba(0,0,0,.15);
+}
+#q:focus {
+  -webkit-box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
+  -moz-box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
+  box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
 }
 
 #alphabet {
@@ -322,6 +329,12 @@ body {
 
 .dropdown-menu {
   min-width: 0;
+}
+
+#screen {
+
+  height: 100%;
+  background-color: #fff;
 }
 
 /* PODINFO */
@@ -381,14 +394,6 @@ margin-bottom: 5px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
-#settings {
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  padding: 15px;
-  height: 550px;
-  background-color: #fff;
-}
 .results-wrapper {
   border: 1px solid #e6ecf0;
   border-radius: .25rem;
@@ -434,11 +439,6 @@ margin-bottom: 5px;
   line-height: 1.5;        /* fallback */
   max-height: 3.0;       /* fallback */
 }
-a, a:hover {
-  cursor: pointer;
-  color: #000;
-  text-decoration: none;
-}
 .result-artist, .result-artist:hover {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -448,14 +448,25 @@ a, a:hover {
   line-height: 1.5;        /* fallback */
   max-height: 3.0;       /* fallback */
 }
-.browse-result-title, .browse-result-titlet:hover {
+
+.browse-results-list {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.browse-results-list a {
+  height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1; /* number of lines to show */
-  line-height: 1;        /* fallback */
-  max-height: 2;       /* fallback */
+  line-height: 1.5;        /* fallback */
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.browse-results-list a:hover {
+  text-decoration: underline;
 }
 
 #recommendations{
