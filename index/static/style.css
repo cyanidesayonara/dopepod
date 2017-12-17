@@ -112,21 +112,44 @@
 
 #logo {
   text-align: center;
-  font-size: 22px;
-  padding-top: 6px;
+  font-size: 1.5rem;
+  padding-top: 2px;
   padding-bottom: 8px;
+}
+
+/* Extra small devices (phones, up to 480px) */
+@media screen and (max-width: 767px) {
+  body {
+    font-size: 12px;
+  }
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+  body {
+    font-size: 13px;
+  }
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+  body {
+    font-size: 14px;
+  }
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
+  body {
+    font-size: 14px;
+  }
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 14px;
   line-height: 1.42857143;
   color: #2e2e2e;
   background: rgba(255, 255, 255, 1);
 }
 
-a, a:hover {
-  cursor: pointer;
+#navbar a:hover {
   color: #000;
   text-decoration: none;
 }
@@ -306,7 +329,6 @@ a, a:hover {
   color: #ddd;
 }
 #q {
-  font-size: 14px;
   border-radius: .25rem;
   padding: 5px 8px;
   border: 1px solid rgba(0,0,0,.15);
@@ -331,9 +353,20 @@ a, a:hover {
   min-width: 0;
 }
 
-#screen {
-  height: 100%;
+#center-stage {
   background-color: #fff;
+}
+
+#splash {
+  height: 100%;
+  padding: 30px;
+  text-align: center;
+}
+#splash-top {
+  padding: 15%;
+}
+#splash-bottom {
+  padding: 15%;
 }
 
 /* PODINFO */
@@ -485,9 +518,6 @@ margin-bottom: 4px;
   line-height: 1.5;        /* fallback */
   margin-top: 4px;
   margin-bottom: 4px;
-}
-.browse-results-list a:hover {
-  text-decoration: underline;
 }
 
 #recommendations{

@@ -68,7 +68,7 @@ def charts(request):
         }
 
         if request.is_ajax():
-            return render(request, 'index/charts.html', context)
+            return render(request, 'charts.html', context)
 
         # search bar for non-ajax
         context.update({
@@ -254,7 +254,6 @@ def podinfo(request, itunesid):
 
     if request.method == 'GET':
         user = request.user
-
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
         if user.is_authenticated:
@@ -267,8 +266,8 @@ def podinfo(request, itunesid):
             'podcast': podcast,
             'subscription': subscription,
         }
-
         if request.is_ajax():
+            print(context)
             return render(request, 'podinfo.html', context)
 
         # chart & search bar

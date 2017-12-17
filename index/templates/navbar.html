@@ -1,4 +1,4 @@
-<div class="col-3">
+<div class="col-auto col-md-4">
   <a class="nav-link navbar-toggler" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-bars"></i>
   </a>
@@ -48,7 +48,7 @@
     {% endif %}
   </ul>
 </div>
-<div class="col-6" id="logo" >
+<div class="col-auto col-md-4" id="logo" >
   <a class="index-link" href="{% url 'index' %}">
     <span class="x a">
       d
@@ -73,7 +73,7 @@
     </span>
   </a>
 </div>
-<div class="col-3">
+<div class="col-auto col-md-4">
   <ul class="nav nav-fade">
     {% if user.is_authenticated %}
     <li class="nav-item ml-auto">

@@ -121,7 +121,7 @@ function loadResults(url) {
     });
 }
 
-function loadScreen(url) {
+function loadCenterStage(url) {
   $.ajax({
     type: "GET",
     url: url,
@@ -130,11 +130,12 @@ function loadScreen(url) {
       console.log(thrownError);
     })
     .done(function(response) {
+      console.log(response);
       if (response.html) {
-        $("#screen").html(response.html);
+        $("#center-stage").html(response.html);
       }
       else {
-        $("#screen").html(response);
+        $("#center-stage").html(response);
       }
       replaceState(url);
     });
@@ -168,7 +169,7 @@ function scrollToTop() {
   }, 200);
 }
 
-function scrollToBar() {
+function scrollToMultibar() {
   $('html, body').animate({
     scrollTop: $("#multibar-scroll").offset().top
   }, 200);
@@ -274,7 +275,8 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        $("#screen").addClass("d-none");
+        $("#splash").addClass("d-none");
+        $("#center-stage").addClass("d-none");
         hideStage();
       }
     }, 250);
@@ -289,7 +291,8 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        $("#screen").addClass("d-none");
+        $("#splash").addClass("d-none");
+        $("#center-stage").addClass("d-none");
         hideStage();
       }
     }, 250);
@@ -304,7 +307,8 @@ $(document)
         if (q) {
           pushState();
           SearchFunc(url, q, false);
-          $("#screen").addClass("d-none");
+          $("#splash").addClass("d-none");
+          $("#center-stage").addClass("d-none");
           hideStage();
         }
       }, 250);
@@ -314,7 +318,8 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q, false);
-    $("#screen").addClass("d-none");    
+    $("#splash").addClass("d-none");
+    $("#center-stage").addClass("d-none");
     hideStage();
  })
   .on("submit", "#results-form", function(e) {
@@ -384,10 +389,11 @@ $(document)
     var itunesid = $(this).data("itunesid");
     pushState();
     $("#browse-bar").addClass("d-none");
-    $("#screen").removeClass("d-none");
+    $("#splash").addClass("d-none");
+    $("#center-stage").removeClass("d-none");
     showStage();
     scrollToTop();
-    loadScreen(url);
+    loadCenterStage(url);
     $("#episodes").html("");
     loadEpisodes(itunesid);
   })
@@ -396,7 +402,8 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-bar").addClass("d-none");
-    $("#screen").removeClass("d-none");
+    $("#splash").removeClass("d-none");
+    $("#center-stage").removeClass("d-none");
     showStage();
     scrollToTop();
     $("#charts").removeClass("d-none");
@@ -409,7 +416,8 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-bar").removeClass("d-none");
-    $("#screen").addClass("d-none");
+    $("#splash").addClass("d-none");
+    $("#center-stage").addClass("d-none");
     hideStage();
     scrollToTop();
     $("#charts").addClass("d-none");
@@ -422,7 +430,8 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-bar").addClass("d-none");
-    $("#screen").addClass("d-none");
+    $("#splash").addClass("d-none");
+    $("#center-stage").addClass("d-none");
     hideStage();
     scrollToTop();
     $("#charts").addClass("d-none");
@@ -435,13 +444,14 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-bar").addClass("d-none");
-    $("#screen").removeClass("d-none");
+    $("#splash").removeClass("d-none");
+    $("#center-stage").removeClass("d-none");
     showStage();
     scrollToTop();
     $("#charts").removeClass("d-none");
     $("#results").html("");
     $("#episodes").html("");
-    loadScreen("/settings/");
+    loadCenterStage("/settings/");
   })
   .on("click", "#browse-toggle", function(e) {
     e.preventDefault();
@@ -467,12 +477,13 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         pushState();
-        $("#screen").html(xhr.responseJSON.html);
+        $("#center-stage").html(xhr.responseJSON.html);
       })
       .done(function(response) {
         pushState();
         $("#browse-bar").addClass("d-none");
-        $("#screen").removeClass("d-none");
+        $("#splash").removeClass("d-none");
+        $("#center-stage").removeClass("d-none");
         showStage();
         scrollToTop();
         $("#charts").removeClass("d-none");
@@ -517,7 +528,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
         // probably not logged in
-        loadScreen("/account/login/");
+        loadCenterStage("/account/login/");
       })
       .done(function(response) {
         if (button[0].innerText == "Subscribe") {
@@ -548,7 +559,7 @@ $(document)
     var url = this.href;
     showStage();
     scrollToTop();
-    loadScreen(url);
+    loadCenterStage(url);
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -563,13 +574,14 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#screen").html(xhr.responseJSON.html);
+        $("#center-stage").html(xhr.responseJSON.html);
       })
       .done(function() {
         refreshCookie();
         refreshNavbar();
         $("#browse-bar").addClass("d-none");
-        $("#screen").removeClass("d-none");
+        $("#center-stage").removeClass("d-none");
+        $("#splash").addClass("d-none");
         showStage();
         scrollToTop();
         $("#charts").removeClass("d-none");

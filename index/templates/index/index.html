@@ -13,9 +13,12 @@ dopepod
 <div class="container-fluid sticky-top" id="flap">
   <div class="row" id="stage">
 {% endif %}
-    <div class="container" id="screen">
-      {% block stage %}
-      {% endblock %}
+    <div class="container" id="center-stage">
+      {% include 'splash.html' %}
+      <div class="row" id="xxx">
+        {% block center-stage %}
+        {% endblock %}
+      </div>
     </div>
   </div>
   <div class="row" id="multibar-scroll">
@@ -34,7 +37,7 @@ dopepod
   </div>
   <!-- CHARTS -->
   <div class="row" id="charts">
-    {% include 'index/charts.html' %}
+    {% include 'charts.html' %}
   </div>
 </div>
 {% endblock %}
