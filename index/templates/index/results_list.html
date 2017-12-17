@@ -8,7 +8,7 @@ dopepod
 {% if podcasts %}
 <div class="col results-wrapper">
   <div class="row color">
-    <div class="col texture results-bar">
+    <div class="col results-bar">
       <span class="results-info">
         {{ results_info }}
       </span>
@@ -23,7 +23,7 @@ dopepod
       <ul class="browse-results-list">
       {% for podcast in podcasts1 %}
       <li>
-        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
       </li>
@@ -34,7 +34,7 @@ dopepod
       <ul class="browse-results-list">
       {% for podcast in podcasts2 %}
       <li>
-        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
       </li>
@@ -45,7 +45,7 @@ dopepod
       <ul class="browse-results-list">
       {% for podcast in podcasts3 %}
       <li>
-        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
       </li>
@@ -56,7 +56,7 @@ dopepod
       <ul class="browse-results-list">
       {% for podcast in podcasts4 %}
       <li>
-        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
       </li>

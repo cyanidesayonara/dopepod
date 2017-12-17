@@ -1,7 +1,7 @@
 {% if episodes %}
 <div class="col results-wrapper">
   <div class="row color">
-    <div class="col texture results-bar">
+    <div class="col results-bar">
       <nav class="nav">
         <span>
           {{ episodes_info }}
@@ -48,7 +48,7 @@
                   {% if episode.length %}
                   {{ episode.length }}
                   {% else %}
-                  :(
+                  N/A
                   {% endif %}
                 </td>
               </tr>
@@ -67,7 +67,7 @@
                         Play
                       </button>
                     </form>
-                    <a class="btn btn-outline-primary" href="{{ episode.url }}">
+                    <a class="btn btn-outline-primary" href="{{ episode.url }}" title="Download" download>
                       Download
                     </a>
                   </div>

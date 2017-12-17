@@ -1,7 +1,7 @@
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $("#main-content").html(state.context);
+    $("#main-wrapper").html(state.context);
     $("title")[0].innerText = state.title;
 
     // if (state.q) {
@@ -47,7 +47,7 @@ function refreshCookie() {
 }
 
 function pushState() {
-  var el = $("#main-content")[0];
+  var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
   var url = el.baseURI;
   var title = "dopepod";
@@ -65,7 +65,7 @@ function pushState() {
 }
 
 function replaceState(url) {
-  var context = $("#main-content")[0].innerHTML;
+  var context = $("#main-wrapper")[0].innerHTML;
   var title = "dopepod";
   var state = {
     "context": context,
@@ -101,7 +101,7 @@ function loadEpisodes(itunesid) {
     .done(function(response) {
       if ($("#podinfo-main").length) {
         $("#episodes").html(response);
-        var url = $("#main-content")[0].baseURI;
+        var url = $("#main-wrapper")[0].baseURI;
         replaceState(url);
       }
     });
@@ -130,7 +130,6 @@ function loadCenterStage(url) {
       console.log(thrownError);
     })
     .done(function(response) {
-      console.log(response);
       if (response.html) {
         $("#center-stage").html(response.html);
       }
@@ -165,7 +164,7 @@ function loadChart() {
 
 function scrollToTop() {
   $('html, body').animate({
-    scrollTop: $("#main-content").offset().top
+    scrollTop: $("#main-wrapper").offset().top
   }, 200);
 }
 
@@ -549,7 +548,7 @@ $(document)
           $("#subscriber").text("subscribers");
         }
 
-        var url = $("#main-content")[0].baseURI;
+        var url = $("#main-wrapper")[0].baseURI;
         replaceState(url);
       });
   })

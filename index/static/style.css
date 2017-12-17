@@ -149,29 +149,17 @@ body {
   background: rgba(255, 255, 255, 1);
 }
 
-#navbar a:hover {
-  color: #000;
-  text-decoration: none;
-}
-
-.texture {
-  background: url("grid.png");
-  width: 100%;
-}
-
 .btn-outline-primary {
   color: #000;
   background-color: #fff;
   border-color: rgba(76,222,181,1);
   padding: .5rem .5rem;
 }
-
 .btn-outline-primary.active, .btn-outline-primary:hover {
   color: #fff;
   background-color: rgba(76,222,181,1);
   border-color: rgba(76,222,181,1);
 }
-
 .btn-outline-primary:focus {
   box-shadow: none;
 }
@@ -190,7 +178,10 @@ body {
 #navbar-drop {
   padding: 0;
 }
-
+#navbar a:hover {
+  color: #000;
+  text-decoration: none;
+}
 #navbar {
   padding: 0px;
   background: rgba(50, 50, 50, 1);
@@ -228,11 +219,6 @@ body {
 }
 #navbar .nav-link:hover {
   color: rgba(0, 0, 0, 1);
-}
-
-
-#main-content {
-  background-color: #FFFFFF;
 }
 
 #main {
@@ -294,7 +280,7 @@ body {
   z-index: 75;
 }
 #flap.extended{
-  top: -550px;
+  top: -400px;
 }
 #stage {
   background-color: #E6ECF0;
@@ -302,7 +288,7 @@ body {
   overflow: hidden;
 }
 #stage.open {
-  height: 594px;
+  height: 444px;
   padding-top: 44px;
   margin-bottom: -44px;
 }
@@ -354,19 +340,32 @@ body {
 }
 
 #center-stage {
+  height: 100%;
   background-color: #fff;
 }
 
 #splash {
   height: 100%;
-  padding: 30px;
-  text-align: center;
 }
 #splash-top {
-  padding: 15%;
+  text-align: center;
+  padding: 2rem;
 }
-#splash-bottom {
-  padding: 15%;
+#splash-left {
+}
+#splash-right {
+}
+#login-wrapper {
+  background: #eee;
+  padding: 10px;
+  width: 250px;
+  margin: auto;
+}
+#signup-wrapper {
+  background: #eee;
+  padding: 10px;
+  width: 250px;
+  margin: auto;
 }
 
 /* PODINFO */
@@ -375,7 +374,7 @@ body {
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   padding: 15px;
-  height: 550px;
+  height: 400px;
   background-color: #fff;
 }
 #podinfo-main {
@@ -403,12 +402,7 @@ body {
 #podinfo-side-list li {
 margin-bottom: 4px;
 }
-#podinfo-top {
-  height:506px;
-}
-#podinfo-bottom {
-  height: 44px;
-}
+
 #podinfo-copyright {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -446,6 +440,11 @@ margin-bottom: 4px;
 }
 .table tbody tr.hover:hover {
   background-color: rgba(0,0,0,.075);
+}
+
+.results-wrapper a, .results-wrapper a:hover {
+  color: #000;
+  text-decoration: none;
 }
 .results-wrapper {
   border: 1px solid #e6ecf0;
@@ -490,8 +489,6 @@ margin-bottom: 4px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* number of lines to show */
-  line-height: 1.5;        /* fallback */
-  max-height: 3.0;       /* fallback */
 }
 .result-artist, .result-artist:hover {
   overflow: hidden;
@@ -499,8 +496,6 @@ margin-bottom: 4px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* number of lines to show */
-  line-height: 1.5;        /* fallback */
-  max-height: 3.0;       /* fallback */
 }
 
 .browse-results-list {
@@ -515,7 +510,6 @@ margin-bottom: 4px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1; /* number of lines to show */
-  line-height: 1.5;        /* fallback */
   margin-top: 4px;
   margin-bottom: 4px;
 }
@@ -548,9 +542,6 @@ margin-bottom: 4px;
   margin-top: 80px;
 }
 
-.login {
-
-}
 #footer {
   text-align: center;
 }

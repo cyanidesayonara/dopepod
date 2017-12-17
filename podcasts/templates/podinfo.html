@@ -5,108 +5,102 @@
 {% endblock %}
 
 {% block center-stage %}
-<div class="row" id="podinfo-top">
-  <div class="col-4 col-md-auto pb-0" id="podinfo-side">
-    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
-    <ul id="podinfo-side-list">
-      <li>
-        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
-        id="{{ podcast.itunesid }}" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-          {% if podcast.subscribed %}
-          <button type="submit" class="btn btn-outline-primary sub-button">
-            Unsubscribe
-          {% else %}
-          <button type="submit" class="btn btn-outline-primary active sub-button">
-            Subscribe
-          {% endif %}
-          </button>
-        </form>
-      </li>
-      <li>
-        <span id="n_subscribers">
-          {{ podcast.n_subscribers }}
-        </span>
-        <span id="subscriber">
-          subsciber{{ podcast.n_subscribers|pluralize }}
-        </span>
-      </li>
-      <li>
-        <span>
-          Genre:
-        </span>
-        <span id="podinfo-genre">
-          {% if podcast.genre.supergenre %}
-          {{ podcast.genre.supergenre }} -
-          {% endif %}
-          {{ podcast.genre }}
-        </span>
-      </li>
-      <li>
-        <span>
-          Language:
-        </span>
-        <span id="podinfo-language">
-          {{ podcast.language }}
-        </span>
-      </li>
-      <li>
-        <span>
-          Content:
-        </span>
-        <span id="podinfo-explicit">
-          {% if podcast.explicit %}
-            explicit
-          {% else %}
-            clean
-          {% endif %}
-        </span>
-      </li>
-      <li>
-        <em>
-          <span id="podinfo-copyright">
-            {{ podcast.copyrighttext }}
-          </span>
-        </em>
-      </li>
-     </ul>
-  </div>
-  <div class="col pl-0 pb-0" id="podinfo-main">
-    <h5 id="podinfo-title">
-      {{ podcast.title }}
-    </h5>
-    <h6 id="podinfo-artist">
-      <span>
-        By
+<div class="col-4 col-md-3 col-lg-2 pb-0" id="podinfo-side">
+  <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}350x350bb.jpg" />
+  <ul id="podinfo-side-list">
+    <li>
+      <span id="n_subscribers">
+        {{ podcast.n_subscribers }}
       </span>
-      {{ podcast.artist }}
-    </h6>
-    <p id="podinfo-description">
-      {{ podcast.description }}
-    </p>
-  </div>
+      <span id="subscriber">
+        subsciber{{ podcast.n_subscribers|pluralize }}
+      </span>
+    </li>
+    <li>
+      <span>
+        Genre:
+      </span>
+      <span id="podinfo-genre">
+        {% if podcast.genre.supergenre %}
+        {{ podcast.genre.supergenre }} -
+        {% endif %}
+        {{ podcast.genre }}
+      </span>
+    </li>
+    <li>
+      <span>
+        Language:
+      </span>
+      <span id="podinfo-language">
+        {{ podcast.language }}
+      </span>
+    </li>
+    <li>
+      <span>
+        Content:
+      </span>
+      <span id="podinfo-explicit">
+        {% if podcast.explicit %}
+          explicit
+        {% else %}
+          clean
+        {% endif %}
+      </span>
+    </li>
+    <li>
+      <em>
+        <span id="podinfo-copyright">
+          {{ podcast.copyrighttext }}
+        </span>
+      </em>
+    </li>
+   </ul>
 </div>
-<div class="row align-items-center" id="podinfo-bottom">
-  <div class="col">
-    <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
-      <span>
-        Show episodes
-      </span>
-    </button>
-    <button class="btn btn-outline-primary">
-      <span>
-        Show reviews
-      </span>
-    </button>
-    {% if subscription %}
-      <span>
-        Last updated:
-      </span>
-      <span>
-        {{ subscription.last_updated }}
-      </span>
+<div class="col-8 col-md-9 col-lg-10 pl-0 pb-0" id="podinfo-main">
+  <h5 id="podinfo-title">
+    {{ podcast.title }}
+  </h5>
+  <h6 id="podinfo-artist">
+    <span>
+      By
+    </span>
+    {{ podcast.artist }}
+  </h6>
+  <p id="podinfo-description">
+    {{ podcast.description }}
+  </p>
+</div>
+<div class="col">
+  <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
+  id="{{ podcast.itunesid }}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+    {% if podcast.subscribed %}
+    <button type="submit" class="btn btn-outline-primary sub-button">
+      Unsubscribe
+    {% else %}
+    <button type="submit" class="btn btn-outline-primary active sub-button">
+      Subscribe
     {% endif %}
-  </div>
+    </button>
+  </form>
+  <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
+    <span>
+      Show episodes
+    </span>
+  </button>
+  <button class="btn btn-outline-primary">
+    <span>
+      Show reviews
+    </span>
+  </button>
+  {% if subscription %}
+    <span>
+      Last updated:
+    </span>
+    <span>
+      {{ subscription.last_updated }}
+    </span>
+  {% endif %}
 </div>
 {% endblock %}

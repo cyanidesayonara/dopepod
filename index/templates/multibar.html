@@ -1,63 +1,61 @@
-<div class="texture">
-  <div class="container" id="multibar">
-    <div class="row">
-      <!-- SEARCH BAR -->
-      <div class="col">
-        <ul class="nav nav-fade">
-          <li class="nav-item">
-            <a class="nav-link" id="browse-toggle" href="{% url 'browse' %}">
-              Browse
-            </a>
-          </li>
-          <span class="ml-auto">
-            <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
-              <div class="input-group" id="search-field">
-                <label for="q" class="sr-only">Search</label>
-                {% if selected_q %}
-                <input class="form-control" type="text" name="q" id="q"
-                type="search" placeholder="Search for podcasts"
-                aria-label="Search for podcasts" autocomplete="off"
-                accept-charset="utf-8" value="{{ selected_q }}">
-                {% else %}
-                <input class="form-control" type="text" name="q" id="q"
-                type="search" placeholder="Search for podcasts"
-                aria-label="Search for podcasts" autocomplete="off"
-                accept-charset="utf-8">
-                {% endif %}
-                <button id="search-button" type="submit">
-                  <i class="fa fa-search"></i>
-                </button>
-              </div>
-            </form>
-          </span>
-        </ul>
-      </div>
+<div class="container" id="multibar">
+  <div class="row">
+    <!-- SEARCH BAR -->
+    <div class="col">
+      <ul class="nav nav-fade">
+        <li class="nav-item">
+          <a class="nav-link" id="browse-toggle" href="{% url 'browse' %}">
+            Browse
+          </a>
+        </li>
+        <span class="ml-auto">
+          <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
+            <div class="input-group" id="search-field">
+              <label for="q" class="sr-only">Search</label>
+              {% if selected_q %}
+              <input class="form-control" type="text" name="q" id="q"
+              type="search" placeholder="Search for podcasts"
+              aria-label="Search for podcasts" autocomplete="off"
+              accept-charset="utf-8" value="{{ selected_q }}">
+              {% else %}
+              <input class="form-control" type="text" name="q" id="q"
+              type="search" placeholder="Search for podcasts"
+              aria-label="Search for podcasts" autocomplete="off"
+              accept-charset="utf-8">
+              {% endif %}
+              <button id="search-button" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </form>
+        </span>
+      </ul>
     </div>
-    <div class="row">
-      <!-- BROWSE BAR -->
-      {% if browse %}
-      <div class="col" id="browse-bar">
-      {% else %}
-      <div class="col d-none" id="browse-bar">
-      {% endif %}
-        <form id="browse-form" method="GET" action="{% url 'browse' %}">
-          <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
-            {% for letter in alphabet %}
-            {% if letter == selected_alphabet %}
-            <label class="btn btn-outline-primary alphabet-button active">
-              <input type="radio" name="alphabet" value="{{ letter }}" checked>
-              {{ letter }}
-            </label>
-            {% else %}
-            <label class="btn btn-outline-primary alphabet-button">
-              <input type="radio" name="alphabet" value="{{ letter }}">
-              {{ letter }}
-            </label>
-            {% endif %}
-            {% endfor %}
-          </div>
-        </form>
-      </div>
+  </div>
+  <div class="row">
+    <!-- BROWSE BAR -->
+    {% if browse %}
+    <div class="col" id="browse-bar">
+    {% else %}
+    <div class="col d-none" id="browse-bar">
+    {% endif %}
+      <form id="browse-form" method="GET" action="{% url 'browse' %}">
+        <div class="btn-group" id="alphabet-buttons" data-toggle="buttons">
+          {% for letter in alphabet %}
+          {% if letter == selected_alphabet %}
+          <label class="btn btn-outline-primary alphabet-button active">
+            <input type="radio" name="alphabet" value="{{ letter }}" checked>
+            {{ letter }}
+          </label>
+          {% else %}
+          <label class="btn btn-outline-primary alphabet-button">
+            <input type="radio" name="alphabet" value="{{ letter }}">
+            {{ letter }}
+          </label>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </form>
     </div>
   </div>
 </div>

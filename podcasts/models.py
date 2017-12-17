@@ -252,7 +252,7 @@ class Podcast(models.Model):
                         episode['pubDate'] = parse(pubdate)
                     # if episode data not found, skip episode
                     except AttributeError as e:
-                        logger.error('can\'t get episode data', self.feedUrl)
+                        logger.error('can\'t get pubDate', self.feedUrl)
                         continue
 
                     # try to get title & summary
@@ -265,11 +265,11 @@ class Podcast(models.Model):
                             summary = item.find('itunes:summary', ns).text
                         # if episode data not found, skip episode
                         except AttributeError as e:
-                            logger.error('can\'t get episode data', self.feedUrl)
+                            logger.error('can\'t get title/description', self.feedUrl)
                             continue
 
                     # strip html tags+ split + join again by single space
-                    episode['summary'] = ' '.join(strip_tags(summary).split())                        
+                    episode['summary'] = ' '.join(strip_tags(summary).split())
 
                     # try to get length
                     length = None
@@ -280,7 +280,7 @@ class Podcast(models.Model):
                             length = item.find('duration').text
                         except AttributeError as e:
                             logger.error('can\'t get length', self.feedUrl)
-                    
+
                     if length:
                         length = str(length)
                         # convert length to timedelta
@@ -288,7 +288,7 @@ class Podcast(models.Model):
                             episode['length'] = timedelta(seconds=int(length))
                         else:
                             if '.' in length:
-                                length = length.replace('.', ':')                       
+                                length = length.replace('.', ':')
                             try:
                                 dt = datetime.strptime(length, '%H:%M:%S')
                                 length = timedelta(hours=dt.hour, minutes=dt.minute, seconds=dt.second)
@@ -297,7 +297,7 @@ class Podcast(models.Model):
                                 try:
                                     dt = datetime.strptime(length, '%M:%S')
                                     length = timedelta(minutes=dt.minute, seconds=dt.second)
-                                    episode['length'] = length                                  
+                                    episode['length'] = length
                                 except ValueError:
                                     logger.error('can\'t parse length', self.feedUrl)
 
@@ -311,7 +311,7 @@ class Podcast(models.Model):
                         episode['type'] = enclosure.get('type')
                         episodes.append(episode)
                     except AttributeError as e:
-                        logger.error('can\'t get episode url', self.feedUrl)
+                        logger.error('can\'t get episode url/type', self.feedUrl)
                 return episodes
 
             except etree.XMLSyntaxError:
