@@ -13,12 +13,14 @@ dopepod
 <div class="container-fluid sticky-top" id="flap">
   <div class="row" id="stage">
 {% endif %}
-    <div class="container">
+    <div class="container" id="splash">
+    {% if splash %}
       {% include 'splash.html' %}
-      <div class="row" id="center-stage">
-        {% block center-stage %}
-        {% endblock %}
-      </div>
+    {% endif %}
+    </div>
+    <div class="container" id="center-stage">
+      {% block center-stage %}
+      {% endblock %}
     </div>
   </div>
   <div class="row" id="multibar-scroll">
