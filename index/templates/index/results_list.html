@@ -22,7 +22,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts1 %}
-      <li>
+      <li class="text-truncate">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -33,7 +33,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts2 %}
-      <li>
+      <li class="text-truncate">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -44,7 +44,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts3 %}
-      <li>
+      <li class="text-truncate">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -55,7 +55,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts4 %}
-      <li>
+      <li class="text-truncate">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>

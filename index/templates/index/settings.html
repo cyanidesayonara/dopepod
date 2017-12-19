@@ -5,29 +5,37 @@ settings
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-sm-3" id="settings-side">
-  <h2>
-    Settings
-  </h2>
-</div>
-<div class="col-sm-9" id="settings-main">
-  <form id="settings-form" action="{% url 'settings' %}" method="POST">
-  {% if user_form.errors %}
-  {{ user_form.errors }}
-  {% endif %}
-  <table>
-    {{ user_form.as_table }}
-  </table>
-  {% if profile_form.errors %}
-  {{ profile_form.errors }}
-  {% endif %}
-  <table>
-    {{ profile_form.as_table }}
-  </table>
-  <button class="btn btn-outline-primary" type="submit">
-    Save changes
-  </button>
-  {% csrf_token %}
-  </form>
+<div class="row" id="settings">
+  <div class="col-sm-3" id="settings-side">
+    <h2>
+      Settings
+    </h2>
+  </div>
+  <div class="col-sm-9" id="settings-main">
+    <form id="settings-form" action="{% url 'settings' %}" method="POST">
+    {% if user_form.errors %}
+    {{ user_form.errors }}
+    {% endif %}
+    <table>
+      {{ user_form.as_table }}
+    </table>
+    {% if profile_form.errors %}
+    {{ profile_form.errors }}
+    {% endif %}
+    <table>
+      {{ profile_form.as_table }}
+    </table>
+    <button class="btn btn-outline-primary" type="submit">
+      Save changes
+    </button>
+    {% csrf_token %}
+    </form>
+    <div class="alert alert-warning alert-dismissible fade show d-none" id="settings-alert" role="alert">
+      Saved!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
 </div>
 {% endblock %}

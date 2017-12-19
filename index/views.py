@@ -34,18 +34,23 @@ def index(request):
         chart = Podcast.get_charts()
         chart_selected_genre = 'All'
         chart_results_info = 'Top 50 podcasts on iTunes'
-        splash = False if user.is_authenticated else True
-        
+
         context = {
-            'splash': splash,
+            'splash': True,
             'stage_open': True,
-            'selected_alphabet': 'A',
             'chart_results_info': chart_results_info,
             'chart_genres': genres,
             'chart_selected_genre': chart_selected_genre,
             'chart': chart[:50],
             'alphabet': ALPHABET,
         }
+
+        if user.is_authenticated:
+            subscriptions = Subscription.get_subscriptions(user)
+            context.update({
+                'user': user,
+                'subscriptions': subscriptions,
+            })
 
         return render(request, 'index/index.html', context)
 
@@ -72,11 +77,9 @@ def charts(request):
         if request.is_ajax():
             return render(request, 'charts.html', context)
 
-        splash = False if user.is_authenticated else True
-
         # search bar for non-ajax
         context.update({
-            'splash': splash,
+            'splash': False,
             'stage_open': True,
             'selected_alphabet': 'A',
             'alphabet': ALPHABET,
@@ -237,8 +240,8 @@ def subscriptions(request):
             chart_selected_genre = 'All'
 
             context.update({
-                'splash': False,
-                'stage_open': False,
+                'splash': True,
+                'stage_open': True,
                 'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
@@ -249,8 +252,8 @@ def subscriptions(request):
             return render(request, 'index/subscriptions.html', context)
         else:
             if request.is_ajax():
-                raise Http404()
-            return redirect('/account/login/?next=/subscriptions/')
+                return render(request, 'login_signup.html', {})
+            return redirect('/?next=/subscriptions/')
 
 def podinfo(request, itunesid):
     """
@@ -282,7 +285,7 @@ def podinfo(request, itunesid):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         eps = podcast.get_episodes()
-        episodes_info = str(len(eps)) + ' episodes'
+        episodes_info = podcast.title + '\n' + str(len(eps)) + ' episodes'
         chart_results_info = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 
@@ -347,6 +350,7 @@ def settings(request):
                 return redirect('/')
             else:
                 context = {
+                    'user': user,
                     'user_form': user_form,
                     'profile_form': profile_form,
                 }
@@ -372,5 +376,5 @@ def settings(request):
                 return render(request, 'index/settings.html', context)
     else:
         if request.is_ajax():
-            raise Http404()
-        return redirect('/account/login/?next=/settings/')
+            return render(request, 'login_signup.html', {})
+        return redirect('/?next=/settings/')

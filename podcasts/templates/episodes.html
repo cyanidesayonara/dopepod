@@ -2,16 +2,12 @@
 <div class="col results-wrapper">
   <div class="row color">
     <div class="col results-bar">
-      <nav class="nav">
-        <span>
-          {{ episodes_info }}
-        </span>
-        <button class="btn btn-outline-primary ml-auto" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
-          <span>
-            Show episodes
-          </span>
-        </button>
-      </nav>
+      <span>
+        {{ episodes_info }}
+      </span>
+      <button class="btn btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
+        Show episodes
+      </button>
     </div>
   </div>
   <div class="collapse" id="episode-collapse">
@@ -46,9 +42,9 @@
                 </td>
                 <td>
                   {% if episode.length %}
-                  {{ episode.length }}
+                    {{ episode.length }}
                   {% else %}
-                  N/A
+                    N/A
                   {% endif %}
                 </td>
               </tr>
@@ -56,6 +52,7 @@
                 <td colspan="4" class="hidden-row">
                   <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
                     {{ episode.summary }}
+                    <br />
                     <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
                       {% csrf_token %}
                       <input type="hidden" name="url" value="{{ episode.url }}">

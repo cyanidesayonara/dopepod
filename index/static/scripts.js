@@ -108,6 +108,7 @@ function loadEpisodes(itunesid) {
 }
 
 function loadResults(url) {
+  $("#results").html("Loading results...");
   $.ajax({
     type: "GET",
     url: url,
@@ -121,6 +122,20 @@ function loadResults(url) {
     });
 }
 
+function loadSplash(url) {
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#splash").html(response);
+      replaceState("/");
+    });
+}
+
 function loadCenterStage(url) {
   $.ajax({
     type: "GET",
@@ -130,17 +145,13 @@ function loadCenterStage(url) {
       console.log(thrownError);
     })
     .done(function(response) {
-      if (response.html) {
-        $("#center-stage").html(response.html);
-      }
-      else {
-        $("#center-stage").html(response);
-      }
+      $("#center-stage").html(response);
       replaceState(url);
     });
 }
 
 function loadChart() {
+  $("#charts").html("Loading charts...");
   var url = "/charts/";
   var genre = $("input[name=chart-genre]:checked").val();
   if (genre != "All") {
@@ -169,8 +180,9 @@ function scrollToTop() {
 }
 
 function scrollToMultibar() {
+  $('html, body').scrollTop()
   $('html, body').animate({
-    scrollTop: $("#multibar-scroll").offset().top
+    scrollTop: $("#multibar").offset().top
   }, 200);
 }
 
@@ -274,9 +286,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        $("#splash").addClass("d-none");
-        $("#center-stage").addClass("d-none");
-        hideStage();
       }
     }, 250);
   })
@@ -290,9 +299,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        $("#splash").addClass("d-none");
-        $("#center-stage").addClass("d-none");
-        hideStage();
       }
     }, 250);
   })
@@ -306,9 +312,6 @@ $(document)
         if (q) {
           pushState();
           SearchFunc(url, q, false);
-          $("#splash").addClass("d-none");
-          $("#center-stage").addClass("d-none");
-          hideStage();
         }
       }, 250);
     })
@@ -317,9 +320,6 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q, false);
-    $("#splash").addClass("d-none");
-    $("#center-stage").addClass("d-none");
-    hideStage();
  })
   .on("submit", "#results-form", function(e) {
     e.preventDefault();
@@ -387,70 +387,51 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
-    $("#browse-bar").addClass("d-none");
-    $("#splash").addClass("d-none");
-    $("#center-stage").removeClass("d-none");
-    showStage();
-    scrollToTop();
     loadCenterStage(url);
-    $("#episodes").html("");
     loadEpisodes(itunesid);
+    $("#browse-bar").addClass("d-none");
+    $("#splash").html("");
+    $("#episodes").html("");
+    scrollToTop();
   })
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
+    loadSplash("/dashboard/");
     $("#browse-bar").addClass("d-none");
-    $("#splash").removeClass("d-none");
-    $("#center-stage").removeClass("d-none");
-    showStage();
-    scrollToTop();
-    $("#charts").removeClass("d-none");
+    $("#center-stage").html("");
     $("#results").html("");
     $("#episodes").html("");
-    replaceState("/");
+    scrollToTop();
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#browse-bar").removeClass("d-none");
-    $("#splash").addClass("d-none");
-    $("#center-stage").addClass("d-none");
-    hideStage();
-    scrollToTop();
-    $("#charts").addClass("d-none");
-    $("#episodes").html("");
-    $("#results").html("");
     loadResults("/browse/");
+    $("#browse-bar").removeClass("d-none");
+    $("#episodes").html("");
+    scrollToMultibar();
    })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#browse-bar").addClass("d-none");
-    $("#splash").addClass("d-none");
-    $("#center-stage").addClass("d-none");
-    hideStage();
-    scrollToTop();
-    $("#charts").addClass("d-none");
-    $("#episodes").html("");
-    $("#results").html("");
     loadResults("/subscriptions/");
+    $("#browse-bar").addClass("d-none");
+    $("#episodes").html("");
+    scrollToMultibar();
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#browse-bar").addClass("d-none");
-    $("#splash").removeClass("d-none");
-    $("#center-stage").removeClass("d-none");
-    showStage();
-    scrollToTop();
-    $("#charts").removeClass("d-none");
-    $("#results").html("");
-    $("#episodes").html("");
     loadCenterStage("/settings/");
+    $("#splash").html("");
+    $("#browse-bar").addClass("d-none");
+    $("episodes").html("");
+    scrollToTop();
   })
   .on("click", "#browse-toggle", function(e) {
     e.preventDefault();
@@ -480,14 +461,7 @@ $(document)
       })
       .done(function(response) {
         pushState();
-        $("#browse-bar").addClass("d-none");
-        $("#splash").removeClass("d-none");
-        $("#center-stage").removeClass("d-none");
-        showStage();
-        scrollToTop();
-        $("#charts").removeClass("d-none");
-        $("#results").html("");
-        $("#episodes").html("");
+        $("#settings-alert").removeClass("d-none");
       });
   })
   // put episode in player
@@ -552,13 +526,18 @@ $(document)
         replaceState(url);
       });
   })
+  .on("click", ".password-link", function(e) {
+    e.preventDefault();
+    alert("You son of a bitch");
+  })
   // open login register or password reset in modal
-  .on("click", ".ajax-login, .ajax-register, .login-link, .signup-link, .password-link", function(e) {
+  .on("click", ".ajax-login, .ajax-register", function(e) {
     e.preventDefault();
     var url = this.href;
-    showStage();
+    pushState();
+    loadSplash("/");
+    $("#center-stage").html("");
     scrollToTop();
-    loadCenterStage(url);
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -578,13 +557,7 @@ $(document)
       .done(function() {
         refreshCookie();
         refreshNavbar();
-        $("#browse-bar").addClass("d-none");
-        $("#center-stage").removeClass("d-none");
-        $("#splash").addClass("d-none");
-        showStage();
+        loadSplash("/dashboard/")
         scrollToTop();
-        $("#charts").removeClass("d-none");
-        $("#results").html("");
-        $("#episodes").html("");
       });
   })

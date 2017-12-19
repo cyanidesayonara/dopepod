@@ -1,16 +1,14 @@
 <div class="row">
-  <div class="col">
-    <ul class="nav">
-      {% if podcasts.has_other_pages %}
-      <li>
-        <div class="btn-group" id="page-buttons" data-toggle="buttons">
-          {% if podcasts.has_previous %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
-              <i class="fas fa-chevron-left"></i>
-            </label>
-          {% endif %}
-          {% for i in podcasts.paginator.page_range %}
+  <div class="col-auto">
+    {% if podcasts.has_other_pages %}
+      <div class="btn-group" id="page-buttons" data-toggle="buttons">
+        {% if podcasts.has_previous %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="{{ podcasts.previous_page_number }}">
+            <i class="fas fa-chevron-left"></i>
+          </label>
+        {% endif %}
+        {% for i in podcasts.paginator.page_range %}
           {% if podcasts.number == i %}
             <label class="btn btn-outline-primary page-button active">
               <input type="radio" name="page" value="{{ i }}" checked>
@@ -22,31 +20,27 @@
               {{ i }}
             </label>
           {% endif %}
-          {% endfor %}
-          {% if podcasts.has_next %}
-            <label class="btn btn-outline-primary page-button">
-              <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
-              <i class="fas fa-chevron-right"></i>
-            </label>
-          {% endif %}
-        </div>
-      </li>
-      {% endif %}
-      {% if genres %}
-      <li>
-        <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-          Genre
-        </a>
-      </li>
-      {% endif %}
-      {% if languages %}
-      <li>
-        <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-          Language
-        </a>
-      </li>
-      {% endif %}
-      </ul>
+        {% endfor %}
+        {% if podcasts.has_next %}
+          <label class="btn btn-outline-primary page-button">
+            <input type="radio" name="page" value="{{ podcasts.next_page_number }}">
+            <i class="fas fa-chevron-right"></i>
+          </label>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="col-auto ml-auto">
+    {% if genres %}
+      <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+        Genre
+      </a>
+    {% endif %}
+    {% if languages %}
+      <a class="btn btn-outline-primary" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+        Language
+      </a>
+    {% endif %}
   </div>
 </div>
 <div class="row options-select">
@@ -55,65 +49,86 @@
       <div id="options-accordion1" class="collapse" role="tabpanel">
         {% if genres %}
           <div class="options-group" id="genre-buttons" data-toggle="buttons">
-            {% if selected_genre == 'All' %}
-              <label class="btn options-button active">
-                <input type="radio" name="genre" value="All" checked>
-                All
-              </label>
-            {% else %}
-              <label class="btn options-button">
-                <input type="radio" name="genre" value="All">
-                All
-              </label>
-            {% endif %}
-            {% for genre in genres %}
-              {% if selected_genre == genre.name %}
+            <ul id="button-field">
+              {% if selected_genre == 'All' %}
+              <li>
                 <label class="btn options-button active">
-                  <input type="radio" name="genre" value="{{ genre.name }}" checked>
-                  {{ genre.name }}
-                </label>
+                  <input class="field-button" type="radio" name="genre" value="All" checked>
+                All
+              </label>
+              </li>
               {% else %}
+              <li>
                 <label class="btn options-button">
-                  <input type="radio" name="genre" value="{{ genre.name }}">
+                  <input class="field-button" type="radio" name="genre" value="All">
+                  All
+                </label>
+              </li>
+              {% endif %}
+              {% for genre in genres %}
+              {% if selected_genre == genre.name %}
+              <li>
+                <label class="btn options-button active">
+                  <input class="field-button" type="radio" name="genre" value="{{ genre.name }}" checked>
                   {{ genre.name }}
                 </label>
+              </li>
+              {% else %}
+              <li>
+                <label class="btn options-button">
+                  <input class="field-button" type="radio" name="genre" value="{{ genre.name }}">
+                  {{ genre.name }}
+                </label>
+              </li>
               {% endif %}
             {% endfor %}
+            </ul>
           </div>
         {% endif %}
       </div>
     </div>
     <div class="item">
       <div id="options-accordion2" class="collapse" role="tabpanel">
-        {% if languages %}
-          <div class="options-group" id="language-buttons" data-toggle="buttons">
-            {% if selected_language == 'All' %}
-              <label class="btn options-button mx-auto active">
-                <input type="radio" name="language" value="All" checked>
+          {% if languages %}
+          <div class="options-group btn-group-justified" id="language-buttons" data-toggle="buttons">
+            <ul id="button-field">
+              {% if selected_language == 'All' %}
+              <li>
+                <label class="btn options-button active">
+                  <input class="field-button" type="radio" name="language" value="All" checked>
                 All
               </label>
-            {% else %}
-              <label class="btn options-button mx-auto">
-                <input type="radio" name="language" value="All">
-                All
-              </label>
-            {% endif %}
-            {% for language in languages %}
-              {% if selected_language == language.name %}
-                <label class="btn options-button mx-auto active">
-                  <input type="radio" name="language" value="{{ language.name }}" checked>
-                  {{ language.name }}
-                </label>
+              </li>
               {% else %}
-                <label class="btn options-button mx-auto">
-                  <input type="radio" name="language" value="{{ language.name }}">
+              <li>
+                <label class="btn options-button">
+                  <input class="field-button" type="radio" name="language" value="All">
+                  All
+                </label>
+              </li>
+              {% endif %}
+              {% for language in languages %}
+              {% if selected_language == language.name %}
+              <li>
+                <label class="btn options-button active">
+                  <input class="field-button" type="radio" name="language" value="{{ language.name }}" checked>
                   {{ language.name }}
                 </label>
+              </li>
+              {% else %}
+              <li>
+                <label class="btn options-button">
+                  <input class="field-button" type="radio" name="language" value="{{language.name }}">
+                  {{ language.name }}
+                </label>
+              </li>
               {% endif %}
             {% endfor %}
+            </ul>
           </div>
         {% endif %}
       </div>
     </div>
+
   </div>
 </div>

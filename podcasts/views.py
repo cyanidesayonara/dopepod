@@ -6,6 +6,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def dashboard(request):
+    user = request.user
+    if user.is_authenticated:
+        subscriptions = Subscription.get_subscriptions(user)
+        context = {
+            'user': user,
+            'subscriptions': subscriptions,
+        }
+        return render(request, 'dashboard.html', context)
+    else:
+        return render(request, 'login_signup.html', {})
+
 def episodes(request):
     """
     returns html for episodes
@@ -22,7 +34,7 @@ def episodes(request):
             raise Http404()
 
         eps = podcast.get_episodes()
-        episodes_info = str(len(eps)) + ' episodes'
+        episodes_info = podcast.title + '\n' + str(len(eps)) + ' episodes'
 
         context = {
             'episodes_info': episodes_info,
@@ -93,4 +105,4 @@ def subscribe(request):
         else:
             if request.is_ajax():
                 raise Http404()
-            return redirect('/account/login/?next=/podinfo/' + itunesid + '/')
+            return redirect('/?next=/podinfo/' + itunesid + '/')

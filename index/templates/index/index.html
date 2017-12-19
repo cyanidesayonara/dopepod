@@ -15,7 +15,11 @@ dopepod
 {% endif %}
     <div class="container" id="splash">
     {% if splash %}
-      {% include 'splash.html' %}
+      {% if user.is_authenticated %}
+        {% include 'dashboard.html' %}
+      {% else %}
+        {% include 'login_signup.html' %}
+      {% endif %}
     {% endif %}
     </div>
     <div class="container" id="center-stage">

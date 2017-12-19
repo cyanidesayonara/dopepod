@@ -4,6 +4,7 @@ from podcasts import views as podcasts
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
+    url(r'^dashboard/$', podcasts.dashboard, name='dashboard'),
     url(r'^search/$', index.search, name='search'),
     url(r'^navbar/$', index.navbar, name='navbar'),
     url(r'^browse/$', index.browse, name='browse'),

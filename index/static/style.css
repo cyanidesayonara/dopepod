@@ -227,20 +227,44 @@ body {
 }
 
 .options-group {
-  padding: 8px;
   background-color: #eee;
 }
-
+.options-button.active, .options-button:hover {
+  background: #ddd;
+}
+.btn {
+  font-size: inherit;
+}
 .options-button {
   border: 1px solid #ddd;
-  border-radius: .25rem;
+  margin-right: 8px;
+  margin-bottom: 8px;
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
 }
-
-.options-button.active, .options-button:hover {
-  background: #ddd;
+#button-field {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  padding-top: 8px;
+  padding-left: 8px;
+}
+.field-button {
+  position: absolute;
+  clip: rect(0,0,0,0);
+  pointer-events: none;
+}
+#alphabet-buttons {
+  background: inherit;
+}
+.alphabet-button {
+ padding: .5rem .8rem;
+ margin-bottom: 4px;
+ margin-right: 4px;
 }
 
 /* MULTI BAR */
@@ -273,6 +297,8 @@ body {
 
 }
 #browse-bar {
+}
+#browse-form {
 
 }
 
@@ -325,27 +351,15 @@ body {
   box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
 }
 
-#alphabet {
-  background: #3b6d83;
-}
-#alphabet-buttons {
- padding: 1rem 1rem;
-}
-.alphabet-button {
- padding: .5rem .75rem;
-}
-
 .dropdown-menu {
   min-width: 0;
 }
 
 #center-stage {
-  height: 100%;
   background-color: #fff;
 }
 
 #splash {
-  height: 100%;
 }
 #splash-top {
   text-align: center;
@@ -354,6 +368,9 @@ body {
 #splash-left {
 }
 #splash-right {
+}
+#login-signup {
+  height: 400px;
 }
 #login-wrapper {
   background: #eee;
@@ -366,6 +383,21 @@ body {
   padding: 10px;
   width: 250px;
   margin: auto;
+}
+
+#dashboard {
+  height: 400px;
+}
+#dashboard-top {
+  text-align: center;
+  padding: 30px 5%;
+  margin: auto;
+  background-color: #ddd;
+}
+
+#settings {
+  height: 400px;
+  padding: 15px;
 }
 
 /* PODINFO */
@@ -411,18 +443,15 @@ margin-bottom: 4px;
   -webkit-line-clamp: 2;
 }
 #podinfo-artist {
+
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  white-space: nowrap;
 }
 #podinfo-description {
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 20;
+  white-space: nowrap;
 }
 #episodes-wrapper {
   border: 1px solid #e6ecf0;
@@ -503,25 +532,8 @@ margin-bottom: 4px;
 }
 .browse-results-list a {
   height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1; /* number of lines to show */
   margin-top: 4px;
   margin-bottom: 4px;
-}
-
-#recommendations{
-  margin-top: 15px;
-  min-height: 0px;
-  border: 1px solid black;
-}
-
-.sub-box {
-  border: 1px solid black;
-  margin: 5px;
-  color: #000;
 }
 
 /* PLAYER */
@@ -531,13 +543,6 @@ margin-bottom: 4px;
     background-repeat: no-repeat;
     background-position: center;
     height: 240px;
-}
-.hide {
-    display: none;
-}
-
-.profile {
-  margin-top: 80px;
 }
 
 #footer {
