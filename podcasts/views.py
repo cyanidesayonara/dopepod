@@ -16,7 +16,11 @@ def dashboard(request):
         }
         return render(request, 'dashboard.html', context)
     else:
-        return render(request, 'login_signup.html', {})
+        signup = request.POST.get('signup' , None)
+        context = {
+            'signup': signup,
+        }
+        return render(request, 'login_signup.html', context)
 
 def episodes(request):
     """
@@ -97,7 +101,7 @@ def subscribe(request):
                 raise Http404()
 
             n_subscribers = podcast.subscribe(user)
-            
+
             if request.is_ajax():
                 return HttpResponse(str(n_subscribers))
             return redirect('/podinfo/' + itunesid + '/')

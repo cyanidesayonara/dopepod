@@ -326,7 +326,7 @@ body {
 #search-button {
   position: absolute;
   left: 220px;
-  top: 12px;
+  top: 13px;
   z-index: 50;
   background-color: inherit;
   border: 0;

@@ -51,6 +51,11 @@ def index(request):
                 'user': user,
                 'subscriptions': subscriptions,
             })
+        else:
+            signup = request.GET.get('signup' , None)
+            context.update({
+                'signup': signup,
+            })
 
         return render(request, 'index/index.html', context)
 

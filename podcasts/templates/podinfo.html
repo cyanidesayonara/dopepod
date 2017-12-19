@@ -72,6 +72,7 @@
     </p>
   </div>
   <div class="col">
+    {% if user.is_authenticated %}
     <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
     id="{{ podcast.itunesid }}" method="POST">
     {% csrf_token %}
@@ -79,12 +80,13 @@
     {% if podcast.subscribed %}
     <button type="submit" class="btn btn-outline-primary sub-button">
       Unsubscribe
-      {% else %}
+    {% else %}
       <button type="submit" class="btn btn-outline-primary active sub-button">
         Subscribe
-        {% endif %}
+    {% endif %}
       </button>
     </form>
+    {% endif %}
     <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
       <span>
         Show episodes
@@ -106,4 +108,3 @@
   </div>
 </div>
 {% endblock %}
-  

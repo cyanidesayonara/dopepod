@@ -122,10 +122,16 @@ function loadResults(url) {
     });
 }
 
-function loadSplash(url) {
+function loadSplash(url, signup) {
+  if (!signup) {
+    signup = null;
+  }
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: url,
+    data: {
+      'signup': signup,
+    },
   })
     .fail(function(xhr, ajaxOptions, thrownError){
       console.log(thrownError);
@@ -530,12 +536,21 @@ $(document)
     e.preventDefault();
     alert("You son of a bitch");
   })
-  // open login register or password reset in modal
-  .on("click", ".ajax-login, .ajax-register", function(e) {
+  // open login register
+  .on("click", ".ajax-login", function(e) {
     e.preventDefault();
     var url = this.href;
     pushState();
-    loadSplash("/");
+    loadSplash("/dashboard/", false);
+    $("#center-stage").html("");
+    scrollToTop();
+  })
+  // open login register
+  .on("click", ".ajax-register", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    pushState();
+    loadSplash("/dashboard/", true);
     $("#center-stage").html("");
     scrollToTop();
   })
@@ -552,7 +567,8 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#center-stage").html(xhr.responseJSON.html);
+        console.log(xhr.responseJSON.html);
+        $("#splash").html(xhr.responseJSON.html);
       })
       .done(function() {
         refreshCookie();
