@@ -4,7 +4,7 @@
       Search for and listen to thousands of free podcasts on<br /><strong>dopepod</strong>
     </h4>
   </div>
-  <div class="col-12" id="splash-bottom">
+  <div class="col-12 mt-auto" id="splash-bottom">
     {% if signup %}
       <div class="collapse login-signup-collapse" id="login-collapse">
     {% else %}
@@ -55,7 +55,7 @@
         <span>
           or
         </span>
-        Signup
+        Sign Up
         <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
           {% csrf_token %}
           <div class="form-group">

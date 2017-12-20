@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     # 'allauth.socialaccount.providers.facebook',
     # 'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.reddit',
 ]
 
@@ -88,17 +88,15 @@ SITE_ID = 1
 # django-allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_PRESERVE_USERNAME_CASING = False
-ACCOUNT_USERNAME_BLACKLIST = ['admin']
+ACCOUNT_USERNAME_BLACKLIST = ['root', 'admin']
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 
 # email verif
 #ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-#ACCOUNT_EMAIL_REQUIRED = True
-#ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 ACCOUNT_LOGOUT_ON_GET = True
 # SESSION_COOKIE_AGE = 7
@@ -117,6 +115,54 @@ SESSION_COOKIE_NAME = 'dopepod'
 #SESSION_COOKIE_DOMAIN = local_settings.SESSION_COOKIE_DOMAIN
 
 SESSION_COOKIE_SECURE = False
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'facebook': {
+#         'METHOD': 'oauth2',
+#         'SCOPE': ['email', 'public_profile', 'user_friends'],
+#         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+#         'INIT_PARAMS': {'cookie': True},
+#         'FIELDS': [
+#             'id',
+#             'email',
+#             'name',
+#             'first_name',
+#             'last_name',
+#             'verified',
+#             'locale',
+#             'timezone',
+#             'link',
+#             'gender',
+#             'updated_time',
+#         ],
+#         'EXCHANGE_TOKEN': True,
+#         'LOCALE_FUNC': lambda request: 'en_US',
+#         'VERIFIED_EMAIL': False,
+#         'VERSION': 'v2.5',
+#     }
+# }
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'github': {
+#         'SCOPE': [
+#             'user',
+#             'repo',
+#             'read:org',
+#         ],
+#     }
+# }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 TEMPLATES = [
     {

@@ -67,7 +67,7 @@ dopepod
 </div>
 {% else %}
 <div class="col" id="results-wrapper">
-  <form id="result-form" method="GET" action="{% url 'browse' %}">
+  <form id="results-form" method="GET" action="{% url 'browse' %}">
     <input type="hidden" id="selected_alphabet" name="selected_alphabet" value="{{ selected_alphabet }}">
     {% include 'optionsbar.html' %}
   </form>

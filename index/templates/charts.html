@@ -1,52 +1,55 @@
 <div class="col results-wrapper">
-  <form id="chart-form" method="GET" action="{% url 'charts' %}">
-    <!-- OPTIONS -->
-    <div class="row color">
-      <div class="col results-bar">
-        <nav class="nav">
-          <span>
-            {{ chart_results_info }}
-          </span>
-          <a class="ml-auto" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-            Genre
-          </a>
-        </nav>
-      </div>
+  <div class="row color">
+    <div class="col results-bar">
+      <span class="results-info">
+        {{ chart_results_info }}
+      </span>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-auto ml-auto">
+      <a class="btn btn-outline-primary" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+        Genre
+      </a>
+    </div>
+  </div>
+  <form id="chart-form" method="GET" action="{% url 'charts' %}">
     <div class="row options-select">
-      <div id="options-accordion" data-children=".item">
-        <div class="item">
-          <div id="options-accordion1" class="collapse" role="tabpanel">
-            {% if chart_genres %}
-              <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
-                {% if chart_selected_genre == 'All' %}
-                  <label class="btn options-button active">
-                    <input type="radio" name="chart-genre" value="All" checked>
-                    All
-                  </label>
-                {% else %}
-                  <label class="btn options-button">
-                    <input type="radio" name="chart-genre" value="All">
-                    All
-                  </label>
-                {% endif %}
-                {% for genre in chart_genres %}
-                  {% if chart_selected_genre == genre.name %}
-                    <label class="btn options-button active">
-                      <input type="radio" name="chart-genre" value="{{ genre.name }}" checked>
-                      {{ genre.name }}
-                    </label>
-                  {% else %}
-                    <label class="btn options-button">
-                      <input type="radio" name="chart-genre" value="{{ genre.name }}">
-                      {{ genre.name }}
-                    </label>
-                  {% endif %}
-                {% endfor %}
-              </div>
+      <div class="collapse" id="chart-genre-collapse">
+        {% if chart_genres %}
+          <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+            <ul id="button-field">
+            {% if chart_selected_genre == 'All' %}
+              <label class="btn options-button active">
+                <input class="field-button" type="radio" name="chart-genre" value="All" checked>
+                All
+              </label>
+            {% else %}
+              <label class="btn options-button">
+                <input class="field-button" type="radio" name="chart-genre" value="All">
+                All
+              </label>
             {% endif %}
+            {% for genre in chart_genres %}
+              {% if chart_selected_genre == genre.name %}
+              <li>
+                <label class="btn options-button active">
+                  <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}" checked>
+                  {{ genre.name }}
+                </label>
+              </li>
+              {% else %}
+              <li>
+                <label class="btn options-button">
+                  <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
+                  {{ genre.name }}
+                </label>
+              </li>
+              {% endif %}
+            {% endfor %}
+            </ul>
           </div>
-        </div>
+        {% endif %}
       </div>
     </div>
   </form>

@@ -48,7 +48,6 @@ def index(request):
         if user.is_authenticated:
             subscriptions = Subscription.get_subscriptions(user)
             context.update({
-                'user': user,
                 'subscriptions': subscriptions,
             })
         else:
@@ -274,6 +273,7 @@ def podinfo(request, itunesid):
 
         subscription = None
         if user.is_authenticated:
+            podcast.set_subscribed(user)
             try:
                 subscription = Subscription.objects.get(owner=user, parent=podcast)
             except Subscription.DoesNotExist:
@@ -355,7 +355,6 @@ def settings(request):
                 return redirect('/')
             else:
                 context = {
-                    'user': user,
                     'user_form': user_form,
                     'profile_form': profile_form,
                 }

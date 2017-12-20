@@ -40,12 +40,12 @@
       </a>
     </li>
     {% if user.is_authenticated %}
-    {% endif %}
     <li class="nav-item">
       <a class="nav-link subscriptions-link d-none d-md-block" href="{% url 'subscriptions' %}">
         Subscriptions
       </a>
     </li>
+    {% endif %}
   </ul>
 </div>
 <div class="col-6 col-md-4" id="logo" >
