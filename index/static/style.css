@@ -365,10 +365,9 @@ body {
   height: 400px;
 }
 #login-wrapper {
-
   background: #ddd;
   padding: 10px;
-  width: 250px;
+  width: 300px;
   margin: auto;
 }
 #signup-wrapper {
