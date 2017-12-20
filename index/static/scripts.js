@@ -554,8 +554,12 @@ $(document)
     $("#center-stage").html("");
     scrollToTop();
   })
+  .on("click", ".login-signup-toggle", function() {
+    $("#login-errors").html("");
+    $("#signup-errors").html("");
+  })
   // login or signup, refresh after
-  .on("submit", ".login-form, .signup-form", function (e) {
+  .on("submit", ".login-form", function (e) {
     e.preventDefault();
     var data = $(this).serialize();
     var method = this.method;
@@ -567,7 +571,28 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#splash").html(xhr.responseJSON.html);
+        $("#login-errors").html(xhr.responseJSON.html);
+      })
+      .done(function() {
+        refreshCookie();
+        refreshNavbar();
+        loadSplash("/dashboard/")
+        scrollToTop();
+      });
+  })
+  .on("submit", ".signup-form", function (e) {
+    e.preventDefault();
+    var data = $(this).serialize();
+    var method = this.method;
+    var url = this.action;
+    $.ajax({
+      data: data,
+      method: method,
+      url: url,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        $("#signup-errors").html(xhr.responseJSON.html);
       })
       .done(function() {
         refreshCookie();
