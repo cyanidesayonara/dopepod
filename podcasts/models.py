@@ -22,7 +22,7 @@ class Podcast(models.Model):
     explicit = models.BooleanField()
     language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE)
     copyrighttext = models.CharField(max_length=500)
-    description = models.TextField(max_length=500, blank=True)
+    description = models.TextField(max_length=1000, blank=True)
     n_subscribers = models.IntegerField(default=0)
     is_subscribed = models.BooleanField(default=False)
     reviewsUrl = models.CharField(max_length=500)
