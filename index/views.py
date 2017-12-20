@@ -40,11 +40,9 @@ def index(request):
             subscriptions = Subscription.get_subscriptions(user)
         else:
             signup = request.GET.get('signup' , None)
-            context.update({
-                'signup': signup,
-            })
 
         context = {
+            'signup': signup,
             'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
