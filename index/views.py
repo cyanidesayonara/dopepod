@@ -83,7 +83,7 @@ def charts(request):
 
         # search bar for non-ajax
         context.update({
-            'splash': False,
+            'splash': True,
             'stage_open': True,
             'selected_alphabet': 'A',
             'alphabet': ALPHABET,
@@ -140,8 +140,8 @@ def search(request):
             chart_selected_genre = 'All'
 
             context.update({
-                'splash': False,
-                'stage_open': False,
+                'splash': True,
+                'stage_open': True,
                 'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
@@ -206,8 +206,8 @@ def browse(request):
         chart_selected_genre = 'All'
 
         context.update({
-            'splash': False,
-            'stage_open': False,
+            'splash': True,
+            'stage_open': True,
             'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
