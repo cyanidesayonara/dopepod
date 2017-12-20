@@ -214,7 +214,6 @@ function SearchFunc(url, q, page) {
     xhr.abort();
     xhr = null;
   }
-  $("#results").html("Loading results...");
 
   data = {
     "q": q,
@@ -240,6 +239,7 @@ function SearchFunc(url, q, page) {
       }
     }
   }
+  $("#results").html("Loading results...");
 
   xhr = $.ajax({
     method: "GET",
@@ -374,7 +374,7 @@ $(document)
         var q = $("#selected_alphabet").val();
       }
       else {
-        var q = $("#q").val();
+        var q = $("#selected_q").val();
       }
       if (q) {
         pushState();
