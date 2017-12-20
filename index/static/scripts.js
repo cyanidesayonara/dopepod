@@ -214,6 +214,7 @@ function SearchFunc(url, q, page) {
     xhr.abort();
     xhr = null;
   }
+  $("#results").html("Loading results...");
 
   data = {
     "q": q,

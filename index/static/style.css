@@ -444,7 +444,6 @@ body {
 }
 #episodes-wrapper {
   border: 1px solid #e6ecf0;
-  border-radius: .25rem;
   overflow: hidden;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -465,7 +464,6 @@ body {
   text-decoration: none;
 }
 .results-wrapper {
-  border-radius: .25rem;
   overflow: hidden;
   margin-top: 15px;
   margin-bottom: 15px;

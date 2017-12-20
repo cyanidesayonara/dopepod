@@ -272,12 +272,12 @@ def podinfo(request, itunesid):
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
         subscription = None
-        if user.is_authenticated:
-            podcast.set_subscribed(user)
-            try:
-                subscription = Subscription.objects.get(owner=user, parent=podcast)
-            except Subscription.DoesNotExist:
-                pass
+        # if user.is_authenticated:
+        #     podcast.set_subscribed(user)
+        #     try:
+        #         subscription = Subscription.objects.get(owner=user, parent=podcast)
+        #     except Subscription.DoesNotExist:
+        #         pass
 
         context = {
             'podcast': podcast,
