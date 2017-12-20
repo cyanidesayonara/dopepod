@@ -8,8 +8,8 @@ class PodcastAdmin(admin.ModelAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(PodcastAdmin):
-    list_display = ('owner', 'parent', 'last_updated', 'title', 'artist', 'itunesid', 'genre', 'language', 'feedUrl', 'n_subscribers')
-    fields = ('owner', 'parent', 'last_updated', 'title', 'artist', 'itunesid', 'genre', 'language', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl',)
+    list_display = ('owner', 'parent', 'last_updated', 'new_episodes')
+    fields = ('owner', 'parent', 'last_updated', 'new_episodes',)
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

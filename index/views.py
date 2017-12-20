@@ -289,18 +289,10 @@ def podinfo(request, itunesid):
     if request.method == 'GET':
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
-
-        subscription = None
-        # if user.is_authenticated:
-        #     podcast.set_subscribed(user)
-        #     try:
-        #         subscription = Subscription.objects.get(owner=user, parent=podcast)
-        #     except Subscription.DoesNotExist:
-        #         pass
+        podcast.set_subscribed(user)
 
         context = {
             'podcast': podcast,
-            'subscription': subscription,
         }
         if request.is_ajax():
             return render(request, 'podinfo.html', context)

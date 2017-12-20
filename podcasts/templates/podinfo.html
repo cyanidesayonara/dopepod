@@ -14,7 +14,7 @@
           {{ podcast.n_subscribers }}
         </span>
         <span id="subscriber">
-          subsciber{{ podcast.n_subscribers|pluralize }}
+          subscriber{{ podcast.n_subscribers|pluralize }}
         </span>
       </li>
       <li>
@@ -77,7 +77,7 @@
     id="{{ podcast.itunesid }}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-    {% if podcast.subscribed %}
+    {% if podcast.is_subscribed %}
     <button type="submit" class="btn btn-outline-primary sub-button">
       Unsubscribe
     {% else %}

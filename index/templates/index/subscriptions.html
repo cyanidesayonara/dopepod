@@ -18,22 +18,22 @@ dopepod
       {% for subscription in subscriptions %}
         <div class="row">
           <div class="col-auto pl-0">
-            <a class="show-podinfo" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
-              <img class="img-fluid" src="//images.weserv.nl/?url={{ subscription.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+            <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
+              <img class="img-fluid" src="//images.weserv.nl/?url={{ subscription.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             </a>
           </div>
           <div class="col pr-0">
             <h5>
-              <a class="show-podinfo" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
-                {{ subscription.title }}
+              <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
+                {{ subscription.parent.title }}
               </a>
             </h5>
             <h6>
               <span>
                 By
               </span>
-              <a class="show-podinfo" data-itunesid="{{ subscription.itunesid }}" href="{% url 'podinfo' itunesid=subscription.itunesid %}">
-                {{ subscription.artist }}
+              <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
+                {{ subscription.parent.artist }}
               </a>
             </h6>
             <p>

@@ -24,7 +24,7 @@ class Podcast(models.Model):
     copyrighttext = models.CharField(max_length=500)
     description = models.TextField(max_length=500, blank=True)
     n_subscribers = models.IntegerField(default=0)
-    subscribed = models.BooleanField(default=False)
+    is_subscribed = models.BooleanField(default=False)
     reviewsUrl = models.CharField(max_length=500)
     artworkUrl = models.CharField(max_length=500)
     podcastUrl = models.CharField(max_length=500)
@@ -185,36 +185,21 @@ class Podcast(models.Model):
         # if subscription doesn't exist, create it
         except Subscription.DoesNotExist:
             Subscription.objects.create(
-                itunesid=self.itunesid,
-                feedUrl=self.feedUrl,
-                title=self.title,
-                artist=self.artist,
-                genre=self.genre,
-                n_subscribers=self.n_subscribers + 1,
-                explicit=self.explicit,
-                language=self.language,
-                copyrighttext=self.copyrighttext,
-                description=self.description,
-                reviewsUrl=self.reviewsUrl,
-                artworkUrl=self.artworkUrl,
-                podcastUrl=self.podcastUrl,
                 owner=user,
                 parent=self,
             )
             self.n_subscribers += 1
             self.save()
 
-        return self.n_subscribers
-
     def set_subscribed(self, user):
         """
-        sets self.subscribed = True if subscribed
+        sets self.is_subscribed = True if subscribed
         """
 
-        subscriptions = Subscription.get_subscriptions_itunesids(user)
-        if subscriptions:
-            if self.itunesid in subscriptions:
-                self.subscribed = True
+        subscriptions_itunesids = Subscription.get_subscriptions_itunesids(user)
+        if subscriptions_itunesids:
+            if self.itunesid in subscriptions_itunesids:
+                self.is_subscribed = True
 
     def get_episodes(self):
         """
@@ -448,7 +433,7 @@ class Podcast(models.Model):
         except requests.exceptions.HTTPError as e:
             logger.error('no response from itunes')
 
-class Subscription(Podcast):
+class Subscription(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE, related_name='podcast')
     last_updated = models.DateTimeField(default=timezone.now)
@@ -461,7 +446,7 @@ class Subscription(Podcast):
         return Subscription.objects.filter(owner=user)
 
     def get_subscriptions_itunesids(user):
-        return Subscription.objects.filter(owner=user).values_list('itunesid', flat=True)
+        return Subscription.objects.filter(owner=user).values_list('parent__itunesid', flat=True)
 
 class Episode(models.Model):
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)

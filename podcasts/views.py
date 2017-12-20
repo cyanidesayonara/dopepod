@@ -91,21 +91,30 @@ def subscribe(request):
             try:
                 itunesid = request.POST['itunesid']
             except KeyError:
-                raise Http404()
+                if request.is_ajax():
+                    return render(request, 'login_signup.html', {})
+                return redirect('/?next=/podinfo/' + itunesid + '/')
 
             # check whether podcast exists
             try:
                 podcast = Podcast.objects.get(itunesid=int(itunesid))
             except Podcast.DoesNotExist:
-                raise Http404()
+                if request.is_ajax():
+                    return render(request, 'login_signup.html', {})
+                return redirect('/?next=/podinfo/' + itunesid + '/')
 
-            n_subscribers = podcast.subscribe(user)
+            podcast.subscribe(user)
+            podcast.set_subscribed(user)
+
+            context = {
+                'podcast': podcast,
+            }
 
             if request.is_ajax():
-                return HttpResponse(str(n_subscribers))
+                return render(request, 'podinfo.html', context)
             return redirect('/podinfo/' + itunesid + '/')
 
         else:
             if request.is_ajax():
-                raise Http404()
+                return render(request, 'login_signup.html', {})
             return redirect('/?next=/podinfo/' + itunesid + '/')

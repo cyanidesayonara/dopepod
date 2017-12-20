@@ -512,25 +512,8 @@ $(document)
         loadCenterStage("/account/login/");
       })
       .done(function(response) {
-        if (button[0].innerText == "Subscribe") {
-          button.text("Unsubscribe");
-          button.removeClass("active");
-        }
-        else {
-          button.text("Subscribe");
-          button.addClass("active");
-        }
-
-        $("#n_subscribers").text(response);
-
-        if (response == "1") {
-          $("#subscriber").text("subscriber");
-        }
-        else {
-          $("#subscriber").text("subscribers");
-        }
-
         var url = $("#main-wrapper")[0].baseURI;
+        loadCenterStage(url);
         replaceState(url);
       });
   })
