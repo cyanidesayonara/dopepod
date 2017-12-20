@@ -35,7 +35,17 @@ def index(request):
         chart_selected_genre = 'All'
         chart_results_info = 'Top 50 podcasts on iTunes'
 
+        subscriptions = None
+        if user.is_authenticated:
+            subscriptions = Subscription.get_subscriptions(user)
+        else:
+            signup = request.GET.get('signup' , None)
+            context.update({
+                'signup': signup,
+            })
+
         context = {
+            'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
             'chart_results_info': chart_results_info,
@@ -45,16 +55,6 @@ def index(request):
             'alphabet': ALPHABET,
         }
 
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions(user)
-            context.update({
-                'subscriptions': subscriptions,
-            })
-        else:
-            signup = request.GET.get('signup' , None)
-            context.update({
-                'signup': signup,
-            })
 
         return render(request, 'index/index.html', context)
 
@@ -81,8 +81,13 @@ def charts(request):
         if request.is_ajax():
             return render(request, 'charts.html', context)
 
+        subscriptions = None
+        if user.is_authenticated:
+            subscriptions = Subscription.get_subscriptions(user)
+
         # search bar for non-ajax
         context.update({
+            'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
             'selected_alphabet': 'A',
@@ -139,7 +144,12 @@ def search(request):
             chart_results_info = 'Top 50 podcasts on iTunes'
             chart_selected_genre = 'All'
 
+            subscriptions = None
+            if user.is_authenticated:
+                subscriptions = Subscription.get_subscriptions(user)
+
             context.update({
+                'subscriptions': subscriptions,
                 'splash': True,
                 'stage_open': True,
                 'selected_alphabet': 'A',
@@ -205,7 +215,12 @@ def browse(request):
         chart_results_info = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 
+        subscriptions = None
+        if user.is_authenticated:
+            subscriptions = Subscription.get_subscriptions(user)
+
         context.update({
+            'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
             'selected_alphabet': 'A',
@@ -243,7 +258,12 @@ def subscriptions(request):
             chart_results_info = 'Top 50 podcasts on iTunes'
             chart_selected_genre = 'All'
 
+            subscriptions = None
+            if user.is_authenticated:
+                subscriptions = Subscription.get_subscriptions(user)
+
             context.update({
+                'subscriptions': subscriptions,
                 'splash': True,
                 'stage_open': True,
                 'selected_alphabet': 'A',

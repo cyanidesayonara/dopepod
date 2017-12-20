@@ -11,7 +11,6 @@ def dashboard(request):
     if user.is_authenticated:
         subscriptions = Subscription.get_subscriptions(user)
         context = {
-            'user': user,
             'subscriptions': subscriptions,
         }
         return render(request, 'dashboard.html', context)
