@@ -534,7 +534,6 @@ $(document)
   })
   .on("click", ".password-link", function(e) {
     e.preventDefault();
-    alert("You son of a bitch");
   })
   // open login register
   .on("click", ".ajax-login", function(e) {
