@@ -69,7 +69,7 @@
               <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             </a>
           </div>
-          <div class="col">
+          <div class="col text-truncate">
             <h6 class="result-title">
               <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
                 {{ podcast.title }}

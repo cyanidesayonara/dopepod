@@ -500,6 +500,7 @@ body {
 .result-title, .result-title:hover {
   overflow: hidden;
   max-height: 35px;
+  white-space: normal;
 }
 .result-artist, .result-artist:hover {
   text-overflow: ellipsis;
