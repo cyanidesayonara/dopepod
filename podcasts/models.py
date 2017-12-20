@@ -411,6 +411,7 @@ class Podcast(models.Model):
 
                 # make sure feedUrl works
                 try:
+                    logger.error(feedUrl)
                     response = requests.get(feedUrl, headers=headers, timeout=30)
                     response.raise_for_status()
                     try:
@@ -436,6 +437,10 @@ class Podcast(models.Model):
                     return
                 except requests.exceptions.ReadTimeout as e:
                     logger.error('timed out:', feedUrl)
+                    return
+                except:
+                    # idna.core.IDNAError?
+                    logger.error('something else', feedUrl)
                     return
             except KeyError as e:
                 logger.error('Missing data: ' + str(e))

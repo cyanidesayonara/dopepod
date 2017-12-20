@@ -407,6 +407,8 @@ body {
   padding-bottom: 0;
   padding-left: 0;
   max-height: 350px;
+  overflow: hidden;
+
 }
 #podinfo-side {
   padding-top: 15px;
@@ -439,7 +441,6 @@ body {
   white-space: nowrap;
 }
 #podinfo-description {
-  max-height: 200px;
 }
 #episodes-wrapper {
   border: 1px solid #e6ecf0;
