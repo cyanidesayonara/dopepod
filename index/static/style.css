@@ -191,7 +191,8 @@ body {
   z-index: 99;
 }
 .navbar-dropdown {
-    background: rgba(50, 50, 50, 1);
+  background: rgba(50, 50, 50, 1);
+  min-width: 0;
 }
 
 .nav-link {
@@ -285,21 +286,16 @@ body {
   background: -ms-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
   background: linear-gradient(to right, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
 }
-#options {
+
+#browse-toggle {
+  margin-top: .5rem;
 }
+
 #options-list {
   display: flex;
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
-}
-#search-bar {
-
-}
-#browse-bar {
-}
-#browse-form {
-
 }
 
 #flap {
@@ -351,10 +347,6 @@ body {
   box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
 }
 
-.dropdown-menu {
-  min-width: 0;
-}
-
 #center-stage {
   background-color: #fff;
 }
@@ -363,7 +355,7 @@ body {
 }
 #splash-top {
   text-align: center;
-  padding: 30px 5% 0;
+  padding-top: 30px;
 }
 #splash-left {
 }
@@ -373,7 +365,8 @@ body {
   height: 400px;
 }
 #login-wrapper {
-  background: #eee;
+  
+  background: #ddd;
   padding: 10px;
   width: 250px;
   margin: auto;
@@ -390,7 +383,7 @@ body {
 }
 #dashboard-top {
   text-align: center;
-  padding: 30px 5%;
+  padding: 30px;
   margin: auto;
   background-color: #ddd;
 }
@@ -411,15 +404,12 @@ body {
 }
 #podinfo-main {
   padding-top: 15px;
-  padding-bottom: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding-bottom: 0;
+  padding-left: 0;
 }
 #podinfo-side {
   padding-top: 15px;
-  padding-bottom: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding-bottom: 0;
 }
 #show-episodes {
   background-color: #888;
@@ -432,7 +422,7 @@ body {
   margin-bottom: 0;
 }
 #podinfo-side-list li {
-margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 #podinfo-copyright {

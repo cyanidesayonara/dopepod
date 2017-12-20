@@ -48,7 +48,6 @@ def index(request):
         if user.is_authenticated:
             subscriptions = Subscription.get_subscriptions(user)
             context.update({
-                'user': user,
                 'subscriptions': subscriptions,
             })
         else:
@@ -355,7 +354,6 @@ def settings(request):
                 return redirect('/')
             else:
                 context = {
-                    'user': user,
                     'user_form': user_form,
                     'profile_form': profile_form,
                 }

@@ -123,6 +123,7 @@ function loadResults(url) {
 }
 
 function loadSplash(url, signup) {
+  $("#splash").html("<div class='row' style='height:400px;'><div>");
   if (!signup) {
     signup = null;
   }
@@ -143,6 +144,7 @@ function loadSplash(url, signup) {
 }
 
 function loadCenterStage(url) {
+  $("#center-stage").html("<div class='row' style='height:400px;'><div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -157,9 +159,9 @@ function loadCenterStage(url) {
 }
 
 function loadChart() {
+  var genre = $("input[name=chart-genre]:checked").val();
   $("#charts").html("Loading charts...");
   var url = "/charts/";
-  var genre = $("input[name=chart-genre]:checked").val();
   if (genre != "All") {
     data = {
       "genre": genre,
@@ -175,7 +177,6 @@ function loadChart() {
     })
     .done(function(response) {
       $("#charts").html(response);
-      replaceState(url);
     });
 }
 
@@ -186,9 +187,8 @@ function scrollToTop() {
 }
 
 function scrollToMultibar() {
-  $('html, body').scrollTop()
   $('html, body').animate({
-    scrollTop: $("#multibar").offset().top
+    scrollTop: 400
   }, 200);
 }
 
@@ -292,6 +292,7 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
+        scrollToMultibar();
       }
     }, 250);
   })
@@ -300,11 +301,12 @@ $(document)
     e.preventDefault();
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#browse-form")[0].action;
+      var url = $("#search-form")[0].action;
       var q = $("#q").val();
       if (q) {
         pushState();
         SearchFunc(url, q, false);
+        scrollToMultibar();
       }
     }, 250);
   })
@@ -318,6 +320,7 @@ $(document)
         if (q) {
           pushState();
           SearchFunc(url, q, false);
+          scrollToMultibar();
         }
       }, 250);
     })
@@ -326,6 +329,7 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q, false);
+    scrollToMultibar();
  })
   .on("submit", "#results-form", function(e) {
     e.preventDefault();
@@ -380,11 +384,9 @@ $(document)
   })
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
-    pushState();
     loadChart();
   })
   .on("change", "#chart-genre-buttons", function() {
-    pushState();
     loadChart();
   })
   // show podinfo
@@ -425,16 +427,16 @@ $(document)
     e.preventDefault();
     pushState();
     loadResults("/subscriptions/");
-    $("#browse-bar").addClass("d-none");
     $("#episodes").html("");
     scrollToMultibar();
+    $("#browse-bar").addClass("d-none");
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
-    loadCenterStage("/settings/");
     $("#splash").html("");
+    loadCenterStage("/settings/");
     $("#browse-bar").addClass("d-none");
     $("episodes").html("");
     scrollToTop();
