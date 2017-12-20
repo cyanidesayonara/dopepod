@@ -6,9 +6,9 @@
       </span>
     </div>
   </div>
-  <div class="row">
+  <div class="row options">
     <div class="col-auto ml-auto">
-      <a class="btn btn-outline-primary" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+      <a class="btn btn-dope" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
         Genre
       </a>
     </div>
@@ -17,15 +17,15 @@
     <div class="row options-select">
       <div class="collapse" id="chart-genre-collapse">
         {% if chart_genres %}
-          <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+          <div class="options-group color" id="chart-genre-buttons" data-toggle="buttons">
             <ul id="button-field">
             {% if chart_selected_genre == 'All' %}
-              <label class="btn options-button active">
+              <label class="btn btn-dopeoptions-button active">
                 <input class="field-button" type="radio" name="chart-genre" value="All" checked>
                 All
               </label>
             {% else %}
-              <label class="btn options-button">
+              <label class="btn btn-dope options-button">
                 <input class="field-button" type="radio" name="chart-genre" value="All">
                 All
               </label>
@@ -33,14 +33,14 @@
             {% for genre in chart_genres %}
               {% if chart_selected_genre == genre.name %}
               <li>
-                <label class="btn options-button active">
+                <label class="btn btn-dope options-button active">
                   <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}" checked>
                   {{ genre.name }}
                 </label>
               </li>
               {% else %}
               <li>
-                <label class="btn options-button">
+                <label class="btn btn-dope options-button">
                   <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
                   {{ genre.name }}
                 </label>

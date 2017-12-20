@@ -78,21 +78,21 @@
     {% csrf_token %}
     <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
     {% if podcast.is_subscribed %}
-    <button type="submit" class="btn btn-outline-primary sub-button">
+    <button type="submit" class="btn btn-dope sub-button">
       Unsubscribe
     {% else %}
-      <button type="submit" class="btn btn-outline-primary active sub-button">
+      <button type="submit" class="btn btn-dope active sub-button">
         Subscribe
     {% endif %}
       </button>
     </form>
     {% endif %}
-    <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
+    <button class="btn btn-dope" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
       <span>
         Show episodes
       </span>
     </button>
-    <button class="btn btn-outline-primary">
+    <button class="btn btn-dope">
       <span>
         Show reviews
       </span>
