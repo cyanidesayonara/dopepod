@@ -253,6 +253,7 @@ function SearchFunc(url, q, page) {
       if (!jQuery.isEmptyObject(data)) {
         url = url + "?" + $.param(data);
       }
+      scrollToMultibar();
       replaceState(url);
     });
   return xhr;
@@ -292,7 +293,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        scrollToMultibar();
       }
     }, 250);
   })
@@ -306,7 +306,6 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
-        scrollToMultibar();
       }
     }, 250);
   })
@@ -320,7 +319,7 @@ $(document)
         if (q) {
           pushState();
           SearchFunc(url, q, false);
-          scrollToMultibar();
+
         }
       }, 250);
     })
@@ -569,7 +568,6 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        console.log(xhr.responseJSON.html);
         $("#splash").html(xhr.responseJSON.html);
       })
       .done(function() {

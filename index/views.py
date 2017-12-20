@@ -273,6 +273,7 @@ def podinfo(request, itunesid):
 
         subscription = None
         if user.is_authenticated:
+            podcast.set_subscribed(user)
             try:
                 subscription = Subscription.objects.get(owner=user, parent=podcast)
             except Subscription.DoesNotExist:
