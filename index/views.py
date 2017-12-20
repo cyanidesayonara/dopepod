@@ -36,6 +36,7 @@ def index(request):
         chart_results_info = 'Top 50 podcasts on iTunes'
 
         subscriptions = None
+        signup = None
         if user.is_authenticated:
             subscriptions = Subscription.get_subscriptions(user)
         else:
