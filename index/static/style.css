@@ -305,6 +305,20 @@ body {
 #browse-toggle {
   margin-top: 8px;
 }
+#browse-bar {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+#alphabet-field {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  padding-top: 4px;
+  padding-left: 4px;
+}
 
 #options-list {
   display: flex;
