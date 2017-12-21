@@ -433,11 +433,11 @@ body {
 #podinfo-main {
   text-align: justify;
   padding: 15px 15px 0 0;
-  height: 326px;
+  height: 330px;
   overflow: hidden;
 }
 #podinfo-side {
-  height: 326px;
+  height: 330px;
   padding-top: 15px;
   padding-bottom: 0;
   overflow: hidden;
