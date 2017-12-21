@@ -191,8 +191,10 @@ def browse(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             podcasts = paginator.page(paginator.num_pages)
+        pagecount = paginator.num_pages
 
         context = {
+            'pagecount': pagecount,
             'genres': genres,
             'languages': languages,
             'selected_alphabet': alphabet,
@@ -289,7 +291,9 @@ def podinfo(request, itunesid):
     if request.method == 'GET':
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
-        podcast.set_subscribed(user)
+        
+        if user.is_authenticated:
+            podcast.set_subscribed(user)
 
         context = {
             'podcast': podcast,
@@ -301,7 +305,7 @@ def podinfo(request, itunesid):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         eps = podcast.get_episodes()
-        episodes_info = podcast.title + '\n' + str(len(eps)) + ' episodes'
+        episodes_info = str(len(eps)) + ' episodes of ' + podcast.title
         chart_results_info = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 

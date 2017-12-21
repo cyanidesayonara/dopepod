@@ -71,7 +71,7 @@
       {{ podcast.description }}
     </p>
   </div>
-  <div class="col">
+  <div class="col" id="podinfo-bottom">
     {% if user.is_authenticated %}
     <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
     id="{{ podcast.itunesid }}" method="POST">
@@ -89,12 +89,12 @@
     {% endif %}
     <button class="btn btn-dope" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
       <span>
-        Show episodes
+        Episodes
       </span>
     </button>
-    <button class="btn btn-dope">
+    <button class="btn btn-dope btn-dope-disabled">
       <span>
-        Show reviews
+        Reviews
       </span>
     </button>
   </div>

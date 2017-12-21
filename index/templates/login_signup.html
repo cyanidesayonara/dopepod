@@ -3,81 +3,88 @@
     <h4>
       Search for and listen to thousands of free podcasts on<br /><strong>dopepod</strong>
     </h4>
+    <div id="login-buttons">
+      {% if signup %}
+      <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
+        Log In
+      </button>
+      <button class="btn btn-dope login-signup-toggle active" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
+        Sign Up
+      </button>
+    {% else %}
+      <button class="btn btn-dope login-signup-toggle active" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
+        Log In
+      </button>
+      <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
+        Sign Up
+      </button>
+    {% endif %}
+    </div>
   </div>
-  <div class="col-12 mt-auto" id="splash-bottom">
+  <div class="col-12" id="splash-bottom">
+    <div id="login-wrapper">
     {% if signup %}
       <div class="collapse login-signup-collapse" id="login-collapse">
     {% else %}
       <div class="collapse login-signup-collapse show" id="login-collapse">
     {% endif %}
-      <div id="login-wrapper">
         <div id="login-errors">
         </div>
-        Log In
-        <span>
-          or
-        </span>
-        <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-          Sign Up
-        </button>
         <form class="login-form" method="POST" action="{% url 'account_login' %}">
           {% csrf_token %}
-          <div class="form-group">
+          <div class="login-form-group">
             <label class="sr-only" for="login-login">Username or e-mail</label>
-            <input class="form-control" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+            <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
           </div>
           <div class="form-row">
-            <div class="col form-group">
+            <div class="col login-form-group">
               <label class="sr-only" for="login-password">Password</label>
-              <input class="form-control" type="password" name="password" placeholder="Password" required="" id="login-password">
+              <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
             </div>
             <div class="col-auto">
               <button type="submit" class="btn btn-dope">Log In</button>
             </div>
           </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="remember" id="remember">
-              Remember me
-            </label>
+          <div class="form-row">
+            <div class="col">
+              <a class="password-link" href="/account/password/reset/">
+                Forgot Password?
+              </a>
+            </div>
+            <div class="col form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                Remember me
+              </label>
+            </div>
           </div>
-          <a class="password-link" href="/account/password/reset/">Forgot Password?</a>
         </form>
       </div>
-    </div>
-    {% if signup %}
-      <div class="collapse login-signup-collapse show" id="signup-collapse">
-    {% else %}
-      <div class="collapse login-signup-collapse" id="signup-collapse">
-    {% endif %}
-      <div id="login-wrapper">
+      {% if signup %}
+        <div class="collapse login-signup-collapse show" id="signup-collapse">
+      {% else %}
+        <div class="collapse login-signup-collapse" id="signup-collapse">
+      {% endif %}
         <div id="signup-errors">
         </div>
-        <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-          Log In
-        </button>
-        <span>
-          or
-        </span>
-        Sign Up
         <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
           {% csrf_token %}
-          <div class="form-group">
+          <div class="login-form-group">
             <label class="sr-only" for="signup-email">E-mail</label>
-            <input class="form-control" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+            <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
           </div>
-          <div class="form-group">
+          <div class="login-form-group">
             <label class="sr-only" for="signup-email">Username</label>
-            <input class="form-control" type="text" name="username" placeholder="Username" autofocus="autofocus" minlength="4" maxlength="150" required="" id="signup-email">
+            <input class="form-control login-field" type="text" name="username" placeholder="Username" autofocus="autofocus" minlength="4" maxlength="150" required="" id="signup-email">
           </div>
-          <div class="form-group">
+          <div class="login-form-group">
             <label class="sr-only" for="signup-password1">Password</label>
-            <input class="form-control" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
+            <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
           </div>
           <div class="form-row">
-            <div class="col form-group">
+            <div class="col login-form-group">
               <label class="sr-only" for="signup-password">Password (again)</label>
-              <input class="form-control" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+              <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
             </div>
             <div class="col-auto">
               <button type="submit" class="btn btn-dope">Sign Up</button>

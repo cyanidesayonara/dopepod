@@ -150,6 +150,8 @@ body {
 }
 
 .btn-dope {
+  font-size: 16px;
+  padding: 5px 8px;
   color: #000;
   background-color: #fff;
 }
@@ -159,6 +161,10 @@ body {
 }
 .btn-dope.focus, .btn-dope:focus {
   box-shadow: none;
+}
+.btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover  {
+  color: #000;
+  background: #ddd;
 }
 
 .color {
@@ -224,16 +230,9 @@ body {
   min-height: 100vh;
 }
 
-.btn {
-  font-size: inherit;
-}
 .page-button {
-  width: 38px;
-  height: 38px;
-  border: none;
-  user-select: none;
+  margin: 0;
 }
-
 
 .page-list {
   list-style: none;
@@ -303,9 +302,8 @@ body {
   background: -ms-linear-gradient(left, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
   background: linear-gradient(to right, rgba(76,222,181,.8) 0%, rgba(145,194,186,.8) 100%);
 }
-
 #browse-toggle {
-  margin-top: .5rem;
+  margin-top: 8px;
 }
 
 #options-list {
@@ -359,9 +357,9 @@ body {
   border: 1px solid rgba(0,0,0,.15);
 }
 #q:focus {
-  -webkit-box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
-  -moz-box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
-  box-shadow: inset rgba(0,0,0,.3) -1px -1px 2px, inset rgba(0,0,0,.3) 1px 1px 2px;
+  -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
+  -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
+  box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
 }
 
 #center-stage {
@@ -369,29 +367,43 @@ body {
 }
 
 #splash {
+  background: #fff;
 }
 #splash-top {
   text-align: center;
-  padding-top: 30px;
+  margin-top: 30px;
 }
-#splash-left {
-}
-#splash-right {
+#splash-bottom {
+  text-align: center;
+  margin-bottom: auto;
 }
 #login-signup {
   height: 400px;
 }
 #login-wrapper {
   background: #ddd;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   width: 300px;
   margin: auto;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  font-size: 16px;
 }
-#signup-wrapper {
-  background: #eee;
-  padding: 10px;
-  width: 250px;
-  margin: auto;
+#login-buttons {
+  padding: 10px 0;
+}
+.login-field {
+  padding: 5px 8px;
+  border-radius: .25rem;
+  border: 1px solid rgba(0,0,0,.15);
+  margin-bottom: 10px;
+}
+.login-field:focus {
+  border: 1px solid rgba(0,0,0,.15);
+  -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
+  -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
+  box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
 }
 
 #dashboard {
@@ -419,16 +431,19 @@ body {
   background-color: #fff;
 }
 #podinfo-main {
-  padding: 15px;
-  max-height: 340px;
+  text-align: justify;
+  padding: 15px 15px 0 0;
+  height: 326px;
   overflow: hidden;
-  margin-bottom: 10px;
 }
 #podinfo-side {
-  max-height: 340px;
+  height: 326px;
   padding-top: 15px;
   padding-bottom: 0;
   overflow: hidden;
+}
+#podinfo-bottom {
+  padding: 10px;
 }
 #show-episodes {
   background-color: #888;
@@ -437,12 +452,12 @@ body {
 #podinfo-side-list {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
+  margin-top: 6px;
   margin-bottom: 0;
 }
 #podinfo-side-list li {
   margin-bottom: 4px;
-  max-height: 34px;
+  max-height: 37px;
   overflow: hidden;
 }
 
@@ -472,6 +487,15 @@ body {
 .table tbody tr.hover:hover {
   background-color: rgba(0,0,0,.075);
 }
+.more-collapse {
+  text-align: justify;
+}
+#episodes-table th, #episodes-table td {
+  padding: 8px;
+}
+#episodes-table thead th {
+  border-top: none;
+}
 
 .results-wrapper a, .results-wrapper a:hover {
   text-decoration: none;
@@ -485,6 +509,8 @@ body {
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 .results-bar {
+  color: #fff;
+  font-size: 18px;
   text-align: center;
   padding-top: 8px;
   padding-bottom: 8px;

@@ -5,6 +5,10 @@
       <span>
         {{ episodes_info }}
       </span>
+    </div>
+  </div>
+  <div class="row options">
+    <div class="col-auto ml-auto">
       <button class="btn btn-dope float-right" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
         Show episodes
       </button>
@@ -13,7 +17,7 @@
   <div class="collapse" id="episode-collapse">
     <div class="row results-list">
       <div class="col px-0">
-        <table class="table">
+        <table class="table" id="episodes-table">
           <thead>
             <tr>
               <th>
@@ -53,18 +57,18 @@
                   <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
                     {{ episode.summary }}
                     <br />
-                    <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+                    <form class="play d-inline float-right" action="{% url 'play' %}" method="POST" target="_blank">
                       {% csrf_token %}
                       <input type="hidden" name="url" value="{{ episode.url }}">
                       <input type="hidden" name="type" value="{{ episode.type }}">
                       <input type="hidden" name="title" value="{{ episode.title }}">
                       <input type="hidden" name="date" value="{{ episode.pubDate }}">
                       <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-                      <button class="btn btn-dope" type="submit">
+                      <button class="btn btn-dope float-right" type="submit">
                         Play
                       </button>
                     </form>
-                    <a class="btn btn-dope" href="{{ episode.url }}" title="Download" download>
+                    <a class="btn btn-dope float-right" href="{{ episode.url }}" title="Download" download>
                       Download
                     </a>
                   </div>
