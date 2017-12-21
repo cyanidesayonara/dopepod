@@ -368,6 +368,9 @@ body {
 
 #splash {
   background: #fff;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 #splash-top {
   text-align: center;
@@ -423,9 +426,6 @@ body {
 
 /* PODINFO */
 #podinfo {
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   padding: 15px 15px 0 15px;
   height: 400px;
   background-color: #fff;
