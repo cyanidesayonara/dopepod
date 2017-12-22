@@ -108,7 +108,7 @@ function loadEpisodes(itunesid) {
 }
 
 function loadResults(url) {
-  $("#results").html("Loading results...");
+  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -159,6 +159,7 @@ function loadCenterStage(url) {
 }
 
 function loadChart() {
+  $("#center-stage").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
   var genre = $("input[name=chart-genre]:checked").val();
   $("#charts").html("Loading charts...");
   var url = "/charts/";

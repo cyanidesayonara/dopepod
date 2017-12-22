@@ -37,10 +37,14 @@ def episodes(request):
             raise Http404()
 
         eps = podcast.get_episodes()
-        episodes_info = podcast.title + '\n' + str(len(eps)) + ' episodes'
+        episodes_count = len(eps)
+        if episodes_count != 1:
+            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
+        else:
+            episodes_header = str(episodes_count) + ' episode of ' + podcast.title
 
         context = {
-            'episodes_info': episodes_info,
+            'episodes_header': episodes_header,
             'episodes': eps,
             'podcast': podcast,
         }
@@ -93,7 +97,7 @@ def subscribe(request):
             except KeyError:
                 if request.is_ajax():
                     return render(request, 'login_signup.html', {})
-                return redirect('/?next=/podinfo/' + itunesid + '/')
+                return redirect('/?next=/podheader/' + itunesid + '/')
 
             # check whether podcast exists
             try:

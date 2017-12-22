@@ -1,83 +1,82 @@
 {% if episodes %}
-<div class="col results-wrapper">
-  <div class="row color">
-    <div class="col results-bar">
-      <span>
-        {{ episodes_info }}
-      </span>
-    </div>
-  </div>
+<div class="col-auto color results-bar">
+  <span class="results-header">
+    {{ episodes_header }}
+  </span>
+  <button class="btn btn-dope float-right" id="show-button" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
+    +
+  </button>
+</div>
+<div class="col-12 collapse results-wrapper show" id="episode-collapse">
   <div class="row options">
-    <div class="col-auto ml-auto">
-      <button class="btn btn-dope float-right" type="button" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="false" aria-controls="episode-collapse">
-        Show episodes
-      </button>
+    <div class="col">
+      <a class="btn btn-dope float-right" href="#">
+        Button
+      </a>
     </div>
   </div>
-  <div class="collapse" id="episode-collapse">
-    <div class="row results-list">
-      <div class="col px-0">
-        <table class="table" id="episodes-table">
-          <thead>
-            <tr>
-              <th>
-                #
-              </th>
-              <th>
-                Title
-              </th>
-              <th>
-                Released
-              </th>
-              <th>
-                Length
-              </th>
+  <div class="row results-list">
+    <div class="col">
+      <table class="table" id="episodes-table">
+        <thead>
+          <tr>
+            <th>
+              #
+            </th>
+            <th>
+              Title
+            </th>
+            <th>
+              Released
+            </th>
+            <th>
+              Length
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for episode in episodes %}
+            <tr class="hover" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}">
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>
+                {{ episode.title }}
+              </td>
+              <td>
+                {{ episode.pubDate }}
+              </td>
+              <td>
+                {% if episode.length %}
+                  {{ episode.length }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for episode in episodes %}
-              <tr class="hover" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>
-                  {{ episode.title }}
-                </td>
-                <td>
-                  {{ episode.pubDate }}
-                </td>
-                <td>
-                  {% if episode.length %}
-                    {{ episode.length }}
-                  {% else %}
-                    N/A
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td colspan="4" class="hidden-row">
-                  <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
-                    {{ episode.summary }}
-                    <br />
-                    <form class="play d-inline float-right" action="{% url 'play' %}" method="POST" target="_blank">
-                      {% csrf_token %}
-                      <input type="hidden" name="url" value="{{ episode.url }}">
-                      <input type="hidden" name="type" value="{{ episode.type }}">
-                      <input type="hidden" name="title" value="{{ episode.title }}">
-                      <input type="hidden" name="date" value="{{ episode.pubDate }}">
-                      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-                      <button class="btn btn-dope float-right" type="submit">
-                        Play
-                      </button>
-                    </form>
-                    <a class="btn btn-dope float-right" href="{{ episode.url }}" title="Download" download>
-                      Download
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+            <tr>
+              <td colspan="4" class="hidden-row">
+                <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+                  {{ episode.summary }}
+                  <br />
+                  <form class="play d-inline float-right" action="{% url 'play' %}" method="POST" target="_blank">
+                    {% csrf_token %}
+                    <input type="hidden" name="url" value="{{ episode.url }}">
+                    <input type="hidden" name="type" value="{{ episode.type }}">
+                    <input type="hidden" name="title" value="{{ episode.title }}">
+                    <input type="hidden" name="date" value="{{ episode.pubDate }}">
+                    <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+                    <button class="btn btn-dope float-right" type="submit">
+                      Play
+                    </button>
+                  </form>
+                  <a class="btn btn-dope float-right" href="{{ episode.url }}" title="Download" download>
+                    Download
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

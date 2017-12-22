@@ -33,7 +33,7 @@ def index(request):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         chart_selected_genre = 'All'
-        chart_results_info = 'Top 50 podcasts on iTunes'
+        chart_header = 'Top 50 podcasts on iTunes'
 
         subscriptions = None
         signup = None
@@ -47,7 +47,7 @@ def index(request):
             'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
-            'chart_results_info': chart_results_info,
+            'chart_header': chart_header,
             'chart_genres': genres,
             'chart_selected_genre': chart_selected_genre,
             'chart': chart[:50],
@@ -68,13 +68,13 @@ def charts(request):
         user = request.user
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts(genre)
-        chart_results_info = 'Top 50 podcasts on iTunes' + ('' if genre == None else ' in  ' + str(genre))
+        chart_header = 'Top 50 podcasts on iTunes' + ('' if genre == None else ' in  ' + str(genre))
 
         context = {
             'chart': chart[:50],
             'chart_genres': genres,
             'chart_selected_genre': genre if genre else 'All',
-            'chart_results_info': chart_results_info,
+            'chart_header': chart_header,
         }
 
         if request.is_ajax():
@@ -115,7 +115,7 @@ def search(request):
 
             podcasts = Podcast.search(genre, language, user, q=q)
             paginator = Paginator(podcasts, 24)
-            results_info = str(paginator.count) + ' results for "' + q + '"'
+            results_header = str(paginator.count) + ' results for "' + q + '"'
 
             try:
                 podcasts = paginator.page(page)
@@ -132,7 +132,7 @@ def search(request):
                 'selected_q': q,
                 'selected_genre': genre if genre else 'All',
                 'selected_language': language if language else 'All',
-                'results_info': results_info,
+                'results_header': results_header,
                 'podcasts': podcasts,
             }
 
@@ -140,7 +140,7 @@ def search(request):
                 return render(request, 'index/results_detail.html', context)
 
             chart = Podcast.get_charts()
-            chart_results_info = 'Top 50 podcasts on iTunes'
+            chart_header = 'Top 50 podcasts on iTunes'
             chart_selected_genre = 'All'
 
             subscriptions = None
@@ -156,7 +156,7 @@ def search(request):
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
                 'chart_selected_genre': chart_selected_genre,
-                'chart_results_info': chart_results_info,
+                'chart_header': chart_header,
             })
 
             return render(request, 'index/results_detail.html', context)
@@ -181,7 +181,7 @@ def browse(request):
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
-        results_info = str(paginator.count) + ' results for "' + alphabet + '"'
+        results_header = str(paginator.count) + ' results for "' + alphabet + '"'
 
         try:
             podcasts = paginator.page(page)
@@ -200,7 +200,7 @@ def browse(request):
             'selected_alphabet': alphabet,
             'selected_genre': genre if genre else 'All',
             'selected_language': language if language else 'All',
-            'results_info': results_info,
+            'results_header': results_header,
             'podcasts': podcasts,
             'podcasts1': podcasts[:40],
             'podcasts2': podcasts[40:80],
@@ -213,7 +213,7 @@ def browse(request):
 
         # chart & browse bar for non-ajax
         chart = Podcast.get_charts()
-        chart_results_info = 'Top 50 podcasts on iTunes'
+        chart_header = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 
         subscriptions = None
@@ -229,7 +229,7 @@ def browse(request):
             'chart': chart[:50],
             'alphabet': ALPHABET,
             'chart_selected_genre': chart_selected_genre,
-            'chart_results_info': chart_results_info,
+            'chart_header': chart_header,
         })
         return render(request, 'index/results_list.html', context)
 
@@ -243,10 +243,10 @@ def subscriptions(request):
         user = request.user
         if user.is_authenticated:
             subs = Subscription.get_subscriptions(user)
-            results_info = str(subs.count()) + ' subscriptions'
+            results_header = str(subs.count()) + ' subscriptions'
 
             context = {
-                'results_info': results_info,
+                'results_header': results_header,
                 'subscriptions': subs,
             }
 
@@ -256,7 +256,7 @@ def subscriptions(request):
             # chart & search bar for non-ajax
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
-            chart_results_info = 'Top 50 podcasts on iTunes'
+            chart_header = 'Top 50 podcasts on iTunes'
             chart_selected_genre = 'All'
 
             subscriptions = None
@@ -272,7 +272,7 @@ def subscriptions(request):
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
                 'chart_selected_genre': chart_selected_genre,
-                'chart_results_info': chart_results_info,
+                'chart_header': chart_header,
             })
             return render(request, 'index/subscriptions.html', context)
         else:
@@ -291,7 +291,7 @@ def podinfo(request, itunesid):
     if request.method == 'GET':
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
-        
+
         if user.is_authenticated:
             podcast.set_subscribed(user)
 
@@ -305,8 +305,8 @@ def podinfo(request, itunesid):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         eps = podcast.get_episodes()
-        episodes_info = str(len(eps)) + ' episodes of ' + podcast.title
-        chart_results_info = 'Top 50 podcasts on iTunes'
+        episodes_header = str(len(eps)) + ' episodes of ' + podcast.title
+        chart_header = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 
         context.update({
@@ -318,8 +318,8 @@ def podinfo(request, itunesid):
             'chart_selected_genre': chart_selected_genre,
             'alphabet': ALPHABET,
             'episodes': eps,
-            'episodes_info': episodes_info,
-            'chart_results_info': chart_results_info,
+            'episodes_header': episodes_header,
+            'chart_header': chart_header,
         })
         return render(request, 'podinfo.html', context)
 
@@ -344,7 +344,7 @@ def settings(request):
             # chart & search bar
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
-            chart_results_info = 'Top 50 podcasts on iTunes'
+            chart_header = 'Top 50 podcasts on iTunes'
             chart_selected_genre = 'All'
 
             context.update({
@@ -355,7 +355,7 @@ def settings(request):
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
                 'chart_selected_genre': chart_selected_genre,
-                'chart_results_info': chart_results_info,
+                'chart_header': chart_header,
             })
             return render(request, 'index/settings.html', context)
 
@@ -380,7 +380,7 @@ def settings(request):
                 # chart & search bar
                 genres = Genre.get_primary_genres()
                 chart = Podcast.get_charts()
-                chart_results_info = 'Top 50 podcasts on iTunes'
+                chart_header = 'Top 50 podcasts on iTunes'
                 chart_selected_genre = 'All'
                 context.update({
                     'splash': False,
@@ -390,7 +390,7 @@ def settings(request):
                     'chart': chart[:50],
                     'chart_selected_genre': chart_selected_genre,
                     'alphabet': ALPHABET,
-                    'chart_results_info': chart_results_info,
+                    'chart_header': chart_header,
                 })
                 return render(request, 'index/settings.html', context)
     else:
