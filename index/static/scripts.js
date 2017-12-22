@@ -87,7 +87,7 @@ function replaceState(url) {
 function loadEpisodes(itunesid) {
   // load episodes for podcast
   // TODO also load on back button
-  $("#episodes").html("Loading episodes...");
+  $("#episodes").html("<div class='col-auto color results-bar'><span class='results-info'>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -209,7 +209,7 @@ function refreshNavbar() {
 }
 
 // ye ajax search function
-function SearchFunc(url, q, page) {
+function SearchFunc(url, q, page=null) {
   /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
@@ -233,14 +233,15 @@ function SearchFunc(url, q, page) {
         data["language"] = language;
       }
     }
-    if (page) {
-      if ($("#page-buttons").length) {
-        var page = $("input[name=page]:checked").val();
+    if ($("#page-buttons").length) {    
+      var page = $("input[name=page]:checked").val();
+      if (page && page != '1') {
         data["page"] = page;
       }
     }
   }
-  $("#results").html("Loading results...");
+
+  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",
@@ -283,18 +284,19 @@ $(document)
     $(".more-collapse.show").collapse("hide");
   })
   // remove focus from button (focus would be saved on state)
-  .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
-    $(this.children).removeClass("focus");
-  })
+  // .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
+  //   $(this.children).removeClass("focus");
+  // })
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      if (q) {
+      if (q) {        
         pushState();
-        SearchFunc(url, q, false);
+        SearchFunc(url, q);
+        $("#episodes").html("");
       }
     }, 250);
   })
@@ -307,7 +309,8 @@ $(document)
       var q = $("#q").val();
       if (q) {
         pushState();
-        SearchFunc(url, q, false);
+        SearchFunc(url, q);
+        $("#episodes").html("");
       }
     }, 250);
   })
@@ -320,8 +323,8 @@ $(document)
         var q = $("input[name=alphabet]:checked").val();
         if (q) {
           pushState();
-          SearchFunc(url, q, false);
-
+          SearchFunc(url, q);
+          $("#episodes").html("");
         }
       }, 250);
     })
@@ -329,8 +332,8 @@ $(document)
     var url = $("#browse-form")[0].action;
     var q = $("input[name=alphabet]:checked").val();
     pushState();
-    SearchFunc(url, q, false);
-    scrollToMultibar();
+    SearchFunc(url, q);
+    $("#episodes").html("");
  })
   .on("submit", "#results-form", function(e) {
     e.preventDefault();
@@ -345,7 +348,8 @@ $(document)
       }
       if (q) {
         pushState();
-        SearchFunc(url, q, false);
+        SearchFunc(url, q);
+        $("#episodes").html("");
       }
     }, 250);
   })
@@ -362,7 +366,8 @@ $(document)
       }
       if (q) {
         pushState();
-        SearchFunc(url, q, true);
+        SearchFunc(url, q);
+        $("#episodes").html("");
       }
     }, 250);
   })
@@ -380,6 +385,7 @@ $(document)
       if (q) {
         pushState();
         SearchFunc(url, q, false);
+        $("#episodes").html("");
       }
     }, 250);
   })
@@ -428,9 +434,9 @@ $(document)
     e.preventDefault();
     pushState();
     loadResults("/subscriptions/");
+    $("#browse-bar").addClass("d-none");
     $("#episodes").html("");
     scrollToMultibar();
-    $("#browse-bar").addClass("d-none");
   })
   // open settings
   .on("click", ".settings-link", function(e) {
@@ -499,6 +505,7 @@ $(document)
     e.preventDefault();
     // button, gets new value
     var button = $(this).find(".sub-button");
+    button.text("Loading...");
     var data = $(this).serialize();
     var url = this.action;
     var method = this.method;
@@ -509,8 +516,8 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-        // probably not logged in
         loadCenterStage("/account/login/");
+        button.text("Fail :(");
       })
       .done(function(response) {
         var url = $("#main-wrapper")[0].baseURI;
