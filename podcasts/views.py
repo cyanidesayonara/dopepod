@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription
 import logging
+import requests
 
 logger = logging.getLogger(__name__)
 

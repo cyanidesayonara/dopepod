@@ -292,7 +292,7 @@ class Podcast(models.Model):
                     # enclosure might be missing, have alternatives
                     enclosure = item.find('enclosure')
                     try:
-                        episode['url'] = enclosure.get('url').replace('http:', '')
+                        episode['url'] = enclosure.get('url')
                         episode['type'] = enclosure.get('type')
                         episodes.append(episode)
                     except AttributeError as e:

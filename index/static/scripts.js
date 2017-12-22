@@ -85,8 +85,6 @@ function replaceState(url) {
 }
 
 function loadEpisodes(itunesid) {
-  // load episodes for podcast
-  // TODO also load on back button
   $("#episodes").html("<div class='col-auto color results-bar'><span class='results-info'>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
@@ -159,9 +157,8 @@ function loadCenterStage(url) {
 }
 
 function loadChart() {
-  $("#center-stage").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
+  $("#center-stage").html("<div class='col-auto color results-bar'><span class='results-info'>Loading charts...</span></div>");
   var genre = $("input[name=chart-genre]:checked").val();
-  $("#charts").html("Loading charts...");
   var url = "/charts/";
   if (genre != "All") {
     data = {
@@ -210,6 +207,8 @@ function refreshNavbar() {
 
 // ye ajax search function
 function SearchFunc(url, q, page=null) {
+  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
+
   /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
@@ -242,8 +241,6 @@ function SearchFunc(url, q, page=null) {
       }
     }
   }
-
-  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",
@@ -496,12 +493,12 @@ $(document)
         console.log(thrownError);
       })
       .done(function(response) {
-        $("#player").html(response);
+        $("#player-drop").html(response);
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
-    $("#player").empty();
+    $("#player-drop").empty();
   })
   .on("submit", "#sub-form", function(e) {
     e.preventDefault();
