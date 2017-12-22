@@ -1,3 +1,5 @@
+{% load account socialaccount %}
+
 <div class="row" id="login-signup">
   <div class="col-12"id="splash-top">
     <h4>
@@ -59,6 +61,11 @@
             </div>
           </div>
         </form>
+        {% get_providers as socialaccount_providers %}
+        <ul class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </ul>
+        {% include "socialaccount/snippets/login_extra.html" %}
       </div>
       {% if signup %}
         <div class="collapse login-signup-collapse show" id="signup-collapse">
