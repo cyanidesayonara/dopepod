@@ -390,6 +390,7 @@ body {
 }
 
 #splash {
+  font-size: 16px;
   background: #fff;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
@@ -397,27 +398,40 @@ body {
 }
 #splash-top {
   text-align: center;
-  margin-top: 30px;
+  padding-top: 20px;
 }
 #splash-bottom {
-  text-align: center;
-  margin-bottom: auto;
+  padding-bottom: 10px;
 }
 #login-signup {
   height: 400px;
+}
+#login-errors {
+  width: 300px;
+  margin: auto;
+}
+#login-errors .alert {
+  padding: 10px;
+  margin-bottom: 10px;
 }
 #login-wrapper {
   background: #ddd;
   padding: 10px 10px 0 10px;
   width: 300px;
+  height: 136px;
   margin: auto;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  font-size: 16px;
 }
 #login-buttons {
   padding: 10px 0;
+}
+#social-login {
+  text-align: center;
+  width: 300px;
+  padding-top: 10px;
+  margin: auto;
 }
 .login-field {
   padding: 5px 8px;
@@ -439,7 +453,11 @@ body {
   text-align: center;
   padding: 30px;
   margin: auto;
-  background-color: #ddd;
+  background: #ddd;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  font-size: 16px;
 }
 
 #settings {
@@ -510,10 +528,10 @@ body {
 }
 
 .h-line {
-    height: 1px;
-    border: 0;
-    background: #ddd;
-    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, #ddd));
+  height: 1px;
+  border: 0;
+  background: #ddd;
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, #ddd));
 }
 
 .results-wrapper a, .results-wrapper a:hover {
@@ -521,7 +539,6 @@ body {
 }
 .results-wrapper {
   overflow: hidden;
-  margin-bottom: 15px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0px 2px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0px 2px;
   box-shadow: rgba(0,0,0,.5) 0 0px 2px;
@@ -542,7 +559,8 @@ body {
 }
 
 .results-list {
-  padding: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .results-list a {
   color: #000;
@@ -551,14 +569,13 @@ body {
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
-  padding: .25rem;
+  padding: 5px;
 }
 .result-box:hover {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   background: #eee;
-  padding: .25rem;
 }
 .result-image {
   object-fit: cover;

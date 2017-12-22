@@ -125,8 +125,10 @@ def search(request):
             except EmptyPage:
                 # If page is out of range (e.g. 9999), deliver last page of results.
                 podcasts = paginator.page(paginator.num_pages)
+            pagecount = paginator.num_pages
 
             context = {
+                'pagecount': pagecount,
                 'genres': genres,
                 'languages': languages,
                 'selected_q': q,

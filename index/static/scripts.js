@@ -233,10 +233,12 @@ function SearchFunc(url, q, page=null) {
         data["language"] = language;
       }
     }
-    if ($("#page-buttons").length) {    
-      var page = $("input[name=page]:checked").val();
-      if (page && page != '1') {
-        data["page"] = page;
+    if (page) {
+      if ($("#page-buttons").length) {
+        var page = $("input[name=page]:checked").val();
+        if (page && page != '1') {
+          data["page"] = page;
+        }
       }
     }
   }
@@ -293,7 +295,7 @@ $(document)
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      if (q) {        
+      if (q) {
         pushState();
         SearchFunc(url, q);
         $("#episodes").html("");
@@ -348,7 +350,7 @@ $(document)
       }
       if (q) {
         pushState();
-        SearchFunc(url, q);
+        SearchFunc(url, q, true);
         $("#episodes").html("");
       }
     }, 250);
@@ -366,7 +368,7 @@ $(document)
       }
       if (q) {
         pushState();
-        SearchFunc(url, q);
+        SearchFunc(url, q, true);
         $("#episodes").html("");
       }
     }, 250);
@@ -584,7 +586,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#signup-errors").html(xhr.responseJSON.html);
+        $("#login-errors").html(xhr.responseJSON.html);
       })
       .done(function() {
         refreshCookie();

@@ -2,9 +2,9 @@
 
 <div class="row" id="login-signup">
   <div class="col-12"id="splash-top">
-    <h4>
-      Search for and listen to thousands of free podcasts on<br /><strong>dopepod</strong>
-    </h4>
+    <h5>
+      Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
+    </h5>
     <div id="login-buttons">
       {% if signup %}
       <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
@@ -22,6 +22,8 @@
       </button>
     {% endif %}
     </div>
+    <div id="login-errors">
+    </div>
   </div>
   <div class="col-12" id="splash-bottom">
     <div id="login-wrapper">
@@ -30,12 +32,10 @@
     {% else %}
       <div class="collapse login-signup-collapse show" id="login-collapse">
     {% endif %}
-        <div id="login-errors">
-        </div>
         <form class="login-form" method="POST" action="{% url 'account_login' %}">
           {% csrf_token %}
           <div class="login-form-group">
-            <label class="sr-only" for="login-login">Username or e-mail</label>
+            <label class="sr-only" for="login-login">E-mail</label>
             <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
           </div>
           <div class="form-row">
@@ -61,44 +61,51 @@
             </div>
           </div>
         </form>
-        {% get_providers as socialaccount_providers %}
-        <ul class="socialaccount_providers">
-          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-        </ul>
-        {% include "socialaccount/snippets/login_extra.html" %}
       </div>
-      {% if signup %}
-        <div class="collapse login-signup-collapse show" id="signup-collapse">
-      {% else %}
-        <div class="collapse login-signup-collapse" id="signup-collapse">
-      {% endif %}
-        <div id="signup-errors">
-        </div>
+    {% if signup %}
+      <div class="collapse login-signup-collapse show" id="signup-collapse">
+    {% else %}
+      <div class="collapse login-signup-collapse" id="signup-collapse">
+    {% endif %}
         <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
-          {% csrf_token %}
-          <div class="login-form-group">
-            <label class="sr-only" for="signup-email">E-mail</label>
-            <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+        {% csrf_token %}
+        <div class="login-form-group">
+          <label class="sr-only" for="signup-email">E-mail</label>
+          <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+        </div>
+        <div class="login-form-group">
+          <label class="sr-only" for="signup-password1">Password</label>
+          <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
+        </div>
+        <div class="form-row">
+          <div class="col login-form-group">
+            <label class="sr-only" for="signup-password">Password (again)</label>
+            <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
           </div>
-          <div class="login-form-group">
-            <label class="sr-only" for="signup-email">Username</label>
-            <input class="form-control login-field" type="text" name="username" placeholder="Username" autofocus="autofocus" minlength="4" maxlength="150" required="" id="signup-email">
+          <div class="col-auto">
+            <button type="submit" class="btn btn-dope">Sign Up</button>
           </div>
-          <div class="login-form-group">
-            <label class="sr-only" for="signup-password1">Password</label>
-            <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
-          </div>
-          <div class="form-row">
-            <div class="col login-form-group">
-              <label class="sr-only" for="signup-password">Password (again)</label>
-              <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-dope">Sign Up</button>
-            </div>
-          </div>
-        </form>
+        </div>
+      </form>
       </div>
+    </div>
+    <div id="social-login">
+      <span>
+        Or log in with a social account
+      </span>
+      <br />
+      <!-- <a title="Reddit" class="socialaccount_provider reddit" href="/account/reddit/login/?process=login">
+        <i class="fab fa-reddit"></i>
+      </a> -->
+      <!-- <a title="Github" class="socialaccount_provider github" href="/account/github/login/?process=login">
+        <i class="fab fa-github"></i>
+      </a> -->
+      <!-- <a title="Facebook" class="socialaccount_provider facebook" href="/account/facebook/login/?process=login">
+        <i class="fab fa-facebook-f"></i>
+      </a> -->
+      <a title="Google" class="socialaccount_provider google" href="/account/google/login/?process=login">
+        <i class="fab fa-google"></i>
+      </a>
     </div>
   </div>
 </div>

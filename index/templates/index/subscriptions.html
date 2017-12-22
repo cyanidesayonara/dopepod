@@ -9,18 +9,32 @@ dopepod
   <span class="results-header">
     {{ results_header }}
   </span>
+  <!-- <button class="btn btn-dope float-right" id="show-button" type="button" data-toggle="collapse" data-target="#chart-collapse" aria-expanded="false" aria-controls="chart-collapse">
+    +
+  </button> -->
 </div>
 <div class="col-12 results-wrapper">
+  <div class="row options">
+    <div class="col">
+      <a class="btn btn-dope float-right" href="#">
+        Button
+      </a>
+    </div>
+  </div>
+  <form id="subscriptions-form" method="GET" action="{% url 'subscriptions' %}">
+    <div class="row options-select">
+    </div>
+  </form>
   <div class="row results-list">
     <div class="col">
       {% for subscription in subscriptions %}
         <div class="row">
-          <div class="col-auto pl-0">
+          <div class="col-auto">
             <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
               <img class="img-fluid" src="//images.weserv.nl/?url={{ subscription.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             </a>
           </div>
-          <div class="col px-0">
+          <div class="col">
             <h5>
               <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
                 {{ subscription.parent.title }}

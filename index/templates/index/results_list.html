@@ -5,11 +5,13 @@ dopepod
 {% endblock %}
 
 {% block results %}
-{% if podcasts %}
 <div class="col-auto color results-bar">
   <span class="results-header">
     {{ results_header }}
   </span>
+  <!-- <button class="btn btn-dope float-right" id="show-button" type="button" data-toggle="collapse" data-target="#chart-collapse" aria-expanded="false" aria-controls="chart-collapse">
+    +
+  </button> -->
 </div>
 <div class="col-12 results-wrapper">
   <form id="results-form" method="GET" action="{% url 'browse' %}">
@@ -17,6 +19,7 @@ dopepod
     {% include 'optionsbar.html' %}
   </form>
   <div class="row results-list">
+    {% if podcasts %}
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts1 %}
@@ -61,21 +64,13 @@ dopepod
       {% endfor %}
       </ul>
     </div>
-  </div>
-</div>
-{% else %}
-<div class="col" id="results-wrapper">
-  <form id="results-form" method="GET" action="{% url 'browse' %}">
-    <input type="hidden" id="selected_alphabet" name="selected_alphabet" value="{{ selected_alphabet }}">
-    {% include 'optionsbar.html' %}
-  </form>
-  <div class="row results-row">
+    {% else %}
     <div class="col">
       <p>
         No results :p
       </p>
     </div>
+    {% endif %}
   </div>
 </div>
-{% endif %}
 {% endblock %}
