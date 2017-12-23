@@ -51,8 +51,11 @@ def link_to_local_user(sender, request, sociallogin, **kwargs):
     User = get_user_model()
     users = User.objects.filter(email=email)
     if users:
-        user = users[0]
-        # allauth.account.app_settings.EmailVerificationMethod
-        perform_login(request, user, email_verification='optional')
-        sociallogin.connect(request, user)
-        raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
+        print(user.socialaccount_set)
+        print(sociallogin)
+        if user.socialaccount_set.count() == 0:
+            user = users[0]
+            # allauth.account.app_settings.EmailVerificationMethod
+            perform_login(request, user, email_verification='optional')
+            sociallogin.connect(request, user)
+            raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
