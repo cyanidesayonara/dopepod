@@ -84,42 +84,6 @@ function replaceState(url) {
   $("title")[0].innerText = title;
 }
 
-function loadEpisodes(itunesid) {
-  $("#episodes").html("<div class='col-auto color results-bar'><span class='results-info'>Loading episodes...</span></div>");
-  $.ajax({
-    method: "POST",
-    url: "/episodes/",
-    data: {
-      "itunesid": itunesid,
-    },
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      if ($("#podinfo-main").length) {
-        $("#episodes").html(response);
-        var url = $("#main-wrapper")[0].baseURI;
-        replaceState(url);
-      }
-    });
-}
-
-function loadResults(url) {
-  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#results").html(response);
-      replaceState(url);
-    });
-}
-
 function loadSplash(url, signup) {
   $("#splash").html("<div class='row' style='height:400px;'><div>");
   if (!signup) {
@@ -156,8 +120,45 @@ function loadCenterStage(url) {
     });
 }
 
+function loadEpisodes(itunesid) {
+  console.log("whaddup");
+  $("#episodes").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading episodes...</span></div>");
+  $.ajax({
+    method: "POST",
+    url: "/episodes/",
+    data: {
+      "itunesid": itunesid,
+    },
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      if ($("#podinfo-main").length) {
+        $("#episodes").html(response);
+        var url = $("#main-wrapper")[0].baseURI;
+        replaceState(url);
+      }
+    });
+}
+
+function loadResults(url) {
+  $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading results...</span></div>");
+  $.ajax({
+    type: "GET",
+    url: url,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError){
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      $("#results").html(response);
+      replaceState(url);
+    });
+}
+
 function loadChart() {
-  $("#center-stage").html("<div class='col-auto color results-bar'><span class='results-info'>Loading charts...</span></div>");
+  $("#chart").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading charts...</span></div>");
   var genre = $("input[name=chart-genre]:checked").val();
   var url = "/charts/";
   if (genre != "All") {
@@ -207,18 +208,15 @@ function refreshNavbar() {
 
 // ye ajax search function
 function SearchFunc(url, q, page=null) {
-  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
-
-  /* if there is a previous ajax request, then we abort it and then set xhr to null */
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
-
+  
   data = {
     "q": q,
   }
-
+  
   if ($("#results-form").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
@@ -242,6 +240,8 @@ function SearchFunc(url, q, page=null) {
     }
   }
 
+  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
+  
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -405,7 +405,6 @@ $(document)
     loadEpisodes(itunesid);
     $("#browse-bar").addClass("d-none");
     $("#splash").html("");
-    $("#episodes").html("");
     scrollToTop();
   })
   // go to home view
@@ -494,13 +493,11 @@ $(document)
       })
       .done(function(response) {
         $("#player-drop").html(response);
-        $("#player-drop").addClass("shadow");
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
     $("#audio-el").preload="none";
-    $("#player-drop").removeClass("shadow");
     $("#player-drop").empty();
   })
   .on("click", "#player-minimize", function(e) {

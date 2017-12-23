@@ -1,4 +1,4 @@
-<div class="col-auto color results-bar">
+<div class="col-auto color-1 results-bar">
   <span class="results-header">
     {{ chart_header }}
   </span>
@@ -18,7 +18,7 @@
     <div class="row options-select">
       <div class="collapse" id="chart-genre-collapse">
         {% if chart_genres %}
-          <div class="options-group color" id="chart-genre-buttons" data-toggle="buttons">
+          <div class="options-group color-1" id="chart-genre-buttons" data-toggle="buttons">
             <ul id="button-field">
             {% if chart_selected_genre == 'All' %}
               <label class="btn btn-dope options-button active">
@@ -70,7 +70,7 @@
               <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             </a>
           </div>
-          <div class="col text-truncate">
+          <div class="col">
             <h6 class="result-title">
               <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
                 {{ podcast.title }}

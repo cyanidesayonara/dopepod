@@ -5,7 +5,7 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col-auto color results-bar">
+<div class="col-auto color-1 results-bar">
   <span class="results-header">
     {{ results_header }}
   </span>
@@ -23,7 +23,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts1 %}
-      <li class="text-truncate">
+      <li>
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -34,7 +34,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts2 %}
-      <li class="text-truncate">
+      <li>
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -45,7 +45,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts3 %}
-      <li class="text-truncate">
+      <li>
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>
@@ -56,7 +56,7 @@ dopepod
     <div class="col-lg-3 col-md-6 col-sm-12">
       <ul class="browse-results-list">
       {% for podcast in podcasts4 %}
-      <li class="text-truncate">
+      <li>
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
           {{ podcast.title }}
         </a>

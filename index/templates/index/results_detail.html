@@ -5,7 +5,7 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col-auto color results-bar">
+<div class="col-auto color-1 results-bar">
   <span class="results-header">
     {{ results_header }}
   </span>
@@ -20,24 +20,15 @@ dopepod
   </form>
   <div class="row results-list">
     {% for podcast in podcasts %}
-      <div class="col-lg-2 col-md-3 col-4 result-box">
-        <a class="show-podinfo result-image" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
-        </a>
+      <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
         <h6 class="result-title">
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-            {{ podcast.title }}
-          </a>
+          {{ podcast.title }}
         </h6>
         <p class="result-artist">
-          <span>
-            by
-          </span>
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
-            {{ podcast.artist }}
-          </a>
+          by {{ podcast.artist }}
         </p>
-      </div>
+      </a>
     {% empty %}
       <div class="col">
         <p>
