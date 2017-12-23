@@ -494,12 +494,24 @@ $(document)
       })
       .done(function(response) {
         $("#player-drop").html(response);
+        $("#player-drop").addClass("shadow");
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
-    $("audio-el").preload="none";
+    $("#audio-el").preload="none";
+    $("#player-drop").removeClass("shadow");
     $("#player-drop").empty();
+  })
+  .on("click", "#player-minimize", function(e) {
+    if ($("#player-image").hasClass("d-none")) {
+      $("#audio-el").removeClass("d-none");
+      $("#player-image").removeClass("d-none");
+    }
+    else {
+      $("#audio-el").addClass("d-none");
+      $("#player-image").addClass("d-none");
+    }
   })
   .on("submit", "#sub-form", function(e) {
     e.preventDefault();

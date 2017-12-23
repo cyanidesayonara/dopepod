@@ -1,7 +1,7 @@
 <div class="row">
   <div class="container">
     <div class="row" id="player-wrapper">
-      <div class="col-auto">
+      <div class="col-auto" id="player-image">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
         </a>
@@ -12,15 +12,19 @@
             {{ podcast.title }}
           </h6>
         </a>
-        <p>
+        <span>
           {{ title }} | {{ date }}
-        </p>
+        </span>
+        <br />
         <audio id="audio-el" controls preload="metadata" autoplay>
           <source src="{{ url }}" type="{{ type }}" />
         </audio>
       </div>
+      <button type="button" id="player-minimize" class="close" aria-label="Minimize">
+        <i class="fas fa-window-minimize"></i>
+      </button>
       <button type="button" id="player-close" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+        <i class="far fa-times-circle"></i>
       </button>
     </div>
   </div>
