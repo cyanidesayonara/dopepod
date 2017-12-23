@@ -5,88 +5,138 @@
     <h5>
       Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
     </h5>
-    <div id="login-buttons">
+    <nav class="nav" id="login-signup-buttons" role="tablist">
       {% if signup %}
-      <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-        Log In
-      </button>
-      <button class="btn btn-dope login-signup-toggle active" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-        Sign Up
-      </button>
-    {% else %}
-      <button class="btn btn-dope login-signup-toggle active" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-        Log In
-      </button>
-      <button class="btn btn-dope login-signup-toggle" type="button" data-toggle="collapse" data-target=".login-signup-collapse" aria-expanded="false" aria-controls="login-collapse signup-collapse">
-        Sign Up
-      </button>
-    {% endif %}
-    </div>
+        <a class="btn btn-dope" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="false">
+          Log In
+        </a>
+        <a class="btn btn-dope active" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="true">
+          Sign Up
+        </a>
+      {% else %}
+        <a class="btn btn-dope active" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="true">
+          Log In
+        </a>
+        <a class="btn btn-dope" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="false">
+          Sign Up
+        </a>
+      {% endif %}
+    </nav>
     <div id="login-errors">
     </div>
   </div>
   <div class="col-12" id="splash-bottom">
     <div id="login-wrapper">
-    {% if signup %}
-      <div class="collapse login-signup-collapse" id="login-collapse">
-    {% else %}
-      <div class="collapse login-signup-collapse show" id="login-collapse">
-    {% endif %}
-        <form class="login-form" method="POST" action="{% url 'account_login' %}">
-          {% csrf_token %}
-          <div class="login-form-group">
-            <label class="sr-only" for="login-login">E-mail</label>
-            <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+      <div class="tab-content" id="pills-tabContent">
+        {% if signup %}
+          <div class="tab-pane fade" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
+            <form class="login-form" method="POST" action="{% url 'account_login' %}">
+              {% csrf_token %}
+              <div class="login-form-group">
+                <label class="sr-only" for="login-login">E-mail</label>
+                <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+              </div>
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="login-password">Password</label>
+                  <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-dope login-button">Log In</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <a class="password-link" href="/account/password/reset/">
+                    Forgot Password?
+                  </a>
+                </div>
+                <div class="col form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                    Remember me
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="form-row">
-            <div class="col login-form-group">
-              <label class="sr-only" for="login-password">Password</label>
-              <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-dope login-button">Log In</button>
-            </div>
+          <div class="tab-pane fade show active" id="pills-signup" role="tabpanel" aria-labelledby="pills-signup-tab">
+            <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
+              {% csrf_token %}
+              <div class="login-form-group">
+                <label class="sr-only" for="signup-email">E-mail</label>
+                <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+              </div>
+              <div class="login-form-group">
+                <label class="sr-only" for="signup-password1">Password</label>
+                <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
+              </div>
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="signup-password">Password (again)</label>
+                  <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-dope signup-button">Sign Up</button>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="form-row">
-            <div class="col">
-              <a class="password-link" href="/account/password/reset/">
-                Forgot Password?
-              </a>
-            </div>
-            <div class="col form-check form-check-inline">
-              <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                Remember me
-              </label>
-            </div>
+        {% else %}
+          <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
+            <form class="login-form" method="POST" action="{% url 'account_login' %}">
+              {% csrf_token %}
+              <div class="login-form-group">
+                <label class="sr-only" for="login-login">E-mail</label>
+                <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+              </div>
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="login-password">Password</label>
+                  <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-dope login-button">Log In</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <a class="password-link" href="/account/password/reset/">
+                    Forgot Password?
+                  </a>
+                </div>
+                <div class="col form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                    Remember me
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    {% if signup %}
-      <div class="collapse login-signup-collapse show" id="signup-collapse">
-    {% else %}
-      <div class="collapse login-signup-collapse" id="signup-collapse">
-    {% endif %}
-        <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
-        {% csrf_token %}
-        <div class="login-form-group">
-          <label class="sr-only" for="signup-email">E-mail</label>
-          <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
-        </div>
-        <div class="login-form-group">
-          <label class="sr-only" for="signup-password1">Password</label>
-          <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
-        </div>
-        <div class="form-row">
-          <div class="col login-form-group">
-            <label class="sr-only" for="signup-password">Password (again)</label>
-            <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+          <div class="tab-pane fade" id="pills-signup" role="tabpanel" aria-labelledby="pills-signup-tab">
+            <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
+              {% csrf_token %}
+              <div class="login-form-group">
+                <label class="sr-only" for="signup-email">E-mail</label>
+                <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+              </div>
+              <div class="login-form-group">
+                <label class="sr-only" for="signup-password1">Password</label>
+                <input class="form-control login-field" type="password" name="password1" placeholder="Password" required="" id="signup-password1">
+              </div>
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="signup-password">Password (again)</label>
+                  <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-dope signup-button">Sign Up</button>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-dope signup-button">Sign Up</button>
-          </div>
-        </div>
-      </form>
+        {% endif %}
       </div>
     </div>
     <div id="social-login">

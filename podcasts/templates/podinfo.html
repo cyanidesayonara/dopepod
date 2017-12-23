@@ -71,7 +71,7 @@
       {{ podcast.description }}
     </p>
   </div>
-  <div class="col" id="podinfo-bottom">
+  <div class="col-auto ml-auto" id="podinfo-bottom">
     {% if user.is_authenticated %}
     <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
     id="{{ podcast.itunesid }}" method="POST">

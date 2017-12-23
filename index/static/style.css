@@ -163,10 +163,11 @@ body {
   font-size: 16px;
   padding: 5px 7px;
   background-color: #fff;
+  border: none;
 }
 .btn-dope.active, .btn-dope:hover, .btn-dope.focus, .btn-dope:focus{
   color: #fff;
-  background-color: rgba(76,222,181,1);
+  background: rgba(76,222,181,1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   box-shadow: rgba(0,0,0,.3) 0 0px 3px;
@@ -251,9 +252,15 @@ body {
   min-height: 100vh;
 }
 
-.page-button {
-  margin: 0;
+#page-buttons {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
+.page-button {
+  margin: 0 1px 0;
+  padding: 4px 6px;
+}
+
 
 .page-list {
   list-style: none;
@@ -265,6 +272,16 @@ body {
 }
 .options-group {
   background-color: rgba(76,222,181,1);
+}
+#browse-toggle{
+  margin-top: 8px;
+}
+.toggle[aria-expanded=true]] {
+  color: #fff;
+  background: rgba(76,222,181,1);
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0px 3px;
 }
 
 .options-button {
@@ -304,15 +321,14 @@ body {
 
 /* MULTI BAR */
 #multibar {
-
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 #multibar-scroll {
   margin-top: 44px;
   z-index: 95;
 }
-#browse-toggle {
-  margin-top: 8px;
-}
+
 #browse-bar {
   padding-top: 6px;
   padding-bottom: 6px;
@@ -353,13 +369,13 @@ body {
 }
 
 #search-field {
-  padding: .5rem 0 .5rem .5rem;
+  font-size: 16px;
   width: 250px;
 }
 #search-button {
   position: absolute;
   left: 220px;
-  top: 13px;
+  top: 4px;
   z-index: 50;
   background-color: inherit;
   border: 0;
@@ -387,6 +403,9 @@ body {
 
 #center-stage {
   background-color: #fff;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
 
 #splash {
@@ -424,8 +443,9 @@ body {
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
-#login-buttons {
-  padding: 10px 0;
+#login-signup-buttons {
+  display: block;
+  padding: 10px;
 }
 #social-login {
   text-align: center;
@@ -449,12 +469,7 @@ body {
 .close:focus {
   outline: 0;
 }
-#player-minimize {
-  -webkit-appearance: none;
-  position: absolute;
-  top: 0;
-  right: 40px;
-}
+
 .login-field {
   padding: 5px 8px;
   border-radius: .25rem;
@@ -487,8 +502,8 @@ body {
   padding: 15px;
 }
 
-/* PODINFO */
 #podinfo {
+  position: relative;
   padding: 15px 15px 0 15px;
   height: 400px;
   background-color: #fff;
@@ -500,13 +515,17 @@ body {
   overflow: hidden;
 }
 #podinfo-side {
-  height: 330px;
+  height: 360px;
   padding-top: 15px;
   padding-bottom: 0;
   overflow: hidden;
 }
 #podinfo-bottom {
-  padding: 10px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 #podinfo-side-list {
   list-style: none;
@@ -516,7 +535,7 @@ body {
 }
 #podinfo-side-list li {
   margin-bottom: 4px;
-  max-height: 37px;
+  max-height: 65px;
   overflow: hidden;
 }
 
@@ -633,7 +652,7 @@ hr .h-line {
 }
 
 #player-wrapper a, #player-wrapper a:hover {
-  color: #000;
+  color: #2e2e2e;
   text-decoration: none;
 }
 #player-wrapper {
@@ -641,6 +660,17 @@ hr .h-line {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+#player-buttons {
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 15px;
+}
+#player-close {
+  margin-left: 10px;
+}
+
 
 #footer {
   padding-top: 10px;

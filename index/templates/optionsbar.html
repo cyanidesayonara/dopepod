@@ -57,16 +57,18 @@
         </ul>
       </div>
     {% endif %}
+    <div class="float-right" id="option-buttons">
     {% if genres %}
-      <a class="btn btn-dope float-right" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="true" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+      <a class="btn btn-dope toggle" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="false" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
         Genre
       </a>
     {% endif %}
     {% if languages %}
-      <a class="btn btn-dope float-right" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="true" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+      <a class="btn btn-dope toggle" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="false" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
         Language
       </a>
     {% endif %}
+  </div>
   </div>
 </div>
 <div class="row options-select">
@@ -74,7 +76,7 @@
     <div class="item">
       <div id="options-accordion1" class="collapse" role="tabpanel">
         {% if genres %}
-          <div class="options-group-1" id="genre-buttons" data-toggle="buttons">
+          <div class="options-group color-1" id="genre-buttons" data-toggle="buttons">
             <ul id="button-field">
               {% if selected_genre == 'All' %}
               <li>

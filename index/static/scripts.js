@@ -84,11 +84,8 @@ function replaceState(url) {
   $("title")[0].innerText = title;
 }
 
-function loadSplash(url, signup) {
+function loadSplash(url, signup=null) {
   $("#splash").html("<div class='row' style='height:400px;'><div>");
-  if (!signup) {
-    signup = null;
-  }
   $.ajax({
     type: "POST",
     url: url,
@@ -542,7 +539,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     pushState();
-    loadSplash("/dashboard/", false);
+    loadSplash("/dashboard/");
     $("#center-stage").html("");
     scrollToTop();
   })
@@ -575,6 +572,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         $("#login-errors").html(xhr.responseJSON.html);
+        button.text("Log In");
       })
       .done(function() {
         refreshCookie();
@@ -598,6 +596,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         $("#login-errors").html(xhr.responseJSON.html);
+        button.text("Sign Up");
       })
       .done(function() {
         refreshCookie();

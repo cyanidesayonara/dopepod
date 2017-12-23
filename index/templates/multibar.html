@@ -2,9 +2,15 @@
   <div class="row">
     <!-- SEARCH BAR -->
     <div class="col">
-      <a class="btn btn-dope" id="browse-toggle" href="{% url 'browse' %}">
-        A-Z
-      </a>
+      {% if browse %}
+        <a class="btn btn-dope toggle" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
+          A-Z
+        </a>
+      {% else %}
+        <a class="btn btn-dope toggle" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
+          A-Z
+        </a>
+      {% endif %}
     </div>
     <div class="col-auto">
       <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
@@ -31,9 +37,9 @@
   <div class="row">
     <!-- BROWSE BAR -->
     {% if browse %}
-    <div class="col" id="browse-bar">
+    <div class="col-12 collapse show" id="browse-collapse">
     {% else %}
-    <div class="col d-none" id="browse-bar">
+    <div class="col-12 collapse" id="browse-collapse">
     {% endif %}
       <form id="browse-form" method="GET" action="{% url 'browse' %}">
         <div class="alphabet-group options-group" id="alphabet-buttons" data-toggle="buttons">
