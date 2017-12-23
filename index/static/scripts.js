@@ -236,7 +236,7 @@ function SearchFunc(url, q, page=null) {
     }
   }
 
-  $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
+  $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",
