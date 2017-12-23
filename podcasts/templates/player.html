@@ -3,7 +3,7 @@
     <div class="row" id="player-wrapper">
       <div class="col-auto">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=100&h=100&t=absolute" />
+          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
         </a>
       </div>
       <div class="col">
@@ -15,8 +15,8 @@
         <p>
           {{ title }} | {{ date }}
         </p>
-        <audio controls preload="metadata" autoplay>
-          <source src="{{ url }}" type="{{ type }}"/>
+        <audio id="audio-el" controls preload="metadata" autoplay>
+          <source src="{{ url }}" type="{{ type }}" />
         </audio>
       </div>
       <button type="button" id="player-close" class="close" aria-label="Close">

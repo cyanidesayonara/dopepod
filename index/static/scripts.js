@@ -498,6 +498,7 @@ $(document)
   })
   // close player
   .on("click", "#player-close", function(e) {
+    $("audio-el").preload="none";
     $("#player-drop").empty();
   })
   .on("submit", "#sub-form", function(e) {
@@ -552,6 +553,8 @@ $(document)
   // login or signup, refresh after
   .on("submit", ".login-form", function (e) {
     e.preventDefault();
+    var button = $(this).find(".login-button");
+    button.text("Loading...");
     var data = $(this).serialize();
     var method = this.method;
     var url = this.action;
@@ -573,6 +576,8 @@ $(document)
   })
   .on("submit", ".signup-form", function (e) {
     e.preventDefault();
+    var button = $(this).find(".signup-button");
+    button.text("Loading...");
     var data = $(this).serialize();
     var method = this.method;
     var url = this.action;

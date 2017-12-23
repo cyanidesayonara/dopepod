@@ -91,9 +91,11 @@ ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_PASSWORD_MIN_LENGTH = 8
+SOCIALACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_ADAPTER = "dopepod.adapter.MyLoginAccountAdapter"
+LOGIN_REDIRECT_URL = "/subscriptions/"
 
 # email verif
 #ACCOUNT_EMAIL_VERIFICATION = "mandatory"
@@ -107,7 +109,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 LOGIN_URL = '/account/login/'
 LOGOUT_URL = '/account/logout/'
-LOGIN_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'dopepod.urls'
 
@@ -137,7 +138,7 @@ SESSION_COOKIE_SECURE = False
 #         ],
 #         'EXCHANGE_TOKEN': True,
 #         'LOCALE_FUNC': lambda request: 'en_US',
-#         'VERIFIED_EMAIL': False,
+#         'VERIFIED_EMAIL': True,
 #         'VERSION': 'v2.5',
 #     }
 # }
@@ -160,7 +161,8 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
-        }
+        },
+        'VERIFIED_EMAIL': True
     }
 }
 
@@ -228,7 +230,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = local_settings.SENDGRID_API_KEY
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = local_settings.EMAIL_HOST
