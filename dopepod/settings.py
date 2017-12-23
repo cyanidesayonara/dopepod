@@ -53,6 +53,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
+    "sendgrid",
+
     # django-allauth
     'allauth',
     'allauth.account',
@@ -233,12 +235,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = local_settings.SENDGRID_API_KEY
-
 EMAIL_USE_TLS = True
-EMAIL_HOST = local_settings.EMAIL_HOST
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
-EMAIL_PORT = local_settings.EMAIL_PORT
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = 'noreply@dopepod.me'
 
 # Email Configuration ==========================================================
 #ADMINS = [('Me', 'my@email'), ]
