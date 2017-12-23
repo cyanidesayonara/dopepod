@@ -161,7 +161,7 @@ body {
 .btn-dope {
   color: #2e2e2e;
   font-size: 16px;
-  padding: 5px 7px;
+  padding: 6px 8px;
   background-color: #fff;
   border: none;
 }
@@ -276,13 +276,19 @@ body {
 #browse-toggle{
   margin-top: 8px;
 }
-.toggle[aria-expanded=true]] {
+.toggle[aria-expanded="true"] {
   color: #fff;
   background: rgba(76,222,181,1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   box-shadow: rgba(0,0,0,.3) 0 0px 3px;
 }
+.show-button {
+  font-size: 14px;
+  margin-left: 10px;
+  color: #2e2e2e;
+}
+
 
 .options-button {
   margin-right: 8px;
@@ -550,6 +556,8 @@ body {
 #podinfo-description {
 }
 #show-button {
+  position: absolute;
+  color: #2e2e2e;
   margin-left: 10px;
 }
 .hidden-row {
@@ -567,6 +575,9 @@ body {
 #episodes-table thead th {
   border-top: none;
 }
+.episode-buttons {
+  margin: 10px;
+}
 
 hr .h-line {
   height: 1px;
@@ -583,6 +594,7 @@ hr .h-line {
   border: 1px solid #ddd;
 }
 .results-bar {
+  position: relative;
   overflow: hidden;
   max-width: 100%;
   margin-top: 15px;

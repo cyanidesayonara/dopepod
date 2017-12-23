@@ -118,7 +118,6 @@ function loadCenterStage(url) {
 }
 
 function loadEpisodes(itunesid) {
-  console.log("whaddup");
   $("#episodes").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
@@ -209,11 +208,11 @@ function SearchFunc(url, q, page=null) {
     xhr.abort();
     xhr = null;
   }
-  
+
   data = {
     "q": q,
   }
-  
+
   if ($("#results-form").length) {
     if ($("#genre-buttons").length) {
       var genre = $("input[name=genre]:checked").val();
@@ -238,7 +237,7 @@ function SearchFunc(url, q, page=null) {
   }
 
   $("#results").html("<div class='col-auto color results-bar'><span class='results-info'>Loading results...</span></div>");
-  
+
   xhr = $.ajax({
     method: "GET",
     url: url,
@@ -533,6 +532,7 @@ $(document)
   })
   .on("click", ".password-link", function(e) {
     e.preventDefault();
+    $("#pills-password-tab").tab("show");
   })
   // open login register
   .on("click", ".ajax-login", function(e) {
@@ -584,6 +584,30 @@ $(document)
   .on("submit", ".signup-form", function (e) {
     e.preventDefault();
     var button = $(this).find(".signup-button");
+    button.text("Loading...");
+    var data = $(this).serialize();
+    var method = this.method;
+    var url = this.action;
+    $.ajax({
+      data: data,
+      method: method,
+      url: url,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        $("#login-errors").html(xhr.responseJSON.html);
+        button.text("Sign Up");
+      })
+      .done(function() {
+        refreshCookie();
+        refreshNavbar();
+        loadSplash("/dashboard/")
+        scrollToTop();
+      });
+  })
+  .on("submit", ".password-form", function (e) {
+    e.preventDefault();
+    var button = $(this).find(".password-button");
     button.text("Loading...");
     var data = $(this).serialize();
     var method = this.method;

@@ -9,9 +9,11 @@
 <div class="col-12 collapse results-wrapper show" id="chart-collapse">
   <div class="row options">
     <div class="col">
-      <a class="btn btn-dope float-right" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-        Genre
-      </a>
+      <div class="float-right" id="option-buttons">
+        <a class="btn btn-dope toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+          Genre
+        </a>
+      </div>
     </div>
   </div>
   <form id="chart-form" method="GET" action="{% url 'charts' %}">

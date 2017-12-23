@@ -2,12 +2,12 @@
   <div class="row">
     <!-- SEARCH BAR -->
     <div class="col">
-      {% if browse %}
-        <a class="btn btn-dope toggle" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
+      {% if podcasts1 %}
+        <a class="btn btn-dope toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
           A-Z
         </a>
       {% else %}
-        <a class="btn btn-dope toggle" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
+        <a class="btn btn-dope toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
           A-Z
         </a>
       {% endif %}
@@ -36,7 +36,7 @@
   </div>
   <div class="row">
     <!-- BROWSE BAR -->
-    {% if browse %}
+    {% if podcasts1 %}
     <div class="col-12 collapse show" id="browse-collapse">
     {% else %}
     <div class="col-12 collapse" id="browse-collapse">

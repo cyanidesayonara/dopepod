@@ -10,6 +10,9 @@
         <a class="btn btn-dope" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="false">
           Log In
         </a>
+        <span>
+          or
+        </span>
         <a class="btn btn-dope active" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="true">
           Sign Up
         </a>
@@ -17,10 +20,16 @@
         <a class="btn btn-dope active" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="true">
           Log In
         </a>
+        <span>
+          or
+        </span>
         <a class="btn btn-dope" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="false">
           Sign Up
         </a>
       {% endif %}
+      <a class="d-none" id="pills-password-tab" data-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">
+        Log In
+      </a>
     </nav>
     <div id="login-errors">
     </div>
@@ -33,7 +42,7 @@
             <form class="login-form" method="POST" action="{% url 'account_login' %}">
               {% csrf_token %}
               <div class="login-form-group">
-                <label class="sr-only" for="login-login">E-mail</label>
+                <label class="sr-only" for="login-login">Email</label>
                 <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
               </div>
               <div class="form-row">
@@ -47,7 +56,7 @@
               </div>
               <div class="form-row">
                 <div class="col">
-                  <a class="password-link" href="/account/password/reset/">
+                  <a class="password-link" href="/x=y">
                     Forgot Password?
                   </a>
                 </div>
@@ -64,7 +73,7 @@
             <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
               {% csrf_token %}
               <div class="login-form-group">
-                <label class="sr-only" for="signup-email">E-mail</label>
+                <label class="sr-only" for="signup-email">Email</label>
                 <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
               </div>
               <div class="login-form-group">
@@ -82,12 +91,27 @@
               </div>
             </form>
           </div>
+          <div class="tab-pane fade" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
+            {% if user.is_authenticated %}
+            <p>
+              Already logged in, dummy
+            </p>
+            {% endif %}
+            <p>
+              Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.
+            </p>
+            <form method="POST" action="{% url 'account_reset_password' %}" class="password_reset">
+              {% csrf_token %}
+              <input type="email" name="email" size="30" placeholder="E-mail address" required="" id="forgot-email">
+              <input class="btn btn-dope" type="submit" value="Reset my password" />
+            </form>
+          </div>
         {% else %}
           <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
             <form class="login-form" method="POST" action="{% url 'account_login' %}">
               {% csrf_token %}
               <div class="login-form-group">
-                <label class="sr-only" for="login-login">E-mail</label>
+                <label class="sr-only" for="login-login">Email</label>
                 <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
               </div>
               <div class="form-row">
@@ -101,7 +125,7 @@
               </div>
               <div class="form-row">
                 <div class="col">
-                  <a class="password-link" href="/account/password/reset/">
+                  <a class="password-link" href="/?x=z">
                     Forgot Password?
                   </a>
                 </div>
@@ -118,7 +142,7 @@
             <form class="signup-form" method="POST" action="{% url 'account_signup' %}">
               {% csrf_token %}
               <div class="login-form-group">
-                <label class="sr-only" for="signup-email">E-mail</label>
+                <label class="sr-only" for="signup-email">Email</label>
                 <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
               </div>
               <div class="login-form-group">
@@ -127,11 +151,30 @@
               </div>
               <div class="form-row">
                 <div class="col login-form-group">
-                  <label class="sr-only" for="signup-password">Password (again)</label>
+                  <label class="sr-only" for="signup-password2">Password (again)</label>
                   <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
                 </div>
                 <div class="col-auto">
                   <button type="submit" class="btn btn-dope signup-button">Sign Up</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="tab-pane fade" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
+            <p>
+              Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.
+            </p>
+            <form class="password-form" method="POST" action="{% url 'account_reset_password' %}" class="password_reset">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="forgot-email">Email</label>
+                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="E-mail address" required="">
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-dope password-button" type="submit">
+                    Reset
+                  </button>
                 </div>
               </div>
             </form>
