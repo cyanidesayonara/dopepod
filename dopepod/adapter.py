@@ -47,12 +47,13 @@ def link_to_local_user(sender, request, sociallogin, **kwargs):
     * https://github.com/pennersr/django-allauth/issues/215
 
     '''
-    email_address = sociallogin.account.extra_data['email']
+    email = sociallogin.account.extra_data['email']
     User = get_user_model()
-    users = User.objects.filter(email=email_address)
+    users = User.objects.filter(email=email)
     if users:
         user = users[0]
         if user.socialaccount_set.count() == 0:
             # allauth.account.app_settings.EmailVerificationMethod
-            perform_login(request, users[0], email_verification='optional')
+            perform_login(request, user, email_verification='optional')
+            sociallogin.connect(request, user)
             raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
