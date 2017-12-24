@@ -1,3 +1,4 @@
+// HISTORY API
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
@@ -12,40 +13,6 @@ $(window).on("popstate", function(event) {
     // }
   }
 })
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = jQuery.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + "=")) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
-function csrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
-  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-function refreshCookie() {
-  // for sending csrf token on every ajax POST request
-  var csrftoken = getCookie("csrftoken");
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-          xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
-}
-
 function pushState() {
   var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
@@ -63,7 +30,6 @@ function pushState() {
   history.pushState(state, "", url);
   $("title")[0].innerText = title;
 }
-
 function replaceState(url) {
   var context = $("#main-wrapper")[0].innerHTML;
   var title = "dopepod";
@@ -84,6 +50,53 @@ function replaceState(url) {
   $("title")[0].innerText = title;
 }
 
+// LOGIN REFRESH
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function refreshCookie() {
+  // for sending csrf token on every ajax POST request
+  var csrftoken = getCookie("csrftoken");
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    }
+  });
+}
+function refreshNavbar() {
+  // refresh navbar (and maybe other stuff as well?)
+  $.ajax({
+    type: "GET",
+    url: "/navbar/",
+  })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      console.log(thrownError);
+    })
+    .done(function(response) {
+      // refresh navbar
+      $("#navbar-drop").html(response);
+    });
+}
+
+// LOADERS
 function loadSplash(url, signup=null) {
   $("#splash").html("<div class='row' style='height:400px;'><div>");
   $.ajax({
@@ -101,7 +114,6 @@ function loadSplash(url, signup=null) {
       replaceState("/");
     });
 }
-
 function loadCenterStage(url) {
   $("#center-stage").html("<div class='row' style='height:400px;'><div>");
   $.ajax({
@@ -116,7 +128,6 @@ function loadCenterStage(url) {
       replaceState(url);
     });
 }
-
 function loadEpisodes(itunesid) {
   $("#episodes").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading episodes...</span></div>");
   $.ajax({
@@ -137,7 +148,6 @@ function loadEpisodes(itunesid) {
       }
     });
 }
-
 function loadResults(url) {
   $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading results...</span></div>");
   $.ajax({
@@ -152,7 +162,6 @@ function loadResults(url) {
       replaceState(url);
     });
 }
-
 function loadChart() {
   $("#chart").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading charts...</span></div>");
   var genre = $("input[name=chart-genre]:checked").val();
@@ -174,34 +183,6 @@ function loadChart() {
       $("#charts").html(response);
     });
 }
-
-function scrollToTop() {
-  $('html, body').animate({
-    scrollTop: $("#main-wrapper").offset().top
-  }, 200);
-}
-
-function scrollToMultibar() {
-  $('html, body').animate({
-    scrollTop: 400
-  }, 200);
-}
-
-function refreshNavbar() {
-  // refresh navbar (and maybe other stuff as well?)
-  $.ajax({
-    type: "GET",
-    url: "/navbar/",
-  })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      // refresh navbar
-      $("#navbar-drop").html(response);
-    });
-}
-
 // ye ajax search function
 function SearchFunc(url, q, page=null) {
   if(xhr != null) {
@@ -257,15 +238,26 @@ function SearchFunc(url, q, page=null) {
   return xhr;
 }
 
-function showStage() {
-  $("#stage").addClass("open");
-  $("#flap").addClass("extended");
+// SCROLLTO
+function scrollToTop() {
+  $('html, body').animate({
+    scrollTop: $("#main-wrapper").offset().top
+  }, 200);
+}
+function scrollToMultibar() {
+  $('html, body').animate({
+    scrollTop: 400
+  }, 200);
 }
 
-function hideStage() {
-  $("#stage").removeClass("open");
-  $("#flap").removeClass("extended");
-}
+// function showStage() {
+//   $("#stage").addClass("open");
+//   $("#flap").addClass("extended");
+// }
+// function hideStage() {
+//   $("#stage").removeClass("open");
+//   $("#flap").removeClass("extended");
+// }
 
 // after page loads
 $(document)
@@ -275,13 +267,7 @@ $(document)
     xhr = null;
     timeout = 0;
   })
-  .on("show.bs.collapse", function () {
-    $(".more-collapse.show").collapse("hide");
-  })
-  // remove focus from button (focus would be saved on state)
-  // .on("click", "#search-button, #alphabet-buttons, #genre-buttons, #language-buttons, #view-buttons", function() {
-  //   $(this.children).removeClass("focus");
-  // })
+  // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
     clearTimeout(timeout);
@@ -309,6 +295,7 @@ $(document)
       }
     }, 250);
   })
+  // BROWSE
   // browse when "browse" button is clicked
   .on("submit", "#browse-form", function(e) {
       e.preventDefault();
@@ -329,7 +316,8 @@ $(document)
     pushState();
     SearchFunc(url, q);
     $("#episodes").html("");
- })
+  })
+  //RESULTS
   .on("submit", "#results-form", function(e) {
     e.preventDefault();
     clearTimeout(timeout);
@@ -384,6 +372,7 @@ $(document)
       }
     }, 250);
   })
+  // CHARTS
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
     loadChart();
@@ -391,12 +380,14 @@ $(document)
   .on("change", "#chart-genre-buttons", function() {
     loadChart();
   })
+  // LINKS
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
+    $("#browse-collapse").collapse("hide");
     loadCenterStage(url);
     loadEpisodes(itunesid);
     $("#browse-bar").addClass("d-none");
@@ -407,6 +398,7 @@ $(document)
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
+    $("#browse-collapse").collapse("hide");
     loadSplash("/dashboard/");
     $("#browse-bar").addClass("d-none");
     $("#center-stage").html("");
@@ -418,8 +410,8 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     pushState();
+    $("#browse-collapse").collapse("show");
     loadResults("/browse/");
-    $("#browse-bar").removeClass("d-none");
     $("#episodes").html("");
     scrollToMultibar();
    })
@@ -427,6 +419,7 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     pushState();
+    $("#browse-collapse").collapse("hide");
     loadResults("/subscriptions/");
     $("#browse-bar").addClass("d-none");
     $("#episodes").html("");
@@ -436,22 +429,14 @@ $(document)
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     pushState();
+    $("#browse-collapse").collapse("hide");
     $("#splash").html("");
     loadCenterStage("/settings/");
     $("#browse-bar").addClass("d-none");
     $("episodes").html("");
     scrollToTop();
   })
-  .on("click", "#browse-toggle", function(e) {
-    e.preventDefault();
-    if ($("#browse-bar").hasClass("d-none")) {
-      $("#browse-bar").removeClass("d-none");
-    }
-    else {
-      $("#browse-bar").addClass("d-none");
-    }
-
-  })
+  // FORMS
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
@@ -473,6 +458,31 @@ $(document)
         $("#settings-alert").removeClass("d-none");
       });
   })
+  .on("submit", "#sub-form", function(e) {
+    e.preventDefault();
+    // button, gets new value
+    var button = $(this).find(".sub-button");
+    button.text("Loading...");
+    var data = $(this).serialize();
+    var url = this.action;
+    var method = this.method;
+    $.ajax({
+      method: method,
+      url: url,
+      data: data,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError){
+        console.log(thrownError);
+        loadCenterStage("/account/login/");
+        button.text("Fail :(");
+      })
+      .done(function(response) {
+        var url = $("#main-wrapper")[0].baseURI;
+        loadCenterStage(url);
+        replaceState(url);
+      });
+  })
+  // PLAYER
   // put episode in player
   .on("click", ".play", function(e) {
     e.preventDefault();
@@ -506,34 +516,7 @@ $(document)
       $("#player-image").addClass("d-none");
     }
   })
-  .on("submit", "#sub-form", function(e) {
-    e.preventDefault();
-    // button, gets new value
-    var button = $(this).find(".sub-button");
-    button.text("Loading...");
-    var data = $(this).serialize();
-    var url = this.action;
-    var method = this.method;
-    $.ajax({
-      method: method,
-      url: url,
-      data: data,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
-        loadCenterStage("/account/login/");
-        button.text("Fail :(");
-      })
-      .done(function(response) {
-        var url = $("#main-wrapper")[0].baseURI;
-        loadCenterStage(url);
-        replaceState(url);
-      });
-  })
-  .on("click", ".password-link", function(e) {
-    e.preventDefault();
-    $("#pills-password-tab").tab("show");
-  })
+  // LOGIN & SIGNUP
   // open login register
   .on("click", ".ajax-login", function(e) {
     e.preventDefault();
@@ -552,9 +535,12 @@ $(document)
     $("#center-stage").html("");
     scrollToTop();
   })
+  .on("click", ".password-link", function(e) {
+    e.preventDefault();
+    $("#pills-password-tab").tab("show");
+  })
   .on("click", ".login-signup-toggle", function() {
     $("#login-errors").html("");
-    $("#signup-errors").html("");
   })
   // login or signup, refresh after
   .on("submit", ".login-form", function (e) {
@@ -628,4 +614,8 @@ $(document)
         loadSplash("/dashboard/")
         scrollToTop();
       });
+  })
+  // BOOTSTRAP
+  .on("show.bs.collapse", function () {
+    $(".more-collapse.show").collapse("hide");
   })

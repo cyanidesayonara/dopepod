@@ -55,24 +55,26 @@
             <tr>
               <td colspan="4" class="hidden-row">
                 <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
-                  <span class="episode-summary">
-                    {{ episode.summary }}
-                  </span>
-                  <div class="episode-buttons float-right">
-                    <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
-                      {% csrf_token %}
-                      <input type="hidden" name="url" value="{{ episode.url }}">
-                      <input type="hidden" name="type" value="{{ episode.type }}">
-                      <input type="hidden" name="title" value="{{ episode.title }}">
-                      <input type="hidden" name="date" value="{{ episode.pubDate }}">
-                      <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
-                      <button class="btn btn-dope active" type="submit">
-                        Play
-                      </button>
-                    </form>
-                    <a class="btn btn-dope active" href="{{ episode.url }}" title="Download" download>
-                      Download
-                    </a>
+                  <div class="episode-more">
+                    <span class="episode-summary">
+                      {{ episode.summary }}
+                    </span>
+                    <div class="episode-buttons float-right">
+                      <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+                        {% csrf_token %}
+                        <input type="hidden" name="url" value="{{ episode.url }}">
+                        <input type="hidden" name="type" value="{{ episode.type }}">
+                        <input type="hidden" name="title" value="{{ episode.title }}">
+                        <input type="hidden" name="date" value="{{ episode.pubDate }}">
+                        <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+                        <button class="btn btn-dope active" type="submit">
+                          Play
+                        </button>
+                      </form>
+                      <a class="btn btn-dope active" href="{{ episode.url }}" title="Download" download>
+                        Download
+                      </a>
+                    </div>
                   </div>
                 </div>
               </td>

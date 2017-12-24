@@ -191,14 +191,14 @@ body {
 }
 
 .shadow-down {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid rgba(0,0,0,.3);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 
 .shadow-up {
-  border-top: 1px solid #000;
+  border-top: 1px solid rgba(0,0,0,.3);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
@@ -393,7 +393,7 @@ body {
   outline: 1px #fff;
 }
 #search-button:hover {
-  color: #ddd;
+  color: rgba(76,222,181,1);
 }
 #q {
   border-radius: .25rem;
@@ -577,6 +577,11 @@ body {
 }
 .episode-buttons {
   margin: 10px;
+}
+.episode-more {
+  height: 100%;
+  margin: 10px;
+  background: #fff;
 }
 
 hr .h-line {
