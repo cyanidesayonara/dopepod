@@ -114,7 +114,7 @@ class Podcast(models.Model):
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/xml'
 
         try:
-            response = requests.get(url, headers=headers, timeout=30)
+            response = requests.get(url, headers=headers, timeout=5)
             response.raise_for_status()
 
             root = etree.XML(response.content)
@@ -323,9 +323,10 @@ class Podcast(models.Model):
             podcast.artworkUrl = item['artworkUrl']
             podcast.podcastUrl = item['podcastUrl']
             podcast.save()
+            logger.error("pod updated", podcast.itunesid)
 
         except Podcast.DoesNotExist:
-            Podcast.objects.create(
+            podcast = Podcast.objects.create(
                 itunesid=item['itunesid'],
                 feedUrl=item['feedUrl'],
                 title=item['title'],
@@ -339,6 +340,7 @@ class Podcast(models.Model):
                 artworkUrl=item['artworkUrl'],
                 podcastUrl=item['podcastUrl'],
             )
+            logger.error("pod updated", podcast.itunesid)
 
     def scrape_podcast(itunesid):
         """
@@ -353,7 +355,7 @@ class Podcast(models.Model):
         # get data from itunes lookup
         url = 'https://itunes.apple.com/lookup?id=' + itunesid
         try:
-            response = requests.get(url, headers=headers, timeout=30)
+            response = requests.get(url, headers=headers, timeout=5)
             response.raise_for_status()
             jsonresponse = response.json()
             data = jsonresponse['results'][0]
@@ -364,7 +366,7 @@ class Podcast(models.Model):
 
         # get more data from itunes artist page
         try:
-            response = requests.get(itunesUrl, headers=headers, timeout=30)
+            response = requests.get(itunesUrl, headers=headers, timeout=5)
             response.raise_for_status()
 
             tree = html.fromstring(response.text)
@@ -397,7 +399,7 @@ class Podcast(models.Model):
                 # make sure feedUrl works
                 try:
                     logger.error(feedUrl)
-                    response = requests.get(feedUrl, headers=headers, timeout=30)
+                    response = requests.get(feedUrl, headers=headers, timeout=5)
                     response.raise_for_status()
                     try:
                         return Podcast.objects.get(itunesid=itunesid)

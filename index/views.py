@@ -26,8 +26,6 @@ def index(request):
             return render(request, 'index/index.html', {})
 
         user = request.user
-        genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts()
 
         # chart and search bar for non-ajax
         genres = Genre.get_primary_genres()
@@ -54,7 +52,6 @@ def index(request):
             'alphabet': ALPHABET,
         }
 
-
         return render(request, 'index/index.html', context)
 
 def charts(request):
@@ -68,21 +65,17 @@ def charts(request):
         user = request.user
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts(genre)
-        chart_header = 'Top 50 podcasts on iTunes' + ('' if genre == None else ' in  ' + str(genre))
+        chart_header = 'Top 50 podcasts on iTunes'
 
         context = {
             'chart': chart[:50],
             'chart_genres': genres,
-            'chart_selected_genre': genre if genre else 'All',
+            'chart_selected_genre': genre,
             'chart_header': chart_header,
         }
 
         if request.is_ajax():
             return render(request, 'charts.html', context)
-
-        subscriptions = None
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions(user)
 
         # search bar for non-ajax
         context.update({
@@ -125,10 +118,9 @@ def search(request):
             except EmptyPage:
                 # If page is out of range (e.g. 9999), deliver last page of results.
                 podcasts = paginator.page(paginator.num_pages)
-            pagecount = paginator.num_pages
 
             context = {
-                'pagecount': pagecount,
+                'paginator': paginator,
                 'genres': genres,
                 'languages': languages,
                 'selected_q': q,
@@ -143,21 +135,13 @@ def search(request):
 
             chart = Podcast.get_charts()
             chart_header = 'Top 50 podcasts on iTunes'
-            chart_selected_genre = 'All'
-
-            subscriptions = None
-            if user.is_authenticated:
-                subscriptions = Subscription.get_subscriptions(user)
 
             context.update({
-                'subscriptions': subscriptions,
                 'splash': True,
                 'stage_open': True,
-                'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
-                'chart_selected_genre': chart_selected_genre,
                 'chart_header': chart_header,
             })
 
@@ -174,12 +158,12 @@ def browse(request):
 
     if request.method == 'GET':
         user = request.user
+        alphabet = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
         page = int(request.GET.get('page', '1'))
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
-        alphabet = request.GET.get('q', 'A')
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
@@ -193,10 +177,9 @@ def browse(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             podcasts = paginator.page(paginator.num_pages)
-        pagecount = paginator.num_pages
 
         context = {
-            'pagecount': pagecount,
+            'paginator': paginator,
             'genres': genres,
             'languages': languages,
             'selected_alphabet': alphabet,
@@ -218,19 +201,12 @@ def browse(request):
         chart_header = 'Top 50 podcasts on iTunes'
         chart_selected_genre = 'All'
 
-        subscriptions = None
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions(user)
-
         context.update({
-            'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
-            'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
             'alphabet': ALPHABET,
-            'chart_selected_genre': chart_selected_genre,
             'chart_header': chart_header,
         })
         return render(request, 'index/results_list.html', context)
@@ -244,12 +220,12 @@ def subscriptions(request):
     if request.method == 'GET':
         user = request.user
         if user.is_authenticated:
-            subs = Subscription.get_subscriptions(user)
-            results_header = str(subs.count()) + ' subscriptions'
+            subscriptions = Subscription.get_subscriptions(user)
+            results_header = str(subscriptions.count()) + ' subscriptions'
 
             context = {
                 'results_header': results_header,
-                'subscriptions': subs,
+                'subscriptions': subscriptions,
             }
 
             if request.is_ajax():
@@ -259,21 +235,13 @@ def subscriptions(request):
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
             chart_header = 'Top 50 podcasts on iTunes'
-            chart_selected_genre = 'All'
-
-            subscriptions = None
-            if user.is_authenticated:
-                subscriptions = Subscription.get_subscriptions(user)
 
             context.update({
-                'subscriptions': subscriptions,
                 'splash': True,
                 'stage_open': True,
-                'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
-                'chart_selected_genre': chart_selected_genre,
                 'chart_header': chart_header,
             })
             return render(request, 'index/subscriptions.html', context)
@@ -300,26 +268,30 @@ def podinfo(request, itunesid):
         context = {
             'podcast': podcast,
         }
+
         if request.is_ajax():
             return render(request, 'podinfo.html', context)
 
         # chart & search bar
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
-        eps = podcast.get_episodes()
-        episodes_header = str(len(eps)) + ' episodes of ' + podcast.title
+        episodes = podcast.get_episodes()
+        episodes_count = len(episodes)
+
+        if episodes_count == 1:
+            episodes_header = str(episodes_count) + ' episode of ' + podcast.title
+        else:
+            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
+        
         chart_header = 'Top 50 podcasts on iTunes'
-        chart_selected_genre = 'All'
 
         context.update({
             'stage_open': True,
             'splash': False,
-            'selected_alphabet': 'A',
             'chart_genres': genres,
             'chart': chart[:50],
-            'chart_selected_genre': chart_selected_genre,
             'alphabet': ALPHABET,
-            'episodes': eps,
+            'episodes': episodes,
             'episodes_header': episodes_header,
             'chart_header': chart_header,
         })
@@ -347,16 +319,13 @@ def settings(request):
             genres = Genre.get_primary_genres()
             chart = Podcast.get_charts()
             chart_header = 'Top 50 podcasts on iTunes'
-            chart_selected_genre = 'All'
 
             context.update({
                 'splash': False,
                 'stage_open': True,
-                'selected_alphabet': 'A',
                 'chart_genres': genres,
                 'chart': chart[:50],
                 'alphabet': ALPHABET,
-                'chart_selected_genre': chart_selected_genre,
                 'chart_header': chart_header,
             })
             return render(request, 'index/settings.html', context)
@@ -383,14 +352,11 @@ def settings(request):
                 genres = Genre.get_primary_genres()
                 chart = Podcast.get_charts()
                 chart_header = 'Top 50 podcasts on iTunes'
-                chart_selected_genre = 'All'
                 context.update({
                     'splash': False,
                     'stage_open': True,
-                    'selected_alphabet': 'A',
                     'chart_genres': genres,
                     'chart': chart[:50],
-                    'chart_selected_genre': chart_selected_genre,
                     'alphabet': ALPHABET,
                     'chart_header': chart_header,
                 })

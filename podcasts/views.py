@@ -25,7 +25,7 @@ def dashboard(request):
 def episodes(request):
     """
     returns html for episodes
-    POST ajax request sent from podinfo
+    POST ajax request sent by podinfo
     required argument: itunesid
     """
 
@@ -33,20 +33,21 @@ def episodes(request):
     if request.method == 'POST':
         try:
             itunesid = request.POST['itunesid']
-            podcast = Podcast.objects.get(itunesid=itunesid)
-        except:
+            podcast = Podcast.objects.get(itunesid=int(itunesid))
+        except (KeyError, Podcast.DoesNotExist) as e:
             raise Http404()
 
-        eps = podcast.get_episodes()
-        episodes_count = len(eps)
-        if episodes_count != 1:
-            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
-        else:
+        episodes = podcast.get_episodes()
+        episodes_count = len(episodes)
+
+        if episodes_count == 1:
             episodes_header = str(episodes_count) + ' episode of ' + podcast.title
+        else:
+            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
 
         context = {
             'episodes_header': episodes_header,
-            'episodes': eps,
+            'episodes': episodes,
             'podcast': podcast,
         }
         return render(request, 'episodes.html', context)
@@ -91,22 +92,14 @@ def subscribe(request):
 
     # validate request
     if request.method == 'POST':
+        try:
+            itunesid = request.POST['itunesid']
+            podcast = Podcast.objects.get(itunesid=int(itunesid))
+        except (KeyError, Podcast.DoesNotExist) as e:
+            raise Http404()
+        
         user = request.user
         if user.is_authenticated:
-            try:
-                itunesid = request.POST['itunesid']
-            except KeyError:
-                if request.is_ajax():
-                    return render(request, 'login_signup.html', {})
-                return redirect('/?next=/podheader/' + itunesid + '/')
-
-            # check whether podcast exists
-            try:
-                podcast = Podcast.objects.get(itunesid=int(itunesid))
-            except Podcast.DoesNotExist:
-                if request.is_ajax():
-                    return render(request, 'login_signup.html', {})
-                return redirect('/?next=/podinfo/' + itunesid + '/')
 
             podcast.subscribe(user)
             podcast.set_subscribed(user)
