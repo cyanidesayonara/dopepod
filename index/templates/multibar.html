@@ -3,11 +3,11 @@
     <!-- SEARCH BAR -->
     <div class="col">
       {% if podcasts1 %}
-        <a class="btn btn-dope toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
+        <a class="btn btn-dope toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
           A-Z
         </a>
       {% else %}
-        <a class="btn btn-dope toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
+        <a class="btn btn-dope toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
           A-Z
         </a>
       {% endif %}
@@ -47,14 +47,14 @@
           {% for letter in alphabet %}
           {% if letter == selected_alphabet %}
           <li>
-            <label class="btn btn-dope page-button alphabet-button active">
+            <label class="btn btn-dope alphabet-button active">
               <input class="field-button" type="radio" name="alphabet" value="{{ letter }}" checked>
               {{ letter }}
             </label>
           </li>
           {% else %}
           <li>
-            <label class="btn btn-dope page-button alphabet-button">
+            <label class="btn btn-dope alphabet-button">
               <input class="field-button" type="radio" name="alphabet" value="{{ letter }}">
               {{ letter }}
             </label>

@@ -10,6 +10,7 @@ from datetime import time, timedelta, datetime
 from dateutil.parser import parse
 from operator import attrgetter
 import logging
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -77,13 +78,18 @@ class Podcast(models.Model):
             ).order_by('global_rank', 'genre_rank', '-discriminate')
 
         elif alphabet:
-            # if alphabet == '#':
+            if alphabet == '#':
+                query = Q()
+                for letter in string.ascii_lowercase:
+                    query = query | Q(title__istartswith=letter)
+                podcasts = podcasts.exclude(query).order_by('title')
 
-            the = 'the ' + alphabet
-            podcasts = podcasts.filter(
-                Q(title__istartswith=alphabet) |
-                Q(title__istartswith=the)
-            ).order_by('title')
+            else:
+                the = 'the ' + alphabet
+                podcasts = podcasts.filter(
+                    Q(title__istartswith=alphabet) |
+                    Q(title__istartswith=the)
+                ).order_by('title')
         else:
             podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', '-discriminate')
 
@@ -330,8 +336,6 @@ class Podcast(models.Model):
             podcast.artworkUrl = item['artworkUrl']
             podcast.podcastUrl = item['podcastUrl']
             podcast.save()
-            logger.error("pod updated", podcast.itunesid)
-
         except Podcast.DoesNotExist:
             podcast = Podcast.objects.create(
                 itunesid=item['itunesid'],
@@ -347,7 +351,6 @@ class Podcast(models.Model):
                 artworkUrl=item['artworkUrl'],
                 podcastUrl=item['podcastUrl'],
             )
-            logger.error("pod updated", podcast.itunesid)
 
     def scrape_podcast(itunesid):
         """

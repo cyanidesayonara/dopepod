@@ -380,7 +380,7 @@ $(document)
   .on("change", "#chart-genre-buttons", function() {
     loadChart();
   })
-  // LINKS
+  // NAVIGATION
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
@@ -439,6 +439,9 @@ $(document)
     loadCenterStage("/settings/");
     $("episodes").html("");
     scrollToTop();
+  })
+  .on("click", "#browse-toggle", function() {
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
   })
   // FORMS
   // replace settings, empty and hide modal

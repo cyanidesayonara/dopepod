@@ -3,9 +3,14 @@
   <span class="results-header">
     {{ episodes_header }}
   </span>
-  <a class="btn btn-dope toggle float-right show-button" id="show-episodes" href="#" data-toggle="collapse" data-target="#episode-collapse" aria-expanded="true" aria-controls="episode-collapse">
-    -
-  </a>
+  <div class="results-buttons">
+    <a class="results-minimize" aria-label="Minimize">
+      <i class="fas fa-minus-circle"></i>
+    </a>
+    <a class="results-close" aria-label="Close">
+      <i class="fas fa-times-circle"></i>
+    </a>
+  </div>
 </div>
 <div class="col-12 collapse results-wrapper show" id="episode-collapse">
   <div class="row options">

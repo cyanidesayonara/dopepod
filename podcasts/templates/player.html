@@ -1,31 +1,30 @@
 <div class="row color-1-trans shadow-up">
   <div class="container">
     <div class="row" id="player-wrapper">
-      <div class="col-auto pr-0" id="player-image">
+      <div class="col-auto" id="player-image">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
         </a>
       </div>
-      <div class="col">
+      <div class="col" id="player-content">
         <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-          <h6>
+          <span id="player-title">
             {{ podcast.title }}
-          </h6>
+          </span>
         </a>
-        <span>
+        <span id="player-episode">
           {{ title }} | {{ date }}
         </span>
-        <br />
         <audio id="audio-el" controls preload="metadata" autoplay>
           <source src="{{ url }}" type="{{ type }}" />
         </audio>
       </div>
       <div id="player-buttons">
         <a id="player-minimize" aria-label="Minimize">
-          <i class="fas fa-window-minimize"></i>
+          <i class="fas fa-minus-circle"></i>
         </a>
         <a id="player-close" aria-label="Close">
-          <i class="far fa-times-circle"></i>
+          <i class="fas fa-times-circle"></i>
         </a>
       </div>
     </div>

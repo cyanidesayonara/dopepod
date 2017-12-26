@@ -111,12 +111,14 @@ body {
   color: #2e2e2e;
   background: #ddd;
 }
-#navbar .nav-link {
+#navbar a {
   color: rgba(255, 255, 255, 1);
   font-size: 16px;
+  padding: 10px;
 }
-#navbar .nav-link:hover {
+#navbar a:hover {
   color: #2e2e2e;
+  text-decoration: none;
 }
 @keyframes fadeIn {
   0% {
@@ -225,13 +227,19 @@ body {
   animation: moveRight 1s ease-in 3s forwards;
   -webkit-animation: moveRight 1s ease-in 3s forwards;
 }
+#logo a:hover {
+  text-decoration: none;
+}
+#logo a {
+  font-size: 24px;
+}
 #logo {
   text-align: center;
-  font-size: 24px;
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
+/* MAIN */
 #main {
   padding: 15px;
   min-height: 100vh;
@@ -239,7 +247,6 @@ body {
 
 /* TOGGLE BUTTONS */
 #browse-toggle{
-  margin-top: 8px;
 }
 .toggle[aria-expanded="true"] {
   color: #fff;
@@ -260,14 +267,15 @@ body {
   display: inline-flex;
 }
 .page-button {
-  margin: 0 1px 0;
-  padding: 4px 6px;
+  margin: 0 3px 5px 0;
+  padding: 5px 7px;
 }
 .page-list {
   list-style: none;
   font-size: 16px;
 }
 .options {
+  border-bottom: 1px solid #ddd;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -282,7 +290,6 @@ body {
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  padding-left: 0;
   margin-bottom: 0;
   list-style: none;
   padding-top: 8px;
@@ -297,9 +304,9 @@ body {
 /* ALPHABET BUTTONS */
 #alphabet-buttons {
   background: inherit;
-  font-size: 16px;
 }
 .alphabet-button {
+  font-size: 16px;
   width: 30px;
   height: 30px;
   margin-bottom: 4px;
@@ -320,7 +327,6 @@ body {
   margin-top: 44px;
   z-index: 95;
 }
-
 #browse-bar {
   padding-top: 6px;
   padding-bottom: 6px;
@@ -368,7 +374,7 @@ body {
 #search-button {
   position: absolute;
   left: 220px;
-  top: 4px;
+  top: 6px;
   z-index: 50;
   background-color: inherit;
   border: 0;
@@ -421,14 +427,16 @@ body {
   margin-bottom: 10px;
 }
 #login-wrapper {
-  background: #ddd;
   padding: 10px 10px 0 10px;
   width: 300px;
-  height: 136px;
+  height: 148px;
   margin: auto;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+}
+.login-form-group {
+  margin: 0;
 }
 #login-signup-buttons {
   display: block;
@@ -443,6 +451,10 @@ body {
 #social-login a, #social-login a:hover {
   color: #2e2e2e;
   text-decoration: none;
+}
+.social-link {
+  width: 100%;
+  border: 1px solid #000;
 }
 .login-field {
   padding: 5px 8px;
@@ -576,10 +588,24 @@ body {
   max-width: 100%;
   margin-top: 15px;
   border-radius: .25rem .25rem 0 0;
-  color: #fff;
-  font-size: 18px;
+  font-size: 20px;
   padding-top: 8px;
   padding-bottom: 8px;
+  padding-right: 80px;
+}
+.results-buttons {
+  position: absolute;
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 8px;
+}
+.results-minimize {
+  margin-right: 10px;
+}
+.results-close {
+  margin-right: 15px;
 }
 .results-list {
   padding: 10px;
@@ -630,7 +656,7 @@ body {
   margin-top: 4px;
   margin-bottom: 4px;
 }
-hr .h-line {
+hr.h-line {
   height: 1px;
   border: 0;
   background: #ddd;
@@ -655,15 +681,37 @@ hr .h-line {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+#player-image {
+  padding-left: 10px;
+  padding-right: 0;
+}
+#player-content {
+  padding: 0 10px;
+  margin-right: 80px;
+}
+#player-title {
+  max-height: 45px;
+  overflow: hidden;
+  display: block;
+  font-size: 16px;
+}
+#player-episode {
+  display: block;
+  max-height: 35px;
+  overflow: hidden;
+}
 #player-buttons {
   font-size: 20px;
   position: absolute;
   top: 0;
   right: 0;
-  padding: 10px 15px;
+  padding-top: 10px;
+}
+#player-minimize {
+  margin-right: 10px;
 }
 #player-close {
-  margin-left: 10px;
+  margin-right: 15px;
 }
 
 /* FOOTER */
