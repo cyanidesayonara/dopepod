@@ -41,6 +41,7 @@ class Podcast(models.Model):
         for pod in Podcast.objects.all():
             if pod.artworkUrl == bad_url or pod.genre == bad_genre:
                 pod.discriminate = True
+                pod.save()
 
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
