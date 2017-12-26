@@ -8,8 +8,8 @@ import requests
 from lxml import etree, html
 from datetime import time, timedelta, datetime
 from dateutil.parser import parse
+from operator import attrgetter
 import logging
-from django import forms
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +30,17 @@ class Podcast(models.Model):
     podcastUrl = models.CharField(max_length=500)
     genre_rank = models.IntegerField(null=True, blank=True)
     global_rank = models.IntegerField(null=True, blank=True)
+    discriminate = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
+    def set_discriminated():
+        bad_url = 'is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/'
+        bad_genre = Genre.objects.get(itunesid=1314)
+        for pod in Podcast.objects.all():
+            if pod.artworkUrl == bad_url or pod.genre == bad_genre:
+                pod.discriminate = True
 
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
@@ -43,7 +51,7 @@ class Podcast(models.Model):
         """
 
         podcasts = Podcast.objects.all()
-
+ 
         # filter by explicit
         if user.is_authenticated:
             if not user.profile.show_explicit:
@@ -65,14 +73,18 @@ class Podcast(models.Model):
             podcasts = podcasts.filter(
                 Q(title__istartswith=q) |
                 Q(title__icontains=q)
-            )
+            ).order_by('global_rank', 'genre_rank', '-discriminate')
 
         elif alphabet:
+            # if alphabet == '#':
+
             the = 'the ' + alphabet
             podcasts = podcasts.filter(
                 Q(title__istartswith=alphabet) |
                 Q(title__istartswith=the)
             ).order_by('title')
+        else:
+            podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', '-discriminate')
 
         return podcasts
 
@@ -160,14 +172,8 @@ class Podcast(models.Model):
         """
 
         if genre:
-            podcasts = Podcast.objects.filter(
-                Q(genre=genre) |
-                Q(genre__supergenre=genre),
-                genre_rank__isnull=False
-            ).order_by('genre_rank')
-        else:
-            podcasts = Podcast.objects.filter(global_rank__isnull=False).order_by('global_rank')
-        return podcasts
+            return Podcast.objects.filter(Q(genre=genre) | Q(genre__supergenre=genre), genre_rank__isnull=False).order_by('genre_rank')
+        return Podcast.objects.filter(global_rank__isnull=False).order_by('global_rank')
 
     def subscribe(self, user):
         """
@@ -234,7 +240,7 @@ class Podcast(models.Model):
                     # try to get pubdate + parse & convert it to datetime
                     try:
                         pubdate = item.find('pubDate').text
-                        episode['pubDate'] = parse(pubdate)
+                        episode['pubDate'] = parse(pubdate).strftime('%b %d %Y, %H:%M')
                     # if episode data not found, skip episode
                     except AttributeError as e:
                         logger.error('can\'t get pubDate', self.feedUrl)
@@ -444,11 +450,16 @@ class Subscription(models.Model):
     def update(self):
         self.last_updated = timezone.now()
 
+    def get_last_updated(self):
+        return self.last_updated.strftime('%b %d %Y, %H:%M')
+
     def get_subscriptions(user):
-        return Subscription.objects.filter(owner=user)
+        if user.is_authenticated:
+            return Subscription.objects.filter(owner=user)
 
     def get_subscriptions_itunesids(user):
-        return Subscription.objects.filter(owner=user).values_list('parent__itunesid', flat=True)
+        if user.is_authenticated:
+            return Subscription.objects.filter(owner=user).values_list('parent__itunesid', flat=True)
 
 class Episode(models.Model):
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)

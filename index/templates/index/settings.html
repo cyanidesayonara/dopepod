@@ -5,37 +5,39 @@ settings
 {% endblock %}
 
 {% block center-stage %}
-<div class="row" id="settings">
-  <div class="col-sm-3" id="settings-side">
-    <h2>
-      Settings
-    </h2>
-  </div>
-  <div class="col-sm-9" id="settings-main">
+<div class="row">
+  <div class="col-auto mx-auto" id="settings">
+
     <form id="settings-form" action="{% url 'settings' %}" method="POST">
-    {% if user_form.errors %}
-    {{ user_form.errors }}
-    {% endif %}
-    <table>
-      {{ user_form.as_table }}
-    </table>
-    {% if profile_form.errors %}
-    {{ profile_form.errors }}
-    {% endif %}
-    <table>
-      {{ profile_form.as_table }}
-    </table>
-    <button class="btn btn-outline-primary" type="submit">
-      Save changes
-    </button>
-    {% csrf_token %}
+      <h3>
+        Settings
+      </h3>
+      <div class="form-row">
+        <div class="col form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-control" type="email" name="email" id="email" value="{{ user_form.email.value }}">
+        </div>
+        <div class="col form-group">
+          <label class="form-label" for="location">Location</label>
+          <input class="form-control" type="text" name="tocation" id="location" value="{{ profile_form.location.value }}">
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="bio">Bio</label>
+        <textarea class="form-control" rows="3" name="bio" maxlength="500" id="bio" value="{{ profile_form.bio.value }}"></textarea>
+      </div>
+      <div class="form-group">
+        <div class="form-check form-check-inline">
+          <label class="form-check-label" for="show_explicit">
+            <input class="form-check-input" type="checkbox" name="show_explicit" id="show_explicit" checked="" value="{{ profile_form.show_explicit.value }}">
+            Show explicit content
+          </label>
+        </div>
+        <button type="submit" class="btn btn-dope active float-right settings-button">Save</button>
+      </div>
     </form>
-    <div class="alert alert-info alert-dismissible fade show d-none" id="settings-alert" role="alert">
-      Saved!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+    {{ profile_form.location.label_tag }}
   </div>
 </div>
 {% endblock %}

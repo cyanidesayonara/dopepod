@@ -44,10 +44,10 @@
               <i class="fas fa-chevron-right"></i>
             </label>
           </li>
-          {% if not podcasts.next_page_number == pagecount%}
+          {% if not podcasts.next_page_number == paginator.num_pages %}
           <li>
             <label class="btn btn-dope page-button">
-              <input class="field-button" type="radio" name="page" value="{{ pagecount }}">
+              <input class="field-button" type="radio" name="page" value="{{ paginator.num_pages }}">
               <i class="fas fa-chevron-right"></i>
               <i class="fas fa-chevron-right"></i>
             </label>
@@ -58,12 +58,20 @@
       </div>
     {% endif %}
     <div class="float-right" id="option-buttons">
-      {% if genres %}
+      {% if selected_genre %}
+        <a class="btn btn-dope toggle active" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="false" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+          {{ selected_genre }}
+        </a>
+      {% else %}
         <a class="btn btn-dope toggle" data-parent="#options-accordion" href="#options-accordion1" aria-expanded="false" aria-controls="options-accordion1" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
           Genre
         </a>
       {% endif %}
-      {% if languages %}
+      {% if selected_language %}
+        <a class="btn btn-dope toggle active" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="false" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+          {{ selected_language }}
+        </a>
+      {% else %}
         <a class="btn btn-dope toggle" data-parent="#options-accordion" href="#options-accordion2" aria-expanded="false" aria-controls="options-accordion2" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
           Language
         </a>
@@ -78,20 +86,20 @@
         {% if genres %}
           <div class="options-group color-1" id="genre-buttons" data-toggle="buttons">
             <ul id="button-field">
-              {% if selected_genre == 'All' %}
-              <li>
-                <label class="btn btn-dope options-button active">
-                  <input class="field-button" type="radio" name="genre" value="All" checked>
-                  All
-                </label>
-              </li>
+              {% if selected_genre %}
+                <li>
+                  <label class="btn btn-dope options-button">
+                    <input class="field-button" type="radio" name="genre" value="All">
+                    All
+                  </label>
+                </li>
               {% else %}
-              <li>
-                <label class="btn btn-dope options-button">
-                  <input class="field-button" type="radio" name="genre" value="All">
-                  All
-                </label>
-              </li>
+                <li>
+                  <label class="btn btn-dope options-button active">
+                    <input class="field-button" type="radio" name="genre" value="All" checked>
+                    All
+                  </label>
+                </li>
               {% endif %}
               {% for genre in genres %}
               {% if selected_genre == genre.name %}
@@ -120,20 +128,20 @@
           {% if languages %}
           <div class="options-group color-1" id="language-buttons" data-toggle="buttons">
             <ul id="button-field">
-              {% if selected_language == 'All' %}
-              <li>
-                <label class="btn btn-dope options-button active">
-                  <input class="field-button" type="radio" name="language" value="All" checked>
-                All
-              </label>
-              </li>
+              {% if selected_language %}
+                <li>
+                  <label class="btn btn-dope options-button">
+                    <input class="field-button" type="radio" name="language" value="All">
+                    All
+                  </label>
+                </li>
               {% else %}
-              <li>
-                <label class="btn btn-dope options-button">
-                  <input class="field-button" type="radio" name="language" value="All">
+                <li>
+                  <label class="btn btn-dope options-button active">
+                    <input class="field-button" type="radio" name="language" value="All" checked>
                   All
                 </label>
-              </li>
+                </li>
               {% endif %}
               {% for language in languages %}
               {% if selected_language == language.name %}
@@ -157,6 +165,5 @@
         {% endif %}
       </div>
     </div>
-
   </div>
 </div>

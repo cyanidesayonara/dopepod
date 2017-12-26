@@ -30,5 +30,6 @@ class WillyPipeline(object):
         """
         counts n_podcasts for all genres and languages
         """
-
+        
         Filterable.count_n_podcasts()
+        Podcast.set_discriminated()

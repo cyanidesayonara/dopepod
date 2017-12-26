@@ -396,31 +396,22 @@ body {
 
 #center-stage {
   background-color: #fff;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
 
 /* SPLASH */
 #splash {
   font-size: 16px;
   background: #fff;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
 #splash-top {
   text-align: center;
   padding-top: 20px;
 }
 #splash-bottom {
-  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 /* LOGIN-SIGNUP */
-#login-signup {
-  height: 400px;
-}
 #login-errors {
   width: 300px;
   margin: auto;
@@ -449,8 +440,9 @@ body {
   padding-top: 10px;
   margin: auto;
 }
-#social-icons {
-  font-size: 20px;
+#social-login a, #social-login a:hover {
+  color: #2e2e2e;
+  text-decoration: none;
 }
 .login-field {
   padding: 5px 8px;
@@ -491,6 +483,8 @@ body {
 
 /* SETTINGS */
 #settings {
+  background: #ddd;
+  position: relative;
   height: 400px;
   padding: 15px;
 }
@@ -644,11 +638,11 @@ hr .h-line {
 }
 
 /* LOADING GIFS */
-#overlay {
-    background: url("loading.gif");
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 240px;
+#settings-overlay {
+  top: 0;
+  position: absolute;
+  height: 400px;
+  width: 100%;
 }
 
 /* PLAYER */

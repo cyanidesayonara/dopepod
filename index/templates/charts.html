@@ -7,9 +7,15 @@
   <div class="row options">
     <div class="col">
       <div class="float-right" id="option-buttons">
-        <a class="btn btn-dope toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-          Genre
-        </a>
+        {% if chart_selected_genre %}
+          <a class="btn btn-dope toggle active" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+            {{ chart_selected_genre }}
+          </a>
+        {% else %}
+          <a class="btn btn-dope toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+            Genre
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -56,10 +62,10 @@
       {% for podcast in chart %}
         <div class="row">
           <div class="col-auto">
-            {% if chart_selected_genre == 'All' %}
-              {{ podcast.global_rank }}
-            {% else %}
+            {% if chart_selected_genre %}
               {{ podcast.genre_rank }}
+            {% else %}
+              {{ podcast.global_rank }}
             {% endif %}
           </div>
           <div class="col-auto">
@@ -86,7 +92,7 @@
         {% endif %}
       {% empty %}
         <p>
-          No results :p
+          No results
         </p>
       {% endfor %}
     </div>

@@ -184,14 +184,16 @@ function loadChart() {
     });
 }
 // ye ajax search function
-function SearchFunc(url, q, page=null) {
+function SearchFunc(url, q=null, page=null) {
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
 
-  data = {
-    "q": q,
+  data = {};
+
+  if (q) {
+    data["q"] = q;
   }
 
   if ($("#results-form").length) {
@@ -209,7 +211,7 @@ function SearchFunc(url, q, page=null) {
     }
     if (page) {
       if ($("#page-buttons").length) {
-        var page = $("input[name=page]:checked").val();
+        
         if (page && page != '1') {
           data["page"] = page;
         }
@@ -290,6 +292,7 @@ $(document)
       var q = $("#q").val();
       if (q) {
         pushState();
+        $("#q").val("");        
         SearchFunc(url, q);
         $("#episodes").html("");
       }
@@ -302,18 +305,17 @@ $(document)
       clearTimeout(timeout);
       timeout = setTimeout(function() {
         var url = $("#browse-form")[0].action;
-        var q = $("input[name=alphabet]:checked").val();
-        if (q) {
-          pushState();
-          SearchFunc(url, q);
-          $("#episodes").html("");
-        }
+        pushState();
+        $("#q").val("");        
+        SearchFunc(url, q);
+        $("#episodes").html("");
       }, 250);
     })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     var q = $("input[name=alphabet]:checked").val();
     pushState();
+    $("#q").val("");
     SearchFunc(url, q);
     $("#episodes").html("");
   })
@@ -324,16 +326,15 @@ $(document)
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
       if ($("#selected_alphabet").length) {
-        var q = $("#selected_alphabet").val();
-      }
-      else {
         var q = $("#selected_q").val();
       }
-      if (q) {
-        pushState();
-        SearchFunc(url, q, true);
-        $("#episodes").html("");
+      else {
+        var q = $("#selected_alphabet").val();
       }
+      pushState();
+      $("#q").val("");
+      SearchFunc(url, q, true);
+      $("#episodes").html("");
     }, 250);
   })
   // search when user changes options
@@ -341,17 +342,17 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#selected_alphabet").length) {
-        var q = $("#selected_alphabet").val();
-      }
-      else {
+      var page = $("input[name=page]:checked").val();
+      if ($("#selected_q").length) {
         var q = $("#selected_q").val();
       }
-      if (q) {
-        pushState();
-        SearchFunc(url, q, true);
-        $("#episodes").html("");
+      else {
+        var q = $("#selected_alphabet").val();
       }
+      pushState();
+      $("#q").val("");
+      SearchFunc(url, q, page);
+      $("#episodes").html("");
     }, 250);
   })
   // search when user changes options
@@ -359,17 +360,16 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#selected_alphabet").length) {
-        var q = $("#selected_alphabet").val();
-      }
-      else {
+      if ($("#selected_q").length) {
         var q = $("#selected_q").val();
       }
-      if (q) {
-        pushState();
-        SearchFunc(url, q, false);
-        $("#episodes").html("");
+      else {
+        var q = $("#selected_alphabet").val();
       }
+      pushState();
+      $("#q").val("");
+      SearchFunc(url, q, true);
+      $("#episodes").html("");
     }, 250);
   })
   // CHARTS
@@ -387,10 +387,9 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
-    $("#browse-collapse").collapse("hide");
+    $("#q").val("");
     loadCenterStage(url);
     loadEpisodes(itunesid);
-    $("#browse-bar").addClass("d-none");
     $("#splash").html("");
     scrollToTop();
   })
@@ -399,8 +398,9 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-collapse").collapse("hide");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     loadSplash("/dashboard/");
-    $("#browse-bar").addClass("d-none");
     $("#center-stage").html("");
     $("#results").html("");
     $("#episodes").html("");
@@ -411,6 +411,8 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-collapse").collapse("show");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");    
     loadResults("/browse/");
     $("#episodes").html("");
     scrollToMultibar();
@@ -420,8 +422,9 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-collapse").collapse("hide");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     loadResults("/subscriptions/");
-    $("#browse-bar").addClass("d-none");
     $("#episodes").html("");
     scrollToMultibar();
   })
@@ -430,9 +433,10 @@ $(document)
     e.preventDefault();
     pushState();
     $("#browse-collapse").collapse("hide");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     $("#splash").html("");
     loadCenterStage("/settings/");
-    $("#browse-bar").addClass("d-none");
     $("episodes").html("");
     scrollToTop();
   })
@@ -440,6 +444,8 @@ $(document)
   // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
+    var button = $(this).find(".settings-button");
+    button.text("Saving...");
     var data = $(this).serialize();
     var method = this.method;
     var url = this.action;
@@ -452,10 +458,15 @@ $(document)
         console.log(thrownError);
         pushState();
         $("#center-stage").html(xhr.responseJSON.html);
+        button.text("Fail :(");
       })
       .done(function(response) {
         pushState();
-        $("#settings-alert").removeClass("d-none");
+        loadSplash("/dashboard/");
+        $("#center-stage").html("");
+        $("#results").html("");
+        $("#episodes").html("");
+        scrollToTop();
       });
   })
   .on("submit", "#sub-form", function(e) {
@@ -522,6 +533,9 @@ $(document)
     e.preventDefault();
     var url = this.href;
     pushState();
+    $("#browse-collapse").collapse("hide");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     loadSplash("/dashboard/");
     $("#center-stage").html("");
     scrollToTop();
@@ -531,6 +545,9 @@ $(document)
     e.preventDefault();
     var url = this.href;
     pushState();
+    $("#browse-collapse").collapse("hide");
+    $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     loadSplash("/dashboard/", true);
     $("#center-stage").html("");
     scrollToTop();

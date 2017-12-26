@@ -30,15 +30,10 @@ def index(request):
         # chart and search bar for non-ajax
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
-        chart_selected_genre = 'All'
         chart_header = 'Top 50 podcasts on iTunes'
 
-        subscriptions = None
-        signup = None
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions(user)
-        else:
-            signup = request.GET.get('signup' , None)
+        subscriptions = Subscription.get_subscriptions(user)
+        signup = request.GET.get('signup' , None)
 
         context = {
             'signup': signup,
@@ -47,7 +42,6 @@ def index(request):
             'stage_open': True,
             'chart_header': chart_header,
             'chart_genres': genres,
-            'chart_selected_genre': chart_selected_genre,
             'chart': chart[:50],
             'alphabet': ALPHABET,
         }
@@ -77,6 +71,8 @@ def charts(request):
         if request.is_ajax():
             return render(request, 'charts.html', context)
 
+        subscriptions = Subscription.get_subscriptions(user)
+
         # search bar for non-ajax
         context.update({
             'subscriptions': subscriptions,
@@ -105,9 +101,8 @@ def search(request):
             page = int(request.GET.get('page', '1'))
             languages = Language.objects.all()
             genres = Genre.get_primary_genres()
-
             podcasts = Podcast.search(genre, language, user, q=q)
-            paginator = Paginator(podcasts, 24)
+            paginator = Paginator(podcasts, 60)
             results_header = str(paginator.count) + ' results for "' + q + '"'
 
             try:
@@ -124,8 +119,8 @@ def search(request):
                 'genres': genres,
                 'languages': languages,
                 'selected_q': q,
-                'selected_genre': genre if genre else 'All',
-                'selected_language': language if language else 'All',
+                'selected_genre': genre,
+                'selected_language': language,
                 'results_header': results_header,
                 'podcasts': podcasts,
             }
@@ -135,8 +130,10 @@ def search(request):
 
             chart = Podcast.get_charts()
             chart_header = 'Top 50 podcasts on iTunes'
+            subscriptions = Subscription.get_subscriptions(user)
 
             context.update({
+                'subscriptions': subscriptions,
                 'splash': True,
                 'stage_open': True,
                 'chart_genres': genres,
@@ -167,7 +164,10 @@ def browse(request):
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
-        results_header = str(paginator.count) + ' results for "' + alphabet + '"'
+        if alphabet:
+            results_header = str(paginator.count) + ' results for "' + alphabet + '"'
+        else:
+            results_header = str(paginator.count) + ' results'
 
         try:
             podcasts = paginator.page(page)
@@ -183,8 +183,8 @@ def browse(request):
             'genres': genres,
             'languages': languages,
             'selected_alphabet': alphabet,
-            'selected_genre': genre if genre else 'All',
-            'selected_language': language if language else 'All',
+            'selected_genre': genre,
+            'selected_language': language,
             'results_header': results_header,
             'podcasts': podcasts,
             'podcasts1': podcasts[:40],
@@ -199,9 +199,10 @@ def browse(request):
         # chart & browse bar for non-ajax
         chart = Podcast.get_charts()
         chart_header = 'Top 50 podcasts on iTunes'
-        chart_selected_genre = 'All'
+        subscriptions = Subscription.get_subscriptions(user)
 
         context.update({
+            'subscriptions': subscriptions,
             'splash': True,
             'stage_open': True,
             'chart_genres': genres,
@@ -219,36 +220,35 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        if user.is_authenticated:
-            subscriptions = Subscription.get_subscriptions(user)
-            results_header = str(subscriptions.count()) + ' subscriptions'
+        subscriptions = Subscription.get_subscriptions(user)
+        results_header = str(subscriptions.count()) + ' subscriptions'
 
-            context = {
-                'results_header': results_header,
-                'subscriptions': subscriptions,
-            }
+        context = {
+            'results_header': results_header,
+            'subscriptions': subscriptions,
+        }
 
-            if request.is_ajax():
-                return render(request, 'index/subscriptions.html', context)
-
-            # chart & search bar for non-ajax
-            genres = Genre.get_primary_genres()
-            chart = Podcast.get_charts()
-            chart_header = 'Top 50 podcasts on iTunes'
-
-            context.update({
-                'splash': True,
-                'stage_open': True,
-                'chart_genres': genres,
-                'chart': chart[:50],
-                'alphabet': ALPHABET,
-                'chart_header': chart_header,
-            })
+        if request.is_ajax():
             return render(request, 'index/subscriptions.html', context)
-        else:
-            if request.is_ajax():
-                return render(request, 'login_signup.html', {})
-            return redirect('/?next=/subscriptions/')
+
+        # chart & search bar for non-ajax
+        genres = Genre.get_primary_genres()
+        chart = Podcast.get_charts()
+        chart_header = 'Top 50 podcasts on iTunes'
+
+        context.update({
+            'splash': True,
+            'stage_open': True,
+            'chart_genres': genres,
+            'chart': chart[:50],
+            'alphabet': ALPHABET,
+            'chart_header': chart_header,
+        })
+        return render(request, 'index/subscriptions.html', context)
+    else:
+        if request.is_ajax():
+            return render(request, 'login_signup.html', {})
+        return redirect('/?next=/subscriptions/')
 
 def podinfo(request, itunesid):
     """
@@ -262,8 +262,7 @@ def podinfo(request, itunesid):
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
 
-        if user.is_authenticated:
-            podcast.set_subscribed(user)
+        podcast.set_subscribed(user)
 
         context = {
             'podcast': podcast,
@@ -284,7 +283,7 @@ def podinfo(request, itunesid):
             episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
         
         chart_header = 'Top 50 podcasts on iTunes'
-
+        
         context.update({
             'stage_open': True,
             'splash': False,

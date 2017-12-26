@@ -1,7 +1,7 @@
 {% load account socialaccount %}
 
-<div class="row" id="login-signup">
-  <div class="col-12"id="splash-top">
+<div class="row">
+  <div class="col-12" id="splash-top">
     <h5>
       Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
     </h5>
@@ -31,10 +31,12 @@
         Log In
       </a>
     </nav>
+  </div>
+</div>
+<div classa="row">
+  <div class="col-12" id="splash-bottom">
     <div id="login-errors">
     </div>
-  </div>
-  <div class="col-12" id="splash-bottom">
     <div id="login-wrapper">
       <div class="tab-content" id="pills-tabContent">
         {% if signup %}
@@ -43,7 +45,7 @@
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="login-login">Email</label>
-                <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+                <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required="" id="login-login">
               </div>
               <div class="form-row">
                 <div class="col login-form-group">
@@ -74,7 +76,7 @@
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="signup-email">Email</label>
-                <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+                <input class="form-control login-field" type="email" name="email" placeholder="Email" required="" id="signup-email">
               </div>
               <div class="login-form-group">
                 <label class="sr-only" for="signup-password1">Password</label>
@@ -98,11 +100,11 @@
             </p>
             {% endif %}
             <p>
-              Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.
+              Forgotten your password? Enter your email address below, and we'll send you an email allowing you to reset it.
             </p>
             <form method="POST" action="{% url 'account_reset_password' %}" class="password_reset">
               {% csrf_token %}
-              <input type="email" name="email" size="30" placeholder="E-mail address" required="" id="forgot-email">
+              <input type="email" name="email" size="30" placeholder="Email" required="" id="forgot-email">
               <input class="btn btn-dope" type="submit" value="Reset my password" />
             </form>
           </div>
@@ -112,7 +114,7 @@
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="login-login">Email</label>
-                <input class="form-control login-field" type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" required="" id="login-login">
+                <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required="" id="login-login">
               </div>
               <div class="form-row">
                 <div class="col login-form-group">
@@ -143,7 +145,7 @@
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="signup-email">Email</label>
-                <input class="form-control login-field" type="email" name="email" placeholder="E-mail" required="" id="signup-email">
+                <input class="form-control login-field" type="email" name="email" placeholder="Email" required="" id="signup-email">
               </div>
               <div class="login-form-group">
                 <label class="sr-only" for="signup-password1">Password</label>
@@ -162,14 +164,14 @@
           </div>
           <div class="tab-pane fade" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
             <p>
-              Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.
+              Forgotten your password? Enter your email address below, and we'll send you an email allowing you to reset it.
             </p>
             <form class="password-form" method="POST" action="{% url 'account_reset_password' %}" class="password_reset">
               {% csrf_token %}
               <div class="form-row">
                 <div class="col login-form-group">
                   <label class="sr-only" for="forgot-email">Email</label>
-                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="E-mail address" required="">
+                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required="">
                 </div>
                 <div class="col-auto">
                   <button class="btn btn-dope password-button" type="submit">
@@ -183,24 +185,21 @@
       </div>
     </div>
     <div id="social-login">
-      <span>
-        Or log in with a social account
-      </span>
-      <br />
-      <div id="social-icons">
-        <a title="Google" class="socialaccount_provider google social-link" href="/account/google/login/?process=login">
-          <i class="fab fa-google"></i>
-        </a>
-        <!-- <a title="Reddit" class="socialaccount_provider reddit" href="/account/reddit/login/?process=login">
-        <i class="fab fa-reddit"></i>
-        </a> -->
-        <!-- <a title="Github" class="socialaccount_provider github" href="/account/github/login/?process=login">
-        <i class="fab fa-github"></i>
-        </a> -->
-        <!-- <a title="Facebook" class="socialaccount_provider facebook" href="/account/facebook/login/?process=login">
-        <i class="fab fa-facebook-f"></i>
-        </a> -->
-      </div>
+      <!--<a class="btn btn-block btn-social btn-google socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google" >
+        <i class="fa fab-google "></i> Sign in with Google
+      </a>
+      <a class="btn btn-block btn-social btn-twitter">
+        <span class="fa fab-facebook"></span> Sign in with Facebook
+      </a>-->
+      <!-- <a title="Reddit" class="socialaccount_provider reddit" href="/account/reddit/login/?process=login">
+      <i class="fab fa-reddit"></i>
+      </a> -->
+      <!-- <a title="Github" class="socialaccount_provider github" href="/account/github/login/?process=login">
+      <i class="fab fa-github"></i>
+      </a> -->
+      <!-- <a title="Facebook" class="socialaccount_provider facebook" href="/account/facebook/login/?process=login">
+      <i class="fab fa-facebook-f"></i>
+      </a> -->
     </div>
   </div>
 </div>

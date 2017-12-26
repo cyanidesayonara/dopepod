@@ -49,7 +49,7 @@ dopepod
               <span>
                 Last updated:
               </span>
-              {{ subscription.last_updated }}
+              {{ subscription.get_last_updated }}
             </p>
           </div>
         </div>
@@ -58,7 +58,7 @@ dopepod
         {% endif %}
       {% empty %}
         <p>
-          No subscriptions :p
+          No subscriptions
         </p>
       {% endfor %}
     </div>
