@@ -609,7 +609,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
         $("#login-errors").html(xhr.responseJSON.html);
-        button.text("Sign Up");
+        button.text("Reset");
       })
       .done(function() {
         refreshCookie();
