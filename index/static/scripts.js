@@ -276,11 +276,9 @@ $(document)
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      if (q) {
-        pushState();
-        SearchFunc(url, q);
-        $("#episodes").html("");
-      }
+      pushState();
+      SearchFunc(url, q);
+      $("#episodes").html("");
     }, 250);
   })
   // search when "search" button is clicked
@@ -290,12 +288,10 @@ $(document)
     timeout = setTimeout(function() {
       var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      if (q) {
-        pushState();
-        $("#q").val("");        
-        SearchFunc(url, q);
-        $("#episodes").html("");
-      }
+      pushState();
+      SearchFunc(url, q);
+      $("#q").val("");
+      $("#episodes").html("");
     }, 250);
   })
   // BROWSE
@@ -305,9 +301,10 @@ $(document)
       clearTimeout(timeout);
       timeout = setTimeout(function() {
         var url = $("#browse-form")[0].action;
-        pushState();
-        $("#q").val("");        
+        var q = $("input[name=alphabet]:checked").val();
+        pushState();  
         SearchFunc(url, q);
+        $("#q").val("");
         $("#episodes").html("");
       }, 250);
     })
@@ -315,8 +312,8 @@ $(document)
     var url = $("#browse-form")[0].action;
     var q = $("input[name=alphabet]:checked").val();
     pushState();
-    $("#q").val("");
     SearchFunc(url, q);
+    $("#q").val("");
     $("#episodes").html("");
   })
   //RESULTS
@@ -325,15 +322,15 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#selected_alphabet").length) {
-        var q = $("#selected_q").val();
+      if ($("#alphabet").length) {
+        var q = $("#alphabet").val();
       }
       else {
-        var q = $("#selected_alphabet").val();
+        var q = $("#q").val();
       }
       pushState();
-      $("#q").val("");
       SearchFunc(url, q, true);
+      $("#q").val("");
       $("#episodes").html("");
     }, 250);
   })
@@ -343,15 +340,15 @@ $(document)
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
       var page = $("input[name=page]:checked").val();
-      if ($("#selected_q").length) {
-        var q = $("#selected_q").val();
+      if ($("#alphabet").length) {
+        var q = $("#alphabet").val();
       }
       else {
-        var q = $("#selected_alphabet").val();
+        var q = $("#q").val();
       }
       pushState();
-      $("#q").val("");
       SearchFunc(url, q, page);
+      $("#q").val("");
       $("#episodes").html("");
     }, 250);
   })
@@ -360,15 +357,15 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#selected_q").length) {
-        var q = $("#selected_q").val();
+      if ($("#alphabet").length) {
+        var q = $("#alphabet").val();
       }
       else {
-        var q = $("#selected_alphabet").val();
+        var q = $("#q").val();
       }
       pushState();
-      $("#q").val("");
       SearchFunc(url, q, true);
+      $("#q").val("");
       $("#episodes").html("");
     }, 250);
   })
@@ -637,5 +634,7 @@ $(document)
   })
   // BOOTSTRAP
   .on("show.bs.collapse", function () {
+    console.log("whaddup");
     $(".more-collapse.show").collapse("hide");
+    $(".collapse.show").collapse("hide");
   })

@@ -6,50 +6,50 @@ dopepod
 
 {% block results_x %}
 {% if podcasts %}
-  <div class="col-lg-3 col-md-6 col-sm-12">
-    <ul class="browse-results-list">
+<div class="col-lg-3 col-md-6 col-sm-12">
+  <ul class="browse-results-list">
     {% for podcast in podcasts1 %}
-    <li>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-        {{ podcast.title }}
-      </a>
-    </li>
+      <li>
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+          {{ podcast.title }}
+        </a>
+      </li>
     {% endfor %}
-    </ul>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-12">
-    <ul class="browse-results-list">
+  </ul>
+</div>
+<div class="col-lg-3 col-md-6 col-sm-12">
+  <ul class="browse-results-list">
     {% for podcast in podcasts2 %}
-    <li>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-        {{ podcast.title }}
-      </a>
-    </li>
+      <li>
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+          {{ podcast.title }}
+        </a>
+      </li>
     {% endfor %}
-    </ul>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-12">
-    <ul class="browse-results-list">
+  </ul>
+</div>
+<div class="col-lg-3 col-md-6 col-sm-12">
+  <ul class="browse-results-list">
     {% for podcast in podcasts3 %}
-    <li>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-        {{ podcast.title }}
-      </a>
-    </li>
+      <li>
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+          {{ podcast.title }}
+        </a>
+      </li>
     {% endfor %}
-    </ul>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-12">
-    <ul class="browse-results-list">
+  </ul>
+</div>
+<div class="col-lg-3 col-md-6 col-sm-12">
+  <ul class="browse-results-list">
     {% for podcast in podcasts4 %}
-    <li>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-        {{ podcast.title }}
-      </a>
-    </li>
+      <li>
+        <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+          {{ podcast.title }}
+        </a>
+      </li>
     {% endfor %}
-    </ul>
-  </div>
+  </ul>
+</div>
 {% else %}
   <div class="col">
     <p>

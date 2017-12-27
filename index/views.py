@@ -94,56 +94,54 @@ def search(request):
 
     if request.method == 'GET':
         q = request.GET.get('q', None)
-        if q:
-            user = request.user
-            genre = request.GET.get('genre', None)
-            language = request.GET.get('language', None)
-            page = int(request.GET.get('page', '1'))
-            languages = Language.objects.all()
-            genres = Genre.get_primary_genres()
-            podcasts = Podcast.search(genre, language, user, q=q)
-            paginator = Paginator(podcasts, 60)
-            results_header = str(paginator.count) + ' results for "' + q + '"'
+        user = request.user
+        genre = request.GET.get('genre', None)
+        language = request.GET.get('language', None)
+        page = int(request.GET.get('page', '1'))
+        languages = Language.objects.all()
+        genres = Genre.get_primary_genres()
+        podcasts = Podcast.search(genre, language, user, q=q)
+        paginator = Paginator(podcasts, 60)
+        results_header = str(paginator.count) + ' results'
 
-            try:
-                podcasts = paginator.page(page)
-            except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                podcasts = paginator.page(1)
-            except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of results.
-                podcasts = paginator.page(paginator.num_pages)
+        try:
+            podcasts = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            podcasts = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            podcasts = paginator.page(paginator.num_pages)
 
-            context = {
-                'paginator': paginator,
-                'genres': genres,
-                'languages': languages,
-                'selected_q': q,
-                'selected_genre': genre,
-                'selected_language': language,
-                'results_header': results_header,
-                'podcasts': podcasts,
-            }
+        context = {
+            'paginator': paginator,
+            'genres': genres,
+            'languages': languages,
+            'selected_q': q,
+            'selected_genre': genre,
+            'selected_language': language,
+            'results_header': results_header,
+            'podcasts': podcasts,
+        }
 
-            if request.is_ajax():
-                return render(request, 'index/results_detail.html', context)
-
-            chart = Podcast.get_charts()
-            chart_header = 'Top 50 podcasts on iTunes'
-            subscriptions = Subscription.get_subscriptions(user)
-
-            context.update({
-                'subscriptions': subscriptions,
-                'splash': True,
-                'stage_open': True,
-                'chart_genres': genres,
-                'chart': chart[:50],
-                'alphabet': ALPHABET,
-                'chart_header': chart_header,
-            })
-
+        if request.is_ajax():
             return render(request, 'index/results_detail.html', context)
-        return render(request, 'index/results_detail.html', {})
+
+        chart = Podcast.get_charts()
+        chart_header = 'Top 50 podcasts on iTunes'
+        subscriptions = Subscription.get_subscriptions(user)
+
+        context.update({
+            'subscriptions': subscriptions,
+            'splash': True,
+            'stage_open': True,
+            'chart_genres': genres,
+            'chart': chart[:50],
+            'alphabet': ALPHABET,
+            'chart_header': chart_header,
+        })
+
+        return render(request, 'index/results_detail.html', context)
 
 def browse(request):
     """
@@ -164,10 +162,7 @@ def browse(request):
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
-        if alphabet:
-            results_header = str(paginator.count) + ' results for "' + alphabet + '"'
-        else:
-            results_header = str(paginator.count) + ' results'
+        results_header = str(paginator.count) + ' results'
 
         try:
             podcasts = paginator.page(page)

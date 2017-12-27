@@ -4,93 +4,104 @@
       {{ chart_header }}
     </div>
     <div class="col-auto results-options">
-      {% if chart_selected_genre %}
-        <a class="btn btn-dope btn-dope-tab toggle active" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-          {{ chart_selected_genre }}
-        </a>
-      {% else %}
-        <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-          Genre
-        </a>
-      {% endif %}
+      <ul>
+        {% if chart_selected_genre %}
+          <li>
+            <a class="btn btn-dope btn-dope-tab toggle active" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+              Genre
+            </a>
+          </li>
+        {% else %}
+          <li>
+            <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+              Genre
+            </a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
-  <div class="row options-select color-1">
-    <form id="chart-form" method="GET" action="{% url 'charts' %}">
-      <div class="collapse" id="chart-genre-collapse">
-        <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
-          <ul id="options-field">
+  <form id="chart-form" method="GET" action="{% url 'charts' %}">
+    <div class="row options-select color-1">
+      <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+        <div class="col-auto ml-auto">
           {% if chart_selected_genre %}
-            <label class="btn btn-dope options-button">
-              <input class="field-button" type="radio" name="chart-genre" value="All">
-              All
-            </label>
-          {% else %}
             <label class="btn btn-dope options-button active">
-              <input class="field-button" type="radio" name="chart-genre" value="All" checked>
-              All
+              <input class="field-button" type="checkbox" name="genre" value="All">
+              {{ chart_selected_genre }}
             </label>
           {% endif %}
-          {% for genre in chart_genres %}
-            {% if chart_selected_genre == genre.name %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}" checked>
-                {{ genre.name }}
-              </label>
-            </li>
-            {% else %}
+        </div>
+        <div class="collapse" id="chart-genre-collapse">
+          <ul id="options-field">
+          {% if chart_selected_genre %}
             <li>
               <label class="btn btn-dope options-button">
-                <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
-                {{ genre.name }}
+                <input class="field-button" type="radio" name="chart-genre" value="All">
+                All
               </label>
             </li>
+          {% else %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="radio" name="chart-genre" value="All" checked>
+                All
+              </label>
+            </li>
+          {% endif %}
+          {% for genre in chart_genres %}
+            {% if not chart_selected_genre == genre.name %}
+              <li>
+                <label class="btn btn-dope options-button">
+                  <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
+                  {{ genre.name }}
+                </label>
+              </li>
             {% endif %}
           {% endfor %}
           </ul>
         </div>
       </div>
-    </form>
-  </div>
-  <div class="row results-wrapper">
-    <div class="col">
-      {% for podcast in chart %}
-        <div class="row">
-          <div class="col-auto">
-            {% if chart_selected_genre %}
-              {{ podcast.genre_rank }}
-            {% else %}
-              {{ podcast.global_rank }}
-            {% endif %}
-          </div>
-          <div class="col-auto">
-            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-              <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-            </a>
-          </div>
-          <div class="col">
-            <h6 class="result-title">
-              <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-                {{ podcast.title }}
-              </a>
-            </h6>
-            <p class="result-artist">
-              <span>by </span>
-              <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
-                {{ podcast.artist }}
-              </a>
-            </p>
-          </div>
-        </div>
-        {% if not forloop.last %}
-          <hr class="h-line" />
-        {% endif %}
-      {% empty %}
-        <p>
-          No results
-        </p>
-      {% endfor %}
     </div>
-  </div>
+    <div class="row results-wrapper">
+      <div class="col">
+        {% for podcast in chart %}
+          <div class="row">
+            <div class="col-auto">
+              {% if chart_selected_genre %}
+                {{ podcast.genre_rank }}
+              {% else %}
+                {{ podcast.global_rank }}
+              {% endif %}
+            </div>
+            <div class="col-auto">
+              <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+                <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+              </a>
+            </div>
+            <div class="col">
+              <h6 class="result-title">
+                <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+                  {{ podcast.title }}
+                </a>
+              </h6>
+              <p class="result-artist">
+                <span>by </span>
+                <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+                  {{ podcast.artist }}
+                </a>
+              </p>
+            </div>
+          </div>
+          {% if not forloop.last %}
+            <hr class="h-line" />
+          {% endif %}
+        {% empty %}
+          <p>
+            No results
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+  </form>
 </div>

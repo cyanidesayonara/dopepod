@@ -7,24 +7,21 @@ dopepod
 {% block results_x %}
 {% if podcasts %}
   {% for podcast in podcasts %}
-  <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
-    <h6 class="result-title">
-      {{ podcast.title }}
-    </h6>
-    <p class="result-artist">
-      by {{ podcast.artist }}
-    </p>
-  </a>
-  {% if podcasts.has_next and forloop.counter == 30 %}
-  <div class="infinite"></div>
-  {% endif %}
+    <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
+      <h6 class="result-title">
+        {{ podcast.title }}
+      </h6>
+      <p class="result-artist">
+        by {{ podcast.artist }}
+      </p>
+    </a>
   {% endfor %}
 {% else %}
-    <div class="col">
-      <p>
-        No results
-      </p>
-    </div>
+  <div class="col">
+    <p>
+      No results
+    </p>
+  </div>
 {% endif %}
 {% endblock %}

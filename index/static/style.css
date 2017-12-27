@@ -316,12 +316,10 @@ body {
   background: inherit;
 }
 .alphabet-button {
-  font-size: 16px;
   width: 30px;
   height: 30px;
   margin-bottom: 4px;
   margin-right: 4px;
-  padding: 8px;
   border: none;
 }
 .alphabet-button:focus {
@@ -594,8 +592,10 @@ body {
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
+  margin-bottom: 15px;
 }
 .results-bar {
+  margin-top: 15px;
   font-size: 20px;
 }
 .results-header {

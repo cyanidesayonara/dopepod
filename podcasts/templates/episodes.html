@@ -1,45 +1,48 @@
 {% if episodes %}
-<div class="col-auto color-1 results-bar">
-  <span class="results-header">
-    {{ episodes_header }}
-  </span>
-  <div class="results-buttons">
-    <a class="results-minimize" aria-label="Minimize">
-      <i class="fas fa-minus-circle"></i>
-    </a>
-    <a class="results-close" aria-label="Close">
-      <i class="fas fa-times-circle"></i>
-    </a>
-  </div>
-</div>
-<div class="col-12 collapse results-wrapper show" id="episode-collapse">
-  <div class="row options">
-    <div class="col">
-      <div class="float-right" id="option-buttons">
-
+<div class="col">
+    <div class="row results-bar">
+      <div class="col results-header">
+        {{ episodes_header }}
+      </div>
+      <div class="col-auto results-options">
+        <ul>
+          <li>
+            <a class="btn btn-dope btn-dope-tab results-minimize" aria-label="Minimize">
+              <i class="fas fa-minus-circle"></i>
+            </a>
+          </li>
+          <li>
+            <a class="btn btn-dope btn-dope-tab results-close" aria-label="Close">
+              <i class="fas fa-times-circle"></i>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
-  <div class="row results-list">
-    <div class="col">
-      <table class="table" id="episodes-table">
-        <thead>
-          <tr>
-            <th>
-              #
-            </th>
-            <th>
-              Title
-            </th>
-            <th>
-              Released
-            </th>
-            <th>
-              Length
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+    <div class="row options-select color-1">
+      <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+      </div>
+    </div>
+    <div class="row results-wrapper">
+      <div class="col">
+        <table class="table" id="episodes-table">
+          <thead>
+            <tr>
+              <th>
+                #
+              </th>
+              <th>
+                Title
+              </th>
+              <th>
+                Released
+              </th>
+              <th>
+                Length
+              </th>
+            </tr>
+          </thead>
+          <tbody>
           {% for episode in episodes %}
             <tr class="hover" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}">
               <th scope="row">{{ forloop.counter }}</th>
@@ -89,5 +92,5 @@
       </table>
     </div>
   </div>
-</div>
+  </div>
 {% endif %}
