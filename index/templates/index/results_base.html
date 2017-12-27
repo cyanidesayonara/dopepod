@@ -1,46 +1,44 @@
-{% extends extend|yesno:'ajax.html,index/index.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,index/index.html' %}
 
 {% block title %}
 dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col">
+<div class="col results">
   <div class="row results-bar">
     <div class="col results-header">
       {{ results_header }}
     </div>
     <div class="col-auto results-options">
-      {% if podcasts %}
-        <ul>
+      <ul>
           {% if selected_genre %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Genre
-              </a>
-            </li>
+          <li>
+            <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+              Genre
+            </a>
+          </li>
           {% else %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Genre
-              </a>
-            </li>
+          <li>
+            <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+              Genre
+            </a>
+          </li>
           {% endif %}
           {% if selected_language %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
-                Language
-              </a>
-            </li>
+          <li>
+            <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+              Language
+            </a>
+          </li>
           {% else %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
-                Language
-              </a>
-            </li>
+          <li>
+            <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+              Language
+            </a>
+          </li>
           {% endif %}
         </ul>
-      {% endif %}
     </div>
   </div>
   {% if selected_q %}
@@ -51,36 +49,38 @@ dopepod
   <form id="results-form" method="GET" action="{% url 'browse' %}">
   {% endif %}
   <div class="row options-select color-1">
-    <div class="options-group" id="genre-buttons" data-toggle="buttons">
-      <div class="col-auto ml-auto">
-        {% if selected_alphabet %}
-          <label class="btn btn-dope options-button active">
-            <input class="field-button" type="checkbox" name="alphabet" value="{{ selected_alphabet }}" checked>
-            {{ selected_alphabet }}
-          </label>
-        {% endif %}
-        {% if selected_q %}
-          <label class="btn btn-dope options-button active">
-            <input class="field-button" type="checkbox" name="q" value="{{ selected_q }}" checked>
-            {{ selected_q }}
-          </label>
-        {% endif %}
-        {% if selected_genre %}
-          <label class="btn btn-dope options-button active">
-            <input class="field-button" type="checkbox" name="genre" value="{{ selected_genre }}" checked>
-            {{ selected_genre }}
-          </label>
-        {% endif %}
-        {% if selected_language %}
-          <label class="btn btn-dope options-button active">
-            <input class="field-button" type="checkbox" name="language" value="{{ selected_language }}" checked>
-            {{ selected_language }}
-          </label>
-        {% endif %}
+    <div class="col-auto ml-auto" id="selected-buttons" data-toggle="buttons">
+        <ul class="options-field">
+          {% if selected_q %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
+                {{ selected_q }}
+              </label>
+            </li>
+          {% endif %}
+          {% if selected_genre %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
+                {{ selected_genre }}
+              </label>
+            </li>
+          {% endif %}
+          {% if selected_language %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
+                {{ selected_language }}
+              </label>
+            </li>
+          {% endif %}
+        </ul>
       </div>
-      <div class="collapse" id="genre-collapse">
-        {% if genres %}
-          <ul id="options-field">
+    <div class="collapse options-collapse" id="genre-collapse">
+      {% if genres %}
+        <div class="options-group" id="genre-buttons" data-toggle="buttons">
+          <ul class="options-field">
             {% if selected_genre %}
               <li>
                 <label class="btn btn-dope options-button">
@@ -107,13 +107,13 @@ dopepod
               {% endif %}
             {% endfor %}
             </ul>
-          {% endif %}
         </div>
-      </div>
-      <div class="collapse" id="language-collapse">
-        {% if languages %}
+      {% endif %}
+    </div>
+    <div class="collapse options-collapse" id="language-collapse">
+      {% if languages %}
         <div class="options-group" id="language-buttons" data-toggle="buttons">
-          <ul id="options-field">
+          <ul class="options-field">
             {% if selected_language %}
             <li>
               <label class="btn btn-dope options-button">
@@ -141,8 +141,8 @@ dopepod
             {% endfor %}
           </ul>
         </div>
-        {% endif %}
-      </div>
+      {% endif %}
+    </div>
   </div>
   <div class="row results-wrapper">
     <div class="col">
@@ -195,10 +195,10 @@ dopepod
           </div>
         </div>
       {% endif %}
-      <div class="row">
-        {% block results_x %}
-        {% endblock %}
-      </div>
+
+      {% block results_x %}
+      {% endblock %}
+      
       {% if podcasts.has_other_pages %}
         <div class="row pagination">
           <div class="col">

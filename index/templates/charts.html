@@ -1,4 +1,4 @@
-<div class="col">
+<div class="col results">
   <div class="row results-bar">
     <div class="col results-header">
       {{ chart_header }}
@@ -18,22 +18,26 @@
             </a>
           </li>
         {% endif %}
-      </ul>
+    </ul>
     </div>
   </div>
   <form id="chart-form" method="GET" action="{% url 'charts' %}">
-    <div class="row options-select color-1">
-      <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
-        <div class="col-auto ml-auto">
-          {% if chart_selected_genre %}
+  <div class="row options-select color-1">
+    <div class="col-auto ml-auto" id="chart-selected-buttons" data-toggle="buttons">
+      <ul class="options-field">
+        {% if chart_selected_genre %}
+          <li>
             <label class="btn btn-dope options-button active">
-              <input class="field-button" type="checkbox" name="genre" value="All">
+              <input class="field-button" type="checkbox" name="chart-genre" value="All">
               {{ chart_selected_genre }}
             </label>
-          {% endif %}
-        </div>
-        <div class="collapse" id="chart-genre-collapse">
-          <ul id="options-field">
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="collapse genre-options-collapse" id="chart-genre-collapse">
+      <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+        <ul class="options-field">
           {% if chart_selected_genre %}
             <li>
               <label class="btn btn-dope options-button">
@@ -59,11 +63,11 @@
               </li>
             {% endif %}
           {% endfor %}
-          </ul>
-        </div>
+        </ul>
       </div>
-    </div>
-    <div class="row results-wrapper">
+  </div>
+  </div>
+  <div class="row results-wrapper">
       <div class="col">
         {% for podcast in chart %}
           <div class="row">

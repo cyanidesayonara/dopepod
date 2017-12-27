@@ -196,26 +196,26 @@ function SearchFunc(url, q=null, page=null) {
     data["q"] = q;
   }
 
-  if ($("#results-form").length) {
-    if ($("#genre-buttons").length) {
-      var genre = $("input[name=genre]:checked").val();
-      if (genre && genre != 'All') {
-        data["genre"] = genre;
-      }
-    }
-    if ($("#language-buttons").length) {
-      var language = $("input[name=language]:checked").val();
-      if (language && language != 'All') {
-        data["language"] = language;
-      }
-    }
-    if (page) {
-      if ($("#page-buttons").length) {
-        
-        if (page && page != '1') {
-          data["page"] = page;
-        }
-      }
+  var genre = $("input[name=genre]:checked").val();
+  if (!genre) {
+    genre = $("input[name=selected-genre]:checked").val();
+  }
+  if (genre && genre != 'All') {
+    data["genre"] = genre;
+  }
+
+  var language = $("input[name=language]:checked").val();
+  if (!language) {
+    language = $("input[name=selected-language]:checked").val();
+  }
+  if (language && language != 'All') {
+    data["language"] = language;
+  }
+
+  if (page) {
+    var page = $("input[name=page]:checked").val();
+    if (page && page != '1') {
+      data["page"] = page;
     }
   }
 
@@ -302,7 +302,7 @@ $(document)
       timeout = setTimeout(function() {
         var url = $("#browse-form")[0].action;
         var q = $("input[name=alphabet]:checked").val();
-        pushState();  
+        pushState();
         SearchFunc(url, q);
         $("#q").val("");
         $("#episodes").html("");
@@ -313,7 +313,9 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q);
+    $("#browse-collapse").collapse("hide");
     $("#q").val("");
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     $("#episodes").html("");
   })
   //RESULTS
@@ -322,14 +324,9 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#alphabet").length) {
-        var q = $("#alphabet").val();
-      }
-      else {
-        var q = $("#q").val();
-      }
+      var q = $("input[name=selected-q]:checked").val();
       pushState();
-      SearchFunc(url, q, true);
+      SearchFunc(url, q);
       $("#q").val("");
       $("#episodes").html("");
     }, 250);
@@ -339,32 +336,21 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      var page = $("input[name=page]:checked").val();
-      if ($("#alphabet").length) {
-        var q = $("#alphabet").val();
-      }
-      else {
-        var q = $("#q").val();
-      }
+      var q = $("input[name=selected-q]:checked").val();
       pushState();
-      SearchFunc(url, q, page);
+      SearchFunc(url, q, true);
       $("#q").val("");
       $("#episodes").html("");
     }, 250);
   })
   // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons", function() {
+  .on("change", "#genre-buttons, #language-buttons, #selected-buttons", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
-      if ($("#alphabet").length) {
-        var q = $("#alphabet").val();
-      }
-      else {
-        var q = $("#q").val();
-      }
+      var q = $("input[name=selected-q]:checked").val();
       pushState();
-      SearchFunc(url, q, true);
+      SearchFunc(url, q);
       $("#q").val("");
       $("#episodes").html("");
     }, 250);
@@ -374,7 +360,7 @@ $(document)
     e.preventDefault();
     loadChart();
   })
-  .on("change", "#chart-genre-buttons", function() {
+  .on("change", "#chart-genre-buttons, #chart-selected-buttons", function() {
     loadChart();
   })
   // NAVIGATION
@@ -409,7 +395,7 @@ $(document)
     pushState();
     $("#browse-collapse").collapse("show");
     $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");    
+    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
     loadResults("/browse/");
     $("#episodes").html("");
     scrollToMultibar();
@@ -632,9 +618,27 @@ $(document)
         scrollToTop();
       });
   })
+  .on("click", "#show-episodes", function(e) {
+    e.preventDefault();
+    var el = $("#episode-collapse");
+    if (!el.hasClass("show")) {
+      el.addClass("show");
+    }
+    scrollToMultibar();
+  })
+  .on("click", ".results-close", function(e) {
+    e.preventDefault();
+    $(this).parents(".results").remove();
+  })
   // BOOTSTRAP
-  .on("show.bs.collapse", function () {
-    console.log("whaddup");
-    $(".more-collapse.show").collapse("hide");
-    $(".collapse.show").collapse("hide");
+  .on("show.bs.collapse", function (e) {
+    if ($(e.target).hasClass("more-collapse")) {
+      $(".more-collapse.show").collapse("hide");
+    }
+    else if ($(e.target).hasClass("options-collapse")) {
+      $(".options-collapse.show").collapse("hide");
+    }
+    else if ($(e.target).hasClass("genre-options-collapse")) {
+      $(".genre-options-collapse.show").collapse("hide");
+    }
   })

@@ -153,14 +153,14 @@ def browse(request):
 
     if request.method == 'GET':
         user = request.user
-        alphabet = request.GET.get('q', None)
+        q = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
         page = int(request.GET.get('page', '1'))
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
 
-        podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
+        podcasts = Podcast.search(genre, language, user, alphabet=q)
         paginator = Paginator(podcasts, 160)
         results_header = str(paginator.count) + ' results'
 
@@ -177,7 +177,7 @@ def browse(request):
             'paginator': paginator,
             'genres': genres,
             'languages': languages,
-            'selected_alphabet': alphabet,
+            'selected_q': q,
             'selected_genre': genre,
             'selected_language': language,
             'results_header': results_header,
@@ -276,9 +276,9 @@ def podinfo(request, itunesid):
             episodes_header = str(episodes_count) + ' episode of ' + podcast.title
         else:
             episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
-        
+
         chart_header = 'Top 50 podcasts on iTunes'
-        
+
         context.update({
             'stage_open': True,
             'splash': False,

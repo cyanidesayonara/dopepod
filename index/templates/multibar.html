@@ -34,16 +34,16 @@
       </form>
     </div>
   </div>
-  <div class="row">
-    <!-- BROWSE BAR -->
-    {% if podcasts1 %}
-    <div class="col-12 collapse show" id="browse-collapse">
-    {% else %}
-    <div class="col-12 collapse" id="browse-collapse">
-    {% endif %}
+  <!-- BROWSE BAR -->
+  {% if podcasts1 %}
+  <div class="row collapse show" id="browse-collapse">
+  {% else %}
+  <div class="row collapse" id="browse-collapse">
+  {% endif %}
+    <div class="col">
       <form id="browse-form" method="GET" action="{% url 'browse' %}">
-        <div class="alphabet-group options-group" id="alphabet-buttons" data-toggle="buttons">
-          <ul id="options-field">
+        <div class="alphabet-group" id="alphabet-buttons" data-toggle="buttons">
+          <ul class="options-field">
           {% for letter in alphabet %}
           {% if letter == selected_alphabet %}
           <li>

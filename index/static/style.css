@@ -33,34 +33,30 @@ body {
 }
 
 /* BUTTONS */
-.btn-dope {
+.btn-dope, .btn-dope.focus, .btn-dope:focus {
   color: #2e2e2e;
   font-size: 16px;
-  padding: 6px 8px;
   background-color: #fff;
   border: none;
+  box-shadow: none;
 }
-.btn-dope.active, .btn-dope:hover, .btn-dope.focus, .btn-dope:focus {
+.btn-dope.active, .btn-dope:hover {
   color: #fff;
-  background: rgba(76,222,181,1);
+  background: rgba(0, 204, 122, 1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   box-shadow: rgba(0,0,0,.3) 0 0px 3px;
 }
-.btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover  {
-  color: #2e2e2e;
-  background: #ddd;
-}
 .btn-dope-tab {
   box-shadow: none;
-  border-radius: .25rem .25rem 0 0;
+  border-radius: 2rem .25rem 0 0;
 }
 .btn-dope-tab.active, .btn-dope-tab:hover, .btn-dope-tab.focus, .btn-dope-tab:focus {
   box-shadow: none;
 }
 .toggle[aria-expanded="true"] {
   color: #fff;
-  background: rgba(76,222,181,1);
+  background: rgba(0, 204, 122, 1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
   box-shadow: rgba(0,0,0,.3) 0 0px 3px;
@@ -68,13 +64,18 @@ body {
 .btn-dope-tab.toggle[aria-expanded="true"] {
   box-shadow: none;
 }
+.btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled.focus, .btn-dope-disabled:focus  {
+  color: #2e2e2e;
+  background: #ddd;
+  box-shadow: none;
+}
 
 /* COLORS */
 .color-1-trans {
-  background: rgba(76,222,181,.9);
+  background: rgba(0, 204, 122, .9);
 }
 .color-1 {
-  background: rgba(76,222,181,1);
+  background: rgba(0, 204, 122, 1);
 }
 .color-2 {
   background: rgba(45,43,43,1);
@@ -106,7 +107,7 @@ body {
   padding: 0;
 }
 #navbar a:hover {
-  color: #2e2e2e;
+  color: #fff;
 }
 .navbar-dropdown {
   min-width: 0;
@@ -261,6 +262,10 @@ body {
   padding: 30px 15px 15px 15px;
   min-height: 100vh;
 }
+.results {
+  margin-left: -1px;
+  margin-right: -1px;
+}
 
 /* TOGGLE BUTTONS */
 #browse-toggle{
@@ -278,7 +283,10 @@ body {
   display: inline-flex;
 }
 .page-button {
-
+  margin: 0;
+  min-width: 32px;
+  margin-bottom: 4px;
+  margin-right: 4px;
 }
 .page-list {
   list-style: none;
@@ -290,20 +298,19 @@ body {
   padding-bottom: 10px;
 }
 .options-group {
-
+  padding: 10px 6px 6px 10px;
 }
 .options-button {
-  margin-right: 8px;
-  margin-bottom: 8px;
+  margin-right: 4px;
+  margin-bottom: 4px;
 }
-#options-field {
+.options-field {
+  padding: 0;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin-bottom: 0;
   list-style: none;
-  padding-top: 8px;
-  padding-left: 8px;
 }
 .field-button {
   position: absolute;
@@ -312,15 +319,15 @@ body {
 }
 
 /* ALPHABET BUTTONS */
-#alphabet-buttons {
-  background: inherit;
+.alphabet-group {
+  padding-top: 10px;
 }
 .alphabet-button {
-  width: 30px;
-  height: 30px;
+  height: 32px;
+  width: 32px;
+  padding: 4px;
   margin-bottom: 4px;
   margin-right: 4px;
-  border: none;
 }
 .alphabet-button:focus {
   box-shadow: none;
@@ -338,15 +345,6 @@ body {
 #browse-bar {
   padding-top: 6px;
   padding-bottom: 6px;
-}
-#alphabet-field {
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-  padding-top: 4px;
 }
 
 #options-list {
@@ -438,9 +436,6 @@ body {
   width: 300px;
   height: 148px;
   margin: auto;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 .login-form-group {
   margin: 0;
@@ -456,12 +451,8 @@ body {
   margin: auto;
 }
 #social-login a, #social-login a:hover {
-  color: #2e2e2e;
-  text-decoration: none;
 }
 .social-link {
-  width: 100%;
-  border: 1px solid #000;
 }
 .login-field {
   padding: 5px 8px;
@@ -560,17 +551,24 @@ body {
 .hidden-row {
   padding: 0 !important;
 }
-.table tbody tr.hover:hover {
-  background-color: rgba(0,0,0,.075);
-}
 .more-collapse {
   text-align: justify;
+}
+#episodes-table {
+  margin: 0;
 }
 #episodes-table th, #episodes-table td {
   padding: 8px;
 }
 #episodes-table thead th {
   border-top: none;
+}
+#episodes-table tbody tr.hover:hover {
+  background: rgba(0, 204, 122, 1);
+  color: #fff;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0px 3px;
 }
 .episode-buttons {
   margin: 10px;
@@ -587,11 +585,15 @@ body {
   color: #000;
 }
 .results-wrapper {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   overflow: hidden;
   border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 4px solid rgba(0, 204, 122, 1);
   border-right: 1px solid #ddd;
+  -webkit-box-shadow: inset rgba(0,0,0,.3) 0 -1px 2px;
+  -moz-box-shadow: inset rgba(0,0,0,.3) 0 -1px 2px;
+  box-shadow: inset rgba(0,0,0,.3) 0 -1px 2px ;
   margin-bottom: 15px;
 }
 .results-bar {
@@ -602,7 +604,9 @@ body {
 
 }
 .results-options {
-  padding-right: 0;
+  padding: 0;
+  -ms-flex-item-align: end!important;
+  align-self: flex-end!important;
 }
 .results-options ul {
   display: -ms-flexbox;
@@ -614,7 +618,10 @@ body {
   list-style: none;
 }
 .options-select {
-  padding-top: 10px;
+  padding-top: 4px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
 .pagination {
   padding-top: 10px;
@@ -628,23 +635,26 @@ body {
   padding-top: 8px;
 }
 .results-minimize {
-  margin-right: 10px;
+
 }
 .results-close {
-  margin-right: 15px;
+
+}
+#result-detail {
+  padding: 10px;
 }
 .result-box {
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
-  padding: 5px;
-  border-radius: .25rem;
+  padding-left: 4px;
+  padding-right: 4px;
 }
-.result-box:hover {
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  background: #eee;
+.result-box img:hover {
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 8px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 8px;
+  box-shadow: rgba(0,0,0,.3) 0 0 8px;
+  border: 1px solid #ddd;
 }
 .result-image {
   object-fit: cover;
