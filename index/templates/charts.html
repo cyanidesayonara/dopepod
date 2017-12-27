@@ -1,29 +1,25 @@
-<div class="col-auto color-1 results-bar">
-  <span class="results-header">
-    {{ chart_header }}
-  </span>
-</div>
-<div class="col-12 collapse results-wrapper show" id="chart-collapse">
-  <div class="row options">
-    <div class="col">
-      <div class="float-right" id="option-buttons">
-        {% if chart_selected_genre %}
-          <a class="btn btn-dope toggle active" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-            {{ chart_selected_genre }}
-          </a>
-        {% else %}
-          <a class="btn btn-dope toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
-            Genre
-          </a>
-        {% endif %}
-      </div>
+<div class="col">
+  <div class="row results-bar">
+    <div class="col results-header">
+      {{ chart_header }}
+    </div>
+    <div class="col-auto results-options">
+      {% if chart_selected_genre %}
+        <a class="btn btn-dope btn-dope-tab toggle active" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+          {{ chart_selected_genre }}
+        </a>
+      {% else %}
+        <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#chart-genre-collapse" aria-expanded="false" aria-controls="chart-genre-collapse">
+          Genre
+        </a>
+      {% endif %}
     </div>
   </div>
-  <form id="chart-form" method="GET" action="{% url 'charts' %}">
-    <div class="row options-select">
+  <div class="row options-select color-1">
+    <form id="chart-form" method="GET" action="{% url 'charts' %}">
       <div class="collapse" id="chart-genre-collapse">
-        <div class="options-group color-1" id="chart-genre-buttons" data-toggle="buttons">
-          <ul id="button-field">
+        <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
+          <ul id="options-field">
           {% if chart_selected_genre %}
             <label class="btn btn-dope options-button">
               <input class="field-button" type="radio" name="chart-genre" value="All">
@@ -55,9 +51,9 @@
           </ul>
         </div>
       </div>
-    </div>
-  </form>
-  <div class="row results-list">
+    </form>
+  </div>
+  <div class="row results-wrapper">
     <div class="col">
       {% for podcast in chart %}
         <div class="row">

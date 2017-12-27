@@ -43,7 +43,7 @@
     {% endif %}
       <form id="browse-form" method="GET" action="{% url 'browse' %}">
         <div class="alphabet-group options-group" id="alphabet-buttons" data-toggle="buttons">
-          <ul id="button-field">
+          <ul id="options-field">
           {% for letter in alphabet %}
           {% if letter == selected_alphabet %}
           <li>

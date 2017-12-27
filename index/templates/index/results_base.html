@@ -5,21 +5,241 @@ dopepod
 {% endblock %}
 
 {% block results %}
-<div class="col-auto color-1 results-bar">
-  <span class="results-header">
-    {{ results_header }}
-  </span>
-</div>
-<div class="col-12 results-wrapper">
+<div class="col">
+  <div class="row results-bar">
+    <div class="col results-header">
+      {{ results_header }}
+    </div>
+    <div class="col-auto results-options">
+      <ul>
+        {% if selected_genre %}
+        <li>
+          <a class="btn btn-dope btn-dope-tab toggle active" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+            {{ selected_genre }}
+          </a>
+        </li>
+        {% else %}
+        <li>
+          <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+            Genre
+          </a>
+        </li>
+        {% endif %}
+        {% if selected_language %}
+        <li>
+          <a class="btn btn-dope btn-dope-tab toggle active" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+            {{ selected_language }}
+          </a>
+        </li>
+        {% else %}
+        <li>
+          <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+            Language
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  {% if selected_q %}
+  <form id="results-form" method="GET" action="{% url 'search' %}">
+  {% else %}
   <form id="results-form" method="GET" action="{% url 'browse' %}">
+  {% endif %}
+  <div class="row options-select color-1">
     {% if selected_alphabet %}
       <input type="hidden" id="selected_alphabet" name="selected_alphabet" value="{{ selected_alphabet }}">
     {% endif %}
-    {% include 'optionsbar.html' %}
-  </form>
-  <div class="row results-list">
-    {% block results_x %}
-    {% endblock %}
+    {% if selected_q %}
+      <input type="hidden" id="selected_q" name="selected_q" value="{{ selected_q }}">
+    {% endif %}
+      <div class="collapse" id="genre-collapse">
+        {% if genres %}
+          <div class="options-group" id="genre-buttons" data-toggle="buttons">
+            <ul id="options-field">
+              {% if selected_genre %}
+                <li>
+                  <label class="btn btn-dope options-button">
+                    <input class="field-button" type="radio" name="genre" value="All">
+                    All
+                  </label>
+                </li>
+              {% else %}
+                <li>
+                  <label class="btn btn-dope options-button active">
+                    <input class="field-button" type="radio" name="genre" value="All" checked>
+                    All
+                  </label>
+                </li>
+              {% endif %}
+              {% for genre in genres %}
+              {% if selected_genre == genre.name %}
+              <li>
+                <label class="btn btn-dope options-button active">
+                  <input class="field-button" type="radio" name="genre" value="{{ genre.name }}" checked>
+                  {{ genre.name }}
+                </label>
+              </li>
+              {% else %}
+              <li>
+                <label class="btn btn-dope options-button">
+                  <input class="field-button" type="radio" name="genre" value="{{ genre.name }}">
+                  {{ genre.name }}
+                </label>
+              </li>
+              {% endif %}
+            {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+      <div class="collapse" id="language-collapse">
+        {% if languages %}
+        <div class="options-group color-1" id="language-buttons" data-toggle="buttons">
+          <ul id="options-field">
+            {% if selected_language %}
+            <li>
+              <label class="btn btn-dope options-button">
+                <input class="field-button" type="radio" name="language" value="All">
+                All
+              </label>
+            </li>
+            {% else %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="radio" name="language" value="All" checked>
+                All
+              </label>
+            </li>
+            {% endif %}
+            {% for language in languages %}
+            {% if selected_language == language.name %}
+            <li>
+              <label class="btn btn-dope options-button active">
+                <input class="field-button" type="radio" name="language" value="{{ language.name }}" checked>
+                {{ language.name }}
+              </label>
+            </li>
+            {% else %}
+            <li>
+              <label class="btn btn-dope options-button">
+                <input class="field-button" type="radio" name="language" value="{{language.name }}">
+                {{ language.name }}
+              </label>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
   </div>
+  <div class="row results-wrapper">
+    <div class="col">
+        <div class="row pagination">
+          <div class="col">
+            {% if podcasts.has_other_pages %}
+            <div class="btn-group" id="page-buttons" data-toggle="buttons">
+              <ul class="nav page-list">
+                {% if podcasts.has_previous %}
+                {% if not podcasts.previous_page_number == 1%}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="1">
+                    <i class="fas fa-chevron-left"></i>
+                    <i class="fas fa-chevron-left"></i>
+                  </label>
+                </li>
+                {% endif %}
+                {% endif %}
+                {% for i in podcasts.paginator.page_range %}
+                {% if podcasts.number == i %}
+                <li>
+                  <label class="btn btn-dope page-button active">
+                    <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
+                    {{ i }}
+                  </label>
+                </li>
+                {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="{{ i }}">
+                    {{ i }}
+                  </label>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if podcasts.has_next %}
+                {% if not podcasts.next_page_number == paginator.num_pages %}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="{{ paginator.num_pages }}">
+                    <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-chevron-right"></i>
+                  </label>
+                </li>
+                {% endif %}
+                {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          {% block results_x %}
+          {% endblock %}
+        </div>
+        <div class="row pagination">
+          <div class="col">
+            {% if podcasts.has_other_pages %}
+            <div class="btn-group" id="page-buttons" data-toggle="buttons">
+              <ul class="nav page-list">
+                {% if podcasts.has_previous %}
+                {% if not podcasts.previous_page_number == 1%}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="1">
+                    <i class="fas fa-chevron-left"></i>
+                    <i class="fas fa-chevron-left"></i>
+                  </label>
+                </li>
+                {% endif %}
+                {% endif %}
+                {% for i in podcasts.paginator.page_range %}
+                {% if podcasts.number == i %}
+                <li>
+                  <label class="btn btn-dope page-button active">
+                    <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
+                    {{ i }}
+                  </label>
+                </li>
+                {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="{{ i }}">
+                    {{ i }}
+                  </label>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if podcasts.has_next %}
+                {% if not podcasts.next_page_number == paginator.num_pages %}
+                <li>
+                  <label class="btn btn-dope page-button">
+                    <input class="field-button" type="radio" name="page" value="{{ paginator.num_pages }}">
+                    <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-chevron-right"></i>
+                  </label>
+                </li>
+                {% endif %}
+                {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+  </div>
+  </form>
 </div>
 {% endblock %}
