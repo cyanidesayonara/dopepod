@@ -1,10 +1,10 @@
-{% extends 'index/results_base.html' %}
+{% extends 'results_base.html' %}
 
 {% block title %}
 dopepod
 {% endblock %}
 
-{% block results_x %}
+{% block results_content %}
 <div class="row results-content">
   {% for podcast in podcasts %}
   <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">

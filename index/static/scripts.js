@@ -13,6 +13,7 @@ $(window).on("popstate", function(event) {
     // }
   }
 })
+
 function pushState() {
   var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
@@ -81,7 +82,7 @@ function refreshCookie() {
     }
   });
 }
-function refreshNavbar() {
+function refreshPage() {
   // refresh navbar (and maybe other stuff as well?)
   $.ajax({
     type: "GET",
@@ -91,30 +92,23 @@ function refreshNavbar() {
       console.log(thrownError);
     })
     .done(function(response) {
-      // refresh navbar
+      // refresh page
+      $("#episodes").empty();
+      $("#results").empty();
+      loadChart();
       $("#navbar-drop").html(response);
     });
 }
 
-// LOADERS
-function loadSplash(url, signup=null) {
-  $("#splash").html("<div class='row' style='height:400px;'><div>");
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: {
-      'signup': signup,
-    },
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#splash").html(response);
-      replaceState("/");
-    });
+function clearSearch() {
+  $("#q").val("");
+  $("#browse-collapse").collapse("hide");
+  $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
 }
+
+// LOADERS
 function loadCenterStage(url) {
+  $("#episodes").empty();
   $("#center-stage").html("<div class='row' style='height:400px;'><div>");
   $.ajax({
     type: "GET",
@@ -129,6 +123,7 @@ function loadCenterStage(url) {
     });
 }
 function loadEpisodes(itunesid) {
+  $("#episodes").empty();
   $("#episodes").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
@@ -141,7 +136,7 @@ function loadEpisodes(itunesid) {
       console.log(thrownError);
     })
     .done(function(response) {
-      if ($("#podinfo-main").length) {
+      if ($("#podinfo").length) {
         $("#episodes").html(response);
         var url = $("#main-wrapper")[0].baseURI;
         replaceState(url);
@@ -149,6 +144,7 @@ function loadEpisodes(itunesid) {
     });
 }
 function loadResults(url) {
+  $("#episodes").empty();
   $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading results...</span></div>");
   $.ajax({
     type: "GET",
@@ -222,6 +218,7 @@ function SearchFunc(url, q=null, page=null) {
     }
   }
 
+  scrollToMultibar();
   $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
@@ -237,16 +234,14 @@ function SearchFunc(url, q=null, page=null) {
       if (!jQuery.isEmptyObject(data)) {
         url = url + "?" + $.param(data);
       }
-      scrollToMultibar();
       replaceState(url);
     });
-  return xhr;
 }
 
 // SCROLLTO
 function scrollToTop() {
   $('html, body').animate({
-    scrollTop: $("#main-wrapper").offset().top
+    scrollTop: $("body").offset().top
   }, 200);
 }
 function scrollToMultibar() {
@@ -254,15 +249,6 @@ function scrollToMultibar() {
     scrollTop: 400
   }, 200);
 }
-
-// function showStage() {
-//   $("#stage").addClass("open");
-//   $("#flap").addClass("extended");
-// }
-// function hideStage() {
-//   $("#stage").removeClass("open");
-//   $("#flap").removeClass("extended");
-// }
 
 // after page loads
 $(document)
@@ -281,7 +267,7 @@ $(document)
       var q = $("#q").val();
       pushState();
       SearchFunc(url, q);
-      $("#episodes").html("");
+      $("#episodes").empty();
     }, 250);
   })
   // search when "search" button is clicked
@@ -293,8 +279,8 @@ $(document)
       var q = $("#q").val();
       pushState();
       SearchFunc(url, q);
-      $("#q").val("");
-      $("#episodes").html("");
+      clearSearch();
+      $("#episodes").empty();
     }, 250);
   })
   // BROWSE
@@ -307,8 +293,8 @@ $(document)
       var q = $("input[name=alphabet]:checked").val();
       pushState();
       SearchFunc(url, q);
-      $("#q").val("");
-      $("#episodes").html("");
+      clearSearch();
+      $("#episodes").empty();
     }, 250);
   })
   .on("change", "#alphabet-buttons", function() {
@@ -316,10 +302,8 @@ $(document)
     var q = $("input[name=alphabet]:checked").val();
     pushState();
     SearchFunc(url, q);
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    $("#episodes").html("");
+    clearSearch();
+    $("#episodes").empty();
   })
   //RESULTS
   .on("submit", "#results-form", function(e) {
@@ -330,8 +314,8 @@ $(document)
       var q = $("input[name=selected-q]:checked").val();
       pushState();
       SearchFunc(url, q);
-      $("#q").val("");
-      $("#episodes").html("");
+      clearSearch();
+      $("#episodes").empty();
     }, 250);
   })
   // search when user changes options
@@ -343,7 +327,7 @@ $(document)
       pushState();
       SearchFunc(url, q, true);
       $("#q").val("");
-      $("#episodes").html("");
+      $("#episodes").empty();
     }, 250);
   })
   // search when user changes options
@@ -373,61 +357,47 @@ $(document)
     var url = this.href;
     var itunesid = $(this).data("itunesid");
     pushState();
-    $("#q").val("");
+    clearSearch();
     loadCenterStage(url);
     loadEpisodes(itunesid);
-    $("#splash").html("");
     scrollToTop();
   })
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     pushState();
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    loadSplash("/dashboard/");
-    $("#center-stage").html("");
-    $("#results").html("");
-    $("#episodes").html("");
+    var url = this.href;
+    pushState();
+    clearSearch();
+    loadCenterStage(url);
     scrollToTop();
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
+    var url = this.href;
     pushState();
-    $("#browse-collapse").collapse("show");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    loadResults("/browse/");
-    $("#episodes").html("");
+    clearSearch();
+    loadResults(url);
     scrollToMultibar();
    })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
+    var url = this.href;
     pushState();
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    loadResults("/subscriptions/");
-    $("#episodes").html("");
+    clearSearch();
+    loadResults(url);
     scrollToMultibar();
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
+    var url = this.href;
     pushState();
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    $("#splash").html("");
-    loadCenterStage("/settings/");
-    $("episodes").html("");
+    clearSearch();
+    loadCenterStage(url);
     scrollToTop();
-  })
-  .on("click", "#browse-toggle", function() {
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
   })
   // FORMS
   // replace settings, empty and hide modal
@@ -451,10 +421,7 @@ $(document)
       })
       .done(function(response) {
         pushState();
-        loadSplash("/dashboard/");
-        $("#center-stage").html("");
-        $("#results").html("");
-        $("#episodes").html("");
+        loadCenterStage("/");
         scrollToTop();
       });
   })
@@ -473,7 +440,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         console.log(thrownError);
-        loadCenterStage("/account/login/");
+        loadCenterStage("/");
         button.text("Fail :(");
       })
       .done(function(response) {
@@ -517,28 +484,13 @@ $(document)
     }
   })
   // LOGIN & SIGNUP
-  // open login register
-  .on("click", ".ajax-login", function(e) {
+  // open login / register
+  .on("click", ".ajax-login, .ajax-signup", function(e) {
     e.preventDefault();
     var url = this.href;
     pushState();
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    loadSplash("/dashboard/");
-    $("#center-stage").html("");
-    scrollToTop();
-  })
-  // open login register
-  .on("click", ".ajax-register", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    pushState();
-    $("#browse-collapse").collapse("hide");
-    $("#q").val("");
-    $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-    loadSplash("/dashboard/", true);
-    $("#center-stage").html("");
+    clearSearch();
+    loadCenterStage(url);
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {
@@ -546,10 +498,10 @@ $(document)
     $("#pills-password-tab").tab("show");
   })
   .on("click", ".login-signup-toggle", function() {
-    $("#login-errors").html("");
+    $("#login-errors").empty();
   })
   // login or signup, refresh after
-  .on("submit", ".login-form", function (e) {
+  .on("submit", ".login-form, .signup-form", function (e) {
     e.preventDefault();
     var button = $(this).find(".login-button");
     button.text("Loading...");
@@ -568,32 +520,8 @@ $(document)
       })
       .done(function() {
         refreshCookie();
-        refreshNavbar();
-        loadSplash("/dashboard/")
-        scrollToTop();
-      });
-  })
-  .on("submit", ".signup-form", function (e) {
-    e.preventDefault();
-    var button = $(this).find(".signup-button");
-    button.text("Loading...");
-    var data = $(this).serialize();
-    var method = this.method;
-    var url = this.action;
-    $.ajax({
-      data: data,
-      method: method,
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        $("#login-errors").html(xhr.responseJSON.html);
-        button.text("Sign Up");
-      })
-      .done(function() {
-        refreshCookie();
-        refreshNavbar();
-        loadSplash("/dashboard/")
+        refreshPage();
+        loadCenterStage("/")
         scrollToTop();
       });
   })
@@ -615,9 +543,7 @@ $(document)
         button.text("Reset");
       })
       .done(function() {
-        refreshCookie();
-        refreshNavbar();
-        loadSplash("/dashboard/")
+        loadCenterStage("/")
         scrollToTop();
       });
   })
@@ -633,15 +559,13 @@ $(document)
     e.preventDefault();
     $(this).parents(".results").remove();
   })
-  // BOOTSTRAP
-  .on("show.bs.collapse", function (e) {
-    if ($(e.target).hasClass("more-collapse")) {
+  // BOOTSTRAP COLLAPSES
+  .on("show.bs.collapse", ".more-collapse", function (e) {
       $(".more-collapse.show").collapse("hide");
-    }
-    else if ($(e.target).hasClass("options-collapse")) {
+  })
+  .on("show.bs.collapse", ".options-collapse", function (e) {
       $(".options-collapse.show").collapse("hide");
-    }
-    else if ($(e.target).hasClass("genre-options-collapse")) {
+  })
+  .on("show.bs.collapse", ".genre-options-collapse", function (e) {
       $(".genre-options-collapse.show").collapse("hide");
-    }
   })

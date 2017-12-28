@@ -1,10 +1,17 @@
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
+
+{% block title %}
+dopepod
+{% endblock %}
+
+{% block center-stage %}
 <div class="row" id="dashboard">
   <div class="col-auto" id="dashboard-top">
     <h3>
       dashboard
     </h3>
     <p>
-      You have 0
+      You have {{ subscriptions.count }}
       <a class="subscriptions-link" href="{% url 'subscriptions' %}">
         subscriptions
       </a>
@@ -14,3 +21,4 @@
     </p>
   </div>
 </div>
+{% endblock %}

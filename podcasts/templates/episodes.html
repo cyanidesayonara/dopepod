@@ -19,11 +19,11 @@
       </ul>
     </div>
   </div>
-  <div class="row options-select color-1">
-    <div class="col-auto ml-auto" id="episodes-selected-buttons" data-toggle="buttons">
-      <ul class="options-field">
-      </ul>
+  <div class="row options-select color-1" id="episodes-selected-buttons" data-toggle="buttons">
+    {% if episode_selected_options %}
+    <div class="col-auto mr-auto selected-group">
     </div>
+     {% endif %}
   </div>
   <div class="row collapse show results-wrapper" id="episode-collapse">
     <div class="col">

@@ -1,5 +1,6 @@
 {% load static %}
 {% load account %}
+{% load account socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,8 +28,33 @@
     </nav>
     <!-- CONTENT -->
     <div id="main-wrapper">
-      {% block content %}
-      {% endblock %}
+      <div class="container-fluid sticky-top extended" id="flap">
+        <div class="row open" id="stage">
+          <div class="container" id="center-stage">
+            {% block center-stage %}
+            {% endblock %}
+          </div>
+        </div>
+        <!-- MULTIBAR -->
+        <div class="row color-1-trans shadow-down" id="multibar-scroll">
+          {% include 'multibar.html' %}
+        </div>
+      </div>
+      <!-- MAIN -->
+      <div class="container"id="main">
+        <div class="row" id="episodes">
+          {% include 'episodes.html' %}
+        </div>
+        <!-- RESULTS -->
+        <div class="row" id="results">
+          {% block results %}
+          {% endblock %}
+        </div>
+        <!-- CHARTS -->
+        <div class="row" id="charts">
+          {% include 'charts.html' %}
+        </div>
+      </div>
     </div>
     <!-- PLAYER -->
     <div class="container-fluid fixed-bottom" id="player-drop">

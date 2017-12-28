@@ -24,7 +24,7 @@
   <form id="chart-form" method="GET" action="{% url 'charts' %}">
     <div class="row options-select color-1" id="chart-selected-buttons" data-toggle="buttons">
       {% if chart_selected_genre %}
-        <div class="col-auto ml-auto options-group">
+      <div class="col-auto ml-auto options-group">
           <label class="btn btn-dope options-button active">
             <input class="field-button" type="checkbox" name="chart-genre" value="All">
             {{ chart_selected_genre }}

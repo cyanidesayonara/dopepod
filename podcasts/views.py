@@ -20,7 +20,7 @@ def dashboard(request):
         context = {
             'signup': signup,
         }
-        return render(request, 'login_signup.html', context)
+        return render(request, 'login.html', context)
 
 def episodes(request):
     """
@@ -92,14 +92,13 @@ def subscribe(request):
 
     # validate request
     if request.method == 'POST':
-        try:
-            itunesid = request.POST['itunesid']
-            podcast = Podcast.objects.get(itunesid=int(itunesid))
-        except (KeyError, Podcast.DoesNotExist) as e:
-            raise Http404()
-        
         user = request.user
         if user.is_authenticated:
+            try:
+                itunesid = request.POST['itunesid']
+                podcast = Podcast.objects.get(itunesid=int(itunesid))
+            except (KeyError, Podcast.DoesNotExist) as e:
+                raise Http404()
 
             podcast.subscribe(user)
             podcast.set_subscribed(user)
@@ -114,5 +113,5 @@ def subscribe(request):
 
         else:
             if request.is_ajax():
-                return render(request, 'login_signup.html', {})
+                return render(request, 'login.html', {})
             return redirect('/?next=/podinfo/' + itunesid + '/')

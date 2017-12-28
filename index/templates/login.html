@@ -1,38 +1,50 @@
-{% load account socialaccount %}
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
 
+{% block title %}
+dopepod
+{% endblock %}
+
+{% block center-stage %}
 <div class="row">
-  <div class="col" id="splash-top">
+  <div class="col col-lg-8 offset-lg-2" id="login">
     <h5>
       Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
     </h5>
-    <nav class="nav" id="login-signup-buttons" role="tablist">
+    <div class="nav" id="login-buttons" role="tablist">
       {% if signup %}
         <a class="btn btn-dope" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="false">
-          Log In
+          Login
         </a>
-        <span>
-          or
-        </span>
         <a class="btn btn-dope active" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="true">
-          Sign Up
+          Signup
         </a>
       {% else %}
         <a class="btn btn-dope active" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="true">
-          Log In
+          Login
         </a>
         <a class="btn btn-dope" id="pills-signup-tab" data-toggle="pill" href="#pills-signup" role="tab" aria-controls="pills-signup" aria-selected="false">
-          Sign Up
+          Signup
         </a>
       {% endif %}
-      <a class="d-none" id="pills-password-tab" data-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">
-        Log In
+      <a id="pills-password-tab" data-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">
       </a>
-    </nav>
-  </div>
-</div>
-<div classa="row">
-  <div class="col" id="splash-bottom">
+    </div>
     <div id="login-errors">
+      {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {% for field in form %}
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
     </div>
     <div id="login-wrapper">
       <div class="tab-content" id="pills-tabContent">
@@ -50,7 +62,7 @@
                   <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="btn btn-dope active login-button">Log In</button>
+                  <button type="submit" class="btn btn-dope active login-button">Login</button>
                 </div>
               </div>
               <div class="form-row">
@@ -85,7 +97,7 @@
                   <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="btn btn-dope active signup-button">Sign Up</button>
+                  <button type="submit" class="btn btn-dope active login-button">Signup</button>
                 </div>
               </div>
             </form>
@@ -119,7 +131,7 @@
                   <input class="form-control login-field" type="password" name="password" placeholder="Password" required="" id="login-password">
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="btn btn-dope active login-button">Log In</button>
+                  <button type="submit" class="btn btn-dope active login-button">Login</button>
                 </div>
               </div>
               <div class="form-row">
@@ -154,7 +166,7 @@
                   <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="btn btn-dope active signup-button">Sign Up</button>
+                  <button type="submit" class="btn btn-dope active signup-button">Signup</button>
                 </div>
               </div>
             </form>
@@ -177,26 +189,22 @@
                 </div>
               </div>
             </form>
-          </div>
+        </div>
         {% endif %}
       </div>
     </div>
-    <div id="social-login">
-      <a class="btn btn-dope socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google">
-        <i class="fab fa-google"></i> Sign in with Google
-      </a>
-      <a class="btn btn-dope socialaccount_provider google social-link" href="/account/facebook/login/?process=login" title="Facebook">
-        <i class="fab fa-facebook"></i> Sign in with Facebook
-      </a>
-      <!-- <a title="Reddit" class="socialaccount_provider reddit" href="/account/reddit/login/?process=login">
+    <a class="btn btn-dope socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google">
+      <i class="fab fa-google"></i> Sign in with Google
+    </a>
+    <a class="btn btn-dope socialaccount_provider google social-link" href="/account/facebook/login/?process=login" title="Facebook">
+      <i class="fab fa-facebook"></i> Sign in with Facebook
+    </a>
+    <!-- <a title="Reddit" class="socialaccount_provider reddit" href="/account/reddit/login/?process=login">
       <i class="fab fa-reddit"></i>
-      </a> -->
-      <!-- <a title="Github" class="socialaccount_provider github" href="/account/github/login/?process=login">
-      <i class="fab fa-github"></i>
-      </a> -->
-      <!-- <a title="Facebook" class="socialaccount_provider facebook" href="/account/facebook/login/?process=login">
-      <i class="fab fa-facebook-f"></i>
-      </a> -->
-    </div>
+    </a> -->
+    <!-- <a title="Github" class="socialaccount_provider github" href="/account/github/login/?process=login">
+    <i class="fab fa-github"></i>
+    </a> -->
   </div>
 </div>
+{% endblock %}
