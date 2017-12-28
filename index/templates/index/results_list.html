@@ -5,8 +5,8 @@ dopepod
 {% endblock %}
 
 {% block results_x %}
-<div class="row" id="results_list">
-  {% if podcasts %}
+{% if podcasts %}
+<div class="row results-content">
   <div class="col-lg-3 col-md-6 col-sm-12">
     <ul class="browse-results-list">
       {% for podcast in podcasts1 %}
@@ -51,12 +51,6 @@ dopepod
       {% endfor %}
     </ul>
   </div>
-  {% else %}
-    <div class="col">
-      <p>
-        No results
-      </p>
-    </div>
-  {% endif %}
 </div>
+{% endif %}
 {% endblock %}

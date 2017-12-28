@@ -153,14 +153,14 @@ def browse(request):
 
     if request.method == 'GET':
         user = request.user
-        q = request.GET.get('q', None)
+        alphabet = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
         page = int(request.GET.get('page', '1'))
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
 
-        podcasts = Podcast.search(genre, language, user, alphabet=q)
+        podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
         results_header = str(paginator.count) + ' results'
 
@@ -177,7 +177,7 @@ def browse(request):
             'paginator': paginator,
             'genres': genres,
             'languages': languages,
-            'selected_q': q,
+            'selected_alphabet': alphabet,
             'selected_genre': genre,
             'selected_language': language,
             'results_header': results_header,

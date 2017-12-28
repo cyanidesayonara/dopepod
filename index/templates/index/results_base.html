@@ -48,102 +48,91 @@ dopepod
   {% else %}
   <form id="results-form" method="GET" action="{% url 'browse' %}">
   {% endif %}
-  <div class="row options-select color-1">
-    <div class="col-auto ml-auto" id="selected-buttons" data-toggle="buttons">
-        <ul class="options-field">
+    <div class="row options-select color-1" id="selected-buttons" data-toggle="buttons">
+      {% if selected_q or selected_alphabet %}
+        <div class="col-auto mr-auto selected-group">
           {% if selected_q %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
-                {{ selected_q }}
-              </label>
-            </li>
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
+              {{ selected_q }}
+            </label>
           {% endif %}
+          {% if selected_alphabet %}
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_alphabet }}" checked>
+              {{ selected_alphabet }}
+            </label>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if selected_genre or selected_language %}
+        <div class="col options-group">
           {% if selected_genre %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
-                {{ selected_genre }}
-              </label>
-            </li>
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
+              {{ selected_genre }}
+            </label>
           {% endif %}
           {% if selected_language %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
-                {{ selected_language }}
-              </label>
-            </li>
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
+              {{ selected_language }}
+            </label>
           {% endif %}
-        </ul>
-      </div>
+        </div>
+      {% endif %}
     <div class="collapse options-collapse" id="genre-collapse">
       {% if genres %}
         <div class="options-group" id="genre-buttons" data-toggle="buttons">
-          <ul class="options-field">
-            {% if selected_genre %}
-              <li>
-                <label class="btn btn-dope options-button">
-                  <input class="field-button" type="radio" name="genre" value="All">
-                  All
-                </label>
-              </li>
-            {% else %}
-              <li>
-                <label class="btn btn-dope options-button active">
-                  <input class="field-button" type="radio" name="genre" value="All" checked>
-                  All
-                </label>
-              </li>
+          {% if selected_genre %}
+            <label class="btn btn-dope options-button">
+              <input class="field-button" type="radio" name="genre" value="All">
+              All
+            </label>
+          {% else %}
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="radio" name="genre" value="All" checked>
+              All
+            </label>
+          {% endif %}
+          {% for genre in genres %}
+            {% if not selected_genre == genre.name %}
+              <label class="btn btn-dope options-button">
+                <input class="field-button" type="radio" name="genre" value="{{ genre.name }}">
+                {{ genre.name }}
+              </label>
             {% endif %}
-            {% for genre in genres %}
-              {% if not selected_genre == genre.name %}
-                <li>
-                  <label class="btn btn-dope options-button">
-                    <input class="field-button" type="radio" name="genre" value="{{ genre.name }}">
-                    {{ genre.name }}
-                  </label>
-                </li>
-              {% endif %}
-            {% endfor %}
-            </ul>
+          {% endfor %}
         </div>
       {% endif %}
     </div>
     <div class="collapse options-collapse" id="language-collapse">
       {% if languages %}
         <div class="options-group" id="language-buttons" data-toggle="buttons">
-          <ul class="options-field">
-            {% if selected_language %}
-            <li>
-              <label class="btn btn-dope options-button">
-                <input class="field-button" type="radio" name="language" value="All">
-                All
-              </label>
-            </li>
-            {% else %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="radio" name="language" value="All" checked>
-                All
-              </label>
-            </li>
+          {% if selected_language %}
+            <label class="btn btn-dope options-button">
+              <input class="field-button" type="radio" name="language" value="All">
+              All
+            </label>
+          {% else %}
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="radio" name="language" value="All" checked>
+              All
+            </label>
+          {% endif %}
+          {% for language in languages %}
+            {% if not selected_language == language.name %}
+                <label class="btn btn-dope options-button">
+                  <input class="field-button" type="radio" name="language" value="{{ language.name }}">
+                  {{ language.name }}
+                </label>
             {% endif %}
-            {% for language in languages %}
-              {% if not selected_language == language.name %}
-                <li>
-                  <label class="btn btn-dope options-button">
-                    <input class="field-button" type="radio" name="language" value="{{ language.name }}">
-                    {{ language.name }}
-                  </label>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+          {% endfor %}
         </div>
       {% endif %}
     </div>
   </div>
+  {% if podcasts or subscriptions %}
   <div class="row results-wrapper">
     <div class="col">
       {% if podcasts.has_other_pages %}
@@ -250,6 +239,7 @@ dopepod
       {% endif %}
     </div>
   </div>
+  {% endif %}
   </form>
 </div>
 {% endblock %}

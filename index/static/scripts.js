@@ -195,6 +195,9 @@ function SearchFunc(url, q=null, page=null) {
   if (q) {
     data["q"] = q;
   }
+  else {
+    url ="/browse/";
+  }
 
   var genre = $("input[name=genre]:checked").val();
   if (!genre) {
@@ -297,17 +300,17 @@ $(document)
   // BROWSE
   // browse when "browse" button is clicked
   .on("submit", "#browse-form", function(e) {
-      e.preventDefault();
-      clearTimeout(timeout);
-      timeout = setTimeout(function() {
-        var url = $("#browse-form")[0].action;
-        var q = $("input[name=alphabet]:checked").val();
-        pushState();
-        SearchFunc(url, q);
-        $("#q").val("");
-        $("#episodes").html("");
-      }, 250);
-    })
+    e.preventDefault();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = $("#browse-form")[0].action;
+      var q = $("input[name=alphabet]:checked").val();
+      pushState();
+      SearchFunc(url, q);
+      $("#q").val("");
+      $("#episodes").html("");
+    }, 250);
+  })
   .on("change", "#alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     var q = $("input[name=alphabet]:checked").val();

@@ -18,56 +18,44 @@
             </a>
           </li>
         {% endif %}
-    </ul>
+      </ul>
     </div>
   </div>
   <form id="chart-form" method="GET" action="{% url 'charts' %}">
-  <div class="row options-select color-1">
-    <div class="col-auto ml-auto" id="chart-selected-buttons" data-toggle="buttons">
-      <ul class="options-field">
-        {% if chart_selected_genre %}
-          <li>
-            <label class="btn btn-dope options-button active">
-              <input class="field-button" type="checkbox" name="chart-genre" value="All">
-              {{ chart_selected_genre }}
-            </label>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-    <div class="collapse genre-options-collapse" id="chart-genre-collapse">
-      <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
-        <ul class="options-field">
+    <div class="row options-select color-1" id="chart-selected-buttons" data-toggle="buttons">
+      {% if chart_selected_genre %}
+        <div class="col-auto ml-auto options-group">
+          <label class="btn btn-dope options-button active">
+            <input class="field-button" type="checkbox" name="chart-genre" value="All">
+            {{ chart_selected_genre }}
+          </label>
+        </div>
+      {% endif %}
+      <div class="collapse genre-options-collapse" id="chart-genre-collapse">
+        <div class="options-group" id="chart-genre-buttons" data-toggle="buttons">
           {% if chart_selected_genre %}
-            <li>
-              <label class="btn btn-dope options-button">
-                <input class="field-button" type="radio" name="chart-genre" value="All">
-                All
-              </label>
-            </li>
+            <label class="btn btn-dope options-button">
+              <input class="field-button" type="radio" name="chart-genre" value="All">
+              All
+            </label>
           {% else %}
-            <li>
-              <label class="btn btn-dope options-button active">
-                <input class="field-button" type="radio" name="chart-genre" value="All" checked>
-                All
-              </label>
-            </li>
+            <label class="btn btn-dope options-button active">
+              <input class="field-button" type="radio" name="chart-genre" value="All" checked>
+              All
+            </label>
           {% endif %}
           {% for genre in chart_genres %}
             {% if not chart_selected_genre == genre.name %}
-              <li>
-                <label class="btn btn-dope options-button">
-                  <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
-                  {{ genre.name }}
-                </label>
-              </li>
+              <label class="btn btn-dope options-button">
+                <input class="field-button" type="radio" name="chart-genre" value="{{ genre.name }}">
+                {{ genre.name }}
+              </label>
             {% endif %}
           {% endfor %}
-        </ul>
+        </div>
       </div>
-  </div>
-  </div>
-  <div class="row results-wrapper">
+    </div>
+    <div class="row results-wrapper">
       <div class="col">
         {% for podcast in chart %}
           <div class="row">
