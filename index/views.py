@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from allauth.account import views as allauth
+import json
 
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
 
@@ -14,6 +16,41 @@ def navbar(request):
 
     if request.method == 'GET':
         return render(request, 'navbar.html', {})
+
+def login(request):
+    """
+    relays stuff to and from allauth
+    """
+
+    if request.method == 'POST':
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = allauth.login(request)
+        data = json.loads(response.content)
+        errors = data['form']['errors']
+
+        context = {
+            'errors': errors,
+        }
+
+        if request.is_ajax():
+            if response.status_code == '200':
+                return render(request, 'ajax.html', {})        
+            else:
+                print(request.is_ajax())
+                return render(request, 'errors.html', context)
+        else:
+            if response.status_code == '200':
+                return redirect('/')
+            else:
+                return render(request, 'dashboard.html', context)
+
+def signup(request):
+    response = allauth.login(request)
+    print(response.content)
+
+def reset_password(request):
+    response = allauth.login(request)
+    print(response.content)
 
 def index(request):
     """
@@ -43,12 +80,13 @@ def index(request):
         chart_header = 'Top 50 podcasts on iTunes'
 
         context.update({
+            'dashboard': True,
             'chart_header': chart_header,
             'chart_genres': genres,
             'chart': chart[:50],
             'alphabet': ALPHABET,
         })
-
+        
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
         else:
@@ -251,6 +289,7 @@ def subscriptions(request):
         genres = Genre.get_primary_genres()
         chart = Podcast.get_charts()
         chart_header = 'Top 50 podcasts on iTunes'
+
 
         context.update({
             'chart_genres': genres,

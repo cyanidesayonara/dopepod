@@ -33,6 +33,9 @@
           <div class="container" id="center-stage">
             {% block center-stage %}
             {% endblock %}
+            {% if not dashboard %}
+              {% include 'dashboard.html' %}
+            {% endif %}
           </div>
         </div>
         <!-- MULTIBAR -->

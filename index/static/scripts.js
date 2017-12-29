@@ -515,10 +515,11 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#login-errors").html(xhr.responseJSON.html);
+        $("#login-errors").html(xhr.responseJSON);
         button.text("Log In");
       })
-      .done(function() {
+      .done(function(response) {
+        console.log("whaddup");
         refreshCookie();
         refreshPage();
         loadCenterStage("/")
