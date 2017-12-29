@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Subscription, Podcast
+from podcasts.models import Genre, Language, Chart, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
@@ -35,18 +34,16 @@ def index(request):
             if user.is_authenticated:
                 return render(request, 'dashboard.html', context)
             else:
-                return render(request, 'login.html', context)
+                return render(request, 'splash.html', context)
 
         # chart and search bar for non-ajax
+        chart = Chart.objects.get(genre=None)
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts()
-        chart_header = 'Top 50 podcasts on iTunes'
 
         context.update({
             'extend': True,
-            'chart_header': chart_header,
+            'chart': chart,
             'chart_genres': genres,
-            'chart': chart[:50],
             'alphabet': ALPHABET,
         })
 
@@ -65,14 +62,11 @@ def charts(request):
         genre = request.GET.get('genre', None)
         user = request.user
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts(genre)
-        chart_header = 'Top 50 podcasts on iTunes'
+        chart = Chart.objects.get(genre=genre)
 
         context = {
-            'chart': chart[:50],
+            'chart': chart,
             'chart_genres': genres,
-            'chart_selected_genre': genre,
-            'chart_header': chart_header,
         }
 
         if request.is_ajax():
@@ -82,6 +76,7 @@ def charts(request):
 
         # search bar + subs for non-ajax
         context.update({
+            'splash': True,
             'subscriptions': subscriptions,
             'alphabet': ALPHABET,
         })
@@ -140,16 +135,15 @@ def search(request):
         if request.is_ajax():
             return render(request, 'results_detail.html', context)
 
-        chart = Podcast.get_charts()
-        chart_header = 'Top 50 podcasts on iTunes'
+        chart = Chart.objects.get(genre=None)
         subscriptions = Subscription.get_subscriptions(user)
 
         context.update({
+            'splash': True,            
             'subscriptions': subscriptions,
             'chart_genres': genres,
-            'chart': chart[:50],
+            'chart': chart,
             'alphabet': ALPHABET,
-            'chart_header': chart_header,
         })
 
         return render(request, 'results_detail.html', context)
@@ -211,16 +205,15 @@ def browse(request):
             return render(request, 'results_list.html', context)
 
         # chart & browse bar for non-ajax
-        chart = Podcast.get_charts()
-        chart_header = 'Top 50 podcasts on iTunes'
+        chart = Chart.objects.get(genre=None)
         subscriptions = Subscription.get_subscriptions(user)
 
         context.update({
+            'splash': True,
             'subscriptions': subscriptions,
             'chart_genres': genres,
-            'chart': chart[:50],
+            'chart': chart,
             'alphabet': ALPHABET,
-            'chart_header': chart_header,
         })
         return render(request, 'results_list.html', context)
 
@@ -250,15 +243,13 @@ def subscriptions(request):
 
         # chart & search bar for non-ajax
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts()
-        chart_header = 'Top 50 podcasts on iTunes'
-
+        chart = Chart.objects.get(genre=None)
 
         context.update({
+            'splash': True,
             'chart_genres': genres,
-            'chart': chart[:50],
+            'chart': chart,
             'alphabet': ALPHABET,
-            'chart_header': chart_header,
         })
         return render(request, 'subscriptions.html', context)
     else:
@@ -288,7 +279,6 @@ def podinfo(request, itunesid):
 
         # chart & search bar
         genres = Genre.get_primary_genres()
-        chart = Podcast.get_charts()
         episodes = podcast.get_episodes()
         episodes_count = len(episodes)
 
@@ -297,15 +287,14 @@ def podinfo(request, itunesid):
         else:
             episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
 
-        chart_header = 'Top 50 podcasts on iTunes'
+        chart = Chart.objects.get(genre=None)
 
         context.update({
             'chart_genres': genres,
-            'chart': chart[:50],
+            'chart': chart,
             'alphabet': ALPHABET,
             'episodes': episodes,
             'episodes_header': episodes_header,
-            'chart_header': chart_header,
         })
         return render(request, 'podinfo.html', context)
 
@@ -329,14 +318,12 @@ def settings(request):
 
             # chart & search bar
             genres = Genre.get_primary_genres()
-            chart = Podcast.get_charts()
-            chart_header = 'Top 50 podcasts on iTunes'
+            chart = Chart.objects.get(genre=None)
 
             context.update({
                 'chart_genres': genres,
-                'chart': chart[:50],
+                'chart': chart,
                 'alphabet': ALPHABET,
-                'chart_header': chart_header,
             })
             return render(request, 'settings.html', context)
 
@@ -360,13 +347,12 @@ def settings(request):
 
                 # chart & search bar
                 genres = Genre.get_primary_genres()
-                chart = Podcast.get_charts()
-                chart_header = 'Top 50 podcasts on iTunes'
+                chart = Chart.objects.get(genre=None)
+                
                 context.update({
                     'chart_genres': genres,
-                    'chart': chart[:50],
+                    'chart': chart,
                     'alphabet': ALPHABET,
-                    'chart_header': chart_header,
                 })
                 return render(request, 'settings.html', context)
     else:

@@ -30,21 +30,7 @@ dopepod
       </a>
     </div>
     <div id="login-errors">
-      {% if form.errors %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {% for field in form %}
-            {% for error in field.errors %}
-              {{ error }}
-            {% endfor %}
-          {% endfor %}
-          {% for error in form.non_field_errors %}
-            {{ error }}
-          {% endfor %}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      {% endif %}
+      {{ errors }}
     </div>
     <div id="login-wrapper">
       <div class="tab-content" id="pills-tabContent">
@@ -85,7 +71,7 @@ dopepod
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="signup-email">Email</label>
-                <input class="form-control login-field" type="email" name="email" placeholder="Email" required="" id="signup-email">
+                <input class="form-control login-field" type="email" name="email" placeholder="Email" size="30" required="" id="signup-email" value="{{ email }}">
               </div>
               <div class="login-form-group">
                 <label class="sr-only" for="signup-password1">Password</label>
@@ -113,7 +99,7 @@ dopepod
             </p>
             <form method="POST" action="{% url 'password_reset' %}">
               {% csrf_token %}
-              <input type="email" name="email" size="30" placeholder="Email" required="" id="forgot-email">
+              <input class="form-control login-field" type="email" size="30" name="email" placeholder="Email" required="" required="" id="forgot-email" value="">
               <input class="btn btn-dope" type="submit" value="Reset my password" />
             </form>
           </div>
@@ -123,7 +109,7 @@ dopepod
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="login-login">Email</label>
-                <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required="" id="login-login">
+                <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required="" id="login-login" value="{{ email }}">
               </div>
               <div class="form-row">
                 <div class="col login-form-group">
@@ -154,7 +140,7 @@ dopepod
               {% csrf_token %}
               <div class="login-form-group">
                 <label class="sr-only" for="signup-email">Email</label>
-                <input class="form-control login-field" type="email" name="email" placeholder="Email" required="" id="signup-email">
+                <input class="form-control login-field" type="email" name="email" size="30" placeholder="Email" required="" id="signup-email">
               </div>
               <div class="login-form-group">
                 <label class="sr-only" for="signup-password1">Password</label>

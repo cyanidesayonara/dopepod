@@ -24,12 +24,8 @@ function pushState() {
     "title": title,
   };
 
-  if ($("#podinfo").length) {
-    title = $("#podinfo-title")[0].innerText;
-  }
-
   history.pushState(state, "", url);
-  $("title")[0].innerText = title;
+  updateTitle();
 }
 function replaceState(url) {
   var context = $("#main-wrapper")[0].innerHTML;
@@ -38,16 +34,28 @@ function replaceState(url) {
     "context": context,
     "title": title,
   };
-
+  
   if (!url || url == "/charts/") {
     var url = "/";
   }
+  
+  history.replaceState(state, "", url);
+  updateTitle();  
+}
+function updateTitle() {
+  var title = "dopepod";
 
   if ($("#podinfo").length) {
-    title = $("#podinfo-title")[0].innerText;
+    console.log("uhcfuhcfhju");
+    title += " - " + $("#podinfo-title")[0].innerText;
   }
 
-  history.replaceState(state, "", url);
+  var el = $("#player-content");
+
+  if (el.length) {
+    title += " | now playing: " + el.find("#player-title")[0].innerText + " - " + el.find("#player-episode")[0].innerText;
+  }
+  
   $("title")[0].innerText = title;
 }
 
@@ -102,7 +110,6 @@ function refreshPage() {
 
 function clearSearch() {
   $("#q").val("");
-  $("#browse-collapse").collapse("hide");
   $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
 }
 
@@ -240,14 +247,16 @@ function SearchFunc(url, q=null, page=null) {
 
 // SCROLLTO
 function scrollToTop() {
+  $("#browse-collapse").collapse("hide");
   $('html, body').animate({
     scrollTop: $("body").offset().top
-  }, 200);
+  }, 350);
 }
 function scrollToMultibar() {
+  $("#browse-collapse").collapse("hide");
   $('html, body').animate({
     scrollTop: 400
-  }, 200);
+  }, 350);
 }
 
 // after page loads
@@ -466,12 +475,14 @@ $(document)
       })
       .done(function(response) {
         $("#player-drop").html(response);
+        updateTitle();
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
     $("#audio-el").preload="none";
     $("#player-drop").empty();
+    updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
     if ($("#player-image").hasClass("d-none")) {
@@ -515,8 +526,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        console.log(xhr.responseJSON.form.errors);
-        $("#login-errors").html(xhr.responseJSON.form.errors);
+        $("#login-errors").html(xhr.responseText);
         button.text("Log In");
       })
       .done(function(response) {
@@ -540,7 +550,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#login-errors").html(xhr.responseJSON.html);
+        $("#login-errors").html(xhr.responseText);
         button.text("Reset");
       })
       .done(function() {

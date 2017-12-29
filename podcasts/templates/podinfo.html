@@ -6,7 +6,7 @@
 
 {% block center-stage %}
 <div class="row">
-  <div class="col col-lg-8 offset-lg-2" id="podinfo">
+  <div class="col" id="podinfo">
     <div class="row" id="podinfo-top">
       <div class="col-4" id="podinfo-side">
         <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
@@ -75,7 +75,7 @@
       </div>
     </div>
     <div class="row" id="podinfo-bottom">
-      <div class="col" id="podinfo-options">
+      <div class="col-auto ml-auto" id="podinfo-options">
         {% if user.is_authenticated %}
         <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
         id="{{ podcast.itunesid }}" method="POST">

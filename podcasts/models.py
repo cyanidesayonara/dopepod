@@ -95,29 +95,6 @@ class Podcast(models.Model):
 
         return podcasts
 
-    def set_charts():
-        """
-        sets genre_rank and global_rank for top ranking podcasts
-        """
-
-        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
-
-        genres = Genre.get_primary_genres()
-
-        # null all genre_ranks
-        res1 = Podcast.objects.filter(genre_rank__isnull=False)
-        res2 = Podcast.objects.filter(global_rank__isnull=False)
-        podcasts = res1.union(res2)
-
-        for podcast in podcasts:
-            podcast.global_rank = None
-            podcast.genre_rank = None
-            podcast.save()
-
-        for genre in genres:
-            Podcast.parse_itunes_charts(genre)
-        Podcast.parse_itunes_charts()
-
     def parse_itunes_charts(genre=None):
         """
         parses itunes chart xml data
@@ -147,6 +124,8 @@ class Podcast(models.Model):
             ns.update(root.nsmap)
             del ns[None]
 
+            podcasts = []
+
             for i, entry in enumerate(root.findall('atom:entry', ns), 1):
                 element = entry.find('atom:id', ns)
                 itunesid = element.xpath('./@im:id', namespaces=ns)[0]
@@ -164,6 +143,7 @@ class Podcast(models.Model):
                     else:
                         podcast.global_rank = i
                     podcast.save()
+                    podcasts.append(podcast)
                 else:
                     i = i -1
 
@@ -171,16 +151,8 @@ class Podcast(models.Model):
             logger.error(str(e))
         except requests.exceptions.ReadTimeout as e:
             logger.error('timed out')
-
-    def get_charts(genre=None):
-        """
-        returns charts for requested genre
-        or global rankings if genre not specified
-        """
-
-        if genre:
-            return Podcast.objects.filter(Q(genre=genre) | Q(genre__supergenre=genre), genre_rank__isnull=False).order_by('genre_rank')
-        return Podcast.objects.filter(global_rank__isnull=False).order_by('global_rank')
+        
+        return podcasts
 
     def subscribe(self, user):
         """
@@ -464,6 +436,70 @@ class Subscription(models.Model):
     def get_subscriptions_itunesids(user):
         if user.is_authenticated:
             return Subscription.objects.filter(owner=user).values_list('parent__itunesid', flat=True)
+
+class Chart(models.Model):
+    podcasts = models.ManyToManyField('podcasts.Podcast')
+    header = models.CharField(max_length=30, default='Top 50 podcasts on iTunes')
+    genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.CASCADE)
+
+    @property
+    def sorted_podcasts(self):
+        if self.genre:
+            return self.podcasts.order_by('genre_rank')[:50]
+        return self.podcasts.order_by('global_rank')[:50]
+
+    def set_charts():
+        """
+        sets genre_rank and global_rank for top ranking podcasts
+        """
+
+        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+
+        genres = Genre.get_primary_genres()
+
+        # per genre
+        for genre in genres:
+            podcasts = Podcast.parse_itunes_charts(genre)
+            try:
+                chart = Chart.objects.get(genre=genre)
+            except Chart.DoesNotExist:
+                chart = Chart()
+                chart.genre = genre
+                chart.save()
+            chart.podcasts.set(podcasts)
+            print(chart.podcasts.count())
+
+            itunesids = []
+            for podcast in podcasts:
+                itunesids.append(podcast.itunesid)
+
+            podcasts = Podcast.objects.filter(genre=genre, genre_rank__isnull=False).exclude(itunesid__in=itunesids)
+            for podcast in podcasts:
+                podcast.genre_rank = None
+                podcast.save()
+
+            chart.save()
+
+        # global
+        podcasts = Podcast.parse_itunes_charts()
+        try:
+            chart = Chart.objects.get(genre=None)
+        except Chart.DoesNotExist:
+            chart = Chart()
+            chart.genre = None
+            chart.save()
+        chart.podcasts.set(podcasts)
+
+        itunesids = []
+        for podcast in podcasts:
+            itunesids.append(podcast.itunesid)
+
+        podcasts = Podcast.objects.filter(global_rank__isnull=False).exclude(itunesid__in=itunesids)
+        for podcast in podcasts:
+            podcast.global_rank = None
+            podcast.save()
+
+        chart.save()
 
 class Episode(models.Model):
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)
