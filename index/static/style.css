@@ -48,9 +48,6 @@ body {
   -moz-box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
   box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
 }
-.btn-dope-podinfo {
-  max-width: 100%
-}
 .btn-dope-tab {
   border-radius: 2rem .25rem 0 0;
 }

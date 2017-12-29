@@ -33,8 +33,12 @@
           <div class="container" id="center-stage">
             {% block center-stage %}
             {% endblock %}
-            {% if not dashboard %}
-              {% include 'dashboard.html' %}
+            {% if not extend %}
+              {% if user.is_authenticated %}
+                {% include 'dashboard.html' %}
+              {% else %}
+                {% include 'splash.html' %}
+              {% endif %}
             {% endif %}
           </div>
         </div>

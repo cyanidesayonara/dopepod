@@ -26,7 +26,6 @@ class MyLoginAccountAdapter(DefaultAccountAdapter):
         if request.user.is_authenticated:
             return settings.LOGIN_REDIRECT_URL
         else:
-            print("whaddup")
             return "/"
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):

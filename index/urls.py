@@ -1,12 +1,10 @@
 from django.conf.urls import url
 from index import views as index
 from podcasts import views as podcasts
+from login import views as login
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
-    url(r'^login/$', index.login, name='login'),
-    url(r'^signup/$', index.signup, name='signup'),
-    url(r'^reset_password/$', index.reset_password, name='reset_password'),
     url(r'^dashboard/$', podcasts.dashboard, name='dashboard'),
     url(r'^search/$', index.search, name='search'),
     url(r'^navbar/$', index.navbar, name='navbar'),
@@ -18,4 +16,8 @@ urlpatterns = [
     url(r'^episodes/$', podcasts.episodes, name='episodes'),
     url(r'^play/$', podcasts.play, name='play'),
     url(r'^subscribe/$', podcasts.subscribe, name='subscribe'),
+    url(r'^login/$', login.login, name='login'),
+    url(r'^signup/$', login.signup, name='signup'),
+    url(r'^password_reset/$', login.password_reset, name='password_reset'),
+    url(r'^logout/$', login.logout, name='logout'),
 ]

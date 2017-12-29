@@ -80,14 +80,20 @@
       <a class="settings-link d-none d-md-block" href="{% url 'settings' %}">
         Settings
       </a>
-      <a class="ajax-logout d-block d-md-none" href="{% url 'account_logout' %}">
-        <i class="fas fa-sign-out-alt"></i>
-      </a>
+      <form class="logout-form" method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="ajax-logout d-block d-md-none" type="submit">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </form>
     </li>
-    <li class="d-none d-md-block">
-      <a class="ajax-logout d-none d-md-block" href="{% url 'account_logout' %}">
-        Logout
-      </a>
+    <li>
+      <form class="logout-form" method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="ajax-logout d-none d-md-block" type="submit">
+          Logout
+        </button>
+      </form>
     </li>
     {% else %}
     <li class="ml-auto">

@@ -497,7 +497,7 @@ $(document)
     e.preventDefault();
     $("#pills-password-tab").tab("show");
   })
-  .on("click", ".login-signup-toggle", function() {
+  .on("click", ".login-toggle", function() {
     $("#login-errors").empty();
   })
   // login or signup, refresh after
@@ -515,11 +515,11 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         console.log(thrownError);
-        $("#login-errors").html(xhr.responseJSON);
+        console.log(xhr.responseJSON.form.errors);
+        $("#login-errors").html(xhr.responseJSON.form.errors);
         button.text("Log In");
       })
       .done(function(response) {
-        console.log("whaddup");
         refreshCookie();
         refreshPage();
         loadCenterStage("/")
