@@ -72,12 +72,9 @@ def charts(request):
         if request.is_ajax():
             return render(request, 'charts.html', context)
 
-        subscriptions = Subscription.get_subscriptions(user)
-
         # search bar + subs for non-ajax
         context.update({
             'splash': True,
-            'subscriptions': subscriptions,
             'alphabet': ALPHABET,
         })
 
@@ -136,11 +133,9 @@ def search(request):
             return render(request, 'results_detail.html', context)
 
         chart = Chart.objects.get(genre=None)
-        subscriptions = Subscription.get_subscriptions(user)
 
         context.update({
             'splash': True,            
-            'subscriptions': subscriptions,
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,
@@ -206,11 +201,9 @@ def browse(request):
 
         # chart & browse bar for non-ajax
         chart = Chart.objects.get(genre=None)
-        subscriptions = Subscription.get_subscriptions(user)
 
         context.update({
             'splash': True,
-            'subscriptions': subscriptions,
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,

@@ -6,23 +6,19 @@ settings
 
 {% block center-stage %}
 <div class="row">
-  <div class="col-auto mx-auto" id="settings">
-
+  <div class="col" id="settings">
     <form id="settings-form" action="{% url 'settings' %}" method="POST">
       <h3>
         Settings
       </h3>
-      <div class="form-row">
-        <div class="col form-group">
+        <div class="form-group">
           <label class="form-label" for="email">Email</label>
           <input class="form-control" type="email" name="email" id="email" value="{{ user_form.email.value }}">
         </div>
-        <div class="col form-group">
+        <div class="form-group">
           <label class="form-label" for="location">Location</label>
           <input class="form-control" type="text" name="tocation" id="location" value="{{ profile_form.location.value }}">
         </div>
-
-      </div>
       <div class="form-group">
         <label class="form-label" for="bio">Bio</label>
         <textarea class="form-control" rows="3" name="bio" maxlength="500" id="bio" value="{{ profile_form.bio.value }}"></textarea>
@@ -37,7 +33,6 @@ settings
         <button type="submit" class="btn btn-dope active float-right settings-button">Save</button>
       </div>
     </form>
-    {{ profile_form.location.label_tag }}
   </div>
 </div>
 {% endblock %}

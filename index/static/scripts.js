@@ -44,17 +44,14 @@ function replaceState(url) {
 }
 function updateTitle() {
   var title = "dopepod";
-
-  if ($("#podinfo").length) {
-    console.log("uhcfuhcfhju");
-    title += " - " + $("#podinfo-title")[0].innerText;
-  }
-
   var el = $("#player-content");
-
   if (el.length) {
     title += " | now playing: " + el.find("#player-title")[0].innerText + " - " + el.find("#player-episode")[0].innerText;
   }
+  else if ($("#podinfo").length) {
+      title += " - " + $("#podinfo-title")[0].innerText;
+  }
+  
   
   $("title")[0].innerText = title;
 }
@@ -111,6 +108,7 @@ function refreshPage() {
 function clearSearch() {
   $("#q").val("");
   $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
+  console.log("njkefnjkefcnjk");
 }
 
 // LOADERS
@@ -335,7 +333,7 @@ $(document)
       var q = $("input[name=selected-q]:checked").val();
       pushState();
       SearchFunc(url, q, true);
-      $("#q").val("");
+      clearSearch();
       $("#episodes").empty();
     }, 250);
   })
@@ -347,7 +345,7 @@ $(document)
       var q = $("input[name=selected-q]:checked").val();
       pushState();
       SearchFunc(url, q);
-      $("#q").val("");
+      clearSearch();
       $("#episodes").html("");
     }, 250);
   })
@@ -379,6 +377,7 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
+    $("#episodes").html("");    
     scrollToTop();
   })
   // open browse
@@ -388,6 +387,7 @@ $(document)
     pushState();
     clearSearch();
     loadResults(url);
+    $("#episodes").html("");    
     scrollToMultibar();
    })
   // open subscriptions
@@ -397,6 +397,7 @@ $(document)
     pushState();
     clearSearch();
     loadResults(url);
+    $("#episodes").html("");
     scrollToMultibar();
   })
   // open settings
@@ -406,6 +407,7 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
+    $("#episodes").html("");
     scrollToTop();
   })
   // FORMS
@@ -502,6 +504,7 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
+    $("#episodes").html("");
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {
@@ -533,8 +536,9 @@ $(document)
         refreshCookie();
         refreshPage();
         loadCenterStage("/")
+        $("#episodes").html("");
         scrollToTop();
-      });
+        });
   })
   .on("submit", ".password-form", function (e) {
     e.preventDefault();
@@ -561,8 +565,14 @@ $(document)
   .on("click", "#show-episodes", function(e) {
     e.preventDefault();
     var el = $("#episode-collapse");
-    if (!el.hasClass("show")) {
-      el.addClass("show");
+    if (el) {
+      if (!el.hasClass("show")) {
+        el.collapse('show');
+      }
+    }
+    else {
+      var itunesid = $("#podinfo").data("itunesid");
+      loadEpisodes(itunesid);
     }
     scrollToMultibar();
   })

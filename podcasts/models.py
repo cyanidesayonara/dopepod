@@ -423,6 +423,9 @@ class Subscription(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
     new_episodes = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ('parent__title',)
+
     def update(self):
         self.last_updated = timezone.now()
 

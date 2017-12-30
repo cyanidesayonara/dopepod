@@ -3,11 +3,11 @@
     <!-- SEARCH BAR -->
     <div class="col">
       {% if podcasts1 %}
-        <a class="btn btn-dope toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
+        <a class="btn btn-dope active toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
           A-Z
         </a>
       {% else %}
-        <a class="btn btn-dope toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
+        <a class="btn btn-dope active toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="false" aria-controls="browse-collapse">
           A-Z
         </a>
       {% endif %}

@@ -6,16 +6,16 @@
 
 {% block center-stage %}
 <div class="row">
-  <div class="col" id="podinfo">
+  <div class="col" id="podinfo" data-itunesid="{{ podcast.itunesid }}">
     <div class="row" id="podinfo-top">
-      <div class="col-4" id="podinfo-side">
+      <div class="col-4" id="podinfo-left">
         <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
-        <ul id="podinfo-side-list">
+        <ul class="podinfo-side-list d-block d-lg-none">
           <li>
-            <span id="n_subscribers">
+            <span class="n_subscribers">
               {{ podcast.n_subscribers }}
             </span>
-            <span id="subscriber">
+            <span class="subscriber">
               subscriber{{ podcast.n_subscribers|pluralize }}
             </span>
           </li>
@@ -23,7 +23,7 @@
             <span>
               Genre:
             </span>
-            <span id="podinfo-genre">
+            <span class="podinfo-genre">
               {% if podcast.genre.supergenre %}
               {{ podcast.genre.supergenre }} -
               {% endif %}
@@ -34,7 +34,7 @@
             <span>
               Language:
             </span>
-            <span id="podinfo-language">
+            <span class="podinfo-language">
               {{ podcast.language }}
             </span>
           </li>
@@ -42,7 +42,7 @@
             <span>
               Content:
             </span>
-            <span id="podinfo-explicit">
+            <span class="podinfo-explicit">
               {% if podcast.explicit %}
               explicit
               {% else %}
@@ -52,14 +52,14 @@
           </li>
           <li>
             <em>
-              <span id="podinfo-copyright">
+              <span class="podinfo-copyright">
                 {{ podcast.copyrighttext }}
               </span>
             </em>
           </li>
         </ul>
       </div>
-      <div class="col-8" id="podinfo-main">
+      <div class="col-8 col-lg-6" id="podinfo-main">
         <h5 id="podinfo-title">
           {{ podcast.title }}
         </h5>
@@ -73,12 +73,96 @@
           {{ podcast.description }}
         </p>
       </div>
+      <div class="col-lg-2" id="podinfo-right">
+        <ul class="podinfo-side-list d-none d-lg-block">
+          {% if podcast.global_rank %}
+            <li>
+              <span class="global_rank">
+                #{{ podcast.global_rank }} in
+                podcasts
+              </span>
+            </li>
+          {% endif %}
+          {% if podcast.genre_rank %}
+            <li>
+              <span class="genre_rank">
+                #{{ podcast.genre_rank }} in
+                {% if podcast.genre.supergenre %}
+                  {{ podcast.genre.supergenre }}
+                {% else %}
+                  {{ podcast.genre }}
+                {% endif %}
+              </span>
+            </li>
+          {% endif %}
+          <li>
+            <span class="n_subscribers">
+              {{ podcast.n_subscribers }}
+            </span>
+            <span class="subscriber">
+              subscriber{{ podcast.n_subscribers|pluralize }}
+            </span>
+          </li>
+          <li>
+            <span>
+              Genre:
+            </span>
+            <span class="podinfo-genre">
+              {% if podcast.genre.supergenre %}
+              {{ podcast.genre.supergenre }} -
+              {% endif %}
+              {{ podcast.genre }}
+            </span>
+          </li>
+          <li>
+            <span>
+              Language:
+            </span>
+            <span class="podinfo-language">
+              {{ podcast.language }}
+            </span>
+          </li>
+          <li>
+            <span>
+              Content:
+            </span>
+            <span class="podinfo-explicit">
+              {% if podcast.explicit %}
+              explicit
+              {% else %}
+              clean
+              {% endif %}
+            </span>
+          </li>
+          <li>
+            <a class="podinfo-podcastUrl" href="{{ podcast.podcastUrl }}">
+            <span >
+              Podcast website
+            </span>
+            </a>
+          </li>
+          <li>
+            <a class="podinfo-feedUrl" href="{{ podcast.feedUrl }}">
+              <span >
+                Podcast RSS feed
+              </span>
+              </a>
+            </li>
+            <li>
+              <em>
+                <span id="podinfo-copyright">
+                  {{ podcast.copyrighttext }}
+                </span>
+              </em>
+            </li>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="row" id="podinfo-bottom">
-      <div class="col-auto ml-auto" id="podinfo-options">
+      <div class="col-auto" id="podinfo-options">
         {% if user.is_authenticated %}
-        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}"
-        id="{{ podcast.itunesid }}" method="POST">
+        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
         {% if podcast.is_subscribed %}
@@ -91,7 +175,7 @@
           </button>
         </form>
         {% endif %}
-        <a class="btn btn-dope btn-dope-podinfo toggle" id="show-episodes" href="#">
+        <a class="btn btn-dope active" id="show-episodes" href="#">
           <span>
             Episodes
           </span>
