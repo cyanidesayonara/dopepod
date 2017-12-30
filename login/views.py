@@ -26,7 +26,6 @@ def login(request):
             for error in data['form']['fields'][field]['errors']:
                 errors = errors + error
 
-
         if ajax:
             if response.status_code == 200:
                 return HttpResponse('')
@@ -49,6 +48,8 @@ def login(request):
                 return redirect('/')
             else:
                 return render(request, 'splash.html', context)
+    else:
+        return redirect('/')   
 
 def signup(request):
     if request.method == 'POST':
@@ -86,6 +87,8 @@ def signup(request):
                 return redirect('/')
             else:
                 return render(request, 'splash.html', context)
+    else:
+        return redirect('/?signup=yeah')   
 
 def password_reset(request):
     if request.method == 'POST':

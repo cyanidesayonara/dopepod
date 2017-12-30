@@ -432,10 +432,6 @@ class Subscription(models.Model):
     def get_last_updated(self):
         return self.last_updated.strftime('%b %d %Y, %H:%M')
 
-    def get_subscriptions(user):
-        if user.is_authenticated:
-            return Subscription.objects.filter(owner=user)
-
     def get_subscriptions_itunesids(user):
         if user.is_authenticated:
             return Subscription.objects.filter(owner=user).values_list('parent__itunesid', flat=True)
@@ -470,7 +466,6 @@ class Chart(models.Model):
                 chart.genre = genre
                 chart.save()
             chart.podcasts.set(podcasts)
-            print(chart.podcasts.count())
 
             itunesids = []
             for podcast in podcasts:

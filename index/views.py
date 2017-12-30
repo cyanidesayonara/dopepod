@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Chart, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.vary import vary_on_headers
 
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
 
@@ -14,6 +15,8 @@ def navbar(request):
     if request.method == 'GET':
         return render(request, 'navbar.html', {})
 
+
+@vary_on_headers('Accept')
 def index(request):
     """
     returns index page
@@ -23,10 +26,8 @@ def index(request):
     if request.method == 'GET':
         user = request.user
         signup = request.GET.get('signup' , None)
-        subscriptions = Subscription.get_subscriptions(user)
 
         context = {
-            'subscriptions': subscriptions,
             'signup': signup,
         }
 
@@ -52,6 +53,7 @@ def index(request):
         else:
             return render(request, 'splash.html', context)
 
+@vary_on_headers('Accept')
 def charts(request):
     """
     returns chart (optional: for requested genre)
@@ -80,6 +82,7 @@ def charts(request):
 
         return render(request, 'base.html', context)
 
+@vary_on_headers('Accept')
 def search(request):
     """
     sets search terms
@@ -143,6 +146,7 @@ def search(request):
 
         return render(request, 'results_detail.html', context)
 
+@vary_on_headers('Accept')
 def browse(request):
     """
     sets browse terms
@@ -210,6 +214,7 @@ def browse(request):
         })
         return render(request, 'results_list.html', context)
 
+@vary_on_headers('Accept')
 def subscriptions(request):
     """
     returns subscriptions for user
@@ -250,6 +255,7 @@ def subscriptions(request):
             return render(request, 'splash.html', {})
         return redirect('/?next=/subscriptions/')
 
+@vary_on_headers('Accept')
 def podinfo(request, itunesid):
     """
     returns a podinfo page
@@ -291,6 +297,7 @@ def podinfo(request, itunesid):
         })
         return render(request, 'podinfo.html', context)
 
+@vary_on_headers('Accept')
 def settings(request):
     """
     GET returns settings form

@@ -4,6 +4,7 @@ $(window).on("popstate", function(event) {
   if (state) {
     $("#main-wrapper").html(state.context);
     $("title")[0].innerText = state.title;
+    console.log(state);
 
     // if (state.q) {
     //   $("#q").val(state.q);
@@ -108,13 +109,11 @@ function refreshPage() {
 function clearSearch() {
   $("#q").val("");
   $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
-  console.log("njkefnjkefcnjk");
 }
 
 // LOADERS
 function loadCenterStage(url) {
-  $("#episodes").empty();
-  $("#center-stage").html("<div class='row' style='height:400px;'><div>");
+  $("#center-stage").html("<div class='col-auto color-1 results-loading'><span>Loading podcast...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -128,8 +127,7 @@ function loadCenterStage(url) {
     });
 }
 function loadEpisodes(itunesid) {
-  $("#episodes").empty();
-  $("#episodes").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading episodes...</span></div>");
+  $("#episodes").html("<div class='col-auto color-1 results-loading'><span>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -150,7 +148,7 @@ function loadEpisodes(itunesid) {
 }
 function loadResults(url) {
   $("#episodes").empty();
-  $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading results...</span></div>");
+  $("#results").html("<div class='col-auto color-1 results-loading'><span>Loading results...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -164,7 +162,7 @@ function loadResults(url) {
     });
 }
 function loadChart() {
-  $("#chart").html("<div class='col-auto color-1 results-bar'><span class='results-bar'>Loading charts...</span></div>");
+  $("#chart").html("<div class='col-auto color-1 results-loading'><span>Loading charts...</span></div>");
   var genre = $("input[name=chart-genre]:checked").val();
   var url = "/charts/";
   if (genre != "All") {
@@ -224,7 +222,8 @@ function SearchFunc(url, q=null, page=null) {
   }
 
   scrollToMultibar();
-  $("#results").html("<div class='col-auto color-1 results-bar'><span class='results-info'>Loading results...</span></div>");
+  $("#episodes").html("");
+  $("#results").html("<div class='col-auto color-1 results-loading'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",
@@ -274,7 +273,6 @@ $(document)
       var q = $("#q").val();
       pushState();
       SearchFunc(url, q);
-      $("#episodes").empty();
     }, 250);
   })
   // search when "search" button is clicked
@@ -287,7 +285,6 @@ $(document)
       pushState();
       SearchFunc(url, q);
       clearSearch();
-      $("#episodes").empty();
     }, 250);
   })
   // BROWSE
@@ -301,7 +298,6 @@ $(document)
       pushState();
       SearchFunc(url, q);
       clearSearch();
-      $("#episodes").empty();
     }, 250);
   })
   .on("change", "#alphabet-buttons", function() {
@@ -310,7 +306,6 @@ $(document)
     pushState();
     SearchFunc(url, q);
     clearSearch();
-    $("#episodes").empty();
   })
   //RESULTS
   .on("submit", "#results-form", function(e) {
@@ -322,7 +317,6 @@ $(document)
       pushState();
       SearchFunc(url, q);
       clearSearch();
-      $("#episodes").empty();
     }, 250);
   })
   // search when user changes options
@@ -334,7 +328,6 @@ $(document)
       pushState();
       SearchFunc(url, q, true);
       clearSearch();
-      $("#episodes").empty();
     }, 250);
   })
   // search when user changes options
@@ -346,7 +339,6 @@ $(document)
       pushState();
       SearchFunc(url, q);
       clearSearch();
-      $("#episodes").html("");
     }, 250);
   })
   // CHARTS
@@ -387,7 +379,6 @@ $(document)
     pushState();
     clearSearch();
     loadResults(url);
-    $("#episodes").html("");    
     scrollToMultibar();
    })
   // open subscriptions
@@ -397,7 +388,6 @@ $(document)
     pushState();
     clearSearch();
     loadResults(url);
-    $("#episodes").html("");
     scrollToMultibar();
   })
   // open settings
@@ -411,7 +401,6 @@ $(document)
     scrollToTop();
   })
   // FORMS
-  // replace settings, empty and hide modal
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
     var button = $(this).find(".settings-button");
@@ -536,7 +525,6 @@ $(document)
         refreshCookie();
         refreshPage();
         loadCenterStage("/")
-        $("#episodes").html("");
         scrollToTop();
         });
   })
@@ -565,7 +553,7 @@ $(document)
   .on("click", "#show-episodes", function(e) {
     e.preventDefault();
     var el = $("#episode-collapse");
-    if (el) {
+    if (el.length) {
       if (!el.hasClass("show")) {
         el.collapse('show');
       }

@@ -56,7 +56,6 @@ body {
   background-color: #fff;
   border: none;
   box-shadow: none;
-  margin: 0;
 }
 .btn-dope.focus, .btn-dope:focus {
   outline: rgba(0,0,0,0);
@@ -156,11 +155,15 @@ body {
   min-width: 0;
 }
 .nav-fade li {
+  display: block;
   border-radius: .25rem;
   transition: background .25s ease-in-out;
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
+  margin-right: 2px;
+  margin-left: 2px;
 }
+.nav-fade li 
 #multibar .nav-fade li {
   margin-top: 3px;
   margin-bottom: 3px;
@@ -170,6 +173,7 @@ body {
   background: #ddd;
 }
 .nav-link-dope  {
+  border-radius: .25rem;
   cursor: pointer;
   border: none;
   background: inherit;
@@ -658,10 +662,9 @@ body {
   box-shadow: rgba(0,0,0,.3) 0 1px 2px ;
 }
 .results-bar {
-  font-size: 20px;
 }
 .results-header {
-
+  font-size: 20px;
 }
 .results-options {
   padding: 0;
