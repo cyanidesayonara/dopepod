@@ -62,7 +62,8 @@ def charts(request):
 
     if request.method == 'GET':
         genre = request.GET.get('genre', None)
-        user = request.user
+        if genre == 'All':
+            genre = None
         genres = Genre.get_primary_genres()
         chart = Chart.objects.get(genre=genre)
 
@@ -223,7 +224,7 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        subscriptions = Subscription.get_subscriptions(user)
+        subscriptions = user.subscription_set.all()
 
         if subscriptions.count == 1:
             results_header = str(subscriptions.count()) + ' subscription'

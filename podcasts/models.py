@@ -544,6 +544,9 @@ class Genre(Filterable):
     itunesid = models.IntegerField()
     supergenre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, blank=True, null=True)
 
+    class Meta:
+        ordering = ('name',)
+
     def get_primary_genres():
         """
         returns primary genres
@@ -571,6 +574,9 @@ class Genre(Filterable):
             )
 
 class Language(Filterable):
+
+    class Meta:
+        ordering = ('-n_podcasts', 'name')
 
     def create_or_get_language(name):
         try:

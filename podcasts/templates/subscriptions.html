@@ -7,7 +7,7 @@ dopepod
 {% block results_content %}
 <div class="row results-content">
   <div class="col">
-    {% for subscription in subscriptions %}
+    {% for subscription in user.subscription_set.all %}
       <div class="row">
         <div class="col-auto">
           <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">

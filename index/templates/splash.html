@@ -6,10 +6,10 @@ dopepod
 
 {% block center-stage %}
 <div class="row">
-  <div class="col col-lg-8 offset-lg-2" id="login">
-    <h5>
+  <div class="col" id="login">
+    <h4>
       Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
-    </h5>
+    </h4>
     <div class="nav" id="login-buttons" role="tablist">
       {% if signup %}
         <a class="btn btn-dope login-toggle" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="false">
@@ -30,7 +30,11 @@ dopepod
       </a>
     </div>
     <div id="login-errors">
-      {{ errors }}
+      {% if errors %}
+        <span class="error-message">
+          {{ errors }}
+        </span>  
+      {% endif %}
     </div>
     <div id="login-wrapper">
       <div class="tab-content" id="pills-tabContent">

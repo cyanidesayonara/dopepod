@@ -4,7 +4,6 @@ $(window).on("popstate", function(event) {
   if (state) {
     $("#main-wrapper").html(state.context);
     $("title")[0].innerText = state.title;
-    console.log(state);
 
     // if (state.q) {
     //   $("#q").val(state.q);
@@ -95,7 +94,7 @@ function refreshPage() {
     url: "/navbar/",
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       // refresh page
@@ -113,13 +112,13 @@ function clearSearch() {
 
 // LOADERS
 function loadCenterStage(url) {
-  $("#center-stage").html("<div class='col-auto color-1 results-loading'><span>Loading podcast...</span></div>");
+  $("#center-stage").html("<div class='col-auto color-1 results-loading'><span>Loading...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
   })
     .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       $("#center-stage").html(response);
@@ -136,7 +135,7 @@ function loadEpisodes(itunesid) {
     },
   })
     .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       if ($("#podinfo").length) {
@@ -154,7 +153,7 @@ function loadResults(url) {
     url: url,
   })
     .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       $("#results").html(response);
@@ -163,20 +162,24 @@ function loadResults(url) {
 }
 function loadChart() {
   $("#chart").html("<div class='col-auto color-1 results-loading'><span>Loading charts...</span></div>");
-  var genre = $("input[name=chart-genre]:checked").val();
   var url = "/charts/";
-  if (genre != "All") {
+  var genre = $("input[name=chart-genre]:checked").val();
+  if (!genre) {
+    genre = $("input[name=chart-selected-genre]:checked").val();
+  }
+  if (genre && genre != 'All') {
     data = {
-      "genre": genre,
+      "genre": genre
     };
     url = url + "?" + $.param(data);
   }
+  
   $.ajax({
     type: "GET",
     url: url,
   })
     .fail(function(xhr, ajaxOptions, thrownError){
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       $("#charts").html(response);
@@ -231,7 +234,7 @@ function SearchFunc(url, q=null, page=null) {
     data: data,
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      console.log(thrownError);
+      // console.log(thrownError);
     })
     .done(function(response) {
       $("#results").html(response);
@@ -344,10 +347,16 @@ $(document)
   // CHARTS
   .on("submit", "#chart-form", function(e) {
     e.preventDefault();
-    loadChart();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      loadChart();
+    }, 250);
   })
   .on("change", "#chart-genre-buttons, #chart-selected-buttons", function() {
-    loadChart();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      loadChart();
+    }, 250);
   })
   // NAVIGATION
   // show podinfo
@@ -414,7 +423,7 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
+        // console.log(thrownError);
         pushState();
         $("#center-stage").html(xhr.responseJSON.html);
         button.text("Fail :(");
@@ -439,7 +448,7 @@ $(document)
       data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
+        // console.log(thrownError);
         loadCenterStage("/");
         button.text("Fail :(");
       })
@@ -462,7 +471,7 @@ $(document)
       data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError){
-        console.log(thrownError);
+        // console.log(thrownError);
       })
       .done(function(response) {
         $("#player-drop").html(response);
@@ -517,8 +526,8 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        $("#login-errors").html(xhr.responseText);
+        // console.log(thrownError);
+        $("#login-errors").html("<div class='error-message'>" + xhr.responseText + "</div>");
         button.text("Log In");
       })
       .done(function(response) {
@@ -541,8 +550,8 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        $("#login-errors").html(xhr.responseText);
+        // console.log(thrownError);
+        $("#login-errors").html("<div class='error-message'>" + xhr.responseText + "</div>");
         button.text("Reset");
       })
       .done(function() {

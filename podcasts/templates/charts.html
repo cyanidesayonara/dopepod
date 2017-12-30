@@ -26,8 +26,9 @@
       {% if chart.genre %}
       <div class="col-auto ml-auto options-group">
           <label class="btn btn-dope options-button active">
-            <input class="field-button" type="checkbox" name="chart-genre" value="All">
+            <input class="field-button" type="checkbox" name="chart-selected-genre" value="{{ chart.genre }}" checked>
             {{ chart.genre }}
+            <i class="fas fa-times-circle selected"></i>
           </label>
         </div>
       {% endif %}
@@ -57,42 +58,42 @@
     </div>
     <div class="row results-wrapper">
       <div class="col">
-        {% for podcast in chart.sorted_podcasts %}
-          <div class="row">
-            <div class="col-auto">
-              {% if chart.genre %}
-                {{ podcast.genre_rank }}
-              {% else %}
-                {{ podcast.global_rank }}
+        <div class="row results-content">
+          <div class="col">
+            {% for podcast in chart.sorted_podcasts %}
+              <div class="row">
+                <div class="col-auto">
+                  {% if chart.genre %}
+                    {{ podcast.genre_rank }}
+                  {% else %}
+                    {{ podcast.global_rank }}
+                  {% endif %}
+                </div>
+                <div class="col-auto">
+                  <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+                    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+                  </a>
+                </div>
+                <div class="col">
+                  <h6 class="result-title">
+                    <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+                      {{ podcast.title }}
+                    </a>
+                  </h6>
+                  <p class="result-artist">
+                    <span>by </span>
+                    <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+                      {{ podcast.artist }}
+                    </a>
+                  </p>
+                </div>
+              </div>
+              {% if not forloop.last %}
+                <hr class="h-line" />
               {% endif %}
-            </div>
-            <div class="col-auto">
-              <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-                <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-              </a>
-            </div>
-            <div class="col">
-              <h6 class="result-title">
-                <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-                  {{ podcast.title }}
-                </a>
-              </h6>
-              <p class="result-artist">
-                <span>by </span>
-                <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
-                  {{ podcast.artist }}
-                </a>
-              </p>
-            </div>
+            {% endfor %}
           </div>
-          {% if not forloop.last %}
-            <hr class="h-line" />
-          {% endif %}
-        {% empty %}
-          <p>
-            No results
-          </p>
-        {% endfor %}
+        </div>
       </div>
     </div>
   </form>

@@ -4,49 +4,7 @@ body {
   line-height: 1.42857143;
   color: #2e2e2e;
   background: rgba(255, 255, 255, 1);
-}
-
-/* MEDIA QUERIES */
-/* Extra small devices (phones, up to 480px) */
-@media screen and (max-width: 767px) {
-  body {
-    font-size: 12px;
-  }
-  #podinfo-options {
-    margin: auto!important;
-  }
-}
-/* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) and (max-width: 991px) {
-  body {
-    font-size: 13px;
-  }
-  #podinfo-options {
-    margin-left: auto!important;
-    border-left: 1px solid #ddd!important;
-    border-top: 1px solid #ddd!important;
-  }
-  #podinfo-bottom {
-    border: none!important;
-  }
-}
-/* tablets/desktops and up ----------- */
-@media (min-width: 992px) and (max-width: 1199px) {
-  body {
-    font-size: 14px;
-  }
-  #podinfo-options {
-    margin: auto!important;
-  }
-}
-/* large desktops and up ----------- */
-@media screen and (min-width: 1200px) {
-  body {
-    font-size: 14px;
-  }
-  #podinfo-options {
-    margin: auto!important;
-  }
+  font-size: 14px;
 }
 
 /* BUTTONS */
@@ -56,16 +14,7 @@ body {
   background-color: #fff;
   border: none;
   box-shadow: none;
-}
-.btn-dope.focus, .btn-dope:focus {
   outline: rgba(0,0,0,0);
-}
-.btn-dope:hover {
-  color: #fff;
-  background: rgba(0, 204, 122, 1);
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
-  box-shadow: rgba(0,0,0,.3) 0 0px 5px;  
 }
 .btn-dope.active {
   color: #fff;
@@ -97,12 +46,9 @@ body {
 .reverse-toggle[aria-expanded="false"] {
   color: #fff;
   background: rgba(0, 204, 122, 1);
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 0px 3px;
-}
-.btn-dope-tab.toggle[aria-expanded="true"] {
-
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
+  -moz-box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
+  box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
 }
 .btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled.focus, .btn-dope-disabled:focus  {
   color: #2e2e2e;
@@ -119,20 +65,6 @@ body {
 }
 .color-2 {
   background: rgba(45,43,43,1);
-}
-
-/* SHADOWS */
-.shadow-down {
-  border-bottom: 1px solid rgba(0,0,0,.3);
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-}
-.shadow-up {
-  border-top: 1px solid rgba(0,0,0,.3);
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
 }
 
 /* NAVBAR */
@@ -163,7 +95,6 @@ body {
   margin-right: 2px;
   margin-left: 2px;
 }
-.nav-fade li 
 #multibar .nav-fade li {
   margin-top: 3px;
   margin-bottom: 3px;
@@ -308,6 +239,12 @@ body {
   padding-bottom: 6px;
 }
 
+/* LOADING ANIMATIONS */
+#results-loading {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 /* MAIN */
 #main {
   padding: 30px 15px 15px 15px;
@@ -316,16 +253,6 @@ body {
 .results {
   margin-top: 15px;
   margin-bottom: 15px;
-}
-
-/* TOGGLE BUTTONS */
-#browse-toggle{
-}
-
-.show-button {
-  font-size: 14px;
-  margin-left: 10px;
-  color: #2e2e2e;
 }
 
 /* OPTIONS BUTTONS */
@@ -370,8 +297,6 @@ body {
   margin-bottom: 0;
   list-style: none;
 }
-.options-field li {
-}
 .field-button {
   position: absolute;
   clip: rect(0,0,0,0);
@@ -389,9 +314,6 @@ body {
   margin-bottom: 4px;
   margin-right: 4px;
 }
-.alphabet-button:focus {
-  box-shadow: none;
-}
 
 /* MULTI BAR */
 #multibar {
@@ -399,6 +321,10 @@ body {
   padding-bottom: 8px;
 }
 #multibar-scroll {
+  border-bottom: 1px solid rgba(0,0,0,.3);
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   margin-top: 44px;
   z-index: 95;
 }
@@ -466,19 +392,6 @@ body {
 }
 
 #center-stage {
-
-}
-
-/* SPLASH */
-#splash {
-
-}
-#splash-top {
-  text-align: center;
-  padding-top: 20px;
-}
-#splash-bottom {
-  padding-top: 10px;
 }
 
 /* LOGIN-SIGNUP */
@@ -493,12 +406,14 @@ body {
   display: block;
 }
 #login-errors {
-  padding-top: 10px;
-  margin: auto;
 }
-#login-errors .alert {
+.error-message {
+  display: inline-block;
+  margin-top: 10px;
   padding: 10px;
-  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: .25rem;
+  background: rgba(0, 204, 122, .3);
 }
 #login-wrapper {
   padding: 10px 10px 0 10px;
@@ -517,15 +432,6 @@ body {
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
-}
-
-.close {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-.close:focus {
-  outline: 0;
 }
 
 /* DASHBOARD */
@@ -551,6 +457,7 @@ body {
   padding: 15px;
 }
 #settings-form {
+  margin: auto;
   width: 300px;
 }
 
@@ -603,9 +510,9 @@ body {
   overflow: hidden;
 }
 #podinfo-options {
+  margin: auto;
 }
 #podinfo-copyright {
-
 }
 #podinfo-title, #podinfo-artist {
   overflow: hidden;
@@ -665,8 +572,10 @@ body {
 }
 .results-header {
   font-size: 20px;
+  white-space: nowrap;
 }
 .results-options {
+  margin-left: auto;
   padding: 0;
   -ms-flex-item-align: end!important;
   align-self: flex-end!important;
@@ -704,10 +613,8 @@ body {
   margin-left: 10px;
 }
 .results-minimize {
-
 }
 .results-close {
-
 }
 .results-content {
   padding: 10px;
@@ -736,7 +643,7 @@ body {
   white-space: normal;
 }
 .result-artist, .result-artist:hover {
-  height: 40px;
+  height: 36px;
   overflow: hidden;
   margin: 0;
 }
@@ -770,6 +677,12 @@ hr.h-line {
 }
 
 /* PLAYER */
+#player {
+  border-top: 1px solid rgba(0,0,0,.3);
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
+}
 #player-wrapper a, #player-wrapper a:hover {
   color: #2e2e2e;
   text-decoration: none;
@@ -817,4 +730,33 @@ hr.h-line {
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
+}
+
+/* MEDIA QUERIES */
+/* Extra small devices (phones, up to 480px) */
+@media screen and (max-width: 767px) {
+  body {
+    font-size: 12px;
+  }
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+  body {
+    font-size: 13px;
+  }
+  #podinfo-options {
+    margin-right: 0;
+    margin-left: auto!important;
+    border-left: 1px solid #ddd!important;
+    border-top: 1px solid #ddd!important;
+  }
+  #podinfo-bottom {
+    border: none!important;
+  }
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
 }
