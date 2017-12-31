@@ -245,6 +245,7 @@ body {
 
 /* LOADING ANIMATIONS */
 #results-loading {
+
   padding-top: 15px;
   padding-bottom: 15px;
 }
@@ -583,6 +584,7 @@ body {
 .results-header {
   font-size: 20px;
   min-width: 300px;
+  margin-bottom: 15px;
 }
 .results-options {
   margin-left: auto;
@@ -647,7 +649,6 @@ body {
 .result-image {
   object-fit: cover;
   width: 100%;
-  background: transparent url("loading.gif") center no-repeat;
 }
 .result-title, .result-title:hover {
   overflow: hidden;
@@ -682,11 +683,8 @@ hr.h-line {
 }
 
 /* LOADING GIFS */
-#settings-overlay {
-  top: 0;
-  position: absolute;
-  height: 400px;
-  width: 100%;
+.loading-icon {
+  margin-right: 10px;
 }
 
 /* PLAYER */

@@ -95,6 +95,9 @@ def search(request):
 
     if request.method == 'GET':
         user = request.user
+        languages = Language.objects.all()
+        genres = Genre.get_primary_genres()
+        
         q = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
@@ -104,8 +107,14 @@ def search(request):
         except ValueError:
             page = 1
 
-        languages = Language.objects.all()
-        genres = Genre.get_primary_genres()
+        if q:
+            q.strip()
+
+        if genre and genre not in genres.values_list('name', flat=True):
+            genre = None
+
+        if language and language not in languages.values_list('name', flat=True):
+            language = None
 
         podcasts = Podcast.search(genre, language, user, q=q)
         paginator = Paginator(podcasts, 60)
@@ -159,6 +168,9 @@ def browse(request):
 
     if request.method == 'GET':
         user = request.user
+        genres = Genre.get_primary_genres()
+        languages = Language.objects.all()
+
         alphabet = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
@@ -168,8 +180,14 @@ def browse(request):
         except ValueError:
             page = 1
 
-        languages = Language.objects.all()
-        genres = Genre.get_primary_genres()
+        if alphabet and alphabet not in ALPHABET:
+            alphabet = None
+
+        if genre and genre not in genres.values_list('name', flat=True):
+            genre = None
+
+        if language and language not in languages.values_list('name', flat=True):
+            language = None
 
         podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
         paginator = Paginator(podcasts, 160)
@@ -270,6 +288,8 @@ def podinfo(request, itunesid):
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
         podcast.set_subscribed(user)
+        podcast.views += 1
+        podcast.save()
 
         context = {
             'podcast': podcast,
