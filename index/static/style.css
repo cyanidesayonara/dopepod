@@ -23,7 +23,7 @@ body {
 .btn.options-button {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
   -moz-box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
-  box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;  
+  box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
 }
 .btn-dope-tab, .btn-dope-tab.focus, .btn-dope-tab:focus {
   border-radius: 2rem .25rem 0 0;
@@ -34,7 +34,7 @@ body {
   background: rgba(0, 204, 122, 1);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
-  box-shadow: rgba(0,0,0,.3) 0 0px 5px;  
+  box-shadow: rgba(0,0,0,.3) 0 0px 5px;
 }
 .toggle[aria-expanded="true"] {
   color: #fff;
@@ -83,6 +83,10 @@ body {
   background: #ddd;
 }
 .navbar-dropdown {
+  margin-top: 5px;
+  min-width: 0;
+}
+.navbar-dropdown ul li {
   margin-top: 5px;
   min-width: 0;
 }
@@ -321,7 +325,7 @@ body {
   padding-bottom: 8px;
 }
 #multibar-scroll {
-  border-bottom: 1px solid rgba(0,0,0,.3);
+  border-bottom: 1px solid rgba(45,43,43,.8);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
@@ -382,10 +386,10 @@ body {
 #q {
   border-radius: .25rem;
   padding: 5px 25px 5px 8px;
-  border: 1px solid rgba(0,0,0,.15);
+  border: 1px solid rgba(45,43,43,.5);
 }
 #q:focus {
-  border: 1px solid rgba(0,0,0,.3);
+  border: 1px solid rgba(45,43,43,.8);
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
@@ -418,7 +422,7 @@ body {
 #login-wrapper {
   padding: 10px 10px 0 10px;
   width: 300px;
-  height: 148px;
+  min-height: 148px;
   margin: auto;
 }
 .login-field {
@@ -457,8 +461,14 @@ body {
   padding: 15px;
 }
 #settings-form {
+  position: relative;
   margin: auto;
   width: 300px;
+}
+#settings-save {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 /* PODINFO */
@@ -543,8 +553,8 @@ body {
   background: rgba(0, 204, 122, 1);
   color: #fff;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 0px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
 .episode-buttons {
   margin: 10px;
@@ -572,7 +582,7 @@ body {
 }
 .results-header {
   font-size: 20px;
-  white-space: nowrap;
+  min-width: 300px;
 }
 .results-options {
   margin-left: auto;
@@ -612,6 +622,9 @@ body {
 .selected {
   margin-left: 10px;
 }
+.selected:hover {
+  color: rgba(45,43,43,1);
+}
 .results-minimize {
 }
 .results-close {
@@ -626,9 +639,9 @@ body {
   padding: 4px;
 }
 .result-box img:hover {
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 8px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 8px;
-  box-shadow: rgba(0,0,0,.3) 0 0 8px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
   border: 1px solid #ddd;
 }
 .result-image {

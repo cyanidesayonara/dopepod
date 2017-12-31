@@ -42,12 +42,12 @@ dopepod
           {% endif %}
           <li>
             <a class="btn btn-dope btn-dope-tab reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse" aria-expanded="true" aria-controls="results-collapse" aria-label="Minimize">
-              <i class="fas fa-minus-circle"></i>
+              <i class="fas fa-minus-circle icon"></i>
             </a>
           </li>
           <li>
             <a class="btn btn-dope btn-dope-tab results-close" href="#" aria-label="Close">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times-circle icon"></i>
             </a>
           </li>
         </ul>
@@ -69,14 +69,14 @@ dopepod
           <label class="btn btn-dope options-button active">
             <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
             {{ selected_q }}
-            <i class="fas fa-times-circle selected"></i>
+            <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
         {% if selected_alphabet %}
           <label class="btn btn-dope options-button active">
             <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_alphabet }}" checked>
             {{ selected_alphabet }}
-            <i class="fas fa-times-circle selected"></i>
+            <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
       </div>
@@ -87,14 +87,14 @@ dopepod
           <label class="btn btn-dope options-button active">
             <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
             {{ selected_genre }}
-            <i class="fas fa-times-circle selected"></i>
+            <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
         {% if selected_language %}
           <label class="btn btn-dope options-button active">
             <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
             {{ selected_language }}
-            <i class="fas fa-times-circle selected"></i>
+            <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
       </div>
@@ -240,10 +240,10 @@ dopepod
                 {% endif %}
                 {% endfor %}
                 {% if podcasts.has_next %}
-                {% if not podcasts.next_page_number == paginator.num_pages %}
+                {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
                 <li>
                   <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="{{ paginator.num_pages }}">
+                    <input class="field-button" type="radio" name="page" value="{{ podcasts.paginator.num_pages }}">
                     <i class="fas fa-chevron-right"></i>
                     <i class="fas fa-chevron-right"></i>
                   </label>

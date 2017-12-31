@@ -1,6 +1,6 @@
 <div class="col-3 col-md-4">
   <a class="nav-link-dope navbar-toggler" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i class="fas fa-bars"></i>
+    <i class="fas fa-bars icon"></i>
   </a>
   <div class="dropdown-menu navbar-dropdown color-2" aria-labelledby="navbar-dropdown">
     <ul class="nav nav-fade d-block">
@@ -83,7 +83,7 @@
       <form class="logout-form d-block d-md-none" method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
         <button class="nav-link-dope ajax-logout" type="submit">
-          <i class="fas fa-sign-out-alt"></i>
+          <i class="fas fa-sign-out-alt icon"></i>
         </button>
       </form>
     </li>
@@ -106,7 +106,7 @@
         Signup
       </a>
       <a class="nav-link-dope ajax-login d-block d-md-none" href="/">
-        <i class="fas fa-sign-in-alt"></i>
+        <i class="fas fa-sign-in-alt icon"></i>
       </a>
     </li>
     {% endif %}

@@ -170,13 +170,13 @@ class WillyTheSpider(scrapy.Spider):
 
             except requests.exceptions.HTTPError:
                 with open('logs.txt', 'a', encoding='utf-8') as f:
-                    f.write(datetime.now() + ' | No response from feedUrl' + ' -- ' + str(data) + '\n\n')
+                    f.write(str(datetime.now()) + ' | No response from feedUrl' + ' -- ' + str(data) + '\n\n')
 
             except requests.exceptions.ReadTimeout as e:
                 with open('logs.txt', 'a', encoding='utf-8') as f:
-                    f.write(datetime.now() + ' | feedUrl timed out' + ' -- ' + str(data) + '\n\n')    
-                            
+                    f.write(str(datetime.now()) + ' | feedUrl timed out' + ' -- ' + str(data) + '\n\n')
+
         except KeyError as e:
             print('Missing data: ' + str(e))
             with open('logs.txt', 'a', encoding='utf-8') as f:
-                f.write(datetime.now() + ' | Missing data: ' + str(e) + ' -- ' + str(data) + '\n\n')
+                f.write(str(datetime.now()) + ' | Missing data: ' + str(e) + ' -- ' + str(data) + '\n\n')

@@ -31,7 +31,6 @@ def login(request):
                 return HttpResponse('')
             else:
                 return HttpResponse(errors, status=400)
-
         else:
             chart = Chart.objects.get(genre=None)
             genres = Genre.get_primary_genres()
@@ -49,7 +48,7 @@ def login(request):
             else:
                 return render(request, 'splash.html', context)
     else:
-        return redirect('/')   
+        return redirect('/')
 
 def signup(request):
     if request.method == 'POST':
@@ -88,7 +87,7 @@ def signup(request):
             else:
                 return render(request, 'splash.html', context)
     else:
-        return redirect('/?signup=yeah')   
+        return redirect('/?signup=yeah')
 
 def password_reset(request):
     if request.method == 'POST':

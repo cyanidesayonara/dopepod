@@ -4,6 +4,7 @@ from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Chart, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
+import json
 
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
 
@@ -139,7 +140,7 @@ def search(request):
         chart = Chart.objects.get(genre=None)
 
         context.update({
-            'splash': True,            
+            'splash': True,
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,
@@ -194,7 +195,7 @@ def browse(request):
             'selected_genre': genre,
             'selected_language': language,
             'results_header': results_header,
-            'podcasts': paginator,
+            'podcasts': podcasts,
             'podcasts1': podcasts[:40],
             'podcasts2': podcasts[40:80],
             'podcasts3': podcasts[80:120],
@@ -331,25 +332,48 @@ def settings(request):
         if request.method == 'POST':
             user_form = UserForm(instance=request.user, data=request.POST)
             profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+
+            context = {
+                'user_form': user_form,
+                'profile_form': profile_form,
+            }
+
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
                 if request.is_ajax():
-                    return render(request, 'settings.html', {})
+                    return render(request, 'settings.html', context)
                 return redirect('/')
             else:
-                context = {
-                    'user_form': user_form,
-                    'profile_form': profile_form,
-                }
+                data = json.loads(user_form.errors.as_json())
+                keys = data.keys()
+                errors = {}
+                for key in keys:
+                    message = data[key][0]['message']
+                    if message:
+                        key
+                        errors[key] = message
 
-                if request.is_ajax():
-                    return render(request, 'settings.html', context)
+                data = json.loads(profile_form.errors.as_json())
+                keys = data.keys()
+                for key in keys:
+                    message = data[key][0]['message']
+                    if message:
+                        key
+                        errors[key] = message
+
+                context.update({
+                    'errors': errors,
+                })
+
+                print(context)
+                if request.is_ajax:
+                    return render(request, 'settings.html', context, status=400)
 
                 # chart & search bar
                 genres = Genre.get_primary_genres()
                 chart = Chart.objects.get(genre=None)
-                
+
                 context.update({
                     'chart_genres': genres,
                     'chart': chart,

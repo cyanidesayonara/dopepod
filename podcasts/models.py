@@ -32,6 +32,7 @@ class Podcast(models.Model):
     genre_rank = models.IntegerField(null=True, blank=True)
     global_rank = models.IntegerField(null=True, blank=True)
     discriminate = models.BooleanField(default=False)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -53,7 +54,7 @@ class Podcast(models.Model):
         """
 
         podcasts = Podcast.objects.all()
- 
+
         # filter by explicit
         if user.is_authenticated:
             if not user.profile.show_explicit:
@@ -91,7 +92,7 @@ class Podcast(models.Model):
                     Q(title__istartswith=the)
                 ).order_by('title')
         else:
-            podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', '-discriminate')
+            podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', 'discriminate')
 
         return podcasts
 
@@ -151,7 +152,7 @@ class Podcast(models.Model):
             logger.error(str(e))
         except requests.exceptions.ReadTimeout as e:
             logger.error('timed out')
-        
+
         return podcasts
 
     def subscribe(self, user):

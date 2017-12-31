@@ -34,13 +34,13 @@ function replaceState(url) {
     "context": context,
     "title": title,
   };
-  
+
   if (!url || url == "/charts/") {
     var url = "/";
   }
-  
+
   history.replaceState(state, "", url);
-  updateTitle();  
+  updateTitle();
 }
 function updateTitle() {
   var title = "dopepod";
@@ -51,8 +51,8 @@ function updateTitle() {
   else if ($("#podinfo").length) {
       title += " - " + $("#podinfo-title")[0].innerText;
   }
-  
-  
+
+
   $("title")[0].innerText = title;
 }
 
@@ -173,7 +173,7 @@ function loadChart() {
     };
     url = url + "?" + $.param(data);
   }
-  
+
   $.ajax({
     type: "GET",
     url: url,
@@ -225,7 +225,7 @@ function SearchFunc(url, q=null, page=null) {
   }
 
   scrollToMultibar();
-  $("#episodes").html("");
+  $("#episodes").empty();
   $("#results").html("<div class='col-auto color-1 results-loading'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
@@ -378,7 +378,7 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
-    $("#episodes").html("");    
+    $("#episodes").empty();
     scrollToTop();
   })
   // open browse
@@ -406,13 +406,13 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
-    $("#episodes").html("");
+    $("#episodes").empty();
     scrollToTop();
   })
   // FORMS
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
-    var button = $(this).find(".settings-button");
+    var button = $(this).find("#settings-save");
     button.text("Saving...");
     var data = $(this).serialize();
     var method = this.method;
@@ -425,10 +425,11 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         // console.log(thrownError);
         pushState();
-        $("#center-stage").html(xhr.responseJSON.html);
-        button.text("Fail :(");
+        $("#center-stage").html(xhr.responseText);
+        button.text("Save");
       })
       .done(function(response) {
+        button.text("Saved");
         pushState();
         loadCenterStage("/");
         scrollToTop();
@@ -450,7 +451,7 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         // console.log(thrownError);
         loadCenterStage("/");
-        button.text("Fail :(");
+        button.text("Oops :p");
       })
       .done(function(response) {
         var url = $("#main-wrapper")[0].baseURI;
@@ -502,7 +503,7 @@ $(document)
     pushState();
     clearSearch();
     loadCenterStage(url);
-    $("#episodes").html("");
+    $("#episodes").empty();
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {
