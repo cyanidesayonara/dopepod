@@ -107,9 +107,8 @@ def search(request):
         except ValueError:
             page = 1
 
-        q = q.strip()
-        if q and not q.isalnum():
-            q = None
+        if q:
+            q.strip()
 
         if genre and genre not in genres.values_list('name', flat=True):
             genre = None
@@ -289,6 +288,8 @@ def podinfo(request, itunesid):
         user = request.user
         podcast = get_object_or_404(Podcast, itunesid=itunesid)
         podcast.set_subscribed(user)
+        podcast.views += 1
+        podcast.save()
 
         context = {
             'podcast': podcast,
