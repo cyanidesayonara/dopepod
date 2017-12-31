@@ -112,7 +112,7 @@ function clearSearch() {
 
 // LOADERS
 function loadCenterStage(url) {
-  $("#center-stage").html("<div class='col-auto color-1 results-loading'><span>Loading...</span></div>");
+  $("#center-stage").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -126,7 +126,7 @@ function loadCenterStage(url) {
     });
 }
 function loadEpisodes(itunesid) {
-  $("#episodes").html("<div class='col-auto color-1 results-loading'><span>Loading episodes...</span></div>");
+  $("#episodes").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading episodes...</span></div>");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -147,7 +147,7 @@ function loadEpisodes(itunesid) {
 }
 function loadResults(url) {
   $("#episodes").empty();
-  $("#results").html("<div class='col-auto color-1 results-loading'><span>Loading results...</span></div>");
+  $("#results").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading results...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -161,7 +161,7 @@ function loadResults(url) {
     });
 }
 function loadChart() {
-  $("#chart").html("<div class='col-auto color-1 results-loading'><span>Loading charts...</span></div>");
+  $("#chart").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading charts...</span></div>");
   var url = "/charts/";
   var genre = $("input[name=chart-genre]:checked").val();
   if (!genre) {
@@ -226,7 +226,7 @@ function SearchFunc(url, q=null, page=null) {
 
   scrollToMultibar();
   $("#episodes").empty();
-  $("#results").html("<div class='col-auto color-1 results-loading'><span class='results-info'>Loading results...</span></div>");
+  $("#results").html("<div class='col-auto results-loading'><span class='results-info'>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",

@@ -76,7 +76,7 @@ class Podcast(models.Model):
             podcasts = podcasts.filter(
                 Q(title__istartswith=q) |
                 Q(title__icontains=q)
-            ).order_by('global_rank', 'genre_rank', '-discriminate')
+            ).order_by('global_rank', 'genre_rank', 'discriminate')
 
         elif alphabet:
             if alphabet == '#':
