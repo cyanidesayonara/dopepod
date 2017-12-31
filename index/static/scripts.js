@@ -226,7 +226,7 @@ function SearchFunc(url, q=null, page=null) {
 
   scrollToMultibar();
   $("#episodes").empty();
-  $("#results").html("<div class='col-auto results-loading'><span class='results-info'>Loading results...</span></div>");
+  $("#results").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading results...</span></div>");
 
   xhr = $.ajax({
     method: "GET",

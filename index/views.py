@@ -97,7 +97,7 @@ def search(request):
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
-        
+
         q = request.GET.get('q', None)
         genre = request.GET.get('genre', None)
         language = request.GET.get('language', None)
@@ -109,6 +109,9 @@ def search(request):
 
         if q:
             q.strip()
+
+        if len(q) > 30:
+            q = None
 
         if genre and genre not in genres.values_list('name', flat=True):
             genre = None
