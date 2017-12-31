@@ -585,6 +585,6 @@ $(document)
   .on("show.bs.collapse", ".options-collapse", function (e) {
       $(".options-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".genre-options-collapse", function (e) {
-      $(".genre-options-collapse.show").collapse("hide");
+  .on("show.bs.collapse", ".chart-options-collapse", function (e) {
+      $(".chart-options-collapse.show").collapse("hide");
   })
