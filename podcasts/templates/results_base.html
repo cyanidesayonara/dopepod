@@ -68,14 +68,14 @@ dopepod
     {% if selected_q or selected_alphabet %}
       <div class="col selected-group">
         {% if selected_q %}
-          <label class="btn btn-dope options-button active">
+          <label class="btn btn-dope selected-button active">
             <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
             {{ selected_q }}
             <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
         {% if selected_alphabet %}
-          <label class="btn btn-dope options-button active">
+          <label class="btn btn-dope selected-button active">
             <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_alphabet }}" checked>
             {{ selected_alphabet }}
             <i class="fas fa-times-circle icon selected"></i>
@@ -86,14 +86,14 @@ dopepod
     {% if selected_genre or selected_language %}
       <div class="col col-md-auto ml-auto options-group">
         {% if selected_genre %}
-          <label class="btn btn-dope options-button active">
+          <label class="btn btn-dope selected-button active">
             <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
             {{ selected_genre }}
             <i class="fas fa-times-circle icon selected"></i>
           </label>
         {% endif %}
         {% if selected_language %}
-          <label class="btn btn-dope options-button active">
+          <label class="btn btn-dope selected-button active">
             <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
             {{ selected_language }}
             <i class="fas fa-times-circle icon selected"></i>

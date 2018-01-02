@@ -35,18 +35,16 @@
     <!-- MAIN CONTENT -->
     <div id="main-wrapper">
       <div class="container-fluid sticky-top extended" id="flap">
-        <div class="row open" id="stage">
-          <div class="container" id="center-stage">
-            {% block center-stage %}
-            {% endblock %}
-            {% if splash %}
-              {% if user.is_authenticated %}
-                {% include 'dashboard.html' %}
-              {% else %}
-                {% include 'splash.html' %}
-              {% endif %}
+        <div class="row open" id="center-stage">
+          {% block center-stage %}
+          {% endblock %}
+          {% if splash %}
+            {% if user.is_authenticated %}
+              {% include 'dashboard.html' %}
+            {% else %}
+              {% include 'splash.html' %}
             {% endif %}
-          </div>
+          {% endif %}
         </div>
         <!-- MULTIBAR -->
         <div class="row color-1-trans" id="multibar-scroll">

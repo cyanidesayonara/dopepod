@@ -41,6 +41,7 @@ ALLOWED_HOSTS = local_settings.ALLOWED_HOSTS
 INSTALLED_APPS = [
     'index',
     'podcasts',
+    'login',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -90,7 +91,7 @@ SITE_ID = 1
 # django-allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

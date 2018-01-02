@@ -16,7 +16,6 @@ def navbar(request):
     if request.method == 'GET':
         return render(request, 'navbar.html', {})
 
-
 @vary_on_headers('Accept')
 def index(request):
     """
@@ -26,10 +25,10 @@ def index(request):
 
     if request.method == 'GET':
         user = request.user
-        signup = request.GET.get('signup' , None)
+        view = request.GET.get('view' , None)
 
         context = {
-            'signup': signup,
+            'view': view,
         }
 
         if request.is_ajax():
@@ -368,13 +367,13 @@ def settings(request):
                     return render(request, 'settings.html', context)
                 return redirect('/')
             else:
+                errors = {}
+
                 data = json.loads(user_form.errors.as_json())
                 keys = data.keys()
-                errors = {}
                 for key in keys:
                     message = data[key][0]['message']
                     if message:
-                        key
                         errors[key] = message
 
                 data = json.loads(profile_form.errors.as_json())
@@ -382,14 +381,12 @@ def settings(request):
                 for key in keys:
                     message = data[key][0]['message']
                     if message:
-                        key
                         errors[key] = message
 
                 context.update({
                     'errors': errors,
                 })
 
-                print(context)
                 if request.is_ajax:
                     return render(request, 'settings.html', context, status=400)
 

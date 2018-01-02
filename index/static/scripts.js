@@ -266,6 +266,9 @@ $(document)
     refreshCookie();
     xhr = null;
     timeout = 0;
+    $("#login-tab")[0].href = "#tabs-login";
+    $("#signup-tab")[0].href = "#tabs-signup";
+    $("#search-button").html("<i class='fa fa-search icon'></i>");
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -508,10 +511,10 @@ $(document)
   })
   .on("click", ".password-link", function(e) {
     e.preventDefault();
-    $("#pills-password-tab").tab("show");
+    $("#password-tab").tab("show");
   })
   .on("click", ".login-toggle", function() {
-    $("#login-errors").empty();
+    $(".error-message").remove();
   })
   // login or signup, refresh after
   .on("submit", ".login-form, .signup-form", function (e) {
@@ -528,8 +531,7 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         // console.log(thrownError);
-        $("#login-errors").html("<div class='error-message'>" + xhr.responseText + "</div>");
-        button.text("Log In");
+        $("#center-stage").html(xhr.responseText);
       })
       .done(function(response) {
         refreshCookie();
@@ -552,11 +554,10 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         // console.log(thrownError);
-        $("#login-errors").html("<div class='error-message'>" + xhr.responseText + "</div>");
-        button.text("Reset");
+        $("#center-stage").html(xhr.responseText);
       })
-      .done(function() {
-        loadCenterStage("/")
+      .done(function(response) {
+        $("#center-stage").html(response);
         scrollToTop();
       });
   })
@@ -579,12 +580,19 @@ $(document)
     $(this).parents(".results").remove();
   })
   // BOOTSTRAP COLLAPSES
-  .on("show.bs.collapse", ".more-collapse", function (e) {
+  .on("show.bs.collapse", ".more-collapse", function(e) {
       $(".more-collapse.show").collapse("hide");
+  })
+   .on("click", ".results-minimize", function(e) {
+     $(this).parents(".results").find(".options-collapse.show").collapse("hide");
+   })
+  .on("click", ".btn-dope-tab.toggle", function(e) {
+    $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
+
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
       $(".options-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".chart-options-collapse", function (e) {
+  .on("show.bs.collapse", ".chart-options-collapse", function(e) {
       $(".chart-options-collapse.show").collapse("hide");
   })

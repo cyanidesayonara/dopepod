@@ -12,7 +12,6 @@ body {
   color: #2e2e2e;
   font-size: 16px;
   background-color: #fff;
-  border: none;
   box-shadow: none;
   outline: rgba(0,0,0,0);
 }
@@ -20,14 +19,14 @@ body {
   color: #fff;
   background: rgba(0, 204, 122, 1);
 }
-.btn.options-button {
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
-  -moz-box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
-  box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
-}
 .btn-dope-tab, .btn-dope-tab.focus, .btn-dope-tab:focus {
   border-radius: 2rem .25rem 0 0;
   background: inherit;
+}
+.btn-dope-social {
+  display: inline-flex;
+  padding: 0;
+  flex: auto;
 }
 .btn-dope:hover {
   color: #fff;
@@ -242,10 +241,11 @@ body {
 }
 
 /* LOADING ANIMATIONS */
-#results-loading {
-  font-size: 20px;
+.results-loading {
+  font-size: 24px;
   padding-top: 15px;
   padding-bottom: 15px;
+  margin: auto;
 }
 
 /* MAIN */
@@ -292,6 +292,13 @@ body {
   margin-right: 8px;
   margin-bottom: 8px;
 }
+.selected-button {
+  margin-right: 8px;
+  margin-bottom: 8px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0px 5px;
+  -moz-box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
+  box-shadow: inset rgba(0,0,0,.3) 0 0px 5px;
+}
 .options-field {
   padding: 5px 0 2px 0;
   display: flex;
@@ -309,6 +316,9 @@ body {
 /* ALPHABET BUTTONS */
 .alphabet-group {
   padding-top: 10px;
+}
+#alphabet-buttons {
+  display: flex;
 }
 .alphabet-button {
   height: 32px;
@@ -349,12 +359,12 @@ body {
 #flap.extended{
   top: -400px;
 }
-#stage {
+#center-stage {
   background-color: #E6ECF0;
   z-index: 90;
   overflow: hidden;
 }
-#stage.open {
+#center-stage.open {
   height: 444px;
   padding-top: 44px;
   margin-bottom: -44px;
@@ -380,7 +390,7 @@ body {
   outline: 1px #fff;
 }
 #search-button:hover {
-  color: rgba(76,222,181,1);
+
 }
 #q {
   border-radius: .25rem;
@@ -406,22 +416,19 @@ body {
 }
 #login-buttons {
   padding-top: 10px;
+  padding-bottom: 10px;
   display: block;
 }
-#login-errors {
+.login-toggle {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .error-message {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: .25rem;
-  background: rgba(0, 204, 122, .3);
 }
 #login-wrapper {
   padding: 10px 10px 0 10px;
-  width: 300px;
-  min-height: 148px;
+  max-width: 350px;
+  min-height: 150px;
   margin: auto;
 }
 .login-field {
@@ -435,6 +442,15 @@ body {
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 2px, inset rgba(0,0,0,.2) 1px 1px 2px;
+}
+.social-button {
+  display: inline;
+  padding: 6px 12px;
+}
+.social-icon {
+  background: rgba(0, 204, 122, 1);
+  border-radius: .25rem 0 0 .25rem;
+  color: #fff;
 }
 
 /* DASHBOARD */

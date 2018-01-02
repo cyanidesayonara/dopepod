@@ -28,7 +28,9 @@
           accept-charset="utf-8">
           {% endif %}
           <button id="search-button" type="submit">
-            <i class="fa fa-search icon"></i>
+            <span>
+              Go
+            </span>
           </button>
         </div>
       </form>
@@ -43,25 +45,19 @@
     <div class="col">
       <form id="browse-form" method="GET" action="{% url 'browse' %}">
         <div class="alphabet-group" id="alphabet-buttons" data-toggle="buttons">
-          <ul class="options-field">
           {% for letter in alphabet %}
-          {% if letter == selected_alphabet %}
-          <li>
-            <label class="btn btn-dope alphabet-button active">
-              <input class="field-button" type="radio" name="alphabet" value="{{ letter }}" checked>
-              {{ letter }}
-            </label>
-          </li>
-          {% else %}
-          <li>
-            <label class="btn btn-dope alphabet-button">
-              <input class="field-button" type="radio" name="alphabet" value="{{ letter }}">
-              {{ letter }}
-            </label>
-          </li>
-          {% endif %}
+            {% if letter == selected_alphabet %}
+              <label class="btn btn-dope alphabet-button active">
+                <input id="alphabet-{{ letter }}" class="field-button" type="radio" name="alphabet" value="{{ letter }}" checked>
+                {{ letter }}
+              </label>
+            {% else %}
+              <label for="alphabet-{{ letter }}" class="btn btn-dope alphabet-button">
+                <input id="alphabet-{{ letter }}" class="field-button" type="radio" name="alphabet" value="{{ letter }}">
+                {{ letter }}
+              </label>
+            {% endif %}
           {% endfor %}
-          </ul>
         </div>
       </form>
     </div>
