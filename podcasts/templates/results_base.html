@@ -109,11 +109,6 @@ dopepod
             <input class="field-button" type="radio" name="genre" value="All">
             All
           </label>
-        {% else %}
-          <label class="btn btn-dope options-button active">
-            <input class="field-button" type="radio" name="genre" value="All" checked>
-            All
-          </label>
         {% endif %}
         {% for genre in genres %}
           {% if not selected_genre == genre.name %}
@@ -132,11 +127,6 @@ dopepod
           {% if selected_language %}
             <label class="btn btn-dope options-button">
               <input class="field-button" type="radio" name="language" value="All">
-              All
-            </label>
-          {% else %}
-            <label class="btn btn-dope options-button active">
-              <input class="field-button" type="radio" name="language" value="All" checked>
               All
             </label>
           {% endif %}

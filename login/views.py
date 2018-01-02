@@ -155,10 +155,8 @@ def password_reset(request):
 def password_reset_from_key(request, uidb36, key):
     if request.method == 'GET':
         response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
-        try:
-            print(response.context)
-            print("sdfdsf")
-            print(response.template)
-        except:
-            pass
+        return response
+
+    if request.method == 'POST':
+        response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
         return response

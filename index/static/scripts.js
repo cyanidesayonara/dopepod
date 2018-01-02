@@ -266,8 +266,10 @@ $(document)
     refreshCookie();
     xhr = null;
     timeout = 0;
-    $("#login-tab")[0].href = "#tabs-login";
-    $("#signup-tab")[0].href = "#tabs-signup";
+    if ($("#login-buttons").length) {
+      $("#login-tab")[0].href = "#tabs-login";
+      $("#signup-tab")[0].href = "#tabs-signup";
+    }
     $("#search-button").html("<i class='fa fa-search icon'></i>");
   })
   // SEARCH

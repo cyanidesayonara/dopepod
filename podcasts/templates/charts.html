@@ -41,11 +41,6 @@
               <input class="field-button" type="radio" name="chart-genre" value="All">
               All
             </label>
-          {% else %}
-            <label class="btn btn-dope options-button active">
-              <input class="field-button" type="radio" name="chart-genre" value="All" checked>
-              All
-            </label>
           {% endif %}
           {% for genre in chart_genres %}
             {% if not chart.genre == genre.name %}
