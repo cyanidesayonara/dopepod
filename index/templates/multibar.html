@@ -1,7 +1,7 @@
 <div class="container" id="multibar">
   <div class="row">
     <!-- SEARCH BAR -->
-    <div class="col">
+    <div class="col pr-0">
       {% if podcasts1 %}
         <a class="btn btn-dope active toggle" id="browse-toggle" href="{% url 'browse' %}" data-toggle="collapse" data-target="#browse-collapse" aria-expanded="true" aria-controls="browse-collapse">
           A-Z
@@ -12,7 +12,7 @@
         </a>
       {% endif %}
     </div>
-    <div class="col-auto">
+    <div class="col-auto pl-0" id="search">
       <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
         <div class="input-group" id="search-field">
           <label for="q" class="sr-only">Search</label>
@@ -44,7 +44,7 @@
   {% endif %}
     <div class="col">
       <form id="browse-form" method="GET" action="{% url 'browse' %}">
-        <div class="alphabet-group" id="alphabet-buttons" data-toggle="buttons">
+        <div class="alphabet-group alphabet-buttons" data-toggle="buttons">
           {% for letter in alphabet %}
             {% if letter == selected_alphabet %}
               <label class="btn btn-dope alphabet-button active">

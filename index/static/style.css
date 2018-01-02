@@ -77,6 +77,13 @@ body {
   box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   z-index: 99;
 }
+#navbar-left {
+  display: inline-flex;
+}
+#navbar-right {
+  display: inline-flex;
+  justify-content: flex-end;
+}
 #navbar-drop {
   padding: 0;
 }
@@ -88,38 +95,23 @@ body {
   margin-top: 5px;
   min-width: 0;
 }
-.navbar-dropdown ul li {
-  margin-top: 5px;
-  min-width: 0;
-}
-.nav-fade li {
-  transition: background .25s ease-in-out;
-  -moz-transition: background .25s ease-in-out;
-  -webkit-transition: background .25s ease-in-out;
-  margin-right: 2px;
-  margin-left: 2px;
-}
-#multibar .nav-fade li {
-  margin-top: 3px;
-  margin-bottom: 3px;
-}
-#navbar .nav-fade li:hover {
-  border-radius: .25rem;
-  color: #2e2e2e;
-  background: #ddd;
-}
 .nav-link-dope  {
   cursor: pointer;
+  border-radius: .25rem;
   border: none;
   background: inherit;
   -webkit-appearance: none;
   color: rgba(255, 255, 255, 1);
   font-size: 16px;
   padding: 10px;
+  transition: background .25s ease-in-out;
+  -moz-transition: background .25s ease-in-out;
+  -webkit-transition: background .25s ease-in-out;
 }
 .nav-link-dope:hover {
   text-decoration: none;
   color: #2e2e2e;
+  background: #ddd;
 }
 .nav-link-dope:focus {
   outline: rgba(0,0,0,0);
@@ -262,9 +254,12 @@ body {
 }
 
 /* OPTIONS BUTTONS */
-#page-buttons {
-  display: -ms-inline-flexbox;
-  display: inline-flex;
+.page-buttons {
+}
+.page-group {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .page-button, .page-button:focus, .page-button.focus {
   margin: 0;
@@ -318,10 +313,12 @@ body {
 
 /* ALPHABET BUTTONS */
 .alphabet-group {
-  padding-top: 10px;
-}
-#alphabet-buttons {
   display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 10px 0 0;
+}
+.alphabet-buttons {
 }
 .alphabet-button {
   height: 32px;
@@ -374,13 +371,18 @@ body {
 }
 
 /* SEARCH */
+#search {
+}
+#search-form {
+
+}
 #search-field {
-  font-size: 16px;
   width: 250px;
+  font-size: 16px;
 }
 #search-button {
   position: absolute;
-  left: 220px;
+  right: 0;
   top: 6px;
   z-index: 50;
   background-color: inherit;
@@ -506,17 +508,21 @@ body {
   padding-bottom: 10px;
 }
 #podinfo-main {
-  height: 330px;
+  height: 100%;
   overflow: hidden;
 }
 #podinfo-left {
   background: #fff;
   text-align: center;
   padding-right: 0;
-  height: 330px;
+  height: 100%;
+}
+#podinfo-left img {
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 #podinfo-right {
-  padding-top: 10px;
   align-self: flex-end;
 }
 .podinfo-side-list {
@@ -624,9 +630,9 @@ body {
 .options-select {
   overflow: hidden;
   padding-top: 4px;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
-  box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 5px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 5px;
+  box-shadow: rgba(0,0,0,.3) 0 0 5px;
 }
 .pagination {
   padding-top: 10px;

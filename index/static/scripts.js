@@ -106,8 +106,9 @@ function refreshPage() {
 }
 
 function clearSearch() {
+  $("#browse-collapse").collapse("hide");
   $("#q").val("");
-  $("#alphabet-buttons").find(".alphabet-button.active").removeClass("active");
+  $(".alphabet-buttons").find(".alphabet-button.active").removeClass("active");
 }
 
 // LOADERS
@@ -247,13 +248,11 @@ function SearchFunc(url, q=null, page=null) {
 
 // SCROLLTO
 function scrollToTop() {
-  $("#browse-collapse").collapse("hide");
   $('html, body').animate({
     scrollTop: $("body").offset().top
   }, 350);
 }
 function scrollToMultibar() {
-  $("#browse-collapse").collapse("hide");
   $('html, body').animate({
     scrollTop: 400
   }, 350);
@@ -308,7 +307,7 @@ $(document)
       clearSearch();
     }, 250);
   })
-  .on("change", "#alphabet-buttons", function() {
+  .on("change", ".alphabet-buttons", function() {
     var url = $("#browse-form")[0].action;
     var q = $("input[name=alphabet]:checked").val();
     pushState();
@@ -328,7 +327,7 @@ $(document)
     }, 250);
   })
   // search when user changes options
-  .on("change", "#page-buttons", function() {
+  .on("change", ".page-buttons", function() {
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = $("#results-form")[0].action;
@@ -394,6 +393,7 @@ $(document)
     clearSearch();
     loadResults(url);
     scrollToMultibar();
+    $("#browse-collapse").collapse("show");
    })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
@@ -456,7 +456,6 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
         // console.log(thrownError);
         loadCenterStage("/");
-        button.text("Oops :p");
       })
       .done(function(response) {
         var url = $("#main-wrapper")[0].baseURI;

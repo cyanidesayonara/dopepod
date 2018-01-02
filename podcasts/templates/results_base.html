@@ -148,48 +148,38 @@ dopepod
       {% if podcasts.has_other_pages %}
         <div class="row pagination">
           <div class="col">
-            <div class="btn-group" id="page-buttons" data-toggle="buttons">
-              <ul class="nav page-list">
-                {% if podcasts.has_previous %}
+            <div class="page-group page-buttons" data-toggle="buttons">
+              {% if podcasts.has_previous %}
                 {% if not podcasts.previous_page_number == 1%}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="1">
                     <i class="fas fa-chevron-left"></i>
                     <i class="fas fa-chevron-left"></i>
                   </label>
-                </li>
                 {% endif %}
-                {% endif %}
-                {% for i in podcasts.paginator.page_range %}
+              {% endif %}
+              {% for i in podcasts.paginator.page_range %}
                 {% if podcasts.number == i %}
-                <li>
                   <label class="btn btn-dope page-button active">
                     <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
                     {{ i }}
                   </label>
-                </li>
                 {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="{{ i }}">
                     {{ i }}
                   </label>
-                </li>
                 {% endif %}
-                {% endfor %}
-                {% if podcasts.has_next %}
+              {% endfor %}
+              {% if podcasts.has_next %}
                 {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="{{ podcasts.paginator.num_pages }}">
                     <i class="fas fa-chevron-right"></i>
                     <i class="fas fa-chevron-right"></i>
                   </label>
-                </li>
                 {% endif %}
-                {% endif %}
-              </ul>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -201,48 +191,38 @@ dopepod
       {% if podcasts.has_other_pages %}
         <div class="row pagination">
           <div class="col">
-            <div class="btn-group" id="page-buttons" data-toggle="buttons">
-              <ul class="nav page-list">
-                {% if podcasts.has_previous %}
+            <div class="page-group page-buttons" data-toggle="buttons">
+              {% if podcasts.has_previous %}
                 {% if not podcasts.previous_page_number == 1%}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="1">
                     <i class="fas fa-chevron-left"></i>
                     <i class="fas fa-chevron-left"></i>
                   </label>
-                </li>
                 {% endif %}
-                {% endif %}
-                {% for i in podcasts.paginator.page_range %}
+              {% endif %}
+              {% for i in podcasts.paginator.page_range %}
                 {% if podcasts.number == i %}
-                <li>
                   <label class="btn btn-dope page-button active">
                     <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
                     {{ i }}
                   </label>
-                </li>
                 {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="{{ i }}">
                     {{ i }}
                   </label>
-                </li>
                 {% endif %}
-                {% endfor %}
-                {% if podcasts.has_next %}
+              {% endfor %}
+              {% if podcasts.has_next %}
                 {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                <li>
                   <label class="btn btn-dope page-button">
                     <input class="field-button" type="radio" name="page" value="{{ podcasts.paginator.num_pages }}">
                     <i class="fas fa-chevron-right"></i>
                     <i class="fas fa-chevron-right"></i>
                   </label>
-                </li>
                 {% endif %}
-                {% endif %}
-              </ul>
+              {% endif %}
             </div>
           </div>
         </div>
