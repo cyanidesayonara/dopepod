@@ -4,6 +4,7 @@ from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Chart, Subscription, Podcast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
+import urllib.parse
 import json
 
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
@@ -42,7 +43,7 @@ def index(request):
         genres = Genre.get_primary_genres()
 
         context.update({
-            'extend': True,
+            'splash': True,
             'chart': chart,
             'chart_genres': genres,
             'alphabet': ALPHABET,
@@ -61,10 +62,12 @@ def charts(request):
     """
 
     if request.method == 'GET':
-        genre = request.GET.get('genre', None)
-        if genre == 'All':
-            genre = None
         genres = Genre.get_primary_genres()
+
+        genre = request.GET.get('genre', None)
+        if genre:
+            if genre not in genres.values_list('name', flat=True):
+                genre = None
         chart = Chart.objects.get(genre=genre)
 
         context = {
@@ -77,7 +80,6 @@ def charts(request):
 
         # search bar + subs for non-ajax
         context.update({
-            'splash': True,
             'alphabet': ALPHABET,
         })
 
@@ -96,103 +98,36 @@ def search(request):
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
-
         q = request.GET.get('q', None)
-        genre = request.GET.get('genre', None)
-        language = request.GET.get('language', None)
 
-        try:
-            page = int(request.GET.get('page', '1'))
-        except ValueError:
-            page = 1
+        view = 'list'
+        show = 160
+        template = 'results_list.html'
 
         if q:
             q.strip()
+            if len(q) > 30:
+                q = None
+            elif len(q) > 1:
+                view = 'detail'
+                show = 60
+                template = 'results_detail.html'
 
-        if len(q) > 30:
-            q = None
-
+        genre = request.GET.get('genre', None)
         if genre and genre not in genres.values_list('name', flat=True):
             genre = None
 
+        language = request.GET.get('language', None)
         if language and language not in languages.values_list('name', flat=True):
             language = None
-
-        podcasts = Podcast.search(genre, language, user, q=q)
-        paginator = Paginator(podcasts, 60)
-
-        if paginator.count == 1:
-            results_header = str(paginator.count) + ' result'
-        else:
-            results_header = str(paginator.count) + ' results'
-
-        try:
-            podcasts = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            podcasts = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            podcasts = paginator.page(paginator.num_pages)
-
-        context = {
-            'genres': genres,
-            'languages': languages,
-            'selected_q': q,
-            'selected_genre': genre,
-            'selected_language': language,
-            'results_header': results_header,
-            'podcasts': podcasts,
-        }
-
-        if request.is_ajax():
-            return render(request, 'results_detail.html', context)
-
-        chart = Chart.objects.get(genre=None)
-
-        context.update({
-            'splash': True,
-            'chart_genres': genres,
-            'chart': chart,
-            'alphabet': ALPHABET,
-        })
-
-        return render(request, 'results_detail.html', context)
-
-@vary_on_headers('Accept')
-def browse(request):
-    """
-    sets browse terms
-    calls search
-    returns results
-    with chart & browse bar for non-ajax
-    """
-
-    if request.method == 'GET':
-        user = request.user
-        genres = Genre.get_primary_genres()
-        languages = Language.objects.all()
-
-        alphabet = request.GET.get('q', None)
-        genre = request.GET.get('genre', None)
-        language = request.GET.get('language', None)
 
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
 
-        if alphabet and alphabet not in ALPHABET:
-            alphabet = None
-
-        if genre and genre not in genres.values_list('name', flat=True):
-            genre = None
-
-        if language and language not in languages.values_list('name', flat=True):
-            language = None
-
-        podcasts = Podcast.search(genre, language, user, alphabet=alphabet)
-        paginator = Paginator(podcasts, 160)
+        podcasts = Podcast.search(genre, language, user, q=q)
+        paginator = Paginator(podcasts, show)
 
         if paginator.count == 1:
             results_header = str(paginator.count) + ' result'
@@ -208,10 +143,39 @@ def browse(request):
             # If page is out of range (e.g. 9999), deliver last page of results.
             podcasts = paginator.page(paginator.num_pages)
 
+        url = request.path
+        querystring = {}
+        urls = {}
+
+        if q:
+            querystring['q'] = q
+        if genre:
+            querystring['genre'] = genre
+        if language:
+            querystring['language'] = language
+
+        if q or genre or language:
+            querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
+            urls['q_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_q)
+
+            querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
+            urls['genre_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_genre)
+
+            querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
+            urls['language_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_language)
+
+            urls['full_url'] = url + '?' + urllib.parse.urlencode(querystring)
+        else:
+            urls['q_url'] = url + '?'
+            urls['genre_url'] = url + '?'
+            urls['language_url'] = url + '?'
+            urls['full_url'] = url + '?'
+
         context = {
+            'urls': urls,
             'genres': genres,
             'languages': languages,
-            'selected_alphabet': alphabet,
+            'selected_q': q,
             'selected_genre': genre,
             'selected_language': language,
             'results_header': results_header,
@@ -223,18 +187,17 @@ def browse(request):
         }
 
         if request.is_ajax():
-            return render(request, 'results_list.html', context)
+            return render(request, template, context)
 
-        # chart & browse bar for non-ajax
         chart = Chart.objects.get(genre=None)
 
         context.update({
-            'splash': True,
             'chart_genres': genres,
             'chart': chart,
             'alphabet': ALPHABET,
         })
-        return render(request, 'results_list.html', context)
+
+        return render(request, template, context)
 
 @vary_on_headers('Accept')
 def subscriptions(request):
@@ -245,17 +208,16 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        subscriptions = user.subscription_set.all()
+        podcasts = user.subscription_set.all()
 
-        if subscriptions.count == 1:
-            results_header = str(subscriptions.count()) + ' subscription'
+        if podcasts.count() == 1:
+            results_header = str(podcasts.count()) + ' subscriptions'
         else:
-            results_header = str(subscriptions.count()) + ' subscriptions'
-
+            results_header = str(podcasts.count()) + ' subscriptions'
 
         context = {
             'results_header': results_header,
-            'subscriptions': subscriptions,
+            'podcasts': podcasts,
         }
 
         if request.is_ajax():

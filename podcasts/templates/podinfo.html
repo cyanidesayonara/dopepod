@@ -1,7 +1,7 @@
-{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
+{% extends not splash|yesno:'ajax.html,base.html' %}
 
 {% block title %}
-{{ podcast.title }}
+{{ podcasts.title }}
 {% endblock %}
 
 {% block center-stage %}

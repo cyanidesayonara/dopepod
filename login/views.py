@@ -49,7 +49,7 @@ def login(request):
             chart = Chart.objects.get(genre=None)
             genres = Genre.get_primary_genres()
             context.update({
-                'extend': True,
+                'splash': True,
                 'chart_genres': genres,
                 'chart': chart,
                 'alphabet': ALPHABET,
@@ -91,7 +91,7 @@ def signup(request):
             chart = Chart.objects.get(genre=None)
             genres = Genre.get_primary_genres()
             context.update({
-                'extend': True,
+                'splash': True,
                 'chart_genres': genres,
                 'chart': chart,
                 'alphabet': ALPHABET,
@@ -139,7 +139,7 @@ def password_reset(request):
             chart = Chart.objects.get(genre=None)
             genres = Genre.get_primary_genres()
             context.update({
-                'extend': True,
+                'splash': True,
                 'chart_genres': genres,
                 'chart': chart,
                 'alphabet': ALPHABET,

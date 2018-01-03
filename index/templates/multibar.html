@@ -43,23 +43,19 @@
   <div class="row collapse" id="browse-collapse">
   {% endif %}
     <div class="col">
-      <form id="browse-form" method="GET" action="{% url 'browse' %}">
-        <div class="alphabet-group alphabet-buttons" data-toggle="buttons">
-          {% for letter in alphabet %}
-            {% if letter == selected_alphabet %}
-              <label class="btn btn-dope alphabet-button active">
-                <input id="alphabet-{{ letter }}" class="field-button" type="radio" name="alphabet" value="{{ letter }}" checked>
-                {{ letter }}
-              </label>
-            {% else %}
-              <label for="alphabet-{{ letter }}" class="btn btn-dope alphabet-button">
-                <input id="alphabet-{{ letter }}" class="field-button" type="radio" name="alphabet" value="{{ letter }}">
-                {{ letter }}
-              </label>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </form>
+      <div class="alphabet-group alphabet-buttons" data-toggle="buttons">
+        {% for letter in alphabet %}
+          {% if letter == selected_alphabet %}
+          <a class="btn btn-dope alphabet-button active" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
+            {{ letter }}
+          </a>
+          {% else %}
+          <a class="btn btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
+            {{ letter }}
+          </a>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>

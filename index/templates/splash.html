@@ -1,4 +1,4 @@
-{% extends extend|yesno:'base.html,ajax.html' %}
+{% extends splash|yesno:'base.html,ajax.html' %}
 
 {% block title %}
 dopepod
@@ -334,8 +334,8 @@ dopepod
         </div>
       </div>
       <a class="btn btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google">
-        <div class="social-button social-icon">
-          <i class="fab fa-google icon"></i>
+        <div class="social-button social-icon" id="google-icon">
+          G
         </div>
         <div class="social-button">
           Sign in with Google

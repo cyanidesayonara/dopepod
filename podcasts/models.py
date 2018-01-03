@@ -11,6 +11,7 @@ from dateutil.parser import parse
 from operator import attrgetter
 import logging
 import string
+from urllib.parse import quote, unquote
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.itunesid')
 
-    def search(genre, language, user, q=None, alphabet=None):
+    def search(genre, language, user, q=None):
         """
         returns podcasts matching search terms
         """
@@ -73,24 +74,25 @@ class Podcast(models.Model):
 
         # last but not least, filter by title
         if q:
-            podcasts = podcasts.filter(
-                Q(title__istartswith=q) |
-                Q(title__icontains=q)
-            ).order_by('global_rank', 'genre_rank', 'discriminate')
-
-        elif alphabet:
-            if alphabet == '#':
-                query = Q()
-                for letter in string.ascii_lowercase:
-                    query = query | Q(title__istartswith=letter)
-                podcasts = podcasts.exclude(query).order_by('title')
-
-            else:
-                the = 'the ' + alphabet
+            if len(q) > 1:
                 podcasts = podcasts.filter(
-                    Q(title__istartswith=alphabet) |
-                    Q(title__istartswith=the)
-                ).order_by('title')
+                    Q(title__istartswith=q) |
+                    Q(title__icontains=q)
+                )
+                podcasts = podcasts.order_by('global_rank', 'genre_rank', 'discriminate')
+            else:
+                if q == '#':
+                    query = Q()
+                    for letter in string.ascii_lowercase:
+                        query = query | Q(title__istartswith=letter)
+                        podcasts = podcasts.exclude(query)
+                else:
+                    the = 'the ' + q
+                    podcasts = podcasts.filter(
+                        Q(title__istartswith=q) |
+                        Q(title__istartswith=the)
+                    )
+                podcasts = podcasts.order_by('title')
         else:
             podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', 'discriminate')
 
@@ -524,6 +526,12 @@ class Filterable(models.Model):
     def __str__(self):
         return self.name
 
+    def url_format(self):
+        return quote(self.name)
+
+    def unformat(self):
+        return unquote(self.name)
+
     def count_n_podcasts():
         """
         after updating podcast database with scrapy, count and set n_podcasts
@@ -577,7 +585,7 @@ class Genre(Filterable):
 class Language(Filterable):
 
     class Meta:
-        ordering = ('-n_podcasts', 'name')
+        ordering = ('-n_podcasts',)
 
     def create_or_get_language(name):
         try:

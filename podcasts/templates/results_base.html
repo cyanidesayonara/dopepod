@@ -55,67 +55,46 @@ dopepod
         </ul>
     </div>
   </div>
-  {% if selected_q %}
-  <form id="results-form" method="GET" action="{% url 'search' %}">
-  {% elif subscriptions %}
-  <form id="subscriptions-form" method="GET" action="{% url 'subscriptions' %}">
-  {% elif episodes %}
-  <form id="episodes-form" method="GET" action="{% url 'podinfo' %}">
-  {% else %}
-  <form id="results-form" method="GET" action="{% url 'browse' %}">
-  {% endif %}
-  <div class="row options-select color-1" id="selected-buttons" data-toggle="buttons">
+  <div class="row options-select selected-buttons color-1">
     {% if selected_q or selected_alphabet %}
       <div class="col selected-group">
         {% if selected_q %}
-          <label class="btn btn-dope selected-button active">
-            <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_q }}" checked>
+          <a class="btn btn-dope selected-button active" href="{{ urls.q_url }}">
             {{ selected_q }}
             <i class="fas fa-times-circle icon selected"></i>
-          </label>
-        {% endif %}
-        {% if selected_alphabet %}
-          <label class="btn btn-dope selected-button active">
-            <input class="field-button" type="checkbox" name="selected-q" value="{{ selected_alphabet }}" checked>
-            {{ selected_alphabet }}
-            <i class="fas fa-times-circle icon selected"></i>
-          </label>
+          </a>
         {% endif %}
       </div>
     {% endif %}
     {% if selected_genre or selected_language %}
       <div class="col col-md-auto ml-auto options-group">
         {% if selected_genre %}
-          <label class="btn btn-dope selected-button active">
-            <input class="field-button" type="checkbox" name="selected-genre" value="{{ selected_genre }}" checked>
+          <a class="btn btn-dope selected-button active" href="{{ urls.genre_url }}">
             {{ selected_genre }}
             <i class="fas fa-times-circle icon selected"></i>
-          </label>
+          </a>
         {% endif %}
         {% if selected_language %}
-          <label class="btn btn-dope selected-button active">
-            <input class="field-button" type="checkbox" name="selected-language" value="{{ selected_language }}" checked>
+          <a class="btn btn-dope selected-button active" href="{{ urls.language_url }}">
             {{ selected_language }}
             <i class="fas fa-times-circle icon selected"></i>
-          </label>
+          </a>
         {% endif %}
       </div>
     {% endif %}
     {% if genres %}
       <div class="collapse options-collapse" id="genre-collapse">
-        <div class="options-group" id="genre-buttons" data-toggle="buttons">
+        <div class="options-group genre-buttons">
         {% if selected_genre %}
-          <label class="btn btn-dope options-button">
-            <input class="field-button" type="radio" name="genre" value="All">
+          <a class="btn btn-dope options-button" href="{{ urls.genre_url }}">
             All
-          </label>
+          </a>
         {% endif %}
         {% for genre in genres %}
           {% if not selected_genre == genre.name %}
-            <label class="btn btn-dope options-button">
-              <input class="field-button" type="radio" name="genre" value="{{ genre.name }}">
-              {{ genre.name }}
-            </label>
+          <a class="btn btn-dope options-button" href="{{ urls.genre_url }}&genre={{ genre.url_format }}">
+            {{ genre.name }}
+          </a>
           {% endif %}
         {% endfor %}
       </div>
@@ -123,113 +102,102 @@ dopepod
     {% endif %}
     {% if languages %}
       <div class="collapse options-collapse" id="language-collapse">
-        <div class="options-group" id="language-buttons" data-toggle="buttons">
+        <div class="options-group language-buttons">
           {% if selected_language %}
-            <label class="btn btn-dope options-button">
-              <input class="field-button" type="radio" name="language" value="All">
+            <a class="btn btn-dope options-button" href="{{ urls.language_url }}">
               All
-            </label>
+            </a>
           {% endif %}
           {% for language in languages %}
             {% if not selected_language == language.name %}
-                <label class="btn btn-dope options-button">
-                  <input class="field-button" type="radio" name="language" value="{{ language.name }}">
-                  {{ language.name }}
-                </label>
+              <a class="btn btn-dope options-button" href="{{ urls.language_url }}&language={{ language.url_format }}">
+                {{ language.name }}
+              </a>
             {% endif %}
           {% endfor %}
         </div>
       </div>
     {% endif %}
   </div>
-  {% if podcasts or subscriptions %}
-  <div class="row collapse show results-wrapper" id="results-collapse">
-    <div class="col">
-      {% if podcasts.has_other_pages %}
-        <div class="row pagination">
-          <div class="col">
-            <div class="page-group page-buttons" data-toggle="buttons">
-              {% if podcasts.has_previous %}
-                {% if not podcasts.previous_page_number == 1%}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="1">
-                    <i class="fas fa-chevron-left"></i>
-                    <i class="fas fa-chevron-left"></i>
-                  </label>
+  {% if podcasts %}
+    <div class="row collapse show results-wrapper" id="results-collapse">
+      <div class="col">
+        {% if podcasts.has_other_pages %}
+          <div class="row pagination">
+            <div class="col">
+              <div class="page-group page-buttons">
+                {% if podcasts.has_previous %}
+                  {% if not podcasts.previous_page_number == 1%}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page=1">
+                      <i class="fas fa-chevron-left"></i>
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-              {% for i in podcasts.paginator.page_range %}
-                {% if podcasts.number == i %}
-                  <label class="btn btn-dope page-button active">
-                    <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
-                    {{ i }}
-                  </label>
-                {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="{{ i }}">
-                    {{ i }}
-                  </label>
+                {% for i in podcasts.paginator.page_range %}
+                  {% if podcasts.number == i %}
+                    <a class="btn btn-dope page-button active" href="{{ urls.full_url }}&page={{ i }}">
+                      {{ i }}
+                    </a>
+                  {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
+                      {{ i }}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+                {% if podcasts.has_next %}
+                  {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ podcasts.paginator.num_pages }}">
+                      <i class="fas fa-chevron-right"></i>
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  {% endif %}
                 {% endif %}
-              {% endfor %}
-              {% if podcasts.has_next %}
-                {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="{{ podcasts.paginator.num_pages }}">
-                    <i class="fas fa-chevron-right"></i>
-                    <i class="fas fa-chevron-right"></i>
-                  </label>
-                {% endif %}
-              {% endif %}
+              </div>
             </div>
           </div>
-        </div>
-      {% endif %}
+        {% endif %}
 
-      {% block results_content %}
-      {% endblock %}
+        {% block results_content %}
+        {% endblock %}
 
-      {% if podcasts.has_other_pages %}
-        <div class="row pagination">
-          <div class="col">
-            <div class="page-group page-buttons" data-toggle="buttons">
-              {% if podcasts.has_previous %}
-                {% if not podcasts.previous_page_number == 1%}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="1">
-                    <i class="fas fa-chevron-left"></i>
-                    <i class="fas fa-chevron-left"></i>
-                  </label>
+        {% if podcasts.has_other_pages %}
+          <div class="row pagination">
+            <div class="col">
+              <div class="page-group page-buttons">
+                {% if podcasts.has_previous %}
+                  {% if not podcasts.previous_page_number == 1%}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page=1">
+                      <i class="fas fa-chevron-left"></i>
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-              {% for i in podcasts.paginator.page_range %}
-                {% if podcasts.number == i %}
-                  <label class="btn btn-dope page-button active">
-                    <input class="field-button" type="radio" name="page" value="{{ i }}" checked>
-                    {{ i }}
-                  </label>
-                {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="{{ i }}">
-                    {{ i }}
-                  </label>
+                {% for i in podcasts.paginator.page_range %}
+                  {% if podcasts.number == i %}
+                    <a class="btn btn-dope page-button active" href="{{ urls.full_url }}&page={{ i }}">
+                      {{ i }}
+                    </a>
+                  {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
+                      {{ i }}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+                {% if podcasts.has_next %}
+                  {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
+                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
+                      <i class="fas fa-chevron-right"></i>
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  {% endif %}
                 {% endif %}
-              {% endfor %}
-              {% if podcasts.has_next %}
-                {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                  <label class="btn btn-dope page-button">
-                    <input class="field-button" type="radio" name="page" value="{{ podcasts.paginator.num_pages }}">
-                    <i class="fas fa-chevron-right"></i>
-                    <i class="fas fa-chevron-right"></i>
-                  </label>
-                {% endif %}
-              {% endif %}
+              </div>
             </div>
           </div>
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
-  </div>
   {% endif %}
-  </form>
 </div>
 {% endblock %}

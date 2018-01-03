@@ -7,32 +7,32 @@ dopepod
 {% block results_content %}
 <div class="row results-content">
   <div class="col">
-    {% for subscription in user.subscription_set.all %}
+    {% for podcast in podcasts  %}
       <div class="row">
         <div class="col-auto">
-          <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
-            <img class="img-fluid" src="//images.weserv.nl/?url={{ subscription.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+          <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
           </a>
         </div>
         <div class="col">
           <h5>
-            <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
-              {{ subscription.parent.title }}
+            <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
+              {{ podcast.parent.title }}
             </a>
           </h5>
           <h6>
             <span>
               By
             </span>
-            <a class="show-podinfo" data-itunesid="{{ subscription.parent.itunesid }}" href="{% url 'podinfo' itunesid=subscription.parent.itunesid %}">
-              {{ subscription.parent.artist }}
+            <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
+              {{ podcast.parent.artist }}
             </a>
           </h6>
           <p>
             <span>
               Last updated:
             </span>
-            {{ subscription.get_last_updated }}
+            {{ podcast.get_last_updated }}
           </p>
         </div>
       </div>

@@ -39,7 +39,9 @@
           {% block center-stage %}
           {% endblock %}
           {% if splash %}
-            {% if user.is_authenticated %}
+            {% if episodes %}
+              {% include 'podinfo.html' %}
+            {% elif user.is_authenticated %}
               {% include 'dashboard.html' %}
             {% else %}
               {% include 'splash.html' %}

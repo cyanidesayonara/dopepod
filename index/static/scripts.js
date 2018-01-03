@@ -161,19 +161,8 @@ function loadResults(url) {
       replaceState(url);
     });
 }
-function loadChart() {
+function loadChart(url) {
   $("#chart").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading charts...</span></div>");
-  var url = "/charts/";
-  var genre = $("input[name=chart-genre]:checked").val();
-  if (!genre) {
-    genre = $("input[name=chart-selected-genre]:checked").val();
-  }
-  if (genre && genre != 'All') {
-    data = {
-      "genre": genre
-    };
-    url = url + "?" + $.param(data);
-  }
 
   $.ajax({
     type: "GET",
@@ -187,61 +176,24 @@ function loadChart() {
     });
 }
 // ye ajax search function
-function SearchFunc(url, q=null, page=null) {
+function SearchFunc(url) {
   if(xhr != null) {
     xhr.abort();
     xhr = null;
   }
 
-  data = {};
-
-  if (q) {
-    data["q"] = q;
-  }
-  else {
-    url ="/browse/";
-  }
-
-  var genre = $("input[name=genre]:checked").val();
-  if (!genre) {
-    genre = $("input[name=selected-genre]:checked").val();
-  }
-  if (genre && genre != 'All') {
-    data["genre"] = genre;
-  }
-
-  var language = $("input[name=language]:checked").val();
-  if (!language) {
-    language = $("input[name=selected-language]:checked").val();
-  }
-  if (language && language != 'All') {
-    data["language"] = language;
-  }
-
-  if (page) {
-    var page = $("input[name=page]:checked").val();
-    if (page && page != '1') {
-      data["page"] = page;
-    }
-  }
-
   scrollToMultibar();
   $("#episodes").empty();
   $("#results").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading results...</span></div>");
-
   xhr = $.ajax({
     method: "GET",
     url: url,
-    data: data,
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
       // console.log(thrownError);
     })
     .done(function(response) {
       $("#results").html(response);
-      if (!jQuery.isEmptyObject(data)) {
-        url = url + "?" + $.param(data);
-      }
       replaceState(url);
     });
 }
@@ -268,98 +220,57 @@ $(document)
     if ($("#login-buttons").length) {
       $("#login-tab")[0].href = "#tabs-login";
       $("#signup-tab")[0].href = "#tabs-signup";
+      $("#google-icon").html("<i class='fab fa-google icon'></i>");
     }
     $("#search-button").html("<i class='fa fa-search icon'></i>");
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
+    var url = this.action;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      pushState();
-      SearchFunc(url, q);
+      if (q) {
+        url = url + '?q=' + q;
+        pushState();
+        SearchFunc(url);
+      }
     }, 250);
   })
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
+    var url = this.action;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#search-form")[0].action;
       var q = $("#q").val();
-      pushState();
-      SearchFunc(url, q);
-      clearSearch();
+      if (q) {
+        url = url + '?q=' + q;
+        pushState();
+        SearchFunc(url);
+      }
     }, 250);
   })
   // BROWSE
-  // browse when "browse" button is clicked
-  .on("submit", "#browse-form", function(e) {
+  // search when user clicks buttons
+  .on("click", ".alphabet-buttons a, .page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
     e.preventDefault();
+    var url = $(this)[0].href;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = $("#browse-form")[0].action;
-      var q = $("input[name=alphabet]:checked").val();
       pushState();
-      SearchFunc(url, q);
-      clearSearch();
-    }, 250);
-  })
-  .on("change", ".alphabet-buttons", function() {
-    var url = $("#browse-form")[0].action;
-    var q = $("input[name=alphabet]:checked").val();
-    pushState();
-    SearchFunc(url, q);
-    clearSearch();
-  })
-  //RESULTS
-  .on("submit", "#results-form", function(e) {
-    e.preventDefault();
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = $("#results-form")[0].action;
-      var q = $("input[name=selected-q]:checked").val();
-      pushState();
-      SearchFunc(url, q);
-      clearSearch();
-    }, 250);
-  })
-  // search when user changes options
-  .on("change", ".page-buttons", function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = $("#results-form")[0].action;
-      var q = $("input[name=selected-q]:checked").val();
-      pushState();
-      SearchFunc(url, q, true);
-      clearSearch();
-    }, 250);
-  })
-  // search when user changes options
-  .on("change", "#genre-buttons, #language-buttons, #selected-buttons", function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = $("#results-form")[0].action;
-      var q = $("input[name=selected-q]:checked").val();
-      pushState();
-      SearchFunc(url, q);
+      SearchFunc(url);
       clearSearch();
     }, 250);
   })
   // CHARTS
-  .on("submit", "#chart-form", function(e) {
+  .on("click", ".chart-genre-buttons a, .chart-selected-buttons a", function(e) {
     e.preventDefault();
+    var url = $(this)[0].href;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      loadChart();
-    }, 250);
-  })
-  .on("change", "#chart-genre-buttons, #chart-selected-buttons", function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      loadChart();
+      loadChart(url);
     }, 250);
   })
   // NAVIGATION
@@ -377,7 +288,6 @@ $(document)
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
-    pushState();
     var url = this.href;
     pushState();
     clearSearch();
