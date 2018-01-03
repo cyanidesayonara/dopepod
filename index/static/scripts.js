@@ -146,9 +146,9 @@ function loadEpisodes(itunesid) {
       }
     });
 }
-function loadResults(url) {
+function loadResults(url, drop) {
   $("#episodes").empty();
-  $("#results").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading results...</span></div>");
+  drop.html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading...</span></div>");
   $.ajax({
     type: "GET",
     url: url,
@@ -157,7 +157,9 @@ function loadResults(url) {
       // console.log(thrownError);
     })
     .done(function(response) {
-      $("#results").html(response);
+      console.log(drop)
+      console.log(url)
+      $(drop).html(response);
       replaceState(url);
     });
 }
@@ -227,28 +229,32 @@ $(document)
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", "#search-form", function() {
-    var url = this.action;
+    var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      var url = el[0].action;
+      var drop = $("#search");
       var q = $("#q").val();
       if (q) {
         url = url + '?q=' + q;
         pushState();
-        SearchFunc(url);
+        loadResults(url, drop);
       }
     }, 250);
   })
   // search when "search" button is clicked
   .on("submit", "#search-form", function(e) {
     e.preventDefault();
-    var url = this.action;
+    var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      var url = el[0].action;
+      var drop = $("#search");
       var q = $("#q").val();
       if (q) {
         url = url + '?q=' + q;
         pushState();
-        SearchFunc(url);
+        loadResults(url, drop);
       }
     }, 250);
   })
@@ -256,21 +262,14 @@ $(document)
   // search when user clicks buttons
   .on("click", ".alphabet-buttons a, .page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
     e.preventDefault();
-    var url = $(this)[0].href;
+    var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      var url = el[0].href;
+      var drop = el.parents(".results").parent()[0];
       pushState();
-      SearchFunc(url);
+      loadResults(url, drop);
       clearSearch();
-    }, 250);
-  })
-  // CHARTS
-  .on("click", ".chart-genre-buttons a, .chart-selected-buttons a", function(e) {
-    e.preventDefault();
-    var url = $(this)[0].href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      loadChart(url);
     }, 250);
   })
   // NAVIGATION
@@ -299,9 +298,10 @@ $(document)
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     var url = this.href;
+    var drop = $("#search");
     pushState();
     clearSearch();
-    loadResults(url);
+    loadResults(url, drop);
     scrollToMultibar();
     $("#browse-collapse").collapse("show");
    })
@@ -309,9 +309,10 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
+    var drop = $("#search");
     pushState();
     clearSearch();
-    loadResults(url);
+    loadResults(url, drop);
     scrollToMultibar();
   })
   // open settings
@@ -474,7 +475,8 @@ $(document)
   })
   .on("click", "#show-episodes", function(e) {
     e.preventDefault();
-    var el = $("#episode-collapse");
+    var el = $("#episodes").find(".results-collapse");
+    console.log(el)
     if (el.length) {
       if (!el.hasClass("show")) {
         el.collapse('show');
@@ -503,7 +505,4 @@ $(document)
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
       $(".options-collapse.show").collapse("hide");
-  })
-  .on("show.bs.collapse", ".chart-options-collapse", function(e) {
-      $(".chart-options-collapse.show").collapse("hide");
   })

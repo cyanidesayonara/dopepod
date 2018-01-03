@@ -1,7 +1,7 @@
-{% extends not splash|yesno:'ajax.html,base.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
 
 {% block title %}
-{{ podcasts.title }}
+{{ podcasts.title }} - dopepod
 {% endblock %}
 
 {% block center-stage %}
@@ -88,11 +88,15 @@
               <li>
                 <span class="genre_rank">
                   #{{ podcast.genre_rank }} in
-                  {% if podcast.genre.supergenre %}
-                    {{ podcast.genre.supergenre }}
-                  {% else %}
-                    {{ podcast.genre }}
-                  {% endif %}
+                    {% if podcast.genre.supergenre %}
+                    <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                      {{ podcast.genre.supergenre }}
+                    </a>
+                    {% else %}
+                    <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                      {{ podcast.genre }}
+                    {% endif %}
+                  </a>
                 </span>
               </li>
             {% endif %}

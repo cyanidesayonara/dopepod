@@ -1,49 +1,34 @@
-{% extends 'results_base.html' %}
-
-{% block title %}
-dopepod
-{% endblock %}
-
-{% block results_content %}
 <div class="row results-content">
   <div class="col">
-    {% for podcast in podcasts  %}
+    {% for subscription in results.podcasts %}
       <div class="row">
+        {% with subscription.parent as podcast %}
         <div class="col-auto">
-          <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
-            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/">
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
           </a>
         </div>
         <div class="col">
-          <h5>
-            <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
-              {{ podcast.parent.title }}
+          <h5 class="result-title">
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.title }}">
+              {{ podcast.title }}
             </a>
           </h5>
-          <h6>
-            <span>
-              By
-            </span>
-            <a class="show-podinfo" data-itunesid="{{ podcast.parent.itunesid }}" href="{% url 'podinfo' itunesid=podcast.parent.itunesid %}">
-              {{ podcast.parent.artist }}
+          <h6 class="result-artist">
+            <span>by </span>
+            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.artist }}">
+              {{ podcast.artist }}
             </a>
           </h6>
+          {% endwith %}
           <p>
-            <span>
-              Last updated:
-            </span>
-            {{ podcast.get_last_updated }}
+            {{ subscription.last_updated }}
           </p>
         </div>
       </div>
       {% if not forloop.last %}
         <hr class="h-line" />
       {% endif %}
-    {% empty %}
-      <p>
-        No subscriptions
-      </p>
     {% endfor %}
   </div>
 </div>
-{% endblock %}

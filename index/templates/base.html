@@ -17,13 +17,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <noscript>
-      <style>
-        /* .collapse {
-            display: block;
-        } */
-      </style>
-    </noscript>
   </head>
   <body>
     <!--HERE BE NAVBAR-->
@@ -38,15 +31,6 @@
         <div class="row open" id="center-stage">
           {% block center-stage %}
           {% endblock %}
-          {% if splash %}
-            {% if episodes %}
-              {% include 'podinfo.html' %}
-            {% elif user.is_authenticated %}
-              {% include 'dashboard.html' %}
-            {% else %}
-              {% include 'splash.html' %}
-            {% endif %}
-          {% endif %}
         </div>
         <!-- MULTIBAR -->
         <div class="row color-1-trans" id="multibar-scroll">
@@ -56,16 +40,27 @@
       <!-- MAIN -->
       <div class="container"id="main">
         <div class="row" id="episodes">
-          {% include 'episodes.html' %}
+          {% if episodes %}
+            {% with episodes as results %}
+              {% include 'results_base.html' %}
+            {% endwith%}
+          {% endif %}
         </div>
         <!-- RESULTS -->
-        <div class="row" id="results">
-          {% block results %}
-          {% endblock %}
+        <div class="row" id="search">
+          {% if search %}
+            {% with search as results %}
+              {% include 'results_base.html' %}
+            {% endwith%}
+          {% endif %}
         </div>
         <!-- CHARTS -->
         <div class="row" id="charts">
-          {% include 'charts.html' %}
+          {% if charts %}
+            {% with charts as results %}
+              {% include 'results_base.html' %}
+            {% endwith%}
+          {% endif %}
         </div>
       </div>
     </div>

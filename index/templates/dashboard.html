@@ -1,7 +1,7 @@
-{% extends splash|yesno:'base.html,ajax.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
 
 {% block title %}
-dopepod
+dashboard - dopepod
 {% endblock %}
 
 {% block center-stage %}

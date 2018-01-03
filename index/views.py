@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Chart, Subscription, Podcast
+from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
 import urllib.parse
@@ -38,14 +38,9 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
-        # chart and search bar for non-ajax
-        chart = Chart.objects.get(genre=None)
-        genres = Genre.get_primary_genres()
+        context = Chart.get_charts(context)
 
         context.update({
-            'splash': True,
-            'chart': chart,
-            'chart_genres': genres,
             'alphabet': ALPHABET,
         })
 
@@ -62,28 +57,28 @@ def charts(request):
     """
 
     if request.method == 'GET':
+        user = request.user
         genres = Genre.get_primary_genres()
 
         genre = request.GET.get('genre', None)
         if genre:
             if genre not in genres.values_list('name', flat=True):
                 genre = None
-        chart = Chart.objects.get(genre=genre)
 
-        context = {
-            'chart': chart,
-            'chart_genres': genres,
-        }
+        context = {}
+        context = Chart.get_charts(context, genre)
 
         if request.is_ajax():
-            return render(request, 'charts.html', context)
+            return render(request, 'results_base.html', context)
 
-        # search bar + subs for non-ajax
-        context.update({
+        context = {
             'alphabet': ALPHABET,
-        })
+        }
 
-        return render(request, 'base.html', context)
+        if user.is_authenticated:
+            return render(request, 'dashboard.html', context)
+        else:
+            return render(request, 'splash.html', context)
 
 @vary_on_headers('Accept')
 def search(request):
@@ -102,16 +97,14 @@ def search(request):
 
         view = 'list'
         show = 160
-        template = 'results_list.html'
 
         if q:
             q.strip()
             if len(q) > 30:
                 q = None
             elif len(q) > 1:
-                view = 'detail'
+                view = 'grid'
                 show = 60
-                template = 'results_detail.html'
 
         genre = request.GET.get('genre', None)
         if genre and genre not in genres.values_list('name', flat=True):
@@ -171,33 +164,38 @@ def search(request):
             urls['language_url'] = url + '?'
             urls['full_url'] = url + '?'
 
-        context = {
-            'urls': urls,
-            'genres': genres,
-            'languages': languages,
-            'selected_q': q,
-            'selected_genre': genre,
-            'selected_language': language,
-            'results_header': results_header,
-            'podcasts': podcasts,
-            'podcasts1': podcasts[:40],
-            'podcasts2': podcasts[40:80],
-            'podcasts3': podcasts[80:120],
-            'podcasts4': podcasts[120:160],
-        }
+        results = {}
+        results['drop'] = 'search'
+        results['podcasts'] = podcasts
+        results['header'] = results_header
+        results['selected_selected_q'] = q
+        results['selected_genre'] = genre
+        results['selected_language'] = language
+        results['genres'] = genres
+        results['languages'] = languages
+        results['view'] = view
+        results['urls'] = urls
+        results['extra_options'] = True
+
 
         if request.is_ajax():
-            return render(request, template, context)
+            context = {
+            'results': results,
+            }
+            return render(request, 'results_base.html', context)
 
-        chart = Chart.objects.get(genre=None)
+        context = {}
+        context = Chart.get_charts(context)
 
         context.update({
-            'chart_genres': genres,
-            'chart': chart,
+            'search': results,
             'alphabet': ALPHABET,
         })
 
-        return render(request, template, context)
+        if user.is_authenticated:
+            return render(request, 'dashboard.html', context)
+        else:
+            return render(request, 'splash.html', context)
 
 @vary_on_headers('Accept')
 def subscriptions(request):
@@ -208,36 +206,36 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        podcasts = user.subscription_set.all()
+        subscriptions = user.subscription_set.all()
 
-        if podcasts.count() == 1:
-            results_header = str(podcasts.count()) + ' subscriptions'
+        if subscriptions.count() == 1:
+            results_header = str(subscriptions.count()) + ' subscriptions'
         else:
-            results_header = str(podcasts.count()) + ' subscriptions'
+            results_header = str(subscriptions.count()) + ' subscriptions'
+
+        results = {}
+        results['drop'] = 'search'
+        results['podcasts'] = subscriptions
+        results['header'] = results_header
+        results['view'] = 'subscriptions'
+        results['extra_options'] = True
+
+
+        if request.is_ajax():
+            context = {
+            'results': results,
+            }
+            return render(request, 'results_base.html', context)
 
         context = {
-            'results_header': results_header,
-            'podcasts': podcasts,
+            'search': results,
         }
+        context = Chart.get_charts(context)
 
-        if request.is_ajax():
-            return render(request, 'subscriptions.html', context)
-
-        # chart & search bar for non-ajax
-        genres = Genre.get_primary_genres()
-        chart = Chart.objects.get(genre=None)
-
-        context.update({
-            'splash': True,
-            'chart_genres': genres,
-            'chart': chart,
-            'alphabet': ALPHABET,
-        })
-        return render(request, 'subscriptions.html', context)
-    else:
-        if request.is_ajax():
-            return render(request, 'splash.html', {})
-        return redirect('/?next=/subscriptions/')
+        if user.is_authenticated:
+            return render(request, 'dashboard.html', context)
+        else:
+            return render(request, 'splash.html', context)
 
 @vary_on_headers('Accept')
 def podinfo(request, itunesid):
@@ -250,38 +248,29 @@ def podinfo(request, itunesid):
 
     if request.method == 'GET':
         user = request.user
-        podcast = get_object_or_404(Podcast, itunesid=itunesid)
-        podcast.set_subscribed(user)
-        podcast.views += 1
-        podcast.save()
+        try:
+            podcast = Podcast.objects.get(itunesid=itunesid)
+            podcast.set_subscribed(user)
+            podcast.views += 1
+            podcast.save()
 
-        context = {
-            'podcast': podcast,
-        }
+            context = {
+                'podcast': podcast,
+            }
 
-        if request.is_ajax():
+            if request.is_ajax():
+                return render(request, 'podinfo.html', context)
+
+            context = Episode.get_episodes(context, podcast)
+
+            context = Chart.get_charts(context)
+
+            context.update({
+                'alphabet': ALPHABET,
+            })
             return render(request, 'podinfo.html', context)
-
-        # chart & search bar
-        genres = Genre.get_primary_genres()
-        episodes = podcast.get_episodes()
-        episodes_count = len(episodes)
-
-        if episodes_count == 1:
-            episodes_header = str(episodes_count) + ' episode of ' + podcast.title
-        else:
-            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
-
-        chart = Chart.objects.get(genre=None)
-
-        context.update({
-            'chart_genres': genres,
-            'chart': chart,
-            'alphabet': ALPHABET,
-            'episodes': episodes,
-            'episodes_header': episodes_header,
-        })
-        return render(request, 'podinfo.html', context)
+        except Podcast.DoesNotExist:
+            raise Http404
 
 @vary_on_headers('Accept')
 def settings(request):
@@ -302,13 +291,9 @@ def settings(request):
             if request.is_ajax():
                 return render(request, 'settings.html', context)
 
-            # chart & search bar
-            genres = Genre.get_primary_genres()
-            chart = Chart.objects.get(genre=None)
+            context = Chart.get_charts(context)
 
             context.update({
-                'chart_genres': genres,
-                'chart': chart,
                 'alphabet': ALPHABET,
             })
             return render(request, 'settings.html', context)
@@ -352,13 +337,9 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, 'settings.html', context, status=400)
 
-                # chart & search bar
-                genres = Genre.get_primary_genres()
-                chart = Chart.objects.get(genre=None)
+                context = Chart.get_charts(context)
 
                 context.update({
-                    'chart_genres': genres,
-                    'chart': chart,
                     'alphabet': ALPHABET,
                 })
                 return render(request, 'settings.html', context)

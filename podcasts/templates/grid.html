@@ -1,12 +1,5 @@
-{% extends 'results_base.html' %}
-
-{% block title %}
-dopepod
-{% endblock %}
-
-{% block results_content %}
 <div class="row results-content">
-  {% for podcast in podcasts %}
+  {% for podcast in results.podcasts %}
   <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
     <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
     <h6 class="result-title">
@@ -18,4 +11,3 @@ dopepod
   </a>
   {% endfor %}
 </div>
-{% endblock %}

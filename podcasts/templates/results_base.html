@@ -1,117 +1,100 @@
-{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
-
-{% block title %}
-dopepod
-{% endblock %}
-
-{% block results %}
 <div class="col results">
   <div class="row results-bar">
     <div class="col results-header">
       <span>
-        {{ results_header }}
+        {{ results.header }}
       </span>
     </div>
     <div class="col-auto results-options">
-      <ul>
-        {% if not subscriptions %}
-          {% if selected_genre %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Genre
-              </a>
-            </li>
-            {% else %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
-                Genre
-              </a>
-            </li>
-            {% endif %}
-            {% if selected_language %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
-                Language
-              </a>
-            </li>
-            {% else %}
-            <li>
-              <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
-                Language
-              </a>
-            </li>
-            {% endif %}
-          {% endif %}
-          <li>
-            <a class="btn btn-dope btn-dope-tab reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse" aria-expanded="true" aria-controls="results-collapse" aria-label="Minimize">
-              <i class="fas fa-minus-circle icon"></i>
-            </a>
-          </li>
-          <li>
-            <a class="btn btn-dope btn-dope-tab results-close" href="#" aria-label="Close">
-              <i class="fas fa-times-circle icon"></i>
-            </a>
-          </li>
-        </ul>
+      {% if results.genres %}
+        {% if results.selected_genre %}
+          <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+            Genre
+          </a>
+        {% else %}
+          <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#genre-collapse" aria-expanded="false" aria-controls="genre-collapse">
+            Genre
+          </a>
+        {% endif %}
+      {% endif %}
+      {% if results.languages %}
+        {% if results.selected_language %}
+          <a class="btn btn-dope btn-dope-tab active toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+            Language
+          </a>
+        {% else %}
+          <a class="btn btn-dope btn-dope-tab toggle" data-toggle="collapse" href="#language-collapse" aria-expanded="false" aria-controls="language-collapse">
+            Language
+          </a>
+        {% endif %}
+      {% endif %}
+      {% if results.extra_options %}
+        <a class="btn btn-dope btn-dope-tab reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse" aria-label="Minimize">
+          <i class="fas fa-minus-circle icon"></i>
+        </a>
+        <a class="btn btn-dope btn-dope-tab results-close" href="#" aria-label="Close">
+          <i class="fas fa-times-circle icon"></i>
+        </a>
+      {% endif %}
     </div>
   </div>
   <div class="row options-select selected-buttons color-1">
-    {% if selected_q or selected_alphabet %}
+    {% if results.selected_q %}
       <div class="col selected-group">
-        {% if selected_q %}
-          <a class="btn btn-dope selected-button active" href="{{ urls.q_url }}">
-            {{ selected_q }}
+        {% if results.selected_q %}
+          <a class="btn btn-dope selected-button active" href="{{ results.urls.q_url }}">
+            {{ results.selected_q }}
             <i class="fas fa-times-circle icon selected"></i>
           </a>
         {% endif %}
       </div>
     {% endif %}
-    {% if selected_genre or selected_language %}
+    {% if results.selected_genre or results.selected_language %}
       <div class="col col-md-auto ml-auto options-group">
-        {% if selected_genre %}
-          <a class="btn btn-dope selected-button active" href="{{ urls.genre_url }}">
-            {{ selected_genre }}
+        {% if results.selected_genre %}
+          <a class="btn btn-dope selected-button active" href="{{ results.urls.genre_url }}">
+            {{ results.selected_genre }}
             <i class="fas fa-times-circle icon selected"></i>
           </a>
         {% endif %}
-        {% if selected_language %}
-          <a class="btn btn-dope selected-button active" href="{{ urls.language_url }}">
-            {{ selected_language }}
+        {% if results.selected_language %}
+          <a class="btn btn-dope selected-button active" href="{{ results.urls.language_url }}">
+            {{ results.selected_language }}
             <i class="fas fa-times-circle icon selected"></i>
           </a>
         {% endif %}
       </div>
     {% endif %}
-    {% if genres %}
+    {% if results.genres %}
       <div class="collapse options-collapse" id="genre-collapse">
         <div class="options-group genre-buttons">
-        {% if selected_genre %}
-          <a class="btn btn-dope options-button" href="{{ urls.genre_url }}">
-            All
-          </a>
-        {% endif %}
-        {% for genre in genres %}
-          {% if not selected_genre == genre.name %}
-          <a class="btn btn-dope options-button" href="{{ urls.genre_url }}&genre={{ genre.url_format }}">
-            {{ genre.name }}
-          </a>
-          {% endif %}
-        {% endfor %}
-      </div>
-      </div>
-    {% endif %}
-    {% if languages %}
-      <div class="collapse options-collapse" id="language-collapse">
-        <div class="options-group language-buttons">
-          {% if selected_language %}
-            <a class="btn btn-dope options-button" href="{{ urls.language_url }}">
+          {% if results.selected_genre %}
+            <a class="btn btn-dope options-button" href="{{ results.urls.genre_url }}">
               All
             </a>
           {% endif %}
-          {% for language in languages %}
-            {% if not selected_language == language.name %}
-              <a class="btn btn-dope options-button" href="{{ urls.language_url }}&language={{ language.url_format }}">
-                {{ language.name }}
+          {% for genre in results.genres %}
+            {% if not results.selected_genre == genre %}
+              <a class="btn btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
+                {{ genre }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if results.languages %}
+      <div class="collapse options-collapse" id="language-collapse">
+        <div class="options-group language-buttons">
+          {% if results.selected_language %}
+            <a class="btn btn-dope options-button" href="{{ results.urls.language_url }}">
+              All
+            </a>
+          {% endif %}
+          {% for language in results.languages %}
+            {% if not results.selected_language == language %}
+              <a class="btn btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
+                {{ language }}
               </a>
             {% endif %}
           {% endfor %}
@@ -119,85 +102,27 @@ dopepod
       </div>
     {% endif %}
   </div>
-  {% if podcasts %}
-    <div class="row collapse show results-wrapper" id="results-collapse">
-      <div class="col">
-        {% if podcasts.has_other_pages %}
-          <div class="row pagination">
-            <div class="col">
-              <div class="page-group page-buttons">
-                {% if podcasts.has_previous %}
-                  {% if not podcasts.previous_page_number == 1%}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page=1">
-                      <i class="fas fa-chevron-left"></i>
-                      <i class="fas fa-chevron-left"></i>
-                    </a>
-                  {% endif %}
-                {% endif %}
-                {% for i in podcasts.paginator.page_range %}
-                  {% if podcasts.number == i %}
-                    <a class="btn btn-dope page-button active" href="{{ urls.full_url }}&page={{ i }}">
-                      {{ i }}
-                    </a>
-                  {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
-                      {{ i }}
-                    </a>
-                  {% endif %}
-                {% endfor %}
-                {% if podcasts.has_next %}
-                  {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ podcasts.paginator.num_pages }}">
-                      <i class="fas fa-chevron-right"></i>
-                      <i class="fas fa-chevron-right"></i>
-                    </a>
-                  {% endif %}
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
+  <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
+    <div class="col">
+      {% if results.podcasts.has_other_pages %}
+        {% include 'pagination.html' %}
+      {% endif %}
 
-        {% block results_content %}
-        {% endblock %}
+      {% if results.view == 'grid' %}
+        {% include 'grid.html' %}
+      {% elif results.view == 'list' %}
+        {% include 'list.html' %}
+      {% elif results.view == 'charts' %}
+        {% include 'charts.html' %}
+      {% elif results.view == 'episodes' %}
+        {% include 'episodes.html' %}
+      {% elif results.view == 'subscriptions'%}
+        {% include 'subscriptions.html' %}
+      {% endif %}
 
-        {% if podcasts.has_other_pages %}
-          <div class="row pagination">
-            <div class="col">
-              <div class="page-group page-buttons">
-                {% if podcasts.has_previous %}
-                  {% if not podcasts.previous_page_number == 1%}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page=1">
-                      <i class="fas fa-chevron-left"></i>
-                      <i class="fas fa-chevron-left"></i>
-                    </a>
-                  {% endif %}
-                {% endif %}
-                {% for i in podcasts.paginator.page_range %}
-                  {% if podcasts.number == i %}
-                    <a class="btn btn-dope page-button active" href="{{ urls.full_url }}&page={{ i }}">
-                      {{ i }}
-                    </a>
-                  {% elif i > podcasts.number|add:'-3' and i < podcasts.number|add:'3' %}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
-                      {{ i }}
-                    </a>
-                  {% endif %}
-                {% endfor %}
-                {% if podcasts.has_next %}
-                  {% if not podcasts.next_page_number == podcasts.paginator.num_pages %}
-                    <a class="btn btn-dope page-button" href="{{ urls.full_url }}&page={{ i }}">
-                      <i class="fas fa-chevron-right"></i>
-                      <i class="fas fa-chevron-right"></i>
-                    </a>
-                  {% endif %}
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
-      </div>
+      {% if results.podcasts.has_other_pages %}
+        {% include 'pagination.html' %}
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 </div>
-{% endblock %}

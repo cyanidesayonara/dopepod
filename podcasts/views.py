@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from .models import Genre, Language, Podcast, Subscription
+from .models import Genre, Language, Podcast, Subscription, Episode
 import logging
 import requests
 
@@ -37,20 +37,13 @@ def episodes(request):
         except (KeyError, Podcast.DoesNotExist) as e:
             raise Http404()
 
-        episodes = podcast.get_episodes()
-        episodes_count = len(episodes)
-
-        if episodes_count == 1:
-            episodes_header = str(episodes_count) + ' episode of ' + podcast.title
-        else:
-            episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
-
         context = {
-            'episodes_header': episodes_header,
-            'episodes': episodes,
             'podcast': podcast,
         }
-        return render(request, 'episodes.html', context)
+
+        context = Episode.get_episodes(context, podcast, ajax=True)
+
+        return render(request, 'results_base.html', context)
 
 def play(request):
     """

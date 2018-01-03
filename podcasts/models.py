@@ -189,110 +189,6 @@ class Podcast(models.Model):
             if self.itunesid in subscriptions_itunesids:
                 self.is_subscribed = True
 
-    def get_episodes(self):
-        """
-        returns a list of episodes using requests and lxml etree
-        """
-
-        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-            'atom': 'http://www.w3.org/2005/Atom',
-            'im': 'http://itunes.apple.com/rss',
-        }
-
-        # useragent for requests
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
-        }
-
-        episodes = []
-
-        try:
-            response = requests.get(self.feedUrl, headers=headers, timeout=5)
-            response.raise_for_status()
-
-            try:
-                root = etree.XML(response.content)
-
-                ns.update(root.nsmap)
-                tree = root.find('channel')
-
-                for item in tree.findall('item'):
-                    episode = {}
-
-                    # try to get pubdate + parse & convert it to datetime
-                    try:
-                        pubdate = item.find('pubDate').text
-                        episode['pubDate'] = parse(pubdate).strftime('%b %d %Y, %H:%M')
-                    # if episode data not found, skip episode
-                    except AttributeError as e:
-                        logger.error('can\'t get pubDate', self.feedUrl)
-                        continue
-
-                    # try to get title & summary
-                    try:
-                        episode['title'] = item.find('title').text
-                        summary = item.find('description').text
-                    except AttributeError:
-                        # or try with itunes namespace
-                        try:
-                            summary = item.find('itunes:summary', ns).text
-                        # if episode data not found, skip episode
-                        except AttributeError as e:
-                            logger.error('can\'t get title/description', self.feedUrl)
-                            continue
-
-                    # strip html tags+ split + join again by single space
-                    episode['summary'] = ' '.join(strip_tags(summary).split())
-
-                    # try to get length
-                    length = None
-                    try:
-                        length = item.find('itunes:duration', ns).text
-                    except AttributeError as e:
-                        try:
-                            length = item.find('duration').text
-                        except AttributeError as e:
-                            logger.error('can\'t get length', self.feedUrl)
-
-                    if length:
-                        length = str(length)
-                        # convert length to timedelta
-                        if length.isdigit():
-                            episode['length'] = timedelta(seconds=int(length))
-                        else:
-                            if '.' in length:
-                                length = length.replace('.', ':')
-                            try:
-                                dt = datetime.strptime(length, '%H:%M:%S')
-                                length = timedelta(hours=dt.hour, minutes=dt.minute, seconds=dt.second)
-                                episode['length'] = length
-                            except ValueError:
-                                try:
-                                    dt = datetime.strptime(length, '%M:%S')
-                                    length = timedelta(minutes=dt.minute, seconds=dt.second)
-                                    episode['length'] = length
-                                except ValueError:
-                                    logger.error('can\'t parse length', self.feedUrl)
-
-                    episode['parent'] = self.itunesid
-
-                    # link to episode
-                    # enclosure might be missing, have alternatives
-                    enclosure = item.find('enclosure')
-                    try:
-                        episode['url'] = enclosure.get('url').replace('http:', '')
-                        episode['type'] = enclosure.get('type')
-                        episodes.append(episode)
-                    except AttributeError as e:
-                        logger.error('can\'t get episode url/type', self.feedUrl)
-                return episodes
-
-            except etree.XMLSyntaxError:
-                logger.error('trouble with xml')
-
-        except requests.exceptions.HTTPError as e:
-            logger.error(str(e))
-
     def create_or_update_podcast(item):
         genre = Genre.objects.get(name=item['genre'])
         language = Language.create_or_get_language(item['language'])
@@ -502,6 +398,32 @@ class Chart(models.Model):
 
         chart.save()
 
+    def get_charts(context, genre=None):
+        genres = Genre.get_primary_genres()
+        chart = Chart.objects.get(genre=genre)
+
+        url = '/charts/'
+        urls = {}
+        urls['q_url'] = url + '?'
+        urls['genre_url'] = url + '?'
+        urls['language_url'] = url + '?'
+        urls['full_url'] = url + '?'
+
+        charts = {}
+        charts['drop'] = 'charts'
+        charts['podcasts'] = chart.sorted_podcasts
+        charts['header'] = chart.header
+        charts['selected_genre'] = chart.genre
+        charts['genres'] = genres
+        charts['view'] = 'charts'
+        charts['urls'] = urls
+
+        context.update({
+            'charts': charts,
+        })
+
+        return context
+
 class Episode(models.Model):
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)
     pubDate = models.DateTimeField()
@@ -511,6 +433,134 @@ class Episode(models.Model):
     url = models.CharField(max_length=500)
     kind = models.CharField(max_length=16)
     is_new = models.BooleanField(default=False)
+
+    def get_episodes(context, podcast, ajax=None):
+        """
+        returns a list of episodes using requests and lxml etree
+        """
+
+        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            'atom': 'http://www.w3.org/2005/Atom',
+            'im': 'http://itunes.apple.com/rss',
+        }
+
+        # useragent for requests
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        }
+
+        episodes = []
+
+        try:
+            response = requests.get(podcast.feedUrl, headers=headers, timeout=5)
+            response.raise_for_status()
+
+            try:
+                root = etree.XML(response.content)
+
+                ns.update(root.nsmap)
+                tree = root.find('channel')
+
+                for item in tree.findall('item'):
+                    episode = {}
+
+                    # try to get pubdate + parse & convert it to datetime
+                    try:
+                        pubdate = item.find('pubDate').text
+                        episode['pubDate'] = parse(pubdate).strftime('%b %d %Y, %H:%M')
+                    # if episode data not found, skip episode
+                    except AttributeError as e:
+                        logger.error('can\'t get pubDate', podcast.feedUrl)
+                        continue
+
+                    # try to get title & summary
+                    try:
+                        episode['title'] = item.find('title').text
+                        summary = item.find('description').text
+                    except AttributeError:
+                        # or try with itunes namespace
+                        try:
+                            summary = item.find('itunes:summary', ns).text
+                        # if episode data not found, skip episode
+                        except AttributeError as e:
+                            logger.error('can\'t get title/description', podcast.feedUrl)
+                            continue
+
+                    # strip html tags+ split + join again by single space
+                    episode['summary'] = ' '.join(strip_tags(summary).split())
+
+                    # try to get length
+                    length = None
+                    try:
+                        length = item.find('itunes:duration', ns).text
+                    except AttributeError as e:
+                        try:
+                            length = item.find('duration').text
+                        except AttributeError as e:
+                            logger.error('can\'t get length', podcast.feedUrl)
+
+                    if length:
+                        length = str(length)
+                        # convert length to timedelta
+                        if length.isdigit():
+                            episode['length'] = timedelta(seconds=int(length))
+                        else:
+                            if '.' in length:
+                                length = length.replace('.', ':')
+                            try:
+                                dt = datetime.strptime(length, '%H:%M:%S')
+                                length = timedelta(hours=dt.hour, minutes=dt.minute, seconds=dt.second)
+                                episode['length'] = length
+                            except ValueError:
+                                try:
+                                    dt = datetime.strptime(length, '%M:%S')
+                                    length = timedelta(minutes=dt.minute, seconds=dt.second)
+                                    episode['length'] = length
+                                except ValueError:
+                                    logger.error('can\'t parse length', podcast.feedUrl)
+
+                    episode['parent'] = podcast
+
+                    # link to episode
+                    # enclosure might be missing, have alternatives
+                    enclosure = item.find('enclosure')
+                    try:
+                        episode['url'] = enclosure.get('url').replace('http:', '')
+                        episode['type'] = enclosure.get('type')
+                        episodes.append(episode)
+                    except AttributeError as e:
+                        logger.error('can\'t get episode url/type', podcast.feedUrl)
+
+                episodes_count = len(episodes)
+
+                if episodes_count == 1:
+                    episodes_header = str(episodes_count) + ' episode of ' + podcast.title
+                else:
+                    episodes_header = str(episodes_count) + ' episodes of ' + podcast.title
+
+                results = {}
+                results['drop'] = 'episodes'
+                results['episodes'] = episodes
+                results['header'] = episodes_header
+                results['view'] = 'episodes'
+                results['extra_options'] = True
+
+                if ajax:
+                    context.update({
+                        'results': results,
+                    })
+                else:
+                    context.update({
+                        'episodes': results,
+                    })
+
+                return context
+
+            except etree.XMLSyntaxError:
+                logger.error('trouble with xml')
+
+        except requests.exceptions.HTTPError as e:
+            logger.error(str(e))
 
 class Filterable(models.Model):
     """

@@ -1,4 +1,4 @@
-{% extends splash|yesno:'base.html,ajax.html' %}
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
 
 {% block title %}
 dopepod
@@ -61,8 +61,10 @@ dopepod
             </a>
           {% endif %}
         {% endif %}
-        <a class="d-none" id="password-tab" data-toggle="pill" href="#tabs-password" role="tab" aria-controls="tabs-password" aria-selected="false">
-        </a>
+        {% if request.is_ajax %}
+          <a class="d-none" id="password-tab" data-toggle="pill" href="#tabs-password" role="tab" aria-controls="tabs-password" aria-selected="false">
+          </a>
+        {% endif %}
       </div>
       <div id="login-wrapper">
         <div class="tab-content">
