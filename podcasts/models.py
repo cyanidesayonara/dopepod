@@ -398,7 +398,7 @@ class Chart(models.Model):
 
         chart.save()
 
-    def get_charts(context, genre=None):
+    def get_charts(context, genre=None, ajax=None):
         genres = Genre.get_primary_genres()
         chart = Chart.objects.get(genre=genre)
 
@@ -409,18 +409,23 @@ class Chart(models.Model):
         urls['language_url'] = url + '?'
         urls['full_url'] = url + '?'
 
-        charts = {}
-        charts['drop'] = 'charts'
-        charts['podcasts'] = chart.sorted_podcasts
-        charts['header'] = chart.header
-        charts['selected_genre'] = chart.genre
-        charts['genres'] = genres
-        charts['view'] = 'charts'
-        charts['urls'] = urls
+        results = {}
+        results['drop'] = 'charts'
+        results['podcasts'] = chart.sorted_podcasts
+        results['header'] = chart.header
+        results['selected_genre'] = chart.genre
+        results['genres'] = genres
+        results['view'] = 'charts'
+        results['urls'] = urls
 
-        context.update({
-            'charts': charts,
-        })
+        if ajax:
+            context.update({
+                'results': results,
+            })
+        else:
+            context.update({
+                'charts': results,
+            })
 
         return context
 

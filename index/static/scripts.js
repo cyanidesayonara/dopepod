@@ -106,9 +106,7 @@ function refreshPage() {
 }
 
 function clearSearch() {
-  $("#browse-collapse").collapse("hide");
   $("#q").val("");
-  $(".alphabet-buttons").find(".alphabet-button.active").removeClass("active");
 }
 
 // LOADERS
@@ -147,6 +145,10 @@ function loadEpisodes(itunesid) {
     });
 }
 function loadResults(url, drop) {
+  if(xhr != null) {
+    xhr.abort();
+    xhr = null;
+  }
   $("#episodes").empty();
   drop.html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading...</span></div>");
   $.ajax({
@@ -157,45 +159,7 @@ function loadResults(url, drop) {
       // console.log(thrownError);
     })
     .done(function(response) {
-      console.log(drop)
-      console.log(url)
-      $(drop).html(response);
-      replaceState(url);
-    });
-}
-function loadChart(url) {
-  $("#chart").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading charts...</span></div>");
-
-  $.ajax({
-    type: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-      // console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#charts").html(response);
-    });
-}
-// ye ajax search function
-function SearchFunc(url) {
-  if(xhr != null) {
-    xhr.abort();
-    xhr = null;
-  }
-
-  scrollToMultibar();
-  $("#episodes").empty();
-  $("#results").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading results...</span></div>");
-  xhr = $.ajax({
-    method: "GET",
-    url: url,
-  })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      // console.log(thrownError);
-    })
-    .done(function(response) {
-      $("#results").html(response);
+      drop.html(response);
       replaceState(url);
     });
 }
@@ -239,6 +203,7 @@ $(document)
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
+        $("#browse-collapse").collapse("hide");
       }
     }, 250);
   })
@@ -255,75 +220,112 @@ $(document)
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
+        $("#browse-collapse").collapse("hide");
+        scrollToMultibar();
       }
     }, 250);
   })
-  // BROWSE
-  // search when user clicks buttons
-  .on("click", ".alphabet-buttons a, .page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
+  .on("click", ".alphabet-buttons a", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = el[0].href;
-      var drop = el.parents(".results").parent()[0];
+      var drop = $("#search");
       pushState();
       loadResults(url, drop);
       clearSearch();
+      $("#browse-collapse").collapse("hide");
+      scrollToMultibar();
+    }, 250);
+  })
+  // search when user clicks buttons
+  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
+    e.preventDefault();
+    var el = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = el[0].href;
+      var drop = $(el.parents(".results").parent()[0]);
+      pushState();
+      clearSearch();
+      $("#browse-collapse").collapse("hide");
+      loadResults(url, drop);
     }, 250);
   })
   // NAVIGATION
   // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
-    var url = this.href;
-    var itunesid = $(this).data("itunesid");
-    pushState();
-    clearSearch();
-    loadCenterStage(url);
-    loadEpisodes(itunesid);
-    scrollToTop();
+    var el = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = el[0].href;
+      var itunesid = el.data("itunesid");
+      pushState();
+      clearSearch();
+      loadCenterStage(url);
+      loadEpisodes(itunesid);
+      $("#browse-collapse").collapse("hide");
+      scrollToTop();
+    }, 250);
   })
   // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    pushState();
-    clearSearch();
-    loadCenterStage(url);
-    $("#episodes").empty();
-    scrollToTop();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      pushState();
+      clearSearch();
+      loadCenterStage(url);
+      $("#episodes").empty();
+      $("#search").empty();
+      $("#browse-collapse").collapse("hide");
+      scrollToTop();
+    }, 250);
   })
   // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#search");
-    pushState();
-    clearSearch();
-    loadResults(url, drop);
-    scrollToMultibar();
-    $("#browse-collapse").collapse("show");
-   })
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var drop = $("#search");
+      pushState();    
+      clearSearch();
+      loadResults(url, drop);
+      $("#browse-collapse").collapse("show");
+      scrollToMultibar();
+    }, 250);
+  })
   // open subscriptions
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#search");
-    pushState();
-    clearSearch();
-    loadResults(url, drop);
-    scrollToMultibar();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var drop = $("#search");
+      pushState();
+      clearSearch();
+      loadResults(url, drop);
+      $("#browse-collapse").collapse("hide");
+      scrollToMultibar();
+    }, 250);
   })
   // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    pushState();
-    clearSearch();
-    loadCenterStage(url);
-    $("#episodes").empty();
-    scrollToTop();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      pushState();
+      clearSearch();
+      loadCenterStage(url);
+      $("#episodes").empty();
+      $("#browse-collapse").collapse("hide");
+      scrollToTop();
+    }, 250);
   })
   // FORMS
   .on("submit", "#settings-form", function (e) {
@@ -475,7 +477,7 @@ $(document)
   })
   .on("click", "#show-episodes", function(e) {
     e.preventDefault();
-    var el = $("#episodes").find(".results-collapse");
+    var el = $("#results-collapse-episodes");
     console.log(el)
     if (el.length) {
       if (!el.hasClass("show")) {

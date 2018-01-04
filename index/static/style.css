@@ -20,7 +20,7 @@ body {
   background: rgba(0, 204, 122, 1);
 }
 .btn-dope-tab, .btn-dope-tab.focus, .btn-dope-tab:focus {
-  border-radius: 2rem .25rem 0 0;
+  border-radius: .25rem .25rem 0 0;
   background: inherit;
 }
 .btn-dope-social {
@@ -434,7 +434,7 @@ body {
 #login-wrapper {
   padding: 10px 10px 0 10px;
   max-width: 350px;
-  min-height: 150px;
+  min-height: 170px;
   margin: auto;
 }
 .login-field {

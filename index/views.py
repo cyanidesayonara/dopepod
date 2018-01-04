@@ -66,11 +66,11 @@ def charts(request):
                 genre = None
 
         context = {}
-        context = Chart.get_charts(context, genre)
-
         if request.is_ajax():
+            context = Chart.get_charts(context, genre, ajax=True)
             return render(request, 'results_base.html', context)
 
+        context = Chart.get_charts(context, genre)
         context = {
             'alphabet': ALPHABET,
         }
@@ -167,8 +167,17 @@ def search(request):
         results = {}
         results['drop'] = 'search'
         results['podcasts'] = podcasts
+        if view == 'list':
+            one = show // 4
+            two = show // 2
+            three = show // 2 + show // 4
+            results['podcasts1'] = podcasts[:one]
+            results['podcasts2'] = podcasts[one:two]
+            results['podcasts3'] = podcasts[two:three]
+            results['podcasts4'] = podcasts[three:]
+        
         results['header'] = results_header
-        results['selected_selected_q'] = q
+        results['selected_q'] = q
         results['selected_genre'] = genre
         results['selected_language'] = language
         results['genres'] = genres
@@ -176,7 +185,6 @@ def search(request):
         results['view'] = view
         results['urls'] = urls
         results['extra_options'] = True
-
 
         if request.is_ajax():
             context = {

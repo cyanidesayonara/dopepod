@@ -37,23 +37,17 @@
     </div>
   </div>
   <!-- BROWSE BAR -->
-  {% if podcasts1 %}
+  {% if search.podcasts1 %}
   <div class="row collapse show" id="browse-collapse">
   {% else %}
   <div class="row collapse" id="browse-collapse">
   {% endif %}
     <div class="col">
-      <div class="alphabet-group alphabet-buttons" data-toggle="buttons">
+      <div class="alphabet-group alphabet-buttons">
         {% for letter in alphabet %}
-          {% if letter == selected_alphabet %}
-          <a class="btn btn-dope alphabet-button active" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
-            {{ letter }}
-          </a>
-          {% else %}
           <a class="btn btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
             {{ letter }}
           </a>
-          {% endif %}
         {% endfor %}
       </div>
     </div>
