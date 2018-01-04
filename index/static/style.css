@@ -248,14 +248,13 @@ body {
   margin: auto;
   height: 44px;
 }
-.logo-wrapper:hover {
+/* .logo-wrapper:hover {
   -moz-transform: scale(-1, 1);
   -webkit-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
   transform: scale(-1, 1);
-}
-
+} */
 
 /* LOADING ANIMATIONS */
 .results-loading {
@@ -349,7 +348,6 @@ body {
   margin-left: auto;
 }
 .alphabet-button {
-  font-weight: 600;
   height: 32px;
   width: 32px;
   padding: 4px;
