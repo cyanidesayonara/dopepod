@@ -34,8 +34,7 @@ function replaceState(url) {
     "context": context,
     "title": title,
   };
-
-  if (!url || url == "/charts/") {
+  if (url.includes("charts")) {
     var url = "/";
   }
 
@@ -100,7 +99,7 @@ function refreshPage() {
       // refresh page
       $("#episodes").empty();
       $("#results").empty();
-      loadChart();
+      loadResults("/charts/", $("#charts"));
       $("#navbar-drop").html(response);
     });
 }
@@ -168,12 +167,12 @@ function loadResults(url, drop) {
 function scrollToTop() {
   $('html, body').animate({
     scrollTop: $("body").offset().top
-  }, 350);
+  }, 250);
 }
 function scrollToMultibar() {
   $('html, body').animate({
     scrollTop: 400
-  }, 350);
+  }, 250);
 }
 
 // after page loads
@@ -204,6 +203,7 @@ $(document)
         pushState();
         loadResults(url, drop);
         $("#browse-collapse").collapse("hide");
+        scrollToMultibar()
       }
     }, 250);
   })
@@ -251,6 +251,7 @@ $(document)
       clearSearch();
       $("#browse-collapse").collapse("hide");
       loadResults(url, drop);
+      scrollToMultibar()
     }, 250);
   })
   // NAVIGATION
@@ -263,10 +264,10 @@ $(document)
       var url = el[0].href;
       var itunesid = el.data("itunesid");
       pushState();
+      $("#browse-collapse").collapse("hide");
       clearSearch();
       loadCenterStage(url);
       loadEpisodes(itunesid);
-      $("#browse-collapse").collapse("hide");
       scrollToTop();
     }, 250);
   })
@@ -277,11 +278,11 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       pushState();
+      $("#browse-collapse").collapse("hide");
       clearSearch();
       loadCenterStage(url);
       $("#episodes").empty();
       $("#search").empty();
-      $("#browse-collapse").collapse("hide");
       scrollToTop();
     }, 250);
   })
@@ -293,9 +294,9 @@ $(document)
     timeout = setTimeout(function() {
       var drop = $("#search");
       pushState();    
+      $("#browse-collapse").collapse("show");
       clearSearch();
       loadResults(url, drop);
-      $("#browse-collapse").collapse("show");
       scrollToMultibar();
     }, 250);
   })
@@ -306,10 +307,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#search");
+      $("#browse-collapse").collapse("hide");
       pushState();
       clearSearch();
       loadResults(url, drop);
-      $("#browse-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -320,10 +321,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       pushState();
+      $("#browse-collapse").collapse("hide");
       clearSearch();
       loadCenterStage(url);
       $("#episodes").empty();
-      $("#browse-collapse").collapse("hide");
       scrollToTop();
     }, 250);
   })
@@ -478,7 +479,6 @@ $(document)
   .on("click", "#show-episodes", function(e) {
     e.preventDefault();
     var el = $("#results-collapse-episodes");
-    console.log(el)
     if (el.length) {
       if (!el.hasClass("show")) {
         el.collapse('show');
@@ -498,13 +498,12 @@ $(document)
   .on("show.bs.collapse", ".more-collapse", function(e) {
       $(".more-collapse.show").collapse("hide");
   })
+  .on("show.bs.collapse", ".options-collapse", function (e) {
+      $(".options-collapse.show").collapse("hide");
+  })
    .on("click", ".results-minimize", function(e) {
      $(this).parents(".results").find(".options-collapse.show").collapse("hide");
    })
   .on("click", ".btn-dope-tab.toggle", function(e) {
     $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
-
-  })
-  .on("show.bs.collapse", ".options-collapse", function (e) {
-      $(".options-collapse.show").collapse("hide");
   })

@@ -1,7 +1,7 @@
 {% extends request.is_ajax|yesno:'ajax.html,base.html' %}
 
 {% block title %}
-{{ podcasts.title }} - dopepod
+Listen to episodes of {{ podcast.title }} on dopepod
 {% endblock %}
 
 {% block center-stage %}

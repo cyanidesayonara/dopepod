@@ -7,21 +7,6 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-def dashboard(request):
-    user = request.user
-    if user.is_authenticated:
-        subscriptions = Subscription.get_subscriptions(user)
-        context = {
-            'subscriptions': subscriptions,
-        }
-        return render(request, 'dashboard.html', context)
-    else:
-        signup = request.POST.get('signup' , None)
-        context = {
-            'signup': signup,
-        }
-        return render(request, 'login.html', context)
-
 def episodes(request):
     """
     returns html for episodes
@@ -106,5 +91,5 @@ def subscribe(request):
 
         else:
             if request.is_ajax():
-                return render(request, 'login.html', {})
+                return render(request, 'splash.html', {})
             return redirect('/?next=/podinfo/' + itunesid + '/')

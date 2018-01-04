@@ -65,15 +65,15 @@ def charts(request):
             if genre not in genres.values_list('name', flat=True):
                 genre = None
 
-        context = {}
         if request.is_ajax():
+            context = {}
             context = Chart.get_charts(context, genre, ajax=True)
             return render(request, 'results_base.html', context)
 
-        context = Chart.get_charts(context, genre)
         context = {
             'alphabet': ALPHABET,
         }
+        context = Chart.get_charts(context, genre)
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)

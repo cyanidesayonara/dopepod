@@ -1,4 +1,4 @@
-<div class="col-auto col-md-4" id="navbar-left">
+<div class="col-auto col-md-4" id="navbar-l">
   <a class="nav-link-dope d-inline d-md-none" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-bars icon"></i>
   </a>
@@ -30,32 +30,34 @@
     </a>
   {% endif %}
 </div>
-<div class="col col-md-4" id="logo" >
+<div class="col col-md-4" id="navbar-c">
   <a class="index-link" href="/">
-    <span class="x a">
-      d
-    </span>
-    <span class="x b">
-      o
-    </span>
-    <span class="x c">
-      p
-    </span>
-    <span class="x d">
-      e
-    </span>
-    <span class="x e">
-      p
-    </span>
-    <span class="x f">
-      o
-    </span>
-    <span class="x g">
-      d
-    </span>
+    <div class="logo-wrapper">
+      <span class="x a">
+        d
+      </span>
+      <span class="x b">
+        o
+      </span>
+      <span class="x c">
+        p
+      </span>
+      <span class="x d">
+        e
+      </span>
+      <span class="x e">
+        p
+      </span>
+      <span class="x f">
+        o
+      </span>
+      <span class="x g">
+        d
+      </span>
+    </div>
   </a>
 </div>
-<div class="col-auto col-md-4"id="navbar-right">
+<div class="col-auto col-md-4"id="navbar-r">
   {% if user.is_authenticated %}
     <a class="nav-link-dope settings-link d-none d-md-inline" href="{% url 'settings' %}">
       Settings

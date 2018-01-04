@@ -4,8 +4,7 @@
       {% if results.podcasts.has_previous %}
         {% if not results.podcasts.previous_page_number == 1%}
           <a class="btn btn-dope page-button" href="{{ results.urls.full_url }}&page=1">
-            <i class="fas fa-chevron-left"></i>
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-angle-double-left"></i>
           </a>
         {% endif %}
       {% endif %}
@@ -23,8 +22,7 @@
       {% if results.podcasts.has_next %}
         {% if not results.podcasts.next_page_number == results.podcasts.paginator.num_pages %}
           <a class="btn btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.podcasts.paginator.num_pages }}">
-            <i class="fas fa-chevron-right"></i>
-            <i class="fas fa-chevron-right"></i>
+            <i class="fas fa-angle-double-right"></i>
           </a>
         {% endif %}
       {% endif %}

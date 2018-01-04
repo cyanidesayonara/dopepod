@@ -417,7 +417,7 @@ class Chart(models.Model):
         results['genres'] = genres
         results['view'] = 'charts'
         results['urls'] = urls
-
+        
         if ajax:
             context.update({
                 'results': results,
