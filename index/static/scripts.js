@@ -240,7 +240,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
+  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a, .genre_rank a", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
@@ -293,7 +293,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#search");
-      pushState();    
+      pushState();
       $("#browse-collapse").collapse("show");
       clearSearch();
       loadResults(url, drop);

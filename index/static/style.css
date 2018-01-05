@@ -130,25 +130,15 @@ body {
 .nav-link-dope:focus {
   outline: rgba(0,0,0,0);
 }
-@keyframes fadeIn {
-  0% {
-    color: rgba(255, 255, 255, 0);
-  }
-  100% {
-    color: rgba(255, 255, 255, 1);
-  }
-}
-@-webkit-keyframes fadeIn {
-  0% {
-    color: rgba(255, 255, 255, 0);
-  }
-  100% {
-    color: rgba(255, 255, 255, 1);
-  }
-}
+
 @keyframes moveLeft {
   0% {
     color: rgba(255, 255, 255, 0);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    transform: scaleX(-1);
   }
   100% {
     color: rgba(255, 255, 255, 1);
@@ -161,6 +151,11 @@ body {
 @-webkit-keyframes moveLeft {
   0% {
     color: rgba(255, 255, 255, 0);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    transform: scaleX(-1);
   }
   100% {
     color: rgba(255, 255, 255, 1);
@@ -172,75 +167,118 @@ body {
 }
 @keyframes moveRight {
   0% {
+    -moz-transform: scaleX(1);
+    -webkit-transform: scaleX(1);
+    -o-transform: scaleX(1);
+    -ms-transform: scaleX(1);
+    transform: scaleX(1);
     color: rgba(255, 255, 255, 0);
   }
   100% {
     color: rgba(255, 255, 255, 1);
-    transform: translateX(20px);
-    -webkit-transform: translateX(20px); /** Chrome & Safari **/
-    -o-transform: translateX(20px); /** Opera **/
-    -moz-transform: translateX(20px); /** Firefox **/
+    transform: scaleX(-1) translateX(-20px);
+    -webkit-transform: scaleX(-1) translateX(-20px); /** Chrome & Safari **/
+    -o-transform: scaleX(-1) translateX(-20px); /** Opera **/
+    -moz-transform: scaleX(-1) translateX(-20px); /** Firefox **/
   }
 }
 @-webkit-keyframes moveRight {
   0% {
+    -moz-transform: scaleX(1);
+    -webkit-transform: scaleX(1);
+    -o-transform: scaleX(1);
+    -ms-transform: scaleX(1);
+    transform: scaleX(1);
     color: rgba(255, 255, 255, 0);
-    transform: translateX(20px);
-    -webkit-transform: translateX(20px); /** Chrome & Safari **/
-    -o-transform: translateX(20px); /** Opera **/
-    -moz-transform: translateX(20px); /** Firefox **/
   }
   100% {
+    transform: scaleX(-1) translateX(-20px);
+    -webkit-transform: scaleX(-1) translateX(-20px); /** Chrome & Safari **/
+    -o-transform: scaleX(-1) translateX(-20px); /** Opera **/
+    -moz-transform: scaleX(-1) translateX(-20px); /** Firefox **/
     color: rgba(255, 255, 255, 1);
-    transform: translateX(0px);
-    -webkit-transform: translateX(0px); /** Chrome & Safari **/
-    -o-transform: translateX(0px); /** Opera **/
-    -moz-transform: translateX(0px); /** Firefox **/
+  }
+}
+@keyframes spin {
+  0% {
+    -moz-transform: translateX(20px) scaleX(-1);
+    -webkit-transform: translateX(20px) scaleX(-1);
+    -o-transform: translateX(20px) scaleX(-1);
+    -ms-transform: translateX(20px) scaleX(-1);
+    transform: translateX(20px) scaleX(-1);
+  }
+  100% {
+    -moz-transform: translateX(20px) scaleX(1);
+    -webkit-transform: translateX(20px) scaleX(1);
+    -o-transform: translateX(20px) scaleX(1);
+    -ms-transform: translateX(20px) scaleX(1);
+    transform: translateX(20px) scaleX(1);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -moz-transform: translateX(20px);
+    -webkit-transform: translateX(20px);
+    -o-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+  100% {
+    -moz-transform: translateX(20px) scaleX(1);
+    -webkit-transform: translateX(20px) scaleX(1);
+    -o-transform: translateX(20px) scaleX(1);
+    -ms-transform: translateX(20px) scaleX(1);
+    transform: translateX(20px) scaleX(1);
   }
 }
 
 .x {
-  position: absolute;  
+  position: absolute;
   color: rgba(255, 255, 255, 0);
   top: 0;
+
+}
+.x:hover {
+
 }
 .a {
   left: -40px;
-  animation: moveLeft .75s ease-in 1.5s forwards;
-  -webkit-animation: moveLeft .75s ease-in 1.5s forwards;
+  animation: moveLeft .25s ease-in .45s forwards;
+  -webkit-animation: moveLeft .25s ease-in .45s forwards;
 }
 .b {
   left: -20px;
-  animation: moveLeft .75s ease-in 1s forwards;
-  -webkit-animation: moveLeft .75s ease-in 1s forwards;
+  animation: moveLeft .25s ease-in .3s forwards;
+  -webkit-animation: moveLeft .25s ease-in .3s forwards;
 }
 .c {
   left: 0;
-  animation: moveLeft .75s ease-in .5s forwards;
-  -webkit-animation: moveLeft .75s ease-in .5s forwards;
+  animation: moveLeft .25s ease-in .15s forwards;
+  -webkit-animation: moveLeft .25s ease-in .15s forwards;
 }
 .d {
-  left:0;
-  animation: fadeIn 1s ease-in forwards;
-  -webkit-animation: fadeIn 1s ease-in forwards;
+  left:-20px;
+  animation: moveRight .25s ease-in forwards, spin .2s ease-in 1.3s forwards;
+  -webkit-animation: moveRight .25s ease-in forwards, spin .2s ease-in 1.3s forwards;
 }
 .e {
   right: 0;
-  animation: moveRight .75s ease-in .5s forwards;
-  -webkit-animation: moveRight .75s ease-in .5s forwards;
+  animation: moveRight .25s ease-in .15s forwards, spin .15s ease-in 1.2s forwards;
+  -webkit-animation: moveRight .25s ease-in .15s forwards, spin .15s ease-in 1.2s forwards;
 }
 .f {
   right: -20px;
-  animation: moveRight .75s ease-in 1s forwards;
-  -webkit-animation: moveRight .75s ease-in 1s forwards;
+  animation: moveRight .25s ease-in .3s forwards, spin .15s ease-in 1.1s forwards;
+  -webkit-animation: moveRight .25s ease-in .3s forwards, spin .15s ease-in 1.1s forwards;
 }
 .g {
   right: -40px;
-  animation: moveRight .75s ease-in 1.5s forwards;
-  -webkit-animation: moveRight .75s ease-in 1.5s forwards;
+  animation: moveRight .25s ease-in .45s forwards, spin .15s ease-in 1s forwards;
+  -webkit-animation: moveRight .25s ease-in .45s forwards, spin .15s ease-in 1s forwards;
 }
 .logo-wrapper {
   font-size: 28px;
+  font-weight: 600;
   position: relative;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -248,13 +286,6 @@ body {
   margin: auto;
   height: 44px;
 }
-/* .logo-wrapper:hover {
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
-} */
 
 /* LOADING ANIMATIONS */
 .results-loading {
