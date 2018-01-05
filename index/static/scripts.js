@@ -110,7 +110,8 @@ function clearSearch() {
 
 // LOADERS
 function loadCenterStage(url) {
-  $("#center-stage").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading...</span></div>");
+  $("#center-stage").empty();
+  $(".results-loading").clone().appendTo("#center-stage");
   $.ajax({
     type: "GET",
     url: url,
@@ -124,7 +125,8 @@ function loadCenterStage(url) {
     });
 }
 function loadEpisodes(itunesid) {
-  $("#episodes").html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading episodes...</span></div>");
+  $("#episodes").empty();
+  $(".results-loading").clone().appendTo("#episodes");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -149,7 +151,8 @@ function loadResults(url, drop) {
     xhr = null;
   }
   $("#episodes").empty();
-  drop.html("<div class='col-auto results-loading'><i class='fas fa-circle-notch fa-spin icon loading-icon'></i><span>Loading...</span></div>");
+  $(drop).empty();
+  $(".results-loading").clone().appendTo(drop);
   $.ajax({
     type: "GET",
     url: url,
@@ -182,6 +185,7 @@ $(document)
     refreshCookie();
     xhr = null;
     timeout = 0;
+
     if ($("#login-buttons").length) {
       $("#login-tab")[0].href = "#tabs-login";
       $("#signup-tab")[0].href = "#tabs-signup";
@@ -191,6 +195,9 @@ $(document)
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
+  .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
+    // $("#logo-wrapper").html("<span id='dopepod'>dopepod</span>");
+  })
   .on("keyup", "#search-form", function() {
     var el = $(this);
     clearTimeout(timeout);
