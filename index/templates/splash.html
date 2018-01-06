@@ -8,25 +8,28 @@ dopepod
 <div class="container">
   <div class="row">
     <div class="col" id="login">
-      <div id="logo-wrapper">
-        <span class="logo logo-1">d</span>
-        <span class="logo logo-2">o</span>
-        <span class="logo logo-3">p</span>
-        <span class="logo logo-4">e</span>
-        <span class="logo logo-5">p</span>
-        <span class="logo logo-6">o</span>
-        <span class="logo logo-7">d</span>
-        <span id="nothing"></span>
-      </div>
       <h4>
-        Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
+        Search for and listen to thousands of free podcasts on
       </h4>
+      <div class="logo-wrapper">
+        <div class="logo-group">
+          <span class="logo logo-1">d</span>
+          <span class="logo logo-2">o</span>
+          <span class="logo logo-3">p</span>
+          <span class="logo logo-4">e</span>
+          <span class="logo logo-5">p</span>
+          <span class="logo logo-6">o</span>
+          <span class="logo logo-7">d</span>
+          <span id="nothing"></span>
+        </div>
+      </div>
       <div class="nav" id="login-buttons" role="tablist">
         {% if view == 'signup' %}
           {% if request.is_ajax %}
             <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>
@@ -34,6 +37,7 @@ dopepod
             <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>
@@ -43,6 +47,7 @@ dopepod
             <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>
@@ -50,6 +55,7 @@ dopepod
             <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>
@@ -59,6 +65,7 @@ dopepod
             <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>
@@ -66,6 +73,7 @@ dopepod
             <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
               Login
             </a>
+            or
             <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
               Signup
             </a>

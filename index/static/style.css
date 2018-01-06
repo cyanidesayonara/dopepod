@@ -9,6 +9,7 @@ body {
 
 /* BUTTONS */
 .btn-dope, .btn-dope.focus, .btn-dope:focus {
+  border: 1px dashed rgba(0, 204, 122, 1);
   color: #2e2e2e;
   font-size: 16px;
   background-color: #fff;
@@ -21,6 +22,7 @@ body {
 }
 .btn-dope-tab, .btn-dope-tab.focus, .btn-dope-tab:focus {
   border-radius: .25rem .25rem 0 0;
+  border: none;
   background: inherit;
   min-width: 42px;
 }
@@ -137,7 +139,7 @@ body {
 
 @keyframes spinLeft {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(0, 0, 0, 0);
     transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -ms-transform: scaleX(-1);
@@ -145,7 +147,7 @@ body {
     -webkit-transform: scaleX(-1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -155,7 +157,7 @@ body {
 }
 @-webkit-keyframes spinLeft {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(0, 0, 0, 0);
     transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -ms-transform: scaleX(-1);
@@ -163,7 +165,7 @@ body {
     -webkit-transform: scaleX(-1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -173,7 +175,7 @@ body {
 }
 @keyframes spinRight {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(0, 0, 0, 0);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -181,7 +183,7 @@ body {
     -webkit-transform: scaleX(1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
     transform: scaleX(-1);
     -o-transform: scaleX(-1); /** Opera **/
     -ms-transform: scaleX(-1);
@@ -191,7 +193,7 @@ body {
 }
 @-webkit-keyframes spinRight {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(0, 0, 0, 0);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -199,7 +201,7 @@ body {
     -webkit-transform: scaleX(1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
     transform: scaleX(-1);
     -o-transform: scaleX(-1); /** Opera **/
     -ms-transform: scaleX(-1);
@@ -221,7 +223,7 @@ body {
 }
 .logo {
   position: absolute;
-  color: rgba(255, 255, 255, 0);
+  color: rgba(0, 0, 0, 0);
   top: 0;
 }
 .logo-1 {
@@ -263,8 +265,18 @@ body {
   animation: nothing .5s 3s;
   -webkit-animation: nothing .5s 3s;
 }
-#logo-wrapper {
-  font-size: 28px;
+.logo-wrapper {
+  margin: auto;
+  text-align: center;
+  width: 200px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: .25rem;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 5px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 5px;
+  box-shadow: rgba(0,0,0,.3) 0 1px 5px ;
+}
+.logo-group {
   font-weight: 600;
   position: relative;
   padding-top: 6px;
@@ -272,7 +284,9 @@ body {
   width: 15px;
   margin: auto;
   height: 44px;
+  font-size: 28px!important;
 }
+
 #dopepod {
 }
 
