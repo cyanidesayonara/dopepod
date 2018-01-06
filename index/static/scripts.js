@@ -36,10 +36,10 @@ function updateTitle() {
   var title = "dopepod";
   var el = $("#player-content");
   if (el.length) {
-    title += "Now playing: " + el.find("#player-title")[0].innerText + " - " + el.find("#player-episode")[0].innerText + " | dopepod";
+    title = "Now playing: " + el.find("#player-title")[0].innerText + " - " + el.find("#player-episode")[0].innerText + " | dopepod";
   }
   else if ($("#podinfo").length) {
-      title += " - " + $("#podinfo-title")[0].innerText;
+      title = "Listen to episodes of " + $("#podinfo-title")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
 }
