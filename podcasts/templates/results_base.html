@@ -28,6 +28,41 @@
           </a>
         {% endif %}
       {% endif %}
+      {% if results.view == 'grid' %}
+        <a class="btn btn-dope btn-dope-tab" id="view-button" href="{{ results.urls.full_url }}&view=list">
+          <div class="view-icon d-none" id="view-icon-grid">
+            {% if request.is_ajax %}
+              <i class="fas fa-th"></i>
+            {% else %}
+              Grid
+            {% endif %}
+          </div>
+          <div class="view-icon" id="view-icon-list">
+            {% if request.is_ajax %}
+              <i class="fas fa-bars"></i>
+            {% else %}
+              List
+            {% endif %}
+          </div>
+        </a>
+      {% elif results.view == 'list' %}
+        <a class="btn btn-dope btn-dope-tab" id="view-button" href="{{ results.urls.full_url }}&view=grid">
+          <div class="view-icon" id="view-icon-grid">
+            {% if request.is_ajax %}
+              <i class="fas fa-th"></i>
+            {% else %}
+              Grid
+            {% endif %}
+          </div>
+          <div class="view-icon d-none" id="view-icon-list">
+            {% if request.is_ajax %}
+              <i class="fas fa-bars"></i>
+            {% else %}
+              List
+            {% endif %}
+          </div>
+        </a>
+      {% endif %}
       {% if results.extra_options %}
         <a class="btn btn-dope btn-dope-tab reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse-{{ results.drop }}" aria-label="Minimize">
           <i class="fas fa-minus-circle icon"></i>
@@ -111,10 +146,8 @@
           {% include 'pagination.html' %}
         {% endif %}
 
-        {% if results.view == 'grid' %}
-          {% include 'grid.html' %}
-        {% elif results.view == 'list' %}
-          {% include 'list.html' %}
+        {% if results.view == 'grid' or results.view == 'list' %}
+          {% include 'search.html' %}
         {% elif results.view == 'charts' %}
           {% include 'charts.html' %}
         {% elif results.view == 'episodes' %}

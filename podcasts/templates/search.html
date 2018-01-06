@@ -1,4 +1,26 @@
-<div class="row results-content">
+{% if results.view == 'list' %}
+<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }}">
+{% else %}
+<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }} show">
+{% endif %}
+  {% for podcast in results.podcasts %}
+  <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
+    <h6 class="search-result-title">
+      {{ podcast.title }}
+    </h6>
+    <p class="search-result-artist">
+      by {{ podcast.artist }}
+    </p>
+  </a>
+  {% endfor %}
+</div>
+
+{% if results.view == 'list' %}
+<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }} show">
+{% else %}
+<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }}">
+{% endif %}
   <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
     <ul class="browse-results-list">
       {% for podcast in results.podcasts1 %}

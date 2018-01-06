@@ -335,7 +335,11 @@ dopepod
       </div>
       <a class="btn btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google">
         <div class="social-button social-icon" id="google-icon">
-          G
+          {% if request.is_ajax %}
+            <i class='fab fa-google icon'></i>
+          {% else %}
+            G
+          {% endif %}
         </div>
         <div class="social-button">
           Sign in with Google

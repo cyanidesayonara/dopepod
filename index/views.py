@@ -93,18 +93,21 @@ def search(request):
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
+        view = request.GET.get('view', None)
         q = request.GET.get('q', None)
 
-        view = 'list'
-        show = 160
+        if not view:
+            if request.path == '/browse/':
+                view = 'list'
+            else:
+                view = 'grid'
+
+        show = 100
 
         if q:
             q.strip()
             if len(q) > 30:
                 q = None
-            elif len(q) > 1:
-                view = 'grid'
-                show = 60
 
         genre = request.GET.get('genre', None)
         if genre and genre not in genres.values_list('name', flat=True):
@@ -167,15 +170,14 @@ def search(request):
         results = {}
         results['drop'] = 'search'
         results['podcasts'] = podcasts
-        if view == 'list':
-            one = show // 4
-            two = show // 2
-            three = show // 2 + show // 4
-            results['podcasts1'] = podcasts[:one]
-            results['podcasts2'] = podcasts[one:two]
-            results['podcasts3'] = podcasts[two:three]
-            results['podcasts4'] = podcasts[three:]
-        
+        one = show // 4
+        two = show // 2
+        three = show // 2 + show // 4
+        results['podcasts1'] = podcasts[:one]
+        results['podcasts2'] = podcasts[one:two]
+        results['podcasts3'] = podcasts[two:three]
+        results['podcasts4'] = podcasts[three:]
+
         results['header'] = results_header
         results['selected_q'] = q
         results['selected_genre'] = genre
