@@ -79,7 +79,7 @@ function refreshPage() {
   checkForXHR();
   $.ajax({
     type: "GET",
-    url: "/navbar/",
+    url: "/multibar/",
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
       // console.log(thrownError);
@@ -88,7 +88,7 @@ function refreshPage() {
       $("#episodes").empty();
       $("#results").empty();
       loadResults("/charts/", $("#charts"));
-      $("#navbar-drop").html(response);
+      $("#multibar-drop").html(response);
     });
 }
 
@@ -150,7 +150,7 @@ function scrollToTop() {
 }
 function scrollToMultibar() {
   $('html, body').animate({
-    scrollTop: 400
+    scrollTop: 450
   }, 250);
 }
 
@@ -317,6 +317,7 @@ $(document)
     var url = this.href;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      var drop = $("#center-stage");
       pushState();
       $("#browse-collapse").collapse("hide");
       clearSearch();
@@ -346,8 +347,9 @@ $(document)
       })
       .done(function(response) {
         button.text("Saved");
+        var drop = $("#center-stage");        
         pushState();
-        loadCenterStage("/");
+        loadResults("/", drop);
         scrollToTop();
       });
   })
@@ -366,11 +368,13 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         // console.log(thrownError);
-        loadCenterStage("/");
+        var drop = $("#center-stage");      
+        loadResults("/", drop);
       })
       .done(function(response) {
         var url = $("#main-wrapper")[0].baseURI;
-        loadCenterStage(url);
+        var drop = $("#center-stage");      
+        loadResults(url, drop);
         replaceState(url);
       });
   })
@@ -415,9 +419,10 @@ $(document)
   .on("click", ".ajax-login, .ajax-signup", function(e) {
     e.preventDefault();
     var url = this.href;
+    var drop = $("#center-stage");    
     pushState();
     clearSearch();
-    loadCenterStage(url);
+    loadResults(url, drop);
     $("#episodes").empty();
     scrollToTop();
   })
@@ -446,9 +451,10 @@ $(document)
         $("#center-stage").html(xhr.responseText);
       })
       .done(function(response) {
+        var drop = $("#center-stage");
         refreshCookie();
         refreshPage();
-        loadCenterStage("/")
+        loadResults("/")
         scrollToTop();
         });
   })

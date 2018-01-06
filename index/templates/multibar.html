@@ -1,8 +1,64 @@
 <div class="container" id="multibar">
   <div class="row">
-    <!-- SEARCH BAR -->
-    <div class="col pr-0">
-
+    <div class="col" id="multibar-nav">
+      <a class="nav-link-dope d-inline d-md-none" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bars icon"></i>
+      </a>
+      <div class="dropdown-menu navbar-dropdown color-2-trans" aria-labelledby="navbar-dropdown">
+        <a class="nav-link-dope index-link" href="/">
+          Dashboard
+        </a>
+        <!-- <a class="nav-link-dope blog-link" href="#">
+          Blog
+        </a> -->
+        <a class="nav-link-dope browse-link" href="{% url 'browse' %}">
+          Browse
+        </a>
+        {% if user.is_authenticated %}
+          <a class="nav-link-dope subscriptions-link" href="{% url 'subscriptions' %}">
+            Subscriptions
+          </a>
+          <a class="nav-link-dope settings-link" href="{% url 'settings' %}">
+            Settings
+          </a>
+        {% endif %}
+      </div>
+      <a class="nav-link-dope index-link d-none d-md-inline" href="/">
+        Dashboard
+      </a>
+      <!-- <a class="nav-link-dope blog-link d-none d-md-inline" href="#">
+        Blog
+      </a> -->
+      <a class="nav-link-dope browse-link d-none d-md-inline" href="{% url 'browse' %}">
+        Browse
+      </a>
+      {% if user.is_authenticated %}
+        <a class="nav-link-dope subscriptions-link d-none d-md-inline" href="{% url 'subscriptions' %}">
+          Subscriptions
+        </a>
+        <a class="nav-link-dope settings-link d-none d-md-inline" href="{% url 'settings' %}">
+          Settings
+        </a>
+        <form class="logout-form" method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="nav-link-dope ajax-logout d-inline d-md-none" type="submit">
+            <i class="fas fa-sign-out-alt icon"></i>
+          </button>
+          <button class="nav-link-dope ajax-logout d-none d-md-inline" type="submit">
+            Logout
+          </button>
+        </form>
+      {% else %}
+        <a class="nav-link-dope ajax-login d-none d-md-inline" href="/">
+          Login
+        </a>
+        <a class="nav-link-dope ajax-signup d-none d-md-inline" href="/?view=signup">
+          Signup
+        </a>
+        <a class="nav-link-dope ajax-login d-inline d-md-none" href="/">
+          <i class="fas fa-sign-in-alt icon"></i>
+        </a>
+      {% endif %}
     </div>
     <div class="col-auto" id="multibar-search">
       {% if podcasts1 %}
