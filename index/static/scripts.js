@@ -103,8 +103,6 @@ function clearSearch() {
 }
 
 // LOADERS
-
-
 function loadEpisodes(itunesid) {
   $("#episodes").load("/static/loading.html");
   $.ajax({
@@ -150,7 +148,7 @@ function scrollToTop() {
 }
 function scrollToMultibar() {
   $('html, body').animate({
-    scrollTop: 450
+    scrollTop: 444
   }, 250);
 }
 
@@ -169,6 +167,48 @@ function addIcons() {
   }
 }
 
+function collapseCollapses() {
+  var el = $("#episodes-table");
+  if (el.length) {
+    var collapses = el.find(".more-collapse");
+    collapses.each(function() {
+      $(this).collapse("hide");
+    })
+  }
+  $("#multibar-options-collapse").collapse("hide");
+}
+
+function navbarUnFixer() {
+  $(window).scroll(function () {
+    var scroll = $(window).scrollTop();
+    if (scroll > 450) {
+      $("#navbar").css("top", "-50px");
+      var el = $("#multibar-c");
+      moveLogo(el);
+    }
+    else if (scroll < 401) {
+      $("#navbar").css("top", "0");
+      var el = $("#navbar-c");
+      moveLogo(el);
+      // TODO or move pod icon
+    }
+    else {
+      var top = (400 - scroll) + "px";
+      $("#navbar").css("top", top);
+    }
+  })
+}
+
+function moveLogo(el) {
+  if (el.length && !el.children().length) {
+    var logo = $(".logo-wrapper");
+    logo.children().each(function() {
+      $(this).addClass("logo-final");
+    })
+    el.html(logo);
+  }
+}
+
 // after page loads
 $(document)
   .ready(function() {
@@ -176,14 +216,17 @@ $(document)
     refreshCookie();
     xhr = null;
     timeout = 0;
-
+    collapseCollapses();
     addIcons();
+    navbarUnFixer();
+  })
+  .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
+    $(".logo-wrapper").children().each(function() {
+      $(this).addClass("logo-final");
+    })
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
-  .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
-    // $("#logo-wrapper").html("<span id='dopepod'>dopepod</span>");
-  })
   .on("keyup", "#search-form", function() {
     var el = $(this);
     clearTimeout(timeout);
@@ -248,7 +291,6 @@ $(document)
     }, 250);
   })
   // NAVIGATION
-  // show podinfo
   .on("click", ".show-podinfo", function(e) {
     e.preventDefault();
     var el = $(this);
@@ -265,7 +307,6 @@ $(document)
       scrollToTop();
     }, 250);
   })
-  // go to home view
   .on("click", ".index-link", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -281,7 +322,6 @@ $(document)
       scrollToTop();
     }, 250);
   })
-  // open browse
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -296,7 +336,17 @@ $(document)
       scrollToMultibar();
     }, 250);
   })
-  // open subscriptions
+  .on("click", ".charts-link", function(e) {
+    e.preventDefault();
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var drop = $("#search");
+      $("#search").empty();
+      $("#episodes").empty();
+      $("#browse-collapse").collapse("hide");
+      scrollToMultibar();
+    }, 250);
+  })
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -347,7 +397,7 @@ $(document)
       })
       .done(function(response) {
         button.text("Saved");
-        var drop = $("#center-stage");        
+        var drop = $("#center-stage");
         pushState();
         loadResults("/", drop);
         scrollToTop();
@@ -368,12 +418,12 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError){
         // console.log(thrownError);
-        var drop = $("#center-stage");      
+        var drop = $("#center-stage");
         loadResults("/", drop);
       })
       .done(function(response) {
         var url = $("#main-wrapper")[0].baseURI;
-        var drop = $("#center-stage");      
+        var drop = $("#center-stage");
         loadResults(url, drop);
         replaceState(url);
       });
@@ -419,10 +469,11 @@ $(document)
   .on("click", ".ajax-login, .ajax-signup", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");    
+    var drop = $("#center-stage");
     pushState();
-    clearSearch();
     loadResults(url, drop);
+    clearSearch();
+    $("#browse-collapse").collapse("hide");
     $("#episodes").empty();
     scrollToTop();
   })

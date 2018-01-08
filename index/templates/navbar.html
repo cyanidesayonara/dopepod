@@ -1,8 +1,8 @@
+{% load static %}
 <div class="col-auto col-md-4" id="navbar-l">
   <a class="nav-link-dope d-inline d-md-none" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-bars icon"></i>
   </a>
-
   <!-- <a class="blog-link d-none d-md-inline" href="#">
     Blog
   </a> -->
@@ -15,7 +15,9 @@
     </a>
   {% endif %}
 </div>
-
+<div class="col-auto col-md-4" id="navbar-c">
+  {% include 'logo.html' %}
+</div>
 <div class="col-auto col-md-4"id="navbar-r">
   {% if user.is_authenticated %}
     <a class="nav-link-dope settings-link d-none d-md-inline" href="{% url 'settings' %}">

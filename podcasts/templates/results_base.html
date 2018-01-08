@@ -73,7 +73,7 @@
       {% endif %}
     </div>
   </div>
-  <div class="row options-select selected-buttons color-1">
+  <div class="row options-select selected-buttons">
     {% if results.selected_q %}
       <div class="col selected-group">
         {% if results.selected_q %}
@@ -87,7 +87,7 @@
       </div>
     {% endif %}
     {% if results.selected_genre or results.selected_language %}
-      <div class="col col-md-auto options-group">
+      <div class="col options-group">
         {% if results.selected_genre %}
           <a class="btn btn-dope selected-button active" href="{{ results.urls.genre_url }}">
             {{ results.selected_genre }}

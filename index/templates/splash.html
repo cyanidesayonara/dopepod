@@ -5,24 +5,12 @@ dopepod
 {% endblock %}
 
 {% block center-stage %}
-<div class="container">
+<div class="container" id="splash">
   <div class="row">
     <div class="col" id="login">
       <h4>
-        Search for and listen to thousands of free podcasts on
+        Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
       </h4>
-      <div class="logo-wrapper">
-        <div class="logo-group">
-          <span class="logo logo-1">d</span>
-          <span class="logo logo-2">o</span>
-          <span class="logo logo-3">p</span>
-          <span class="logo logo-4">e</span>
-          <span class="logo logo-5">p</span>
-          <span class="logo logo-6">o</span>
-          <span class="logo logo-7">d</span>
-          <span id="nothing"></span>
-        </div>
-      </div>
       <div class="nav" id="login-buttons" role="tablist">
         {% if view == 'signup' %}
           {% if request.is_ajax %}
@@ -98,7 +86,7 @@ dopepod
                     <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active login-button">Login</button>
+                    <button type="submit" class="btn btn-dope login-button">Login</button>
                   </div>
                 </div>
                 <div class="form-row">
@@ -153,7 +141,7 @@ dopepod
                     <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required id="signup-password2">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active login-button">Signup</button>
+                    <button type="submit" class="btn btn-dope login-button">Signup</button>
                   </div>
                 </div>
               </form>
@@ -196,7 +184,7 @@ dopepod
                     <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active login-button">Login</button>
+                    <button type="submit" class="btn btn-dope login-button">Login</button>
                   </div>
                 </div>
                 <div class="form-row">
@@ -231,7 +219,7 @@ dopepod
                     <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required id="signup-password2">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active login-button">Signup</button>
+                    <button type="submit" class="btn btn-dope login-button">Signup</button>
                   </div>
                 </div>
               </form>
@@ -289,7 +277,7 @@ dopepod
                     <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active login-button">Login</button>
+                    <button type="submit" class="btn btn-dope login-button">Login</button>
                   </div>
                 </div>
                 <div class="form-row">
@@ -351,7 +339,7 @@ dopepod
           {% endif %}
         </div>
       </div>
-      <a class="btn btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Google">
+      <a class="btn btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Sign in with Google">
         <div class="social-button social-icon" id="google-icon">
           {% if request.is_ajax %}
             <i class='fab fa-google icon'></i>

@@ -8,27 +8,40 @@ Listen to episodes of {{ podcast.title }} on dopepod
 <div class="container">
   <div class="row">
     <div class="col" id="podinfo" data-itunesid="{{ podcast.itunesid }}">
-      <div class="row" id="podinfo-top">
+      <div class="row" id="podinfo-main">
         <div class="col-4" id="podinfo-left">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
           <ul class="podinfo-side-list d-block d-lg-none">
+            {% if podcast.global_rank %}
+              <li>
+                <span class="global_rank">
+                  #{{ podcast.global_rank }} in
+                  podcasts
+                </span>
+              </li>
+            {% endif %}
+            {% if podcast.genre_rank %}
+              <li>
+                <span class="genre_rank">
+                  #{{ podcast.genre_rank }} in
+                    {% if podcast.genre.supergenre %}
+                    <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                      {{ podcast.genre.supergenre }}
+                    </a>
+                    {% else %}
+                    <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                      {{ podcast.genre }}
+                    {% endif %}
+                  </a>
+                </span>
+              </li>
+            {% endif %}
             <li>
               <span class="n_subscribers">
                 {{ podcast.n_subscribers }}
               </span>
               <span class="subscriber">
                 subscriber{{ podcast.n_subscribers|pluralize }}
-              </span>
-            </li>
-            <li>
-              <span>
-                Genre:
-              </span>
-              <span class="podinfo-genre">
-                {% if podcast.genre.supergenre %}
-                {{ podcast.genre.supergenre }} -
-                {% endif %}
-                {{ podcast.genre }}
               </span>
             </li>
             <li>
@@ -60,7 +73,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
             </li>
           </ul>
         </div>
-        <div class="col-8 col-lg-6" id="podinfo-main">
+        <div class="col-8 col-lg-6" id="podinfo-center">
           <h5 id="podinfo-title">
             {{ podcast.title }}
           </h5>
@@ -106,25 +119,6 @@ Listen to episodes of {{ podcast.title }} on dopepod
               </span>
               <span class="subscriber">
                 subscriber{{ podcast.n_subscribers|pluralize }}
-              </span>
-            </li>
-            <li>
-              <span>
-                Genre:
-              </span>
-              <span class="podinfo-genre">
-                {% if podcast.genre.supergenre %}
-                {{ podcast.genre.supergenre }} -
-                {% endif %}
-                {{ podcast.genre }}
-              </span>
-            </li>
-            <li>
-              <span>
-                Language:
-              </span>
-              <span class="podinfo-language">
-                {{ podcast.language }}
               </span>
             </li>
             <li>

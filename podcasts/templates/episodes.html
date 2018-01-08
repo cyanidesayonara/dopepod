@@ -17,7 +17,11 @@
   </thead>
   <tbody>
     {% for episode in results.episodes %}
-      <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}">
+      {% if request.is_ajax %}
+        <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
+      {% else %}
+        <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="true">
+      {% endif %}
         <th scope="row">{{ forloop.counter }}</th>
         <td>
           {{ episode.title }}
@@ -35,7 +39,11 @@
       </tr>
       <tr>
         <td colspan="4" class="hidden-row">
-          <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+          {% if request.is_ajax %}
+            <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+          {% else %}
+            <div class="collapse more-collapse show" id="more-collapse{{ forloop.counter }}">
+          {% endif %}
             <div class="episode-more">
               <span class="episode-summary">
                 {{ episode.summary }}
