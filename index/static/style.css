@@ -1,4 +1,4 @@
-400/* GLOBAL */
+/* GLOBAL */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   line-height: 1.42857143;
@@ -114,6 +114,7 @@ body {
 }
 .nav-link-dope  {
   background: none!important;
+  display: inline-block;
   border: none;
   border-bottom: 2px solid rgba(255, 255, 255, 0);
   color: rgba(255, 255, 255, 1);
@@ -605,6 +606,8 @@ body {
 /* MULTI BAR */
 #multibar {
   padding: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
   min-height: 44px;
   border-bottom: 1px solid rgba(45,43,43,.8);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
@@ -646,7 +649,7 @@ body {
   z-index: 75;
 }
 #flap.extended{
-  top: -400px;
+  top: -444px;
 }
 #center-stage {
   background-color: #E6ECF0;
@@ -657,12 +660,6 @@ body {
   height: 444px;
   padding-top: 44px;
   margin-bottom: -44px;
-}
-#flap {
-  z-index: 75;
-}
-#flap.extended{
-  top: -444px;
 }
 
 /* SEARCH */
@@ -762,7 +759,7 @@ body {
 
 /* DASHBOARD */
 #dashboard {
-  height: 451px;
+  height: 444px;
 }
 #dashboard-top {
   text-align: center;

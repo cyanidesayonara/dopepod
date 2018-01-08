@@ -182,20 +182,21 @@ function collapseCollapses() {
 function navbarUnFixer() {
   $(window).scroll(function () {
     var scroll = $(window).scrollTop();
-    if (scroll > 450) {
-      $("#navbar").css("top", "-50px");
+    var navbar = $("#navbar");
+    if (scroll > 443) {
+      navbar.css("top", "-50px");
       var el = $("#multibar-c");
       moveLogo(el);
     }
     else if (scroll < 401) {
-      $("#navbar").css("top", "0");
+      navbar.css("top", "0");
       var el = $("#navbar-c");
       moveLogo(el);
       // TODO or move pod icon
     }
     else {
       var top = (400 - scroll) + "px";
-      $("#navbar").css("top", top);
+      navbar.css("top", top);
     }
   })
 }
@@ -203,9 +204,11 @@ function navbarUnFixer() {
 function moveLogo(el) {
   if (el.length && !el.children().length) {
     var logo = $(".logo-wrapper");
-    logo.children().each(function() {
-      $(this).addClass("logo-final");
-    })
+    if (!$(logo.children()[0]).hasClass("logo-final")) {
+      logo.children().each(function() {
+        $(this).addClass("logo-final");
+      })
+    }
     el.html(logo);
   }
 }
