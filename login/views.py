@@ -37,6 +37,7 @@ def login(request):
         context = {
             'errors': errors,
             'email': email,
+            'view': 'login',
         }
 
         if ajax:
@@ -44,14 +45,9 @@ def login(request):
                 return HttpResponse('')
             else:
                 return render(request, 'splash.html', context, status=400)
-
         else:
-            chart = Chart.objects.get(genre=None)
-            genres = Genre.get_primary_genres()
+            context = Chart.get_charts(context)
             context.update({
-                'splash': True,
-                'chart_genres': genres,
-                'chart': chart,
                 'alphabet': ALPHABET,
             })
             if response.status_code == 200:
@@ -59,7 +55,7 @@ def login(request):
             else:
                 return render(request, 'splash.html', context)
     else:
-        return redirect('/')
+        return redirect('/?view=login')
 
 def signup(request):
     if request.method == 'POST':
@@ -88,12 +84,8 @@ def signup(request):
             else:
                 return render(request, 'splash.html', context, status=400)
         else:
-            chart = Chart.objects.get(genre=None)
-            genres = Genre.get_primary_genres()
+            context = Chart.get_charts(context)
             context.update({
-                'splash': True,
-                'chart_genres': genres,
-                'chart': chart,
                 'alphabet': ALPHABET,
             })
             if response.status_code == 200:
@@ -136,12 +128,8 @@ def password_reset(request):
             else:
                 return render(request, 'splash.html', context, status=400)
         else:
-            chart = Chart.objects.get(genre=None)
-            genres = Genre.get_primary_genres()
+            context = Chart.get_charts(context)
             context.update({
-                'splash': True,
-                'chart_genres': genres,
-                'chart': chart,
                 'alphabet': ALPHABET,
             })
             if response.status_code == 200:

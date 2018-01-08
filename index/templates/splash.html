@@ -9,78 +9,45 @@ dopepod
   <div class="row">
     <div class="col" id="login">
       <h4>
-        Search for and listen to thousands of free podcasts on <strong>dopepod</strong>
+        Search for and listen to thousands of free podcasts on dopepod
       </h4>
-      <div class="nav" id="login-buttons" role="tablist">
-        {% if view == 'signup' %}
-          {% if request.is_ajax %}
-            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% else %}
-            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% endif %}
-        {% elif view == 'password' %}
-          {% if request.is_ajax %}
-            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% else %}
-            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% endif %}
-        {% else %}
-          {% if request.is_ajax %}
-            <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% else %}
-            <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="/" role="tab" aria-controls="tabs-login" aria-selected="false">
-              Login
-            </a>
-            or
-            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-              Signup
-            </a>
-          {% endif %}
-        {% endif %}
-        <a class="d-none" id="password-tab" data-toggle="pill" href="#tabs-password" role="tab" aria-controls="tabs-password" aria-selected="false">
-        </a>
-      </div>
       <div id="login-wrapper">
         <div class="tab-content">
           {% if view == 'signup' %}
+            <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+              <span class="site-description">
+                dopepod is a free, mobile-friendly podcast web app that
+                scours the internet for fresh podcasts so you don't have to.
+              </span>
+              <br />
+              <br />
+              <span>
+                Sign up now to subscribe to all your favorite podcasts.
+              </span>
+            </div>
             <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+              {% if errors.general %}
+                <span class="error-message">
+                  {{ errors.general }}
+                </span>
+              {% endif %}
               <form class="login-form" method="POST" action="{% url 'login' %}">
                 {% csrf_token %}
+                {% if errors.email %}
+                  <span class="error-message">
+                    {{ errors.email }}
+                  </span>
+                {% endif %}
                 <div class="login-form-group">
                   <label class="sr-only" for="login-login">Email</label>
-                  <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login">
+                  <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
                 </div>
                 <div class="form-row">
+                  {% if errors.password %}
+                    <span class="error-message">
+                      {{ errors.password }}
+                    </span>
+                  {% endif %}
                   <div class="col login-form-group">
                     <label class="sr-only" for="login-password">Password</label>
                     <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
@@ -105,150 +72,58 @@ dopepod
               </form>
             </div>
             <div class="tab-pane fade show active" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
-              {% if errors.general %}
-                <span class="error-message">
-                  {{ errors.general }}
-                </span>
-              {% endif %}
               <form class="signup-form" method="POST" action="{% url 'signup' %}">
                 {% csrf_token %}
-                {% if errors.email %}
-                  <span class="error-message">
-                    {{ errors.email }}
-                  </span>
-                {% endif %}
                 <div class="login-form-group">
                   <label class="sr-only" for="signup-email">Email</label>
-                  <input class="form-control login-field" type="email" name="email" placeholder="Email" size="30" required id="signup-email" value="{{ email }}">
+                  <input class="form-control login-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
                 </div>
-                {% if errors.password1 %}
-                  <span class="error-message">
-                    {{ errors.password1 }}
-                  </span>
-                {% endif %}
                 <div class="login-form-group">
                   <label class="sr-only" for="signup-password1">Password</label>
                   <input class="form-control login-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
                 </div>
-                {% if errors.password2 %}
-                  <span class="error-message">
-                    {{ errors.password2 }}
-                  </span>
-                {% endif %}
                 <div class="form-row">
                   <div class="col login-form-group">
-                    <label class="sr-only" for="signup-password">Password (again)</label>
-                    <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required id="signup-password2">
+                    <label class="sr-only" for="signup-password2">Password (again)</label>
+                    <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope login-button">Signup</button>
+                    <button type="submit" class="btn btn-dope signup-button">Signup</button>
                   </div>
                 </div>
               </form>
             </div>
             <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
-              <p>
-                Forgot your password? Enter your email address below, and we'll send you an email allowing you to reset it.
-              </p>
-              <form method="POST" action="{% url 'password_reset' %}">
-                {% csrf_token %}
-                <div class="form-row">
-                  {% if errors.email %}
-                  <span class="error-message">
-                    {{ errors.email }}
-                  </span>
-                  {% endif %}
-                  <div class="col login-form-group">
-                    <label class="sr-only" for="forgot-email">Email</label>
-                    <input class="form-control login-field" type="email" size="30" name="email" placeholder="Email" required id="forgot-email">
-                  </div>
-                  <div class="col-auto">
-                    <button class="btn btn-dope active password-button" type="submit">
-                      Send
-                    </button>
-                  </div>
+            <p>
+              Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
+            </p>
+            <form class="password-form" method="POST" action="{% url 'password_reset' %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="forgot-email">Email</label>
+                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
                 </div>
-              </form>
+                <div class="col-auto">
+                  <button class="btn btn-dope active password-button" type="submit">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% elif view == 'login' %}
+            <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+              <span class="site-description">
+                dopepod is a free, mobile-friendly podcast web app that
+                scours the internet for fresh podcasts so you don't have to.
+              </span>
+              <br />
+              <br />
+              <span>
+                Sign up now to subscribe to all your favorite podcasts.
+              </span>
             </div>
-          {% elif view == 'password' %}
-            <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
-              <form class="login-form" method="POST" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="login-form-group">
-                  <label class="sr-only" for="login-login">Email</label>
-                  <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login">
-                </div>
-                <div class="form-row">
-                  <div class="col login-form-group">
-                    <label class="sr-only" for="login-password">Password</label>
-                    <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
-                  </div>
-                  <div class="col-auto">
-                    <button type="submit" class="btn btn-dope login-button">Login</button>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col">
-                    <a class="password-link login-toggle" href="/?view=password">
-                      Forgot Password?
-                    </a>
-                  </div>
-                  <div class="col form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
-              <form class="signup-form" method="POST" action="{% url 'signup' %}">
-                {% csrf_token %}
-                <div class="login-form-group">
-                  <label class="sr-only" for="signup-email">Email</label>
-                  <input class="form-control login-field" type="email" name="email" placeholder="Email" size="30" required id="signup-email">
-                </div>
-                <div class="login-form-group">
-                  <label class="sr-only" for="signup-password1">Password</label>
-                  <input class="form-control login-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
-                </div>
-                <div class="form-row">
-                  <div class="col login-form-group">
-                    <label class="sr-only" for="signup-password">Password (again)</label>
-                    <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required id="signup-password2">
-                  </div>
-                  <div class="col-auto">
-                    <button type="submit" class="btn btn-dope login-button">Signup</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="tab-pane fade show active" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
-              <p>
-                Forgot your password? Enter your email address below, and we'll send you an email allowing you to reset it.
-              </p>
-              <form method="POST" action="{% url 'password_reset' %}">
-                {% csrf_token %}
-                <div class="form-row">
-                  {% if errors.email %}
-                  <span class="error-message">
-                    {{ errors.email }}
-                  </span>
-                  {% endif %}
-                  <div class="col login-form-group">
-                    <label class="sr-only" for="forgot-email">Email</label>
-                    <input class="form-control login-field" type="email" size="30" name="email" placeholder="Email" required id="forgot-email" value="{{ email }}">
-                  </div>
-                  <div class="col-auto">
-                    <button class="btn btn-dope active password-button" type="submit">
-                      Send
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          {% else %}
             <div class="tab-pane fade show active" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
               {% if errors.general %}
                 <span class="error-message">
@@ -312,14 +187,212 @@ dopepod
                     <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
                   </div>
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-dope active signup-button">Signup</button>
+                    <button type="submit" class="btn btn-dope signup-button">Signup</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+            <p>
+              Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
+            </p>
+            <form class="password-form" method="POST" action="{% url 'password_reset' %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="forgot-email">Email</label>
+                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-dope active password-button" type="submit">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% elif view == 'password' %}
+            <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+              <span class="site-description">
+                dopepod is a free, mobile-friendly podcast web app that
+                scours the internet for fresh podcasts so you don't have to.
+              </span>
+              <br />
+              <br />
+              <span>
+                Sign up now to subscribe to all your favorite podcasts.
+              </span>
+            </div>
+            <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+              {% if errors.general %}
+                <span class="error-message">
+                  {{ errors.general }}
+                </span>
+              {% endif %}
+              <form class="login-form" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% if errors.email %}
+                  <span class="error-message">
+                    {{ errors.email }}
+                  </span>
+                {% endif %}
+                <div class="login-form-group">
+                  <label class="sr-only" for="login-login">Email</label>
+                  <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
+                </div>
+                <div class="form-row">
+                  {% if errors.password %}
+                    <span class="error-message">
+                      {{ errors.password }}
+                    </span>
+                  {% endif %}
+                  <div class="col login-form-group">
+                    <label class="sr-only" for="login-password">Password</label>
+                    <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-dope login-button">Login</button>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <a class="password-link login-toggle" href="/?view=password">
+                      Forgot Password?
+                    </a>
+                  </div>
+                  <div class="col form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+              <form class="signup-form" method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <div class="login-form-group">
+                  <label class="sr-only" for="signup-email">Email</label>
+                  <input class="form-control login-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
+                </div>
+                <div class="login-form-group">
+                  <label class="sr-only" for="signup-password1">Password</label>
+                  <input class="form-control login-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
+                </div>
+                <div class="form-row">
+                  <div class="col login-form-group">
+                    <label class="sr-only" for="signup-password2">Password (again)</label>
+                    <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-dope signup-button">Signup</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade show active" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+            <p>
+              Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
+            </p>
+            <form class="password-form" method="POST" action="{% url 'password_reset' %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col login-form-group">
+                  <label class="sr-only" for="forgot-email">Email</label>
+                  <input class="form-control login-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-dope active password-button" type="submit">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% else %}
+            <div class="tab-pane fade show active" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+              <span class="site-description">
+                dopepod is a free, mobile-friendly podcast web app that
+                scours the internet for fresh podcasts so you don't have to.
+              </span>
+              <br />
+              <br />
+              <span>
+                Sign up now to subscribe to all your favorite podcasts.
+              </span>
+            </div>
+            <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+              {% if errors.general %}
+                <span class="error-message">
+                  {{ errors.general }}
+                </span>
+              {% endif %}
+              <form class="login-form" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% if errors.email %}
+                  <span class="error-message">
+                    {{ errors.email }}
+                  </span>
+                {% endif %}
+                <div class="login-form-group">
+                  <label class="sr-only" for="login-login">Email</label>
+                  <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
+                </div>
+                <div class="form-row">
+                  {% if errors.password %}
+                    <span class="error-message">
+                      {{ errors.password }}
+                    </span>
+                  {% endif %}
+                  <div class="col login-form-group">
+                    <label class="sr-only" for="login-password">Password</label>
+                    <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-dope login-button">Login</button>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <a class="password-link login-toggle" href="/?view=password">
+                      Forgot Password?
+                    </a>
+                  </div>
+                  <div class="col form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+              <form class="signup-form" method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <div class="login-form-group">
+                  <label class="sr-only" for="signup-email">Email</label>
+                  <input class="form-control login-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
+                </div>
+                <div class="login-form-group">
+                  <label class="sr-only" for="signup-password1">Password</label>
+                  <input class="form-control login-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
+                </div>
+                <div class="form-row">
+                  <div class="col login-form-group">
+                    <label class="sr-only" for="signup-password2">Password (again)</label>
+                    <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-dope signup-button">Signup</button>
                   </div>
                 </div>
               </form>
             </div>
             <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
               <p>
-                Forgot your password? Enter your email address below, and we'll send you an email allowing you to reset it.
+                Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
               </p>
               <form class="password-form" method="POST" action="{% url 'password_reset' %}">
                 {% csrf_token %}
@@ -335,9 +408,86 @@ dopepod
                   </div>
                 </div>
               </form>
-          </div>
+            </div>
           {% endif %}
         </div>
+      </div>
+      <div class="nav" id="login-buttons" role="tablist">
+        {% if view == 'signup' %}
+          {% if request.is_ajax %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% else %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="/?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope active signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% endif %}
+        {% elif view == 'login' %}
+          {% if request.is_ajax %}
+            <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% else %}
+            <a class="btn btn-dope active login-link login-toggle" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% endif %}
+        {% elif view == 'password' %}
+          {% if request.is_ajax %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% else %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
+              Signup
+            </a>
+          {% endif %}
+        {% else %}
+          {% if request.is_ajax %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="false">
+              Signup
+            </a>
+          {% else %}
+            <a class="btn btn-dope login-link login-toggle" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
+              Login
+            </a>
+            or
+            <a class="btn btn-dope signup-link login-toggle" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="false">
+              Signup
+            </a>
+          {% endif %}
+        {% endif %}
+        <a class="d-none" id="password-tab" data-toggle="pill" href="#tabs-password" role="tab" aria-controls="tabs-password" aria-selected="false">
+        </a>
       </div>
       <a class="btn btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Sign in with Google">
         <div class="social-button social-icon" id="google-icon">

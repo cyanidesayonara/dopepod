@@ -1,20 +1,17 @@
-<div class="container" id="multibar">
-  <div class="row">
-
-    <div class="col-2 col-lg-4" id="multibar-nav">
-      <a class="nav-link-dope d-inline d-lg-none multibar-options-toggle toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
-        <i class="fab fa-youtube"></i>
-      </a>
-      <!-- <a class="nav-link-dope blog-link d-none d-md-inline" href="#">
-      Blog
-    </a> -->
-    <a class="nav-link-dope browse-link d-none d-lg-inline" href="{% url 'browse' %}">
-      Browse
-    </a>
-    <a class="nav-link-dope charts-link d-none d-lg-inline" href="{% url 'charts' %}">
-      Charts
-    </a>
-    {% if user.is_authenticated %}
+<div class="col-2 col-lg-4" id="multibar-nav">
+  <a class="nav-link-dope d-inline d-lg-none multibar-options-toggle toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+    <i class="fab fa-youtube"></i>
+  </a>
+  <!-- <a class="nav-link-dope blog-link d-none d-md-inline" href="#">
+    Blog
+  </a> -->
+  <a class="nav-link-dope browse-link d-none d-lg-inline" href="{% url 'browse' %}">
+    Browse
+  </a>
+  <a class="nav-link-dope charts-link d-none d-lg-inline" href="{% url 'charts' %}">
+    Charts
+  </a>
+  {% if user.is_authenticated %}
     <a class="nav-link-dope index-link d-none d-lg-inline" href="/">
       Dashboard
     </a>
@@ -30,78 +27,72 @@
         Logout
       </button>
     </form>
-    {% else %}
-    <a class="nav-link-dope ajax-login d-none d-lg-inline" href="/">
+  {% else %}
+    <a class="nav-link-dope ajax-login d-none d-lg-inline" href="/?view=login">
       Login
     </a>
     <a class="nav-link-dope ajax-signup d-none d-lg-inline" href="/?view=signup">
       Signup
     </a>
-    {% endif %}
-  </div>
-    <div class="col-lg-4 d-none d-lg-block" id="multibar-c">
-  </div>
-    <div class="col-10 col-lg-4" id="multibar-search">
-      <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
-        <div class="input-group" id="search-field">
-          <label for="q" class="sr-only">Search</label>
-          {% if selected_q %}
-          <input class="form-control" type="text" name="q" id="q"
-          type="search" placeholder="Search for podcasts"
-          aria-label="Search for podcasts" maxlength="30" autocomplete="off"
-          accept-charset="utf-8" value="{{ selected_q }}">
-          {% else %}
-          <input class="form-control" type="text" name="q" id="q"
-          type="search" placeholder="Search for podcasts"
-          aria-label="Search for podcasts" maxlength="30" autocomplete="off"
-          accept-charset="utf-8">
-          {% endif %}
-          <button id="search-button" type="submit">
-            <span>
-              Go
-            </span>
-          </button>
-        </div>
-      </form>
+  {% endif %}
+</div>
+<div class="col-lg-4 d-none d-lg-block" id="multibar-c">
+</div>
+<div class="col-10 col-lg-4" id="multibar-search">
+  <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
+    <div class="input-group" id="search-field">
+      <label for="q" class="sr-only">Search</label>
+      {% if selected_q %}
+      <input class="form-control" type="text" name="q" id="q"
+      type="search" placeholder="Search for podcasts"
+      aria-label="Search for podcasts" maxlength="30" autocomplete="off"
+      accept-charset="utf-8" value="{{ selected_q }}">
+      {% else %}
+      <input class="form-control" type="text" name="q" id="q"
+      type="search" placeholder="Search for podcasts"
+      aria-label="Search for podcasts" maxlength="30" autocomplete="off"
+      accept-charset="utf-8">
+      {% endif %}
+      <button id="search-button" type="submit">
+        <span>
+          Go
+        </span>
+      </button>
     </div>
-  </div>
-  <div class="row collapse show" id="multibar-options-collapse">
-    <div class="col">
-      <div class="nav-group">
-        <!-- <a class="nav-link-dope blog-link" href="#">
-          Blog
-        </a> -->
-        <a class="nav-link-dope browse-link" href="{% url 'browse' %}">
-          Browse
-        </a>
-        <a class="nav-link-dope charts-link" href="{% url 'browse' %}">
-          Charts
-        </a>
-        {% if user.is_authenticated %}
-          <a class="nav-link-dope index-link" href="/">
-            Dashboard
-          </a>
-          <a class="nav-link-dope subscriptions-link" href="{% url 'subscriptions' %}">
-            Subscriptions
-          </a>
-          <a class="nav-link-dope settings-link" href="{% url 'settings' %}">
-            Settings
-          </a>
-          <form class="logout-form" method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button class="nav-link-dope ajax-logout" type="submit">
-              Logout
-            </button>
-          </form>
-        {% else %}
-          <a class="nav-link-dope ajax-login" href="/">
-            Login
-          </a>
-          <a class="nav-link-dope ajax-signup" href="/?view=signup">
-            Signup
-          </a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+  </form>
+</div>
+<div class="col-12 collapse show" id="multibar-options-collapse">
+  <!-- <a class="nav-link-dope blog-link" href="#">
+    Blog
+  </a> -->
+  <a class="nav-link-dope browse-link" href="{% url 'browse' %}">
+    Browse
+  </a>
+  <a class="nav-link-dope charts-link" href="{% url 'browse' %}">
+    Charts
+  </a>
+  {% if user.is_authenticated %}
+    <a class="nav-link-dope index-link" href="/">
+      Dashboard
+    </a>
+    <a class="nav-link-dope subscriptions-link" href="{% url 'subscriptions' %}">
+      Subscriptions
+    </a>
+    <a class="nav-link-dope settings-link" href="{% url 'settings' %}">
+      Settings
+    </a>
+    <form class="logout-form" method="POST" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="nav-link-dope ajax-logout" type="submit">
+        Logout
+      </button>
+    </form>
+  {% else %}
+    <a class="nav-link-dope ajax-login" href="/?view=login">
+      Login
+    </a>
+    <a class="nav-link-dope ajax-signup" href="/?view=signup">
+      Signup
+    </a>
+  {% endif %}
 </div>

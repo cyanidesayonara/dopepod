@@ -87,7 +87,8 @@ function refreshPage() {
     .done(function(response) {
       $("#episodes").empty();
       $("#results").empty();
-      loadResults("/charts/", $("#charts"));
+      var drop = $("#charts");
+      loadResults("/charts/", drop);
       $("#multibar-drop").html(response);
     });
 }
@@ -127,7 +128,7 @@ function loadResults(url, drop) {
   checkForXHR();
   $("#episodes").empty();
   $(drop).load("/static/loading.html");
-  $.ajax({
+  xhr = $.ajax({
     type: "GET",
     url: url,
   })
@@ -498,14 +499,14 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        // console.log(thrownError);
+        console.log(xhr.responseText);
         $("#center-stage").html(xhr.responseText);
       })
       .done(function(response) {
         var drop = $("#center-stage");
         refreshCookie();
         refreshPage();
-        loadResults("/")
+        loadResults("/", drop)
         scrollToTop();
         });
   })

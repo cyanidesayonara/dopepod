@@ -20,7 +20,7 @@
   </head>
   <body>
     <!--HERE BE NAVBAR-->
-    <nav class="navbar fixed-top navbar-expand-md color-2" id="navbar">
+    <nav class="navbar fixed-top color-2" id="navbar">
       <div class="container" id="navbar-drop">
         {% include 'navbar.html' %}
       </div>
@@ -33,9 +33,11 @@
           {% endblock %}
         </div>
         <!-- MULTIBAR -->
-        <div class="row color-2-trans" id="multibar-drop">
-          {% include 'multibar.html' %}
-        </div>
+        <nav class="navbar color-2-trans" id="multibar">
+          <div class="container" id="multibar-drop">
+            {% include 'multibar.html' %}
+          </div>
+        </nav>
       </div>
       <!-- MAIN -->
       <div class="container"id="main">
@@ -60,7 +62,7 @@
           {% if episodes %}
             {% with episodes as results %}
               {% include 'results_base.html' %}
-            {% endwith%}
+            {% endwith %}
           {% endif %}
         </div>
         <!-- RESULTS -->
@@ -68,7 +70,7 @@
           {% if search %}
             {% with search as results %}
               {% include 'results_base.html' %}
-            {% endwith%}
+            {% endwith %}
           {% endif %}
         </div>
         <!-- CHARTS -->
@@ -76,7 +78,7 @@
           {% if charts %}
             {% with charts as results %}
               {% include 'results_base.html' %}
-            {% endwith%}
+            {% endwith %}
           {% endif %}
         </div>
       </div>
