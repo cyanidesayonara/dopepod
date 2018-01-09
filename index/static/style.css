@@ -88,6 +88,8 @@ body {
 #navbar {
   height: 44px;
   padding: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   box-shadow: rgba(0,0,0,.5) 0 2px 3px;
@@ -609,7 +611,6 @@ body {
   padding-top: 4px;
   padding-bottom: 4px;
   min-height: 44px;
-  border-bottom: 1px solid rgba(45,43,43,.8);
   -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
@@ -619,14 +620,13 @@ body {
 #multibar-drop {
   padding: 0;
 }
-#multibar-nav {
+#multibar-l {
   padding-right: 0;
   display: inline-flex;
 }
 #multibar-c {
-  padding-top: 4px;
 }
-#multibar-search {
+#multibar-r {
   display: inline-flex;
   justify-content: flex-end;
 }

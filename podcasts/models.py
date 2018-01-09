@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models import Q
 import requests
@@ -400,7 +401,7 @@ class Chart(models.Model):
 
     def get_charts(context, genre=None, ajax=None):
         genres = Genre.get_primary_genres()
-        chart = Chart.objects.get(genre=genre)
+        chart = get_object_or_404(Chart, genre=genre)
 
         url = '/charts/'
         urls = {}
@@ -417,7 +418,7 @@ class Chart(models.Model):
         results['genres'] = genres
         results['view'] = 'charts'
         results['urls'] = urls
-        
+
         if ajax:
             context.update({
                 'results': results,

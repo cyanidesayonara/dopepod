@@ -1,3 +1,16 @@
+// after page loads
+$(document)
+  .ready(function() {
+    // refresh cookie
+    refreshCookie();
+    xhr = null;
+    timeout = 0;
+    collapseCollapses();
+    addIcons();
+    navbarUnFixer();
+  })
+  
+
 // HISTORY API
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
@@ -213,17 +226,7 @@ function moveLogo(el) {
   }
 }
 
-// after page loads
 $(document)
-  .ready(function() {
-    // refresh cookie
-    refreshCookie();
-    xhr = null;
-    timeout = 0;
-    collapseCollapses();
-    addIcons();
-    navbarUnFixer();
-  })
   .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
     $(".logo-wrapper").children().each(function() {
       $(this).addClass("logo-final");
