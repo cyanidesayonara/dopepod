@@ -1,15 +1,16 @@
 <div class="row done">
   <div class="col-auto done-content">
-    {% if not request.is_ajax %}
-    <div class="round-logo color-3">
-      <span class="char1">d</span>
-      <span class="char2">o</span>
-      <span class="char3">p</span>
-      <span class="char4">e</span>
-      <span class="char5">p</span>
-      <span class="char6">o</span>
-    </div>
+    {% if request.is_ajax %}
+      <p>
+        {{ message }}
+      </p>
+    {% else %}
+      <p>
+        {{ message }}
+      </p>
     {% endif %}
-    <span>We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.</span>
+    <a href="/">
+      Back
+    </a>
   </div>
 </div>

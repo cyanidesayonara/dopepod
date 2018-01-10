@@ -1,5 +1,7 @@
 <div class="col-auto col-lg-4" id="multibar-l">
-  <a class="multibar-options-toggle  d-none d-lg-block lights-toggle"  href="#">
+  <a class="multibar-options-toggle d-none d-lg-inline-block lights-toggle"  href="#">
+    <div class="player-image">
+    </div>
     <div class="round-logo color-3">
       <span class="char1">d</span>
       <span class="char2">o</span>
@@ -10,6 +12,8 @@
     </div>
   </a>
   <a class="multibar-options-toggle d-block d-lg-none" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+    <div class="player-image">
+    </div>
     <div class="round-logo color-3">
       <span class="char1">d</span>
       <span class="char2">o</span>
@@ -19,17 +23,28 @@
       <span class="char6">o</span>
     </div>
   </a>
-  <a class="nav-link-dope charts-link d-none d-lg-block" href="{% url 'browse' %}">
+  <a class="nav-link-dope charts-link d-none d-lg-inline-block" href="{% url 'charts' %}">
     Charts
   </a>
-  <a class="nav-link-dope browse-link d-none d-lg-block" href="{% url 'browse' %}">
+  <a class="nav-link-dope browse-link d-none d-lg-inline-block" href="{% url 'browse' %}">
     Browse
   </a>
+  {% if user.is_authenticated %}
+    <a class="nav-link-dope index-link d-none d-lg-inline-block" href="/">
+      Dashboard
+    </a>
+    <a class="nav-link-dope subscriptions-link d-none d-lg-inline-block" href="{% url 'subscriptions' %}">
+      Subscriptions
+    </a>
+  {% endif %}
 </div>
 <div class="col-lg-4 d-none d-lg-block" id="multibar-c">
 </div>
 <div class="col col-lg-4" id="multibar-r">
   {% if user.is_authenticated %}
+    <a class="nav-link-dope settings-link d-none d-lg-inline-block" href="{% url 'settings' %}">
+      Settings
+    </a>
     <form class="logout-form" method="POST" action="{% url 'logout' %}">
       {% csrf_token %}
       <button class="nav-link-dope ajax-logout d-none d-lg-inline-block" type="submit">
@@ -64,30 +79,33 @@
   </form>
 </div>
 <div class="col-12 collapse show" id="multibar-options-collapse">
-  <!-- <a class="nav-link-dope blog-link" href="#">
-    Blog
-  </a> -->
+  <a class="nav-link-dope charts-link d-inline-block d-lg-none" href="{% url 'charts' %}">
+    Charts
+  </a>
+  <a class="nav-link-dope browse-link d-inline-block d-lg-none" href="{% url 'browse' %}">
+    Browse
+  </a>
   {% if user.is_authenticated %}
-    <a class="nav-link-dope index-link" href="/">
+    <a class="nav-link-dope index-link d-inline-block d-lg-none" href="/">
       Dashboard
     </a>
-    <a class="nav-link-dope subscriptions-link" href="{% url 'subscriptions' %}">
+    <a class="nav-link-dope subscriptions-link d-inline-block d-lg-none" href="{% url 'subscriptions' %}">
       Subscriptions
     </a>
-    <a class="nav-link-dope settings-link" href="{% url 'settings' %}">
+    <a class="nav-link-dope settings-link d-inline-block d-lg-none" href="{% url 'settings' %}">
       Settings
     </a>
     <form class="logout-form d-inline-block" method="POST" action="{% url 'logout' %}">
       {% csrf_token %}
-      <button class="nav-link-dope ajax-logout" type="submit">
+      <button class="nav-link-dope ajax-logout d-inline-block d-lg-none" type="submit">
         Logout
       </button>
     </form>
   {% else %}
-    <a class="nav-link-dope ajax-login" href="/?view=login">
+    <a class="nav-link-dope ajax-login d-inline-block d-lg-none" href="/?view=login">
       Login
     </a>
-    <a class="nav-link-dope ajax-signup" href="/?view=signup">
+    <a class="nav-link-dope ajax-signup d-inline-block d-lg-none" href="/?view=signup">
       Signup
     </a>
   {% endif %}

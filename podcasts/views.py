@@ -39,20 +39,21 @@ def play(request):
 
     # TODO: itemize episode, get url after redirections
     if request.method == 'POST':
+        episode = {}
         try:
-            url = request.POST['url']
-            kind = request.POST['type']
-            title = request.POST['title']
-            date = request.POST['date']
-            itunesid = request.POST['itunesid']
-            podcast = Podcast.objects.get(itunesid=itunesid)
+            episode['url'] = request.POST['url']
+            episode['kind'] = request.POST['type']
+            episode['title'] = request.POST['title']
+            episode['date'] = request.POST['date']
+            episode['itunesid'] = request.POST['itunesid']
+            episode['podcast'] = Podcast.objects.get(itunesid=episode['itunesid'])
+
+            player = {
+                'episode': episode,
+            }
 
             context = {
-                'url': url,
-                'type': kind,
-                'title': title,
-                'date': date,
-                'podcast': podcast,
+                'player': player,
             }
 
             return render(request, 'player.html', context)

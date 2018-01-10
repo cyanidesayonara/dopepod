@@ -1,32 +1,23 @@
 {% load static %}
 <div class="col-auto col-md-4" id="navbar-l">
+  <a class="nav-link-dope d-inline-block d-lg-none" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-bars icon"></i>
+  </a>
 </div>
 <div class="col-auto col-md-4" id="navbar-c">
   {% include 'logo.html' %}
 </div>
 <div class="col-auto col-md-4" id="navbar-r">
-    {% if user.is_authenticated %}
-      <a class="nav-link-dope settings-link d-none d-lg-inline-block" href="{% url 'settings' %}">
-        Settings
-      </a>
-      <form class="logout-form" method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button class="nav-link-dope ajax-logout d-inline-block d-lg-none" type="submit">
-          <i class="fas fa-sign-out-alt icon"></i>
-        </button>
-        <button class="nav-link-dope ajax-logout d-none d-lg-inline-block" type="submit">
-          Logout
-        </button>
-      </form>
-    {% else %}
-      <a class="nav-link-dope ajax-login d-none d-lg-inline-block" href="/?view=login">
-        Login
-      </a>
-      <a class="nav-link-dope ajax-signup d-none d-lg-inline-block" href="/?view=signup">
-        Signup
-      </a>
-      <a class="nav-link-dope ajax-login d-inline-block d-lg-none" href="/?view=login">
-        <i class="fas fa-sign-in-alt icon"></i>
-      </a>
-    {% endif %}
-  </div>
+  {% if user.is_authenticated %}
+    <form class="logout-form" method="POST" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="nav-link-dope ajax-logout d-inline-block d-lg-none" type="submit">
+        <i class="fas fa-sign-out-alt icon"></i>
+      </button>
+    </form>
+  {% else %}
+    <a class="nav-link-dope ajax-login d-inline-block d-lg-none" href="/?view=login">
+      <i class="fas fa-sign-in-alt icon"></i>
+    </a>
+  {% endif %}
+</div>

@@ -106,37 +106,37 @@ def password_reset(request):
         request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         response = allauth.password_reset(request)
         data = json.loads(response.content)
-        errors = {}
 
+        if response.status_code == 200:
+            context = {
+                'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
+            }
+            if ajax:
+                return render(request, 'account/done.html', context)
+            else:
+                return render(request, 'splash.html', context)
+
+        errors = {}
         for error in data['form']['errors']:
             errors['general'] = error
         for field in data['form']['fields']:
             for error in data['form']['fields'][field]['errors']:
-                errors[field] = error
+                errors[field] = error.replace('The e-mail', 'This email')
         email = data['form']['fields']['email']['value']
 
         context = {
             'errors': errors,
             'email': email,
             'view': 'password',
+            'alphabet': ALPHABET,
         }
 
+        context = Chart.get_charts(context)
+
         if ajax:
-            if response.status_code == 200:
-                # TODO return "done.html"
-                return render(request, 'account/done.html', context)
-            else:
-                return render(request, 'splash.html', context, status=400)
+            return render(request, 'splash.html', context, status=400)
         else:
-            context = Chart.get_charts(context)
-            context.update({
-                'alphabet': ALPHABET,
-            })
-            if response.status_code == 200:
-                # TODO return "done.html"
-                return redirect('/')
-            else:
-                return render(request, 'splash.html', context)
+            return redirect('/')
     else:
         return redirect('/?view=password')
 

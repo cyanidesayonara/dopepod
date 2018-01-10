@@ -288,7 +288,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a, .genre_rank a", function(e) {
+  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .selected-buttons a", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
@@ -296,6 +296,25 @@ $(document)
       var url = el[0].href;
       var drop = $(el.parents(".results").parent()[0]);
       pushState();
+      console.log()
+      loadResults(url, drop, );
+      clearSearch();
+      $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
+      if (!drop.id == "charts") {
+        scrollToMultibar()
+      }
+    }, 250);
+  })
+  .on("click", ".genre_rank a", function(e) {
+    e.preventDefault();
+    var el = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var url = el[0].href;
+      var drop = $("#charts");
+      pushState();
+      console.log(drop)
       loadResults(url, drop);
       clearSearch();
       $("#browse-collapse").collapse("hide");
@@ -463,24 +482,28 @@ $(document)
         // console.log(thrownError);
       })
       .done(function(response) {
-        $("#player-drop").html(response);
+        var player = $("#player-drop");
+        player.html(response);
+        var img = player.find("img");
+        $(".player-image").append(img);
+        $(".round-logo").addClass("d-none");
         updateTitle();
       });
   })
   // close player
   .on("click", "#player-close", function(e) {
+    e.preventDefault();
     $("#audio-el").preload="none";
     $("#player-drop").empty();
     updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
-    if ($("#player-image").hasClass("d-none")) {
+    e.preventDefault();
+    if ($("#audio-el").hasClass("d-none")) {
       $("#audio-el").removeClass("d-none");
-      $("#player-image").removeClass("d-none");
     }
     else {
       $("#audio-el").addClass("d-none");
-      $("#player-image").addClass("d-none");
     }
   })
   // LOGIN & SIGNUP
@@ -605,7 +628,6 @@ $(document)
   })
   .on("click", ".lights-toggle", function() {
     var el = $("body");
-    console.log("dfsfsd")
     if (el.hasClass("darken")) {
       el.removeClass("darken");
     }
