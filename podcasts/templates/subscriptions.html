@@ -9,17 +9,17 @@
           </a>
         </div>
         <div class="col">
-          <h5 class="subscription-result-title">
-            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.title }}">
-              {{ podcast.title }}
-            </a>
-          </h5>
-          <h6 class="subscription-result-artist">
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.title }}">
+            <h5 class="subscription-result-title">
+                {{ podcast.title }}
+            </h5>
+          </a>
+          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.artist }}">
+            <h6 class="subscription-result-artist">
             <span>by </span>
-            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="/podinfo/{{ podcast.itunesid }}/" title="{{ podcast.artist }}">
               {{ podcast.artist }}
-            </a>
-          </h6>
+            </h6>
+          </a>
           {% endwith %}
           <p>
             {{ subscription.last_updated }}

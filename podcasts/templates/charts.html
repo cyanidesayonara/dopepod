@@ -1,36 +1,27 @@
 <div class="row results-content">
-  <div class="col charts-results">
-    {% for podcast in results.podcasts %}
-      <div class="row">
-        <div class="col-auto">
-          {% if results.selected_genre %}
-            {{ podcast.genre_rank }}
-          {% else %}
-            {{ podcast.global_rank }}
-          {% endif %}
-        </div>
-        <div class="col-auto">
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-          </a>
-        </div>
-        <div class="col">
-          <h5 class="result-title">
-            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-              {{ podcast.title }}
-            </a>
-          </h5>
-          <h6 class="result-artist">
-            <span>by </span>
-            <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
-              {{ podcast.artist }}
-            </a>
-          </h6>
-        </div>
-      </div>
-      {% if not forloop.last %}
-        <hr class="h-line" />
+{% for podcast in results.podcasts %}
+  <div class="col-12 col-md-6 charts-result">
+    <div class="charts-rank">
+      {% if results.selected_genre %}
+        {{ podcast.genre_rank }}
+      {% else %}
+        {{ podcast.global_rank }}
       {% endif %}
-    {% endfor %}
+    </div>
+      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+        <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+      </a>
+      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+        <h5 class="result-title">
+            {{ podcast.title }}
+        </h5>
+      </a>
+      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+        <h6 class="result-artist">
+          <span>by </span>
+          {{ podcast.artist }}
+        </h6>
+      </a>
   </div>
+{% endfor %}
 </div>

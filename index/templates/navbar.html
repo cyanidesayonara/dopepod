@@ -1,25 +1,5 @@
 {% load static %}
 <div class="col-auto col-md-4" id="navbar-l">
-  <a class="nav-link-dope d-inline-block d-lg-none" href="#" id="navbar-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i class="fas fa-bars icon"></i>
-  </a>
-  <!-- <a class="blog-link d-none d-lg-inline-block" href="#">
-    Blog
-  </a> -->
-  <a class="nav-link-dope browse-link d-none d-lg-inline-block" href="{% url 'browse' %}">
-    Browse
-  </a>
-  <a class="nav-link-dope charts-link d-none d-lg-inline-block" href="{% url 'charts' %}">
-    Charts
-  </a>
-  {% if user.is_authenticated %}
-  <a class="nav-link-dope index-link d-none d-lg-inline-block" href="/">
-    Dashboard
-  </a>
-  <a class="nav-link-dope subscriptions-link d-none d-lg-inline-block" href="{% url 'subscriptions' %}">
-    Subscriptions
-  </a>
-  {% endif %}
 </div>
 <div class="col-auto col-md-4" id="navbar-c">
   {% include 'logo.html' %}

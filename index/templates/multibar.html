@@ -1,27 +1,30 @@
 <div class="col-auto col-lg-4" id="multibar-l">
-  <a class="nav-link-dope d-inline-block d-lg-none multibar-options-toggle toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
-    <i class="fab fa-youtube"></i>
+  <a class="multibar-options-toggle  d-none d-lg-block lights-toggle"  href="#">
+    <div class="round-logo color-3">
+      <span class="char1">d</span>
+      <span class="char2">o</span>
+      <span class="char3">p</span>
+      <span class="char4">e</span>
+      <span class="char5">p</span>
+      <span class="char6">o</span>
+    </div>
   </a>
-  <!-- <a class="nav-link-dope blog-link d-none d-lg-inline-block" href="#">
-    Blog
-  </a> -->
-  <a class="nav-link-dope browse-link d-none d-lg-inline-block" href="{% url 'browse' %}">
-    Browse
+  <a class="multibar-options-toggle d-block d-lg-none" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+    <div class="round-logo color-3">
+      <span class="char1">d</span>
+      <span class="char2">o</span>
+      <span class="char3">p</span>
+      <span class="char4">e</span>
+      <span class="char5">p</span>
+      <span class="char6">o</span>
+    </div>
   </a>
-  <a class="nav-link-dope charts-link d-none d-lg-inline-block" href="{% url 'charts' %}">
+  <a class="nav-link-dope charts-link d-none d-lg-block" href="{% url 'browse' %}">
     Charts
   </a>
-  {% if user.is_authenticated %}
-    <a class="nav-link-dope index-link d-none d-lg-inline-block" href="/">
-      Dashboard
-    </a>
-    <a class="nav-link-dope subscriptions-link d-none d-lg-inline-block" href="{% url 'subscriptions' %}">
-      Subscriptions
-    </a>
-    <a class="nav-link-dope settings-link d-none d-lg-inline-block" href="{% url 'settings' %}">
-      Settings
-    </a>
-  {% endif %}
+  <a class="nav-link-dope browse-link d-none d-lg-block" href="{% url 'browse' %}">
+    Browse
+  </a>
 </div>
 <div class="col-lg-4 d-none d-lg-block" id="multibar-c">
 </div>
@@ -64,12 +67,6 @@
   <!-- <a class="nav-link-dope blog-link" href="#">
     Blog
   </a> -->
-  <a class="nav-link-dope browse-link" href="{% url 'browse' %}">
-    Browse
-  </a>
-  <a class="nav-link-dope charts-link" href="{% url 'browse' %}">
-    Charts
-  </a>
   {% if user.is_authenticated %}
     <a class="nav-link-dope index-link" href="/">
       Dashboard
@@ -80,7 +77,7 @@
     <a class="nav-link-dope settings-link" href="{% url 'settings' %}">
       Settings
     </a>
-    <form class="logout-form" method="POST" action="{% url 'logout' %}">
+    <form class="logout-form d-inline-block" method="POST" action="{% url 'logout' %}">
       {% csrf_token %}
       <button class="nav-link-dope ajax-logout" type="submit">
         Logout

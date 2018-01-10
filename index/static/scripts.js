@@ -9,7 +9,69 @@ $(document)
     addIcons();
     navbarUnFixer();
   })
-  
+
+  function addIcons() {
+    $("#search-button").html("<i class='fa fa-search icon'></i>");
+    var login_buttons = $("#login-buttons");
+    if (login_buttons.length) {
+      login_buttons.find("#login-tab")[0].href = "#tabs-login";
+      login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
+      $("#google-icon").html("<i class='fab fa-google icon'></i>");
+    }
+    // TODO same for minimize and close
+    var view_buttons = $(".view-button");
+    if (view_buttons.length) {
+      view_buttons.each(function() {
+        $(this).find(".view-icon-grid").html("<i class='fas fa-th'></i>");
+        $(this).find(".view-icon-list").html("<i class='fas fa-bars'></i>");
+      })
+    }
+  }
+
+  function collapseCollapses() {
+    var el = $("#episodes-table");
+    if (el.length) {
+      var collapses = el.find(".more-collapse");
+      collapses.each(function() {
+        $(this).collapse("hide");
+      })
+    }
+    $("#multibar-options-collapse").collapse("hide");
+  }
+
+  function moveLogo(el) {
+    if (el.length && !el.children().length) {
+      var logo = $(".logo-wrapper");
+      if (!$(logo.children()[0]).hasClass("logo-final")) {
+        logo.children().each(function() {
+          $(this).addClass("logo-final");
+        })
+      }
+      el.html(logo);
+    }
+  }
+
+  function navbarUnFixer() {
+    $(window).scroll(function () {
+      var scroll = $(window).scrollTop();
+      var navbar = $("#navbar");
+      if (scroll > 443) {
+        navbar.css("top", "-50px");
+        var el = $("#multibar-c");
+        moveLogo(el);
+      }
+      else if (scroll < 401) {
+        navbar.css("top", "0");
+        var el = $("#navbar-c");
+        moveLogo(el);
+        // TODO or move pod icon
+      }
+      else {
+        var top = (400 - scroll) + "px";
+        navbar.css("top", top);
+      }
+    })
+  }
 
 // HISTORY API
 $(window).on("popstate", function(event) {
@@ -166,66 +228,6 @@ function scrollToMultibar() {
   }, 250);
 }
 
-function addIcons() {
-  $("#search-button").html("<i class='fa fa-search icon'></i>");
-  var login_buttons = $("#login-buttons");
-  if (login_buttons.length) {
-    login_buttons.find("#login-tab")[0].href = "#tabs-login";
-    login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
-    $("#google-icon").html("<i class='fab fa-google icon'></i>");
-  }
-  var view_button = $("#view-button");
-  if (view_button.length) {
-    var grid = view_button.find("#view-icon-grid").html("<i class='fas fa-th'></i>");
-    var list = view_button.find("#view-icon-list").html("<i class='fas fa-bars'></i>");
-  }
-}
-
-function collapseCollapses() {
-  var el = $("#episodes-table");
-  if (el.length) {
-    var collapses = el.find(".more-collapse");
-    collapses.each(function() {
-      $(this).collapse("hide");
-    })
-  }
-  $("#multibar-options-collapse").collapse("hide");
-}
-
-function navbarUnFixer() {
-  $(window).scroll(function () {
-    var scroll = $(window).scrollTop();
-    var navbar = $("#navbar");
-    if (scroll > 443) {
-      navbar.css("top", "-50px");
-      var el = $("#multibar-c");
-      moveLogo(el);
-    }
-    else if (scroll < 401) {
-      navbar.css("top", "0");
-      var el = $("#navbar-c");
-      moveLogo(el);
-      // TODO or move pod icon
-    }
-    else {
-      var top = (400 - scroll) + "px";
-      navbar.css("top", top);
-    }
-  })
-}
-
-function moveLogo(el) {
-  if (el.length && !el.children().length) {
-    var logo = $(".logo-wrapper");
-    if (!$(logo.children()[0]).hasClass("logo-final")) {
-      logo.children().each(function() {
-        $(this).addClass("logo-final");
-      })
-    }
-    el.html(logo);
-  }
-}
-
 $(document)
   .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
     $(".logo-wrapper").children().each(function() {
@@ -246,6 +248,7 @@ $(document)
         pushState();
         loadResults(url, drop);
         $("#browse-collapse").collapse("hide");
+        $("#multibar-options-collapse").collapse("hide");
         scrollToMultibar()
       }
     }, 250);
@@ -264,6 +267,7 @@ $(document)
         pushState();
         loadResults(url, drop);
         $("#browse-collapse").collapse("hide");
+        $("#multibar-options-collapse").collapse("hide");
         scrollToMultibar();
       }
     }, 250);
@@ -279,6 +283,7 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -294,6 +299,7 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar()
     }, 250);
   })
@@ -310,6 +316,7 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       loadEpisodes(itunesid);
       scrollToTop();
     }, 250);
@@ -324,6 +331,7 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       $("#episodes").empty();
       $("#search").empty();
       scrollToTop();
@@ -340,6 +348,7 @@ $(document)
       clearSearch();
       $("#episodes").empty();
       $("#browse-collapse").collapse("show");
+      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -351,6 +360,7 @@ $(document)
       $("#search").empty();
       $("#episodes").empty();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -365,6 +375,7 @@ $(document)
       clearSearch();
       $("#episodes").empty();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -377,6 +388,7 @@ $(document)
       var drop = $("#center-stage");
       pushState();
       $("#browse-collapse").collapse("hide");
+      $("#multibar-options-collapse").collapse("hide");
       clearSearch();
       loadResults(url, drop);
       $("#episodes").empty();
@@ -481,6 +493,7 @@ $(document)
     loadResults(url, drop);
     clearSearch();
     $("#browse-collapse").collapse("hide");
+    $("#multibar-options-collapse").collapse("hide");
     $("#episodes").empty();
     scrollToTop();
   })
@@ -551,13 +564,16 @@ $(document)
     }
     scrollToMultibar();
   })
+  .on("click", ".multibar-options-toggle", function(e) {
+    e.preventDefault();
+  })
   .on("click", ".results-close", function(e) {
     e.preventDefault();
     $(this).parents(".results").remove();
   })
-  .on("click", "#view-button", function(e) {
+  .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var collapses = $(".results-collapse");
+    var collapses = $(this).parents(".results").find($(".results-collapse"));
     collapses.each(function() {
       $(this).collapse("toggle");
     })
@@ -581,9 +597,19 @@ $(document)
   .on("show.bs.collapse", ".results-collapse", function (e) {
       $(".results-collapse.show").collapse("hide");
   })
-   .on("click", ".results-minimize", function(e) {
+   .on("click", ".view-button, .results-minimize", function(e) {
      $(this).parents(".results").find(".options-collapse.show").collapse("hide");
    })
   .on("click", ".btn-dope-tab.toggle", function(e) {
     $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
+  })
+  .on("click", ".lights-toggle", function() {
+    var el = $("body");
+    console.log("dfsfsd")
+    if (el.hasClass("darken")) {
+      el.removeClass("darken");
+    }
+    else {
+      el.addClass("darken");
+    }
   })

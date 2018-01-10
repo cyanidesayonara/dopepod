@@ -124,7 +124,7 @@ def password_reset(request):
         if ajax:
             if response.status_code == 200:
                 # TODO return "done.html"
-                return HttpResponse('')
+                return render(request, 'account/done.html', context)
             else:
                 return render(request, 'splash.html', context, status=400)
         else:
