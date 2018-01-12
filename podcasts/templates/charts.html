@@ -1,27 +1,27 @@
 <div class="row results-content">
 {% for podcast in results.podcasts %}
   <div class="col-12 col-md-6 charts-result">
-    <div class="charts-rank">
+    <a class="charts-rank show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
       {% if results.selected_genre %}
         {{ podcast.genre_rank }}
       {% else %}
         {{ podcast.global_rank }}
       {% endif %}
-    </div>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-        <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-      </a>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-        <h5 class="result-title">
-            {{ podcast.title }}
-        </h5>
-      </a>
-      <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
-        <h6 class="result-artist">
-          <span>by </span>
-          {{ podcast.artist }}
-        </h6>
-      </a>
+    </a>
+    <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+    </a>
+    <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
+      <h5 class="result-title">
+          {{ podcast.title }}
+      </h5>
+    </a>
+    <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.artist }}">
+      <h6 class="result-artist">
+        <span>by </span>
+        {{ podcast.artist }}
+      </h6>
+    </a>
   </div>
 {% endfor %}
 </div>

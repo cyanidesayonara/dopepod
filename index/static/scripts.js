@@ -485,7 +485,7 @@ $(document)
         var player = $("#player-drop");
         player.html(response);
         var img = player.find("img");
-        $(".player-image").append(img);
+        $(".player-image").html(img);
         $(".round-logo").addClass("d-none");
         updateTitle();
       });
@@ -495,15 +495,17 @@ $(document)
     e.preventDefault();
     $("#audio-el").preload="none";
     $("#player-drop").empty();
+    $(".player-image").html("");
+    $(".round-logo").removeClass("d-none");
     updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
     e.preventDefault();
-    if ($("#audio-el").hasClass("d-none")) {
-      $("#audio-el").removeClass("d-none");
+    if ($("#player-content").hasClass("d-none")) {
+      $("#player-content").removeClass("d-none");
     }
     else {
-      $("#audio-el").addClass("d-none");
+      $("#player-content").addClass("d-none");
     }
   })
   // LOGIN & SIGNUP

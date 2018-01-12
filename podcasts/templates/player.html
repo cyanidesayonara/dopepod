@@ -1,11 +1,11 @@
 {% if player.episode %}
-<div class="row" id="player-wrapper">
+<div class="row color-5-trans" id="player-wrapper">
   <div class="d-none" id="player-image">
     <a class="show-podinfo" data-itunesid="{{ player.episode.podcast.itunesid }}" href="{% url 'podinfo' itunesid=player.episode.podcast.itunesid %}">
       <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
     </a>
   </div>
-  <div class="col color-2-trans" id="player-content">
+  <div class="col" id="player-content">
     <a class="show-podinfo" data-itunesid="{{ player.episode.podcast.itunesid }}" href="{% url 'podinfo' itunesid=player.episode.podcast.itunesid %}">
       <span id="player-title">
         {{ player.episode.podcast.title }}

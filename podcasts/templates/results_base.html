@@ -1,6 +1,8 @@
 <div class="col results">
   <div class="row results-bar">
     <div class="col results-header">
+      <div class="dummy d-none d-lg-inline-block">
+      </div>
       <span>
         {{ results.header }}
       </span>
@@ -87,7 +89,7 @@
       </div>
     {% endif %}
     {% if results.selected_genre or results.selected_language %}
-      <div class="col options-group">
+      <div class="col selected-group">
         {% if results.selected_genre %}
           <a class="btn btn-dope selected-button active" href="{{ results.urls.genre_url }}">
             {{ results.selected_genre }}
