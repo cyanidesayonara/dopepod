@@ -1,17 +1,8 @@
-<div class="col-auto col-lg-4" id="multibar-l">
-  <a class="multibar-options-toggle d-none d-lg-inline-block lights-toggle"  href="#">
-    <div class="player-image">
-    </div>
-    <div class="round-logo color-3">
-      <span class="char1">d</span>
-      <span class="char2">o</span>
-      <span class="char3">p</span>
-      <span class="char4">e</span>
-      <span class="char5">p</span>
-      <span class="char6">o</span>
-    </div>
+<div class="col-auto col-lg-8" id="multibar-l">
+  <a class="nav-link-dope d-inline-block d-lg-none multibar-options-toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+    <i class="fas fa-bars icon"></i>
   </a>
-  <a class="multibar-options-toggle d-block d-lg-none" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+  <a class="multibar-options-toggle lights-toggle"  href="#">
     <div class="player-image">
     </div>
     <div class="round-logo color-3">
@@ -37,8 +28,6 @@
       Subscriptions
     </a>
   {% endif %}
-</div>
-<div class="col-lg-4 d-none d-lg-block" id="multibar-c">
 </div>
 <div class="col col-lg-4" id="multibar-r">
   {% if user.is_authenticated %}

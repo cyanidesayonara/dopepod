@@ -125,10 +125,12 @@ def search(request):
         podcasts = Podcast.search(genre, language, user, q=q)
         paginator = Paginator(podcasts, show)
 
-        if paginator.count == 1:
-            results_header = str(paginator.count) + ' result'
+        if not q:
+            results_header = str(paginator.count) + ' podcasts'
+        elif paginator.count == 1:
+            results_header = str(paginator.count) + ' result for "' + q + '"'
         else:
-            results_header = str(paginator.count) + ' results'
+            results_header = str(paginator.count) + ' results for "' + q + '"'
 
         try:
             podcasts = paginator.page(page)

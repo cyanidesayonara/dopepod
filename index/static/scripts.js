@@ -39,33 +39,15 @@ $(document)
     $("#multibar-options-collapse").collapse("hide");
   }
 
-  function moveLogo(el) {
-    if (el.length && !el.children().length) {
-      var logo = $(".logo-wrapper");
-      if (!$(logo.children()[0]).hasClass("logo-final")) {
-        logo.children().each(function() {
-          $(this).addClass("logo-final");
-        })
-      }
-      el.html(logo);
-    }
-  }
-
   function navbarUnFixer() {
     $(window).scroll(function () {
       var scroll = $(window).scrollTop();
       var navbar = $("#navbar");
       if (scroll > 443) {
         navbar.css("top", "-50px");
-        var el = $("#multibar-c");
-        moveLogo(el);
       }
       else if (scroll < 401) {
-        navbar.css("top", "0");
-        var el = $("#navbar-c");
-        moveLogo(el);
-        // TODO or move pod icon
-      }
+        navbar.css("top", "0");      }
       else {
         var top = (400 - scroll) + "px";
         navbar.css("top", top);
@@ -636,4 +618,7 @@ $(document)
     else {
       el.addClass("darken");
     }
+  })
+  .on("click", "#navbar .multibar-options-toggle", function(e) {
+    scrollToMultibar();
   })

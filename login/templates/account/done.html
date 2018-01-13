@@ -1,16 +1,12 @@
 <div class="row done">
   <div class="col-auto done-content">
-    {% if request.is_ajax %}
-      <p>
-        {{ message }}
-      </p>
-    {% else %}
-      <p>
-        {{ message }}
-      </p>
+    <p>
+      {{ message }}
+    </p>
+    {% if not request.is_ajax %}
+      <a href="/">
+        Back
+      </a>
     {% endif %}
-    <a href="/">
-      Back
-    </a>
   </div>
 </div>
