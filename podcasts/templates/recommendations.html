@@ -1,8 +1,8 @@
-  <div class="row">
+  <div class="row recommendations-content">
     {% for podcast in results.podcasts %}
       <div class="col-12 col-md-6">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <div class="charts-result">
+          <div class="recommendations-result">
             <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             <h5 class="result-title">
               {{ podcast.title }}

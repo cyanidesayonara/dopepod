@@ -2,12 +2,10 @@
   {% for subscription in results.podcasts %}
     <div class="row">
       {% with subscription.parent as podcast %}
-      <div class="col-auto">
+      <div class="col">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
           <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
         </a>
-      </div>
-      <div class="col">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/" title="{{ podcast.title }}">
           <h5 class="subscription-result-title">
               {{ podcast.title }}
@@ -25,8 +23,5 @@
         </p>
       </div>
     </div>
-    {% if not forloop.last %}
-      <hr class="h-line" />
-    {% endif %}
   {% endfor %}
 </div>

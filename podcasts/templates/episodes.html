@@ -1,22 +1,22 @@
 <div class="col results-content">
   <table class="table" id="episodes-table">
-  <thead>
-    <tr>
-      <th>
-        #
-      </th>
-      <th>
-        Title
-      </th>
-      <th>
-        Released
-      </th>
-      <th>
-        Length
-      </th>
-    </tr>
-  </thead>
-  <tbody>
+    <thead>
+      <tr>
+        <th>
+          #
+        </th>
+        <th>
+          Title
+        </th>
+        <th>
+          Released
+        </th>
+        <th>
+          Length
+        </th>
+      </tr>
+    </thead>
+    <tbody>
     {% for episode in results.episodes %}
       {% if request.is_ajax %}
         <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
@@ -71,5 +71,5 @@
       </tr>
     {% endfor %}
   </tbody>
-</table>
+  </table>
 </div>

@@ -70,10 +70,10 @@ def charts(request):
             context = Chart.get_charts(context, genre, ajax=True)
             return render(request, 'results_base.html', context)
 
-        recommendations = Podcast.objects.all()[50]
+        # recommendations = Podcast.objects.all()[50]
 
         context = {
-            'recommendations': recommendations,
+            # 'recommendations': recommendations,
             'alphabet': ALPHABET,
         }
         context = Chart.get_charts(context, genre)

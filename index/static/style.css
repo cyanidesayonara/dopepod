@@ -43,9 +43,6 @@ body {
   -moz-box-shadow: rgba(0,0,0,.8) 0 0px 8px;
   box-shadow: rgba(0,0,0,.8) 0 0px 8px;
 }
-.btn-dope.selected:hover {
-  color: rgba(0, 191,165, 1);
-}
 .toggle[aria-expanded="true"] {
   color: #fff;
   background: rgba(0, 191,165, 1);
@@ -116,16 +113,14 @@ body {
 #navbar .nav-link-dope {
   color: #fff;
 }
-#navbar .nav-link-dope:hover {
+.logo-wrapper.nav-link-dope, .logo-wrapper.nav-link-dope:hover  {
   text-decoration: none;
+  border: none;
 }
 #navbar-l {
   display: inline-flex;
 }
 #navbar-c {
-}
-#navbar-c .nav-link-dope {
-  border: none;
 }
 #navbar-r {
   display: inline-flex;
@@ -572,10 +567,8 @@ body {
   flex-wrap: wrap;
   justify-content: flex-end;
   padding: 10px 2px 6px 10px;
-}
-.selected-group {
-  text-align: center;
-  padding: 10px 2px 6px 10px;
+  border-top: 2px solid rgba(0, 191,165, 1);
+
 }
 .options-button, .options-button:focus, .options-button.focus {
   margin-right: 5px;
@@ -819,8 +812,7 @@ body {
 /* PODINFO */
 #showpod {
   height: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 20px 0 10px;
 }
 #showpod-c {
   overflow: hidden;
@@ -928,13 +920,14 @@ body {
   overflow: hidden;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-top: 2px solid rgba(0, 191,165, 1);
 }
 .results-bar {
   padding-top: 10px;
 }
 .results-header {
   min-width: 250px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .results-header .dummy {
   width: 100px;
@@ -961,9 +954,11 @@ body {
 .options-bar {
   overflow: hidden;
 }
-.results-content a, .results-content a:hover {
-  text-decoration: none;
+.results-content a {
   color: #000;
+}
+.results-content a:hover {
+  text-decoration: none;
 }
 .results-buttons {
   position: absolute;
@@ -972,18 +967,15 @@ body {
   right: 0;
   padding-top: 8px;
 }
-.selected {
-  margin-left: 10px;
-}
-.selected:hover {
-  color: rgba(45,43,43,1);
-}
 .view-button {
   min-width: 36px;
 }
 .results-minimize {
 }
 .results-close {
+}
+.recommendations-content {
+  margin-top: 15px;
 }
 .results-collapse {
   padding: 10px 0;
@@ -1014,8 +1006,8 @@ body {
   padding: 10px;
 }
 .charts-result {
-  margin-bottom: 5px;
-  height: 100%;
+  display: inline-block;
+  width: 100%;
   padding: 10px;
   border-radius: .25rem;
   transition: all .25s ease-in-out;
@@ -1029,7 +1021,6 @@ body {
 }
 .charts-result img {
   float: right;
-  margin: 0 10px 10px 10px;
   border-radius: .25rem;
   box-shadow: rgba(0,0,0,.3) 0 0 3px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
@@ -1037,7 +1028,7 @@ body {
 }
 .charts-rank {
   float: left;
-  margin-right: 5px;
+  margin-right: 10px;
   text-align: center;
   height: 30px;
   width: 30px;
@@ -1068,8 +1059,8 @@ body {
   line-height: 1.25;
 }
 .search-result-artist, .search-result-artist:hover {
-  font-size: 12px;
-  height: 36px;
+  font-size: 14px;
+  height: 40px;
   overflow: hidden;
   margin: 0;
 }
@@ -1211,7 +1202,7 @@ hr.h-line {
   position: absolute;
   top: 0;
   right: 0;
-  padding-top: 10px;
+  padding: 5px 0;
 }
 .player-button {
   margin-right: 10px;
