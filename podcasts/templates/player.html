@@ -10,7 +10,10 @@
   </div>
   <div class="col-12" id="player-bottom">
     <div id="player-episode">
-      {{ player.episode.title }} | {{ player.episode.date }}
+      {{ player.episode.title }}
+    </div>
+    <div id="player-date">
+      {{ player.episode.date }}
     </div>
     <audio id="audio-el" controls preload="metadata" autoplay>
       <source src="{{ player.episode.url }}"/>

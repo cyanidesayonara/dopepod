@@ -5,8 +5,7 @@ settings
 {% endblock %}
 
 {% block center-stage %}
-<div class="row">
-    <div class="col" id="settings">
+<div class="col" id="settings">
       <form id="settings-form" action="{% url 'settings' %}" method="POST">
         <h3>
           Settings
@@ -51,5 +50,4 @@ settings
         <button type="submit" id="settings-save"class="btn btn-dope active">Save</button>
       </form>
     </div>
-  </div>
 {% endblock %}

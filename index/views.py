@@ -267,9 +267,9 @@ def showpod(request, podid):
         user = request.user
         try:
             podcast = Podcast.objects.get(podid=podid)
-            podcast.set_subscribed(user)
             podcast.views += 1
             podcast.save()
+            podcast.set_subscribed(user)
 
             context = {
                 'podcast': podcast,

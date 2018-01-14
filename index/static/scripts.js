@@ -1,64 +1,79 @@
 // after page loads
 $(document)
   .ready(function() {
-    // refresh cookie
-    refreshCookie();
     xhr = null;
     timeout = 0;
+    refreshCookie();
     collapseCollapses();
     addIcons();
     navbarUnFixer();
+    scrollSpy();
   })
 
-  function addIcons() {
-    $("#search-button").html("<i class='fa fa-search icon'></i>");
-    var login_buttons = $("#login-buttons");
-    if (login_buttons.length) {
-      login_buttons.find("#login-tab")[0].href = "#tabs-login";
-      login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
-      $("#google-icon").html("<i class='fab fa-google icon'></i>");
-    }
-    // TODO same for minimize and close
-    var view_buttons = $(".view-button");
-    if (view_buttons.length) {
-      view_buttons.each(function() {
-        $(this).find(".view-icon-grid").html("<i class='fas fa-th'></i>");
-        $(this).find(".view-icon-list").html("<i class='fas fa-bars'></i>");
-      })
-    }
+function addIcons() {
+  $("#search-button").html("<i class='fa fa-search icon'></i>");
+  var login_buttons = $("#login-buttons");
+  if (login_buttons.length) {
+    login_buttons.find("#login-tab")[0].href = "#tabs-login";
+    login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
+    $("#google-icon").html("<i class='fab fa-google icon'></i>");
   }
-
-  function collapseCollapses() {
-    var el = $("#episodes-table");
-    if (el.length) {
-      var collapses = el.find(".more-collapse");
-      collapses.each(function() {
-        $(this).collapse("hide");
-      })
-    }
-    $("#multibar-options-collapse").collapse("hide");
-  }
-
-  function navbarUnFixer() {
-    $(window).scroll(function () {
-      var scroll = $(window).scrollTop();
-      var navbar = $("#navbar");
-      if (scroll > 499) {
-        navbar.css("top", "-50px");
-        var el = $("#multibar-c");
-        moveLogo(el);
-      }
-      else if (scroll < 457) {
-        navbar.css("top", "0");
-        var el = $("#navbar-c");
-        moveLogo(el);
-      }
-      else {
-        var top = (456 - scroll) + "px";
-        navbar.css("top", top);
-      }
+  var view_buttons = $(".view-button");
+  if (view_buttons.length) {
+    view_buttons.each(function() {
+      $(this).find(".view-icon-grid").html("<i class='fas fa-th'></i>");
+      $(this).find(".view-icon-list").html("<i class='fas fa-bars'></i>");
     })
   }
+  var minimize_buttons = $(".results-minimize");
+  if (minimize_buttons.length) {
+    minimize_buttons.each(function() {
+      $(this).html("<i class='fas fa-minus-circle icon'></i>");
+    })
+  }
+  var close_buttons = $(".results-close");
+  if (close_buttons.length) {
+    close_buttons.each(function() {
+      $(this).html("<i class='fas fa-times-circle icon'></i>");
+    })
+  }
+}
+
+function collapseCollapses() {
+  var el = $("#episodes-table");
+  if (el.length) {
+    var collapses = el.find(".more-collapse");
+    collapses.each(function() {
+      $(this).collapse("hide");
+    })
+  }
+  $("#multibar-options-collapse").collapse("hide");
+}
+
+function scrollSpy() {
+  $(window).scroll(function () {
+    navbarUnFixer();
+  })
+}
+
+function navbarUnFixer() {
+  var scroll = $(window).scrollTop();
+  var navbar = $("#navbar");
+  if (scroll > 499) {
+    navbar.css("top", "-50px");
+    var el = $("#multibar-c");
+    moveLogo(el);
+  }
+  else if (scroll < 457) {
+    navbar.css("top", "0");
+    var el = $("#navbar-c");
+    moveLogo(el);
+  }
+  else {
+    var top = (456 - scroll) + "px";
+    navbar.css("top", top);
+  }
+}
 
 function moveLogo(el) {
   if (el.length && !el.children().length) {
@@ -69,7 +84,6 @@ function moveLogo(el) {
     el.html(logo);
   }
 }
-
 
 // HISTORY API
 $(window).on("popstate", function(event) {
@@ -113,7 +127,7 @@ function updateTitle() {
     var episode = el.find("#player-episode")[0].innerText;
     title = "Now playing: " + title + " - " + episode + " | dopepod";
   }
-  else if ($("#showpod").length) {
+  else if ($("#showpod-c").length) {
       title = "Listen to episodes of " + $("#showpod-title")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
@@ -190,7 +204,7 @@ function loadEpisodes(podid) {
     .fail(function(xhr, ajaxOptions, thrownError){
     })
     .done(function(response) {
-      if ($("#showpod").length) {
+      if ($("#showpod-c").length) {
         $("#episodes").html(response);
         var url = $("#main-wrapper")[0].baseURI;
         replaceState(url);
@@ -224,9 +238,7 @@ function scrollToMultibar() {
     scrollTop: 500
   }, 250);
 }
-function scrollText() {
-  var box = $("#player-top");
-  var text = $("#player-title");
+function scrollText(box, text) {
   var boxWidth = box.width();
   var textWidth = text.width();
   if (textWidth > boxWidth) {
@@ -234,17 +246,8 @@ function scrollText() {
     $(box)
       .animate({scrollLeft: (textWidth - boxWidth)}, animSpeed)
       .animate({scrollLeft: 0}, animSpeed, function() {
-        console.log("jekjrkj")
-        scrollText();
+        scrollText(box, text);
       })
-      // .mouseenter(function() {
-      //   $(this)
-      //     .stop()
-      //     .animate({scrollLeft: 0}, 100)
-      //     .mouseleave(function() {
-      //       scrollText();
-      //     })
-      // })
   }
 }
 
@@ -321,7 +324,6 @@ $(document)
       $("#browse-collapse").collapse("hide");
       $("#multibar-options-collapse").collapse("hide");
       if (drop[0].id != "charts") {
-        console.log(drop[0].id)
         scrollToMultibar()
       }
     }, 250);
@@ -480,6 +482,7 @@ $(document)
         var podid = form.find("input[name=podid]").val();
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
+        console.log(url, drop)
         loadResults(url, drop);
         loadEpisodes(podid);
         replaceState(url);
@@ -503,10 +506,12 @@ $(document)
         var player = $("#player-drop");
         player.html(response);
         var img = player.find("#player-image");
-        $("#player-image-drop").html(img);
+        $("#player-image-drop").html(img).removeClass("d-none");
         $("#player-logo").addClass("d-none");
         updateTitle();
-        scrollText();
+        var box = $("#player-top");
+        var text = $("#player-title");
+        scrollText(box, text);
       });
   })
   // close player
@@ -514,7 +519,7 @@ $(document)
     e.preventDefault();
     $("#audio-el").preload="none";
     $("#player-drop").empty();
-    $("#player-image-drop").html("");
+    $("#player-image-drop").html("").addClass("d-none");
     $("#player-logo").removeClass("d-none");
     updateTitle();
   })
@@ -601,13 +606,10 @@ $(document)
       }
     }
     else {
-      var podid = $("#showpod").data("podid");
+      var podid = $("#showpod-c").data("podid");
       loadEpisodes(podid);
     }
     scrollToMultibar();
-  })
-  .on("click", ".multibar-options-toggle", function(e) {
-    e.preventDefault();
   })
   .on("click", ".results-close", function(e) {
     e.preventDefault();
@@ -642,10 +644,11 @@ $(document)
    .on("click", ".view-button, .results-minimize", function(e) {
      $(this).parents(".results").find(".options-collapse.show").collapse("hide");
    })
-  .on("click", ".results-header .btn-dope.toggle", function(e) {
+  .on("click", ".results-header .btn-dope.toggle, .view-button", function(e) {
     $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
   })
-  .on("click", ".lights-toggle", function() {
+  .on("click", ".lights-toggle", function(e) {
+    e.preventDefault();
     var el = $("body");
     if (el.hasClass("darken")) {
       el.removeClass("darken");

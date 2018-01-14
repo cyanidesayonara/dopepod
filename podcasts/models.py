@@ -186,6 +186,7 @@ class Podcast(models.Model):
         """
 
         subscriptions_podids = Subscription.get_subscriptions_podids(user)
+        print(self.is_subscribed)
         if subscriptions_podids:
             if self.podid in subscriptions_podids:
                 self.is_subscribed = True

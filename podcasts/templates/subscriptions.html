@@ -1,27 +1,22 @@
 <div class="col results-content">
-  {% for subscription in results.podcasts %}
-    <div class="row">
+  <div class="row">
+    {% for subscription in results.podcasts %}
       {% with subscription.parent as podcast %}
-      <div class="col">
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-        </a>
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/" title="{{ podcast.title }}">
-          <h5 class="subscription-result-title">
-              {{ podcast.title }}
-          </h5>
-        </a>
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/" title="{{ podcast.artist }}">
-          <h6 class="subscription-result-artist">
-          <span>by </span>
-            {{ podcast.artist }}
-          </h6>
-        </a>
-        {% endwith %}
-        <p>
-          {{ subscription.last_updated }}
-        </p>
-      </div>
-    </div>
-  {% endfor %}
+        <div class="col-12 col-md-6 subscriptions-box">
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
+            <div class="subscriptions-result">
+              <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+              <h1 class="result-title">
+                {{ podcast.title }}
+              </h1>
+              <p class="last-updated">
+                <span>Last updated </span>
+                {{ subscription.last_updated }}
+              </p>
+            </div>
+          </a>
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
 </div>
