@@ -22,21 +22,21 @@ class WillyTheSpider(scrapy.Spider):
 
         for genre in response.xpath('//div[@id="genre-nav"]/div[@class="grid3-column"]/ul/li'):
             supergenre = genre.xpath('a/text()').extract_first()
-            itunesid = genre.xpath('a/@href').re_first(r'/id(\d+)')
+            podid = genre.xpath('a/@href').re_first(r'/id(\d+)')
             yield GenreItem (
                 name=supergenre,
-                itunesid=itunesid,
+                genreid=genreid,
                 n_podcasts=0,
                 supergenre=None,
             )
             for subgenre in genre.xpath('ul/li'):
                 name = subgenre.xpath('a/text()').extract_first()
-                itunesid = subgenre.xpath('a/@href').re_first(r'/id(\d+)')
+                genreid = subgenre.xpath('a/@href').re_first(r'/id(\d+)')
                 yield GenreItem (
                     name=name,
                     n_podcasts=0,
                     supergenre=supergenre,
-                    itunesid=itunesid,
+                    genreid=genreid,
                 )
 
         for link in response.xpath('//div[@id="genre-nav"]/div/ul/li/a'):
@@ -87,13 +87,13 @@ class WillyTheSpider(scrapy.Spider):
 
     def parse_podcasts(self, response):
         """
-        gets itunesid from podcast link
-        lookups podcast by itunesid
+        gets podid from podcast link
+        lookups podcast by podid
         """
 
         for link in response.xpath('//div[@id="selectedcontent"]/div/ul/li/a[contains(@href, "id")]'):
-            itunesid = link.xpath('@href').re_first(r'/id(\w+)')
-            url = 'https://itunes.apple.com/lookup?id=' + itunesid
+            podid = link.xpath('@href').re_first(r'/id(\w+)')
+            url = 'https://itunes.apple.com/lookup?id=' + podid
             yield scrapy.Request(url, meta = {
                       'dont_redirect': True,
                   }, callback=self.parse_lookup)
@@ -134,14 +134,14 @@ class WillyTheSpider(scrapy.Spider):
 
         try:
             data = response.meta['data']
-            itunesid = data['collectionId']
+            podid = data['collectionId']
             feedUrl = data['feedUrl']
             title = data['collectionName']
             artist = data['artistName']
             artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')[7:]
             genre = data['primaryGenreName']
             explicit = True if data['collectionExplicitness'] == 'explicit' else False
-            reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(itunesid) + '/xml'
+            reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/xml'
 
             # useragent headers for requests
             headers = {
@@ -154,7 +154,7 @@ class WillyTheSpider(scrapy.Spider):
                 response.raise_for_status()
 
                 return PodcastItem (
-                    itunesid=itunesid,
+                    podid=podid,
                     feedUrl=feedUrl,
                     title=title,
                     artist=artist,

@@ -1,0 +1,200 @@
+{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
+
+{% block title %}
+Listen to episodes of {{ podcast.title }} on dopepod
+{% endblock %}
+
+{% block center-stage %}
+<div class="row color-5-trans" id="showpod" data-podid="{{ podcast.podid }}">
+  <div class="col-4" id="showpod-l">
+    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}330x330bb.jpg&w=330&h=330&t=absolute" />
+    <ul class="showpod-side-list d-block d-lg-none">
+      {% if podcast.global_rank %}
+        <li>
+          <span class="global_rank">
+            #{{ podcast.global_rank }} in
+            podcasts
+          </span>
+        </li>
+      {% endif %}
+      {% if podcast.genre_rank %}
+        <li>
+          <span class="genre_rank">
+            #{{ podcast.genre_rank }} in
+              {% if podcast.genre.supergenre %}
+              <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                {{ podcast.genre.supergenre }}
+              </a>
+              {% else %}
+              <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                {{ podcast.genre }}
+              {% endif %}
+            </a>
+          </span>
+        </li>
+      {% endif %}
+      <li>
+        <span class="n_subscribers">
+          {{ podcast.n_subscribers }}
+        </span>
+        <span class="subscriber">
+          subscriber{{ podcast.n_subscribers|pluralize }}
+        </span>
+      </li>
+      <li>
+        <span>
+          Language:
+        </span>
+        <span class="showpod-language">
+          {{ podcast.language }}
+        </span>
+      </li>
+      <li>
+        <span>
+          Content:
+        </span>
+        <span class="showpod-explicit">
+          {% if podcast.explicit %}
+          explicit
+          {% else %}
+          clean
+          {% endif %}
+        </span>
+      </li>
+      <li>
+        <em>
+          <span class="showpod-copyright">
+            {{ podcast.copyrighttext }}
+          </span>
+        </em>
+      </li>
+    </ul>
+  </div>
+  <div class="col-8 col-lg-6" id="showpod-c">
+    <h5 id="showpod-title">
+      {{ podcast.title }}
+    </h5>
+    <h6 id="showpod-artist">
+      <span>
+        By
+      </span>
+      {{ podcast.artist }}
+    </h6>
+    <p id="showpod-description">
+      {{ podcast.description }}
+    </p>
+  </div>
+  <div class="col-lg-2" id="showpod-r">
+    <ul class="showpod-side-list d-none d-lg-block">
+      {% if podcast.global_rank %}
+        <li>
+          <span class="global_rank">
+            #{{ podcast.global_rank }} in
+            podcasts
+          </span>
+        </li>
+      {% endif %}
+      {% if podcast.genre_rank %}
+        <li>
+          <span class="genre_rank">
+            #{{ podcast.genre_rank }} in
+              {% if podcast.genre.supergenre %}
+              <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                {{ podcast.genre.supergenre }}
+              </a>
+              {% else %}
+              <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                {{ podcast.genre }}
+              {% endif %}
+            </a>
+          </span>
+        </li>
+      {% endif %}
+      <li>
+        <span class="n_subscribers">
+          {{ podcast.n_subscribers }}
+        </span>
+        <span class="subscriber">
+          subscriber{{ podcast.n_subscribers|pluralize }}
+        </span>
+      </li>
+      {% if not podcast.genre_rank and not podcast.global_rank %}
+        <li>
+          <span class="genre_rank">
+            Genre:
+            {% if podcast.genre.supergenre %}
+              <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                {{ podcast.genre.supergenre }}
+              </a>
+            {% else %}
+              <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                {{ podcast.genre }}
+              </a>
+            {% endif %}
+          </span>
+        </li>
+      {% endif %}
+      <li>
+        <span>
+          Content:
+        </span>
+        <span class="showpod-explicit">
+          {% if podcast.explicit %}
+          explicit
+          {% else %}
+          clean
+          {% endif %}
+        </span>
+      </li>
+      <li>
+        <a class="showpod-podcastUrl" href="{{ podcast.podcastUrl }}">
+        <span>
+          Podcast website
+        </span>
+        </a>
+      </li>
+      <li>
+        <a class="showpod-feedUrl" href="{{ podcast.feedUrl }}">
+          <span >
+            Podcast RSS feed
+          </span>
+          </a>
+        </li>
+        <li>
+          <em>
+            <span id="showpod-copyright">
+              {{ podcast.copyrighttext }}
+            </span>
+          </em>
+        </li>
+      </li>
+    </ul>
+  </div>
+  <div class="col-auto" id="showpod-options">
+          {% if user.is_authenticated %}
+          <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="podid" value="{{ podcast.podid }}">
+          {% if podcast.is_subscribed %}
+          <button type="submit" class="btn btn-dope btn-dope-showpod sub-button">
+            Unsubscribe
+            {% else %}
+            <button type="submit" class="btn btn-dope btn-dope-showpod active sub-button">
+              Subscribe
+              {% endif %}
+            </button>
+          </form>
+          {% endif %}
+          <a class="btn btn-dope active" id="show-episodes" href="#">
+            <span>
+              Episodes
+            </span>
+          </a>
+          <button class="btn btn-dope btn-dope-showpod btn-dope-disabled">
+            <span>
+              Reviews
+            </span>
+          </button>
+        </div>
+</div>
+{% endblock %}

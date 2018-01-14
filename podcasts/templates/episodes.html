@@ -1,4 +1,5 @@
-<table class="table" id="episodes-table">
+<div class="col results-content">
+  <table class="table" id="episodes-table">
   <thead>
     <tr>
       <th>
@@ -55,7 +56,7 @@
                   <input type="hidden" name="type" value="{{ episode.type }}">
                   <input type="hidden" name="title" value="{{ episode.title }}">
                   <input type="hidden" name="date" value="{{ episode.pubDate }}">
-                  <input type="hidden" name="itunesid" value="{{ podcast.itunesid }}">
+                  <input type="hidden" name="podid" value="{{ podcast.podid }}">
                   <button class="btn btn-dope active" type="submit">
                     Play
                   </button>
@@ -71,3 +72,4 @@
     {% endfor %}
   </tbody>
 </table>
+</div>

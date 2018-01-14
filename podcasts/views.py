@@ -10,15 +10,15 @@ logger = logging.getLogger(__name__)
 def episodes(request):
     """
     returns html for episodes
-    POST ajax request sent by podinfo
-    required argument: itunesid
+    POST ajax request sent by showpod
+    required argument: podid
     """
 
     # ajax using POST
     if request.method == 'POST':
         try:
-            itunesid = request.POST['itunesid']
-            podcast = Podcast.objects.get(itunesid=int(itunesid))
+            podid = request.POST['podid']
+            podcast = Podcast.objects.get(podid=int(podid))
         except (KeyError, Podcast.DoesNotExist) as e:
             raise Http404()
 
@@ -29,6 +29,9 @@ def episodes(request):
         context = Episode.get_episodes(context, podcast, ajax=True)
 
         return render(request, 'results_base.html', context)
+
+def recommended(request):
+    pass
 
 def play(request):
     """
@@ -45,8 +48,8 @@ def play(request):
             episode['kind'] = request.POST['type']
             episode['title'] = request.POST['title']
             episode['date'] = request.POST['date']
-            episode['itunesid'] = request.POST['itunesid']
-            episode['podcast'] = Podcast.objects.get(itunesid=episode['itunesid'])
+            episode['podid'] = request.POST['podid']
+            episode['podcast'] = Podcast.objects.get(podid=episode['podid'])
 
             player = {
                 'episode': episode,
@@ -74,8 +77,8 @@ def subscribe(request):
         user = request.user
         if user.is_authenticated:
             try:
-                itunesid = request.POST['itunesid']
-                podcast = Podcast.objects.get(itunesid=int(itunesid))
+                podid = request.POST['podid']
+                podcast = Podcast.objects.get(podid=int(podid))
             except (KeyError, Podcast.DoesNotExist) as e:
                 raise Http404()
 
@@ -87,10 +90,10 @@ def subscribe(request):
             }
 
             if request.is_ajax():
-                return render(request, 'podinfo.html', context)
-            return redirect('/podinfo/' + itunesid + '/')
+                return render(request, 'showpod.html', context)
+            return redirect('/showpod/' + podid + '/')
 
         else:
             if request.is_ajax():
                 return render(request, 'splash.html', {})
-            return redirect('/?next=/podinfo/' + itunesid + '/')
+            return redirect('/?next=/showpod/' + podid + '/')

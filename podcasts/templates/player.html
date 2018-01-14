@@ -1,28 +1,26 @@
 {% if player.episode %}
-<div class="row color-5-trans" id="player-wrapper">
-  <div class="d-none" id="player-image">
-    <a class="show-podinfo" data-itunesid="{{ player.episode.podcast.itunesid }}" href="{% url 'podinfo' itunesid=player.episode.podcast.itunesid %}">
-      <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-    </a>
+<div class="row color-5" id="player-wrapper">
+  <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+    <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+  </a>
+  <div class="col" id="player-top">
+    <div id="player-title">
+      {{ player.episode.podcast.title }}
+    </div>
   </div>
-  <div class="col" id="player-content">
-    <a class="show-podinfo" data-itunesid="{{ player.episode.podcast.itunesid }}" href="{% url 'podinfo' itunesid=player.episode.podcast.itunesid %}">
-      <span id="player-title">
-        {{ player.episode.podcast.title }}
-      </span>
-    </a>
-    <span id="player-episode">
+  <div class="col-12" id="player-bottom">
+    <div id="player-episode">
       {{ player.episode.title }} | {{ player.episode.date }}
-    </span>
+    </div>
     <audio id="audio-el" controls preload="metadata" autoplay>
       <source src="{{ player.episode.url }}"/>
     </audio>
   </div>
   <div id="player-buttons">
-    <a id="player-minimize" href="#" aria-label="Minimize">
+    <a class="player-button" id="player-minimize" href="#" aria-label="Minimize">
       <i class="fas fa-minus-circle icon"></i>
     </a>
-    <a id="player-close" href="#" aria-label="Close">
+    <a class="player-button" id="player-close" href="#" aria-label="Close">
       <i class="fas fa-times-circle icon"></i>
     </a>
   </div>

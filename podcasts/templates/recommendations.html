@@ -1,27 +1,18 @@
-<div class="col results-content">
   <div class="row">
     {% for podcast in results.podcasts %}
-      <div class="col-12 col-md-6 charts-box">
+      <div class="col-12 col-md-6">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
           <div class="charts-result">
-            <span class="charts-rank">
-              {% if results.selected_genre %}
-              {{ podcast.genre_rank }}
-              {% else %}
-              {{ podcast.global_rank }}
-              {% endif %}
-            </span>
             <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-            <h1 class="result-title">
+            <h5 class="result-title">
               {{ podcast.title }}
-            </h1>
-            <p class="result-artist">
+            </h5>
+            <h6 class="result-artist">
               <span>by </span>
               {{ podcast.artist }}
-            </p>
+            </h6>
           </div>
         </a>
       </div>
     {% endfor %}
   </div>
-</div>

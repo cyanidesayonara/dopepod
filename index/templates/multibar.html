@@ -1,11 +1,11 @@
-<div class="col-auto col-lg-8" id="multibar-l">
+<div class="col-auto col-lg-5" id="multibar-l">
   <a class="nav-link-dope d-inline-block d-lg-none multibar-options-toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
     <i class="fas fa-bars icon"></i>
   </a>
+  <div class="player-badge" id="player-image-drop">
+  </div>
   <a class="multibar-options-toggle lights-toggle"  href="#">
-    <div class="player-image">
-    </div>
-    <div class="round-logo color-3">
+    <div class="player-badge color-3" id="player-logo">
       <span class="char1">d</span>
       <span class="char2">o</span>
       <span class="char3">p</span>
@@ -29,7 +29,10 @@
     </a>
   {% endif %}
 </div>
-<div class="col col-lg-4" id="multibar-r">
+<div class="col col-lg-2 d-none d-lg-block" id="multibar-c">
+
+</div>
+<div class="col col-lg-5" id="multibar-r">
   {% if user.is_authenticated %}
     <a class="nav-link-dope settings-link d-none d-lg-inline-block" href="{% url 'settings' %}">
       Settings

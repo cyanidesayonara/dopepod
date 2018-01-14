@@ -1,13 +1,13 @@
 {% load static %}
-<div class="col-auto col-md-4" id="navbar-l">
+<div class="col-auto col-md-5" id="navbar-l">
   <a class="nav-link-dope d-inline-block d-lg-none multibar-options-toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
     <i class="fas fa-bars icon"></i>
   </a>
 </div>
-<div class="col-auto col-md-4" id="navbar-c">
+<div class="col-auto col-md-2" id="navbar-c">
   {% include 'logo.html' %}
 </div>
-<div class="col-auto col-md-4" id="navbar-r">
+<div class="col-auto col-md-5" id="navbar-r">
   {% if user.is_authenticated %}
     <form class="logout-form" method="POST" action="{% url 'logout' %}">
       {% csrf_token %}

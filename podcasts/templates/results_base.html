@@ -66,12 +66,12 @@
           </a>
         {% endif %}
       {% endif %}
-      <span class="header">
+      <h1 class="header">
         {{ results.header }}
-      </span>
+      </h1>
     </div>
   </div>
-  <div class="row options-select selected-buttons">
+  <div class="row options-bar">
     {% if results.genres %}
       <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
         <div class="options-group genre-buttons">
@@ -110,26 +110,29 @@
       {% endif %}
     </div>
   {% if results.podcasts or results.episodes %}
-    <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
-      <div class="col">
-        {% if results.podcasts.has_other_pages %}
-          {% include 'pagination.html' %}
-        {% endif %}
+  <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
+      {% if results.podcasts.has_other_pages %}
+        {% include 'pagination.html' %}
+      {% endif %}
 
-        {% if results.view == 'grid' or results.view == 'list' %}
-          {% include 'search.html' %}
-        {% elif results.view == 'charts' %}
-          {% include 'charts.html' %}
-        {% elif results.view == 'episodes' %}
-          {% include 'episodes.html' %}
-        {% elif results.view == 'subscriptions'%}
-          {% include 'subscriptions.html' %}
-        {% endif %}
+      {% if results.view == 'grid' or results.view == 'list' %}
+        {% include 'search.html' %}
+      {% elif results.view == 'charts' %}
+        {% include 'charts.html' %}
+      {% elif results.view == 'episodes' %}
+        {% include 'episodes.html' %}
+      {% elif results.view == 'subscriptions'%}
+        {% include 'subscriptions.html' %}
+      {% endif %}
 
-        {% if results.podcasts.has_other_pages %}
-          {% include 'pagination.html' %}
-        {% endif %}
-      </div>
+      {% if results.podcasts.has_other_pages %}
+        {% include 'pagination.html' %}
+      {% endif %}
     </div>
   {% endif %}
 </div>
+{% if recommendations %}
+  <div class="col col-lg-4">
+    {% include 'recommendations.html' %}
+  </div>
+{% endif %}

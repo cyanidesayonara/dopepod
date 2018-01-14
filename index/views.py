@@ -7,7 +7,7 @@ from django.views.decorators.vary import vary_on_headers
 import urllib.parse
 import json
 
-ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
+ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0']
 
 def navbar(request):
     """
@@ -70,7 +70,10 @@ def charts(request):
             context = Chart.get_charts(context, genre, ajax=True)
             return render(request, 'results_base.html', context)
 
+        recommendations = Podcast.objects.all()[50]
+
         context = {
+            'recommendations': recommendations,
             'alphabet': ALPHABET,
         }
         context = Chart.get_charts(context, genre)
@@ -105,6 +108,8 @@ def search(request):
         show = 100
 
         if q:
+            if q == '0':
+                q = '#'
             q.strip()
             if len(q) > 30:
                 q = None
@@ -250,18 +255,18 @@ def subscriptions(request):
             return render(request, 'splash.html', context)
 
 @vary_on_headers('Accept')
-def podinfo(request, itunesid):
+def showpod(request, podid):
     """
-    returns a podinfo page
+    returns a showpod page
     ajax: episodes loaded separately via ajax
     non-ajax: episodes included + chart & search bar
-    required argument: itunesid
+    required argument: podid
     """
 
     if request.method == 'GET':
         user = request.user
         try:
-            podcast = Podcast.objects.get(itunesid=itunesid)
+            podcast = Podcast.objects.get(podid=podid)
             podcast.set_subscribed(user)
             podcast.views += 1
             podcast.save()
@@ -271,7 +276,7 @@ def podinfo(request, itunesid):
             }
 
             if request.is_ajax():
-                return render(request, 'podinfo.html', context)
+                return render(request, 'showpod.html', context)
 
             context = Episode.get_episodes(context, podcast)
 
@@ -280,7 +285,7 @@ def podinfo(request, itunesid):
             context.update({
                 'alphabet': ALPHABET,
             })
-            return render(request, 'podinfo.html', context)
+            return render(request, 'showpod.html', context)
         except Podcast.DoesNotExist:
             raise Http404
 

@@ -1,67 +1,69 @@
-{% if results.view == 'list' %}
-<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }}">
-{% else %}
-<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }} show">
-{% endif %}
-  {% for podcast in results.podcasts %}
-  <a class="col-lg-2 col-md-3 col-4 result-box show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}">
-    <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
-    <h6 class="search-result-title">
-      {{ podcast.title }}
-    </h6>
-    <p class="search-result-artist">
-      by {{ podcast.artist }}
-    </p>
-  </a>
-  {% endfor %}
-</div>
-{% if results.view == 'list' %}
-<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }} show">
-{% else %}
-<div class="row collapse results-content results-collapse view-collapse-{{ results.drop }}">
-{% endif %}
-  <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
-    <ul class="browse-results-list">
-      {% for podcast in results.podcasts1 %}
-        <li>
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-            {{ podcast.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+<div class="col results-content">
+  {% if results.view == 'list' %}
+  <div class="row collapse results-collapse view-collapse-{{ results.drop }}">
+  {% else %}
+  <div class="row collapse results-collapse view-collapse-{{ results.drop }} show">
+  {% endif %}
+    {% for podcast in results.podcasts %}
+    <a class="col-lg-2 col-md-3 col-4 result-box showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
+      <h1 class="search-result-title">
+        {{ podcast.title }}
+      </h1>
+      <p class="search-result-artist">
+        by {{ podcast.artist }}
+      </p>
+    </a>
+    {% endfor %}
   </div>
-  <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
-    <ul class="browse-results-list">
-      {% for podcast in results.podcasts2 %}
-        <li>
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-            {{ podcast.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
-    <ul class="browse-results-list">
-      {% for podcast in results.podcasts3 %}
-        <li>
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-            {{ podcast.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
-    <ul class="browse-results-list">
-      {% for podcast in results.podcasts4 %}
-        <li>
-          <a class="show-podinfo" data-itunesid="{{ podcast.itunesid }}" href="{% url 'podinfo' itunesid=podcast.itunesid %}" title="{{ podcast.title }}">
-            {{ podcast.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+  {% if results.view == 'list' %}
+  <div class="row collapse results-collapse view-collapse-{{ results.drop }} show">
+  {% else %}
+  <div class="row collapse results-collapse view-collapse-{{ results.drop }}">
+  {% endif %}
+    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+      <ul class="browse-results-list">
+        {% for podcast in results.podcasts1 %}
+          <li>
+            <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+      <ul class="browse-results-list">
+        {% for podcast in results.podcasts2 %}
+          <li>
+            <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+      <ul class="browse-results-list">
+        {% for podcast in results.podcasts3 %}
+          <li>
+            <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+      <ul class="browse-results-list">
+        {% for podcast in results.podcasts4 %}
+          <li>
+            <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </div>

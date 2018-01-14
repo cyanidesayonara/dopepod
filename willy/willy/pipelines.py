@@ -13,16 +13,16 @@ class WillyPipeline(object):
 
     def process_item(self, item, spider):
         """
-        creates or updates podcast (if itunesid not on ids_seen)
+        creates or updates podcast (if podid not on ids_seen)
         or
         creates or updates genre
         """
 
         if type(item) is PodcastItem:
-            itunesid = item['itunesid']
-            if itunesid not in self.ids_seen:
+            podid = item['podid']
+            if podid not in self.ids_seen:
                 Podcast.create_or_update_podcast(item)
-                self.ids_seen.add(itunesid)
+                self.ids_seen.add(podid)
         elif type(item) is GenreItem:
             Genre.create_or_update_genre(item)
 
@@ -30,6 +30,6 @@ class WillyPipeline(object):
         """
         counts n_podcasts for all genres and languages
         """
-        
+
         Filterable.count_n_podcasts()
         Podcast.set_discriminated()
