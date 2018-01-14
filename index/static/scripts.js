@@ -658,5 +658,7 @@ $(document)
     }
   })
   .on("click", "#navbar .multibar-options-toggle", function(e) {
+    e.preventDefault();
+    console.log("asdda")
     scrollToMultibar();
   })
