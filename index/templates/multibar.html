@@ -1,18 +1,15 @@
-<div class="col-auto col-xl-5" id="multibar-l">
-  <div class="player-badge d-none" id="player-image-drop">
+<div class="col-auto col-lg-5" id="multibar-l">
+  <div class="player-badge d-none player-image-drop">
   </div>
-  <div class="player-badge color-3" id="player-logo">
-    <a class="multibar-options-toggle lights-toggle"  href="#">
+  <a class="multibar-options-toggle toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
+    <div class="player-badge noselect color-3 player-logo">
       <span class="char char-1">d</span>
       <span class="char char-2">o</span>
       <span class="char char-3">p</span>
       <span class="char char-4">e</span>
       <span class="char char-5">p</span>
       <span class="char char-6">o</span>
-    </a>
-  </div>
-  <a class="nav-link-dope d-inline-block d-xl-none multibar-options-toggle toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
-    <i class="fas fa-bars icon"></i>
+    </div>
   </a>
   <a class="nav-link-dope charts-link d-none d-xl-inline-block" href="{% url 'charts' %}">
     Charts
@@ -29,9 +26,9 @@
   </a>
   {% endif %}
 </div>
-<div class="col col-xl-2 d-none d-xl-block" id="multibar-c">
+<div class="col-lg-2 d-none d-lg-block" id="multibar-c">
 </div>
-<div class="col col-xl-5" id="multibar-r">
+<div class="col col-lg-5" id="multibar-r">
   {% if user.is_authenticated %}
     <a class="nav-link-dope settings-link d-none d-xl-inline-block" href="{% url 'settings' %}">
       Settings

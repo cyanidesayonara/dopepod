@@ -27,7 +27,6 @@ class Podcast(models.Model):
     copyrighttext = models.CharField(max_length=500)
     description = models.TextField(max_length=1000, blank=True)
     n_subscribers = models.IntegerField(default=0)
-    is_subscribed = models.BooleanField(default=False)
     reviewsUrl = models.CharField(max_length=500)
     artworkUrl = models.CharField(max_length=500)
     podcastUrl = models.CharField(max_length=500)
@@ -186,7 +185,6 @@ class Podcast(models.Model):
         """
 
         subscriptions_podids = Subscription.get_subscriptions_podids(user)
-        print(self.is_subscribed)
         if subscriptions_podids:
             if self.podid in subscriptions_podids:
                 self.is_subscribed = True

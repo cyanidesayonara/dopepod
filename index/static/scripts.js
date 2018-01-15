@@ -491,7 +491,6 @@ $(document)
         var podid = form.find("input[name=podid]").val();
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
-        console.log(url, drop)
         loadResults(url, drop);
         loadEpisodes(podid);
         replaceState(url);
@@ -515,8 +514,8 @@ $(document)
         var player = $("#player-drop");
         player.html(response);
         var img = player.find("#player-image");
-        $("#player-image-drop").html(img).removeClass("d-none");
-        $("#player-logo").addClass("d-none");
+        $(".player-image-drop").html(img).removeClass("d-none");
+        $(".player-logo").addClass("d-none");
         updateTitle();
         var box = $("#player-top");
         var text = $("#player-title");
@@ -528,8 +527,8 @@ $(document)
     e.preventDefault();
     $("#audio-el").preload="none";
     $("#player-drop").empty();
-    $("#player-image-drop").html("").addClass("d-none");
-    $("#player-logo").removeClass("d-none");
+    $(".player-image-drop").empty().addClass("d-none");
+    $(".player-logo").removeClass("d-none");
     updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
@@ -666,8 +665,7 @@ $(document)
       el.addClass("darken");
     }
   })
-  .on("click", "#navbar .multibar-options-toggle", function(e) {
-    e.preventDefault();
-    console.log("asdda")
+  .on("click", ".navbar-multibar-options-toggle", function(e) {
+    $("#multibar-options-collapse").collapse("show");
     scrollToMultibar();
   })

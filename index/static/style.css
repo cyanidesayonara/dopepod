@@ -11,6 +11,16 @@ body {
   background: rgba(100,150,150,1);
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 /* BUTTONS */
 .btn-dope, .btn-dope.focus, .btn-dope:focus {
   border: 2px solid rgba(0, 191, 165, 1);
@@ -112,9 +122,8 @@ body {
 #navbar .nav-link-dope {
   color: #fff;
 }
-.logo-wrapper.nav-link-dope, .logo-wrapper.nav-link-dope:hover  {
-  text-decoration: none;
-  border: none;
+#navbar .nav-link-dope:hover {
+  color: #2e2e2e;
 }
 #navbar-l {
   display: inline-flex;
@@ -606,16 +615,16 @@ body {
 #multibar-l {
   min-width: 100px;
   height: 36px;
-  padding: 0;
+  padding.left: 0;
   display: inline-flex;
 }
 #multibar-c {
+  padding: 0;
 }
 #multibar-c .nav-link-dope {
   margin: auto;
 }
 #multibar-r {
-  padding-left: 0;
   display: inline-flex;
   justify-content: flex-end;
 }
@@ -699,18 +708,13 @@ body {
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
 }
-.browse-toggle {
-  margin-right: 10px;
-}
 
 #center-stage {
 }
 
 /* LOGIN-SIGNUP */
 #login {
-  height: 100%;
   text-align: center;
-  padding-top: 15px;
 }
 #login-buttons {
   padding-top: 10px;
@@ -775,19 +779,14 @@ body {
 
 /* SETTINGS */
 #settings {
-  position: relative;
-  height: 456px;
-  padding: 15px;
+  margin: 10px;
 }
 #settings-form {
-  position: relative;
   margin: auto;
-  width: 300px;
+  max-width: 300px;
 }
 #settings-save {
-  position: absolute;
-  top: 0;
-  right: 0;
+  float: right;
 }
 
 /* PODINFO */
@@ -1108,7 +1107,7 @@ hr.h-line {
 }
 .player-badge {
   overflow: hidden;
-  margin: 0 5px;
+  margin: 5px;
   border-radius: 50%;
   height: 70px;
   width: 70px;
@@ -1116,21 +1115,19 @@ hr.h-line {
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
   transition: all .2s ease-in-out;
-}
-.player-badge a {
   color: #2e2e2e;
 }
 .player-badge:hover {
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 20px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 20px;
-  box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  box-shadow: rgba(0,0,0,.5) 0 0 20px;
 }
-#player-logo {
+.player-logo {
   padding-left: 28px;
   padding-right: 28px;
 }
-#player-logo .char {
-  top: -3px;
+.player-logo .char {
+  top: 2px;
   font-size: 28px;
   height: 38px;
   font-weight: 600;
@@ -1156,7 +1153,7 @@ hr.h-line {
 .char-6 {
   transform: rotate(300deg);
 }
-#player-image-drop {
+.player-image-drop {
   height: 70px;
   width: 70px;
 }

@@ -12,7 +12,7 @@ dashboard - dopepod
   <p>
     You have {{ user.subscription_set.count }}
     <a class="subscriptions-link" href="{% url 'subscriptions' %}">
-      subscriptions
+      subscription{{ user.subscription_set.count|pluralize }}
     </a>
   </p>
   <p>
