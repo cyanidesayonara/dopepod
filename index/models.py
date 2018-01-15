@@ -9,6 +9,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
     show_explicit = models.BooleanField(default=True)
+    dark_theme = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.email

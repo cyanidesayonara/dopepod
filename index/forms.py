@@ -20,4 +20,4 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('bio', 'location', 'show_explicit')
+        fields = ('bio', 'location', 'show_explicit', 'dark_theme')

@@ -5,19 +5,19 @@ dashboard - dopepod
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-auto color-2" id="dashboard-top">
-    <h3>
-      dashboard
-    </h3>
-    <p>
-      You have {{ user.subscription_set.count }}
-      <a class="subscriptions-link" href="{% url 'subscriptions' %}">
-        subscriptions
-      </a>
-    </p>
-    <p>
-      You have no playlist<br />
-      (Coming soon!)
-    </p>
-  </div>
+<div class="col-12" id="dashboard-top">
+  <h3>
+    dashboard
+  </h3>
+  <p>
+    You have {{ user.subscription_set.count }}
+    <a class="subscriptions-link" href="{% url 'subscriptions' %}">
+      subscriptions
+    </a>
+  </p>
+  <p>
+    You have no playlist<br />
+    (Coming soon!)
+  </p>
+</div>
 {% endblock %}

@@ -338,6 +338,7 @@ $(document)
       pushState();
       loadResults(url, drop);
       clearSearch();
+      $("#search").empty();
       $("#browse-collapse").collapse("hide");
       $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar()
@@ -441,6 +442,8 @@ $(document)
     var button = $(this).find("#settings-save");
     button.text("Saving...");
     var data = $(this).serialize();
+    var theme = $("input[name=dark_theme]").is(":checked");
+    console.log(theme);
     var method = this.method;
     var url = this.action;
     $.ajax({
@@ -459,6 +462,12 @@ $(document)
         pushState();
         loadResults("/", drop);
         scrollToTop();
+        if (theme) {
+          $("body").addClass("darken");
+        }
+        else {
+          $("body").removeClass("darken");
+        }
       });
   })
   .on("submit", "#sub-form", function(e) {

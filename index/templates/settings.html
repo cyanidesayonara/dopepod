@@ -6,48 +6,58 @@ settings
 
 {% block center-stage %}
 <div class="col" id="settings">
-      <form id="settings-form" action="{% url 'settings' %}" method="POST">
-        <h3>
-          Settings
-        </h3>
-        <div id="settings-errors">
-          {% if errors %}
-            {% for k, v in errors.items %}
-              <span class="error-message">
-                {% if k %}
-                  {{ k|capfirst }}: {{ v }}
-                {% else %}
-                  {{ v }}
-                {% endif %}
-              </span>
-            {% endfor %}
-          {% endif %}
-        </div>
-        <div class="login-form-group">
-          <label for="email">Email</label>
-          <input class="form-control login-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
-        </div>
-        <div class="login-form-group">
-          <label for="location">Location</label>
-          <input class="form-control login-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
-        </div>
-        <div class="login-form-group">
-          <label for="bio">Bio</label>
-          <textarea class="form-control login-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
-        </div>
-        <div class="login-form-group">
-          <div class="form-check form-check-inline">
-            <label class="form-check-label" for="show_explicit">
-              {% if profile_form.show_explicit.value %}
-                <input class="form-check-input" type="checkbox" name="show_explicit" id="show_explicit" checked />
-              {% else %}
-                <input class="form-check-input" type="checkbox" name="show_explicit" id="show_explicit" />
-              {% endif %}
-              Show explicit content
-            </label>
+  <form id="settings-form" action="{% url 'settings' %}" method="POST">
+    <h3>
+      Settings
+    </h3>
+    <div id="settings-errors">
+      {% if errors %}
+        {% for k, v in errors.items %}
+          <div class="error-message">
+            {% if k %}
+              {{ k|capfirst }}: {{ v }}
+            {% else %}
+              {{ v }}
+            {% endif %}
           </div>
-        </div>
-        <button type="submit" id="settings-save"class="btn btn-dope active">Save</button>
-      </form>
+        {% endfor %}
+      {% endif %}
     </div>
+    <div class="login-form-group">
+      <label for="email">Email</label>
+      <input class="form-control login-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
+    </div>
+    <div class="login-form-group">
+      <label for="location">Location</label>
+      <input class="form-control login-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
+    </div>
+    <div class="login-form-group">
+      <label for="bio">Bio</label>
+      <textarea class="form-control login-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
+    </div>
+    <div class="login-form-group">
+      <div class="form-check form-check-inline">
+        <label class="form-check-label" for="show_explicit">
+          {% if profile_form.show_explicit.value %}
+            <input class="form-check-input" type="checkbox" name="show_explicit" id="show_explicit" checked />
+          {% else %}
+            <input class="form-check-input" type="checkbox" name="show_explicit" id="show_explicit" />
+          {% endif %}
+          Show explicit content
+        </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <label class="form-check-label" for="show_explicit">
+          {% if profile_form.dark_theme.value %}
+            <input class="form-check-input" type="checkbox" name="dark_theme" id="dark_theme" checked />
+          {% else %}
+            <input class="form-check-input" type="checkbox" name="dark_theme" id="dark_theme" />
+          {% endif %}
+          Use dark theme
+        </label>
+      </div>
+    </div>
+    <button type="submit" id="settings-save"class="btn btn-dope active">Save</button>
+  </form>
+</div>
 {% endblock %}
