@@ -665,7 +665,6 @@ $(document)
       el.addClass("darken");
     }
   })
-  .on("click", ".navbar-multibar-options-toggle", function(e) {
-    $("#multibar-options-collapse").collapse("show");
+  .on("click", ".multibar-options-toggle", function(e) {
     scrollToMultibar();
   })
