@@ -46,18 +46,11 @@
   {% endif %}
   <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
     <div class="input-group" id="search-field">
-      <label for="q" class="sr-only">Search</label>
-      {% if selected_q %}
+      <label for="q" class="sr-only">Search for podcasts</label>
       <input class="form-control" type="text" name="q" id="q"
       type="search" placeholder="Search for podcasts"
       aria-label="Search for podcasts" maxlength="30" autocomplete="off"
-      accept-charset="utf-8" value="{{ selected_q }}">
-      {% else %}
-      <input class="form-control" type="text" name="q" id="q"
-      type="search" placeholder="Search for podcasts"
-      aria-label="Search for podcasts" maxlength="30" autocomplete="off"
-      accept-charset="utf-8">
-      {% endif %}
+      accept-charset="utf-8" required>
       <button id="search-button" type="submit">
         <span>
           Go

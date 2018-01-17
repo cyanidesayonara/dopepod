@@ -263,10 +263,11 @@ $(document)
     var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = el[0].action;
-      var drop = $("#search");
       var q = $("#q").val();
-      if (q) {
+
+      if (q && /^[\w\d ]+$/.test(q)) {
+        var url = el[0].action;
+        var drop = $("#search");
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
