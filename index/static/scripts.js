@@ -241,6 +241,7 @@ function scrollToMultibar() {
 function scrollText(box, text) {
   var boxWidth = box.width();
   var textWidth = text.width();
+  console.log(boxWidth, textWidth)
   if (textWidth > boxWidth) {
     var animSpeed = textWidth * 20;
     $(box)
@@ -519,12 +520,13 @@ $(document)
       .done(function(response) {
         var player = $("#player-drop");
         player.html(response);
-        var img = player.find("#player-image");
+        var img = player.find("#player-image").clone();
         $(".player-image-drop").html(img).removeClass("d-none");
         $(".player-logo").addClass("d-none");
         updateTitle();
-        var box = $("#player-top");
-        var text = $("#player-title");
+        var box = $("#player-title");
+        var text = $("#player-title span");
+        console.log(box, text)
         scrollText(box, text);
       });
   })

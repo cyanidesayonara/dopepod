@@ -1,27 +1,11 @@
 {% if player.episode %}
-<div class="row color-5" id="player-wrapper">
-  <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
-    <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
-  </a>
+<div class="container">
+  <div class="row color-5" id="player-wrapper">
   <div class="col" id="player-top">
-    <div id="player-title">
-      {{ player.episode.podcast.title }}
-    </div>
-  </div>
-  <div class="col-12" id="player-bottom">
-    <div id="player-episode">
-      {{ player.episode.title }}
-    </div>
-    <div id="player-date">
-      {{ player.episode.date }}
-    </div>
-    <audio id="audio-el" controls preload="metadata" autoplay>
-      <source src="{{ player.episode.url }}"/>
-    </audio>
-    <div class="dummy">
-    </div>
-  </div>
-  <div id="player-buttons">
+    <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}70x70bb.jpg&w=70&h=70&t=absolute" />
+    </a>
+    <div id="player-buttons">
     <a class="btn btn-dope player-button" id="player-minimize" href="#" aria-label="Minimize">
       <i class="fas fa-minus-circle icon"></i>
     </a>
@@ -29,5 +13,27 @@
       <i class="fas fa-times-circle icon"></i>
     </a>
   </div>
+    <div id="player-title">
+      <span>
+        {{ player.episode.podcast.title }}
+      </span>
+    </div>
+    <div id="player-episode">
+      <span>
+        {{ player.episode.title }}
+      </span>
+    </div>
+    <div id="player-date">
+      <span>
+        {{ player.episode.date }}
+      </span>
+    </div>
+  </div>
+  <div class="col-12" id="player-bottom">
+    <audio id="audio-el" controls preload="metadata" autoplay>
+      <source src="{{ player.episode.url }}"/>
+    </audio>
+  </div>
+</div>
 </div>
 {% endif %}
