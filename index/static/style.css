@@ -662,6 +662,7 @@ body {
 #search-form {
 }
 #search-field {
+  font-size: 16px;
   margin-left: 5px;
 }
 #search-button {
