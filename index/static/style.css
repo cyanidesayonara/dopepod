@@ -673,9 +673,7 @@ body {
 #search-form {
 }
 #search-field {
-  display: block;
-  min-width: 180px;
-  font-size: 16px;
+  margin-left: 5px;
 }
 #search-button {
   cursor: pointer;
@@ -696,7 +694,6 @@ body {
 
 }
 #q {
-  width: 100%;
   border-radius: .25rem;
   padding: 4px 30px 4px 10px;
   border: 1px solid rgba(45,43,43,.5);

@@ -353,12 +353,14 @@ $(document)
       var url = el[0].href;
       var podid = el.data("podid");
       var drop = $("#center-stage");
-      pushState();
-      loadResults(url, drop);
-      clearSearch();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
-      loadEpisodes(podid);
+      if (!(drop.find("#showpod-c").data("podid") == podid)) {
+        pushState();
+        loadResults(url, drop);
+        clearSearch();
+        $("#browse-collapse").collapse("hide");
+        $("#multibar-options-collapse").collapse("hide");
+        loadEpisodes(podid);
+      }
       scrollToTop();
     }, 250);
   })
@@ -368,12 +370,14 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      pushState();
-      loadResults(url, drop);
-      clearSearch();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
-      $("#episodes").empty();
+      if (!drop.find("#dashboard-top").length) {
+        pushState();
+        loadResults(url, drop);
+        clearSearch();
+        $("#browse-collapse").collapse("hide");
+        $("#multibar-options-collapse").collapse("hide");
+        $("#episodes").empty();
+      }
       $("#search").empty();
       scrollToTop();
     }, 250);
@@ -427,11 +431,13 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      pushState();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
-      clearSearch();
-      loadResults(url, drop);
+      if (!drop.find("#settings").length) {
+        pushState();
+        $("#browse-collapse").collapse("hide");
+        $("#multibar-options-collapse").collapse("hide");
+        clearSearch();
+        loadResults(url, drop);
+      }
       $("#episodes").empty();
       scrollToTop();
     }, 250);
@@ -443,7 +449,6 @@ $(document)
     button.text("Saving...");
     var data = $(this).serialize();
     var theme = $("input[name=dark_theme]").is(":checked");
-    console.log(theme);
     var method = this.method;
     var url = this.action;
     $.ajax({
