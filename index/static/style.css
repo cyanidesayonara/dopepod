@@ -54,9 +54,6 @@ body {
 .reverse-toggle[aria-expanded="false"] {
   color: #fff;
   background: rgba(0, 191,165, 1);
-  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 8px;
-  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 8px;
-  box-shadow: rgba(0,0,0,.8) 0 0px 8px;
 }
 .btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled, .btn-dope-disabled:focus  {
   color: #2e2e2e;
@@ -1086,7 +1083,6 @@ hr.h-line {
   margin: auto;
 }
 #player-wrapper a, #player-wrapper a:hover {
-  color: #2e2e2e;
   text-decoration: none;
 }
 #player-wrapper {
@@ -1166,23 +1162,27 @@ hr.h-line {
 #player-title {
   position: relative;
   overflow: hidden;
-  margin: 5px 0 15px 0;
+  margin-bottom: 2px;
 }
 #player-title span {
   white-space: nowrap;
 }
+#player-date {
+  margin-bottom: 2px;
+}
 #player-episode {
-  position: relative;
-  overflow: hidden;
+  height: 35px;
 }
 #player-episode span {
-  white-space: nowrap;
 }
 #player-buttons {
   float: right;
 }
 .player-button {
   margin-left: 4px;
+}
+#player-drop.minimize {
+  bottom: -70px;
 }
 
 /* FOOTER */
