@@ -881,7 +881,7 @@ body {
 }
 .results-header .header {
   font-size: 20px;
-  text-decoration: overline 2px solid rgba(0, 191,165, 1);
+  line-height: 1.5;
 }
 .results-content a {
   color: #000;
@@ -890,7 +890,6 @@ body {
   text-decoration: none;
 }
 .results-buttons {
-  margin-left: auto;
   justify-content: flex-end;
   display: -ms-flexbox;
   display: flex;
@@ -899,10 +898,12 @@ body {
 }
 .results-buttons a {
   margin-left: 4px;
-  margin-bottom: 4px;
 }
 .view-button {
   min-width: 36px;
+}
+.extra-options {
+  float: right;
 }
 .results-minimize {
 }
@@ -1154,6 +1155,7 @@ hr.h-line {
   margin-right: 5px;
 }
 #player-bottom {
+
 }
 
 #player-top {
@@ -1182,7 +1184,7 @@ hr.h-line {
   margin-left: 4px;
 }
 #player-drop.minimize {
-  bottom: -70px;
+  bottom: -35px;
 }
 
 /* FOOTER */
