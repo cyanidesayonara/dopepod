@@ -44,13 +44,21 @@ def play(request):
     if request.method == 'POST':
         episode = {}
         try:
-            episode['url'] = request.POST['url']
-            episode['kind'] = request.POST['type']
-            episode['title'] = request.POST['title']
-            episode['date'] = request.POST['date']
-            episode['podid'] = request.POST['podid']
-            episode['podcast'] = Podcast.objects.get(podid=episode['podid'])
+            url = request.POST['url']
+            kind = request.POST['type']
+            title = request.POST['title']
+            date = request.POST['date']
+            podid = request.POST['podid']
+            podcast = Podcast.objects.get(podid=podid)
 
+            episode = Episode.objects.create(
+                url=url,
+                kind=kind,
+                title=title,
+                pubDate=date,
+                parent=podcast,
+            )
+            
             player = {
                 'episode': episode,
             }
