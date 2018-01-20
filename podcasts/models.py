@@ -572,11 +572,10 @@ class Episode(models.Model):
             results = context['results']
         except KeyError:
             results = context['charts']
-        results['last_played'] = Episode.objects.all().order_by('pubDate')
+        results['last_played'] = Episode.objects.all().order_by('-pubDate')
         context.update({
             'results': results,
         })
-        print(context)
         return context
 
 class Filterable(models.Model):

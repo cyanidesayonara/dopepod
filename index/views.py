@@ -39,6 +39,7 @@ def index(request):
                 return render(request, 'splash.html', context)
 
         context = Chart.get_charts(context)
+        context = Episode.get_last_played(context)
 
         context.update({
             'alphabet': ALPHABET,
@@ -201,6 +202,7 @@ def search(request):
 
         context = {}
         context = Chart.get_charts(context)
+        context = Episode.get_last_played(context)
 
         context.update({
             'search': results,
@@ -246,6 +248,7 @@ def subscriptions(request):
             'search': results,
         }
         context = Chart.get_charts(context)
+        context = Episode.get_last_played(context)
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
@@ -276,9 +279,9 @@ def showpod(request, podid):
             if request.is_ajax():
                 return render(request, 'showpod.html', context)
 
-            context = Episode.get_episodes(context, podcast)
-
             context = Chart.get_charts(context)
+            context = Episode.get_episodes(context, podcast)
+            context = Episode.get_last_played(context)
 
             context.update({
                 'alphabet': ALPHABET,
@@ -307,6 +310,7 @@ def settings(request):
                 return render(request, 'settings.html', context)
 
             context = Chart.get_charts(context)
+            context = Episode.get_last_played(context)
 
             context.update({
                 'alphabet': ALPHABET,
@@ -353,6 +357,7 @@ def settings(request):
                     return render(request, 'settings.html', context, status=400)
 
                 context = Chart.get_charts(context)
+                context = Episode.get_last_played(context)
 
                 context.update({
                     'alphabet': ALPHABET,

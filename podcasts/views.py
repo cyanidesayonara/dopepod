@@ -30,9 +30,6 @@ def episodes(request):
 
         return render(request, 'results_base.html', context)
 
-def recommended(request):
-    pass
-
 def play(request):
     """
     returns html5 audio element
@@ -58,7 +55,7 @@ def play(request):
                 pubDate=date,
                 parent=podcast,
             )
-            
+
             player = {
                 'episode': episode,
             }

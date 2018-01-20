@@ -1023,6 +1023,44 @@ body {
   overflow: hidden;
   height: 38px;
 }
+.last-played {
+  margin-top: 15px;
+  margin-bottom: 15px
+}
+.last-played a {
+  color: #2e2e2e;
+  text-decoration: none;
+}
+.last-played-box {
+  padding: 10px;
+}
+.last-played-result {
+  background: inherit;
+}
+.last-played-result:hover {
+  background: #ddd;
+}
+.last-played-result img {
+  float: left;
+  margin-right: 4px;
+}
+.last-played-result .result-title {
+  font-size: 16px;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.last-played-result .result-episode {
+  margin-bottom: 3px;
+  max-height: 60px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.last-played-result .result-date {
+  margin: 0;
+  font-size: 12px;
+}
 .search-result-title, .search-result-title:hover {
   font-size: 16px;
   margin-top: 4px;
