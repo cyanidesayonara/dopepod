@@ -2,8 +2,8 @@
 <div class="container">
   <div class="row color-5" id="player-wrapper">
   <div class="col" id="player-top">
-    <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
-      <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}70x70bb.jpg&w=70&h=70&t=absolute" />
+    <a class="showpod" id="player-image" data-podid="{{ player.episode.parent.podid }}" href="{% url 'showpod' podid=player.episode.parent.podid %}">
+      <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.parent.artworkUrl }}70x70bb.jpg&w=70&h=70&t=absolute" />
     </a>
     <div id="player-buttons">
     <a class="btn btn-dope player-button" id="player-minimize" href="#" aria-label="Minimize">
@@ -15,12 +15,12 @@
   </div>
     <div id="player-title">
       <span>
-        {{ player.episode.podcast.title }}
+        {{ player.episode.parent.title }}
       </span>
     </div>
     <div id="player-date">
       <span>
-        {{ player.episode.date }}
+        {{ player.episode.pubDate }}
       </span>
     </div>
     <div id="player-episode">
