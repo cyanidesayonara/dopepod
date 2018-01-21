@@ -2,7 +2,7 @@
   <div class="row">
     {% for podcast in results.podcasts %}
       <div class="col-12 col-lg-6 charts-box">
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+        <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
           <div class="charts-result">
             <span class="charts-rank">
               {% if results.selected_genre %}

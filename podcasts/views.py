@@ -28,7 +28,6 @@ def episodes(request):
         }
 
         context = Episode.get_episodes(context, podcast, ajax=True)
-        print(context)
 
         return render(request, 'results_base.html', context)
 
@@ -48,6 +47,7 @@ def play(request):
             date = parse(request.POST['date'])
             podid = request.POST['podid']
             length = request.POST['length']
+            summary = request.POST['summary']
             podcast = Podcast.objects.get(podid=podid)
 
             episode = Episode.objects.create(
@@ -57,6 +57,7 @@ def play(request):
                 pubDate=date,
                 parent=podcast,
                 length=length,
+                summary=summary,
             )
 
             player = {

@@ -653,17 +653,20 @@ $(document)
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".more-collapse", function(e) {
-      $(".more-collapse.show").collapse("hide");
+    $(".more-collapse.show").collapse("hide");
+  })
+  .on("show.bs.collapse", ".last-played-collapse", function(e) {
+    $(".last-played-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
-      $(".options-collapse.show").collapse("hide");
+    $(".options-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".results-collapse", function (e) {
-      $(".results-collapse.show").collapse("hide");
+    $(".results-collapse.show").collapse("hide");
   })
-   .on("click", ".view-button, .results-minimize", function(e) {
-     $(this).parents(".results").find(".options-collapse.show").collapse("hide");
-   })
+  .on("click", ".view-button, .results-minimize", function(e) {
+    $(this).parents(".results").find(".options-collapse.show").collapse("hide");
+  })
   .on("click", ".results-header .btn-dope.toggle, .view-button", function(e) {
     $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
   })
