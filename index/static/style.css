@@ -30,6 +30,17 @@ body {
   font-size: unset;
   background-color: rgba(255, 255, 255, .5);
   box-shadow: none;
+  line-height: 1.5;
+  border-radius: .25rem;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: inline-block;
+  transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .btn-dope.active {
   color: #fff;
@@ -37,6 +48,7 @@ body {
 }
 .btn-dope:hover, .btn-dope:focus {
   color: #fff;
+  text-decoration: none;
   background: rgba(0, 191,165, 1);
   -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 8px;
   -moz-box-shadow: rgba(0,0,0,.8) 0 0px 8px;
@@ -638,13 +650,13 @@ body {
   /* background-image: url("/static/bg.png"); */
 }
 #flap.extended{
-  top: -500px;
+  top: -470px;
 }
 #xxx {
   overflow: hidden;
 }
 #xxx.open {
-  height: 500px;
+  height: 470px;
   padding-top: 44px;
   margin-bottom: -44px;
 }
@@ -699,14 +711,19 @@ body {
 #login {
   text-align: center;
 }
+#login h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
 #login-buttons {
   padding-top: 10px;
-  padding-bottom: 10px;
   display: block;
 }
-.login-toggle {
-  margin-left: 5px;
-  margin-right: 5px;
+#login-buttons a {
+  margin: 0 4px;
+}
+#social-buttons {
+  padding-top: 10px;
 }
 .error-message {
   padding: 4px 6px;
@@ -714,10 +731,14 @@ body {
   margin-bottom: 2px;
 }
 #login-wrapper {
-  padding: 10px 10px 0;
-  max-width: 300px;
-  min-height: 200px;
+  padding: 10px;
+  max-width: 400px;
+  height: 100%;
   margin: auto;
+}
+#login-wrapper .tab-content {
+  height: 200px;
+  padding: 30px;
 }
 .site-description {
 
@@ -776,10 +797,11 @@ body {
 #showpod-c {
   overflow: hidden;
   padding-left: 0;
-  height: 380px;
+  height: 350px;
 }
 #showpod-l {
   text-align: center;
+  height: 350px;
   overflow: hidden;
 }
 #showpod-l img {
@@ -789,7 +811,7 @@ body {
   border-radius: .25rem;
 }
 #showpod-r {
-  height: 380px;
+  height: 350px;
   padding-left: 0;
 }
 .showpod-side-list {
@@ -830,6 +852,7 @@ body {
 }
 .more-collapse {
   text-align: justify;
+  padding: 10px;
 }
 #episodes-table {
   margin: 0;
@@ -853,10 +876,10 @@ body {
 }
 .episode-buttons {
   margin: 10px;
+  float: right;
 }
-.episode-more {
-  height: 100%;
-  padding: 10px;
+.play-button {
+  cursor: pointer;
 }
 
 /* RESULTS */
@@ -879,7 +902,7 @@ body {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.results-header .header {
+.results-header h1 {
   font-size: 20px;
   line-height: 1.5;
   margin: 0;
@@ -943,7 +966,7 @@ body {
   width: 100%;
 }
 .charts-box {
-  padding: 10px;
+  padding: 10px 10px 0 10px;
 }
 .subscriptions-box {
   padding: 10px;
@@ -1032,34 +1055,39 @@ body {
   text-decoration: none;
 }
 .last-played-box {
-  padding: 10px;
+  padding: 10px 15px 0;
 }
-.last-played-result {
-  background: inherit;
+.last-played-header h1 {
+  font-size: 20px;
+  line-height: 1.5;
+  margin: 0;
+  border-bottom: 2px solid rgba(0, 191,165, 1);
 }
-.last-played-result:hover {
-  background: #ddd;
+.last-played-top {
+  height: 100px;
 }
-.last-played-result img {
+.last-played-top img {
   float: left;
   margin-right: 4px;
 }
-.last-played-result .result-title {
+.last-played-top .result-title {
   font-size: 16px;
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.last-played-result .result-episode {
+.last-played-top .result-episode {
   margin-bottom: 3px;
   max-height: 60px;
   overflow: hidden;
   font-size: 14px;
 }
-.last-played-result .result-date {
-  margin: 0;
-  font-size: 12px;
+.last-played-bottom {
+
+}
+.last-played-buttons {
+  float: right;
 }
 .search-result-title, .search-result-title:hover {
   font-size: 16px;
@@ -1100,6 +1128,7 @@ body {
   margin-bottom: 8px;
 }
 .browse-results-list li a {
+  display: inline-block;
   border-bottom: 2px solid rgba(0, 191,165, 0);
 }
 .browse-results-list li a:hover, .browse-results-list li a:focus {

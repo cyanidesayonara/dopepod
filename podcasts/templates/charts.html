@@ -1,7 +1,7 @@
 <div class="col results-content">
   <div class="row">
     {% for podcast in results.podcasts %}
-      <div class="col-12 col-md-6 charts-box">
+      <div class="col-12 col-lg-6 charts-box">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
           <div class="charts-result">
             <span class="charts-rank">

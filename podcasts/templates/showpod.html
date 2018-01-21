@@ -175,21 +175,21 @@ Listen to episodes of {{ podcast.title }} on dopepod
       {% csrf_token %}
       <input type="hidden" name="podid" value="{{ podcast.podid }}">
       {% if podcast.is_subscribed %}
-        <button type="submit" class="btn btn-dope btn-dope-showpod sub-button">
+        <button type="submit" class="btn-dope btn-dope-showpod sub-button">
           Unsubscribe
       {% else %}
-        <button type="submit" class="btn btn-dope btn-dope-showpod active sub-button">
+        <button type="submit" class="btn-dope btn-dope-showpod active sub-button">
           Subscribe
       {% endif %}
         </button>
     </form>
   {% endif %}
-  <a class="btn btn-dope active" id="show-episodes" href="#">
+  <a class="btn-dope active" id="show-episodes" href="#">
     <span>
       Episodes
     </span>
   </a>
-  <button class="btn btn-dope btn-dope-showpod btn-dope-disabled">
+  <button class="btn-dope btn-dope-showpod btn-dope-disabled">
     <span>
       Reviews
     </span>

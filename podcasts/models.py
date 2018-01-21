@@ -472,7 +472,7 @@ class Episode(models.Model):
                     # try to get pubdate + parse & convert it to datetime
                     try:
                         pubdate = item.find('pubDate').text
-                        episode['pubDate'] = parse(pubdate).strftime('%Y-%m-%d %H:%M')
+                        episode['pubDate'] = parse(pubdate)
                     # if episode data not found, skip episode
                     except AttributeError as e:
                         logger.error('can\'t get pubDate', podcast.feedUrl)
@@ -572,7 +572,8 @@ class Episode(models.Model):
             results = context['results']
         except KeyError:
             results = context['charts']
-        results['last_played'] = Episode.objects.all().order_by('-pubDate')
+        results['last_played'] = Episode.objects.all().order_by('-played')[:20]
+
         context.update({
             'results': results,
         })

@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponse
 from .models import Genre, Language, Podcast, Subscription, Episode
 import logging
 import requests
+from dateutil.parser import parse
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ def episodes(request):
         }
 
         context = Episode.get_episodes(context, podcast, ajax=True)
+        print(context)
 
         return render(request, 'results_base.html', context)
 
@@ -39,13 +41,13 @@ def play(request):
 
     # TODO: itemize episode, get url after redirections
     if request.method == 'POST':
-        episode = {}
         try:
             url = request.POST['url']
             kind = request.POST['type']
             title = request.POST['title']
-            date = request.POST['date']
+            date = parse(request.POST['date'])
             podid = request.POST['podid']
+            length = request.POST['length']
             podcast = Podcast.objects.get(podid=podid)
 
             episode = Episode.objects.create(
@@ -54,6 +56,7 @@ def play(request):
                 title=title,
                 pubDate=date,
                 parent=podcast,
+                length=length,
             )
 
             player = {

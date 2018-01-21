@@ -2,25 +2,25 @@
   <div class="page-buttons">
     {% if results.podcasts.has_previous %}
       {% if not results.podcasts.previous_page_number == 1%}
-        <a class="btn btn-dope page-button" href="{{ results.urls.full_url }}&page=1">
+        <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page=1">
           <i class="fas fa-angle-double-left"></i>
         </a>
       {% endif %}
     {% endif %}
     {% for i in results.podcasts.paginator.page_range %}
       {% if results.podcasts.number == i %}
-        <a class="btn btn-dope page-button active" href="{{ results.urls.full_url }}&page={{ i }}">
+        <a class="btn-dope page-button active" href="{{ results.urls.full_url }}&page={{ i }}">
           {{ i }}
         </a>
       {% elif i > results.podcasts.number|add:'-3' and i < results.podcasts.number|add:'3' %}
-        <a class="btn btn-dope page-button" href="{{ results.urls.full_url }}&page={{ i }}">
+        <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ i }}">
           {{ i }}
         </a>
       {% endif %}
     {% endfor %}
     {% if results.podcasts.has_next %}
       {% if not results.podcasts.next_page_number == results.podcasts.paginator.num_pages %}
-        <a class="btn btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.podcasts.paginator.num_pages }}">
+        <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.podcasts.paginator.num_pages }}">
           <i class="fas fa-angle-double-right"></i>
         </a>
       {% endif %}
