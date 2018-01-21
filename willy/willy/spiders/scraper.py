@@ -22,7 +22,7 @@ class WillyTheSpider(scrapy.Spider):
 
         for genre in response.xpath('//div[@id="genre-nav"]/div[@class="grid3-column"]/ul/li'):
             supergenre = genre.xpath('a/text()').extract_first()
-            podid = genre.xpath('a/@href').re_first(r'/id(\d+)')
+            genreid = genre.xpath('a/@href').re_first(r'/id(\d+)')
             yield GenreItem (
                 name=supergenre,
                 genreid=genreid,
