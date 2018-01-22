@@ -1,7 +1,7 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   line-height: 1.42857143;
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   font-size: 14px;
   background: #fff;
   transition: background 0.5s ease;
@@ -31,7 +31,7 @@ a:hover {
 .btn-dope {
   border: 2px solid rgba(0, 191, 165, 1);
   padding: .25rem .5rem;
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   font-weight: 600;
   font-size: unset;
   background-color: rgba(255, 255, 255, .5);
@@ -79,23 +79,23 @@ a:hover {
   text-align: center;
   height: 32px;
   width: 32px;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   border-radius: 50%;
   border: 2px solid rgba(0, 191,165, 1);
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   background: rgba(255, 255, 255, .5);
-  transition: all .2s ease-in-out;
+  transition: all .25s ease-in-out;
 }
 .last-played-toggle:focus {
   outline: none;
 }
 .last-played-toggle[aria-expanded="true"] {
-  transition: all .2s ease-in-out;
+  transition: all .25s ease-in-out;
   transform: rotate(-180deg);
 }
 .btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled, .btn-dope-disabled:focus  {
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   background: #aaa;
   box-shadow: none;
   border: 2px solid #aaa;
@@ -140,13 +140,8 @@ a:hover {
 
 /* NAVBAR */
 #navbar {
-  height: 44px;
+  height: 36px;
   padding: 0;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
-  -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
-  box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   z-index: 95;
 }
 #navbar .nav-link-dope {
@@ -158,6 +153,7 @@ a:hover {
   display: inline-flex;
 }
 #navbar-c {
+  padding: 4px;
 }
 #navbar-r {
   display: inline-flex;
@@ -189,7 +185,7 @@ a:hover {
 
 @keyframes spinLeft {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(46, 46, 46, 0);
     transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -ms-transform: scaleX(-1);
@@ -197,7 +193,7 @@ a:hover {
     -webkit-transform: scaleX(-1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(46, 46, 46, 1);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -207,7 +203,7 @@ a:hover {
 }
 @-webkit-keyframes spinLeft {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(46, 46, 46, 0);
     transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -ms-transform: scaleX(-1);
@@ -215,7 +211,7 @@ a:hover {
     -webkit-transform: scaleX(-1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(46, 46, 46, 1);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -225,7 +221,7 @@ a:hover {
 }
 @keyframes spinRight {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(46, 46, 46, 0);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -233,7 +229,7 @@ a:hover {
     -webkit-transform: scaleX(1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(46, 46, 46, 1);
     transform: scaleX(-1);
     -o-transform: scaleX(-1); /** Opera **/
     -ms-transform: scaleX(-1);
@@ -243,7 +239,7 @@ a:hover {
 }
 @-webkit-keyframes spinRight {
   0% {
-    color: rgba(255, 255, 255, 0);
+    color: rgba(46, 46, 46, 0);
     transform: scaleX(1);
     -o-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -251,7 +247,7 @@ a:hover {
     -webkit-transform: scaleX(1);
   }
   100% {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(46, 46, 46, 1);
     transform: scaleX(-1);
     -o-transform: scaleX(-1); /** Opera **/
     -ms-transform: scaleX(-1);
@@ -334,7 +330,7 @@ a:hover {
 .logo-final {
   animation: none;
   -webkit-animation: none;
-  color: inherit;
+  color: rgb(46, 46, 46);
 }
 
 /* LOADING ANIMATIONS */
@@ -646,9 +642,6 @@ a:hover {
 #multibar-c {
   padding: 0;
 }
-#multibar-c .nav-link-dope {
-  margin: auto;
-}
 #multibar-r {
   display: inline-flex;
   justify-content: flex-end;
@@ -658,6 +651,14 @@ a:hover {
 }
 #multibar-options-collapse a:first-child {
   margin-left: 70px;
+}
+.multibar-logo-drop {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.multibar-logo-drop #showpod-title {
+  font-size: 20px;
+  text-align: center;
 }
 #browse-bar {
   padding-top: 6px;
@@ -677,19 +678,19 @@ a:hover {
   /* background-image: url("/static/bg.png"); */
 }
 #flap.extended{
-  top: -470px;
+  top: -400px;
 }
 #xxx {
   overflow: hidden;
 }
 #xxx.open {
-  height: 470px;
-  padding-top: 44px;
+  height: 400px;
+  padding-top: 0px;
   margin-bottom: -44px;
 }
 #center-stage {
   height: 100%;
-  padding: 20px 0 10px;
+  padding: 10px 0;
 }
 
 /* SEARCH */
@@ -722,10 +723,10 @@ a:hover {
 #q {
   border-radius: .25rem;
   padding: 4px 30px 4px 10px;
-  border: 1px solid #2e2e2e;
+  border: 1px solid rgb(46, 46, 46);
 }
 #q:focus {
-  border: 1px solid #2e2e2e;
+  border: 1px solid rgb(46, 46, 46);
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
@@ -764,8 +765,8 @@ a:hover {
   margin: auto;
 }
 #login-wrapper .tab-content {
-  height: 200px;
-  padding: 30px;
+  height: 160px;
+  padding: 20px 30px 10px;
 }
 .site-description {
 
@@ -823,13 +824,14 @@ a:hover {
 /* PODINFO */
 #showpod-c {
   overflow: hidden;
-  padding-left: 0;
-  height: 350px;
+  padding: 0 10px 0 0;
+  height: 340px;
 }
 #showpod-l {
   text-align: center;
-  height: 350px;
+  height: 340px;
   overflow: hidden;
+  padding: 0 10px;
 }
 #showpod-l img {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
@@ -838,13 +840,12 @@ a:hover {
   border-radius: .25rem;
 }
 #showpod-r {
-  height: 350px;
+  height: 340px;
   padding-left: 0;
 }
 .showpod-side-list {
-  text-align: left;
   list-style: none;
-  padding: 5px;
+  padding: 0;
   margin-bottom: 0;
 }
 #showpod-l .showpod-side-list {
@@ -861,13 +862,17 @@ a:hover {
   margin-bottom: 4px;
 }
 #showpod-options {
-  padding-top: 10px;
+  padding: 8px 0 9px;
   margin: auto;
 }
 #showpod-copyright {
 }
-#showpod-title, #showpod-artist {
-
+#showpod-title {
+  font-size: 24px;
+  margin: 0;
+}
+#showpod-artist {
+  font-size: 20px;
 }
 #showpod-description {
 }
@@ -1053,7 +1058,7 @@ a:hover {
   font-weight: 600;
   border-radius: 50%;
   border: 2px solid rgba(0, 191,165, 1);
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   background: rgba(255, 255, 255, .5);
 }
 
@@ -1075,7 +1080,7 @@ a:hover {
   margin-bottom: 15px
 }
 .last-played a {
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   text-decoration: none;
 }
 .last-played-box {
@@ -1099,6 +1104,7 @@ a:hover {
   margin: 0;
 }
 .last-played-buttons {
+  padding: 5px 0;
   display: flex;
   justify-content: flex-end;
 }
@@ -1223,7 +1229,7 @@ hr.h-line {
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
   transition: all .2s ease-in-out;
-  color: #2e2e2e;
+  color: rgb(46, 46, 46);
   z-index: 150;
 }
 .player-badge:hover {

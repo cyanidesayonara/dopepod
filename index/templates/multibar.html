@@ -27,6 +27,15 @@
   {% endif %}
 </div>
 <div class="col-lg-2 d-none d-lg-block" id="multibar-c">
+  <div class="multibar-logo-drop">
+    {% if podcast.title and not request.is_ajax %}
+      <h1 id="showpod-title">
+        {{ podcast.title }}
+      </h1>
+    {% else %}
+      {% include 'logo.html' %}
+    {% endif %}
+  </div>
 </div>
 <div class="col col-lg-5" id="multibar-r">
   {% if user.is_authenticated %}

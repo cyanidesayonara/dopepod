@@ -70,15 +70,17 @@ Listen to episodes of {{ podcast.title }} on dopepod
     </ul>
 </div>
 <div class="col-8 col-lg-6" id="showpod-c" data-podid="{{ podcast.podid }}">
-  <h5 id="showpod-title">
-    {{ podcast.title }}
-  </h5>
-  <h6 id="showpod-artist">
+  <div class="logo-drop">
+    <h1 id="showpod-title">
+      {{ podcast.title }}
+    </h1>
+  </div>
+  <h2 id="showpod-artist">
     <span>
       By
     </span>
     {{ podcast.artist }}
-  </h6>
+  </h2>
   <p id="showpod-description">
     {{ podcast.description }}
   </p>

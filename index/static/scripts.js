@@ -6,7 +6,7 @@ $(document)
     refreshCookie();
     collapseCollapses();
     addIcons();
-    navbarUnFixer();
+    logoMover();
     scrollSpy();
   })
 
@@ -52,36 +52,22 @@ function collapseCollapses() {
 
 function scrollSpy() {
   $(window).scroll(function () {
-    navbarUnFixer();
+    logoMover();
   })
 }
 
-function navbarUnFixer() {
+function logoMover() {
   var scroll = $(window).scrollTop();
-  var navbar = $("#navbar");
-  if (scroll > 499) {
-    navbar.css("top", "-50px");
-    var el = $("#multibar-c");
-    moveLogo(el);
-  }
-  else if (scroll < 457) {
-    navbar.css("top", "0");
-    var el = $("#navbar-c");
-    moveLogo(el);
-  }
-  else {
-    var top = (456 - scroll) + "px";
-    navbar.css("top", top);
-  }
-}
-
-function moveLogo(el) {
-  if (el.length && !el.children().length) {
-    var logo = $(".logo-wrapper");
-    logo.children().each(function() {
-      $(this).addClass("logo-final");
-    })
-    el.html(logo);
+  if ($("#multibar-c").length) {
+    if (scroll > 399) {
+      $(".multibar-logo-drop").removeClass("d-none");
+      $(".logo-wrapper").children().each(function() {
+        $(this).addClass("logo-final");
+      })
+    }
+    else if (scroll < 100) {
+      $(".multibar-logo-drop").addClass("d-none");
+    }
   }
 }
 
@@ -224,6 +210,8 @@ function loadResults(url, drop) {
     .done(function(response) {
       drop.html(response);
       replaceState(url);
+      var logo = $(".logo-drop").children().clone();
+      $(".multibar-logo-drop").html(logo);
     });
 }
 
@@ -235,7 +223,7 @@ function scrollToTop() {
 }
 function scrollToMultibar() {
   $("html, body").animate({
-    scrollTop: 500
+    scrollTop: 400
   }, 250);
 }
 function scrollText(box, text) {
