@@ -71,9 +71,11 @@ Listen to episodes of {{ podcast.title }} on dopepod
 </div>
 <div class="col-8 col-lg-6" id="showpod-c" data-podid="{{ podcast.podid }}">
   <div class="logo-drop">
-    <h1 id="showpod-title">
-      {{ podcast.title }}
-    </h1>
+    <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+      <h1 id="showpod-title">
+        {{ podcast.title }}
+      </h1>
+    </a>
   </div>
   <h2 id="showpod-artist">
     <span>

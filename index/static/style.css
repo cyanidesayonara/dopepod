@@ -830,8 +830,6 @@ a:hover {
 #showpod-l {
   text-align: center;
   height: 340px;
-  overflow: hidden;
-  padding: 0 10px;
 }
 #showpod-l img {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;

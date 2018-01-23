@@ -25,38 +25,34 @@
     </div>
     <div class="col-12 results-buttons">
       {% if results.view == 'grid' %}
-        <a class="btn-dope view-button" href="{{ results.urls.full_url }}&view=list">
-          <div class="view-icon view-icon-grid d-none">
-            {% if request.is_ajax %}
-              <i class="fas fa-th"></i>
-            {% else %}
-              Grid
-            {% endif %}
-          </div>
-          <div class="view-icon view-icon-list">
-            {% if request.is_ajax %}
-              <i class="fas fa-bars"></i>
-            {% else %}
-              List
-            {% endif %}
-          </div>
+        <a class="btn-dope view-button view-icon view-icon-grid d-none" href="{{ results.urls.full_url }}&view=list">
+          {% if request.is_ajax %}
+            <i class="fas fa-th"></i>
+          {% else %}
+            Grid
+          {% endif %}
+        </a>
+        <a class="btn-dope view-button view-icon view-icon-list" href="{{ results.urls.full_url }}&view=grid">
+          {% if request.is_ajax %}
+            <i class="fas fa-bars"></i>
+          {% else %}
+            List
+          {% endif %}
         </a>
       {% elif results.view == 'list' %}
-        <a class="btn-dope view-button" href="{{ results.urls.full_url }}&view=grid">
-          <div class="view-icon view-icon-grid">
-            {% if request.is_ajax %}
-              <i class="fas fa-bars"></i>
-            {% else %}
-              List
-            {% endif %}
-          </div>
-          <div class="view-icon view-icon-list d-none">
-            {% if request.is_ajax %}
-              <i class="fas fa-th"></i>
-            {% else %}
+        <a class="btn-dope view-button view-icon view-icon-grid" href="{{ results.urls.full_url }}&view=grid">
+          {% if request.is_ajax %}
+            <i class="fas fa-bars"></i>
+          {% else %}
+            List
+          {% endif %}
+        </a>
+        <a class="btn-dope view-button view-icon view-icon-list d-none" href="{{ results.urls.full_url }}&view=list">
+          {% if request.is_ajax %}
+            <i class="fas fa-th"></i>
+          {% else %}
             Grid
-            {% endif %}
-          </div>
+          {% endif %}
         </a>
       {% endif %}
       {% if results.genres %}

@@ -97,7 +97,7 @@ def search(request):
         genres = Genre.get_primary_genres()
         view = request.GET.get('view', None)
         q = request.GET.get('q', None)
-
+        print(request.GET)
         if not view:
             if request.path == '/browse/':
                 view = 'list'

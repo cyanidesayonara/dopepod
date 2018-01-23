@@ -27,11 +27,13 @@
   {% endif %}
 </div>
 <div class="col-lg-2 d-none d-lg-block" id="multibar-c">
-  <div class="multibar-logo-drop">
+  <div class="multibar-logo-drop nav-link-dope">
     {% if podcast.title and not request.is_ajax %}
-      <h1 id="showpod-title">
-        {{ podcast.title }}
-      </h1>
+      <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+        <h1 id="showpod-title">
+          {{ podcast.title }}
+        </h1>
+      </a>
     {% else %}
       {% include 'logo.html' %}
     {% endif %}

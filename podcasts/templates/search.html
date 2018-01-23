@@ -5,15 +5,21 @@
     <div class="row collapse results-collapse view-collapse-{{ results.drop }} show">
   {% endif %}
       {% for podcast in results.podcasts %}
-        <a class="col-lg-2 col-md-3 col-4 result-box showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
-          <h1 class="search-result-title">
-            {{ podcast.title }}
-          </h1>
-          <p class="search-result-artist">
-            by {{ podcast.artist }}
-          </p>
-        </a>
+        <div class="col-lg-2 col-md-3 col-4 result-box">
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
+          </a>
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+            <h1 class="search-result-title">
+              {{ podcast.title }}
+            </h1>
+          </a>
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+            <p class="search-result-artist">
+              by {{ podcast.artist }}
+            </p>
+          </a>
+        </div>
       {% endfor %}
     </div>
   {% if results.view == 'list' %}

@@ -18,7 +18,7 @@ function addIcons() {
     login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
     $("#google-icon").html("<i class='fab fa-google icon'></i>");
   }
-  var view_buttons = $(".view-button");
+  var view_buttons = $(".results-buttons");
   if (view_buttons.length) {
     view_buttons.each(function() {
       $(this).find(".view-icon-grid").html("<i class='fas fa-th'></i>");
@@ -65,7 +65,7 @@ function logoMover() {
         $(this).addClass("logo-final");
       })
     }
-    else if (scroll < 100) {
+    else if (scroll < 400) {
       $(".multibar-logo-drop").addClass("d-none");
     }
   }
@@ -625,17 +625,19 @@ $(document)
   })
   .on("click", ".view-button", function(e) {
     e.preventDefault();
+    pushState();
     var collapses = $(this).parents(".results").find($(".results-collapse"));
     collapses.each(function() {
       $(this).collapse("toggle");
     })
-    $(this).find(".view-icon").each(function() {
+    replaceState(this.href);
+    $(".view-icon").each(function() {
       var icon = $(this);
       if (icon.hasClass("d-none")) {
-        icon.removeClass("d-none")
+        icon.removeClass("d-none");
       }
       else {
-        icon.addClass("d-none")
+        icon.addClass("d-none");
       }
     });
   })
