@@ -27,7 +27,7 @@
   {% endif %}
 </div>
 <div class="col-lg-2 d-none d-lg-block" id="multibar-c">
-  <div class="multibar-logo-drop nav-link-dope">
+  <div class="multibar-logo-drop">
     {% if podcast.title and not request.is_ajax %}
       <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
         <h1 id="showpod-title">
