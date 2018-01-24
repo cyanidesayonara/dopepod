@@ -7,8 +7,6 @@ from django.views.decorators.vary import vary_on_headers
 import urllib.parse
 import json
 
-ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0']
-
 def navbar(request):
     """
     returns navbar (for refreshing)
@@ -41,10 +39,6 @@ def index(request):
         context = Chart.get_charts(context)
         context = Episode.get_last_played(context)
 
-        context.update({
-            'alphabet': ALPHABET,
-        })
-
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
         else:
@@ -73,10 +67,6 @@ def charts(request):
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
-        context.update({
-            'alphabet': ALPHABET,
-        })
-
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
         else:
@@ -97,7 +87,7 @@ def search(request):
         genres = Genre.get_primary_genres()
         view = request.GET.get('view', None)
         q = request.GET.get('q', None)
-        print(request.GET)
+
         if not view:
             if request.path == '/browse/':
                 view = 'list'
@@ -196,7 +186,7 @@ def search(request):
 
         if request.is_ajax():
             context = {
-            'results': results,
+                'results': results,
             }
             return render(request, 'results_base.html', context)
 
@@ -206,7 +196,6 @@ def search(request):
 
         context.update({
             'search': results,
-            'alphabet': ALPHABET,
         })
 
         if user.is_authenticated:
@@ -283,9 +272,6 @@ def showpod(request, podid):
             context = Episode.get_episodes(context, podcast)
             context = Episode.get_last_played(context)
 
-            context.update({
-                'alphabet': ALPHABET,
-            })
             return render(request, 'showpod.html', context)
         except Podcast.DoesNotExist:
             raise Http404
@@ -312,9 +298,6 @@ def settings(request):
             context = Chart.get_charts(context)
             context = Episode.get_last_played(context)
 
-            context.update({
-                'alphabet': ALPHABET,
-            })
             return render(request, 'settings.html', context)
 
         if request.method == 'POST':
@@ -359,9 +342,6 @@ def settings(request):
                 context = Chart.get_charts(context)
                 context = Episode.get_last_played(context)
 
-                context.update({
-                    'alphabet': ALPHABET,
-                })
                 return render(request, 'settings.html', context)
     else:
         if request.is_ajax():

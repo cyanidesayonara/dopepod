@@ -6,9 +6,9 @@ dashboard - dopepod
 
 {% block center-stage %}
 <div class="col-12" id="dashboard-top">
-  <div class="logo-drop">
-    {% include 'logo.html' %}
-  </div>
+  <p>
+    Dashboard
+  </p>
   <p>
     You have {{ user.subscription_set.count }}
     <a class="subscriptions-link" href="{% url 'subscriptions' %}">

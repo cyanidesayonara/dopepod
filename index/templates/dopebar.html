@@ -1,16 +1,4 @@
-<div class="col-auto col-lg-5" id="multibar-l">
-  <div class="player-badge d-none player-image-drop">
-  </div>
-  <a class="multibar-options-toggle" href="#multibar-options-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="multibar-options-collapse">
-    <div class="player-badge noselect color-3 player-logo">
-      <span class="char char-1">d</span>
-      <span class="char char-2">o</span>
-      <span class="char char-3">p</span>
-      <span class="char char-4">e</span>
-      <span class="char char-5">p</span>
-      <span class="char char-6">o</span>
-    </div>
-  </a>
+<div class="col-auto col-lg-5" id="dopebar-l">
   <a class="nav-link-dope charts-link d-none d-xl-inline-block" href="{% url 'charts' %}">
     Charts
   </a>
@@ -26,20 +14,10 @@
   </a>
   {% endif %}
 </div>
-<div class="col-lg-2 d-none d-lg-block" id="multibar-c">
-  <div class="multibar-logo-drop">
-    {% if podcast.title and not request.is_ajax %}
-      <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-        <h1 id="showpod-title">
-          {{ podcast.title }}
-        </h1>
-      </a>
-    {% else %}
-      {% include 'logo.html' %}
-    {% endif %}
-  </div>
+<div class="col-lg-2 d-none d-lg-block" id="dopebar-c">
+  {% include 'logo.html' %}
 </div>
-<div class="col col-lg-5" id="multibar-r">
+<div class="col col-lg-5" id="dopebar-r">
   {% if user.is_authenticated %}
     <a class="nav-link-dope settings-link d-none d-xl-inline-block" href="{% url 'settings' %}">
       Settings
@@ -70,7 +48,7 @@
     </div>
   </form>
 </div>
-<div class="col-12 collapse show" id="multibar-options-collapse">
+<div class="col-12 collapse show" id="dopebar-options-collapse">
   <a class="nav-link-dope charts-link d-inline-block d-xl-none" href="{% url 'charts' %}">
     Charts
   </a>

@@ -25,43 +25,14 @@
 {% endif %}
     <!-- MAIN CONTENT -->
     <div id="main-wrapper">
-      <div class="container-fluid sticky-top extended" id="flap">
-        <div class="container color-5-trans open" id="xxx">
-          <div class="row" id="center-stage">
-            {% block center-stage %}
-            {% endblock %}
-          </div>
-        </div>
-        <!-- MULTIBAR -->
-        <nav class="navbar color-4-trans" id="multibar">
-          <div class="container" id="multibar-drop">
-            {% include 'multibar.html' %}
-          </div>
-        </nav>
-      </div>
       <!-- MAIN -->
       <div class="container"id="main">
-        {% if search.podcasts1 %}
-        <div class="row collapse show" id="browse-collapse">
-        {% else %}
-        <div class="row collapse" id="browse-collapse">
-        {% endif %}
-          <div class="col alphabet-buttons">
-            {% for letter in alphabet %}
-            <a class="btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
-              {% if letter == '0' %}
-              <span>
-                #
-              </span>
-              {% else %}
-              <span>
-                {{ letter }}
-              </span>
-              {% endif %}
-            </a>
-            {% endfor %}
-          </div>
+        <!-- CENTER STAGE -->
+        <div class="row" id="center-stage">
+          {% block center-stage %}
+          {% endblock %}
         </div>
+        <!-- EPISODES -->
         <div class="row" id="episodes">
           {% if episodes %}
             {% with episodes as results %}
@@ -72,8 +43,10 @@
         <!-- RESULTS -->
         <div class="row" id="search">
           {% if search %}
-            {% with search as results %}
-              {% include 'results_base.html' %}
+            {% with alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ#" %}
+              {% with search as results %}
+                {% include 'results_base.html' %}
+              {% endwith %}
             {% endwith %}
           {% endif %}
         </div>
@@ -88,24 +61,18 @@
             {% include 'last_played.html' %}
           {% endif %}
         </div>
+        <!-- MULTIBAR -->
+        <nav class="navbar fixed-bottom color-4-trans" id="dopebar">
+          <div class="container" id="dopebar-drop">
+            {% include 'dopebar.html' %}
+          </div>
+        </nav>
       </div>
     </div>
     <!-- PLAYER -->
     <div class="container-fluid" id="player-drop">
       {% include 'player.html' %}
     </div>
-    <!--FOOTER-->
-    <footer class="footer">
-      <div class="container-fluid">
-        <div class="row color-1" id="footer">
-          <div class="col">
-            <span>
-              © dopepod 2017
-            </span>
-          </div>
-        </div>
-      </div>
-    </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>

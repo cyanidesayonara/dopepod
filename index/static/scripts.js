@@ -6,7 +6,6 @@ $(document)
     refreshCookie();
     collapseCollapses();
     addIcons();
-    logoMover();
     scrollSpy();
   })
 
@@ -47,27 +46,32 @@ function collapseCollapses() {
       $(this).collapse("hide");
     })
   }
-  $("#multibar-options-collapse").collapse("hide");
 }
 
 function scrollSpy() {
   $(window).scroll(function () {
-    logoMover();
+    showpodBadge();
+    splashBadge();
   })
 }
 
-function logoMover() {
+function showpodBadge() {
   var scroll = $(window).scrollTop();
-  if ($("#multibar-c").length) {
-    if (scroll > 399) {
-      $(".multibar-logo-drop").removeClass("d-none");
-      $(".logo-wrapper").children().each(function() {
-        $(this).addClass("logo-final");
-      })
-    }
-    else if (scroll < 400) {
-      $(".multibar-logo-drop").addClass("d-none");
-    }
+  if (scroll < 300) {
+    $(".showpod-badge").addClass("showpod-image");
+  }
+  else if (scroll > 299) {
+    $(".showpod-badge").removeClass("showpod-image");
+  }
+}
+
+function splashBadge() {
+  var scroll = $(window).scrollTop();
+  if (scroll < 300) {
+    $(".splash-logo").addClass("splash-image");
+  }
+  else if (scroll > 299) {
+    $(".splash-logo").removeClass("splash-image");
   }
 }
 
@@ -154,7 +158,7 @@ function refreshPage() {
   checkForXHR();
   $.ajax({
     type: "GET",
-    url: "/multibar/",
+    url: "/dopebar/",
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
     })
@@ -163,7 +167,7 @@ function refreshPage() {
       $("#results").empty();
       var drop = $("#charts");
       loadResults("/charts/", drop);
-      $("#multibar-drop").html(response);
+      $("#dopebar-drop").html(response);
     });
 }
 
@@ -210,8 +214,6 @@ function loadResults(url, drop) {
     .done(function(response) {
       drop.html(response);
       replaceState(url);
-      var logo = $(".logo-drop").children().clone();
-      $(".multibar-logo-drop").html(logo);
     });
 }
 
@@ -259,8 +261,6 @@ $(document)
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
-        $("#browse-collapse").collapse("hide");
-        $("#multibar-options-collapse").collapse("hide");
         scrollToMultibar()
       }
     }, 250);
@@ -278,8 +278,6 @@ $(document)
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
-        $("#browse-collapse").collapse("hide");
-        $("#multibar-options-collapse").collapse("hide");
         scrollToMultibar();
       }
     }, 250);
@@ -294,8 +292,6 @@ $(document)
       pushState();
       loadResults(url, drop);
       clearSearch();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -310,8 +306,6 @@ $(document)
       pushState();
       loadResults(url, drop);
       clearSearch();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
       if (drop[0].id != "charts") {
         scrollToMultibar()
       }
@@ -328,8 +322,6 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#search").empty();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar()
     }, 250);
   })
@@ -346,8 +338,6 @@ $(document)
         pushState();
         loadResults(url, drop);
         clearSearch();
-        $("#browse-collapse").collapse("hide");
-        $("#multibar-options-collapse").collapse("hide");
         loadEpisodes(podid);
       }
       scrollToTop();
@@ -363,8 +353,6 @@ $(document)
         pushState();
         loadResults(url, drop);
         clearSearch();
-        $("#browse-collapse").collapse("hide");
-        $("#multibar-options-collapse").collapse("hide");
         $("#episodes").empty();
       }
       $("#search").empty();
@@ -381,8 +369,6 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#episodes").empty();
-      $("#browse-collapse").collapse("show");
-      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -393,8 +379,6 @@ $(document)
       var drop = $("#search");
       $("#search").empty();
       $("#episodes").empty();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -408,8 +392,6 @@ $(document)
       loadResults(url, drop);
       clearSearch();
       $("#episodes").empty();
-      $("#browse-collapse").collapse("hide");
-      $("#multibar-options-collapse").collapse("hide");
       scrollToMultibar();
     }, 250);
   })
@@ -422,8 +404,6 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find("#settings").length) {
         pushState();
-        $("#browse-collapse").collapse("hide");
-        $("#multibar-options-collapse").collapse("hide");
         clearSearch();
         loadResults(url, drop);
       }
@@ -509,8 +489,6 @@ $(document)
         $("#player-drop").removeClass("minimize");
         player.html(response);
         var img = player.find("#player-image").clone();
-        $(".player-image-drop").html(img).removeClass("d-none");
-        $(".player-logo").addClass("d-none");
         updateTitle();
         var box = $("#player-title");
         var text = $("#player-title span");
@@ -523,8 +501,6 @@ $(document)
     $("#audio-el").preload="none";
     $("#player-drop").empty();
     $("#player-drop").removeClass("minimize");
-    $(".player-image-drop").empty().addClass("d-none");
-    $(".player-logo").removeClass("d-none");
     updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
@@ -549,8 +525,6 @@ $(document)
     pushState();
     loadResults(url, drop);
     clearSearch();
-    $("#browse-collapse").collapse("hide");
-    $("#multibar-options-collapse").collapse("hide");
     $("#episodes").empty();
     scrollToTop();
   })
@@ -670,6 +644,6 @@ $(document)
       el.addClass("darken");
     }
   })
-  .on("click", ".multibar-options-toggle", function(e) {
-    scrollToMultibar();
+  .on("click", ".showpod-badge, .splash-logo", function(e) {
+    scrollToTop();
   })

@@ -78,6 +78,23 @@
         {% endif %}
       {% endif %}
     </div>
+    {% if alphabet %}
+    <div class="col-12 alphabet-buttons">
+      {% for letter in alphabet %}
+      <a class="btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
+        {% if letter == '0' %}
+          <span>
+            #
+          </span>
+        {% else %}
+          <span>
+            {{ letter }}
+          </span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
   <div class="row options-bar">
     {% if results.genres %}
