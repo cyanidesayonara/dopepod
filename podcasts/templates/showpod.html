@@ -9,7 +9,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
   <div class="row" id="showpod">
     <div class="col-4" id="showpod-l">
       <!-- BADGE -->
-      <div class="showpod-badge">
+      <div class="showpod-badge showpod-image">
         <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=360&h=360&t=absolute" />
       </div>
       <ul class="showpod-side-list d-block d-lg-none">
@@ -45,6 +45,22 @@ Listen to episodes of {{ podcast.title }} on dopepod
             subscriber{{ podcast.n_subscribers|pluralize }}
           </span>
         </li>
+        {% if not podcast.genre_rank and not podcast.global_rank %}
+        <li>
+          <span class="genre_rank">
+            Genre:
+            {% if podcast.genre.supergenre %}
+            <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+              {{ podcast.genre.supergenre }}
+            </a>
+            {% else %}
+            <a href="/charts/?genre={{ podcast.genre.url_format }}">
+              {{ podcast.genre }}
+            </a>
+            {% endif %}
+          </span>
+        </li>
+        {% endif %}
         <li>
           <span>
             Language:

@@ -6,6 +6,7 @@ $(document)
     refreshCookie();
     collapseCollapses();
     addIcons();
+    showpodBadge();
     scrollSpy();
   })
 
@@ -51,7 +52,6 @@ function collapseCollapses() {
 function scrollSpy() {
   $(window).scroll(function () {
     showpodBadge();
-    splashBadge();
   })
 }
 
@@ -644,6 +644,6 @@ $(document)
       el.addClass("darken");
     }
   })
-  .on("click", ".showpod-badge, .splash-logo", function(e) {
+  .on("click", ".showpod-badge", function(e) {
     scrollToTop();
   })
