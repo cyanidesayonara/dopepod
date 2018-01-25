@@ -27,6 +27,11 @@
         </div>
         <div class="last-played-bottom">
           <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
+            <span class="episode-summary">
+              {{ episode.summary }}
+            </span>
+          </div>
+          <div class="last-played-buttons">
             <ul>
               <li>
                 played: {{ episode.played }}
@@ -35,11 +40,6 @@
                 released: {{ episode.pubDate }}
               </li>
             </ul>
-            <span class="episode-summary">
-              {{ episode.summary }}
-            </span>
-          </div>
-          <div class="last-played-buttons">
             <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
               {% csrf_token %}
               <input type="hidden" name="url" value="{{ episode.url }}" />

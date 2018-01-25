@@ -7,6 +7,7 @@ $(document)
     collapseCollapses();
     addIcons();
     showpodBadge();
+    splashBadge();
     scrollSpy();
   })
 
@@ -52,26 +53,37 @@ function collapseCollapses() {
 function scrollSpy() {
   $(window).scroll(function () {
     showpodBadge();
+    splashBadge();
   })
-}
-
-function showpodBadge() {
-  var scroll = $(window).scrollTop();
-  if (scroll < 300) {
-    $(".showpod-badge").addClass("showpod-image");
-  }
-  else if (scroll > 299) {
-    $(".showpod-badge").removeClass("showpod-image");
-  }
 }
 
 function splashBadge() {
   var scroll = $(window).scrollTop();
   if (scroll < 300) {
-    $(".splash-logo").addClass("splash-image");
+    $(".showpod-image").removeClass("showpod-badge");
   }
   else if (scroll > 299) {
-    $(".splash-logo").removeClass("splash-image");
+    $(".showpod-image").addClass("showpod-badge");
+  }
+}
+
+function showpodBadge() {
+  var scroll = $(window).scrollTop();
+  if (scroll < 300) {
+    $(".showpod-image").removeClass("showpod-badge");
+  }
+  else if (scroll > 299) {
+    $(".showpod-image").addClass("showpod-badge");
+  }
+}
+
+function splashBadge() {
+  var scroll = $(window).scrollTop();
+  if (scroll < 100) {
+    $(".splash-logo").removeClass("splash-badge");
+  }
+  else if (scroll > 99) {
+    $(".splash-logo").addClass("splash-badge");
   }
 }
 

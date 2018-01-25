@@ -77,6 +77,7 @@ a:hover {
 .last-played-toggle {
   margin-right: 10px;
   text-align: center;
+  cursor: pointer;
   height: 32px;
   width: 32px;
   font-size: 20px;
@@ -143,7 +144,7 @@ a:hover {
   display: inline-block;
   border: none;
   color: rgb(46, 46, 46);
-  font-size: 16px;
+  font-size: 18px;
   padding: 8px 5px;
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
@@ -598,11 +599,11 @@ a:hover {
 /* MULTI BAR */
 #dopebar {
   padding: 4px 0;
-  min-height: 44px;
+  min-height: 50px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
   box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
-  z-index: 9001;
+  z-index: 100;
 }
 #dopebar-drop {
   padding: 0;
@@ -623,33 +624,6 @@ a:hover {
 #browse-bar {
   padding-top: 6px;
   padding-bottom: 6px;
-}
-
-#options-list {
-  display: flex;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-}
-
-#flap {
-  padding: 0;
-  z-index: 90;
-  /* background-image: url("/static/bg.png"); */
-}
-#flap.extended{
-  top: -400px;
-}
-#xxx {
-  overflow: hidden;
-}
-#xxx.open {
-  height: 400px;
-  padding-top: 0px;
-  margin-bottom: -44px;
-}
-#center-stage {
-  height: 100%;
 }
 
 /* SEARCH */
@@ -695,12 +669,23 @@ a:hover {
 }
 
 /* LOGIN-SIGNUP */
-#login {
+#login-wrapper {
   text-align: center;
+  padding: 10px;
+  max-width: 400px;
+  height: 100%;
+  margin: auto;
 }
-#login h1 {
+#login-wrapper h1 {
   font-size: 20px;
   margin-bottom: 10px;
+}
+#login-wrapper .tab-content {
+  height: 160px;
+  padding: 20px 30px 10px;
+}
+.site-description {
+
 }
 #login-buttons {
   padding-top: 10px;
@@ -716,19 +701,6 @@ a:hover {
   padding: 4px 6px;
   background: rgba(230, 81, 0, .5);
   margin-bottom: 2px;
-}
-#login-wrapper {
-  padding: 10px;
-  max-width: 400px;
-  height: 100%;
-  margin: auto;
-}
-#login-wrapper .tab-content {
-  height: 160px;
-  padding: 20px 30px 10px;
-}
-.site-description {
-
 }
 .login-field {
   font-size: unset;
@@ -791,67 +763,65 @@ a:hover {
 }
 #showpod-l {
 }
-.showpod-badge {
-  top: 15px;
-  position: fixed;
-  overflow: hidden;
-  border-radius: 50%;
-  height: 70px;
-  width: 70px;
-  margin-right: 5px;
+.showpod-image {
+  position: static;
+  width: fit-content;
+  height: fit-content;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  color: rgb(46, 46, 46);
+  overflow: hidden;
+}
+.showpod-image img {
+  border-radius: .25rem;
+}
+.showpod-badge {
+  top: 15px;
+  position: fixed;
+  cursor: pointer;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
   z-index: 150;
   transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
   -webkit-transition: all .2s ease-in-out;
 }
 .showpod-badge:hover {
+  transform: scale(1.05);
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 20px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 20px;
   box-shadow: rgba(0,0,0,.5) 0 0 20px;
 }
-.showpod-image {
-  position: static;
-  border-radius: .25rem;
-  width: fit-content;
-  height: fit-content;
-  transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -webkit-transition: all .2s ease-in-out;
-}
 .splash-logo {
-  position: fixed;
-  overflow: hidden;
+  position: static;
   border-radius: 50%;
   height: 70px;
   width: 70px;
-  padding-left: 14px;
+  overflow: hidden;
+  padding-left: 28px;
   padding-right: 28px;
   margin: auto;
+  z-index: 150;
+  color: rgb(46, 46, 46);
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  color: rgb(46, 46, 46);
-  z-index: 150;
   transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
   -webkit-transition: all .2s ease-in-out;
 }
-.splash-logo:hover {
+.splash-badge {
+  position: fixed;
+  top: 15px;
+  transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+}
+.splash-badge:hover {
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 20px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 20px;
   box-shadow: rgba(0,0,0,.5) 0 0 20px;
-}
-.splash-image {
-  position: relative;
-  height: 70px;
-  width: 70px;
-  transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -webkit-transition: all .2s ease-in-out;
 }
 .splash-logo .char {
   top: -3px;
@@ -903,7 +873,7 @@ a:hover {
 }
 #showpod-options {
   margin: auto;
-  padding:  10px 15px 10px 0;
+  padding-top:  10px;
 }
 #showpod-copyright {
 }
@@ -1159,6 +1129,12 @@ a:hover {
 }
 .last-played-buttons a {
   margin-left: 4px;
+}
+.last-played-buttons ul {
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  float: left;
 }
 .last-played-top {
   height: 100px;
