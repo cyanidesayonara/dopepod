@@ -13,27 +13,43 @@ from operator import attrgetter
 import logging
 import string
 from urllib.parse import quote, unquote
+import uuid
 
 logger = logging.getLogger(__name__)
 
+def format_bytes(bytes):
+    #2**10 = 1024
+    power = 2**10
+    suffixes = {1:'KB', 2:'MB', 3:'GB', 4:'TB'}
+
+    n = 1
+    if bytes <= power**2 :
+        bytes /= power
+        return '{0:4.1f}{1}'.format(bytes, suffixes[n])
+    else:
+        while bytes > power :
+            n  += 1
+            bytes /=  power**n
+        return '{0:4.1f}{1}'.format(bytes, suffixes[n])
+
 class Podcast(models.Model):
-    podid = models.IntegerField(primary_key=True)
-    feedUrl = models.CharField(max_length=500)
-    title = models.CharField(max_length=500)
-    artist = models.CharField(max_length=500)
+    podid = models.IntegerField()
+    feedUrl = models.CharField(max_length=1000)
+    title = models.CharField(max_length=1000)
+    artist = models.CharField(max_length=1000)
     genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE)
     explicit = models.BooleanField()
     language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE)
-    copyrighttext = models.CharField(max_length=500)
-    description = models.TextField(max_length=1000, blank=True)
+    copyrighttext = models.CharField(max_length=5000)
+    description = models.TextField(max_length=5000, blank=True)
     n_subscribers = models.IntegerField(default=0)
-    reviewsUrl = models.CharField(max_length=500)
-    artworkUrl = models.CharField(max_length=500)
-    podcastUrl = models.CharField(max_length=500)
-    genre_rank = models.IntegerField(null=True, blank=True)
-    global_rank = models.IntegerField(null=True, blank=True)
+    reviewsUrl = models.CharField(max_length=1000)
+    artworkUrl = models.CharField(max_length=1000)
+    podcastUrl = models.CharField(max_length=1000)
     discriminate = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
+    last_episode = models.DateTimeField(null=True, blank=True)
+    rank = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -107,8 +123,10 @@ class Podcast(models.Model):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
         }
 
+        number = 100
+
         if genre:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=' + str(genre.genreid) + '/xml'
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
         else:
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/xml'
 
@@ -317,34 +335,26 @@ class Podcast(models.Model):
             logger.error('no response from itunes')
 
 class Subscription(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE, related_name='podcast')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast')
     last_updated = models.DateTimeField(default=timezone.now)
     new_episodes = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ('parent__title',)
+        ordering = ('podcast__title',)
 
     def update(self):
         self.last_updated = timezone.now()
-
-    def get_last_updated(self):
-        return self.last_updated.strftime('%b %d %Y, %H:%M')
 
     def get_subscriptions_podids(user):
         if user.is_authenticated:
             return Subscription.objects.filter(owner=user).values_list('parent__podid', flat=True)
 
 class Chart(models.Model):
-    podcasts = models.ManyToManyField('podcasts.Podcast')
-    header = models.CharField(max_length=30, default='Top 50 podcasts on iTunes')
-    genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.CASCADE)
-
-    @property
-    def sorted_podcasts(self):
-        if self.genre:
-            return self.podcasts.order_by('genre_rank')[:50]
-        return self.podcasts.order_by('global_rank')[:50]
+    podcasts = models.ManyToManyField(Podcast, through='Order')
+    provider = models.CharField(max_length=16)
+    header = models.CharField(max_length=16, default='Top 50 podcasts')
+    genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.PROTECT)
 
     def set_charts():
         """
@@ -353,54 +363,77 @@ class Chart(models.Model):
 
         # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
 
+        number = 50
         genres = Genre.get_primary_genres()
 
         # per genre
         for genre in genres:
-            podcasts = Podcast.parse_itunes_charts(genre)
-            try:
-                chart = Chart.objects.get(genre=genre)
-            except Chart.DoesNotExist:
-                chart = Chart()
-                chart.genre = genre
+            providers = [('dopepod', Podcast.objects.filter(genre=genre).order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts(genre))]
+            for provider, podcasts in providers:
+                try:
+                    chart = Chart.objects.get(
+                        genre=genre,
+                        provider=provider,
+                    )
+                except Chart.DoesNotExist:
+                    chart = Chart.objects.create(
+                        provider=provider,
+                        genre=genre,
+                    )
                 chart.save()
-            chart.podcasts.set(podcasts)
 
-            podids = []
-            for podcast in podcasts:
-                podids.append(podcast.podid)
-
-            podcasts = Podcast.objects.filter(genre=genre, genre_rank__isnull=False).exclude(podid__in=podids)
-            for podcast in podcasts:
-                podcast.genre_rank = None
-                podcast.save()
-
-            chart.save()
+                position = 1
+                for podcast in podcasts:
+                    try:
+                        order = Order.objects.get(
+                            position=position,
+                            chart=chart,
+                            podcast=podcast,
+                        )
+                    except Order.DoesNotExist:
+                        order = Order.objects.create(
+                            position=position,
+                            chart=chart,
+                            podcast=podcast,
+                        )
+                    order.save()
+                    position += 1
 
         # global
-        podcasts = Podcast.parse_itunes_charts()
-        try:
-            chart = Chart.objects.get(genre=None)
-        except Chart.DoesNotExist:
-            chart = Chart()
-            chart.genre = None
+        providers = [('dopepod', Podcast.objects.all().order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts())]
+        for provider, podcasts in providers:
+            try:
+                chart = Chart.objects.get(
+                    genre=None,
+                    provider=provider,
+                )
+            except Chart.DoesNotExist:
+                chart = Chart.objects.create(
+                    provider=provider,
+                    genre=None,
+                )
             chart.save()
-        chart.podcasts.set(podcasts)
 
-        podids = []
-        for podcast in podcasts:
-            podids.append(podcast.podid)
+            position = 1
+            for podcast in podcasts:
+                try:
+                    order = Order.objects.get(
+                        position=position,
+                        chart=chart,
+                        podcast=podcast,
+                    )
+                except Order.DoesNotExist:
+                    order = Order.objects.create(
+                        position=position,
+                        chart=chart,
+                        podcast=podcast,
+                    )
+                order.save()
+                position += 1
 
-        podcasts = Podcast.objects.filter(global_rank__isnull=False).exclude(podid__in=podids)
-        for podcast in podcasts:
-            podcast.global_rank = None
-            podcast.save()
-
-        chart.save()
-
-    def get_charts(context, genre=None, ajax=None):
+    def get_charts(context, provider='itunes', genre=None, ajax=None):
         genres = Genre.get_primary_genres()
-        chart = get_object_or_404(Chart, genre=genre)
+        chart = get_object_or_404(Chart, provider=provider, genre=genre)
 
         url = '/charts/'
         urls = {}
@@ -411,13 +444,14 @@ class Chart(models.Model):
 
         results = {}
         results['drop'] = 'charts'
-        results['podcasts'] = chart.sorted_podcasts
+        results['podcasts'] = chart.podcasts
         results['header'] = chart.header
         results['selected_genre'] = chart.genre
         results['genres'] = genres
         results['view'] = 'charts'
         results['urls'] = urls
 
+        print(chart.podcasts.all())
         if ajax:
             context.update({
                 'results': results,
@@ -429,15 +463,24 @@ class Chart(models.Model):
 
         return context
 
+class Order(models.Model):
+    position = models.IntegerField()
+    podcast = models.ForeignKey(Podcast, on_delete=models.PROTECT)
+    chart = models.ForeignKey(Chart, on_delete=models.PROTECT)
+
 class Episode(models.Model):
     parent = models.ForeignKey('podcasts.Podcast', on_delete=models.CASCADE)
     pubDate = models.DateTimeField()
-    title = models.CharField(max_length=500)
+    title = models.CharField(max_length=1000)
     summary = models.TextField(null=True, blank=True)
     length = models.DurationField(null=True, blank=True)
-    url = models.CharField(max_length=500)
+    url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
+    size = models.CharField(max_length=16)
     played = models.DateTimeField(default=timezone.now)
+
+    def played_ago(self):
+        return datetime.now() - self.played
 
     def get_episodes(context, podcast, ajax=None):
         """
@@ -524,6 +567,9 @@ class Episode(models.Model):
                                 except ValueError:
                                     logger.error('can\'t parse length', podcast.feedUrl)
 
+                    if not podcast.last_episode or episode['pubDate']  > podcast.last_episode:
+                        podcast.last_episode = episode['pubDate']
+                        podcast.save()
                     episode['parent'] = podcast
 
                     # link to episode
@@ -532,6 +578,7 @@ class Episode(models.Model):
                     try:
                         episode['url'] = enclosure.get('url').replace('http:', '')
                         episode['type'] = enclosure.get('type')
+                        episode['size'] = format_bytes(int(enclosure.get('length')))
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type', podcast.feedUrl)

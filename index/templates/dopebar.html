@@ -1,82 +1,75 @@
 <div class="col-auto col-lg-5" id="dopebar-l">
-  <a class="nav-link-dope charts-link d-none d-xl-inline-block" href="{% url 'charts' %}">
-    Charts
-  </a>
-  <a class="nav-link-dope browse-link d-none d-xl-inline-block" href="{% url 'browse' %}">
-    Browse
-  </a>
-  {% if user.is_authenticated %}
-  <a class="nav-link-dope index-link d-none d-xl-inline-block" href="/">
-    Dashboard
-  </a>
-  <a class="nav-link-dope subscriptions-link d-none d-xl-inline-block" href="{% url 'subscriptions' %}">
-    Subscriptions
-  </a>
-  {% endif %}
+  <ul>
+    <li>
+      <a class="nav-link-dope charts-link d-none d-xl-inline-block" href="{% url 'charts' %}">
+        Charts
+      </a>
+    </li>
+    <li>
+      <a class="nav-link-dope browse-link d-none d-xl-inline-block" href="{% url 'browse' %}">
+        Browse
+      </a>
+    </li>
+    {% if user.is_authenticated %}
+    <li>
+      <a class="nav-link-dope index-link d-none d-xl-inline-block" href="/">
+        Dashboard
+      </a>
+    </li>
+    <li>
+      <a class="nav-link-dope subscriptions-link d-none d-xl-inline-block" href="{% url 'subscriptions' %}">
+        Subscriptions
+      </a>
+    </li>
+    {% endif %}
+  </ul>
 </div>
 <div class="col-lg-2 d-none d-lg-block" id="dopebar-c">
   {% include 'logo.html' %}
 </div>
 <div class="col col-lg-5" id="dopebar-r">
-  {% if user.is_authenticated %}
-    <a class="nav-link-dope settings-link d-none d-xl-inline-block" href="{% url 'settings' %}">
-      Settings
-    </a>
-    <form class="logout-form" method="POST" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button class="nav-link-dope ajax-logout d-none d-xl-inline-block" type="submit">
-        Logout
-      </button>
-    </form>
-  {% else %}
-    <a class="nav-link-dope ajax-login d-none d-xl-inline-block" href="/?view=login">
-      Login
-    </a>
-  {% endif %}
-  <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
-    <div class="input-group" id="search-field">
-      <label for="q" class="sr-only">Search for podcasts</label>
-      <input class="form-control" type="text" name="q" id="q"
-      type="search" placeholder="Search for podcasts"
-      aria-label="Search for podcasts" maxlength="30" autocomplete="off"
-      accept-charset="utf-8" required>
-      <button id="search-button" type="submit">
-        <span>
-          Go
-        </span>
-      </button>
-    </div>
-  </form>
-</div>
-<div class="col-12 collapse show" id="dopebar-options-collapse">
-  <a class="nav-link-dope charts-link d-inline-block d-xl-none" href="{% url 'charts' %}">
-    Charts
-  </a>
-  <a class="nav-link-dope browse-link d-inline-block d-xl-none" href="{% url 'browse' %}">
-    Browse
-  </a>
-  {% if user.is_authenticated %}
-    <a class="nav-link-dope index-link d-inline-block d-xl-none" href="/">
-      Dashboard
-    </a>
-    <a class="nav-link-dope subscriptions-link d-inline-block d-xl-none" href="{% url 'subscriptions' %}">
-      Subscriptions
-    </a>
-    <a class="nav-link-dope settings-link d-inline-block d-xl-none" href="{% url 'settings' %}">
-      Settings
-    </a>
-    <form class="logout-form d-inline-block" method="POST" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button class="nav-link-dope ajax-logout d-inline-block d-xl-none" type="submit">
-        Logout
-      </button>
-    </form>
-  {% else %}
-    <a class="nav-link-dope ajax-login d-inline-block d-xl-none" href="/?view=login">
-      Login
-    </a>
-    <a class="nav-link-dope ajax-signup d-inline-block d-xl-none" href="/?view=signup">
-      Signup
-    </a>
-  {% endif %}
+  <ul>
+    {% if user.is_authenticated %}
+    <li>
+      <a class="nav-link-dope settings-link d-none d-xl-inline-block" href="{% url 'settings' %}">
+        Settings
+      </a>
+    </li>
+    <li>
+      <form class="logout-form" method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="nav-link-dope ajax-logout d-none d-xl-inline-block" type="submit">
+          Logout
+        </button>
+      </form>
+    </li>
+    {% else %}
+    <li>
+      <a class="nav-link-dope ajax-login d-none d-xl-inline-block" href="/?view=login">
+        Login
+      </a>
+    </li>
+    <li>
+      <a class="nav-link-dope ajax-signup d-none d-xl-inline-block" href="/?view=signup">
+        Signup
+      </a>
+    </li>
+    {% endif %}
+    <li>
+      <form class="form-inline" id="search-form" method="GET" action="{% url 'search' %}">
+        <div class="input-group" id="search-field">
+          <label for="q" class="sr-only">Search for podcasts</label>
+          <input class="form-control" type="text" name="q" id="q"
+          type="search" placeholder="Search for podcasts"
+          aria-label="Search for podcasts" maxlength="30" autocomplete="off"
+          accept-charset="utf-8" required>
+          <button id="search-button" type="submit">
+            <span>
+              Go
+            </span>
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
 </div>

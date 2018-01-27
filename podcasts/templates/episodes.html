@@ -12,6 +12,9 @@
           Released
         </th>
         <th>
+          Size
+        </th>
+        <th>
           Length
         </th>
       </tr>
@@ -28,7 +31,14 @@
           {{ episode.title }}
         </td>
         <td>
-          {{ episode.pubDate }}
+          {{ episode.pubDate|date:'d M Y' }}
+        </td>
+        <td>
+          {% if episode.size %}
+            {{ episode.size }}
+          {% else %}
+            N/A
+          {% endif %}
         </td>
         <td>
           {% if episode.length %}
@@ -39,7 +49,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="4" class="hidden-row">
+        <td colspan="5" class="hidden-row">
           {% if request.is_ajax %}
             <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
           {% else %}

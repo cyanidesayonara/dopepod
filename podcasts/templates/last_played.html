@@ -24,41 +24,41 @@
           <p class="result-episode">
             {{ episode.title }}
           </p>
+          <ul>
+            <li>
+              played: {{ episode.played|date:'d-m-Y H:i:s' }}
+            </li>
+            <li>
+              released: {{ episode.pubDate|date:'d-m-Y H:i:s' }}
+            </li>
+          </ul>
+          <a class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
+            <i class="fas fa-angle-down"></i>
+          </a>
         </div>
         <div class="last-played-bottom">
           <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
-            <span class="episode-summary">
+            <span class="last-played-summary">
               {{ episode.summary }}
             </span>
-          </div>
-          <div class="last-played-buttons">
-            <ul>
-              <li>
-                played: {{ episode.played }}
-              </li>
-              <li>
-                released: {{ episode.pubDate }}
-              </li>
-            </ul>
-            <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
-              {% csrf_token %}
-              <input type="hidden" name="url" value="{{ episode.url }}" />
-              <input type="hidden" name="type" value="{{ episode.type }}" />
-              <input type="hidden" name="title" value="{{ episode.title }}" />
-              <input type="hidden" name="date" value="{{ episode.pubDate }}" />
-              <input type="hidden" name="podid" value="{{ episode.parent.podid }}" />
-              <input type="hidden" name="length" value="{{ episode.length }}" />
-              <input type="hidden" name="summary" value="{{ episode.summary }}" />
-              <button class="btn-dope play-button active" type="submit">
-                Play
-              </button>
-            </form>
-            <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
-              Download
-            </a>
-            <a class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
-              <i class="fas fa-angle-down"></i>
-            </a>
+            <div class="last-played-buttons">
+              <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+                {% csrf_token %}
+                <input type="hidden" name="url" value="{{ episode.url }}" />
+                <input type="hidden" name="type" value="{{ episode.type }}" />
+                <input type="hidden" name="title" value="{{ episode.title }}" />
+                <input type="hidden" name="date" value="{{ episode.pubDate }}" />
+                <input type="hidden" name="podid" value="{{ episode.parent.podid }}" />
+                <input type="hidden" name="length" value="{{ episode.length }}" />
+                <input type="hidden" name="summary" value="{{ episode.summary }}" />
+                <button class="btn-dope play-button active" type="submit">
+                  Play
+                </button>
+              </form>
+              <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
+                Download
+              </a>
+            </div>
           </div>
         </div>
       </div>

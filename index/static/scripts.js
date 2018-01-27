@@ -57,16 +57,6 @@ function scrollSpy() {
   })
 }
 
-function splashBadge() {
-  var scroll = $(window).scrollTop();
-  if (scroll < 300) {
-    $(".showpod-image").removeClass("showpod-badge");
-  }
-  else if (scroll > 299) {
-    $(".showpod-image").addClass("showpod-badge");
-  }
-}
-
 function showpodBadge() {
   var scroll = $(window).scrollTop();
   if (scroll < 300) {

@@ -78,20 +78,24 @@
         {% endif %}
       {% endif %}
     </div>
-    {% if alphabet %}
+    {% if results.alphabet %}
     <div class="col-12 alphabet-buttons">
-      {% for letter in alphabet %}
-      <a class="btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
-        {% if letter == '0' %}
-          <span>
-            #
-          </span>
-        {% else %}
-          <span>
-            {{ letter }}
-          </span>
-        {% endif %}
-      </a>
+      {% for letter in results.alphabet %}
+       {% if letter == results.selected_q|capfirst %}
+         <a class="btn-dope active alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
+       {% else %}
+         <a class="btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
+       {% endif %}
+          {% if letter == '0' %}
+            <span>
+              #
+            </span>
+          {% else %}
+            <span>
+              {{ letter }}
+            </span>
+          {% endif %}
+        </a>
       {% endfor %}
     </div>
     {% endif %}

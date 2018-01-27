@@ -75,6 +75,7 @@ a:hover {
   background: rgba(0, 191,165, 1);
 }
 .last-played-toggle {
+  float: right;
   margin-right: 10px;
   text-align: center;
   cursor: pointer;
@@ -529,7 +530,7 @@ a:hover {
 #main-wrapper {
 }
 #main {
-  padding: 15px 25px 50px 25px;
+  padding: 50px 25px 15px 25px;
   min-height: 100vh;
 }
 #browse-collapse {
@@ -600,26 +601,30 @@ a:hover {
 #dopebar {
   padding: 4px 0;
   min-height: 50px;
-  -webkit-box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
-  -moz-box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
-  box-shadow: rgba(0,0,0,.5) 0 -2px 3px;
+  -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
+  -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
+  box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   z-index: 100;
 }
 #dopebar-drop {
   padding: 0;
 }
+#dopebar-drop ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#dopebar-drop ul li {
+  display: inline-block;
+}
 #dopebar-l {
-  z-index: 125;
-  min-width: 100px;
-  height: 36px;
-  display: inline-flex;
+
 }
 #dopebar-c {
   padding: 0;
 }
-#dopebar-r {
-  display: inline-flex;
-  justify-content: flex-end;
+#dopebar-r ul {
+  float: right;
 }
 #browse-bar {
   padding-top: 6px;
@@ -782,7 +787,7 @@ a:hover {
   border-radius: 50%;
   height: 70px;
   width: 70px;
-  z-index: 150;
+  z-index: 9001;
   transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
   -webkit-transition: all .2s ease-in-out;
@@ -872,7 +877,7 @@ a:hover {
   margin-bottom: 4px;
 }
 #showpod-options {
-  margin: auto;
+  margin-left: auto;
   padding-top:  10px;
 }
 #showpod-copyright {
@@ -1084,7 +1089,7 @@ a:hover {
 .charts-result .result-title, .charts-result .result-title:hover {
   font-size: 16px;
   overflow: hidden;
-  height: 58px;
+  height: 39px;
   margin-bottom: 4px;
 }
 .charts-result .result-artist, .charts-result .result-artist:hover {
@@ -1092,12 +1097,13 @@ a:hover {
   font-weight: 400;
   font-size: 14px;
   overflow: hidden;
-  height: 38px;
+  height: 19px;
 }
 .last-played {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
 .last-played a {
   color: rgb(46, 46, 46);
   text-decoration: none;
@@ -1117,10 +1123,12 @@ a:hover {
   border-bottom: 2px solid rgba(0, 191,165, 1);
   padding: 5px 0;
 }
-.last-played-bottom ul {
-  list-style: none;
-  padding: 5px 0;
+.last-played-top ul {
+  font-size: 12px;
+  padding: 0;
   margin: 0;
+  float: left;
+  list-style: none;
 }
 .last-played-buttons {
   padding: 5px 0;
@@ -1129,12 +1137,6 @@ a:hover {
 }
 .last-played-buttons a {
   margin-left: 4px;
-}
-.last-played-buttons ul {
-  font-size: 12px;
-  padding: 0;
-  margin: 0;
-  float: left;
 }
 .last-played-top {
   height: 100px;
@@ -1160,6 +1162,12 @@ a:hover {
   text-overflow: ellipsis;
 }
 .last-played-top .result-episode {
+  margin-bottom: 6px;
+  height: 40px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.last-played-bottom .episode-summary {
   margin-bottom: 3px;
   max-height: 60px;
   overflow: hidden;

@@ -25,6 +25,12 @@
 {% endif %}
     <!-- MAIN CONTENT -->
     <div id="main-wrapper">
+      <!-- MULTIBAR -->
+      <nav class="navbar fixed-top color-4-trans" id="dopebar">
+        <div class="container" id="dopebar-drop">
+          {% include 'dopebar.html' %}
+        </div>
+      </nav>
       <!-- MAIN -->
       <div class="container"id="main">
         <!-- CENTER STAGE -->
@@ -43,10 +49,8 @@
         <!-- RESULTS -->
         <div class="row" id="search">
           {% if search %}
-            {% with alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ#" %}
-              {% with search as results %}
-                {% include 'results_base.html' %}
-              {% endwith %}
+            {% with search as results %}
+              {% include 'results_base.html' %}
             {% endwith %}
           {% endif %}
         </div>
@@ -61,12 +65,6 @@
             {% include 'last_played.html' %}
           {% endif %}
         </div>
-        <!-- MULTIBAR -->
-        <nav class="navbar fixed-bottom color-4-trans" id="dopebar">
-          <div class="container" id="dopebar-drop">
-            {% include 'dopebar.html' %}
-          </div>
-        </nav>
       </div>
     </div>
     <!-- PLAYER -->

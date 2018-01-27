@@ -82,6 +82,7 @@ def search(request):
     """
 
     if request.method == 'GET':
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
@@ -164,6 +165,7 @@ def search(request):
             urls['full_url'] = url + '?'
 
         results = {}
+        results['alphabet'] = alphabet
         results['drop'] = 'search'
         results['podcasts'] = podcasts
         one = show // 4

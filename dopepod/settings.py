@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'index',
     'podcasts',
     'login',
-
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
