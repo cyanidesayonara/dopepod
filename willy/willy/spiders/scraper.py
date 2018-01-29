@@ -1,9 +1,27 @@
 import scrapy
 import json
-import requests
 import sys
 from willy.items import PodcastItem, GenreItem
 from datetime import datetime
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+# https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+session = requests.Session()
+retries=3
+backoff_factor=0.3
+status_forcelist=(500, 502, 504)
+retry = Retry(
+    total=retries,
+    read=retries,
+    connect=retries,
+    backoff_factor=backoff_factor,
+    status_forcelist=status_forcelist,
+)
+adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
 
 class WillyTheSpider(scrapy.Spider):
     name = 'willy'
@@ -150,7 +168,7 @@ class WillyTheSpider(scrapy.Spider):
 
             try:
                 # make sure feedUrl works
-                response = requests.get(feedUrl, headers=headers, timeout=30)
+                response = session.get(feedUrl, headers=headers, timeout=10)
                 response.raise_for_status()
 
                 return PodcastItem (
@@ -177,6 +195,5 @@ class WillyTheSpider(scrapy.Spider):
                     f.write(str(datetime.now()) + ' | feedUrl timed out' + ' -- ' + str(data) + '\n\n')
 
         except KeyError as e:
-            print('Missing data: ' + str(e))
             with open('logs.txt', 'a', encoding='utf-8') as f:
                 f.write(str(datetime.now()) + ' | Missing data: ' + str(e) + ' -- ' + str(data) + '\n\n')

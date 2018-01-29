@@ -23,7 +23,10 @@
         {{ results.header }}
       </h1>
     </div>
-    <div class="col-12 results-buttons">
+  </div>
+  {% if results.podcasts or results.episodes %}
+    <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
+      <div class="col-12 results-buttons">
       {% if results.view == 'grid' %}
         <a class="btn-dope view-button view-icon view-icon-grid d-none" href="{{ results.urls.full_url }}&view=list">
           {% if request.is_ajax %}
@@ -55,91 +58,99 @@
           {% endif %}
         </a>
       {% endif %}
+      {% if results.alphabet %}
+        {% if results.selected_alphabet %}
+          <a class="btn-dope active toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
+            {{ results.selected_alphabet }}
+          </a>
+        {% else %}
+          <a class="btn-dope toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
+            All Genres
+          </a>
+        {% endif %}
+      {% endif %}
       {% if results.genres %}
         {% if results.selected_genre %}
-        <a class="btn-dope active toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
-          {{ results.selected_genre }}
-        </a>
+          <a class="btn-dope active toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
+            {{ results.selected_genre }}
+          </a>
         {% else %}
-        <a class="btn-dope toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
-          All Genres
-        </a>
+          <a class="btn-dope toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
+            All Genres
+          </a>
         {% endif %}
       {% endif %}
       {% if results.languages %}
         {% if results.selected_language %}
-        <a class="btn-dope active toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
-          {{ results.selected_language }}
-        </a>
+          <a class="btn-dope active toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
+            {{ results.selected_language }}
+          </a>
         {% else %}
-        <a class="btn-dope toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
-          All Languages
-        </a>
+          <a class="btn-dope toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
+            All Languages
+          </a>
         {% endif %}
       {% endif %}
     </div>
-    {% if results.alphabet %}
-    <div class="col-12 alphabet-buttons">
-      {% for letter in results.alphabet %}
-       {% if letter == results.selected_q|capfirst %}
-         <a class="btn-dope active alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
-       {% else %}
-         <a class="btn-dope alphabet-button" href="/browse/?q={{ letter }}" id="alphabet-{{ letter }}">
-       {% endif %}
-          {% if letter == '0' %}
-            <span>
-              #
-            </span>
-          {% else %}
-            <span>
-              {{ letter }}
-            </span>
-          {% endif %}
-        </a>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </div>
-  <div class="row options-bar">
-    {% if results.genres %}
-      <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
-        <div class="options-group genre-buttons">
-          {% if results.selected_genre %}
-            <a class="btn-dope options-button" href="{{ results.urls.genre_url }}">
-              All Genres
+      {% if results.alphabet %}
+        <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">
+        <div class="options-group alphabet-buttons">
+          {% for letter in results.alphabet %}
+          {% if letter == results.selected_q|capfirst %}
+          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+            {% else %}
+            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+              {% endif %}
+              {% if letter == '0' %}
+              <span>
+                #
+              </span>
+              {% else %}
+              <span>
+                {{ letter }}
+              </span>
+              {% endif %}
             </a>
-          {% endif %}
-          {% for genre in results.genres %}
-            {% if not results.selected_genre == genre %}
-              <a class="btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
-                {{ genre }}
-              </a>
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
         </div>
       </div>
-    {% endif %}
-    {% if results.languages %}
-      <div class="collapse options-collapse" id="language-collapse-{{ results.drop }}">
-        <div class="options-group language-buttons">
-          {% if results.selected_language %}
-            <a class="btn-dope options-button" href="{{ results.urls.language_url }}">
-              All Languages
-            </a>
-          {% endif %}
-          {% for language in results.languages %}
-            {% if not results.selected_language == language %}
-              <a class="btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
-                {{ language }}
+      {% endif %}
+      {% if results.genres %}
+        <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
+          <div class="options-group genre-buttons">
+            {% if results.selected_genre %}
+              <a class="btn-dope options-button" href="{{ results.urls.genre_url }}">
+                All Genres
               </a>
             {% endif %}
-          {% endfor %}
+            {% for genre in results.genres %}
+              {% if not results.selected_genre == genre %}
+                <a class="btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
+                  {{ genre }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
         </div>
-      </div>
-    {% endif %}
-  </div>
-  {% if results.podcasts or results.episodes %}
-    <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
+      {% endif %}
+      {% if results.languages %}
+        <div class="collapse options-collapse" id="language-collapse-{{ results.drop }}">
+          <div class="options-group language-buttons">
+            {% if results.selected_language %}
+              <a class="btn-dope options-button" href="{{ results.urls.language_url }}">
+                All Languages
+              </a>
+            {% endif %}
+            {% for language in results.languages %}
+              {% if not results.selected_language == language %}
+                <a class="btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
+                  {{ language }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
       {% if results.podcasts.has_other_pages %}
         {% include 'pagination.html' %}
       {% endif %}

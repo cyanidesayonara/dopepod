@@ -5,14 +5,14 @@ dashboard - dopepod
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-12" id="dashboard-top">
+<div class="col-12 results" id="dashboard-top">
   <p>
     Dashboard
   </p>
   <p>
-    You have {{ user.subscription_set.count }}
+    You have {{ user.subscription.count }}
     <a class="subscriptions-link" href="{% url 'subscriptions' %}">
-      subscription{{ user.subscription_set.count|pluralize }}
+      subscription{{ user.subscription.count|pluralize }}
     </a>
   </p>
   <p>

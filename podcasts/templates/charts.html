@@ -1,15 +1,11 @@
 <div class="col results-content">
   <div class="row">
-    {% for podcast in results.podcasts_set.all %}
+    {% for podcast in results.podcasts %}
       <div class="col-12 col-lg-6 charts-box">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
           <div class="charts-result">
             <span class="charts-rank">
-              {% if results.selected_genre %}
-              {{ podcast.genre_rank }}
-              {% else %}
-              {{ podcast.global_rank }}
-              {% endif %}
+              {{ podcast.position }}
             </span>
             <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
             <h1 class="result-title">

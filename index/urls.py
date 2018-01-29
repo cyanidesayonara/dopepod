@@ -5,7 +5,7 @@ from login import views as login
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
-    url(r'^dopebar/$', index.navbar, name='navbar'),
+    url(r'^dopebar/$', index.dopebar, name='dopebar'),
     url(r'^charts/$', index.charts, name="charts"),
     url(r'^search/$', index.search, name='search'),
     url(r'^browse/$', index.search, name='browse'),

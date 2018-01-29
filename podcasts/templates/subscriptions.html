@@ -1,7 +1,7 @@
 <div class="col results-content">
   <div class="row">
     {% for subscription in results.podcasts %}
-      {% with subscription.parent as podcast %}
+      {% with subscription.podcast as podcast %}
         <div class="col-12 col-md-6 subscriptions-box">
           <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
             <div class="subscriptions-result">

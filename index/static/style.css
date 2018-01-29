@@ -563,6 +563,9 @@ a:hover {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.options-collapse {
+  width: 100%;
+}
 .options-group {
   display: flex;
   -ms-flex-wrap: wrap;
@@ -578,23 +581,9 @@ a:hover {
 
 /* ALPHABET BUTTONS */
 .alphabet-buttons {
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  padding: 0 10px;
-  margin-left: auto;
-  max-width: 330px;
-
-  margin-top: 4px;
 }
 .alphabet-button {
-  display: block;
-  text-align: center;
-  font-weight: 600;
   width: 30px;
-  margin: 0 0 4px 4px;
-  padding: .25rem .25rem;
 }
 
 /* MULTI BAR */
@@ -747,7 +736,6 @@ a:hover {
 
 /* SETTINGS */
 #settings {
-  margin: 10px;
 }
 #settings-form {
   margin: auto;
@@ -772,16 +760,15 @@ a:hover {
   position: static;
   width: fit-content;
   height: fit-content;
+}
+.showpod-image img {
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  overflow: hidden;
-}
-.showpod-image img {
   border-radius: .25rem;
 }
 .showpod-badge {
-  top: 15px;
+  top: 70px;
   position: fixed;
   cursor: pointer;
   border-radius: 50%;
@@ -1322,7 +1309,4 @@ hr.h-line {
 }
 /* large desktops and up ----------- */
 @media screen and (min-width: 1200px) {
-  .alphabet-buttons {
-    max-width: 100%;
-  }
 }

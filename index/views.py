@@ -7,13 +7,13 @@ from django.views.decorators.vary import vary_on_headers
 import urllib.parse
 import json
 
-def navbar(request):
+def dopebar(request):
     """
     returns navbar (for refreshing)
     """
 
     if request.method == 'GET':
-        return render(request, 'navbar.html', {})
+        return render(request, 'dopebar.html', {})
 
 @vary_on_headers('Accept')
 def index(request):
@@ -25,7 +25,7 @@ def index(request):
     if request.method == 'GET':
         user = request.user
         view = request.GET.get('view' , None)
-
+        
         context = {
             'view': view,
         }
@@ -59,13 +59,17 @@ def charts(request):
         if genre:
             if genre not in genres.values_list('name', flat=True):
                 genre = None
+            else:
+                genre = Genre.objects.get(name=genre)
 
         context = {}
-        context = Chart.get_charts(context, genre)
-        context = Episode.get_last_played(context)
+
+        context = Chart.get_charts(context, genre=genre)
 
         if request.is_ajax():
             return render(request, 'results_base.html', context)
+
+        context = Episode.get_last_played(context)
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
@@ -214,10 +218,10 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        subscriptions = user.subscription_set.all()
+        subscriptions = Subscription.objects.filter(user=user)
 
         if subscriptions.count() == 1:
-            results_header = str(subscriptions.count()) + ' subscriptions'
+            results_header = str(subscriptions.count()) + ' subscription'
         else:
             results_header = str(subscriptions.count()) + ' subscriptions'
 

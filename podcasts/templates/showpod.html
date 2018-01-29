@@ -13,27 +13,19 @@ Listen to episodes of {{ podcast.title }} on dopepod
         <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=360&h=360&t=absolute" />
       </div>
       <ul class="showpod-side-list d-block d-lg-none">
-        {% if podcast.global_rank %}
-        <li>
-          <span class="global_rank">
-            #{{ podcast.global_rank }} in
-            podcasts
-          </span>
-        </li>
-        {% endif %}
-        {% if podcast.genre_rank %}
+        {% if podcast.rank %}
         <li>
           <span class="genre_rank">
-            #{{ podcast.genre_rank }} in
+            #{{ podcast.rank }} in
             {% if podcast.genre.supergenre %}
-            <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
-              {{ podcast.genre.supergenre }}
-            </a>
+              <a href="/charts/?genre={{ podcast.genre.supergenre.url_format }}">
+                {{ podcast.genre.supergenre }}
+              </a>
             {% else %}
-            <a href="/charts/?genre={{ podcast.genre.url_format }}">
-              {{ podcast.genre }}
-              {% endif %}
-            </a>
+              <a href="/charts/?genre={{ podcast.genre.url_format }}">
+                {{ podcast.genre }}
+              </a>
+            {% endif %}
           </span>
         </li>
         {% endif %}

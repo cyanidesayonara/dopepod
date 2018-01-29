@@ -5,7 +5,6 @@ from django.utils.html import strip_tags
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models import Q
-import requests
 from lxml import etree, html
 from datetime import time, timedelta, datetime
 from dateutil.parser import parse
@@ -13,7 +12,25 @@ from operator import attrgetter
 import logging
 import string
 from urllib.parse import quote, unquote
-import uuid
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+# https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+session = requests.Session()
+retries=3
+backoff_factor=0.3
+status_forcelist=(500, 502, 504)
+retry = Retry(
+    total=retries,
+    read=retries,
+    connect=retries,
+    backoff_factor=backoff_factor,
+    status_forcelist=status_forcelist,
+)
+adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +112,7 @@ class Podcast(models.Model):
                     Q(title__istartswith=q) |
                     Q(title__icontains=q)
                 )
-                podcasts = podcasts.order_by('global_rank', 'genre_rank', 'discriminate')
+                podcasts = podcasts.order_by('rank', 'discriminate')
             else:
                 if q == '#':
                     query = Q()
@@ -110,7 +127,7 @@ class Podcast(models.Model):
                     )
                 podcasts = podcasts.order_by('title')
         else:
-            podcasts = podcasts.filter().order_by('global_rank', 'genre_rank', 'discriminate')
+            podcasts = podcasts.filter().order_by('rank', 'discriminate')
 
         return podcasts
 
@@ -128,10 +145,10 @@ class Podcast(models.Model):
         if genre:
             url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
         else:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/xml'
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/xml'
 
         try:
-            response = requests.get(url, headers=headers, timeout=5)
+            response = session.get(url, headers=headers, timeout=10)
             response.raise_for_status()
 
             root = etree.XML(response.content)
@@ -183,7 +200,7 @@ class Podcast(models.Model):
 
         # if subscription exists, delete it
         try:
-            subscription = Subscription.objects.get(parent=self, owner=user)
+            subscription = Subscription.objects.get(podcast=self, user=user)
             subscription.delete()
             self.n_subscribers -= 1
             self.save()
@@ -191,8 +208,8 @@ class Podcast(models.Model):
         # if subscription doesn't exist, create it
         except Subscription.DoesNotExist:
             Subscription.objects.create(
-                owner=user,
-                parent=self,
+                user=user,
+                podcast=self,
             )
             self.n_subscribers += 1
             self.save()
@@ -265,7 +282,7 @@ class Podcast(models.Model):
 
         # get more data from itunes artist page
         try:
-            response = requests.get(itunesUrl, headers=headers, timeout=5)
+            response = session.get(itunesUrl, headers=headers, timeout=5)
             response.raise_for_status()
 
             tree = html.fromstring(response.text)
@@ -298,11 +315,12 @@ class Podcast(models.Model):
                 # make sure feedUrl works
                 try:
                     logger.error(feedUrl)
-                    response = requests.get(feedUrl, headers=headers, timeout=5)
+                    response = session.get(feedUrl, headers=headers, timeout=5)
                     response.raise_for_status()
                     try:
                         return Podcast.objects.get(podid=podid)
                     except Podcast.DoesNotExist:
+                        print(data)
                         return Podcast.objects.create(
                             podid=podid,
                             feedUrl=feedUrl,
@@ -335,9 +353,9 @@ class Podcast(models.Model):
             logger.error('no response from itunes')
 
 class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast')
-    last_updated = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
+    last_updated = models.DateTimeField(default=timezone.now())
     new_episodes = models.IntegerField(default=0)
 
     class Meta:
@@ -348,7 +366,7 @@ class Subscription(models.Model):
 
     def get_subscriptions_podids(user):
         if user.is_authenticated:
-            return Subscription.objects.filter(owner=user).values_list('parent__podid', flat=True)
+            return Subscription.objects.filter(user=user).values_list('podcast__podid', flat=True)
 
 class Chart(models.Model):
     podcasts = models.ManyToManyField(Podcast, through='Order')
@@ -368,7 +386,7 @@ class Chart(models.Model):
 
         # per genre
         for genre in genres:
-            providers = [('dopepod', Podcast.objects.filter(genre=genre).order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts(genre))]
+            providers = [('dopepod', Podcast.objects.filter(genre=genre).order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts(genre)[:number])]
             for provider, podcasts in providers:
                 try:
                     chart = Chart.objects.get(
@@ -383,21 +401,30 @@ class Chart(models.Model):
                 chart.save()
 
                 position = 1
+                old_orders = Order.objects.filter(chart=chart)
+                new_orders = []
+
                 for podcast in podcasts:
                     try:
                         order = Order.objects.get(
-                            position=position,
                             chart=chart,
                             podcast=podcast,
                         )
+                        order.position = position
                     except Order.DoesNotExist:
                         order = Order.objects.create(
-                            position=position,
                             chart=chart,
                             podcast=podcast,
+                            position=position,
                         )
                     order.save()
+                    new_orders.append(order)
                     position += 1
+
+                for order in old_orders:
+                    if order not in new_orders:
+                        print(order)
+                        order.delete()
 
         # global
         providers = [('dopepod', Podcast.objects.all().order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts())]
@@ -415,10 +442,12 @@ class Chart(models.Model):
             chart.save()
 
             position = 1
+            old_orders = Order.objects.filter(chart=chart)
+            new_orders = []
+
             for podcast in podcasts:
                 try:
                     order = Order.objects.get(
-                        position=position,
                         chart=chart,
                         podcast=podcast,
                     )
@@ -429,11 +458,24 @@ class Chart(models.Model):
                         podcast=podcast,
                     )
                 order.save()
+                new_orders.append(order)
                 position += 1
+
+            for order in old_orders:
+                if order not in new_orders:
+                    print(order)
+                    order.delete()
 
     def get_charts(context, provider='itunes', genre=None, ajax=None):
         genres = Genre.get_primary_genres()
         chart = get_object_or_404(Chart, provider=provider, genre=genre)
+        orders = Order.objects.filter(chart=chart).order_by('position')
+        podcasts = []
+
+        for order in orders:
+            podcast = order.podcast
+            podcast.position = order.position
+            podcasts.append(podcast)
 
         url = '/charts/'
         urls = {}
@@ -444,14 +486,13 @@ class Chart(models.Model):
 
         results = {}
         results['drop'] = 'charts'
-        results['podcasts'] = chart.podcasts
+        results['podcasts'] = podcasts
         results['header'] = chart.header
         results['selected_genre'] = chart.genre
         results['genres'] = genres
         results['view'] = 'charts'
         results['urls'] = urls
 
-        print(chart.podcasts.all())
         if ajax:
             context.update({
                 'results': results,
@@ -500,7 +541,7 @@ class Episode(models.Model):
         episodes = []
 
         try:
-            response = requests.get(podcast.feedUrl, headers=headers, timeout=5)
+            response = session.get(podcast.feedUrl, headers=headers, timeout=5)
             response.raise_for_status()
 
             try:
