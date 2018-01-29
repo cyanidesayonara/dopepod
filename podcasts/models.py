@@ -354,14 +354,14 @@ class Podcast(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
-    last_updated = models.DateTimeField(default=timezone.now())
+    last_updated = models.DateTimeField(default=timezone.now)
     new_episodes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('podcast__title',)
 
     def update(self):
-        self.last_updated = timezone.now()
+        self.last_updated = timezone.now
 
     def get_subscriptions_podids(user):
         if user.is_authenticated:
@@ -410,19 +410,18 @@ class Chart(models.Model):
                             podcast=podcast,
                         )
                         order.position = position
+                        order.save()
                     except Order.DoesNotExist:
                         order = Order.objects.create(
                             chart=chart,
                             podcast=podcast,
                             position=position,
                         )
-                    order.save()
                     new_orders.append(order)
                     position += 1
 
                 for order in old_orders:
                     if order not in new_orders:
-                        print(order)
                         order.delete()
 
         # global
@@ -462,7 +461,6 @@ class Chart(models.Model):
 
             for order in old_orders:
                 if order not in new_orders:
-                    print(order)
                     order.delete()
 
     def get_charts(context, provider='itunes', genre=None, ajax=None):
