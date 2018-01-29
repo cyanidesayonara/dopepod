@@ -320,7 +320,6 @@ class Podcast(models.Model):
                     try:
                         return Podcast.objects.get(podid=podid)
                     except Podcast.DoesNotExist:
-                        print(data)
                         return Podcast.objects.create(
                             podid=podid,
                             feedUrl=feedUrl,
