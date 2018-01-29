@@ -64,7 +64,7 @@
                 <input type="hidden" name="url" value="{{ episode.url }}" />
                 <input type="hidden" name="type" value="{{ episode.type }}" />
                 <input type="hidden" name="title" value="{{ episode.title }}" />
-                <input type="hidden" name="date" value="{{ episode.pubDate }}" />
+                <input type="hidden" name="date" value="{{ episode.pubDate|date:'r' }}" />
                 <input type="hidden" name="podid" value="{{ podcast.podid }}" />
                 <input type="hidden" name="length" value="{{ episode.length }}" />
                 <input type="hidden" name="summary" value="{{ episode.summary }}" />

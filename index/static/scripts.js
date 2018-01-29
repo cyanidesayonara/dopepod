@@ -57,20 +57,11 @@ function scrollSpy() {
 
 function showpodBadge() {
   var scroll = $(window).scrollTop();
-  if (scroll < 300) {
-    $(".showpod-image").removeClass("showpod-badge");
-    var width = 100 - 0.3 * scroll;
-    $(".showpod-image").css("height", $(".showpod-image")[0].scrollWidth + "px");
-    $(".showpod-image img").css("width", width + "%");
-    $(".showpod-image img").css("margin-top", (100 - width) + "%");
-  }
-  else if (scroll > 299) {
-    $(".showpod-image img").css("width", "");
-    $(".showpod-image").css("height", "");
+  if (scroll > 300) {
     $(".showpod-image").addClass("showpod-badge");
-    $(".showpod-image img").css("margin-top", "");
   }
   else {
+    $(".showpod-image").removeClass("showpod-badge");
   }
 }
 

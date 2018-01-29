@@ -30,11 +30,11 @@ Listen to episodes of {{ podcast.title }} on dopepod
         </li>
         {% endif %}
         <li>
+          <span class="subscriber">
+            Subscriber{{ podcast.n_subscribers|pluralize }}
+          </span>
           <span class="n_subscribers">
             {{ podcast.n_subscribers }}
-          </span>
-          <span class="subscriber">
-            subscriber{{ podcast.n_subscribers|pluralize }}
           </span>
         </li>
         {% if not podcast.genre_rank and not podcast.global_rank %}
@@ -123,15 +123,15 @@ Listen to episodes of {{ podcast.title }} on dopepod
         </li>
         {% endif %}
         <li>
+          <span class="subscriber">
+            Subscriber{{ podcast.n_subscribers|pluralize }}
+          </span>
           <span class="n_subscribers">
             {{ podcast.n_subscribers }}
           </span>
-          <span class="subscriber">
-            subscriber{{ podcast.n_subscribers|pluralize }}
-          </span>
         </li>
         {% if not podcast.genre_rank and not podcast.global_rank %}
-        <li>
+          <li>
           <span class="genre_rank">
             Genre:
             {% if podcast.genre.supergenre %}
@@ -167,7 +167,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         </li>
         <li>
           <a class="showpod-feedUrl" href="{{ podcast.feedUrl }}">
-            <span >
+            <span>
               Podcast RSS feed
             </span>
           </a>
@@ -179,35 +179,35 @@ Listen to episodes of {{ podcast.title }} on dopepod
             </span>
           </em>
         </li>
-      </li>
-    </ul>
-  </div>
-    <div class="col-auto" id="showpod-options">
-  {% if user.is_authenticated %}
-    <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="podid" value="{{ podcast.podid }}">
-      {% if podcast.is_subscribed %}
-        <button type="submit" class="btn-dope btn-dope-showpod sub-button">
-          Unsubscribe
-      {% else %}
-        <button type="submit" class="btn-dope btn-dope-showpod active sub-button">
-          Subscribe
+        </li>
+      </ul>
+    </div>
+    <div class="col-12" id="showpod-options">
+      {% if user.is_authenticated %}
+        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="podid" value="{{ podcast.podid }}">
+          {% if podcast.is_subscribed %}
+            <button type="submit" class="btn-dope btn-dope-showpod sub-button">
+              Unsubscribe
+          {% else %}
+            <button type="submit" class="btn-dope btn-dope-showpod active sub-button">
+              Subscribe
+          {% endif %}
+            </button>
+        </form>
       {% endif %}
-        </button>
-    </form>
-  {% endif %}
-  <a class="btn-dope active" id="show-episodes" href="#">
-    <span>
-      Episodes
-    </span>
-  </a>
-  <button class="btn-dope btn-dope-showpod btn-dope-disabled">
-    <span>
-      Reviews
-    </span>
-  </button>
-</div>
+      <a class="btn-dope active" id="show-episodes" href="#">
+        <span>
+          Episodes
+        </span>
+      </a>
+      <button class="btn-dope btn-dope-showpod btn-dope-disabled">
+        <span>
+          Reviews
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 {% endblock %}

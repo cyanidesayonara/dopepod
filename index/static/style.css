@@ -751,39 +751,56 @@ a:hover {
 }
 #showpod-c {
   overflow: hidden;
-  height: 340px;
+  min-height: 340px;
   padding: 0 10px 0 0;
 }
 #showpod-l {
+  padding-right: 10px;
 }
 .showpod-image {
   position: static;
   width: fit-content;
   height: fit-content;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
 }
 .showpod-image img {
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
   border-radius: .25rem;
+  transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
 }
 .showpod-badge {
-  top: 70px;
+  top: 60px;
   position: fixed;
   cursor: pointer;
+  overflow: visible;
+  z-index: 9001;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
+}
+.showpod-badge img {
   border-radius: 50%;
   height: 70px;
   width: 70px;
   z-index: 9001;
+  -webkit-box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  box-shadow: rgba(0,0,0,.5) 0 0 10px;
   transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
   -webkit-transition: all .2s ease-in-out;
 }
 .showpod-badge:hover {
-  transform: scale(1.05);
-  -webkit-box-shadow: rgba(0,0,0,.5) 0 0 20px;
-  -moz-box-shadow: rgba(0,0,0,.5) 0 0 20px;
-  box-shadow: rgba(0,0,0,.5) 0 0 20px;
+  transform: scale(1.1);
+  transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
 }
 .splash-logo {
   position: static;
@@ -858,13 +875,14 @@ a:hover {
   overflow: hidden;
 }
 #showpod-l .showpod-side-list li {
+  border-bottom: 2px solid rgba(0, 191, 165, 1);
   margin-bottom: 4px;
 }
 #showpod-r .showpod-side-list li {
   margin-bottom: 4px;
 }
-#showpod-options {
-  margin-left: auto;
+.showpod-options {
+  float: right;
   padding-top:  10px;
 }
 #showpod-copyright {
