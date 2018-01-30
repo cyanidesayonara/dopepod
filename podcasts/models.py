@@ -605,9 +605,9 @@ class Episode(models.Model):
                                 except ValueError:
                                     logger.error('can\'t parse length', podcast.feedUrl)
 
-                    if not podcast.last_episode or episode['pubDate']  > podcast.last_episode:
-                        podcast.last_episode = episode['pubDate']
-                        podcast.save()
+                    # if not podcast.last_episode or episode['pubDate']  > podcast.last_episode:
+                    #     podcast.last_episode = episode['pubDate']
+                    #     podcast.save()
                     episode['parent'] = podcast
 
                     # link to episode
