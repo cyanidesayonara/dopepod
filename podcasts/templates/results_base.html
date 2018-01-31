@@ -24,7 +24,6 @@
       </h1>
     </div>
   </div>
-  {% if results.podcasts or results.episodes %}
     <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
       <div class="col-12 results-buttons">
       {% if results.view == 'grid' %}
@@ -59,13 +58,13 @@
         </a>
       {% endif %}
       {% if results.alphabet %}
-        {% if results.selected_alphabet %}
+        {% if results.selected_q|capfirst in results.alphabet %}
           <a class="btn-dope active toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
-            {{ results.selected_alphabet }}
+            {{ results.selected_q|capfirst }}
           </a>
         {% else %}
           <a class="btn-dope toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
-            All Genres
+            A-Z
           </a>
         {% endif %}
       {% endif %}
@@ -94,33 +93,38 @@
     </div>
       {% if results.alphabet %}
         <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">
-        <div class="options-group alphabet-buttons">
-          {% for letter in results.alphabet %}
-          {% if letter == results.selected_q|capfirst %}
-          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
-            {% else %}
-            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
-              {% endif %}
-              {% if letter == '0' %}
-              <span>
-                #
-              </span>
+          <div class="options-group alphabet-buttons">
+            {% if results.selected_q|capfirst in results.alphabet %}
+              <a class="btn-dope options-button alphabet-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
+                <i class="fas fa-times-circle icon"></i>
+              </a>
+            {% endif %}
+            {% for letter in results.alphabet %}
+            {% if letter == results.selected_q|capfirst %}
+            <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
               {% else %}
-              <span>
-                {{ letter }}
-              </span>
-              {% endif %}
-            </a>
-            {% endfor %}
+              <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+                {% endif %}
+                  {% if letter == '0' %}
+                    <span>
+                      #
+                    </span>
+                  {% else %}
+                    <span>
+                      {{ letter }}
+                    </span>
+                  {% endif %}
+                </a>
+              {% endfor %}
+          </div>
         </div>
-      </div>
       {% endif %}
       {% if results.genres %}
         <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
           <div class="options-group genre-buttons">
             {% if results.selected_genre %}
-              <a class="btn-dope options-button" href="{{ results.urls.genre_url }}">
-                All Genres
+              <a class="btn-dope options-button nix-button" href="{{ results.urls.genre_url }}">
+                <i class="fas fa-times-circle icon"></i>
               </a>
             {% endif %}
             {% for genre in results.genres %}
@@ -137,8 +141,8 @@
         <div class="collapse options-collapse" id="language-collapse-{{ results.drop }}">
           <div class="options-group language-buttons">
             {% if results.selected_language %}
-              <a class="btn-dope options-button" href="{{ results.urls.language_url }}">
-                All Languages
+              <a class="btn-dope options-button nix-button" href="{{ results.urls.language_url }}">
+                <i class="fas fa-times-circle icon"></i>
               </a>
             {% endif %}
             {% for language in results.languages %}
@@ -151,23 +155,22 @@
           </div>
         </div>
       {% endif %}
-      {% if results.podcasts.has_other_pages %}
+      {% if results.pagination %}
         {% include 'pagination.html' %}
       {% endif %}
 
-      {% if results.view == 'grid' or results.view == 'list' %}
-        {% include 'search.html' %}
-      {% elif results.view == 'charts' %}
-        {% include 'charts.html' %}
-      {% elif results.view == 'episodes' %}
-        {% include 'episodes.html' %}
-      {% elif results.view == 'subscriptions'%}
-        {% include 'subscriptions.html' %}
+      {% if results.podcasts or results.episodes %}
+        {% if results.view == 'grid' or results.view == 'list' %}
+          {% include 'search.html' %}
+        {% elif results.view == 'charts' %}
+          {% include 'charts.html' %}
+        {% elif results.view == 'subscriptions'%}
+          {% include 'subscriptions.html' %}
+        {% endif %}
       {% endif %}
 
-      {% if results.podcasts.has_other_pages %}
+      {% if results.pagination %}
         {% include 'pagination.html' %}
       {% endif %}
     </div>
-  {% endif %}
 </div>

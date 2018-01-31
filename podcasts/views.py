@@ -28,7 +28,7 @@ def episodes(request):
 
         context = Episode.get_episodes(context, podcast, ajax=True)
 
-        return render(request, 'results_base.html', context)
+        return render(request, 'episodes.html', context)
 
 def play(request):
     """

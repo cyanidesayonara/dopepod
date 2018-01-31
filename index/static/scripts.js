@@ -173,7 +173,7 @@ function clearSearch() {
 
 // LOADERS
 function loadEpisodes(podid) {
-  $("#episodes").load("/static/loading.html");
+  $("#episodes-collapse").load("/static/loading.html");
   $.ajax({
     method: "POST",
     url: "/episodes/",
@@ -185,7 +185,7 @@ function loadEpisodes(podid) {
     })
     .done(function(response) {
       if ($("#showpod-c").length) {
-        $("#episodes").html(response);
+        $("#episodes-collapse").html(response);
         var url = $("#main-wrapper")[0].baseURI;
         replaceState(url);
       }
@@ -568,20 +568,6 @@ $(document)
         $("#center-stage").html(response);
         scrollToTop();
       });
-  })
-  .on("click", "#show-episodes", function(e) {
-    e.preventDefault();
-    var el = $("#results-collapse-episodes");
-    if (el.length) {
-      if (!el.hasClass("show")) {
-        el.collapse('show');
-      }
-    }
-    else {
-      var podid = $("#showpod-c").data("podid");
-      loadEpisodes(podid);
-    }
-    scrollToMultibar();
   })
   .on("click", ".results-close", function(e) {
     e.preventDefault();

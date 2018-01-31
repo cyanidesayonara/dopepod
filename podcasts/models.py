@@ -65,7 +65,7 @@ class Podcast(models.Model):
     podcastUrl = models.CharField(max_length=1000)
     discriminate = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
-    last_episode = models.DateTimeField(null=True, blank=True)
+    plays = models.IntegerField(default=0)
     rank = models.IntegerField(default=0)
 
     def __str__(self):
@@ -382,10 +382,15 @@ class Chart(models.Model):
 
         number = 50
         genres = Genre.get_primary_genres()
+        genres.append(None)
+
+        dopepod_charts = Podcast.objects.filter(genre=genre).order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
+        itunes_charts = Podcast.parse_itunes_charts(genre)
+        print(len(itunes_charts))
 
         # per genre
         for genre in genres:
-            providers = [('dopepod', Podcast.objects.filter(genre=genre).order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts(genre)[:number])]
+            providers = [('dopepod', dopepod_charts[:number]), ('itunes', itunes_charts[:number])]
             for provider, podcasts in providers:
                 try:
                     chart = Chart.objects.get(
@@ -424,51 +429,12 @@ class Chart(models.Model):
                     if order not in new_orders:
                         order.delete()
 
-        # global
-        providers = [('dopepod', Podcast.objects.all().order_by('rank')[:number]), ('itunes', Podcast.parse_itunes_charts())]
-        for provider, podcasts in providers:
-            try:
-                chart = Chart.objects.get(
-                    genre=None,
-                    provider=provider,
-                )
-            except Chart.DoesNotExist:
-                chart = Chart.objects.create(
-                    provider=provider,
-                    genre=None,
-                )
-            chart.save()
-
-            position = 1
-            old_orders = Order.objects.filter(chart=chart)
-            new_orders = []
-
-            for podcast in podcasts:
-                try:
-                    order = Order.objects.get(
-                        chart=chart,
-                        podcast=podcast,
-                    )
-                except Order.DoesNotExist:
-                    order = Order.objects.create(
-                        position=position,
-                        chart=chart,
-                        podcast=podcast,
-                    )
-                order.save()
-                new_orders.append(order)
-                position += 1
-
-            for order in old_orders:
-                if order not in new_orders:
-                    order.delete()
-
     def get_charts(context, provider='itunes', genre=None, ajax=None):
         genres = Genre.get_primary_genres()
         chart = get_object_or_404(Chart, provider=provider, genre=genre)
         orders = Order.objects.filter(chart=chart).order_by('position')
-        podcasts = []
 
+        podcasts = []
         for order in orders:
             podcast = order.podcast
             podcast.position = order.position
@@ -605,9 +571,6 @@ class Episode(models.Model):
                                 except ValueError:
                                     logger.error('can\'t parse length', podcast.feedUrl)
 
-                    # if not podcast.last_episode or episode['pubDate']  > podcast.last_episode:
-                    #     podcast.last_episode = episode['pubDate']
-                    #     podcast.save()
                     episode['parent'] = podcast
 
                     # link to episode

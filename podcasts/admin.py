@@ -3,8 +3,8 @@ from podcasts.models import Podcast, Subscription, Chart, Genre, Language, Episo
 
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
-    list_display = ('title', 'artist', 'podid', 'rank', 'views', 'genre', 'language', 'feedUrl', 'n_subscribers', 'discriminate', 'last_episode')
-    fields = ('title', 'artist', 'podid', 'rank', 'views', 'genre', 'language', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl', 'discriminate', 'last_episode')
+    list_display = ('title', 'artist', 'podid', 'rank', 'views', 'genre', 'language', 'feedUrl', 'n_subscribers', 'discriminate',)
+    fields = ('title', 'artist', 'podid', 'rank', 'views', 'genre', 'language', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl', 'discriminate', 'plays',)
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):

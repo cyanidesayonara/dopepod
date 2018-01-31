@@ -25,7 +25,7 @@ def index(request):
     if request.method == 'GET':
         user = request.user
         view = request.GET.get('view' , None)
-        
+
         context = {
             'view': view,
         }
@@ -64,11 +64,12 @@ def charts(request):
 
         context = {}
 
-        context = Chart.get_charts(context, genre=genre)
 
         if request.is_ajax():
+            context = Chart.get_charts(context, genre=genre, ajax=True)
             return render(request, 'results_base.html', context)
 
+        context = Chart.get_charts(context, genre=genre)
         context = Episode.get_last_played(context)
 
         if user.is_authenticated:
@@ -94,10 +95,10 @@ def search(request):
         q = request.GET.get('q', None)
 
         if not view:
-            if request.path == '/browse/':
-                view = 'list'
-            else:
+            if q and len(q) > 1:
                 view = 'grid'
+            else:
+                view = 'list'
 
         show = 100
 
@@ -150,6 +151,8 @@ def search(request):
             querystring['genre'] = genre
         if language:
             querystring['language'] = language
+        if view:
+            querystring['view'] = view
 
         if q or genre or language:
             querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
@@ -169,6 +172,14 @@ def search(request):
             urls['full_url'] = url + '?'
 
         results = {}
+        if paginator.num_pages > 1:
+            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= paginator.num_pages else paginator.num_pages) + 1)
+            results['pagination'] = {
+                'start': True if page != 1 else False,
+                'pages': pages,
+                'page': page,
+                'end': True if page != paginator.num_pages else False,
+            }
         results['alphabet'] = alphabet
         results['drop'] = 'search'
         results['podcasts'] = podcasts

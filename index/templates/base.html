@@ -38,14 +38,6 @@
           {% block center-stage %}
           {% endblock %}
         </div>
-        <!-- EPISODES -->
-        <div class="row" id="episodes">
-          {% if episodes %}
-            {% with episodes as results %}
-              {% include 'results_base.html' %}
-            {% endwith %}
-          {% endif %}
-        </div>
         <!-- RESULTS -->
         <div class="row" id="search">
           {% if search %}

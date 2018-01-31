@@ -543,6 +543,7 @@ a:hover {
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  padding-top: 10px;
 }
 .nav-group {
   display: flex;
@@ -551,7 +552,7 @@ a:hover {
 }
 .page-button, .page-button:focus, .page-button.focus {
   min-width: 30px;
-  margin-right: 5px;
+  margin-right: 4px;
   font-weight: 600;
 }
 .page-list {
@@ -571,19 +572,25 @@ a:hover {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   justify-content: flex-end;
-  padding: 10px 2px 6px 10px;
+  padding: 10px 10px 6px 6px;
+  margin-top: 10px;
   border-top: 2px solid rgba(0, 191,165, 1);
+  border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 .options-button, .options-button:focus, .options-button.focus {
-  margin-right: 5px;
-  margin-bottom: 5px;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+.nix-button {
+  margin-right: auto;
 }
 
 /* ALPHABET BUTTONS */
 .alphabet-buttons {
 }
 .alphabet-button {
-  width: 30px;
+  min-width: 32px;
+  padding: 4px;
 }
 
 /* MULTI BAR */
@@ -753,17 +760,15 @@ a:hover {
   height: 100%;
 }
 #showpod-l {
-  padding-right: 10px;
+
 }
 #showpod-r {
-  padding-left: 0;
   align-self: flex-end;
 }
 .showpod-side-list {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
-  width: 100%;
 }
 #showpod-l .showpod-side-list {
   margin-top: 10px;
@@ -772,7 +777,7 @@ a:hover {
 }
 .showpod-side-list li {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
-  margin-bottom: 5px;
+  margin-top: 8px;
 }
 .showpod-options {
   align-self: flex-end;
@@ -781,13 +786,20 @@ a:hover {
 #showpod-copyright {
 }
 #showpod-title {
+  margin: 10px 0;
   font-size: 1.7em;
 }
+#showpod-artist {
+  display: block;
+  margin-bottom: 4px;
+}
 #showpod-artist h2 {
-  display: inline-block;
+  display: inline;
   font-size: 1.25em;
 }
 #showpod-description {
+  text-align: justify;
+  margin-bottom: 4px;
 }
 .showpod-image {
   position: static;
@@ -966,8 +978,7 @@ a:hover {
   padding: 0 10px;
 }
 .results-buttons {
-  padding: 4px 10px 0 10px;
-  padding-top: ;
+  padding: 0 10px;
   justify-content: flex-end;
   display: -ms-flexbox;
   display: flex;
@@ -976,9 +987,9 @@ a:hover {
 }
 .results-buttons a {
   margin-left: 4px;
+  min-width: 36px;
 }
 .view-button {
-  min-width: 36px;
 }
 .extra-options {
   float: right;
