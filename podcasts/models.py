@@ -384,12 +384,12 @@ class Chart(models.Model):
         genres = Genre.get_primary_genres()
         genres.append(None)
 
-        dopepod_charts = Podcast.objects.filter(genre=genre).order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
-        itunes_charts = Podcast.parse_itunes_charts(genre)
-        print(len(itunes_charts))
-
-        # per genre
         for genre in genres:
+            if genre:
+                dopepod_charts = Podcast.objects.filter(genre=genre).order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
+            else:
+                dopepod_charts = Podcast.objects.all().order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
+            itunes_charts = Podcast.parse_itunes_charts(genre)
             providers = [('dopepod', dopepod_charts[:number]), ('itunes', itunes_charts[:number])]
             for provider, podcasts in providers:
                 try:
@@ -399,16 +399,15 @@ class Chart(models.Model):
                     )
                 except Chart.DoesNotExist:
                     chart = Chart.objects.create(
-                        provider=provider,
                         genre=genre,
+                        provider=provider,
                     )
                 chart.save()
 
-                position = 1
-                old_orders = Order.objects.filter(chart=chart)
+                old_orders = list(Order.objects.filter(chart=chart))
                 new_orders = []
 
-                for podcast in podcasts:
+                for position, podcast in enumerate(podcasts, start=1):
                     try:
                         order = Order.objects.get(
                             chart=chart,
@@ -423,7 +422,6 @@ class Chart(models.Model):
                             position=position,
                         )
                     new_orders.append(order)
-                    position += 1
 
                 for order in old_orders:
                     if order not in new_orders:
@@ -676,7 +674,7 @@ class Genre(Filterable):
         returns primary genres
         """
 
-        return Genre.objects.filter(supergenre=None).order_by('name')
+        return list(Genre.objects.filter(supergenre=None).order_by('name'))
 
     def create_or_update_genre(item):
         name = item['name']

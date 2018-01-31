@@ -757,10 +757,9 @@ a:hover {
   padding: 15px 0;
 }
 #showpod-c {
-  height: 100%;
 }
 #showpod-l {
-
+  text-align: center;
 }
 #showpod-r {
   align-self: flex-end;
@@ -780,8 +779,7 @@ a:hover {
   margin-top: 8px;
 }
 .showpod-options {
-  align-self: flex-end;
-  padding-top:  10px;
+  padding-top: 15px;
 }
 #showpod-copyright {
 }
@@ -803,8 +801,6 @@ a:hover {
 }
 .showpod-image {
   position: static;
-  width: fit-content;
-  height: fit-content;
   transition: all .15s ease-in-out;
   -moz-transition: all .15s ease-in-out;
   -webkit-transition: all .15s ease-in-out;

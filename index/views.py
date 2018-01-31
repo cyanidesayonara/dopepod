@@ -57,10 +57,10 @@ def charts(request):
 
         genre = request.GET.get('genre', None)
         if genre:
-            if genre not in genres.values_list('name', flat=True):
-                genre = None
-            else:
+            try:
                 genre = Genre.objects.get(name=genre)
+            except Genre.DoesNotExist:
+                genre = None
 
         context = {}
 
