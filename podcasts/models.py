@@ -274,21 +274,23 @@ class Podcast(models.Model):
                 podcastUrl=podcastUrl,
             )
             if created:
-                print('created podcast', title, feedUrl)
+                logger.error('created podcast', title)
+                logger.error('created podcast', feedUrl)
             else:
-                print('updated podcast', title, feedUrl)
+                logger.error('updated podcast', title)
+                logger.error('updated podcast', feedUrl)
             return podcast
         except requests.exceptions.HTTPError as e:
-            print('no response from url:', feedUrl)
+            logger.error('no response from url:', feedUrl)
             return
         except requests.exceptions.ReadTimeout as e:
-            print('timed out:', feedUrl)
+            logger.error('timed out:', feedUrl)
             return
         except KeyError as e:
-            print('Missing data: ' + str(e))
+            logger.error('Missing data: ' + str(e))
         except:
             # idna.core.IDNAError?
-            print('something else', lookupUrl, itunesUrl, feedUrl)
+            logger.error('something else', lookupUrl, itunesUrl, feedUrl)
             return
 
 class Subscription(models.Model):
