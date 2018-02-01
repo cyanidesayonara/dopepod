@@ -137,6 +137,9 @@ Listen to episodes of {{ podcast.title }} on dopepod
       </button>
     </div>
     <div class="col-12 collapse show" id="episodes-collapse">
+      {% if episodes %}
+        {% include 'episodes.html' %}
+      {% endif%}
     </div>
   </div>
 </div>

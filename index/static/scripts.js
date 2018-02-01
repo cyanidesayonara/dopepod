@@ -167,9 +167,6 @@ function checkForXHR() {
     xhr = null;
   }
 }
-function clearSearch() {
-  $("#q").val("");
-}
 
 // LOADERS
 function loadEpisodes(podid) {
@@ -191,9 +188,8 @@ function loadEpisodes(podid) {
       }
     });
 }
-function loadResults(url, drop) {
+function loadResults(url, drop, podid) {
   checkForXHR();
-  $("#episodes").empty();
   $(drop).load("/static/loading.html");
   xhr = $.ajax({
     type: "GET",
@@ -203,6 +199,9 @@ function loadResults(url, drop) {
   })
     .done(function(response) {
       drop.html(response);
+      if (podid) {
+        loadEpisodes(podid);
+      }
       replaceState(url);
     });
 }
@@ -244,14 +243,12 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var q = $("#q").val();
-
       if (q && /^[\w\d ]+$/.test(q)) {
         var url = el[0].action;
         var drop = $("#search");
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
-        scrollToMultibar()
       }
     }, 250);
   })
@@ -264,29 +261,15 @@ $(document)
       var url = el[0].action;
       var drop = $("#search");
       var q = $("#q").val();
-      if (q) {
+      if (q && /^[\w\d ]+$/.test(q)) {
         url = url + '?q=' + q;
         pushState();
         loadResults(url, drop);
-        scrollToMultibar();
       }
     }, 250);
   })
-  .on("click", ".alphabet-buttons a", function(e) {
-    e.preventDefault();
-    var el = $(this);
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = el[0].href;
-      var drop = $("#search");
-      pushState();
-      loadResults(url, drop);
-      clearSearch();
-      scrollToMultibar();
-    }, 250);
-  })
   // search when user clicks buttons
-  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a", function(e) {
+  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .alphabet-buttons a, .genre_rank a", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
@@ -295,24 +278,7 @@ $(document)
       var drop = $(el.parents(".results").parent()[0]);
       pushState();
       loadResults(url, drop);
-      clearSearch();
-      if (drop[0].id != "charts") {
-        scrollToMultibar()
-      }
-    }, 250);
-  })
-  .on("click", ".genre_rank a", function(e) {
-    e.preventDefault();
-    var el = $(this);
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var url = el[0].href;
-      var drop = $("#charts");
-      pushState();
-      loadResults(url, drop);
-      clearSearch();
-      $("#search").empty();
-      scrollToMultibar()
+      $("#q").val("");
     }, 250);
   })
   // NAVIGATION
@@ -326,9 +292,8 @@ $(document)
       var drop = $("#center-stage");
       if (!(drop.find("#showpod-c").data("podid") == podid)) {
         pushState();
-        loadResults(url, drop);
-        clearSearch();
-        loadEpisodes(podid);
+        loadResults(url, drop, podid);
+        $("#q").val("");
       }
       scrollToTop();
     }, 250);
@@ -342,8 +307,7 @@ $(document)
       if (!drop.find("#dashboard-top").length) {
         pushState();
         loadResults(url, drop);
-        clearSearch();
-        $("#episodes").empty();
+        $("#q").val("");
       }
       $("#search").empty();
       scrollToTop();
@@ -357,9 +321,8 @@ $(document)
       var drop = $("#search");
       pushState();
       loadResults(url, drop);
-      clearSearch();
-      $("#episodes").empty();
-      scrollToMultibar();
+      $("#q").val("");
+      scrollToTop();
     }, 250);
   })
   .on("click", ".charts-link", function(e) {
@@ -367,9 +330,9 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#search");
+      $("#q").val("");
       $("#search").empty();
-      $("#episodes").empty();
-      scrollToMultibar();
+      scrollToTop();
     }, 250);
   })
   .on("click", ".subscriptions-link", function(e) {
@@ -380,9 +343,8 @@ $(document)
       var drop = $("#search");
       pushState();
       loadResults(url, drop);
-      clearSearch();
-      $("#episodes").empty();
-      scrollToMultibar();
+      $("#q").val("");
+      scrollToTop();
     }, 250);
   })
   // open settings
@@ -394,10 +356,9 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find("#settings").length) {
         pushState();
-        clearSearch();
+        $("#q").val("");
         loadResults(url, drop);
       }
-      $("#episodes").empty();
       scrollToTop();
     }, 250);
   })
@@ -455,8 +416,7 @@ $(document)
         var podid = form.find("input[name=podid]").val();
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
-        loadResults(url, drop);
-        loadEpisodes(podid);
+        loadResults(url, drop, podid);
         replaceState(url);
       });
   })
@@ -478,7 +438,6 @@ $(document)
         var player = $("#player-drop");
         $("#player-drop").removeClass("minimize");
         player.html(response);
-        var img = player.find("#player-image").clone();
         updateTitle();
         var box = $("#player-title");
         var text = $("#player-title span");
@@ -514,8 +473,7 @@ $(document)
     var drop = $("#center-stage");
     pushState();
     loadResults(url, drop);
-    clearSearch();
-    $("#episodes").empty();
+    $("#q").val("");
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {
@@ -603,12 +561,6 @@ $(document)
   })
   .on("show.bs.collapse", ".results-collapse", function (e) {
     $(".results-collapse.show").collapse("hide");
-  })
-  .on("click", ".view-button, .results-minimize", function(e) {
-    $(this).parents(".results").find(".options-collapse.show").collapse("hide");
-  })
-  .on("click", ".results-header .btn-dope.toggle, .view-button", function(e) {
-    $(this).parents(".results").find(".results-wrapper.collapse").collapse("show");
   })
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();

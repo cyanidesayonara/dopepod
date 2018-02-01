@@ -910,7 +910,7 @@ a:hover {
   padding: 10px;
 }
 #episodes-table {
-  margin: 0;
+  margin: 10px 0 0;
 }
 #episodes-table tr .hidden-row {
   border-bottom: 2px solid rgba(0, 191, 165, 1);

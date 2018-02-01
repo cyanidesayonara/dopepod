@@ -55,22 +55,19 @@ def charts(request):
         user = request.user
         genres = Genre.get_primary_genres()
 
-        genre = request.GET.get('genre', None)
-        if genre:
-            try:
-                genre = Genre.objects.get(name=genre)
-            except Genre.DoesNotExist:
-                genre = None
+        try:
+            genre = request.GET['genre']
+            genre = Genre.objects.get(name=genre)
+        except (Genre.DoesNotExist, KeyError):
+            genre = None
 
         context = {}
-
 
         if request.is_ajax():
             context = Chart.get_charts(context, genre=genre, ajax=True)
             return render(request, 'results_base.html', context)
 
         context = Chart.get_charts(context, genre=genre)
-        context = Episode.get_last_played(context)
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)

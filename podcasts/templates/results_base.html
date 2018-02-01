@@ -2,175 +2,175 @@
   <div class="row results-bar">
     <div class="col-12 results-header">
       {% if results.extra_options %}
-      <div class="extra-options">
-        <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse-{{ results.drop }}" aria-label="Minimize">
-          {% if request.is_ajax %}
-            <i class="fas fa-minus-circle icon"></i>
-          {% else %}
-            -
-          {% endif %}
-        </a>
-        <a class="btn-dope results-close" href="#" aria-label="Close">
-          {% if request.is_ajax %}
-            <i class="fas fa-times-circle icon"></i>
-          {% else %}
-            x
-          {% endif %}
-        </a>
-      </div>
+        <div class="extra-options">
+          <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse-{{ results.drop }}" aria-label="Minimize">
+            {% if request.is_ajax %}
+              <i class="fas fa-minus-circle icon"></i>
+            {% else %}
+              -
+            {% endif %}
+          </a>
+          <a class="btn-dope results-close" href="#" aria-label="Close">
+            {% if request.is_ajax %}
+              <i class="fas fa-times-circle icon"></i>
+            {% else %}
+              x
+            {% endif %}
+          </a>
+        </div>
       {% endif %}
       <h1>
         {{ results.header }}
       </h1>
     </div>
   </div>
-    <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
-      <div class="col-12 results-buttons">
-      {% if results.view == 'grid' %}
-        <a class="btn-dope view-button view-icon view-icon-grid d-none" href="{{ results.urls.full_url }}&view=list">
-          {% if request.is_ajax %}
-            <i class="fas fa-th"></i>
-          {% else %}
-            Grid
-          {% endif %}
-        </a>
-        <a class="btn-dope view-button view-icon view-icon-list" href="{{ results.urls.full_url }}&view=grid">
-          {% if request.is_ajax %}
-            <i class="fas fa-bars"></i>
-          {% else %}
-            List
-          {% endif %}
-        </a>
-      {% elif results.view == 'list' %}
-        <a class="btn-dope view-button view-icon view-icon-grid" href="{{ results.urls.full_url }}&view=grid">
-          {% if request.is_ajax %}
-            <i class="fas fa-bars"></i>
-          {% else %}
-            List
-          {% endif %}
-        </a>
-        <a class="btn-dope view-button view-icon view-icon-list d-none" href="{{ results.urls.full_url }}&view=list">
-          {% if request.is_ajax %}
-            <i class="fas fa-th"></i>
-          {% else %}
-            Grid
-          {% endif %}
-        </a>
-      {% endif %}
-      {% if results.alphabet %}
-        {% if results.selected_q|capfirst in results.alphabet %}
-          <a class="btn-dope active toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
-            {{ results.selected_q|capfirst }}
-          </a>
+  <div class="row collapse show results-wrapper" id="results-collapse-{{ results.drop }}">
+    <div class="col-12 results-buttons">
+    {% if results.view == 'grid' %}
+      <a class="btn-dope view-button view-icon view-icon-grid d-none" href="{{ results.urls.full_url }}&view=list">
+        {% if request.is_ajax %}
+          <i class="fas fa-th"></i>
         {% else %}
-          <a class="btn-dope toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
-            A-Z
-          </a>
+          Grid
         {% endif %}
-      {% endif %}
-      {% if results.genres %}
-        {% if results.selected_genre %}
-          <a class="btn-dope active toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
-            {{ results.selected_genre }}
-          </a>
+      </a>
+      <a class="btn-dope view-button view-icon view-icon-list" href="{{ results.urls.full_url }}&view=grid">
+        {% if request.is_ajax %}
+          <i class="fas fa-bars"></i>
         {% else %}
-          <a class="btn-dope toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
-            All Genres
-          </a>
+          List
         {% endif %}
-      {% endif %}
-      {% if results.languages %}
-        {% if results.selected_language %}
-          <a class="btn-dope active toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
-            {{ results.selected_language }}
-          </a>
+      </a>
+    {% elif results.view == 'list' %}
+      <a class="btn-dope view-button view-icon view-icon-grid" href="{{ results.urls.full_url }}&view=grid">
+        {% if request.is_ajax %}
+          <i class="fas fa-bars"></i>
         {% else %}
-          <a class="btn-dope toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
-            All Languages
-          </a>
+          List
         {% endif %}
+      </a>
+      <a class="btn-dope view-button view-icon view-icon-list d-none" href="{{ results.urls.full_url }}&view=list">
+        {% if request.is_ajax %}
+          <i class="fas fa-th"></i>
+        {% else %}
+          Grid
+        {% endif %}
+      </a>
+    {% endif %}
+    {% if results.alphabet %}
+      {% if results.selected_q|capfirst in results.alphabet %}
+        <a class="btn-dope active toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
+          {{ results.selected_q|capfirst }}
+        </a>
+      {% else %}
+        <a class="btn-dope toggle" data-toggle="collapse" href="#alphabet-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse-{{ results.drop }}">
+          A-Z
+        </a>
       {% endif %}
-    </div>
-      {% if results.alphabet %}
-        <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">
-          <div class="options-group alphabet-buttons">
-            {% if results.selected_q|capfirst in results.alphabet %}
-              <a class="btn-dope options-button alphabet-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
-                <i class="fas fa-times-circle icon"></i>
-              </a>
-            {% endif %}
-            {% for letter in results.alphabet %}
-            {% if letter == results.selected_q|capfirst %}
-            <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
-              {% else %}
-              <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+    {% endif %}
+    {% if results.genres %}
+      {% if results.selected_genre %}
+        <a class="btn-dope active toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
+          {{ results.selected_genre }}
+        </a>
+      {% else %}
+        <a class="btn-dope toggle" data-toggle="collapse" href="#genre-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse-{{ results.drop }}">
+          All Genres
+        </a>
+      {% endif %}
+    {% endif %}
+    {% if results.languages %}
+      {% if results.selected_language %}
+        <a class="btn-dope active toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
+          {{ results.selected_language }}
+        </a>
+      {% else %}
+        <a class="btn-dope toggle" data-toggle="collapse" href="#language-collapse-{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse-{{ results.drop }}">
+          All Languages
+        </a>
+      {% endif %}
+    {% endif %}
+  </div>
+    {% if results.alphabet %}
+      <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">
+        <div class="options-group alphabet-buttons">
+          {% if results.selected_q|capfirst in results.alphabet %}
+            <a class="btn-dope options-button alphabet-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
+              <i class="fas fa-times-circle icon"></i>
+            </a>
+          {% endif %}
+          {% for letter in results.alphabet %}
+          {% if letter == results.selected_q|capfirst %}
+          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+            {% else %}
+            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+              {% endif %}
+                {% if letter == '0' %}
+                  <span>
+                    #
+                  </span>
+                {% else %}
+                  <span>
+                    {{ letter }}
+                  </span>
                 {% endif %}
-                  {% if letter == '0' %}
-                    <span>
-                      #
-                    </span>
-                  {% else %}
-                    <span>
-                      {{ letter }}
-                    </span>
-                  {% endif %}
-                </a>
-              {% endfor %}
-          </div>
+              </a>
+            {% endfor %}
         </div>
-      {% endif %}
-      {% if results.genres %}
-        <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
-          <div class="options-group genre-buttons">
-            {% if results.selected_genre %}
-              <a class="btn-dope options-button nix-button" href="{{ results.urls.genre_url }}">
-                <i class="fas fa-times-circle icon"></i>
+      </div>
+    {% endif %}
+    {% if results.genres %}
+      <div class="collapse options-collapse" id="genre-collapse-{{ results.drop }}">
+        <div class="options-group genre-buttons">
+          {% if results.selected_genre %}
+            <a class="btn-dope options-button nix-button" href="{{ results.urls.genre_url }}">
+              <i class="fas fa-times-circle icon"></i>
+            </a>
+          {% endif %}
+          {% for genre in results.genres %}
+            {% if not results.selected_genre == genre %}
+              <a class="btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
+                {{ genre }}
               </a>
             {% endif %}
-            {% for genre in results.genres %}
-              {% if not results.selected_genre == genre %}
-                <a class="btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
-                  {{ genre }}
-                </a>
-              {% endif %}
-            {% endfor %}
-          </div>
+          {% endfor %}
         </div>
-      {% endif %}
-      {% if results.languages %}
-        <div class="collapse options-collapse" id="language-collapse-{{ results.drop }}">
-          <div class="options-group language-buttons">
-            {% if results.selected_language %}
-              <a class="btn-dope options-button nix-button" href="{{ results.urls.language_url }}">
-                <i class="fas fa-times-circle icon"></i>
+      </div>
+    {% endif %}
+    {% if results.languages %}
+      <div class="collapse options-collapse" id="language-collapse-{{ results.drop }}">
+        <div class="options-group language-buttons">
+          {% if results.selected_language %}
+            <a class="btn-dope options-button nix-button" href="{{ results.urls.language_url }}">
+              <i class="fas fa-times-circle icon"></i>
+            </a>
+          {% endif %}
+          {% for language in results.languages %}
+            {% if not results.selected_language == language %}
+              <a class="btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
+                {{ language }}
               </a>
             {% endif %}
-            {% for language in results.languages %}
-              {% if not results.selected_language == language %}
-                <a class="btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
-                  {{ language }}
-                </a>
-              {% endif %}
-            {% endfor %}
-          </div>
+          {% endfor %}
         </div>
-      {% endif %}
-      {% if results.pagination %}
-        {% include 'pagination.html' %}
-      {% endif %}
+      </div>
+    {% endif %}
+    {% if results.pagination %}
+      {% include 'pagination.html' %}
+    {% endif %}
 
-      {% if results.podcasts or results.episodes %}
-        {% if results.view == 'grid' or results.view == 'list' %}
-          {% include 'search.html' %}
-        {% elif results.view == 'charts' %}
-          {% include 'charts.html' %}
-        {% elif results.view == 'subscriptions'%}
-          {% include 'subscriptions.html' %}
-        {% endif %}
+    {% if results.podcasts or results.episodes %}
+      {% if results.view == 'grid' or results.view == 'list' %}
+        {% include 'search.html' %}
+      {% elif results.view == 'charts' %}
+        {% include 'charts.html' %}
+      {% elif results.view == 'subscriptions'%}
+        {% include 'subscriptions.html' %}
       {% endif %}
+    {% endif %}
 
-      {% if results.pagination %}
-        {% include 'pagination.html' %}
-      {% endif %}
-    </div>
+    {% if results.pagination %}
+      {% include 'pagination.html' %}
+    {% endif %}
+  </div>
 </div>

@@ -4,27 +4,9 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from willy.items import GenreItem, PodcastItem
-from podcasts.models import Genre, Podcast, Filterable
+from podcasts.models import Podcast, Filterable
 
 class WillyPipeline(object):
-    def __init__(self):
-        self.ids_seen = set()
-
-    def process_item(self, item, spider):
-        """
-        creates or updates podcast (if podid not on ids_seen)
-        or
-        creates or updates genre
-        """
-
-        if type(item) is PodcastItem:
-            podid = item['podid']
-            if podid not in self.ids_seen:
-                Podcast.create_or_update_podcast(item)
-                self.ids_seen.add(podid)
-        elif type(item) is GenreItem:
-            Genre.create_or_update_genre(item)
 
     def close_spider(self, spider):
         """

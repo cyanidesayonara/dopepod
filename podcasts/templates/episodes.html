@@ -19,65 +19,65 @@
     </tr>
   </thead>
   <tbody>
-  {% for episode in results.episodes %}
-    {% if request.is_ajax %}
-      <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
-    {% else %}
-      <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="true">
-    {% endif %}
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>
-        {{ episode.title }}
-      </td>
-      <td>
-        {{ episode.pubDate|date:'d M Y' }}
-      </td>
-      <td>
-        {% if episode.size %}
-          {{ episode.size }}
-        {% else %}
-          N/A
-        {% endif %}
-      </td>
-      <td>
-        {% if episode.length %}
-          {{ episode.length }}
-        {% else %}
-          N/A
-        {% endif %}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="5" class="hidden-row">
-        {% if request.is_ajax %}
-          <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
-        {% else %}
-          <div class="collapse more-collapse show" id="more-collapse{{ forloop.counter }}">
-        {% endif %}
-          <span class="episode-summary">
-            {{ episode.summary }}
-          </span>
-          <div class="episode-buttons">
-            <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
-              {% csrf_token %}
-              <input type="hidden" name="url" value="{{ episode.url }}" />
-              <input type="hidden" name="type" value="{{ episode.type }}" />
-              <input type="hidden" name="title" value="{{ episode.title }}" />
-              <input type="hidden" name="date" value="{{ episode.pubDate|date:'r' }}" />
-              <input type="hidden" name="podid" value="{{ podcast.podid }}" />
-              <input type="hidden" name="length" value="{{ episode.length }}" />
-              <input type="hidden" name="summary" value="{{ episode.summary }}" />
-              <button class="btn-dope play-button active" type="submit">
-                Play
-              </button>
-            </form>
-            <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
-              Download
-            </a>
+    {% for episode in episodes %}
+      {% if request.is_ajax %}
+        <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
+      {% else %}
+        <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="true">
+      {% endif %}
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>
+          {{ episode.title }}
+        </td>
+        <td>
+          {{ episode.pubDate|date:'d M Y' }}
+        </td>
+        <td>
+          {% if episode.size %}
+            {{ episode.size }}
+          {% else %}
+            N/A
+          {% endif %}
+        </td>
+        <td>
+          {% if episode.length %}
+            {{ episode.length }}
+          {% else %}
+            N/A
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5" class="hidden-row">
+          {% if request.is_ajax %}
+            <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+          {% else %}
+            <div class="collapse more-collapse show" id="more-collapse{{ forloop.counter }}">
+          {% endif %}
+            <span class="episode-summary">
+              {{ episode.summary }}
+            </span>
+            <div class="episode-buttons">
+              <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+                {% csrf_token %}
+                <input type="hidden" name="url" value="{{ episode.url }}" />
+                <input type="hidden" name="type" value="{{ episode.type }}" />
+                <input type="hidden" name="title" value="{{ episode.title }}" />
+                <input type="hidden" name="date" value="{{ episode.pubDate|date:'r' }}" />
+                <input type="hidden" name="podid" value="{{ podcast.podid }}" />
+                <input type="hidden" name="length" value="{{ episode.length }}" />
+                <input type="hidden" name="summary" value="{{ episode.summary }}" />
+                <button class="btn-dope play-button active" type="submit">
+                  Play
+                </button>
+              </form>
+              <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
+                Download
+              </a>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr>
-  {% endfor %}
-</tbody>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>

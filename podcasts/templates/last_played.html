@@ -7,18 +7,18 @@
     </div>
   </div>
   <div class="row">
-    {% for episode in results.last_played %}
+    {% for episode in last_played %}
       <div class="col-12 last-played-box">
         <div class="last-played-top">
-          <a class="showpod" data-podid="{{ episode.parent.podid }}" href="{% url 'showpod' podid=episode.parent.podid %}" title="{{ episode.parent.title }}">
+          <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
             <span class="result-length">
               {{ episode.length }}
             </span>
-            <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.parent.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
           </a>
-          <a class="showpod" data-podid="{{ episode.parent.podid }}" href="{% url 'showpod' podid=episode.parent.podid %}" title="{{ episode.parent.title }}">
+          <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
             <h1 class="result-title">
-              {{ episode.parent.title }}
+              {{ episode.podcast.title }}
             </h1>
           </a>
           <p class="result-episode">
@@ -26,10 +26,10 @@
           </p>
           <ul>
             <li>
-              played: {{ episode.played|date:'d-m-Y H:i:s' }}
+              played: {{ episode.played_ago }}
             </li>
             <li>
-              released: {{ episode.pubDate|date:'d-m-Y H:i:s' }}
+              released: {{ episode.pubDate|date:'d-m-Y H:i' }}
             </li>
           </ul>
           <a class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
@@ -48,7 +48,7 @@
                 <input type="hidden" name="type" value="{{ episode.type }}" />
                 <input type="hidden" name="title" value="{{ episode.title }}" />
                 <input type="hidden" name="date" value="{{ episode.pubDate }}" />
-                <input type="hidden" name="podid" value="{{ episode.parent.podid }}" />
+                <input type="hidden" name="podid" value="{{ episode.podcast.podid }}" />
                 <input type="hidden" name="length" value="{{ episode.length }}" />
                 <input type="hidden" name="summary" value="{{ episode.summary }}" />
                 <button class="btn-dope play-button active" type="submit">

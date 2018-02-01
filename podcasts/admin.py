@@ -13,8 +13,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(Chart)
 class ChartAdmin(admin.ModelAdmin):
-    list_display = ('header', 'provider', 'genre',)
-    fields = ('header', 'provider', 'genre',)
+    list_display = ('header', 'size', 'provider', 'genre',)
+    fields = ('header', 'size', 'provider', 'genre',)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -23,8 +23,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('parent', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played')
-    fields = ('parent', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played')
+    list_display = ('podcast', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played',)
+    fields = ('podcast', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played',)
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

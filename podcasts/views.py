@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
-from .models import Genre, Language, Podcast, Subscription, Episode
+from django.http import Http404
+from .models import Podcast, Subscription, Episode
 import logging
 from dateutil.parser import parse
 
@@ -54,10 +53,12 @@ def play(request):
                 kind=kind,
                 title=title,
                 pubDate=date,
-                parent=podcast,
+                podcast=podcast,
                 length=length,
                 summary=summary,
             )
+
+            episode.play()
 
             player = {
                 'episode': episode,
