@@ -3,6 +3,7 @@ from django.http import Http404
 from .models import Podcast, Subscription, Episode
 import logging
 from dateutil.parser import parse
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -44,33 +45,49 @@ def play(request):
             title = request.POST['title']
             date = parse(request.POST['date'])
             podid = request.POST['podid']
-            length = request.POST['length']
             summary = request.POST['summary']
-            podcast = Podcast.objects.get(podid=podid)
-
-            episode = Episode.objects.create(
-                url=url,
-                kind=kind,
-                title=title,
-                pubDate=date,
-                podcast=podcast,
-                length=length,
-                summary=summary,
-            )
-
-            episode.play()
-
-            player = {
-                'episode': episode,
-            }
-
-            context = {
-                'player': player,
-            }
-
-            return render(request, 'player.html', context)
         except KeyError:
             raise Http404()
+
+        try:
+            length = request.POST['length']
+            t = datetime.strptime(length,"%H:%M:%S")
+            length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        except ValueError:
+            length = None
+
+        try:
+            size = request.POST['size']
+        except ValueError:
+            size = None
+
+        try:
+            podcast = Podcast.objects.get(podid=podid)
+        except Podcast.DoesNotExist:
+            raise Http404()
+
+        episode = Episode.objects.create(
+            url=url,
+            kind=kind,
+            title=title,
+            pubDate=date,
+            podcast=podcast,
+            length=length,
+            size=size,
+            summary=summary,
+        )
+
+        episode.play()
+
+        player = {
+            'episode': episode,
+        }
+
+        context = {
+            'player': player,
+        }
+
+        return render(request, 'player.html', context)
 
 def subscribe(request):
     """
