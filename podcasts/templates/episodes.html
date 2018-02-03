@@ -25,7 +25,7 @@
       {% else %}
         <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="true">
       {% endif %}
-        <th scope="row">{{ forloop.counter }}</th>
+        <th scope="row">{{ forloop.revcounter }}</th>
         <td>
           {{ episode.title }}
         </td>
@@ -55,7 +55,11 @@
             <div class="collapse more-collapse show" id="more-collapse{{ forloop.counter }}">
           {% endif %}
             <span class="episode-summary">
-              {{ episode.summary }}
+              {% if episode.summary %}
+                {{ episode.summary }}
+              {% else %}
+                No summary
+              {% endif %}
             </span>
             <div class="episode-buttons">
               <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
@@ -66,6 +70,7 @@
                 <input type="hidden" name="date" value="{{ episode.pubDate|date:'r' }}" />
                 <input type="hidden" name="podid" value="{{ podcast.podid }}" />
                 <input type="hidden" name="length" value="{{ episode.length }}" />
+                <input type="hidden" name="size" value="{{ episode.size }}" />
                 <input type="hidden" name="summary" value="{{ episode.summary }}" />
                 <button class="btn-dope play-button active" type="submit">
                   Play

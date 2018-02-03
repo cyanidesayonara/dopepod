@@ -11,7 +11,7 @@ $(document)
   })
 
 function addIcons() {
-  $("#search-button").html("<i class='fa fa-search icon'></i>");
+  $(".search-button").html("<i class='fa fa-search icon'></i>");
   var login_buttons = $("#login-buttons");
   if (login_buttons.length) {
     login_buttons.find("#login-tab")[0].href = "#tabs-login";
@@ -238,11 +238,11 @@ $(document)
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
-  .on("keyup", "#search-form", function() {
+  .on("keyup", ".search-form", function() {
     var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var q = $("#q").val();
+      var q = el.find(".q").val();
       if (q && /^[\w\d ]+$/.test(q)) {
         var url = el[0].action;
         var drop = $("#search");
@@ -253,14 +253,14 @@ $(document)
     }, 250);
   })
   // search when "search" button is clicked
-  .on("submit", "#search-form", function(e) {
+  .on("submit", ".search-form", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = el[0].action;
       var drop = $("#search");
-      var q = $("#q").val();
+      var q = el.find(".q").val();
       if (q && /^[\w\d ]+$/.test(q)) {
         url = url + '?q=' + q;
         pushState();
@@ -278,7 +278,7 @@ $(document)
       var drop = $(el.parents(".results").parent()[0]);
       pushState();
       loadResults(url, drop);
-      $("#q").val("");
+      $(".q").val("");
     }, 250);
   })
   // NAVIGATION
@@ -293,7 +293,7 @@ $(document)
       if (!(drop.find("#showpod-c").data("podid") == podid)) {
         pushState();
         loadResults(url, drop, podid);
-        $("#q").val("");
+        $(".q").val("");
       }
       scrollToTop();
     }, 250);
@@ -307,7 +307,7 @@ $(document)
       if (!drop.find("#dashboard-top").length) {
         pushState();
         loadResults(url, drop);
-        $("#q").val("");
+        $(".q").val("");
       }
       $("#search").empty();
       scrollToTop();
@@ -321,7 +321,7 @@ $(document)
       var drop = $("#search");
       pushState();
       loadResults(url, drop);
-      $("#q").val("");
+      $(".q").val("");
       scrollToTop();
     }, 250);
   })
@@ -330,7 +330,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#search");
-      $("#q").val("");
+      $(".q").val("");
       $("#search").empty();
       scrollToTop();
     }, 250);
@@ -343,7 +343,7 @@ $(document)
       var drop = $("#search");
       pushState();
       loadResults(url, drop);
-      $("#q").val("");
+      $(".q").val("");
       scrollToTop();
     }, 250);
   })
@@ -356,7 +356,7 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find("#settings").length) {
         pushState();
-        $("#q").val("");
+        $(".q").val("");
         loadResults(url, drop);
       }
       scrollToTop();
@@ -473,7 +473,7 @@ $(document)
     var drop = $("#center-stage");
     pushState();
     loadResults(url, drop);
-    $("#q").val("");
+    $(".q").val("");
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {

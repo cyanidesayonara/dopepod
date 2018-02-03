@@ -11,9 +11,11 @@
       <div class="col-12 last-played-box">
         <div class="last-played-top">
           <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-            <span class="result-length">
-              {{ episode.length }}
-            </span>
+            {% if episode.length %}
+              <span class="result-length">
+                {{ episode.length }}
+              </span>
+            {% endif %}
             <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
           </a>
           <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
@@ -39,7 +41,11 @@
         <div class="last-played-bottom">
           <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
             <span class="last-played-summary">
-              {{ episode.summary }}
+              {% if episode.summary %}
+                {{ episode.summary }}
+              {% else %}
+                No summary
+              {% endif %}
             </span>
             <div class="last-played-buttons">
               <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">

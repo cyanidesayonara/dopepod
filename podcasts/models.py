@@ -401,7 +401,7 @@ class Episode(models.Model):
     length = models.DurationField(null=True, blank=True)
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
-    size = models.CharField(max_length=16)
+    size = models.CharField(null=True, blank=True, max_length=16)
     played = models.DateTimeField(null=True, blank=True)
 
     def play(self):
@@ -468,6 +468,13 @@ class Episode(models.Model):
                     # try to get title & summary
                     try:
                         episode['title'] = item.find('title').text
+                    except AttributeError:
+                        try:
+                            episode['title'] = item.find('itunes:subtitle').text
+                        except AttributeError as e:
+                            logger.error('can\'t get title', podcast.feedUrl)
+                            continue
+                    try:
                         summary = item.find('description').text
                     except AttributeError:
                         # or try with itunes namespace
@@ -475,8 +482,11 @@ class Episode(models.Model):
                             summary = item.find('itunes:summary', ns).text
                         # if episode data not found, skip episode
                         except AttributeError as e:
-                            logger.error('can\'t get title/description', podcast.feedUrl)
-                            continue
+                            summary = ''
+                            logger.error('can\'t get description', podcast.feedUrl)
+
+                    if not summary:
+                        summary = ''
 
                     # strip html tags+ split + join again by single space
                     episode['summary'] = ' '.join(strip_tags(summary).split())
@@ -518,7 +528,9 @@ class Episode(models.Model):
                     try:
                         episode['url'] = enclosure.get('url').replace('http:', '')
                         episode['type'] = enclosure.get('type')
-                        episode['size'] = format_bytes(int(enclosure.get('length')))
+                        size = enclosure.get('length')
+                        if size:
+                            episode['size'] = format_bytes(int(size))
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
