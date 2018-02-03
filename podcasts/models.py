@@ -12,6 +12,7 @@ import logging
 import string
 from urllib.parse import quote, unquote
 import requests
+import encodings.idna
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
@@ -255,30 +256,32 @@ class Podcast(models.Model):
             # make sure feedUrl works before creating podcast
             response = session.get(feedUrl, headers=headers, timeout=10)
             response.raise_for_status()
-            genre = Genre.objects.get(name=genre)
-            language = Language.objects.get_or_create(
+            genre, created = Genre.objects.get_or_create(
+                name=genre
+            )
+            language, created = Language.objects.get_or_create(
                 name=language,
             )
-            podcast, created = Podcast.objects.get_or_create(
+            podcast, created = Podcast.objects.update_or_create(
                 podid=podid,
-                feedUrl=feedUrl,
-                title=title,
-                artist=artist,
-                genre=genre,
-                explicit=explicit,
-                language=language,
-                copyrighttext=copyrighttext,
-                description=description,
-                reviewsUrl=reviewsUrl,
-                artworkUrl=artworkUrl,
-                podcastUrl=podcastUrl,
+                defaults={
+                    'feedUrl': feedUrl,
+                    'title': title,
+                    'artist': artist,
+                    'genre': genre,
+                    'explicit': explicit,
+                    'language': language,
+                    'copyrighttext': copyrighttext,
+                    'description': description,
+                    'reviewsUrl': reviewsUrl,
+                    'artworkUrl': artworkUrl,
+                    'podcastUrl': podcastUrl,
+                }
             )
             if created:
-                logger.error('created podcast', title)
-                logger.error('created podcast', feedUrl)
+                logger.error('created podcast', title, feedUrl)
             else:
-                logger.error('updated podcast', title)
-                logger.error('updated podcast', feedUrl)
+                logger.error('updated podcast', title, feedUrl)
             return podcast
         except requests.exceptions.HTTPError as e:
             logger.error('no response from url:', feedUrl)
@@ -287,11 +290,9 @@ class Podcast(models.Model):
             logger.error('timed out:', feedUrl)
             return
         except KeyError as e:
-            logger.error('Missing data: ' + str(e))
+            logger.error('Missing data: ', str(e))
         except:
-            # idna.core.IDNAError?
-            logger.error('something else', lookupUrl, itunesUrl, feedUrl)
-            return
+            logger.error('Something else: ', title, lookupUrl, itunesUrl, feedUrl)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
