@@ -15,7 +15,7 @@
       {% endblock %}
     </title>
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
 {% if user.profile.dark_theme %}
@@ -30,7 +30,7 @@
         {% include 'dopebar.html' %}
       </nav>
       <div class="row" id="main-wrapper">
-        <div class="col-12 order-3 col-lg-3 order-lg-1" id="left">
+        <div class="col-12 order-3 col-xl-6 col-xxl-3 order-xxl-1" id="left">
           <div class="row" id="charts">
             {% if charts %}
               {% with charts as results %}
@@ -40,23 +40,18 @@
           </div>
         </div>
         <!-- MAIN -->
-        <div class="col-12 order-1 col-lg-6 order-lg-2" id="main">
+        <div class="col-12 order-1 col-xl-12 col-xxl-6 order-xxl-2" id="main">
           <!-- CENTER STAGE -->
           <div class="row" id="center-stage">
             {% block center-stage %}
             {% endblock %}
           </div>
           <!-- RESULTS -->
-          <div class="row" id="search">
-            {% if search %}
-            {% with search as results %}
-            {% include 'results_base.html' %}
-            {% endwith %}
-            {% endif %}
+          <div class="row" id="news">
           </div>
         </div>
         <!-- CHARTS -->
-        <div class="col-12 order-2 col-lg-3 order-lg-3" id="right">
+        <div class="col-12 order-2 col-xl-6 col-xxl-3 order-xxl-3" id="right">
           <div class="row" id="last-played">
             {% if last_played %}
               {% include 'last_played.html' %}
@@ -66,7 +61,7 @@
       </div>
     </div>
     <!-- PLAYER -->
-    <div class="container-fluid" id="player-drop">
+    <div class="container" id="player">
       {% include 'player.html' %}
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

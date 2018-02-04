@@ -16,7 +16,7 @@
                 {{ episode.length }}
               </span>
             {% endif %}
-            <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}100x100bb.jpg&w=100&h=100&t=absolute" />
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}300x300bb.jpg&w=100&h=100&t=absolute" />
           </a>
           <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
             <h1 class="result-title">
@@ -56,6 +56,7 @@
                 <input type="hidden" name="date" value="{{ episode.pubDate }}" />
                 <input type="hidden" name="podid" value="{{ episode.podcast.podid }}" />
                 <input type="hidden" name="length" value="{{ episode.length }}" />
+                <input type="hidden" name="size" value="{{ episode.size }}" />
                 <input type="hidden" name="summary" value="{{ episode.summary }}" />
                 <button class="btn-dope play-button active" type="submit">
                   Play

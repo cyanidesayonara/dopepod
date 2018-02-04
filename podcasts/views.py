@@ -10,16 +10,16 @@ logger = logging.getLogger(__name__)
 def episodes(request):
     """
     returns html for episodes
-    POST ajax request sent by showpod
+    GET ajax request sent by showpod
     required argument: podid
     """
 
     # ajax using POST
-    if request.method == 'POST':
+    if request.method == 'GET':
+        podid = request.GET.get('podid', '0')
         try:
-            podid = request.POST['podid']
             podcast = Podcast.objects.get(podid=int(podid))
-        except (KeyError, Podcast.DoesNotExist) as e:
+        except Podcast.DoesNotExist:
             raise Http404()
 
         context = {
@@ -34,7 +34,7 @@ def play(request):
     """
     returns html5 audio element
     POST request in a popup
-    POST ajax request, in multibar (#player)
+    POST ajax request
     """
 
     # TODO: itemize episode, get url after redirections

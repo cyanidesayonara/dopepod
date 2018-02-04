@@ -77,27 +77,29 @@ function pushState() {
   var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
   var url = el.baseURI;
-  var title = "dopepod";
+  var title = updateTitle();
   var state = {
     "context": context,
     "title": title,
   };
-  history.pushState(state, "", url);
   updateTitle();
+  history.pushState(state, "", url);
 }
 function replaceState(url) {
   var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
-  var title = "dopepod";
+  var title = updateTitle();
   var state = {
     "context": context,
     "title": title,
   };
   if (url.includes("charts")) {
-    var url = "/";
+    url = "/";
+  }
+  if (url.includes("episodes")) {
+    url = $("#main-wrapper")[0].baseURI;;
   }
   history.replaceState(state, "", url);
-  updateTitle();
 }
 function updateTitle() {
   var title = "dopepod";
@@ -111,6 +113,7 @@ function updateTitle() {
       title = "Listen to episodes of " + $("#showpod-title")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
+  return title;
 }
 
 // PAGE REFRESH STUFF
@@ -145,20 +148,9 @@ function refreshCookie() {
   });
 }
 function refreshPage() {
-  checkForXHR();
-  $.ajax({
-    type: "GET",
-    url: "/dopebar/",
-  })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-    })
-    .done(function(response) {
-      $("#episodes").empty();
-      $("#results").empty();
-      var drop = $("#charts");
-      loadResults("/charts/", drop);
-      $("#dopebar-drop").html(response);
-    });
+  var url = "/dopebar/";
+  var drop = $("#dopebar");
+  loadResults(url, drop, loadResults, ["/", "#center-stage"]);
 }
 
 function checkForXHR() {
@@ -168,30 +160,15 @@ function checkForXHR() {
   }
 }
 
-// LOADERS
-function loadEpisodes(podid) {
-  $("#episodes-collapse").load("/static/loading.html");
-  $.ajax({
-    method: "POST",
-    url: "/episodes/",
-    data: {
-      "podid": podid,
-    },
-  })
-    .fail(function(xhr, ajaxOptions, thrownError){
-    })
-    .done(function(response) {
-      if ($("#showpod-c").length) {
-        $("#episodes-collapse").html(response);
-        var url = $("#main-wrapper")[0].baseURI;
-        replaceState(url);
-      }
-    });
-}
-function loadResults(url, drop, podid) {
+// LOADER
+function loadResults(url, drop, callback, args) {
   checkForXHR();
-  if (!$(drop).find(".results-loading").length) {
-    $(drop).load("/static/loading.html");
+  if (!callback) {
+    pushState();
+  }
+  drop = $(drop);
+  if (!drop.find(".results-loading").length && url != "/dopebar/") {
+    drop.load("/static/loading.html");
   }
   xhr = $.ajax({
     type: "GET",
@@ -201,8 +178,8 @@ function loadResults(url, drop, podid) {
   })
     .done(function(response) {
       drop.html(response);
-      if (podid) {
-        loadEpisodes(podid);
+      if (callback) {
+        callback(args[0], args[1]);
       }
       replaceState(url);
     });
@@ -247,9 +224,8 @@ $(document)
       var q = el.find(".q").val();
       if (q && /^[\w\d ]+$/.test(q)) {
         var url = el[0].action;
-        var drop = $("#search");
+        var drop = $("#center-stage");
         url = url + '?q=' + q;
-        pushState();
         loadResults(url, drop);
       }
     }, 250);
@@ -261,11 +237,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = el[0].action;
-      var drop = $("#search");
+      var drop = $("#center-stage");
       var q = el.find(".q").val();
       if (q && /^[\w\d ]+$/.test(q)) {
         url = url + '?q=' + q;
-        pushState();
         loadResults(url, drop);
       }
     }, 250);
@@ -278,9 +253,7 @@ $(document)
     timeout = setTimeout(function() {
       var url = el[0].href;
       var drop = $(el.parents(".results").parent()[0]);
-      pushState();
       loadResults(url, drop);
-      $(".q").val("");
     }, 250);
   })
   // NAVIGATION
@@ -293,9 +266,8 @@ $(document)
       var podid = el.data("podid");
       var drop = $("#center-stage");
       if (!(drop.find("#showpod-c").data("podid") == podid)) {
-        pushState();
-        loadResults(url, drop, podid);
-        $(".q").val("");
+        var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
+        loadResults(url, drop, loadResults, args);
       }
       scrollToTop();
     }, 250);
@@ -307,11 +279,8 @@ $(document)
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
       if (!drop.find("#dashboard-top").length) {
-        pushState();
         loadResults(url, drop);
-        $(".q").val("");
       }
-      $("#search").empty();
       scrollToTop();
     }, 250);
   })
@@ -320,20 +289,8 @@ $(document)
     var url = this.href;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = $("#search");
-      pushState();
+      var drop = $("#center-stage");
       loadResults(url, drop);
-      $(".q").val("");
-      scrollToTop();
-    }, 250);
-  })
-  .on("click", ".charts-link", function(e) {
-    e.preventDefault();
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var drop = $("#search");
-      $(".q").val("");
-      $("#search").empty();
       scrollToTop();
     }, 250);
   })
@@ -342,14 +299,11 @@ $(document)
     var url = this.href;
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = $("#search");
-      pushState();
+      var drop = $("#center-stage");
       loadResults(url, drop);
-      $(".q").val("");
       scrollToTop();
     }, 250);
   })
-  // open settings
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -357,8 +311,6 @@ $(document)
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
       if (!drop.find("#settings").length) {
-        pushState();
-        $(".q").val("");
         loadResults(url, drop);
       }
       scrollToTop();
@@ -379,14 +331,12 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        pushState();
         $("#center-stage").html(xhr.responseText);
         button.text("Save");
       })
       .done(function(response) {
         button.text("Saved");
         var drop = $("#center-stage");
-        pushState();
         loadResults("/", drop);
         scrollToTop();
         if (theme) {
@@ -419,7 +369,6 @@ $(document)
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
         loadResults(url, drop, podid);
-        replaceState(url);
       });
   })
   // PLAYER
@@ -437,8 +386,8 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError){
       })
       .done(function(response) {
-        var player = $("#player-drop");
-        $("#player-drop").removeClass("minimize");
+        var player = $("#player");
+        $("#player").removeClass("minimize");
         player.html(response);
         updateTitle();
         var box = $("#player-title");
@@ -450,19 +399,19 @@ $(document)
   .on("click", "#player-close", function(e) {
     e.preventDefault();
     $("#audio-el").preload="none";
-    $("#player-drop").empty();
-    $("#player-drop").removeClass("minimize");
+    $("#player").empty();
+    $("#player").removeClass("minimize");
     updateTitle();
   })
   .on("click", "#player-minimize", function(e) {
     e.preventDefault();
-    if ($("#player-drop").hasClass("minimize")) {
-      $("#player-drop").removeClass("minimize");
+    if ($("#player").hasClass("minimize")) {
+      $("#player").removeClass("minimize");
       $("#player-bottom").removeClass("d-none");
       $(this).removeClass("active");
     }
     else {
-      $("#player-drop").addClass("minimize");
+      $("#player").addClass("minimize");
       $("#player-bottom").addClass("d-none");
       $(this).addClass("active");
     }
@@ -473,9 +422,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    pushState();
     loadResults(url, drop);
-    $(".q").val("");
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {
@@ -502,10 +449,8 @@ $(document)
         $("#center-stage").html(xhr.responseText);
       })
       .done(function(response) {
-        var drop = $("#center-stage");
         refreshCookie();
         refreshPage();
-        loadResults("/", drop)
         scrollToTop();
         });
   })
@@ -540,7 +485,6 @@ $(document)
     collapses.each(function() {
       $(this).collapse("toggle");
     })
-    replaceState(this.href);
     $(".view-icon").each(function() {
       var icon = $(this);
       if (icon.hasClass("d-none")) {
@@ -549,6 +493,7 @@ $(document)
       else {
         icon.addClass("d-none");
       }
+      replaceState(this.href);
     });
   })
   // BOOTSTRAP COLLAPSES
@@ -576,4 +521,7 @@ $(document)
   })
   .on("click", ".showpod-badge", function(e) {
     scrollToTop();
+  })
+  .on("click", ".dopebar-link", function(e) {
+    $(this).blur();
   })

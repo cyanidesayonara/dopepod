@@ -78,9 +78,9 @@ class Podcast(models.Model):
         bad_url = 'is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/'
         bad_genre = Genre.objects.get(genreid=1314)
 
-        for pod in Podcast.objects.filter(Q(artworkUrl=bad_url) | Q(genre=bad_genre)):
-            pod.discriminate = True
-            pod.save()
+        if self.artworkUrl == bad_url or self.genre == bad_genre:
+            self.discriminate = True
+            self.save()
 
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
@@ -282,7 +282,9 @@ class Podcast(models.Model):
                 logger.error('created podcast', title, feedUrl)
             else:
                 logger.error('updated podcast', title, feedUrl)
+            podcast.set_discriminated()
             return podcast
+
         except requests.exceptions.HTTPError as e:
             logger.error('no response from url:', feedUrl)
             return
@@ -326,9 +328,10 @@ class Chart(models.Model):
 
         for genre in genres:
             if genre:
-                dopepod_charts = list(Podcast.objects.filter(genre=genre).order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',))
+                podcasts = Podcast.objects.filter(genre=genre)
             else:
-                dopepod_charts = list(Podcast.objects.all().order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',))
+                podcasts = Podcast.objects.all()
+            dopepod_charts = podcasts.order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
             itunes_charts = Podcast.parse_itunes_charts(genre)
             providers = [('dopepod', dopepod_charts[:number]), ('itunes', itunes_charts[:number])]
             for provider, podcasts in providers:
@@ -407,6 +410,8 @@ class Episode(models.Model):
     def play(self):
         self.played = timezone.now()
         self.save()
+        self.podcast.plays += 1
+        self.podcast.save()
 
     def played_ago(self):
         ago = timezone.now() - self.played
@@ -520,7 +525,7 @@ class Episode(models.Model):
                                 except ValueError:
                                     logger.error('can\'t parse length', podcast.feedUrl)
 
-                    episode['parent'] = podcast
+                    episode['podcast'] = podcast
 
                     # link to episode
                     # enclosure might be missing, have alternatives
@@ -529,7 +534,7 @@ class Episode(models.Model):
                         episode['url'] = enclosure.get('url').replace('http:', '')
                         episode['type'] = enclosure.get('type')
                         size = enclosure.get('length')
-                        if size:
+                        if size and size != '0':
                             episode['size'] = format_bytes(int(size))
                         episodes.append(episode)
                     except AttributeError as e:

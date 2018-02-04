@@ -9,6 +9,7 @@ a {
 }
 a:hover {
   color: rgba(0, 105, 92, 1);
+  text-decoration: none;
 }
 .darken {
   transition: background 0.5s ease;
@@ -51,7 +52,6 @@ a:hover {
 .btn-dope:hover, .btn-dope:focus {
   color: #fff;
   outline: none;
-  text-decoration: none;
   background: rgba(0, 191,165, 1);
   -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
   -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
@@ -287,8 +287,8 @@ a:hover {
 .results-loading {
   border: 2px solid rgba(0, 191,165, 1);
   margin: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
   width: 200px;
   padding-top: 10px;
@@ -508,13 +508,13 @@ a:hover {
   min-height: 100vh;
 }
 #left {
-  padding: 0 30px;
+  padding: 0 25px;
 }
 #main {
-  padding: 0 30px;
+  padding: 0 25px;
 }
 #right {
-  padding: 0 30px;
+  padding: 0 25px;
 }
 #charts {
   padding: 15px 0;
@@ -577,7 +577,7 @@ a:hover {
 .alphabet-buttons {
 }
 .alphabet-button {
-  min-width: 32px;
+  min-width: 30px;
   padding: 4px;
 }
 
@@ -625,13 +625,7 @@ a:hover {
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
 }
-.dopebar-link:hover, .dopebar-link:focus {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 1);
-  outline: none;
-}
-.dopebar-link[aria-expanded="true"] {
-  text-decoration: none;
+.dopebar-link:hover, .dopebar-link:focus, .dopebar-link[aria-expanded="true"] {
   color: rgba(255, 255, 255, 1);
   outline: none;
 }
@@ -952,6 +946,7 @@ a:hover {
 }
 .results-header {
   padding: 0 10px;
+  text-align: center;
 }
 .results-header h1 {
   font-size: 20px;
@@ -964,7 +959,6 @@ a:hover {
   color: #000;
 }
 .results-content a:hover {
-  text-decoration: none;
 }
 .results-pagination {
   padding: 0 10px;
@@ -1118,7 +1112,6 @@ a:hover {
   border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 .last-played-top a:hover {
-  text-decoration: none;
 }
 .last-played-collapse {
 }
@@ -1158,7 +1151,6 @@ a:hover {
 }
 .last-played-top .result-title {
   font-size: 16px;
-  display: inline;
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -1238,15 +1230,13 @@ hr.h-line {
 }
 
 /* PLAYER */
-#player-drop {
+#player {
   z-index: 9000;
-  padding: 0;
   position: fixed;
   bottom: 0;
   margin: auto;
 }
 #player-wrapper a, #player-wrapper a:hover {
-  text-decoration: none;
 }
 #player-wrapper {
   position: relative;
@@ -1266,11 +1256,11 @@ hr.h-line {
   margin-right: 5px;
 }
 #player-bottom {
-
+  padding: 0 10px;
 }
 
 #player-top {
-
+  padding: 0 10px;
 }
 #player-title {
   position: relative;
@@ -1294,8 +1284,8 @@ hr.h-line {
 .player-button {
   margin-left: 4px;
 }
-#player-drop.minimize {
-  bottom: -35px;
+#player.minimize {
+  bottom: -55px;
 }
 
 /* FOOTER */
@@ -1325,4 +1315,7 @@ hr.h-line {
 }
 /* large desktops and up ----------- */
 @media screen and (min-width: 1200px) {
+}
+/* XXL */
+@media screen and (min-width: 1400px) {
 }

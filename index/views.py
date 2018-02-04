@@ -53,12 +53,10 @@ def charts(request):
 
     if request.method == 'GET':
         user = request.user
-        genres = Genre.get_primary_genres()
-
+        genre = request.GET.get('genre', None)
         try:
-            genre = request.GET['genre']
             genre = Genre.objects.get(name=genre)
-        except (Genre.DoesNotExist, KeyError):
+        except Genre.DoesNotExist:
             genre = None
 
         context = {}

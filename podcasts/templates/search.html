@@ -7,7 +7,7 @@
     {% for podcast in results.podcasts %}
       <div class="col-lg-2 col-md-3 col-4 result-box">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}200x200bb.jpg&w=200&h=200&t=absolute" />
+          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=200&h=200&t=absolute" />
         </a>
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
           <h1 class="search-result-title">
