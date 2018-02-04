@@ -4,8 +4,6 @@ from allauth.account import views as allauth
 from podcasts.models import Genre, Language, Chart, Subscription, Podcast
 import json
 
-ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#']
-
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
 
 def login(request):
@@ -47,9 +45,6 @@ def login(request):
                 return render(request, 'splash.html', context, status=400)
         else:
             context = Chart.get_charts(context)
-            context.update({
-                'alphabet': ALPHABET,
-            })
             if response.status_code == 200:
                 return redirect('/')
             else:
@@ -85,9 +80,6 @@ def signup(request):
                 return render(request, 'splash.html', context, status=400)
         else:
             context = Chart.get_charts(context)
-            context.update({
-                'alphabet': ALPHABET,
-            })
             if response.status_code == 200:
                 return redirect('/')
             else:
@@ -128,7 +120,6 @@ def password_reset(request):
             'errors': errors,
             'email': email,
             'view': 'password',
-            'alphabet': ALPHABET,
         }
 
         context = Chart.get_charts(context)
