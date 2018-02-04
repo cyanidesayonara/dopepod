@@ -190,7 +190,9 @@ function loadEpisodes(podid) {
 }
 function loadResults(url, drop, podid) {
   checkForXHR();
-  $(drop).load("/static/loading.html");
+  if (!$(drop).find(".results-loading").length) {
+    $(drop).load("/static/loading.html");
+  }
   xhr = $.ajax({
     type: "GET",
     url: url,

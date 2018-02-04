@@ -24,39 +24,45 @@
   <body>
 {% endif %}
     <!-- MAIN CONTENT -->
-    <div id="main-wrapper">
+    <div class="container-fluid">
       <!-- MULTIBAR -->
       <nav class="navbar fixed-top color-4-trans" id="dopebar">
-        <div class="container" id="dopebar-drop">
-          {% include 'dopebar.html' %}
-        </div>
+        {% include 'dopebar.html' %}
       </nav>
-      <!-- MAIN -->
-      <div class="container"id="main">
-        <!-- CENTER STAGE -->
-        <div class="row" id="center-stage">
-          {% block center-stage %}
-          {% endblock %}
+      <div class="row" id="main-wrapper">
+        <div class="col-12 order-3 col-lg-3 order-lg-1" id="left">
+          <div class="row" id="charts">
+            {% if charts %}
+              {% with charts as results %}
+                {% include 'results_base.html' %}
+              {% endwith %}
+            {% endif %}
+          </div>
         </div>
-        <!-- RESULTS -->
-        <div class="row" id="search">
-          {% if search %}
+        <!-- MAIN -->
+        <div class="col-12 order-1 col-lg-6 order-lg-2" id="main">
+          <!-- CENTER STAGE -->
+          <div class="row" id="center-stage">
+            {% block center-stage %}
+            {% endblock %}
+          </div>
+          <!-- RESULTS -->
+          <div class="row" id="search">
+            {% if search %}
             {% with search as results %}
-              {% include 'results_base.html' %}
+            {% include 'results_base.html' %}
             {% endwith %}
-          {% endif %}
+            {% endif %}
+          </div>
         </div>
         <!-- CHARTS -->
-        <div class="row" id="charts">
-          {% if charts %}
-            {% with charts as results %}
-              {% include 'results_base.html' %}
-            {% endwith %}
-          {% endif %}
-          {% if last_played %}
-            {% include 'last_played.html' %}
-          {% endif %}
-        </div>
+        <div class="col-12 order-2 col-lg-3 order-lg-3" id="right">
+          <div class="row" id="last-played">
+            {% if last_played %}
+              {% include 'last_played.html' %}
+            {% endif %}
+          </div>
+      </div>
       </div>
     </div>
     <!-- PLAYER -->

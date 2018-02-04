@@ -1,4 +1,4 @@
-<div class="col-12 col-md-6 col-lg-4 last-played">
+<div class="col-12">
   <div class="row">
     <div class="col-12 last-played-header">
       <h1>
@@ -42,9 +42,9 @@
           <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
             <span class="last-played-summary">
               {% if episode.summary %}
-                {{ episode.summary }}
+              {{ episode.summary }}
               {% else %}
-                No summary
+              No summary
               {% endif %}
             </span>
             <div class="last-played-buttons">

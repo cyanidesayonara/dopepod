@@ -503,14 +503,27 @@ a:hover {
 
 /* MAIN */
 #main-wrapper {
-}
-#main {
-  padding: 50px 25px 15px 25px;
+  padding-top: 50px;
+  padding-bottom: 15px;
   min-height: 100vh;
 }
-#browse-collapse {
-  margin-left: -25px;
-  margin-right: -25px;
+#left {
+  padding: 0 30px;
+}
+#main {
+  padding: 0 30px;
+}
+#right {
+  padding: 0 30px;
+}
+#charts {
+  padding: 15px 0;
+}
+#last-played {
+  padding: 15px 0;
+}
+#center-stage {
+  padding: 15px 0;
 }
 
 /* OPTIONS BUTTONS */
@@ -625,6 +638,7 @@ a:hover {
 
 /* SEARCH */
 #search {
+  padding: 15px 0;
 }
 .search-form {
   font-size: 16px;
@@ -659,9 +673,6 @@ a:hover {
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
   -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
   box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-}
-
-#center-stage {
 }
 
 /* LOGIN-SIGNUP */
@@ -928,8 +939,6 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 5px;
   box-shadow: rgba(0,0,0,.3) 0 0 5px;
   border: 2px solid rgba(0, 191,165, 1);
-  margin-top: 15px;
-  margin-bottom: 15px;
 }
 .results-wrapper {
   overflow: hidden;
@@ -1097,10 +1106,6 @@ a:hover {
   margin-bottom: 15px;
 }
 
-.last-played a {
-  color: rgb(46, 46, 46);
-  text-decoration: none;
-}
 .last-played-box {
   padding: 10px 15px;
 }
@@ -1111,6 +1116,9 @@ a:hover {
   font-size: 20px;
   margin: 0;
   border-bottom: 2px solid rgba(0, 191,165, 1);
+}
+.last-played-top a:hover {
+  text-decoration: none;
 }
 .last-played-collapse {
 }
@@ -1150,13 +1158,14 @@ a:hover {
 }
 .last-played-top .result-title {
   font-size: 16px;
+  display: inline;
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .last-played-top .result-episode {
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   height: 40px;
   overflow: hidden;
   font-size: 14px;
