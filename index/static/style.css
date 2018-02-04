@@ -977,6 +977,9 @@ a:hover {
 }
 .view-button {
 }
+.back-button {
+  float: left;
+}
 .extra-options {
   float: right;
 }

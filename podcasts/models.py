@@ -353,7 +353,7 @@ class Chart(models.Model):
                         position=position,
                     )
 
-    def get_charts(context, provider='itunes', genre=None, ajax=None):
+    def get_charts(context, provider='dopepod', genre=None, ajax=None):
         genres = Genre.get_primary_genres()
         chart = get_object_or_404(Chart, provider=provider, genre=genre)
         orders = Order.objects.filter(chart=chart).order_by('position')
@@ -375,8 +375,9 @@ class Chart(models.Model):
         results['drop'] = 'charts'
         results['podcasts'] = podcasts
         results['header'] = chart.header
-        results['selected_genre'] = chart.genre
+        results['selected_genre'] = genre
         results['genres'] = genres
+        results['selected_provider'] = provider
         results['view'] = 'charts'
         results['urls'] = urls
 
@@ -414,23 +415,24 @@ class Episode(models.Model):
         self.podcast.save()
 
     def played_ago(self):
-        ago = timezone.now() - self.played
-        seconds = ago.total_seconds()
-        days = int(seconds // 86400)
-        hours = int((seconds % 86400) // 3600)
-        minutes = int((seconds % 3600) // 60)
-        seconds = int(seconds % 60)
-        ago = ''
-        if days:
-            ago += str(days) + 'd '
-        if hours:
-            ago += str(hours) + 'h '
-        if minutes:
-            ago += str(minutes) + 'm '
-        if seconds:
-            ago += str(seconds) + 's '
-        ago += ' ago'
-        return ago
+        if self.played:
+            ago = timezone.now() - self.played
+            seconds = ago.total_seconds()
+            days = int(seconds // 86400)
+            hours = int((seconds % 86400) // 3600)
+            minutes = int((seconds % 3600) // 60)
+            seconds = int(seconds % 60)
+            ago = ''
+            if days:
+                ago += str(days) + 'd '
+            if hours:
+                ago += str(hours) + 'h '
+            if minutes:
+                ago += str(minutes) + 'm '
+            if seconds:
+                ago += str(seconds) + 's '
+            ago += ' ago'
+            return ago
 
     def get_episodes(context, podcast, ajax=None):
         """
@@ -531,11 +533,15 @@ class Episode(models.Model):
                     # enclosure might be missing, have alternatives
                     enclosure = item.find('enclosure')
                     try:
-                        episode['url'] = enclosure.get('url').replace('http:', '')
-                        episode['type'] = enclosure.get('type')
                         size = enclosure.get('length')
                         if size and size != '0':
                             episode['size'] = format_bytes(int(size))
+                    except ValueError:
+                        logger.error('can\'t get episode url/type/size', podcast.feedUrl)
+
+                    try:
+                        episode['url'] = enclosure.get('url').replace('http:', '')
+                        episode['type'] = enclosure.get('type')
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
@@ -553,7 +559,7 @@ class Episode(models.Model):
             logger.error(str(e))
 
     def get_last_played(context):
-        last_played = Episode.objects.all().order_by('-played')[:20]
+        last_played = Episode.objects.all().order_by('-played')[:50]
         context.update({
             'last_played': last_played,
         })

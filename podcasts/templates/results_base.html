@@ -1,7 +1,17 @@
+{% extends results.extend|yesno:'base.html,ajax.html' %}
+
+{% block title %}
+Listen to episodes of {{ podcast.title }} on dopepod
+{% endblock %}
+
+{% block center-stage %}
 <div class="col-12 results color-5-trans">
   <div class="row results-bar">
     <div class="col-12 results-header">
       {% if results.extra_options %}
+        <button class="btn-dope back-button" onclick="window.history.back()">
+          Back
+        </button>
         <div class="extra-options">
           <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse-{{ results.drop }}" aria-label="Minimize">
             {% if request.is_ajax %}
@@ -90,6 +100,15 @@
         </a>
       {% endif %}
     {% endif %}
+    {% if results.selected_provider == 'dopepod' %}
+      <a class="btn-dope active provider-button" href="{{ results.urls.full_url }}&provider=itunes">
+        On dopepod
+      </a>
+    {% elif results.selected_provider == 'itunes' %}
+      <a class="btn-dope active provider-button" href="{{ results.urls.full_url }}&provider=dopepod">
+        On itunes
+      </a>
+    {% endif %}
   </div>
     {% if results.alphabet %}
       <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">
@@ -174,3 +193,4 @@
     {% endif %}
   </div>
 </div>
+{% endblock %}

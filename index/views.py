@@ -59,13 +59,19 @@ def charts(request):
         except Genre.DoesNotExist:
             genre = None
 
+        providers = ['dopepod', 'itunes']
+        provider = request.GET.get('provider', None)
+        if provider not in prividers:
+            provider = None
+
         context = {}
 
         if request.is_ajax():
-            context = Chart.get_charts(context, genre=genre, ajax=True)
+            context = Chart.get_charts(context, genre=genre, provider=provider, ajax=True)
             return render(request, 'results_base.html', context)
 
-        context = Chart.get_charts(context, genre=genre)
+        context = Chart.get_charts(context, provider=provider, genre=genre)
+        context = Episode.get_last_played(context)
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
@@ -202,18 +208,17 @@ def search(request):
             }
             return render(request, 'results_base.html', context)
 
+        results['extend'] = True
+
         context = {}
         context = Chart.get_charts(context)
         context = Episode.get_last_played(context)
 
         context.update({
-            'search': results,
+            'results': results,
         })
 
-        if user.is_authenticated:
-            return render(request, 'dashboard.html', context)
-        else:
-            return render(request, 'splash.html', context)
+        return render(request, 'results_base.html', context)
 
 @vary_on_headers('Accept')
 def subscriptions(request):

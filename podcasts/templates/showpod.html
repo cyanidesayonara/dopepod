@@ -13,7 +13,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}300x300bb.jpg&w=300&h=300&t=absolute" />
       </div>
     </div>
-    <div class="col-12 col-lg-6" id="showpod-c" data-podid="{{ podcast.podid }}">
+    <div class="col-12 col-lg-5" id="showpod-c" data-podid="{{ podcast.podid }}">
       <h1 id="showpod-title">
         {{ podcast.title }}
       </h1>
@@ -27,7 +27,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         {{ podcast.description }}
       </p>
     </div>
-    <div class="col-12 col-lg-2" id="showpod-r">
+    <div class="col-12 col-lg-3" id="showpod-r">
       <ul class="showpod-side-list">
         {% if podcast.global_rank %}
           <li>
@@ -119,6 +119,9 @@ Listen to episodes of {{ podcast.title }} on dopepod
       </ul>
     </div>
     <div class="col-12 showpod-options">
+      <button class="btn-dope" onclick="window.history.back()">
+        Back
+      </button>
       {% if user.is_authenticated %}
         <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
           {% csrf_token %}

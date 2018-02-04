@@ -246,7 +246,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .alphabet-buttons a, .genre_rank a", function(e) {
+  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .alphabet-buttons a, .provider-button", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);
@@ -522,6 +522,6 @@ $(document)
   .on("click", ".showpod-badge", function(e) {
     scrollToTop();
   })
-  .on("click", ".dopebar-link", function(e) {
+  .on("click", ".btn-dope, .dopebar-link, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
