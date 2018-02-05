@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode
+from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode, Order
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
 import urllib.parse
@@ -61,8 +61,8 @@ def charts(request):
 
         providers = ['dopepod', 'itunes']
         provider = request.GET.get('provider', None)
-        if provider not in prividers:
-            provider = None
+        if provider not in providers:
+            provider = providers[0]
 
         context = {}
 
@@ -111,17 +111,19 @@ def search(request):
                 q = None
 
         genre = request.GET.get('genre', None)
-        if genre and genre not in genres.values_list('name', flat=True):
-            genre = None
+
+        if genre:
+            try:
+                genre = genres.get(name=genre)
+            except Genre.DoesNotExist:
+                genre = None
 
         language = request.GET.get('language', None)
-        if language and language not in languages.values_list('name', flat=True):
-            language = None
-
-        try:
-            page = int(request.GET.get('page', '1'))
-        except ValueError:
-            page = 1
+        if language:
+            try:
+                language = languages.get(name=language)
+            except Language.DoesNotExist:
+                language = None
 
         podcasts = Podcast.search(genre, language, user, q=q)
         paginator = Paginator(podcasts, show)
@@ -132,6 +134,11 @@ def search(request):
             results_header = str(paginator.count) + ' result for "' + q + '"'
         else:
             results_header = str(paginator.count) + ' results for "' + q + '"'
+
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
 
         try:
             podcasts = paginator.page(page)
@@ -278,6 +285,8 @@ def showpod(request, podid):
             podcast.save()
             if user.is_authenticated:
                 podcast.set_subscribed(user)
+
+            podcast.get_ranks()
 
             context = {
                 'podcast': podcast,

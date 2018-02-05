@@ -748,6 +748,7 @@ a:hover {
 #settings {
 }
 #settings-form {
+  padding: 10px;
   margin: auto;
   max-width: 300px;
 }

@@ -72,6 +72,7 @@ class Podcast(models.Model):
     views = models.IntegerField(default=0)
     plays = models.IntegerField(default=0)
     rank = models.IntegerField(default=0)
+    bump = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -83,6 +84,30 @@ class Podcast(models.Model):
         if self.artworkUrl == bad_url or self.genre == bad_genre:
             self.discriminate = True
             self.save()
+
+    def set_ranks():
+        podcasts = Podcast.objects.all().order_by('discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'bump')
+        for i, podcast in enumerate(podcasts, start=1):
+            podcast.rank = i
+            podcast.bump = False
+            podcast.save()
+
+    def get_ranks(self):
+        orders = Order.objects.filter(podcast__podid=self.podid, chart__provider='dopepod')
+
+        if self.genre.supergenre:
+            genre = self.genre.supergenre
+        else:
+            genre = self.genre
+
+        try:
+            self.global_rank = orders.get(chart__genre=None).position
+        except Order.DoesNotExist:
+            pass
+        try:
+            self.genre_rank = orders.get(chart__genre=genre).position
+        except Order.DoesNotExist:
+            pass
 
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
@@ -101,13 +126,13 @@ class Podcast(models.Model):
 
         # filter by language
         if language:
-            podcasts = podcasts.filter(language__name=language)
+            podcasts = podcasts.filter(language=language)
 
         # filter by genre
         if genre:
             podcasts = podcasts.filter(
-                Q(genre__name=genre) |
-                Q(genre__supergenre__name=genre)
+                Q(genre=genre) |
+                Q(genre__supergenre=genre)
             )
 
         # last but not least, filter by title
@@ -117,7 +142,7 @@ class Podcast(models.Model):
                     Q(title__istartswith=q) |
                     Q(title__icontains=q)
                 )
-                podcasts = podcasts.order_by('rank', 'discriminate')
+                podcasts = podcasts.order_by('rank')
             else:
                 if q == '#':
                     query = Q()
@@ -132,60 +157,8 @@ class Podcast(models.Model):
                     )
                 podcasts = podcasts.order_by('title')
         else:
-            podcasts = podcasts.filter().order_by('rank', 'discriminate')
+            podcasts = podcasts.filter().order_by('rank')
 
-        return podcasts
-
-    def parse_itunes_charts(genre=None):
-        """
-        parses itunes chart xml data
-        returns list of podcasts
-        """
-
-        headers = {
-            'User-Agent': str(ua.random)
-        }
-
-        number = 100
-
-        if genre:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
-        else:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/xml'
-
-        try:
-            response = session.get(url, headers=headers, timeout=10)
-            response.raise_for_status()
-            root = etree.XML(response.content)
-
-            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-                    'atom': 'http://www.w3.org/2005/Atom',
-                    'im': 'http://itunes.apple.com/rss',
-            }
-
-            # delete None from namespaces, use atom instead
-            ns.update(root.nsmap)
-            del ns[None]
-
-            podcasts = []
-
-            for entry in root.findall('atom:entry', ns):
-                element = entry.find('atom:id', ns)
-                podid = element.xpath('./@im:id', namespaces=ns)[0]
-
-                try:
-                    podcast = Podcast.objects.get(podid=podid)
-                # if podcast don't exists, scrape it and create it
-                except Podcast.DoesNotExist:
-                    logger.error('can\'t get pod, scraping')
-                    podcast = Podcast.scrape_podcast(podid)
-                if podcast:
-                    podcasts.append(podcast)
-
-        except requests.exceptions.HTTPError as e:
-            logger.error(str(e))
-        except requests.exceptions.ReadTimeout as e:
-            logger.error('timed out')
         return podcasts
 
     def subscribe(self, user):
@@ -328,13 +301,28 @@ class Chart(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
+        # sets bump = True for selected
         for genre in genres:
+            podcasts = Chart.parse_itunes_charts(genre)
+            for podcast in podcasts:
+                podcast.bump = True
+                podcast.save()
+
+        # sets bump = False for all
+        Podcast.set_ranks()
+
+        for genre in genres:
+            itunes_charts = Chart.parse_itunes_charts(genre)
+
             if genre:
-                podcasts = Podcast.objects.filter(genre=genre)
+                podcasts = Podcast.objects.filter(
+                    Q(genre=genre) |
+                    Q(genre__supergenre=genre)
+                )
             else:
                 podcasts = Podcast.objects.all()
-            dopepod_charts = podcasts.order_by('discriminate', 'rank', 'n_subscribers', 'views', 'plays',)
-            itunes_charts = Podcast.parse_itunes_charts(genre)
+            dopepod_charts = podcasts.order_by('rank')
+
             providers = [('dopepod', dopepod_charts[:number]), ('itunes', itunes_charts[:number])]
             for provider, podcasts in providers:
                 size = len(podcasts)
@@ -354,6 +342,58 @@ class Chart(models.Model):
                         podcast=podcast,
                         position=position,
                     )
+
+    def parse_itunes_charts(genre=None):
+        """
+        parses itunes chart xml data
+        returns list of podcasts
+        """
+
+        headers = {
+            'User-Agent': str(ua.random)
+        }
+
+        number = 100
+
+        if genre:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
+        else:
+            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/xml'
+
+        try:
+            response = session.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            root = etree.XML(response.content)
+
+            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+                    'atom': 'http://www.w3.org/2005/Atom',
+                    'im': 'http://itunes.apple.com/rss',
+            }
+
+            # delete None from namespaces, use atom instead
+            ns.update(root.nsmap)
+            del ns[None]
+
+            podcasts = []
+
+            for entry in root.findall('atom:entry', ns):
+                element = entry.find('atom:id', ns)
+                podid = element.xpath('./@im:id', namespaces=ns)[0]
+
+                try:
+                    podcast = Podcast.objects.get(podid=podid)
+                # if podcast don't exists, scrape it and create it
+                except Podcast.DoesNotExist:
+                    logger.error('can\'t get pod, scraping')
+                    podcast = Podcast.scrape_podcast(podid)
+                if podcast:
+                    podcasts.append(podcast)
+
+        except requests.exceptions.HTTPError as e:
+            logger.error(str(e))
+        except requests.exceptions.ReadTimeout as e:
+            logger.error('timed out')
+        return podcasts
 
     def get_charts(context, provider='dopepod', genre=None, ajax=None):
         genres = Genre.get_primary_genres()
@@ -469,7 +509,6 @@ class Episode(models.Model):
                     try:
                         pubdate = item.find('pubDate').text
                         pubdate = parse(pubdate, default=parse("00:00Z"))
-                        print(pubdate)
                         episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                     # if episode data not found, skip episode
                     except AttributeError as e:
