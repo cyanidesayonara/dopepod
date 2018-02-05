@@ -23,8 +23,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played',)
-    fields = ('podcast', 'pubDate', 'title', 'summary', 'length', 'url', 'kind', 'played',)
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

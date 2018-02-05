@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import Podcast, Subscription, Episode
 import logging
-from dateutil.parser import parse
 from datetime import datetime, timedelta
+from django.core import signing
 
 logger = logging.getLogger(__name__)
 
@@ -40,25 +40,27 @@ def play(request):
     # TODO: itemize episode, get url after redirections
     if request.method == 'POST':
         try:
-            url = request.POST['url']
-            kind = request.POST['type']
-            title = request.POST['title']
-            date = parse(request.POST['date'])
-            podid = request.POST['podid']
-            summary = request.POST['summary']
-        except KeyError:
+            signature = request.POST['signature']
+            data = signing.loads(signature)
+            url = data['url']
+            kind = data['type']
+            title = data['title']
+            date = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
+            podid = data['podid']
+            description = data['description']
+        except (KeyError, signing.BadSignature):
             raise Http404()
-
+            
         try:
-            length = request.POST['length']
+            length = data['length']
             t = datetime.strptime(length,"%H:%M:%S")
             length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-        except ValueError:
+        except (KeyError, ValueError):
             length = None
 
         try:
-            size = request.POST['size']
-        except ValueError:
+            size = data['size']
+        except KeyError:
             size = None
 
         try:
@@ -74,7 +76,8 @@ def play(request):
             podcast=podcast,
             length=length,
             size=size,
-            summary=summary,
+            description=description,
+            signature=signature,
         )
 
         episode.play()

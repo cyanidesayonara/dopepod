@@ -616,6 +616,7 @@ a:hover {
   padding: 0 15px;
 }
 .dopebar-link  {
+  cursor: pointer;
   font-weight: 600;
   background: none!important;
   border: none;
@@ -1165,7 +1166,7 @@ a:hover {
   overflow: hidden;
   font-size: 14px;
 }
-.last-played-bottom .episode-summary {
+.last-played-bottom .episode-description {
   margin-bottom: 3px;
   max-height: 60px;
   overflow: hidden;

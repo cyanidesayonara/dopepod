@@ -402,12 +402,13 @@ class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE)
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
-    summary = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     length = models.DurationField(null=True, blank=True)
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
     played = models.DateTimeField(null=True, blank=True)
+    signature = models.CharField(max_length=1000)
 
     def play(self):
         self.played = timezone.now()
@@ -468,13 +469,13 @@ class Episode(models.Model):
                     try:
                         pubdate = item.find('pubDate').text
                         pubdate = parse(pubdate)
-                        episode['pubDate'] = datetime.strftime(pubdate,"%c")
+                        episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                     # if episode data not found, skip episode
                     except AttributeError as e:
                         logger.error('can\'t get pubDate', podcast.feedUrl)
                         continue
 
-                    # try to get title & summary
+                    # try to get title & description
                     try:
                         episode['title'] = item.find('title').text
                     except AttributeError:
@@ -484,21 +485,21 @@ class Episode(models.Model):
                             logger.error('can\'t get title', podcast.feedUrl)
                             continue
                     try:
-                        summary = item.find('description').text
+                        description = item.find('description').text
                     except AttributeError:
                         # or try with itunes namespace
                         try:
-                            summary = item.find('itunes:summary', ns).text
+                            description = item.find('itunes:summary', ns).text
                         # if episode data not found, skip episode
                         except AttributeError as e:
-                            summary = ''
+                            description = ''
                             logger.error('can\'t get description', podcast.feedUrl)
 
-                    if not summary:
-                        summary = ''
+                    if not description:
+                        description = ''
 
                     # strip html tags+ split + join again by single space
-                    episode['summary'] = ' '.join(strip_tags(summary).split())
+                    episode['description'] = ' '.join(strip_tags(description).split())
 
                     # try to get length
                     try:
@@ -535,7 +536,7 @@ class Episode(models.Model):
                                 except (ValueError, IndexError):
                                     logger.error('can\'t parse length', podcast.feedUrl)
 
-                    episode['podcast'] = podcast.podid
+                    episode['podid'] = podcast.podid
 
                     # link to episode
                     # enclosure might be missing, have alternatives
@@ -550,8 +551,13 @@ class Episode(models.Model):
                     try:
                         episode['url'] = enclosure.get('url').replace('http:', '')
                         episode['type'] = enclosure.get('type')
-                        value = signing.dumps(episode)
-                        print(value)
+
+                        # create signature
+                        episode['signature'] = signing.dumps(episode)
+
+                        # formatted date
+                        episode['date'] = datetime.strftime(pubdate,"%b %d %Y %X")
+
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
