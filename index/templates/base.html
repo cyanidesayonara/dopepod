@@ -32,7 +32,7 @@
         </div>
       </nav>
       <div class="row" id="main-wrapper">
-        <div class="col-12 order-3 col-xl-3" id="left">
+        <div class="col-12 order-3 col-md-6 col-xl-3" id="left">
           <div class="row" id="charts">
             {% if charts %}
               {% with charts as results %}
@@ -50,7 +50,7 @@
           </div>
         </div>
         <!-- CHARTS -->
-        <div class="col-12 order-2 col-xl-3 offset-xl-3" id="right">
+        <div class="col-12 order-2 col-md-6 col-xl-3 offset-xl-3" id="right">
           <div class="row" id="last-played">
             {% if last_played %}
               {% include 'last_played.html' %}

@@ -500,7 +500,9 @@ a:hover {
   animation: appear .5s ease-in 5s forwards;
   -webkit-animation: appear .5s ease-in 5s forwards;
 }
+#dopebar-wrapper {
 
+}
 /* MAIN */
 #main-wrapper {
   padding-top: 50px;
@@ -1113,6 +1115,7 @@ a:hover {
 .last-played-header h1 {
   font-size: 20px;
   margin: 0;
+  padding-bottom: 5px;
   border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 .last-played-top a:hover {
@@ -1131,6 +1134,7 @@ a:hover {
   list-style: none;
 }
 .last-played-buttons {
+  margin-top: 5px;
   display: flex;
   justify-content: flex-end;
 }
@@ -1161,7 +1165,7 @@ a:hover {
   text-overflow: ellipsis;
 }
 .last-played-top .result-episode {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   height: 40px;
   overflow: hidden;
   font-size: 14px;
@@ -1236,7 +1240,7 @@ hr.h-line {
 /* PLAYER */
 #player {
   z-index: 9000;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   margin: auto;
 }
@@ -1269,13 +1273,13 @@ hr.h-line {
 #player-title {
   position: relative;
   overflow: hidden;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 #player-title span {
   white-space: nowrap;
 }
 #player-date {
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 #player-episode {
   height: 35px;

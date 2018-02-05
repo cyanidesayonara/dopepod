@@ -50,7 +50,7 @@ def play(request):
             description = data['description']
         except (KeyError, signing.BadSignature):
             raise Http404()
-            
+
         try:
             length = data['length']
             t = datetime.strptime(length,"%H:%M:%S")
@@ -67,7 +67,7 @@ def play(request):
             podcast = Podcast.objects.get(podid=podid)
         except Podcast.DoesNotExist:
             raise Http404()
-
+            
         episode = Episode.objects.create(
             url=url,
             kind=kind,

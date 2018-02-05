@@ -526,3 +526,6 @@ $(document)
   .on("click", ".btn-dope, .dopebar-link, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
+  .on("click", "#dopebar-collapse .dopebar-link", function(e) {
+    $("#dopebar-collapse.show").collapse("hide");
+  })

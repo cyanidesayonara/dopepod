@@ -17,6 +17,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
+import re
 
 ua = UserAgent()
 
@@ -62,7 +63,7 @@ class Podcast(models.Model):
     explicit = models.BooleanField()
     language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE)
     copyrighttext = models.CharField(max_length=5000)
-    description = models.TextField(max_length=5000, blank=True)
+    description = models.TextField(max_length=5000, null=True, blank=True)
     n_subscribers = models.IntegerField(default=0)
     reviewsUrl = models.CharField(max_length=1000)
     artworkUrl = models.CharField(max_length=1000)
@@ -402,13 +403,13 @@ class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE)
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(max_length=5000, null=True, blank=True)
     length = models.DurationField(null=True, blank=True)
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
     played = models.DateTimeField(null=True, blank=True)
-    signature = models.CharField(max_length=1000)
+    signature = models.CharField(max_length=5000)
 
     def play(self):
         self.played = timezone.now()
@@ -450,7 +451,6 @@ class Episode(models.Model):
         headers = {
             'User-Agent': str(ua.random)
         }
-
         episodes = []
 
         try:
@@ -468,7 +468,8 @@ class Episode(models.Model):
                     # try to get pubdate + parse & convert it to datetime
                     try:
                         pubdate = item.find('pubDate').text
-                        pubdate = parse(pubdate)
+                        pubdate = parse(pubdate, default=parse("00:00Z"))
+                        print(pubdate)
                         episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                     # if episode data not found, skip episode
                     except AttributeError as e:
@@ -513,28 +514,30 @@ class Episode(models.Model):
 
                     if length:
                         # convert length to timedelta
-                        if length.isdigit():
+                        if length.isdigit() and length != 0:
                             delta = timedelta(seconds=int(length))
                             episode['length'] = str(delta)
                         else:
-                            if '.' in length:
-                                length = length.split('.')
-                            else:
-                                length = length.split(':')
-                            try:
-                                hours = int(length[0])
-                                minutes = int(length[1])
-                                seconds = int(length[2])
-                                delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
-                                episode['length'] = str(delta)
-                            except (ValueError, IndexError):
+                            if re.search('[1-9]', length):
+                                if '.' in length:
+                                    length = length.split('.')
+                                else:
+                                    length = length.split(':')
+
                                 try:
-                                    minutes = int(length[0])
-                                    seconds = int(length[1])
-                                    delta = timedelta(minutes=minutes, seconds=seconds)
+                                    hours = int(length[0])
+                                    minutes = int(length[1])
+                                    seconds = int(length[2])
+                                    delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
                                     episode['length'] = str(delta)
                                 except (ValueError, IndexError):
-                                    logger.error('can\'t parse length', podcast.feedUrl)
+                                    try:
+                                        minutes = int(length[0])
+                                        seconds = int(length[1])
+                                        delta = timedelta(minutes=minutes, seconds=seconds)
+                                        episode['length'] = str(delta)
+                                    except (ValueError, IndexError):
+                                        logger.error('can\'t parse length', podcast.feedUrl)
 
                     episode['podid'] = podcast.podid
 
@@ -543,7 +546,7 @@ class Episode(models.Model):
                     enclosure = item.find('enclosure')
                     try:
                         size = enclosure.get('length')
-                        if size and size != '0':
+                        if size and int(size) > 1:
                             episode['size'] = format_bytes(int(size))
                     except ValueError:
                         logger.error('can\'t get episode size', podcast.feedUrl)
@@ -554,10 +557,8 @@ class Episode(models.Model):
 
                         # create signature
                         episode['signature'] = signing.dumps(episode)
-
                         # formatted date
                         episode['date'] = datetime.strftime(pubdate,"%b %d %Y %X")
-
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
