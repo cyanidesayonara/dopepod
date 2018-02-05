@@ -19,7 +19,7 @@ def episodes(request):
         podid = request.GET.get('podid', '0')
         try:
             podcast = Podcast.objects.get(podid=int(podid))
-        except Podcast.DoesNotExist:
+        except (ValueError, Podcast.DoesNotExist):
             raise Http404()
 
         context = {
@@ -67,7 +67,7 @@ def play(request):
             podcast = Podcast.objects.get(podid=podid)
         except Podcast.DoesNotExist:
             raise Http404()
-            
+
         episode = Episode.objects.create(
             url=url,
             kind=kind,
@@ -108,7 +108,7 @@ def subscribe(request):
             try:
                 podid = request.POST['podid']
                 podcast = Podcast.objects.get(podid=int(podid))
-            except (KeyError, Podcast.DoesNotExist) as e:
+            except (ValueError, KeyError, Podcast.DoesNotExist) as e:
                 raise Http404()
 
             podcast.subscribe(user)

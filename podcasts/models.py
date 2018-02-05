@@ -176,6 +176,7 @@ class Podcast(models.Model):
         else:
             subscription.delete()
             self.n_subscribers -= 1
+        self.save()
 
     def set_subscribed(self, user):
         """
@@ -496,7 +497,6 @@ class Episode(models.Model):
         try:
             response = session.get(podcast.feedUrl, headers=headers, timeout=5)
             response.raise_for_status()
-
             try:
                 root = etree.XML(response.content)
                 ns.update(root.nsmap)
@@ -610,9 +610,11 @@ class Episode(models.Model):
 
             except etree.XMLSyntaxError:
                 logger.error('trouble with xml')
+                return context
 
         except requests.exceptions.HTTPError as e:
             logger.error(str(e))
+            return context
 
     def get_last_played(context):
         last_played = Episode.objects.all().order_by('-played')[:50]
