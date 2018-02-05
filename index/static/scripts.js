@@ -368,7 +368,8 @@ $(document)
         var podid = form.find("input[name=podid]").val();
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
-        loadResults(url, drop, podid);
+        var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
+        loadResults(url, drop, loadResults, args);
       });
   })
   // PLAYER
