@@ -18,6 +18,7 @@ from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
 import re
+import urllib.parse
 
 ua = UserAgent()
 
@@ -291,6 +292,9 @@ class Chart(models.Model):
     header = models.CharField(max_length=16, default='Top 50 podcasts')
     genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.PROTECT)
 
+    def get_providers():
+        return Chart.objects.all().distinct('provider').values_list('provider', flat=True)
+
     def set_charts():
         """
         sets genre_rank and global_rank for top ranking podcasts
@@ -408,11 +412,28 @@ class Chart(models.Model):
             podcasts.append(podcast)
 
         url = '/charts/'
+        querystring = {}
         urls = {}
-        urls['q_url'] = url + '?'
-        urls['genre_url'] = url + '?'
-        urls['language_url'] = url + '?'
-        urls['full_url'] = url + '?'
+
+        if genre:
+            querystring['genre'] = genre
+        if provider:
+            querystring['provider'] = provider
+
+        if genre or provider:
+            querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
+            urls['genre_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_genre)
+
+            querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
+            urls['provider_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_provider)
+
+            urls['full_url'] = url + '?' + urllib.parse.urlencode(querystring)
+        else:
+            urls['q_url'] = url + '?'
+            urls['genre_url'] = url + '?'
+            urls['language_url'] = url + '?'
+            urls['provider_url'] = url + '?'
+            urls['full_url'] = url + '?'
 
         results = {}
         results['drop'] = 'charts'
@@ -420,6 +441,7 @@ class Chart(models.Model):
         results['header'] = chart.header
         results['selected_genre'] = genre
         results['genres'] = genres
+        results['providers'] = Chart.get_providers()
         results['selected_provider'] = provider
         results['view'] = 'charts'
         results['urls'] = urls

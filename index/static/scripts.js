@@ -6,8 +6,8 @@ $(document)
     refreshCookie();
     collapseCollapses();
     addIcons();
-    showpodBadge();
-    scrollSpy();
+    // showpodBadge();
+    // scrollSpy();
   })
 
 function addIcons() {
@@ -150,7 +150,7 @@ function refreshCookie() {
 function refreshPage() {
   var url = "/dopebar/";
   var drop = $("#dopebar");
-  loadResults(url, drop, loadResults, ["/", "#center-stage"]);
+  loadResults([url, drop, loadResults, ["/", "#center-stage"]]);
 }
 
 function checkForXHR() {
@@ -161,11 +161,13 @@ function checkForXHR() {
 }
 
 // LOADER
-function loadResults(url, drop, callback, args) {
+function loadResults(args) {
+  pushState();
   checkForXHR();
-  if (!callback) {
-    pushState();
-  }
+  var url = args[0];
+  var drop = args[1];
+  var callback = args[2];
+  var args = args[3];
   drop = $(drop);
   if (!drop.find(".results-loading").length && url != "/dopebar/") {
     drop.load("/static/loading.html");
@@ -179,7 +181,7 @@ function loadResults(url, drop, callback, args) {
     .done(function(response) {
       drop.html(response);
       if (callback) {
-        callback(args[0], args[1]);
+        callback(args);
       }
       replaceState(url);
     });
@@ -226,7 +228,7 @@ $(document)
         var url = el[0].action;
         var drop = $("#center-stage");
         url = url + '?q=' + q;
-        loadResults(url, drop);
+        loadResults([url, drop]);
       }
     }, 250);
   })
@@ -241,7 +243,7 @@ $(document)
       var q = el.find(".q").val();
       if (q && /^[\w\d ]+$/.test(q)) {
         url = url + '?q=' + q;
-        loadResults(url, drop);
+        loadResults([url, drop]);
       }
     }, 250);
   })
@@ -253,7 +255,7 @@ $(document)
     timeout = setTimeout(function() {
       var url = el[0].href;
       var drop = $(el.parents(".results").parent()[0]);
-      loadResults(url, drop);
+      loadResults([url, drop]);
     }, 250);
   })
   // NAVIGATION
@@ -267,7 +269,7 @@ $(document)
       var drop = $("#center-stage");
       if (!(drop.find("#showpod-c").data("podid") == podid)) {
         var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
-        loadResults(url, drop, loadResults, args);
+        loadResults([url, drop, loadResults, args]);
       }
       scrollToTop();
     }, 250);
@@ -279,7 +281,7 @@ $(document)
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
       if (!drop.find("#dashboard-top").length) {
-        loadResults(url, drop);
+        loadResults([url, drop]);
       }
       scrollToTop();
     }, 250);
@@ -290,7 +292,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      loadResults(url, drop);
+      loadResults([url, drop]);
       scrollToTop();
     }, 250);
   })
@@ -300,7 +302,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      loadResults(url, drop);
+      loadResults([url, drop]);
       scrollToTop();
     }, 250);
   })
@@ -311,7 +313,7 @@ $(document)
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
       if (!drop.find("#settings").length) {
-        loadResults(url, drop);
+        loadResults([url, drop]);
       }
       scrollToTop();
     }, 250);
@@ -369,7 +371,7 @@ $(document)
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
         var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
-        loadResults(url, drop, loadResults, args);
+        loadResults([url, drop, loadResults, args]);
       });
   })
   // PLAYER
@@ -423,7 +425,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    loadResults(url, drop);
+    loadResults([url, drop]);
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {

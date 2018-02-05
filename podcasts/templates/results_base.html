@@ -101,11 +101,11 @@ Listen to episodes of {{ podcast.title }} on dopepod
       {% endif %}
     {% endif %}
     {% if results.selected_provider == 'dopepod' %}
-      <a class="btn-dope active provider-button" href="{{ results.urls.full_url }}&provider=itunes">
+      <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=itunes">
         On dopepod
       </a>
     {% elif results.selected_provider == 'itunes' %}
-      <a class="btn-dope active provider-button" href="{{ results.urls.full_url }}&provider=dopepod">
+      <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=dopepod">
         On itunes
       </a>
     {% endif %}
