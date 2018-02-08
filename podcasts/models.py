@@ -199,7 +199,7 @@ class Podcast(models.Model):
         try:
             # get data from itunes lookup
             lookupUrl = 'https://itunes.apple.com/lookup?id=' + podid
-            response = session.get(lookupUrl, headers=headers, timeout=10)
+            response = requests.get(lookupUrl, headers=headers, timeout=10)
             response.raise_for_status()
             jsonresponse = response.json()
             data = jsonresponse['results'][0]
@@ -214,7 +214,7 @@ class Podcast(models.Model):
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/xml'
 
             # get more data from itunes artist page
-            response = session.get(itunesUrl, headers=headers, timeout=10)
+            response = requests.get(itunesUrl, headers=headers, timeout=10)
             response.raise_for_status()
             tree = html.fromstring(response.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
@@ -231,7 +231,7 @@ class Podcast(models.Model):
                 copyrighttext = '© All rights reserved'
 
             # make sure feedUrl works before creating podcast
-            response = session.get(feedUrl, headers=headers, timeout=10)
+            response = requests.get(feedUrl, headers=headers, timeout=10)
             response.raise_for_status()
             genre, created = Genre.objects.get_or_create(
                 name=genre
