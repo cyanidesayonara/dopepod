@@ -149,7 +149,7 @@ class Podcast(models.Model):
                     query = Q()
                     for letter in string.ascii_lowercase:
                         query = query | Q(title__istartswith=letter)
-                        podcasts = podcasts.exclude(query)
+                    podcasts = podcasts.exclude(query)
                 else:
                     the = 'the ' + q
                     podcasts = podcasts.filter(
@@ -158,7 +158,7 @@ class Podcast(models.Model):
                     )
                 podcasts = podcasts.order_by('title')
         else:
-            podcasts = podcasts.filter().order_by('rank')
+            podcasts = podcasts.order_by('rank')
 
         return podcasts
 
@@ -609,7 +609,7 @@ class Episode(models.Model):
                         size = enclosure.get('length')
                         if size and int(size) > 1:
                             episode['size'] = format_bytes(int(size))
-                    except ValueError:
+                    except (AttributeError, ValueError):
                         logger.error('can\'t get episode size', podcast.feedUrl)
 
                     try:
