@@ -19,6 +19,7 @@ from fake_useragent import UserAgent
 from django.core import signing
 import re
 import urllib.parse
+import html
 
 ua = UserAgent()
 
@@ -400,7 +401,7 @@ class Chart(models.Model):
             logger.error('timed out')
         return podcasts
 
-    def get_charts(context, provider='dopepod', genre=None, ajax=None):
+    def get_charts(provider='dopepod', genre=None):
         genres = Genre.get_primary_genres()
         chart = get_object_or_404(Chart, provider=provider, genre=genre)
         orders = Order.objects.filter(chart=chart).order_by('position')
@@ -446,16 +447,7 @@ class Chart(models.Model):
         results['view'] = 'charts'
         results['urls'] = urls
 
-        if ajax:
-            context.update({
-                'results': results,
-            })
-        else:
-            context.update({
-                'charts': results,
-            })
-
-        return context
+        return results
 
 class Order(models.Model):
     position = models.IntegerField()
@@ -500,7 +492,7 @@ class Episode(models.Model):
             ago += ' ago'
             return ago
 
-    def get_episodes(context, podcast, ajax=None):
+    def get_episodes(podcast):
         """
         returns a list of episodes using requests and lxml etree
         """
@@ -559,6 +551,8 @@ class Episode(models.Model):
 
                     if not description:
                         description = ''
+                    else:
+                        description = html.unescape(description)
 
                     # strip html tags+ split + join again by single space
                     episode['description'] = ' '.join(strip_tags(description).split())
@@ -624,11 +618,7 @@ class Episode(models.Model):
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
 
-                context.update({
-                    'episodes': episodes,
-                })
-
-                return context
+                return episodes
 
             except etree.XMLSyntaxError:
                 logger.error('trouble with xml')
@@ -638,12 +628,8 @@ class Episode(models.Model):
             logger.error(str(e))
             return context
 
-    def get_last_played(context):
-        last_played = Episode.objects.all().order_by('-played')[:50]
-        context.update({
-            'last_played': last_played,
-        })
-        return context
+    def get_last_played():
+        return Episode.objects.all().order_by('-played')[:50]
 
 class Filterable(models.Model):
     """

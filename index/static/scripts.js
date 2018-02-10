@@ -8,7 +8,25 @@ $(document)
     addIcons();
     // showpodBadge();
     // scrollSpy();
+    update_last_played();
+    update_charts();
   })
+
+function update_last_played() {
+  setInterval(function() {
+    var url = "/last_played/";
+    var drop = $("#last-played");
+    loadResults([url, drop]);
+  }, 60000);
+}
+
+function update_charts() {
+  setInterval(function() {
+    var url = "/charts/";
+    var drop = $("#charts");
+    loadResults([url, drop]);
+  }, 86400000);
+}
 
 function addIcons() {
   $(".search-button").html("<i class='fa fa-search icon'></i>");
@@ -96,6 +114,9 @@ function replaceState(url) {
   if (url.includes("charts")) {
     url = "/";
   }
+  if (url.includes("last_played")) {
+    url = "/";
+  }
   if (url.includes("episodes")) {
     url = $("#main-wrapper")[0].baseURI;;
   }
@@ -162,21 +183,24 @@ function checkForXHR() {
 
 // LOADER
 function loadResults(args) {
-  pushState();
-  checkForXHR();
   var url = args[0];
-  var drop = args[1];
+  var drop = $(args[1]);
   var callback = args[2];
   var args = args[3];
-  drop = $(drop);
-  if (!drop.find(".results-loading").length && url != "/dopebar/") {
+  if (!callback) {
+    pushState();
+  }
+  else {
+    checkForXHR();
+  }
+  if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
     drop.load("/static/loading.html");
   }
   xhr = $.ajax({
     type: "GET",
     url: url,
   })
-    .fail(function(xhr, ajaxOptions, thrownError){
+    .fail(function(xhr, ajaxOptions, thrownError) {
   })
     .done(function(response) {
       drop.html(response);
@@ -270,7 +294,7 @@ $(document)
       var podid = el.data("podid");
       var drop = $("#center-stage");
       if (!(drop.find("#showpod-c").data("podid") == podid)) {
-        var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
+        var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
         loadResults([url, drop, loadResults, args]);
       }
       scrollToTop();
@@ -364,7 +388,7 @@ $(document)
       url: url,
       data: data,
     })
-      .fail(function(xhr, ajaxOptions, thrownError){
+      .fail(function(xhr, ajaxOptions, thrownError) {
         var drop = $("#center-stage");
         loadResults("/", drop);
       })
@@ -388,7 +412,7 @@ $(document)
       url: "/play/",
       data: data,
     })
-      .fail(function(xhr, ajaxOptions, thrownError){
+      .fail(function(xhr, ajaxOptions, thrownError) {
       })
       .done(function(response) {
         var player = $("#player");
@@ -498,8 +522,8 @@ $(document)
       else {
         icon.addClass("d-none");
       }
-      replaceState(this.href);
     });
+    // replaceState(this.href);
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".more-collapse", function(e) {

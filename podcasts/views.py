@@ -7,7 +7,7 @@ from django.core import signing
 
 logger = logging.getLogger(__name__)
 
-def episodes(request):
+def episodes(request, podid):
     """
     returns html for episodes
     GET ajax request sent by showpod
@@ -16,19 +16,34 @@ def episodes(request):
 
     # ajax using POST
     if request.method == 'GET':
-        podid = request.GET.get('podid', '0')
-        try:
-            podcast = Podcast.objects.get(podid=int(podid))
-        except (ValueError, Podcast.DoesNotExist):
-            raise Http404()
+        if request.is_ajax():
+            try:
+                podcast = Podcast.objects.get(podid=podid)
+            except Podcast.DoesNotExist:
+                raise Http404()
 
-        context = {
-            'podcast': podcast,
-        }
+            episodes = Episode.get_episodes(podcast)
+            context = {
+                'episodes': episodes,
+            }
+            return render(request, 'episodes.html', context)
+        else:
+            return redirect('/showpod/' + podid + '/')
 
-        context = Episode.get_episodes(context, podcast, ajax=True)
+def last_played(request):
+    """
+    returns n number of last played
+    """
 
-        return render(request, 'episodes.html', context)
+    if request.method == 'GET':
+        if request.is_ajax():
+            last_played = Episode.get_last_played()
+            context = {
+                'last_played': last_played,
+            }
+            return render(request, 'last_played.html', context)
+        else:
+            return redirect('/')
 
 def play(request):
     """

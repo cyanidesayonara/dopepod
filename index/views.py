@@ -36,8 +36,12 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
-        context = Chart.get_charts(context)
-        context = Episode.get_last_played(context)
+        last_played = Episode.get_last_played()
+        charts = Chart.get_charts()
+        context.update({
+            'charts': charts,
+            'last_played': last_played,
+        })
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
@@ -64,14 +68,20 @@ def charts(request):
         if provider not in providers:
             provider = providers[0]
 
-        context = {}
+        charts = Chart.get_charts(genre=genre, provider=provider)
 
         if request.is_ajax():
-            context = Chart.get_charts(context, genre=genre, provider=provider, ajax=True)
+            context = {
+                'results': charts,
+            }
+
             return render(request, 'results_base.html', context)
 
-        context = Chart.get_charts(context, provider=provider, genre=genre)
-        context = Episode.get_last_played(context)
+        last_played = Episode.get_last_played()
+        context.update({
+            'charts': charts,
+            'last_played': last_played,
+        })
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)
@@ -189,7 +199,6 @@ def search(request):
                 'end': True if page != paginator.num_pages else False,
             }
         results['alphabet'] = alphabet
-        results['drop'] = 'search'
         results['podcasts'] = podcasts
         one = show // 4
         two = show // 2
@@ -209,20 +218,20 @@ def search(request):
         results['urls'] = urls
         results['extra_options'] = True
 
+        context = {
+            'results': results,
+        }
         if request.is_ajax():
-            context = {
-                'results': results,
-            }
             return render(request, 'results_base.html', context)
 
         results['extend'] = True
 
-        context = {}
-        context = Chart.get_charts(context)
-        context = Episode.get_last_played(context)
+        charts = Chart.get_charts()
+        last_played = Episode.get_last_played()
 
         context.update({
-            'results': results,
+            'charts': charts,
+            'last_played': last_played,
         })
 
         return render(request, 'results_base.html', context)
@@ -244,29 +253,27 @@ def subscriptions(request):
             results_header = str(subscriptions.count()) + ' subscriptions'
 
         results = {}
-        results['drop'] = 'search'
         results['podcasts'] = subscriptions
         results['header'] = results_header
         results['view'] = 'subscriptions'
         results['extra_options'] = True
 
-
-        if request.is_ajax():
-            context = {
+        context = {
             'results': results,
-            }
+        }
+        if request.is_ajax():
             return render(request, 'results_base.html', context)
 
-        context = {
-            'search': results,
-        }
-        context = Chart.get_charts(context)
-        context = Episode.get_last_played(context)
+        results['extend'] = True
 
-        if user.is_authenticated:
-            return render(request, 'dashboard.html', context)
-        else:
-            return render(request, 'splash.html', context)
+        charts = Chart.get_charts()
+        last_played = Episode.get_last_played()
+        context.update({
+            'charts': charts,
+            'last_played': last_played,
+        })
+
+        return render(request, 'results_base.html', context)
 
 @vary_on_headers('Accept')
 def showpod(request, podid):
@@ -295,9 +302,14 @@ def showpod(request, podid):
             if request.is_ajax():
                 return render(request, 'showpod.html', context)
 
-            context = Chart.get_charts(context)
-            context = Episode.get_episodes(context, podcast)
-            context = Episode.get_last_played(context)
+            charts = Chart.get_charts()
+            episodes = Episode.get_episodes(podcast)
+            last_played = Episode.get_last_played()
+            context.update({
+                'charts': charts,
+                'episodes': episodes,
+                'last_played': last_played,
+            })
 
             return render(request, 'showpod.html', context)
         except Podcast.DoesNotExist:
@@ -322,8 +334,12 @@ def settings(request):
             if request.is_ajax():
                 return render(request, 'settings.html', context)
 
-            context = Chart.get_charts(context)
-            context = Episode.get_last_played(context)
+            charts = Chart.get_charts()
+            last_played = Episode.get_last_played()
+            context.update({
+                'charts': charts,
+                'last_played': last_played,
+            })
 
             return render(request, 'settings.html', context)
 
@@ -366,8 +382,12 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, 'settings.html', context, status=400)
 
-                context = Chart.get_charts(context)
-                context = Episode.get_last_played(context)
+                charts = Chart.get_charts()
+                last_played = Episode.get_last_played()
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
 
                 return render(request, 'settings.html', context)
     else:
