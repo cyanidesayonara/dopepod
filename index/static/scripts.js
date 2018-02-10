@@ -396,7 +396,7 @@ $(document)
         var podid = form.find("input[name=podid]").val();
         var url = $("#main-wrapper")[0].baseURI;
         var drop = $("#center-stage");
-        var args = ["/episodes/?podid=" + podid, "#episodes-collapse"];
+        var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
         loadResults([url, drop, loadResults, args]);
       });
   })
