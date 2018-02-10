@@ -34,9 +34,9 @@
               released: {{ episode.pubDate|date:'d-m-Y H:i' }}
             </li>
           </ul>
-          <a class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
+          <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
             <i class="fas fa-angle-down"></i>
-          </a>
+          </button>
         </div>
         <div class="last-played-bottom">
           <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">

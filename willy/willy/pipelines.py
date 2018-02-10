@@ -14,4 +14,3 @@ class WillyPipeline(object):
         """
 
         Filterable.count_n_podcasts()
-        Podcast.set_discriminated()

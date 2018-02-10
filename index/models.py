@@ -15,7 +15,7 @@ class Profile(models.Model):
         return self.user.email
 
 @receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
         p = Profile.objects.create(user=instance)
         p.save()

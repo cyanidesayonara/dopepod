@@ -4,22 +4,24 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db.models import Q
-from lxml import etree, html
+from lxml import etree, html as lxml_html
 from datetime import time, timedelta, datetime
 from dateutil.parser import parse
 import logging
 import string
 from urllib.parse import quote, unquote
 import requests
-import encodings.idna
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
 import re
 import urllib.parse
-import html as other_html
+import html
+import idna
 
 ua = UserAgent()
 
@@ -88,7 +90,7 @@ class Podcast(models.Model):
             self.save()
 
     def set_ranks():
-        podcasts = Podcast.objects.all().order_by('discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'bump')
+        podcasts = Podcast.objects.all().order_by('discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump')
         for i, podcast in enumerate(podcasts, start=1):
             podcast.rank = i
             podcast.bump = False
@@ -217,7 +219,7 @@ class Podcast(models.Model):
             # get more data from itunes artist page
             response = requests.get(itunesUrl, headers=headers, timeout=10)
             response.raise_for_status()
-            tree = html.fromstring(response.text)
+            tree = lxml_html.fromstring(response.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
             podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
 
@@ -263,14 +265,16 @@ class Podcast(models.Model):
             podcast.set_discriminated()
             return podcast
 
-        except requests.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError:
             logger.error('no response from url:', feedUrl)
-            return
-        except requests.exceptions.ReadTimeout as e:
+        except requests.exceptions.ReadTimeout:
             logger.error('timed out:', feedUrl)
-            return
-        except KeyError as e:
-            logger.error('Missing data: ', str(e))
+        except requests.exceptions.InvalidSchema:
+            logger.error('invalid schema:', feedUrl)
+        except idna.IDNAError:
+            logger.error('goddam idna error', feedUrl)
+        except KeyError:
+            logger.error('Missing data: ', feedUrl)
 
 
 class Subscription(models.Model):
@@ -348,6 +352,9 @@ class Chart(models.Model):
                         position=position,
                     )
 
+        # end by re-counting filterables
+        Filterable.count_n_podcasts()
+
     def parse_itunes_charts(genre=None):
         """
         parses itunes chart xml data
@@ -361,9 +368,9 @@ class Chart(models.Model):
         number = 100
 
         if genre:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
+            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
         else:
-            url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=' + str(number) + '/xml'
+            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/xml'
 
         try:
             response = session.get(url, headers=headers, timeout=10)
@@ -391,13 +398,15 @@ class Chart(models.Model):
                 except Podcast.DoesNotExist:
                     logger.error('can\'t get pod, scraping')
                     podcast = Podcast.scrape_podcast(podid)
+
                 if podcast:
                     podcasts.append(podcast)
 
         except requests.exceptions.HTTPError as e:
-            logger.error(str(e))
-        except requests.exceptions.ReadTimeout as e:
-            logger.error('timed out')
+            logger.error('http error', url)
+        except requests.exceptions.ReadTimeout:
+            logger.error('timed out', url)
+
         return podcasts
 
     def get_charts(provider='dopepod', genre=None):
@@ -464,6 +473,9 @@ class Episode(models.Model):
     size = models.CharField(null=True, blank=True, max_length=16)
     played = models.DateTimeField(null=True, blank=True)
     signature = models.CharField(max_length=5000)
+
+    def get_last_played():
+        return Episode.objects.all().order_by('-played')
 
     def play(self):
         self.played = timezone.now()
@@ -627,8 +639,11 @@ class Episode(models.Model):
             logger.error(str(e))
             return context
 
-    def get_last_played():
-        return Episode.objects.all().order_by('-played')[:50]
+@receiver(post_save, sender=Episode)
+def limit_episodes(sender, instance, created, **kwargs):
+    if created:
+        wannakeep = Episode.objects.all().order_by('-played')[:50]
+        Episode.objects.exclude(pk__in=wannakeep).delete()
 
 class Filterable(models.Model):
     """

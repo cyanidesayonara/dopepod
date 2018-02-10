@@ -79,13 +79,19 @@ a:hover {
   width: 34px;
   font-size: 20px;
   border-radius: 50%;
-  border: 2px solid rgba(0, 191,165, 1);
+  border: 2px solid rgba(0, 191, 165, 1);
   color: rgb(46, 46, 46);
   background: rgba(255, 255, 255, .5);
   transition: all .25s ease-in-out;
 }
 .last-played-toggle:focus {
   outline: none;
+}
+.last-played-toggle:hover {
+  transition: all .25s ease-in-out;
+  background: rgba(0, 191, 165, 1);
+  color: rgb(255, 255, 255);
+
 }
 .last-played-toggle[aria-expanded="true"] {
   transition: all .25s ease-in-out;
