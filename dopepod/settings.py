@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+# pip upgrade line for windows: for /F "delims===" %i in ('pip freeze -l') do pip install -U %i
+
 import os
 import local_settings
 
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
     'index',
     'podcasts',
     'login',
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

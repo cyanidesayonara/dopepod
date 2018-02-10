@@ -12,14 +12,13 @@ from datetime import time, timedelta, datetime
 from dateutil.parser import parse
 import logging
 import string
-from urllib.parse import quote, unquote
+from urllib.parse import quote, unquote, urlencode
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
 import re
-import urllib.parse
 import html
 import idna
 
@@ -431,12 +430,12 @@ class Chart(models.Model):
 
         if genre or provider:
             querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-            urls['genre_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_genre)
+            urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
 
             querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
-            urls['provider_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_provider)
+            urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
 
-            urls['full_url'] = url + '?' + urllib.parse.urlencode(querystring)
+            urls['full_url'] = url + '?' + urlencode(querystring)
         else:
             urls['q_url'] = url + '?'
             urls['genre_url'] = url + '?'
@@ -587,7 +586,7 @@ class Episode(models.Model):
                             if re.search('[1-9]', length):
                                 if '.' in length:
                                     length = length.split('.')
-                                else:
+                                elif ':' in length:
                                     length = length.split(':')
 
                                 try:
