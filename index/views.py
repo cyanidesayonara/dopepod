@@ -174,15 +174,15 @@ def search(request):
 
         if q or genre or language:
             querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
-            urls['q_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_q)
+            urls['q_url'] = url + '?' + urlencode(querystring_wo_q)
 
             querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-            urls['genre_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_genre)
+            urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
 
             querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
-            urls['language_url'] = url + '?' + urllib.parse.urlencode(querystring_wo_language)
+            urls['language_url'] = url + '?' + urlencode(querystring_wo_language)
 
-            urls['full_url'] = url + '?' + urllib.parse.urlencode(querystring)
+            urls['full_url'] = url + '?' + urlencode(querystring)
         else:
             urls['q_url'] = url + '?'
             urls['genre_url'] = url + '?'

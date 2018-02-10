@@ -74,7 +74,7 @@ class Podcast(models.Model):
     discriminate = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
     plays = models.IntegerField(default=0)
-    rank = models.IntegerField(default=0)
+    rank = models.IntegerField(default=1000000)
     bump = models.BooleanField(default=False)
 
     def __str__(self):
@@ -562,7 +562,7 @@ class Episode(models.Model):
                     if not description:
                         description = ''
                     else:
-                        description = other_html.unescape(description)
+                        description = html.unescape(description)
 
                     # strip html tags+ split + join again by single space
                     episode['description'] = ' '.join(strip_tags(description).split())
