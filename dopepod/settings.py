@@ -109,9 +109,6 @@ LOGIN_REDIRECT_URL = "/"
 # SESSION_COOKIE_AGE = 7
 # SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 
-# TODO add workers to  /etc/systemd/system/gunicorn.service, currently breaks login
-# https://stackoverflow.com/questions/23133365/not-able-to-log-in-to-the-django-admin-page-with-a-valid-username-and-password?noredirect=1&lq=1
-
 LOGIN_URL = '/account/login/'
 LOGOUT_URL = '/account/logout/'
 

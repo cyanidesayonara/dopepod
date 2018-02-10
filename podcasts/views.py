@@ -34,7 +34,7 @@ def last_played(request):
     """
     returns n number of last played
     """
-
+    # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
             last_played = Episode.get_last_played()
@@ -52,7 +52,6 @@ def play(request):
     POST ajax request
     """
 
-    # TODO: itemize episode, get url after redirections
     if request.method == 'POST':
         try:
             signature = request.POST['signature']
