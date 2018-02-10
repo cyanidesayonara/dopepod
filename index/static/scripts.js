@@ -229,6 +229,7 @@ $(document)
         var drop = $("#center-stage");
         url = url + '?q=' + q;
         loadResults([url, drop]);
+        scrollToTop();
       }
     }, 250);
   })
@@ -244,6 +245,7 @@ $(document)
       if (q && /^[\w\d ]+$/.test(q)) {
         url = url + '?q=' + q;
         loadResults([url, drop]);
+        scrollToTop();
       }
     }, 250);
   })

@@ -149,7 +149,7 @@ class Podcast(models.Model):
                     query = Q()
                     for letter in string.ascii_lowercase:
                         query = query | Q(title__istartswith=letter)
-                        podcasts = podcasts.exclude(query)
+                    podcasts = podcasts.exclude(query)
                 else:
                     the = 'the ' + q
                     podcasts = podcasts.filter(
@@ -158,7 +158,7 @@ class Podcast(models.Model):
                     )
                 podcasts = podcasts.order_by('title')
         else:
-            podcasts = podcasts.filter().order_by('rank')
+            podcasts = podcasts.order_by('rank')
 
         return podcasts
 
@@ -199,7 +199,7 @@ class Podcast(models.Model):
         try:
             # get data from itunes lookup
             lookupUrl = 'https://itunes.apple.com/lookup?id=' + podid
-            response = session.get(lookupUrl, headers=headers, timeout=10)
+            response = requests.get(lookupUrl, headers=headers, timeout=10)
             response.raise_for_status()
             jsonresponse = response.json()
             data = jsonresponse['results'][0]
@@ -214,7 +214,7 @@ class Podcast(models.Model):
             reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/xml'
 
             # get more data from itunes artist page
-            response = session.get(itunesUrl, headers=headers, timeout=10)
+            response = requests.get(itunesUrl, headers=headers, timeout=10)
             response.raise_for_status()
             tree = html.fromstring(response.text)
             language = tree.xpath('//li[@class="language"]/text()')[0]
@@ -231,7 +231,7 @@ class Podcast(models.Model):
                 copyrighttext = '© All rights reserved'
 
             # make sure feedUrl works before creating podcast
-            response = session.get(feedUrl, headers=headers, timeout=10)
+            response = requests.get(feedUrl, headers=headers, timeout=10)
             response.raise_for_status()
             genre, created = Genre.objects.get_or_create(
                 name=genre
@@ -609,7 +609,7 @@ class Episode(models.Model):
                         size = enclosure.get('length')
                         if size and int(size) > 1:
                             episode['size'] = format_bytes(int(size))
-                    except ValueError:
+                    except (AttributeError, ValueError):
                         logger.error('can\'t get episode size', podcast.feedUrl)
 
                     try:
