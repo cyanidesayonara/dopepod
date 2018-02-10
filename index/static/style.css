@@ -1241,7 +1241,7 @@ hr.h-line {
 /* PLAYER */
 #player {
   z-index: 9000;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   margin: auto;
 }
@@ -1272,8 +1272,9 @@ hr.h-line {
   padding: 0 10px;
 }
 #player-title {
-  position: relative;
+  font-size: 16px;
   overflow: hidden;
+  position: relative;
   margin-bottom: 3px;
 }
 #player-title span {
@@ -1284,10 +1285,12 @@ hr.h-line {
 }
 #player-episode {
   height: 35px;
+  margin-bottom: 3px;
 }
 #player-episode span {
 }
 #player-buttons {
+  display: flex;
   float: right;
 }
 .player-button {
