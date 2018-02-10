@@ -19,7 +19,7 @@ from fake_useragent import UserAgent
 from django.core import signing
 import re
 import urllib.parse
-import html
+import html as other_html
 
 ua = UserAgent()
 
@@ -271,8 +271,7 @@ class Podcast(models.Model):
             return
         except KeyError as e:
             logger.error('Missing data: ', str(e))
-        except:
-            logger.error('Something else: ', title, lookupUrl, itunesUrl, feedUrl)
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
@@ -552,7 +551,7 @@ class Episode(models.Model):
                     if not description:
                         description = ''
                     else:
-                        description = html.unescape(description)
+                        description = other_html.unescape(description)
 
                     # strip html tags+ split + join again by single space
                     episode['description'] = ' '.join(strip_tags(description).split())

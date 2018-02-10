@@ -922,6 +922,10 @@ a:hover {
   background: rgba(0, 191, 165, 1);
   color: #fff;
 }
+/* TODO fix
+tr.hover th {
+
+} */
 .episode-buttons {
   margin: 10px;
   float: right;
