@@ -528,7 +528,7 @@ a:hover {
   padding: 15px 0;
 }
 #last-played {
-  padding: 15px 0;
+
 }
 #center-stage {
   padding: 15px 0;
@@ -928,10 +928,9 @@ a:hover {
   background: rgba(0, 191, 165, 1);
   color: #fff;
 }
-/* TODO episode rows buggy, fix pls
-tr.hover th {
-
-} */
+#episodes-table thead tr th:first-child {
+  width: 45px;
+}
 .episode-buttons {
   margin: 10px;
   float: right;
@@ -1113,17 +1112,16 @@ tr.hover th {
   height: 19px;
 }
 .last-played {
-  margin-top: 15px;
   margin-bottom: 15px;
 }
 
 .last-played-box {
   padding: 10px 15px;
 }
-.last-played-header {
-  margin-bottom: 5px;
+#last-played-header {
+  margin-top: 15px;
 }
-.last-played-header h1 {
+#last-played-header h1 {
   font-size: 20px;
   margin: 0;
   padding-bottom: 5px;
