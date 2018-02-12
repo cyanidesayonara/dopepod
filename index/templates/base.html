@@ -27,30 +27,30 @@
     <div class="container-fluid">
       <!-- MULTIBAR -->
       <nav class="navbar fixed-top color-4-trans" id="dopebar">
-        <div class="container">
-          {% include 'dopebar.html' %}
-        </div>
+        {% include 'dopebar.html' %}
       </nav>
-      <div class="row" id="main-wrapper">
-        <div class="col-12 order-3 col-md-6 col-xl-3 order-xl-2 offset-xl-3" id="left">
-          <div class="row" id="charts">
-            {% if charts %}
+      <div class="container"id="main-wrapper">
+        <div class="row">
+          <!-- CHARTS -->
+          <div class="col-12 order-3 col-md-6 order-md-2" id="left">
+            <div class="row" id="charts">
+              {% if charts %}
               {% with charts as results %}
-                {% include 'results_base.html' %}
+              {% include 'results_base.html' %}
               {% endwith %}
-            {% endif %}
+              {% endif %}
+            </div>
           </div>
-        </div>
-        <!-- MAIN -->
-        <div class="col-12 order-1 col-xl-6 offset-xl-3" id="main">
-          <!-- CENTER STAGE -->
-          <div class="row" id="center-stage">
-            {% block center-stage %}
-            {% endblock %}
+          <!-- MAIN -->
+          <div class="col-12 order-1" id="main">
+            <!-- CENTER STAGE -->
+            <div class="row" id="center-stage">
+              {% block center-stage %}
+              {% endblock %}
+            </div>
           </div>
-        </div>
-        <!-- CHARTS -->
-        <div class="col-12 order-2 col-md-6 col-xl-3 order-xl-3" id="right">
+          <!-- LAST PLAYED -->
+          <div class="col-12 order-2 col-md-6 order-md-3" id="right">
           <div class="row" id="last-played-header">
             <div class="col-12">
               <h1>
@@ -63,6 +63,7 @@
               {% include 'last_played.html' %}
             {% endif %}
           </div>
+        </div>
         </div>
       </div>
     </div>

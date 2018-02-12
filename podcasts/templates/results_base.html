@@ -9,8 +9,8 @@ Listen to episodes of {{ podcast.title }} on dopepod
   <div class="row results-bar">
     <div class="col-12 results-header">
       {% if results.extra_options %}
-        <button class="btn-dope back-button" onclick="window.history.back()">
-          Back
+        <button class="btn-dope back-button results-back" onclick="window.history.back()">
+          <i class="fas fa-arrow-circle-left"></i>
         </button>
         <div class="extra-options">
           <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse-{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse-{{ results.drop }}" aria-label="Minimize">

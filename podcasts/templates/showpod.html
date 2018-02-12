@@ -118,32 +118,50 @@ Listen to episodes of {{ podcast.title }} on dopepod
         </li>
       </ul>
     </div>
-    <div class="col-12 showpod-options">
-      <button class="btn-dope" onclick="window.history.back()">
-        Back
-      </button>
-      {% if user.is_authenticated %}
-        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="podid" value="{{ podcast.podid }}">
-          {% if podcast.is_subscribed %}
-            <button type="submit" class="btn-dope btn-dope-showpod sub-button">
-              Unsubscribe
-          {% else %}
-            <button type="submit" class="btn-dope btn-dope-showpod active sub-button">
-              Subscribe
-          {% endif %}
-            </button>
-        </form>
-      {% endif %}
-      <a class="btn-dope toggle" id="show-episodes" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
-        Episodes
-      </a>
-      <button class="btn-dope btn-dope-disabled">
-        <span>
-          Reviews
-        </span>
-      </button>
+    <div class="col-12">
+      <div class="showpod-options">
+        <button class="btn-dope back-button" onclick="window.history.back()">
+          <i class="fas fa-arrow-circle-left"></i>
+        </button>
+        {% if user.is_authenticated %}
+          <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="podid" value="{{ podcast.podid }}">
+            {% if podcast.is_subscribed %}
+              <button type="submit" class="btn-dope btn-dope-showpod sub-button">
+                Unsubscribe
+            {% else %}
+              <button type="submit" class="btn-dope btn-dope-showpod active sub-button">
+                Subscribe
+            {% endif %}
+              </button>
+          </form>
+        {% endif %}
+        <a class="btn-dope toggle show-episodes" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+          Episodes
+        </a>
+        <button class="btn-dope btn-dope-disabled">
+          <span>
+            Reviews
+          </span>
+        </button>
+      </div>
+      <div class="showpod-extra-options">
+          <a class="btn-dope results-minimize reverse-toggle show-episodes" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+            {% if request.is_ajax %}
+              <i class="fas fa-minus-circle icon"></i>
+            {% else %}
+              -
+            {% endif %}
+          </a>
+          <a class="btn-dope results-close" href="#" aria-label="Close">
+            {% if request.is_ajax %}
+              <i class="fas fa-times-circle icon"></i>
+            {% else %}
+              x
+            {% endif %}
+          </a>
+        </div>
     </div>
     <div class="col-12 collapse show" id="episodes-collapse">
       {% if episodes %}

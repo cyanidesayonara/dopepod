@@ -1,14 +1,15 @@
-<div class="col-3 col-lg-5" id="dopebar-l">
-  <a class="dopebar-link dopebar-icon d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false" aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
-    <i class="fas fa-bars"></i>
-  </a>
-  <ul class="d-none d-xl-inline-block">
-    <li>
-      <a class="dopebar-link browse-link" href="{% url 'browse' %}">
-        Browse
-      </a>
-    </li>
-    {% if user.is_authenticated %}
+<div class="container" id="dopebar-wrapper">
+  <div class="col-3 col-lg-5" id="dopebar-l">
+    <a class="dopebar-link dopebar-icon d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false" aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
+      <i class="fas fa-bars"></i>
+    </a>
+    <ul class="d-none d-xl-inline-block">
+      <li>
+        <a class="dopebar-link browse-link" href="{% url 'browse' %}">
+          Browse
+        </a>
+      </li>
+      {% if user.is_authenticated %}
       <li>
         <a class="dopebar-link index-link" href="/">
           Dashboard
@@ -19,27 +20,27 @@
           Subscriptions
         </a>
       </li>
-    {% endif %}
-  </ul>
-</div>
-<div class="col-6 col-lg-2" id="dopebar-c">
-  {% include 'logo.html' %}
-</div>
-<div class="col-3 col-lg-5" id="dopebar-r">
-  {% if user.is_authenticated %}
+      {% endif %}
+    </ul>
+  </div>
+  <div class="col-6 col-lg-2" id="dopebar-c">
+    {% include 'logo.html' %}
+  </div>
+  <div class="col-3 col-lg-5" id="dopebar-r">
+    {% if user.is_authenticated %}
     <form class="logout-form d-inline-block d-xl-none" method="POST" action="{% url 'logout' %}">
       {% csrf_token %}
       <button class="dopebar-link ajax-logout dopebar-icon" type="submit">
         <i class="fas fa-sign-out-alt"></i>
       </button>
     </form>
-  {% else %}
+    {% else %}
     <a class="dopebar-link ajax-login dopebar-icon d-inline-block d-xl-none" href="/?view=login">
       <i class="fas fa-sign-out-alt"></i>
     </a>
-  {% endif %}
-  <ul class="d-none d-xl-inline-block">
-    {% if user.is_authenticated %}
+    {% endif %}
+    <ul class="d-none d-xl-inline-block">
+      {% if user.is_authenticated %}
       <li>
         <a class="dopebar-link settings-link" href="{% url 'settings' %}">
           Settings
@@ -53,7 +54,7 @@
           </button>
         </form>
       </li>
-    {% else %}
+      {% else %}
       <li>
         <a class="dopebar-link ajax-login" href="/?view=login">
           Login
@@ -64,75 +65,76 @@
           Signup
         </a>
       </li>
-    {% endif %}
-    <li>
-      <form class="form-inline search-form d-none d-xl-inline-block" method="GET" action="{% url 'search' %}">
-        <label for="q" class="sr-only">Search for podcasts</label>
-        <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
-        aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
-        <button class="search-button" type="submit">
-          <span>
-            Go
-          </span>
-        </button>
-      </form>
-    </li>
-  </ul>
-</div>
-<div class="collapse" id="dopebar-collapse">
-  <ul class="d-inline-block d-xl-none">
-    <li>
-      <a class="dopebar-link browse-link" href="{% url 'browse' %}">
-        Browse
-      </a>
-    </li>
-    {% if user.is_authenticated %}
+      {% endif %}
       <li>
-        <a class="dopebar-link index-link" href="/">
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a class="dopebar-link subscriptions-link" href="{% url 'subscriptions' %}">
-          Subscriptions
-        </a>
-      </li>
-      <li>
-        <a class="dopebar-link settings-link" href="{% url 'settings' %}">
-          Settings
-        </a>
-      </li>
-      <li>
-        <form class="logout-form" method="POST" action="{% url 'logout' %}">
-          {% csrf_token %}
-          <button class="dopebar-link ajax-logout d-inline-block d-xl-none" type="submit">
-            Logout
+        <form class="form-inline search-form d-none d-xl-inline-block" method="GET" action="{% url 'search' %}">
+          <label for="q" class="sr-only">Search for podcasts</label>
+          <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
+          aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
+          <button class="search-button" type="submit">
+            <span>
+              Go
+            </span>
           </button>
         </form>
       </li>
-    {% else %}
+    </ul>
+  </div>
+  <div class="collapse" id="dopebar-collapse">
+    <ul class="d-inline-block d-xl-none">
       <li>
-        <a class="dopebar-link ajax-login d-inline-block d-xl-none" href="/?view=login">
-          Login
+        <a class="dopebar-link browse-link" href="{% url 'browse' %}">
+          Browse
         </a>
       </li>
+      {% if user.is_authenticated %}
+        <li>
+          <a class="dopebar-link index-link" href="/">
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="dopebar-link subscriptions-link" href="{% url 'subscriptions' %}">
+            Subscriptions
+          </a>
+        </li>
+        <li>
+          <a class="dopebar-link settings-link" href="{% url 'settings' %}">
+            Settings
+          </a>
+        </li>
+        <li>
+          <form class="logout-form" method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="dopebar-link ajax-logout d-inline-block d-xl-none" type="submit">
+              Logout
+            </button>
+          </form>
+        </li>
+      {% else %}
+        <li>
+          <a class="dopebar-link ajax-login d-inline-block d-xl-none" href="/?view=login">
+            Login
+          </a>
+        </li>
+        <li>
+          <a class="dopebar-link ajax-signup d-inline-block d-xl-none" href="/?view=signup">
+            Signup
+          </a>
+        </li>
+      {% endif %}
       <li>
-        <a class="dopebar-link ajax-signup d-inline-block d-xl-none" href="/?view=signup">
-          Signup
-        </a>
+        <form class="form-inline search-form d-inline-block d-xl-none" method="GET" action="{% url 'search' %}">
+          <label for="q" class="sr-only">Search for podcasts</label>
+          <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
+          aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
+          <button class="search-button" type="submit">
+            <span>
+              Go
+            </span>
+          </button>
+        </form>
       </li>
-    {% endif %}
-    <li>
-      <form class="form-inline search-form d-inline-block d-xl-none" method="GET" action="{% url 'search' %}">
-        <label for="q" class="sr-only">Search for podcasts</label>
-        <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
-        aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
-        <button class="search-button" type="submit">
-          <span>
-            Go
-          </span>
-        </button>
-      </form>
-    </li>
-  </ul>
+    </ul>
+  </div>
 </div>

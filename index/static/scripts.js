@@ -6,13 +6,21 @@ $(document)
     refreshCookie();
     collapseCollapses();
     addIcons();
-    // showpodBadge();
-    // scrollSpy();
-    update_last_played();
-    update_charts();
+    keepAspectRatio()
+    showpodBadge();
+    scrollSpy();
+    updateLastPlayed();
+    updateCharts();
   })
+function keepAspectRatio() {
+  if ($("#showpod-l").length) {
+    var scroll = $(window).scrollTop();
+    var width = $("#showpod-l")[0].clientWidth;
+    $("#showpod-l").css("min-height", width - 30);
+  }
+}
 
-function update_last_played() {
+function updateLastPlayed() {
   setInterval(function() {
     var url = "/last_played/";
     var drop = $("#last-played");
@@ -20,7 +28,7 @@ function update_last_played() {
   }, 60000);
 }
 
-function update_charts() {
+function updateCharts() {
   setInterval(function() {
     var url = "/charts/";
     var drop = $("#charts");
@@ -55,6 +63,12 @@ function addIcons() {
       $(this).html("<i class='fas fa-times-circle icon'></i>");
     })
   }
+  var back_buttons = $(".back-button");
+  if (back_buttons.length) {
+    back_buttons.each(function() {
+      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
+    })
+  }
 }
 
 function collapseCollapses() {
@@ -69,6 +83,7 @@ function collapseCollapses() {
 
 function scrollSpy() {
   $(window).scroll(function () {
+    keepAspectRatio();
     showpodBadge();
   })
 }
@@ -104,6 +119,13 @@ function pushState() {
   history.pushState(state, "", url);
 }
 function replaceState(url) {
+  var urls = ["dopebar", "charts", "episodes", "last_played"];
+  for (i = 0; i < urls.length; i++) {
+    if (url.includes(urls[i])) {
+      console.log("dfsdfdsf");
+      return;
+    }
+  }
   var el = $("#main-wrapper")[0];
   var context = el.innerHTML;
   var title = updateTitle();
@@ -111,15 +133,6 @@ function replaceState(url) {
     "context": context,
     "title": title,
   };
-  if (url.includes("charts")) {
-    url = "/";
-  }
-  if (url.includes("last_played")) {
-    url = "/";
-  }
-  if (url.includes("episodes")) {
-    url = $("#main-wrapper")[0].baseURI;;
-  }
   history.replaceState(state, "", url);
 }
 function updateTitle() {
@@ -187,12 +200,7 @@ function loadResults(args) {
   var drop = $(args[1]);
   var callback = args[2];
   var args = args[3];
-  if (!callback) {
-    pushState();
-  }
-  else {
-    checkForXHR();
-  }
+  checkForXHR();
   if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
     drop.load("/static/loading.html");
   }
