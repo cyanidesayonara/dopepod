@@ -190,7 +190,7 @@ def search(request):
                 'end': True if page != pagecount else False,
             }
         results['alphabet'] = alphabet
-        results['podcasts'] = podcasts[:show]
+        results['podcasts'] = podcasts
         one = show // 4
         two = show // 2
         three = show // 2 + show // 4
@@ -224,7 +224,6 @@ def search(request):
             'charts': charts,
             'last_played': last_played,
         })
-
         return render(request, 'results_base.html', context)
 
 @vary_on_headers('Accept')
