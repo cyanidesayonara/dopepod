@@ -1,4 +1,3 @@
-// after page loads
 $(document)
   .ready(function() {
     xhr = null;
@@ -12,6 +11,7 @@ $(document)
     updateLastPlayed();
     updateCharts();
   })
+
 function keepAspectRatio() {
   if ($("#showpod-l").length) {
     var scroll = $(window).scrollTop();
@@ -257,6 +257,10 @@ function changeTheme(theme) {
   }
 }
 
+function replaceChars(q) {
+  return q.replace(/([^a-z0-9']+)/gi, "");
+}
+
 $(document)
   .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
     $(".logo-wrapper").children().each(function() {
@@ -270,7 +274,8 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var q = el.find(".q").val();
-      if (q && /^[\w\d ]+$/.test(q)) {
+      if (q) {
+        q = replaceChars(q);
         var url = el[0].action;
         var drop = $("#center-stage");
         url = url + '?q=' + q;
@@ -285,10 +290,11 @@ $(document)
     var el = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var url = el[0].action;
-      var drop = $("#center-stage");
       var q = el.find(".q").val();
-      if (q && /^[\w\d ]+$/.test(q)) {
+      if (q) {
+        q = replaceChars(q);
+        var url = el[0].action;
+        var drop = $("#center-stage");
         url = url + '?q=' + q;
         loadResults([url, drop]);
         scrollToTop();
@@ -572,6 +578,9 @@ $(document)
   .on("click", ".btn-dope, .dopebar-link, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
-  .on("click", "#dopebar-collapse .dopebar-link", function(e) {
+  .on("click", "body, #dopebar-wrapper .dopebar-link", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
+  })
+  .on("click", "#dopebar", function(e) {
+    e.stopPropagation();
   })

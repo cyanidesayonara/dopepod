@@ -1,5 +1,5 @@
 {% for episode in last_played %}
-<div class="col-12 last-played-box">
+<div class="col-12 last-played-box color-5-trans">
   <div class="last-played-top">
     <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
       {% if episode.length %}

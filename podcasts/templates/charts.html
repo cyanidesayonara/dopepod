@@ -15,6 +15,14 @@
               <span>by </span>
               {{ podcast.artist }}
             </p>
+            <ul>
+              <li>
+                {{ podcast.n_subscribers }} subscriber{{ podcast.n_subscribers|pluralize }}
+              </li>
+              <li>
+                {{ podcast.language }}
+              </li>
+            </ul>
           </div>
         </a>
       </div>

@@ -934,8 +934,35 @@ a:hover {
   background: rgba(0, 191, 165, 1);
   color: #fff;
 }
-#episodes-table thead tr th:first-child {
+#episodes-table .number {
   width: 45px;
+}
+#episodes-table .date {
+  width: 150px;
+}
+#episodes-table .size {
+  width: 70px;
+}
+#episodes-table .length {
+  width: 70px;
+}
+#episodes-table .title {
+  /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 .episode-buttons {
   margin: 10px;
@@ -1091,6 +1118,13 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
+.charts-result ul {
+  font-size: 12px;
+  text-align: right;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .charts-rank {
   float: left;
   margin-right: 10px;
@@ -1213,7 +1247,7 @@ a:hover {
   height: 40px;
 }
 .browse-results {
-  padding: 10px;
+  padding: 0 10px;
 }
 .browse-results-list {
   font-size: 14px;
