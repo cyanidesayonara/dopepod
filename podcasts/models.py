@@ -632,11 +632,11 @@ class Episode(models.Model):
 
             except etree.XMLSyntaxError:
                 logger.error('trouble with xml')
-                return context
+                return episodes
 
         except requests.exceptions.HTTPError as e:
             logger.error(str(e))
-            return context
+            return episodes
 
 @receiver(post_save, sender=Episode)
 def limit_episodes(sender, instance, created, **kwargs):

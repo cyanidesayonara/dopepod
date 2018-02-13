@@ -24,12 +24,12 @@
   <body>
 {% endif %}
     <!-- MAIN CONTENT -->
-    <div class="container-fluid">
+    <div class="container-fluid px-0">
       <!-- MULTIBAR -->
       <nav class="navbar fixed-top color-4-trans" id="dopebar">
         {% include 'dopebar.html' %}
       </nav>
-      <div class="container"id="main-wrapper">
+      <div class="container" id="main-wrapper">
         <div class="row">
           <!-- CHARTS -->
           <div class="col-12 order-3 col-md-6 order-md-2" id="left">
@@ -51,25 +51,25 @@
           </div>
           <!-- LAST PLAYED -->
           <div class="col-12 order-2 col-md-6 order-md-3" id="right">
-          <div class="row" id="last-played-header">
-            <div class="col-12">
-              <h1>
-                Last played
-              </h1>
+            <div class="row" id="last-played-header">
+              <div class="col-12">
+                <h1>
+                  Last played
+                </h1>
+              </div>
+            </div>
+            <div class="row" id="last-played">
+              {% if last_played %}
+                {% include 'last_played.html' %}
+              {% endif %}
             </div>
           </div>
-          <div class="row" id="last-played">
-            {% if last_played %}
-              {% include 'last_played.html' %}
-            {% endif %}
-          </div>
-        </div>
         </div>
       </div>
-    </div>
-    <!-- PLAYER -->
-    <div class="container-fluid" id="player">
-      {% include 'player.html' %}
+      <!-- PLAYER -->
+      <div class="container fixed-bottom" id="player">
+          {% include 'player.html' %}
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>

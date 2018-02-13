@@ -102,31 +102,35 @@ function showpodBadge() {
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    $("#main-wrapper").html(state.context);
+    var el = $("#main")[0];
+    $(el).html(state.context);
     $("title")[0].innerText = state.title;
   }
 })
-function pushState() {
-  var el = $("#main-wrapper")[0];
+function pushState(url) {
+  var urls = ["dopebar", "charts", "episodes", "last_played"];
+  for (i = 0; i < urls.length; i++) {
+    if (url.includes(urls[i])) {
+      return;
+    }
+  }
+  var el = $("#main")[0];
   var context = el.innerHTML;
-  var url = el.baseURI;
   var title = updateTitle();
   var state = {
     "context": context,
     "title": title,
   };
-  updateTitle();
   history.pushState(state, "", url);
 }
 function replaceState(url) {
   var urls = ["dopebar", "charts", "episodes", "last_played"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
-      console.log("dfsdfdsf");
       return;
     }
   }
-  var el = $("#main-wrapper")[0];
+  var el = $("#main")[0];
   var context = el.innerHTML;
   var title = updateTitle();
   var state = {
@@ -201,6 +205,7 @@ function loadResults(args) {
   var callback = args[2];
   var args = args[3];
   checkForXHR();
+  pushState(url);
   if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
     drop.load("/static/loading.html");
   }
@@ -233,6 +238,7 @@ function scrollToMultibar() {
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
   var textWidth = text.width();
+  console.log(boxWidth, textWidth)
   if (textWidth > boxWidth) {
     var animSpeed = textWidth * 20;
     $(box)
@@ -435,7 +441,7 @@ $(document)
   // close player
   .on("click", "#player-close", function(e) {
     e.preventDefault();
-    $("#audio-el").preload="none";
+    $("#audio-el audio")[0].preload="none";
     $("#player").empty();
     $("#player").removeClass("minimize");
     updateTitle();
@@ -444,12 +450,12 @@ $(document)
     e.preventDefault();
     if ($("#player").hasClass("minimize")) {
       $("#player").removeClass("minimize");
-      $("#player-bottom").removeClass("d-none");
+      $("#audio-el").removeClass("d-none");
       $(this).removeClass("active");
     }
     else {
       $("#player").addClass("minimize");
-      $("#player-bottom").addClass("d-none");
+      $("#audio-el").addClass("d-none");
       $(this).addClass("active");
     }
   })
