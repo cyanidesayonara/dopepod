@@ -115,7 +115,8 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(user, genre, language, q, show):
+
+    def search(genre, language, user, q=None):
         """
         returns podcasts matching search terms
         """
@@ -163,7 +164,7 @@ class Podcast(models.Model):
         else:
             podcasts = podcasts.order_by('rank')
 
-        return podcasts.count(), podcasts[:show]
+        return podcasts
 
     def subscribe(self, user):
         """

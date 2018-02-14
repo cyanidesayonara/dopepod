@@ -89,7 +89,7 @@ def charts(request):
             return render(request, 'dashboard.html', context)
         else:
             return render(request, 'splash.html', context)
-
+            
 @vary_on_headers('Accept')
 def search(request):
     """
@@ -137,19 +137,29 @@ def search(request):
             except Language.DoesNotExist:
                 language = None
 
-        podcount, podcasts = Podcast.search(user, genre, language, q, show)
-        pagecount = podcount / show
+        podcasts = Podcast.search(genre, language, user, q=q)
+        paginator = Paginator(podcasts, show)
+
         if not q:
-            results_header = str(podcount) + ' podcasts'
-        elif pagecount == 1:
-            results_header = str(podcount) + ' result for "' + q + '"'
+            results_header = str(paginator.count) + ' podcasts'
+        elif paginator.count == 1:
+            results_header = str(paginator.count) + ' result for "' + q + '"'
         else:
-            results_header = str(podcount) + ' results for "' + q + '"'
+            results_header = str(paginator.count) + ' results for "' + q + '"'
 
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
+
+        try:
+            podcasts = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            podcasts = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            podcasts = paginator.page(paginator.num_pages)
 
         url = request.path
         querystring = {}
@@ -182,13 +192,13 @@ def search(request):
             urls['full_url'] = url + '?'
 
         results = {}
-        if pagecount > 1:
-            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= pagecount else pagecount) + 1)
+        if paginator.num_pages > 1:
+            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= paginator.num_pages else paginator.num_pages) + 1)
             results['pagination'] = {
                 'start': True if page != 1 else False,
                 'pages': pages,
                 'page': page,
-                'end': True if page != pagecount else False,
+                'end': True if page != paginator.num_pages else False,
             }
         results['alphabet'] = alphabet
         results['podcasts'] = podcasts
@@ -213,7 +223,6 @@ def search(request):
         context = {
             'results': results,
         }
-        logger.error(len(podcasts))
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
@@ -226,6 +235,7 @@ def search(request):
             'charts': charts,
             'last_played': last_played,
         })
+
         return render(request, 'results_base.html', context)
 
 @vary_on_headers('Accept')
