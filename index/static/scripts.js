@@ -540,6 +540,7 @@ $(document)
     $(this).parents(".results").remove();
     var drop = $("#center-stage");
     loadResults(["/", drop]);
+    scrollToTop();
   })
   .on("click", ".view-button", function(e) {
     e.preventDefault();
