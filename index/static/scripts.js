@@ -244,13 +244,14 @@ function scrollToMultibar() {
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
   var textWidth = text.width();
-  console.log(boxWidth, textWidth)
   if (textWidth > boxWidth) {
-    var animSpeed = textWidth * 20;
+    var animSpeed = textWidth * 30;
     $(box)
       .animate({scrollLeft: (textWidth - boxWidth)}, animSpeed)
       .animate({scrollLeft: 0}, animSpeed, function() {
-        scrollText(box, text);
+        setTimeout(function() {
+          scrollText(box, text);
+        }, 1000);
       })
   }
 }
@@ -448,9 +449,12 @@ $(document)
         $("#player").removeClass("minimize");
         player.html(response);
         updateTitle();
-        var box = $("#player-title");
-        var text = $("#player-title span");
-        scrollText(box, text);
+        // gotta wait a sec here
+        setTimeout(function() {
+          var box = $("#player-title");
+          var text = $("#player-title span");
+          scrollText(box, text);
+        }, 1000);
       });
   })
   // close player
