@@ -191,7 +191,13 @@ function refreshPage() {
   loadResults([url, drop, loadResults, ["/", "#center-stage"]]);
 }
 
-function checkForXHR() {
+function checkForXHR(url) {
+  var urls = ["dopebar", "charts", "episodes", "last_played"];
+  for (i = 0; i < urls.length; i++) {
+    if (url.includes(urls[i])) {
+      return;
+    }
+  }
   if(xhr != null) {
     xhr.abort();
     xhr = null;
@@ -204,7 +210,7 @@ function loadResults(args) {
   var drop = $(args[1]);
   var callback = args[2];
   var args = args[3];
-  checkForXHR();
+  checkForXHR(url);
   pushState(url);
   if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
     drop.load("/static/loading.html");

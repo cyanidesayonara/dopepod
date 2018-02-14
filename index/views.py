@@ -6,6 +6,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
+import logging
+logger = logging.getLogger(__name__)
 
 def dopebar(request):
     """
@@ -137,7 +139,6 @@ def search(request):
 
         podcount, podcasts = Podcast.search(user, genre, language, q, show)
         pagecount = podcount / show
-
         if not q:
             results_header = str(podcount) + ' podcasts'
         elif pagecount == 1:
@@ -212,6 +213,7 @@ def search(request):
         context = {
             'results': results,
         }
+        logger.error(len(podcasts))
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
