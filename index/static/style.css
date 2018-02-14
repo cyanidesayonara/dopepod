@@ -1250,8 +1250,7 @@ a:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  padding: 5px 0;
 }
 .browse-results-list li a {
   display: inline-block;
