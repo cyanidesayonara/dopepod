@@ -316,7 +316,6 @@ $(document)
       var url = el[0].href;
       var drop = $(el.parents(".results").parent()[0]);
       loadResults([url, drop]);
-      scrollToTop();
     }, 250);
   })
   // NAVIGATION

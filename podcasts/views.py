@@ -126,7 +126,7 @@ def subscribe(request):
                 raise Http404()
 
             podcast.subscribe(user)
-            podcast.set_subscribed(user)
+            podcast.is_subscribed(user)
 
             context = {
                 'podcast': podcast,

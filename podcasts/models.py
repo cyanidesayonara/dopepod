@@ -179,7 +179,7 @@ class Podcast(models.Model):
             self.n_subscribers -= 1
         self.save()
 
-    def set_subscribed(self, user):
+    def is_subscribed(self, user):
         """
         sets self.is_subscribed = True if subscribed
         """
