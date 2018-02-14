@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode, Order
+from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode, Order, Last_Played
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
@@ -38,7 +38,7 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
-        last_played = Episode.get_last_played()
+        last_played = Last_Played.get_last_played()
         charts = Chart.get_charts()
         context.update({
             'charts': charts,
@@ -79,7 +79,7 @@ def charts(request):
 
             return render(request, 'results_base.html', context)
 
-        last_played = Episode.get_last_played()
+        last_played = Last_Played.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -89,7 +89,7 @@ def charts(request):
             return render(request, 'dashboard.html', context)
         else:
             return render(request, 'splash.html', context)
-            
+
 @vary_on_headers('Accept')
 def search(request):
     """
@@ -104,26 +104,16 @@ def search(request):
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
-        view = request.GET.get('view', None)
+
         q = request.GET.get('q', None)
-
-        if not view:
-            if q and len(q) > 1:
-                view = 'grid'
-            else:
-                view = 'list'
-
-        show = 100
-
         if q:
             if q == '0':
                 q = '#'
             q.strip()
             if len(q) > 30:
-                q = None
+                q = q[:30]
 
         genre = request.GET.get('genre', None)
-
         if genre:
             try:
                 genre = genres.get(name=genre)
@@ -137,7 +127,16 @@ def search(request):
             except Language.DoesNotExist:
                 language = None
 
-        podcasts = Podcast.search(genre, language, user, q=q)
+        view = request.GET.get('view', None)
+        if not view:
+            if q and len(q) > 1:
+                view = 'grid'
+            else:
+                view = 'list'
+
+        show = 100
+
+        podcasts = Podcast.search(user, q, genre, language)
         paginator = Paginator(podcasts, show)
 
         if not q:
@@ -229,7 +228,7 @@ def search(request):
         results['extend'] = True
 
         charts = Chart.get_charts()
-        last_played = Episode.get_last_played()
+        last_played = Last_Played.get_last_played()
 
         context.update({
             'charts': charts,
@@ -269,7 +268,7 @@ def subscriptions(request):
         results['extend'] = True
 
         charts = Chart.get_charts()
-        last_played = Episode.get_last_played()
+        last_played = Last_Played.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -306,7 +305,7 @@ def showpod(request, podid):
 
             charts = Chart.get_charts()
             episodes = Episode.get_episodes(podcast)
-            last_played = Episode.get_last_played()
+            last_played = Last_Played.get_last_played()
             context.update({
                 'charts': charts,
                 'episodes': episodes,
@@ -337,7 +336,7 @@ def settings(request):
                 return render(request, 'settings.html', context)
 
             charts = Chart.get_charts()
-            last_played = Episode.get_last_played()
+            last_played = Last_Played.get_last_played()
             context.update({
                 'charts': charts,
                 'last_played': last_played,
@@ -385,7 +384,7 @@ def settings(request):
                     return render(request, 'settings.html', context, status=400)
 
                 charts = Chart.get_charts()
-                last_played = Episode.get_last_played()
+                last_played = Last_Played.get_last_played()
                 context.update({
                     'charts': charts,
                     'last_played': last_played,

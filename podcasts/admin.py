@@ -1,5 +1,5 @@
 from django.contrib import admin
-from podcasts.models import Podcast, Subscription, Chart, Genre, Language, Episode, Order
+from podcasts.models import Podcast, Subscription, Chart, Genre, Language, Episode, Order, Last_Played
 
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
@@ -23,6 +23,11 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind',)
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind',)
+
+@admin.register(Last_Played)
+class Last_PlayedAdmin(admin.ModelAdmin):
     list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
     fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
 

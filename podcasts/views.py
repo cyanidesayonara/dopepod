@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import Podcast, Subscription, Episode
+from .models import Podcast, Subscription, Episode, Last_Played
 import logging
 from datetime import datetime, timedelta
 from django.core import signing
@@ -37,7 +37,7 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            last_played = Episode.get_last_played()
+            last_played = Last_Played.get_last_played()
             context = {
                 'last_played': last_played,
             }
@@ -82,7 +82,7 @@ def play(request):
         except Podcast.DoesNotExist:
             raise Http404()
 
-        episode = Episode.objects.create(
+        episode = Last_Played.objects.create(
             url=url,
             kind=kind,
             title=title,

@@ -116,7 +116,7 @@ class Podcast(models.Model):
         return reverse('podinfo', args='self.podid')
 
 
-    def search(genre, language, user, q=None):
+    def search(user, q, genre, language):
         """
         returns podcasts matching search terms
         """
@@ -146,7 +146,6 @@ class Podcast(models.Model):
                     Q(title__istartswith=q) |
                     Q(title__icontains=q)
                 )
-                podcasts = podcasts.order_by('rank')
             else:
                 if q == '#':
                     query = Q()
@@ -160,11 +159,8 @@ class Podcast(models.Model):
                         Q(title__istartswith='a ' + q) |
                         Q(title__istartswith='an ' + q)
                     )
-                podcasts = podcasts.order_by('title')
-        else:
-            podcasts = podcasts.order_by('rank')
-
-        return podcasts
+                return podcasts.order_by('title')
+        return podcasts.order_by('rank')
 
     def subscribe(self, user):
         """
@@ -472,37 +468,7 @@ class Episode(models.Model):
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
-    played = models.DateTimeField(null=True, blank=True)
     signature = models.CharField(max_length=5000)
-
-    def get_last_played():
-        return Episode.objects.all().order_by('-played')
-
-    def play(self):
-        self.played = timezone.now()
-        self.save()
-        self.podcast.plays += 1
-        self.podcast.save()
-
-    def played_ago(self):
-        if self.played:
-            ago = timezone.now() - self.played
-            seconds = ago.total_seconds()
-            days = int(seconds // 86400)
-            hours = int((seconds % 86400) // 3600)
-            minutes = int((seconds % 3600) // 60)
-            seconds = int(seconds % 60)
-            ago = ''
-            if days:
-                ago += str(days) + 'd '
-            if hours:
-                ago += str(hours) + 'h '
-            if minutes:
-                ago += str(minutes) + 'm '
-            if seconds:
-                ago += str(seconds) + 's '
-            ago += ' ago'
-            return ago
 
     def get_episodes(podcast):
         """
@@ -630,21 +596,53 @@ class Episode(models.Model):
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
 
-                return episodes
-
             except etree.XMLSyntaxError:
                 logger.error('trouble with xml')
-                return episodes
 
         except requests.exceptions.HTTPError as e:
             logger.error(str(e))
-            return episodes
+        return episodes
 
-@receiver(post_save, sender=Episode)
+class Last_Played(Episode):
+    played = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('-played',)
+
+    def get_last_played():
+        return Last_Played.objects.all().order_by('-played')
+
+    def play(self):
+        self.played = timezone.now()
+        self.save()
+        self.podcast.plays += 1
+        self.podcast.save()
+
+    def played_ago(self):
+        if self.played:
+            ago = timezone.now() - self.played
+            seconds = ago.total_seconds()
+            days = int(seconds // 86400)
+            hours = int((seconds % 86400) // 3600)
+            minutes = int((seconds % 3600) // 60)
+            seconds = int(seconds % 60)
+            ago = ''
+            if days:
+                ago += str(days) + 'd '
+            if hours:
+                ago += str(hours) + 'h '
+            if minutes:
+                ago += str(minutes) + 'm '
+            if seconds:
+                ago += str(seconds) + 's '
+            ago += ' ago'
+            return ago
+
+@receiver(post_save, sender=Last_Played)
 def limit_episodes(sender, instance, created, **kwargs):
     if created:
-        wannakeep = Episode.objects.all().order_by('-played')[:50]
-        Episode.objects.exclude(pk__in=wannakeep).delete()
+        wannakeep = Last_Played.objects.all().order_by('-played')[:48]
+        Last_Played.objects.exclude(pk__in=wannakeep).delete()
 
 class Filterable(models.Model):
     """
