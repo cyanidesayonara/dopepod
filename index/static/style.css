@@ -519,21 +519,20 @@ a:hover {
   padding: 0 25px;
 }
 #main {
+  min-height: unset;
   padding: 0 25px;
 }
 #right {
   padding: 0 25px;
 }
 #charts {
-  padding: 15px 0;
 }
 #last-played {
 }
 #last-played-header {
-  padding-top: 15px;
+  margin-top: 15px;
 }
 #center-stage {
-  padding: 15px 0;
 }
 
 /* OPTIONS BUTTONS */
@@ -917,8 +916,13 @@ a:hover {
   text-align: justify;
   padding: 10px;
 }
+#episodes-collapse {
+  overflow: hidden;
+}
 #episodes-table {
-  margin: 10px 0 0;
+  table-layout: fixed;
+  margin-top: 10px;
+  width: 100%;
 }
 #episodes-table tr .hidden-row {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
@@ -937,32 +941,17 @@ a:hover {
 #episodes-table .number {
   width: 45px;
 }
+#episodes-table .title {
+  word-wrap: break-word;
+}
 #episodes-table .date {
   width: 150px;
 }
 #episodes-table .size {
-  width: 70px;
+  width: 60px;
 }
 #episodes-table .length {
-  width: 70px;
-}
-#episodes-table .title {
-  /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
-  /* These are technically the same, but use both */
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  -ms-word-break: break-all;
-  /* This is the dangerous one in WebKit, as it breaks things wherever */
-  word-break: break-all;
-  /* Instead use this non-standard one: */
-  word-break: break-word;
-
-  /* Adds a hyphen where the word breaks, if supported (No Blink) */
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
+  width: 60px;
 }
 .episode-buttons {
   margin: 10px;
@@ -974,6 +963,7 @@ a:hover {
 
 /* RESULTS */
 .results {
+  margin: 15px 0;
   border-radius: .25rem;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 5px;
@@ -1362,11 +1352,35 @@ hr.h-line {
   body {
     font-size: 12px;
   }
+  #episodes-table .number {
+    width: 35px;
+  }
+  #episodes-table .date {
+    width: 60px;
+  }
+  #episodes-table .size {
+    width: 50px;
+  }
+  #episodes-table .length {
+    width: 50px;
+  }
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {
   body {
     font-size: 13px;
+  }
+  #episodes-table .number {
+    width: 40px;
+  }
+  #episodes-table .date {
+    width: 65px;
+  }
+  #episodes-table .size {
+    width: 55px;
+  }
+  #episodes-table .length {
+    width: 55px;
   }
 }
 /* tablets/desktops and up ----------- */

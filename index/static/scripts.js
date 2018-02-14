@@ -538,6 +538,8 @@ $(document)
   .on("click", ".results-close", function(e) {
     e.preventDefault();
     $(this).parents(".results").remove();
+    var drop = $("#center-stage");
+    loadResults(["/", drop]);
   })
   .on("click", ".view-button", function(e) {
     e.preventDefault();
