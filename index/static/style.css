@@ -13,7 +13,8 @@ a:hover {
 }
 .darken {
   transition: background 0.5s ease;
-  background: rgba(100,150,150,1);
+  background: rgba(25, 25, 25, 1);
+  color: rgb(200, 200, 200);
 }
 
 .noselect {
@@ -138,7 +139,7 @@ a:hover {
   background: rgba(255, 255, 255, 1);
 }
 .color-5-trans {
-  background: rgba(255, 255, 255, .5);
+  background: rgba(255, 255, 255, .2);
 }
 
 @keyframes spinLeft {
@@ -239,13 +240,13 @@ a:hover {
   width: 126px;
   margin: auto;
   padding: 0;
-  height: 40px;
+  height: 34px;
   font-size: 28px!important;
 }
 .logo {
   position: absolute;
   color: rgba(0, 0, 0, 0);
-  top: -3px;
+  top: -7px;
   width: 18px;
   text-align: center;
 }
@@ -594,7 +595,7 @@ a:hover {
 /* MULTI BAR */
 #dopebar {
   padding: 5px 0;
-  min-height: 50px;
+  min-height: 44px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   box-shadow: rgba(0,0,0,.5) 0 2px 3px;
@@ -612,12 +613,14 @@ a:hover {
 #dopebar ul {
   list-style: none;
   padding: 0;
+}
+#dopebar-l ul, #dopebar-r ul {
   margin: 0;
 }
 #dopebar ul li, .dopebar-icon {
   display: inline-block;
   vertical-align: middle;
-  padding: 3px 5px;
+  padding: 5px;
 }
 #dopebar-r > * {
   float: right;
@@ -625,13 +628,17 @@ a:hover {
 #dopebar-collapse {
   padding: 0 15px;
 }
+#dopebar-collapse > * {
+  margin: 5px 0;
+}
 .dopebar-link  {
+  padding: 0;
   cursor: pointer;
   font-weight: 600;
   background: none!important;
   border: none;
   color: rgb(46, 46, 46);
-  font-size: 18px;
+  font-size: 16px;
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
@@ -646,18 +653,18 @@ a:hover {
   padding: 15px 0;
 }
 .search-form {
-  font-size: 16px;
   position: relative;
+  font-size: 14px;
 }
 .search-button {
   cursor: pointer;
   position: absolute;
-  right: 2px;
-  top: 2px;
+  right: 8px;
+  top: 3px;
   z-index: 150;
   background-color: inherit;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 2px solid rgba(0, 191,165, 0);
   transition: all .1s ease-in-out;
@@ -670,8 +677,11 @@ a:hover {
 }
 .q {
   border-radius: .25rem;
-  padding: 4px 30px 4px 10px;
+  font-size: 16px;
+  margin: 0 5px;
+  padding: 4px 25px 4px 8px;
   border: 1px solid rgb(46, 46, 46);
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 .q:focus {
   border: 1px solid rgb(46, 46, 46);
@@ -771,6 +781,7 @@ a:hover {
 #showpod-c {
 }
 #showpod-l {
+  padding-bottom: 10px;
   text-align: center;
 }
 #showpod-r {
@@ -791,7 +802,7 @@ a:hover {
 }
 #showpod-title {
   margin: 10px 0;
-  font-size: 1.7em;
+  font-size: 20px;
 }
 #showpod-artist {
   display: block;
@@ -799,7 +810,7 @@ a:hover {
 }
 #showpod-artist h2 {
   display: inline;
-  font-size: 1.25em;
+  font-size: 16px;
 }
 #showpod-description {
   text-align: justify;
@@ -812,7 +823,6 @@ a:hover {
   -webkit-transition: all .15s ease-in-out;
 }
 .showpod-image img {
-  margin-bottom: 10px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
@@ -827,21 +837,17 @@ a:hover {
   cursor: pointer;
   overflow: visible;
   z-index: 9001;
-  transition: all .15s ease-in-out;
-  -moz-transition: all .15s ease-in-out;
-  -webkit-transition: all .15s ease-in-out;
+  transition: all .1s ease-in-out;
+  -moz-transition: all .1s ease-in-out;
+  -webkit-transition: all .1s ease-in-out;
 }
 .showpod-badge img {
   border-radius: 50%;
-  height: 70px;
-  width: 70px;
-  z-index: 9001;
+  height: 60px;
+  width: 60px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 0 10px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 0 10px;
   box-shadow: rgba(0,0,0,.5) 0 0 10px;
-  transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -webkit-transition: all .2s ease-in-out;
 }
 .showpod-badge:hover {
   transform: scale(1.1);
@@ -907,7 +913,8 @@ a:hover {
 /* EPISODES */
 .hidden-row {
   padding: 0 !important;
-  background: #eee;
+  background: #ddd;
+  color: rgb(46, 46, 46);
 }
 .more-collapse {
   text-align: justify;
@@ -989,7 +996,6 @@ a:hover {
 .results-content {
 }
 .results-content a {
-  color: #000;
 }
 .results-content a:hover {
 }
@@ -1054,6 +1060,9 @@ a:hover {
 .charts-box {
   padding: 10px 10px 0 10px;
 }
+.charts-box a {
+  color: unset;
+}
 .charts-result {
   display: inline-block;
   width: 100%;
@@ -1094,6 +1103,7 @@ a:hover {
   margin: 0;
 }
 .charts-rank {
+  color: rgba(46, 46, 46, 1);
   float: left;
   margin-right: 10px;
   text-align: center;
@@ -1243,6 +1253,7 @@ a:hover {
   padding: 5px 0;
 }
 .browse-results-list li a {
+  color: unset;
   display: inline-block;
   border-bottom: 2px solid rgba(0, 191,165, 0);
 }

@@ -39,6 +39,16 @@
       <i class="fas fa-sign-out-alt"></i>
     </a>
     {% endif %}
+    <form class="form-inline search-form d-none d-xl-inline-block" method="GET" action="{% url 'search' %}">
+      <label for="q" class="sr-only">Search for podcasts</label>
+      <input class="q" type="text" name="q" type="search" placeholder="Search for podcasts"
+      aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
+      <button class="search-button" type="submit">
+        <span>
+          Go
+        </span>
+      </button>
+    </form>
     <ul class="d-none d-xl-inline-block">
       {% if user.is_authenticated %}
       <li>
@@ -66,18 +76,6 @@
         </a>
       </li>
       {% endif %}
-      <li>
-        <form class="form-inline search-form d-none d-xl-inline-block" method="GET" action="{% url 'search' %}">
-          <label for="q" class="sr-only">Search for podcasts</label>
-          <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
-          aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
-          <button class="search-button" type="submit">
-            <span>
-              Go
-            </span>
-          </button>
-        </form>
-      </li>
     </ul>
   </div>
   <div class="collapse" id="dopebar-collapse">
@@ -123,18 +121,16 @@
           </a>
         </li>
       {% endif %}
-      <li>
-        <form class="form-inline search-form d-inline-block d-xl-none" method="GET" action="{% url 'search' %}">
-          <label for="q" class="sr-only">Search for podcasts</label>
-          <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
-          aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
-          <button class="search-button" type="submit">
-            <span>
-              Go
-            </span>
-          </button>
-        </form>
-      </li>
     </ul>
+    <form class="form-inline search-form d-inline-block d-xl-none" method="GET" action="{% url 'search' %}">
+      <label for="q" class="sr-only">Search for podcasts</label>
+      <input class="form-control q" type="text" name="q" type="search" placeholder="Search for podcasts"
+      aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
+      <button class="search-button" type="submit">
+        <span>
+          Go
+        </span>
+      </button>
+    </form>
   </div>
 </div>

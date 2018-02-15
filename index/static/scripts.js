@@ -574,6 +574,14 @@ $(document)
   .on("show.bs.collapse", ".results-collapse", function (e) {
     $(".results-collapse.show").collapse("hide");
   })
+  .on("shown.bs.collapse", "#dopebar-collapse", function (e) {
+    var top = 60 + $("#dopebar-collapse")[0].clientHeight;
+    $(".showpod-badge").css("top", top + "px");
+  })
+  .on("hidden.bs.collapse", "#dopebar-collapse", function (e) {
+    var top = 60 + $("#dopebar-collapse")[0].clientHeight;
+    $(".showpod-badge").css("top", top + "px");
+  })
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
     var el = $("body");
