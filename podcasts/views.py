@@ -122,11 +122,10 @@ def subscribe(request):
             try:
                 podid = request.POST['podid']
                 podcast = Podcast.objects.get(podid=int(podid))
+                podcast.subscribe_or_unsubscribe(user)
+                podcast.is_subscribed(user)
             except (ValueError, KeyError, Podcast.DoesNotExist) as e:
                 raise Http404()
-
-            podcast.subscribe(user)
-            podcast.is_subscribed(user)
 
             context = {
                 'podcast': podcast,
@@ -140,3 +139,34 @@ def subscribe(request):
             if request.is_ajax():
                 return render(request, 'splash.html', {})
             return redirect('/?next=/showpod/' + podid + '/')
+
+def unsubscribe(request):
+    """
+    subscribe to podcast via POST request
+    delete existing subscription or create a new one
+    ajax update subscribers with correct value
+    non-ajax redirects to current page
+    if not logged in, redirects to login
+    """
+
+    # validate request
+    if request.method == 'POST':
+        user = request.user
+        if user.is_authenticated:
+            try:
+                podids = request.POST.getlist('podids[]')
+                for podid in podids:
+                    podcast = Podcast.objects.get(podid=int(podid))
+                    podcast.unsubscribe(user)
+            except (ValueError, KeyError, Podcast.DoesNotExist) as e:
+                raise Http404()
+
+            subscriptions = Subscription.get_subscriptions(user)
+
+            context = {
+                'results': subscriptions,
+            }
+            return render(request, 'results_base.html', context)
+
+        else:
+            return render(request, 'splash.html', {})

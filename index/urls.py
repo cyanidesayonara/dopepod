@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^settings/$', index.settings, name='settings'),
     url(r'^play/$', podcasts.play, name='play'),
     url(r'^subscribe/$', podcasts.subscribe, name='subscribe'),
+    url(r'^unsubscribe/$', podcasts.unsubscribe, name='unsubscribe'),
     url(r'^login/$', login.login, name='login'),
     url(r'^signup/$', login.signup, name='signup'),
     url(r'^logout/$', login.logout, name='logout'),

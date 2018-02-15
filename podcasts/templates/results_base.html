@@ -109,6 +109,11 @@ Listen to episodes of {{ podcast.title }} on dopepod
         On iTunes
       </a>
     {% endif %}
+    {% if results.subscriptions %}
+      <a class="btn-dope unsubscribe-button" href="{% url 'unsubscribe' %}">
+        Unsubscribe
+      </a>
+    {% endif %}
   </div>
     {% if results.alphabet %}
       <div class="collapse options-collapse" id="alphabet-collapse-{{ results.drop }}">

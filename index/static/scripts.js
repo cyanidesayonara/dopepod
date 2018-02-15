@@ -244,7 +244,7 @@ function scrollToMultibar() {
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
   var textWidth = text.width();
-  if (textWidth > boxWidth) {
+  if (textWidth > boxWidth + 5) {
     var animSpeed = textWidth * 30;
     $(box)
       .animate({scrollLeft: (textWidth - boxWidth)}, animSpeed)
@@ -265,7 +265,7 @@ function changeTheme(theme) {
 }
 
 function replaceChars(q) {
-  return q.replace(/([^a-z0-9']+)/gi, "");
+  return q.replace(/([^a-z0-9 ']+)/gi, "");
 }
 
 $(document)
@@ -385,9 +385,9 @@ $(document)
     var button = $(this).find("#settings-save");
     button.text("Saving...");
     var data = $(this).serialize();
-    var theme = $("input[name=dark_theme]").is(":checked");
     var method = this.method;
     var url = this.action;
+    var theme = $("input[name=dark_theme]").is(":checked");
     $.ajax({
       data: data,
       method: method,
@@ -398,11 +398,8 @@ $(document)
         button.text("Save");
       })
       .done(function(response) {
-        button.text("Saved");
-        var drop = $("#center-stage");
+        $("#center-stage").html(response);
         changeTheme(theme);
-        loadResults(["/", drop]);
-        scrollToTop();
       });
   })
   .on("submit", "#sub-form", function(e) {
@@ -419,15 +416,15 @@ $(document)
       data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        var drop = $("#center-stage");
-        loadResults("/", drop);
+        $("#center-stage").html(xhr.responseText);
+        replaceState("/");
       })
       .done(function(response) {
+        $("#center-stage").html(response);
         var podid = form.find("input[name=podid]").val();
-        var url = $("#main-wrapper")[0].baseURI;
-        var drop = $("#center-stage");
-        var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
-        loadResults([url, drop, loadResults, args]);
+        var url = "/episodes/" + podid + "/";
+        var drop = $("#episodes-collapse")
+        loadResults([url, drop]);
       });
   })
   // PLAYER
@@ -595,4 +592,37 @@ $(document)
   })
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
+  })
+  .on("click", ".select-subscription", function() {
+    var el = $(this);
+    if (el.hasClass("active")) {
+      el.removeClass("active");
+    }
+    else {
+      el.addClass("active");
+    }
+  })
+  .on("click", ".unsubscribe-button", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var buttons = $(this).parents(".results").find($(".select-subscription.active"));
+    var podids = [];
+    buttons.each(function(i, button) {
+      podids[i] = $(button).data("podid");
+    })
+    var data = {
+      "podids": podids,
+    }
+    $.ajax({
+      method: "POST",
+      url: url,
+      data: data,
+    })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      replaceState("/");
+      $("#center-stage").html(xhr.responseText);
+    })
+    .done(function(response) {
+      $("#center-stage").html(response);
+    });
   })

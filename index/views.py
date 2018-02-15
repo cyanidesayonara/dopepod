@@ -246,26 +246,15 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        subscriptions = Subscription.objects.filter(user=user)
-
-        if subscriptions.count() == 1:
-            results_header = str(subscriptions.count()) + ' subscription'
-        else:
-            results_header = str(subscriptions.count()) + ' subscriptions'
-
-        results = {}
-        results['podcasts'] = subscriptions
-        results['header'] = results_header
-        results['view'] = 'subscriptions'
-        results['extra_options'] = True
+        subscriptions = Subscription.get_subscriptions(user)
 
         context = {
-            'results': results,
+            'results': subscriptions,
         }
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
-        results['extend'] = True
+        subscriptions['extend'] = True
 
         charts = Chart.get_charts()
         last_played = Last_Played.get_last_played()
@@ -357,7 +346,7 @@ def settings(request):
                 user_form.save()
                 profile_form.save()
                 if request.is_ajax():
-                    return render(request, 'settings.html', context)
+                    return render(request, 'dashboard.html', context)
                 return redirect('/')
             else:
                 errors = {}

@@ -2,19 +2,22 @@
   <div class="row">
     {% for subscription in results.podcasts %}
       {% with subscription.podcast as podcast %}
-        <div class="col-12 col-md-6 subscriptions-box">
+        <div class="col-12 col-md-4 subscriptions-box">
           <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
-            <div class="subscriptions-result">
-              <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
-              <h1 class="result-title">
-                {{ podcast.title }}
-              </h1>
-              <p class="last-updated">
-                <span>Last updated </span>
-                {{ subscription.last_updated }}
-              </p>
-            </div>
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
           </a>
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
+            <h1 class="result-title">
+              {{ podcast.title }}
+            </h1>
+          </a>
+          <p class="last-updated">
+            <span>Last updated: </span>
+            {{ subscription.last_updated }}
+          </p>
+          <button class="btn-dope select-subscription" data-podid="{{ podcast.podid }}">
+            Select
+          </button>
         </div>
       {% endwith %}
     {% endfor %}

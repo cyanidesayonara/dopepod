@@ -162,7 +162,7 @@ class Podcast(models.Model):
                 return podcasts.order_by('title')
         return podcasts.order_by('rank')
 
-    def subscribe(self, user):
+    def subscribe_or_unsubscribe(self, user):
         """
         subscribes to or unsubscribes from podcast
         """
@@ -177,6 +177,20 @@ class Podcast(models.Model):
         else:
             subscription.delete()
             self.n_subscribers -= 1
+        self.save()
+
+    def unsubscribe(self, user):
+        """
+        subscribes to or unsubscribes from podcast
+        """
+
+        # if subscription exists, delete it
+        subscription = Subscription.objects.get(
+            podcast=self,
+            user=user,
+        )
+        subscription.delete()
+        self.n_subscribers -= 1
         self.save()
 
     def is_subscribed(self, user):
@@ -285,6 +299,21 @@ class Subscription(models.Model):
 
     def update(self):
         self.last_updated = timezone.now()
+
+    def get_subscriptions(user):
+        subscriptions = Subscription.objects.filter(user=user)
+        if subscriptions.count() == 1:
+            results_header = str(subscriptions.count()) + ' subscription'
+        else:
+            results_header = str(subscriptions.count()) + ' subscriptions'
+
+        results = {}
+        results['podcasts'] = subscriptions
+        results['header'] = results_header
+        results['view'] = 'subscriptions'
+        results['subscriptions'] = True
+        results['extra_options'] = True
+        return results
 
 class Chart(models.Model):
     podcasts = models.ManyToManyField(Podcast, through='Order')
