@@ -4,6 +4,7 @@ from .models import Podcast, Subscription, Episode, Last_Played
 import logging
 from datetime import datetime, timedelta
 from django.core import signing
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +22,10 @@ def episodes(request, podid):
                 podcast = Podcast.objects.get(podid=podid)
             except Podcast.DoesNotExist:
                 raise Http404()
-
-            episodes = Episode.get_episodes(podcast)
+            episodes = cache.get(podid)
+            if not episodes:
+                episodes = Episode.get_episodes(podcast)
+                cache.add(podid, episodes, 60)
             context = {
                 'episodes': episodes,
             }

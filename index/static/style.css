@@ -5,16 +5,16 @@ body {
   transition: background 0.5s ease;
 }
 a {
-  color: rgba(0, 191, 165, 1);
+  color: rgb(46, 46, 46);
 }
 a:hover {
-  color: rgba(0, 105, 92, 1);
+
   text-decoration: none;
 }
 .darken {
   transition: background 0.5s ease;
-  background: rgba(25, 25, 25, 1);
-  color: rgb(200, 200, 200);
+  background: rgba(0, 0, 0, 1);
+  color: rgb(255, 255, 255);
 }
 
 .noselect {
@@ -82,7 +82,6 @@ a:hover {
   font-size: 20px;
   border-radius: 50%;
   border: 2px solid rgba(0, 191, 165, 1);
-  color: rgb(46, 46, 46);
   background: rgba(255, 255, 255, .5);
   transition: all .25s ease-in-out;
 }
@@ -795,6 +794,12 @@ a:hover {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
   margin-top: 5px;
 }
+.showpod-side-list li a {
+  color: rgba(0, 191, 165, 1);
+}
+.showpod-side-list li a:hover {
+  color: rgba(0, 105, 92, 1);
+}
 #showpod-c .sub-button, .showpod-options {
   float: right;
 }
@@ -1060,7 +1065,7 @@ a:hover {
 .charts-box {
   padding: 10px 10px 0 10px;
 }
-.charts-box a {
+.charts-box a, .result-box a {
   color: unset;
 }
 .charts-result {
@@ -1069,9 +1074,9 @@ a:hover {
   padding: 10px;
   border-radius: .25rem;
   border: 2px solid rgba(0, 191,165, 0);
-  transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  -webkit-transition: all .25s ease-in-out;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
 }
 .subscriptions-result:hover, .charts-result:hover {
   box-shadow: rgba(0,0,0,.3) 0 0 10px;
@@ -1103,8 +1108,8 @@ a:hover {
   margin: 0;
 }
 .charts-rank {
-  color: rgba(46, 46, 46, 1);
   float: left;
+  color: rgb(46, 46, 46);
   margin-right: 10px;
   text-align: center;
   height: 34px;
@@ -1138,8 +1143,6 @@ a:hover {
   margin: 0;
   padding-bottom: 5px;
   border-bottom: 2px solid rgba(0, 191,165, 1);
-}
-.last-played-top a:hover {
 }
 .last-played-collapse {
 }
@@ -1181,11 +1184,15 @@ a:hover {
 }
 .last-played-top .result-title {
 /* TODO make inline without breaking */
+  color: rgba(0, 191, 165, 1);
   font-size: 16px;
   margin-bottom: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.last-played-top .result-title:hover {
+  color: rgba(0, 105, 92, 1);
 }
 .last-played-top .result-episode {
   margin-bottom: 5px;

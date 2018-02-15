@@ -7,13 +7,15 @@
     {% for podcast in results.podcasts %}
       <div class="col-lg-2 col-md-3 col-4 result-box">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=200&h=200&t=absolute" />
-          <h1 class="search-result-title">
-            {{ podcast.title }}
-          </h1>
-          <p class="search-result-artist">
-            by {{ podcast.artist }}
-          </p>
+          <div class="search-result">
+            <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=200&h=200&t=absolute" />
+            <h1 class="search-result-title">
+              {{ podcast.title }}
+            </h1>
+            <p class="search-result-artist">
+              by {{ podcast.artist }}
+            </p>
+          </div>
         </a>
       </div>
     {% endfor %}

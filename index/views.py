@@ -7,6 +7,7 @@ from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
 import logging
+from django.views.decorators.cache import cache_page
 logger = logging.getLogger(__name__)
 
 def dopebar(request):
@@ -15,7 +16,8 @@ def dopebar(request):
     """
 
     if request.method == 'GET':
-        return render(request, 'dopebar.html', {})
+        if request.is_ajax():
+            return render(request, 'dopebar.html', {})
 
 @vary_on_headers('Accept')
 def index(request):
@@ -50,6 +52,7 @@ def index(request):
         else:
             return render(request, 'splash.html', context)
 
+@cache_page(60 * 60)
 @vary_on_headers('Accept')
 def charts(request):
     """
@@ -90,6 +93,7 @@ def charts(request):
         else:
             return render(request, 'splash.html', context)
 
+@cache_page(60 * 60)
 @vary_on_headers('Accept')
 def search(request):
     """
