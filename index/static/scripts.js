@@ -108,7 +108,7 @@ $(window).on("popstate", function(event) {
   }
 })
 function pushState(url) {
-  var urls = ["dopebar", "charts", "episodes", "last_played"];
+  var urls = ["dopebar", "charts", "episodes", "last_played", "unsubscribe"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -124,7 +124,10 @@ function pushState(url) {
   history.pushState(state, "", url);
 }
 function replaceState(url) {
-  var urls = ["dopebar", "charts", "episodes", "last_played"];
+  if (!url || url.includes("unsubscribe") || url.includes("episodes")) {
+    url = $("#main")[0].baseURI;
+  }
+  var urls = ["dopebar", "charts", "last_played"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -619,10 +622,11 @@ $(document)
       data: data,
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      replaceState("/");
       $("#center-stage").html(xhr.responseText);
+      replaceState("/");
     })
     .done(function(response) {
       $("#center-stage").html(response);
+      replaceState(url);
     });
   })
