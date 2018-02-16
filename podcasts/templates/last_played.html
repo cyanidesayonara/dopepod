@@ -9,7 +9,7 @@
       {% endif %}
       <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
     </a>
-    <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+    <a class="showpod color-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
       <h1 class="result-title">
         {{ episode.podcast.title }}
       </h1>
@@ -25,9 +25,6 @@
         released: {{ episode.pubDate|date:'d-m-Y H:i' }}
       </li>
     </ul>
-    <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
-      <i class="fas fa-angle-down"></i>
-    </button>
   </div>
   <div class="last-played-bottom">
     <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
@@ -52,5 +49,8 @@
       </div>
     </div>
   </div>
+  <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
+    <i class="fas fa-angle-down"></i>
+  </button>
 </div>
 {% endfor %}

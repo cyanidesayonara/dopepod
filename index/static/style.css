@@ -8,8 +8,13 @@ a {
   color: rgb(46, 46, 46);
 }
 a:hover {
-
   text-decoration: none;
+}
+a.color-link {
+  color: rgba(0, 191, 165, 1);
+}
+a.color-link :hover {
+  color: rgba(0, 105, 92, 1);
 }
 .darken {
   transition: background 0.5s ease;
@@ -73,8 +78,9 @@ a:hover {
   background: rgba(0, 191,165, 1);
 }
 .last-played-toggle {
-  float: right;
-  margin-right: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
   text-align: center;
   cursor: pointer;
   height: 34px;
@@ -544,6 +550,7 @@ a:hover {
   padding-top: 10px;
 }
 .nav-group {
+  display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -780,7 +787,7 @@ a:hover {
 #showpod-c {
 }
 #showpod-l {
-  padding-bottom: 10px;
+  margin-bottom: 10px;
   text-align: center;
 }
 #showpod-r {
@@ -793,12 +800,6 @@ a:hover {
 .showpod-side-list li {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
   margin-top: 5px;
-}
-.showpod-side-list li a {
-  color: rgba(0, 191, 165, 1);
-}
-.showpod-side-list li a:hover {
-  color: rgba(0, 105, 92, 1);
 }
 #showpod-c .sub-button, .showpod-options {
   float: right;
@@ -924,6 +925,7 @@ a:hover {
 .more-collapse {
   text-align: justify;
   padding: 10px;
+  border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
 #episodes-collapse {
   overflow: hidden;
@@ -934,13 +936,16 @@ a:hover {
   width: 100%;
 }
 #episodes-table tr .hidden-row {
-  border-bottom: 2px solid rgba(0, 191, 165, 1);
+
 }
 #episodes-table th, #episodes-table td {
   padding: 5px;
   border: none;
 }
 #episodes-table thead th {
+  border-bottom: 2px solid rgba(0, 191, 165, 1);
+}
+#episodes-table tbody tr.hover {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
 #episodes-table tbody tr.hover:hover {
@@ -962,9 +967,19 @@ a:hover {
 #episodes-table .length {
   width: 60px;
 }
+#episodes-table .new {
+  color: rgba(0, 191, 165, 1);
+}
 .episode-buttons {
-  margin: 10px;
-  float: right;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+.episode-buttons a {
+  margin-left: 4px;
 }
 .play-button {
   cursor: pointer;
@@ -1038,7 +1053,10 @@ a:hover {
   padding: 10px 0;
 }
 .results-collapse.show {
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .result-box {
   padding: 10px;
@@ -1137,6 +1155,7 @@ a:hover {
 
 .last-played-box {
   padding: 10px 15px;
+  border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 #last-played-header h1 {
   font-size: 20px;
@@ -1145,10 +1164,9 @@ a:hover {
   border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 .last-played-collapse {
+  padding-top: 10px;
 }
 .last-played-bottom {
-  border-bottom: 2px solid rgba(0, 191,165, 1);
-  padding: 10px 0;
 }
 .last-played-top ul {
   font-size: 12px;
@@ -1158,9 +1176,11 @@ a:hover {
   list-style: none;
 }
 .last-played-buttons {
-  margin-top: 5px;
+  margin: 5px 40px 0 0;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-end;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .last-played-buttons a {
   margin-left: 4px;
@@ -1184,15 +1204,11 @@ a:hover {
 }
 .last-played-top .result-title {
 /* TODO make inline without breaking */
-  color: rgba(0, 191, 165, 1);
   font-size: 16px;
   margin-bottom: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.last-played-top .result-title:hover {
-  color: rgba(0, 105, 92, 1);
 }
 .last-played-top .result-episode {
   margin-bottom: 5px;
@@ -1227,14 +1243,10 @@ a:hover {
   margin-right: 5px;
 }
 .subscriptions-box .result-title {
-  color: rgba(0, 191, 165, 1);
   font-size: 16px;
   height: 36px;
   margin-bottom: 4px;
   overflow: hidden;
-}
-.subscriptions-box .result-title:hover {
-  color: rgba(0, 105, 92, 1);
 }
 .subscriptions-box .last-updated {
   margin-bottom: 4px;
@@ -1335,7 +1347,10 @@ hr.h-line {
 #player-episode span {
 }
 #player-buttons {
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   float: right;
 }
 .player-button {

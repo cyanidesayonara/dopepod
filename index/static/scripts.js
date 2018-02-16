@@ -3,7 +3,7 @@ $(document)
     xhr = null;
     timeout = 0;
     refreshCookie();
-    collapseCollapses();
+    // collapseCollapses();
     addIcons();
     keepAspectRatio()
     showpodBadge();
@@ -71,15 +71,15 @@ function addIcons() {
   }
 }
 
-function collapseCollapses() {
-  var el = $("#episodes-table");
-  if (el.length) {
-    var collapses = el.find(".more-collapse");
-    collapses.each(function() {
-      $(this).collapse("hide");
-    })
-  }
-}
+// function collapseCollapses() {
+//   var el = $("#episodes-table");
+//   if (el.length) {
+//     var collapses = el.find(".more-collapse");
+//     collapses.each(function() {
+//       $(this).collapse("hide");
+//     })
+//   }
+// }
 
 function scrollSpy() {
   $(window).scroll(function () {

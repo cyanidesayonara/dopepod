@@ -8,6 +8,7 @@ from urllib.parse import urlencode
 import json
 import logging
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 logger = logging.getLogger(__name__)
 
 def dopebar(request):
@@ -297,7 +298,14 @@ def showpod(request, podid):
                 return render(request, 'showpod.html', context)
 
             charts = Chart.get_charts()
-            episodes = Episode.get_episodes(podcast)
+
+            episodes = cache.get(podid)
+            if not episodes:
+                episodes = Episode.get_episodes(podcast)
+                cache.add(podid, episodes, 60 * 60)
+
+            episodes = Episode.set_new(user, podcast, episodes)
+
             last_played = Last_Played.get_last_played()
             context.update({
                 'charts': charts,

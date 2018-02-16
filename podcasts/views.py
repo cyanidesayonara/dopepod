@@ -18,14 +18,19 @@ def episodes(request, podid):
     # ajax using POST
     if request.method == 'GET':
         if request.is_ajax():
+            user = request.user
             try:
                 podcast = Podcast.objects.get(podid=podid)
             except Podcast.DoesNotExist:
                 raise Http404()
+
             episodes = cache.get(podid)
             if not episodes:
                 episodes = Episode.get_episodes(podcast)
-                cache.add(podid, episodes, 60)
+                cache.add(podid, episodes, 60 * 60)
+
+            episodes = Episode.set_new(user, podcast, episodes)
+
             context = {
                 'episodes': episodes,
             }
