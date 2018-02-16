@@ -1,17 +1,25 @@
 <div class="col-12 results-pagination">
   <div class="page-buttons">
     {% if results.pagination.start %}
-      <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page=1">
+      <a class="btn-dope page-button" href="{{ results.urls.full_url }}">
         <i class="fas fa-angle-double-left"></i>
       </a>
     {% endif %}
     {% for i in results.pagination.pages %}
       {% if results.pagination.page == i %}
-        <a class="btn-dope page-button active" href="{{ results.urls.full_url }}&page={{ i }}">
+        {% if i == 1 %}
+          <a class="btn-dope page-button active" href="{{ results.urls.full_url }}">
+        {% else %}
+          <a class="btn-dope page-button active" href="{{ results.urls.full_url }}&page={{ i }}">
+        {% endif %}
           {{ i }}
         </a>
       {% else %}
-        <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ i }}">
+        {% if i == 1 %}
+          <a class="btn-dope page-button" href="{{ results.urls.full_url }}">
+        {% else %}
+          <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ i }}">
+        {% endif %}
           {{ i }}
         </a>
       {% endif %}

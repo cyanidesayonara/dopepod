@@ -291,7 +291,7 @@ class Podcast(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
-    last_updated = models.DateTimeField(default=timezone.now())
+    last_updated = models.DateTimeField(null=True, default=None)
     new_episodes = models.IntegerField(default=0)
 
     class Meta:
@@ -638,10 +638,14 @@ class Episode(models.Model):
                 subscription = Subscription.objects.get(user=user, podcast=podcast)
                 i = 0
                 for episode in episodes:
-                    if subscription.last_updated < datetime.strptime(episode['pubDate'],"%b %d %Y %X %z"):
-                        i += 1
-                        episode['is_new'] = True
-                print(timezone.now())
+                    if not subscription.last_updated:
+                        pass
+                    elif subscription.last_updated < datetime.strptime(episode['pubDate'],"%b %d %Y %X %z"):
+                        pass
+                    else:
+                        continue
+                    i += 1
+                    episode['is_new'] = True
                 subscription.last_updated = timezone.now()
                 subscription.new_episodes = i
                 subscription.save()
