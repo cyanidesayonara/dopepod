@@ -452,7 +452,7 @@ $(document)
         // gotta wait a sec here
         setTimeout(function() {
           var box = $("#player-title");
-          var text = $("#player-title span");
+          var text = $("#player-title h1");
           scrollText(box, text);
         }, 1000);
       });

@@ -801,6 +801,12 @@ a.color-link :hover {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
   margin-top: 5px;
 }
+.showpod-side-list li a {
+
+}
+.showpod-side-list li a:hover {
+
+}
 #showpod-c .sub-button, .showpod-options {
   float: right;
 }
@@ -1327,12 +1333,13 @@ hr.h-line {
   padding: 0 10px;
 }
 #player-title {
-  font-size: 16px;
   overflow: hidden;
   position: relative;
   margin-bottom: 3px;
 }
-#player-title span {
+#player-title h1 {
+  font-size: 16px;
+  display: inline;
   white-space: nowrap;
 }
 #player-date {

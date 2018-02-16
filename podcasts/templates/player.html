@@ -12,11 +12,11 @@
         <i class="fas fa-times-circle icon"></i>
       </a>
     </div>
-    <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+    <a class="showpod color-link" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
       <div id="player-title">
-        <span>
+        <h1>
           {{ player.episode.podcast.title }}
-        </span>
+        </h1>
       </div>
     </a>
     <p id="player-date">
