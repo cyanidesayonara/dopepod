@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import Podcast, Subscription, Episode, Last_Played
+from .models import Podcast, Subscription, Episode, Chart, Played_Episode, Playlist_Episode
 import logging
 from datetime import datetime, timedelta
 from django.core import signing
@@ -45,7 +45,7 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            last_played = Last_Played.get_last_played()
+            last_played = Played_Episode.get_last_played()
             context = {
                 'last_played': last_played,
             }
@@ -64,13 +64,14 @@ def play(request):
         try:
             signature = request.POST['signature']
             data = signing.loads(signature)
+            podid = data['podid']
+            podcast = Podcast.objects.get(podid=podid)
             url = data['url']
             kind = data['type']
             title = data['title']
-            date = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
-            podid = data['podid']
+            pubDate = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
             description = data['description']
-        except (KeyError, signing.BadSignature):
+        except (Podcast.DoesNotExist, KeyError, signing.BadSignature):
             raise Http404()
 
         try:
@@ -85,16 +86,11 @@ def play(request):
         except KeyError:
             size = None
 
-        try:
-            podcast = Podcast.objects.get(podid=podid)
-        except Podcast.DoesNotExist:
-            raise Http404()
-
-        episode = Last_Played.objects.create(
+        episode = Played_Episode.objects.create(
             url=url,
             kind=kind,
             title=title,
-            pubDate=date,
+            pubDate=pubDate,
             podcast=podcast,
             length=length,
             size=size,
@@ -113,6 +109,66 @@ def play(request):
         }
 
         return render(request, 'player.html', context)
+
+def add_to_playlist(request):
+    if request.method == 'POST':
+        user = request.user
+        try:
+            signature = request.POST['signature']
+            data = signing.loads(signature)
+            podid = data['podid']
+            podcast = Podcast.objects.get(podid=podid)
+            url = data['url']
+            kind = data['type']
+            title = data['title']
+            pubDate = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
+            description = data['description']
+        except (Podcast.DoesNotExist, KeyError, signing.BadSignature):
+            raise Http404()
+
+        try:
+            length = data['length']
+            t = datetime.strptime(length,"%H:%M:%S")
+            length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        except (KeyError, ValueError):
+            length = None
+
+        try:
+            size = data['size']
+        except KeyError:
+            size = None
+
+        episode = Playlist_Episode.objects.create(
+            user=user,
+            url=url,
+            kind=kind,
+            title=title,
+            pubDate=pubDate,
+            podcast=podcast,
+            length=length,
+            size=size,
+            description=description,
+            signature=signature,
+        )
+
+        episodes = Playlist_Episode.get_playlist(user)
+
+        context = {
+            'results': episodes,
+        }
+        if request.is_ajax():
+            return render(request, 'results_base.html', context)
+
+        episodes['extend'] = True
+
+        charts = Chart.get_charts()
+        last_played = Played_Episode.get_last_played()
+        context.update({
+            'charts': charts,
+            'last_played': last_played,
+        })
+
+        return render(request, 'results_base.html', context)
 
 def subscribe(request):
     """

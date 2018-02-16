@@ -15,9 +15,4 @@ class Migration(migrations.Migration):
             old_name='parent',
             new_name='podcast',
         ),
-        migrations.AlterField(
-            model_name='episode',
-            name='played',
-            field=models.DateTimeField(blank=True, null=True),
-        ),
     ]

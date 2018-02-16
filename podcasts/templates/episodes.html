@@ -68,6 +68,13 @@
                   Play
                 </button>
               </form>
+              <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                <button class="btn-dope play-button active" type="submit">
+                  Add to Playlist
+                </button>
+              </form>
               <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
                 Download
               </a>

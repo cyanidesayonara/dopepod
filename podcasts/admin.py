@@ -1,5 +1,5 @@
 from django.contrib import admin
-from podcasts.models import Podcast, Subscription, Chart, Genre, Language, Episode, Order, Last_Played
+from podcasts.models import Podcast, Subscription, Chart, Genre, Language, Order, Played_Episode, Playlist_Episode
 
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
@@ -21,15 +21,15 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('position', 'podcast', 'chart',)
     fields = ('position', 'podcast', 'chart',)
 
-@admin.register(Episode)
-class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind',)
-    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind',)
+@admin.register(Played_Episode)
+class Played_EpisodeAdmin(admin.ModelAdmin):
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at')
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at')
 
-@admin.register(Last_Played)
-class Last_PlayedAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
-    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played',)
+@admin.register(Playlist_Episode)
+class Playlist_EpisodeAdmin(admin.ModelAdmin):
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user')
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user')
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

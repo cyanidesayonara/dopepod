@@ -190,6 +190,8 @@ Listen to episodes of {{ podcast.title }} on dopepod
         {% include 'charts.html' %}
       {% elif results.view == 'subscriptions'%}
         {% include 'subscriptions.html' %}
+      {% elif results.view == 'playlist'%}
+        {% include 'playlist.html' %}
       {% endif %}
     {% endif %}
 

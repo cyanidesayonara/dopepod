@@ -1,5 +1,5 @@
 {% for episode in last_played %}
-<div class="col-12 last-played-box color-5-trans">
+<div class="col-12 last-played-box">
   <div class="last-played-top">
     <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
       {% if episode.length %}
@@ -41,6 +41,13 @@
           <input type="hidden" name="signature" value="{{ episode.signature }}" />
           <button class="btn-dope play-button active" type="submit">
             Play
+          </button>
+        </form>
+        <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="signature" value="{{ episode.signature }}" />
+          <button class="btn-dope play-button active" type="submit">
+            Add to Playlist
           </button>
         </form>
         <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>

@@ -382,6 +382,16 @@ $(document)
       scrollToTop();
     }, 250);
   })
+  .on("click", ".playlist-link", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var drop = $("#center-stage");
+      loadResults([url, drop]);
+      scrollToTop();
+    }, 250);
+  })
   // FORMS
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
@@ -426,8 +436,24 @@ $(document)
         $("#center-stage").html(response);
         var podid = form.find("input[name=podid]").val();
         var url = "/episodes/" + podid + "/";
-        var drop = $("#episodes-collapse")
+        var drop = $("#episodes-collapse");
         loadResults([url, drop]);
+      });
+  })
+  .on("click", ".add-to-playlist", function(e) {
+    e.preventDefault();
+    var data = $(this).serialize();
+    var url = this.action;
+    var method = this.method;
+    $.ajax({
+      method: method,
+      url: url,
+      data: data,
+    })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+      })
+      .done(function(response) {
+        $("#center-stage").html(response);
       });
   })
   // PLAYER
@@ -438,8 +464,8 @@ $(document)
     var url = this.action;
     var method = this.method;
     $.ajax({
-      method: "POST",
-      url: "/play/",
+      method: method,
+      url: url,
       data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {

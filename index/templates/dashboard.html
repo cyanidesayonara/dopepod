@@ -16,8 +16,10 @@ dopepod
     </a>
   </p>
   <p>
-    You have no playlist<br />
-    (Coming soon!)
+    You have {{ user.playlist_episode.count }}
+    <a class="playlist-link" href="{% url 'playlist' %}">
+      episode{{ user.playlist_episode.count|pluralize }} on your playlist
+    </a>
   </p>
 </div>
 {% endblock %}

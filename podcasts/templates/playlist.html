@@ -1,0 +1,15 @@
+<div class="col results-content">
+  <div class="row">
+    {% for episode in results.episodes %}
+      <div class="col-12 playlist-box">
+        <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ podcast.title }}">
+          <div class="playlist-result">
+            <h1>
+              {{ episode.title }}
+            </h1>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

@@ -34,7 +34,6 @@ class Migration(migrations.Migration):
                 ('url', models.CharField(max_length=1000)),
                 ('kind', models.CharField(max_length=16)),
                 ('size', models.CharField(max_length=16)),
-                ('played', models.DateTimeField(default=django.utils.timezone.now)),
             ],
         ),
         migrations.CreateModel(

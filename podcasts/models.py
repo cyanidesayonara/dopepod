@@ -115,7 +115,6 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-
     def search(user, q, genre, language):
         """
         returns podcasts matching search terms
@@ -286,7 +285,6 @@ class Podcast(models.Model):
             logger.error('goddam idna error', feedUrl)
         except KeyError:
             logger.error('Missing data: ', feedUrl)
-
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
@@ -489,7 +487,6 @@ class Order(models.Model):
     chart = models.ForeignKey(Chart, on_delete=models.PROTECT)
 
 class Episode(models.Model):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE)
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -498,6 +495,9 @@ class Episode(models.Model):
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
     signature = models.CharField(max_length=5000)
+
+    class Meta:
+        abstract = True
 
     def get_episodes(podcast):
         """
@@ -653,46 +653,63 @@ class Episode(models.Model):
                 pass
         return episodes
 
-class Last_Played(Episode):
-    played = models.DateTimeField(null=True, blank=True)
+class Played_Episode(Episode):
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='played_episode')
+    played_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ('-played',)
-
-    def get_last_played():
-        return Last_Played.objects.all().order_by('-played')
+        ordering = ('-played_at',)
 
     def play(self):
-        self.played = timezone.now()
-        self.save()
         self.podcast.plays += 1
         self.podcast.save()
 
-    def played_ago(self):
-        if self.played:
-            ago = timezone.now() - self.played
-            seconds = ago.total_seconds()
-            days = int(seconds // 86400)
-            hours = int((seconds % 86400) // 3600)
-            minutes = int((seconds % 3600) // 60)
-            seconds = int(seconds % 60)
-            ago = ''
-            if days:
-                ago += str(days) + 'd '
-            if hours:
-                ago += str(hours) + 'h '
-            if minutes:
-                ago += str(minutes) + 'm '
-            if seconds:
-                ago += str(seconds) + 's '
-            ago += ' ago'
-            return ago
+    def get_last_played():
+        return Played_Episode.objects.all()
 
-@receiver(post_save, sender=Last_Played)
+    def played_ago(self):
+        ago = timezone.now() - self.played_at
+        seconds = ago.total_seconds()
+        days = int(seconds // 86400)
+        hours = int((seconds % 86400) // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = int(seconds % 60)
+        ago = ''
+        if days:
+            ago += str(days) + 'd '
+        if hours:
+            ago += str(hours) + 'h '
+        if minutes:
+            ago += str(minutes) + 'm '
+        if seconds:
+            ago += str(seconds) + 's '
+        ago += ' ago'
+        return ago
+
+@receiver(post_save, sender=Played_Episode)
 def limit_episodes(sender, instance, created, **kwargs):
     if created:
-        wannakeep = Last_Played.objects.all().order_by('-played')[:48]
-        Last_Played.objects.exclude(pk__in=wannakeep).delete()
+        wannakeep = Played_Episode.objects.all()[:48]
+        Played_Episode.objects.exclude(pk__in=wannakeep).delete()
+
+class Playlist_Episode(Episode):
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlist_episode')
+    added_at = models.DateTimeField(default=timezone.now)
+
+    def get_playlist(user):
+        playlist = Playlist_Episode.objects.filter(user=user).order_by('-added_at')
+        if playlist.count() == 1:
+            results_header = str(playlist.count()) + ' episode'
+        else:
+            results_header = str(playlist.count()) + ' episodes'
+
+        results = {}
+        results['episodes'] = playlist
+        results['header'] = results_header
+        results['view'] = 'playlist'
+        results['extra_options'] = True
+        return results
 
 class Filterable(models.Model):
     """

@@ -802,10 +802,10 @@ a.color-link :hover {
   margin-top: 5px;
 }
 .showpod-side-list li a {
-
+    color: rgba(0, 191, 165, 1);
 }
 .showpod-side-list li a:hover {
-
+  color: rgba(0, 105, 92, 1);
 }
 #showpod-c .sub-button, .showpod-options {
   float: right;
@@ -971,6 +971,10 @@ a.color-link :hover {
 }
 #episodes-table .new {
   color: rgba(0, 191, 165, 1);
+  background: rgb(255, 255, 255);
+  padding: 0 2px;
+  border-radius: .25rem;
+  border: 2px solid rgba(0, 191,165, 1);
 }
 .episode-buttons {
   display: -ms-flexbox;
@@ -980,7 +984,7 @@ a.color-link :hover {
   justify-content: flex-end;
   margin-left: auto;
 }
-.episode-buttons a {
+.episode-buttons > * {
   margin-left: 4px;
 }
 .play-button {
@@ -1085,7 +1089,7 @@ a.color-link :hover {
 .charts-box {
   padding: 10px 10px 0 10px;
 }
-.charts-box a, .result-box a {
+.charts-box a, .result-box a, .playlist-box a, #dashboard-top a {
   color: unset;
 }
 .charts-result {
@@ -1154,6 +1158,15 @@ a.color-link :hover {
   overflow: hidden;
   height: 19px;
 }
+.playlist-box {
+
+}
+.playlist-result {
+
+}
+.playlist-result h1 {
+  font-size: 16px;
+}
 
 .last-played-box {
   padding: 10px 15px;
@@ -1184,7 +1197,7 @@ a.color-link :hover {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
-.last-played-buttons a {
+.last-played-buttons > * {
   margin-left: 4px;
 }
 .last-played-top {
