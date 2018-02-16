@@ -1,6 +1,6 @@
 {% if player.episode %}
 <div class="col-12 col-md-4 ml-auto">
-  <div class="color-5" id="player-wrapper">
+  <div class="color-4-trans" id="player-wrapper">
     <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
       <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
     </a>
@@ -12,7 +12,7 @@
         <i class="fas fa-times-circle icon"></i>
       </a>
     </div>
-    <a class="showpod color-link" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+    <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
       <div id="player-title">
         <h1>
           {{ player.episode.podcast.title }}
