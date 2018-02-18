@@ -328,11 +328,14 @@ def showpod(request, podid):
                 cache.add(podid, episodes, 60 * 60)
 
             episodes = Episode.set_new(user, podcast, episodes)
+            results = {
+                'episodes': episodes,
+            }
 
             last_played = Played_Episode.get_last_played()
             context.update({
                 'charts': charts,
-                'episodes': episodes,
+                'results': results,
                 'last_played': last_played,
             })
 

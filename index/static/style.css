@@ -52,7 +52,7 @@ a.color-link :hover {
   display: inline-block;
   transition: all .15s ease-in-out;
 }
-.btn-dope.active {
+.active {
   color: #fff;
   background: rgba(0, 191,165, 1);
 }
@@ -932,6 +932,9 @@ a.color-link :hover {
   padding: 10px;
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
+.more-collapse img {
+  float: left;
+}
 #episodes-collapse {
   overflow: hidden;
 }
@@ -977,6 +980,7 @@ a.color-link :hover {
   border: 2px solid rgba(0, 191,165, 1);
 }
 .episode-buttons {
+  margin-top: 5px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
@@ -1172,11 +1176,13 @@ a.color-link :hover {
   padding: 10px 15px;
   border-bottom: 2px solid rgba(0, 191,165, 1);
 }
+#last-played-header {
+  border-bottom: 2px solid rgba(0, 191,165, 1);
+}
 #last-played-header h1 {
   font-size: 20px;
   margin: 0;
   padding-bottom: 5px;
-  border-bottom: 2px solid rgba(0, 191,165, 1);
 }
 .last-played-collapse {
   padding-top: 10px;
@@ -1198,7 +1204,7 @@ a.color-link :hover {
   flex-wrap: wrap;
 }
 .last-played-buttons > * {
-  margin-left: 4px;
+  margin-right: 4px;
 }
 .last-played-top {
   height: 100px;

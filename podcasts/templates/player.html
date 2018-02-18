@@ -20,7 +20,7 @@
       </div>
     </a>
     <p id="player-date">
-      {{ player.episode.pubDate }}
+      {{ player.episode.pubDate|date:'d-m-Y H:i' }}
     </p>
     <p id="player-episode">
       {{ player.episode.title }}

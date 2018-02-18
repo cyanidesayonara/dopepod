@@ -469,7 +469,7 @@ class Chart(models.Model):
             urls['full_url'] = url + '?'
 
         results = {}
-        results['drop'] = 'charts'
+        results['drop'] = '-charts'
         results['podcasts'] = podcasts
         results['header'] = chart.header
         results['selected_genre'] = genre
@@ -619,8 +619,7 @@ class Episode(models.Model):
 
                         # create signature
                         episode['signature'] = signing.dumps(episode)
-                        # formatted date
-                        episode['date'] = datetime.strftime(pubdate,"%b %d %Y %X")
+                        episode['pubDate'] = pubdate
                         episodes.append(episode)
                     except AttributeError as e:
                         logger.error('can\'t get episode url/type/size', podcast.feedUrl)
@@ -693,7 +692,7 @@ def limit_episodes(sender, instance, created, **kwargs):
         Played_Episode.objects.exclude(pk__in=wannakeep).delete()
 
 class Playlist_Episode(Episode):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE)
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='playlist_episode')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlist_episode')
     added_at = models.DateTimeField(default=timezone.now)
 

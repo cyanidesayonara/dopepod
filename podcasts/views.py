@@ -30,9 +30,11 @@ def episodes(request, podid):
                 cache.add(podid, episodes, 60 * 60)
 
             episodes = Episode.set_new(user, podcast, episodes)
-
-            context = {
+            results = {
                 'episodes': episodes,
+            }
+            context = {
+                'results': results,
             }
             return render(request, 'episodes.html', context)
         else:

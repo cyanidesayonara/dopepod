@@ -19,12 +19,17 @@
     </tr>
   </thead>
   <tbody>
-    {% for episode in episodes %}
+    {% for episode in results.episodes %}
       <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
         <th scope="row">
           {{ forloop.revcounter }}
         </th>
         <td class="title">
+          {% if results.view == 'playlist' %}
+            <strong>
+              {{ episode.podcast.title }} -
+            </strong>
+          {% endif %}
           {{ episode.title }}
           {% if episode.is_new %}
             <span class="new">
@@ -33,7 +38,7 @@
           {% endif %}
         </td>
         <td>
-          {{ episode.date }}
+          {{ episode.pubDate|date:'d-m-Y H:i' }}
         </td>
         <td>
           {% if episode.size %}
@@ -47,19 +52,19 @@
             {{ episode.length }}
           {% else %}
             N/A
-          {% endif %}
+            {% endif %}
         </td>
       </tr>
       <tr>
         <td colspan="5" class="hidden-row">
-            <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
-            <span class="episode-description">
+          <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+            <p class="episode-description">
               {% if episode.description %}
                 {{ episode.description }}
               {% else %}
                 No description
               {% endif %}
-            </span>
+            </p>
             <div class="episode-buttons">
               <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
                 {% csrf_token %}
