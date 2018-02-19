@@ -16,9 +16,9 @@ dopepod
     </a>
   </p>
   <p>
-    You have {{ user.playlist_episode.count }}
+    You have {{ user.playlist_episode.count }} episode{{ user.playlist_episode.count|pluralize }} on your
     <a class="playlist-link" href="{% url 'playlist' %}">
-      episode{{ user.playlist_episode.count|pluralize }} on your playlist
+      playlist
     </a>
   </p>
 </div>

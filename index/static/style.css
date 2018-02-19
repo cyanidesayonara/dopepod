@@ -1,7 +1,7 @@
 body {
   color: rgb(46, 46, 46);
   font-size: 14px;
-  background: #fff;
+  background: rgb(255, 250, 240);
   transition: background 0.5s ease;
 }
 a {
@@ -17,7 +17,7 @@ a.color-link :hover {
   color: rgba(0, 105, 92, 1);
 }
 .darken {
-  transition: background 0.5s ease;
+  transition: all 0.5s ease;
   background: rgba(0, 0, 0, 1);
   color: rgb(255, 255, 255);
 }
@@ -251,7 +251,7 @@ a.color-link :hover {
 .logo {
   position: absolute;
   color: rgba(0, 0, 0, 0);
-  top: -7px;
+  top: -5px;
   width: 18px;
   text-align: center;
 }

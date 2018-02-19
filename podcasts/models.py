@@ -639,7 +639,7 @@ class Episode(models.Model):
                 for episode in episodes:
                     if not subscription.last_updated:
                         pass
-                    elif subscription.last_updated < datetime.strptime(episode['pubDate'],"%b %d %Y %X %z"):
+                    elif subscription.last_updated < episode['pubDate']:
                         pass
                     else:
                         continue

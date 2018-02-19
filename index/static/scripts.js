@@ -262,8 +262,16 @@ function changeTheme(theme) {
   if (theme) {
     $("body").addClass("darken");
   }
-  else {
+  else if (!theme) {
     $("body").removeClass("darken");
+  }
+  else {
+    if ($("body").hasClass("darken")) {
+      $("body").removeClass("darken");
+    }
+    else {
+      $("body").addClass("darken");
+    }
   }
 }
 
@@ -400,7 +408,6 @@ $(document)
     var data = $(this).serialize();
     var method = this.method;
     var url = this.action;
-    var theme = $("input[name=dark_theme]").is(":checked");
     $.ajax({
       data: data,
       method: method,
@@ -412,8 +419,11 @@ $(document)
       })
       .done(function(response) {
         $("#center-stage").html(response);
-        changeTheme(theme);
       });
+  })
+  .on("click", ".dark_theme", function(e) {
+    var theme = $(this).is(":checked");
+    changeTheme(theme);
   })
   .on("submit", "#sub-form", function(e) {
     e.preventDefault();
