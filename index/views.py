@@ -7,7 +7,6 @@ from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
 import logging
-from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 logger = logging.getLogger(__name__)
 
@@ -53,7 +52,6 @@ def index(request):
         else:
             return render(request, 'splash.html', context)
 
-@cache_page(60 * 60)
 @vary_on_headers('Accept')
 def charts(request):
     """
@@ -74,7 +72,16 @@ def charts(request):
         if provider not in providers:
             provider = providers[0]
 
-        charts = Chart.get_charts(genre=genre, provider=provider)
+        cachestring = ''
+        if genre:
+            cachestring += str(genre)
+        cachestring += provider
+        charts = cache.get(cachestring)
+        if not charts:
+            charts = Chart.get_charts(genre=genre, provider=provider)
+            cache.add(cachestring, charts, 60 * 60)
+            print(cachestring)
+
 
         if request.is_ajax():
             context = {
@@ -94,7 +101,6 @@ def charts(request):
         else:
             return render(request, 'splash.html', context)
 
-@cache_page(60 * 60)
 @vary_on_headers('Accept')
 def search(request):
     """
@@ -105,15 +111,13 @@ def search(request):
     """
 
     if request.method == 'GET':
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
         user = request.user
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
 
         q = request.GET.get('q', None)
         if q:
-            if q == '0':
-                q = '#'
             q.strip()
             if len(q) > 30:
                 q = q[:30]
@@ -141,20 +145,36 @@ def search(request):
 
         show = 100
 
-        podcasts = Podcast.search(user, q, genre, language)
-        paginator = Paginator(podcasts, show)
-
-        if not q:
-            results_header = str(paginator.count) + ' podcasts'
-        elif paginator.count == 1:
-            results_header = str(paginator.count) + ' result for "' + q + '"'
-        else:
-            results_header = str(paginator.count) + ' results for "' + q + '"'
-
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
+
+        if user.is_authenticated:
+            if user.profile.show_explicit:
+                explicit = True
+            else:
+                explicit = False
+
+        # TODO make this json sheesh
+        cachestring = ''
+        if q:
+            cachestring += q
+        if page:
+            cachestring += 'page' + str(page)
+        if genre:
+            cachestring += genre.url_format()
+        if language:
+            cachestring += language.url_format()
+        if explicit:
+            cachestring += str(explicit)
+
+        paginator = cache.get(cachestring)
+        if not paginator:
+            print(cachestring)
+            podcasts = Podcast.search(q, genre, language, explicit)
+            paginator = Paginator(podcasts, show)
+            cache.add(cachestring, paginator, 60 * 60)
 
         try:
             podcasts = paginator.page(page)
@@ -164,6 +184,13 @@ def search(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             podcasts = paginator.page(paginator.num_pages)
+
+        if not q:
+            results_header = str(paginator.count) + ' podcasts'
+        elif podcasts.count == 1:
+            results_header = str(paginator.count) + ' result for "' + q + '"'
+        else:
+            results_header = str(paginator.count) + ' results for "' + q + '"'
 
         url = request.path
         querystring = {}

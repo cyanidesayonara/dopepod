@@ -12,7 +12,7 @@ from datetime import time, timedelta, datetime
 from dateutil.parser import parse
 import logging
 import string
-from urllib.parse import quote, unquote, urlencode
+from urllib.parse import quote_plus, unquote_plus, urlencode
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -115,7 +115,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(user, q, genre, language):
+    def search(q, genre, language, explicit):
         """
         returns podcasts matching search terms
         """
@@ -123,9 +123,8 @@ class Podcast(models.Model):
         podcasts = Podcast.objects.all()
 
         # filter by explicit
-        if user.is_authenticated:
-            if not user.profile.show_explicit:
-                podcasts = podcasts.filter(explicit=False)
+        if not explicit:
+            podcasts = podcasts.filter(explicit=False)
 
         # filter by language
         if language:
@@ -154,9 +153,7 @@ class Podcast(models.Model):
                 else:
                     podcasts = podcasts.filter(
                         Q(title__istartswith=q) |
-                        Q(title__istartswith='the ' + q) |
-                        Q(title__istartswith='a ' + q) |
-                        Q(title__istartswith='an ' + q)
+                        Q(title__istartswith='the ' + q)
                     )
                 return podcasts.order_by('title')
         return podcasts.order_by('rank')
@@ -725,10 +722,10 @@ class Filterable(models.Model):
         return self.name
 
     def url_format(self):
-        return quote(self.name)
+        return quote_plus(self.name)
 
     def unformat(self):
-        return unquote(self.name)
+        return unquote_plus(self.name)
 
     def count_n_podcasts():
         """
@@ -765,3 +762,10 @@ class Language(Filterable):
 
     class Meta:
         ordering = ('-n_podcasts',)
+
+# class SearchTerm(models.Model):
+#     number = models.IntegerField()
+#     text = models.CharField(max_length=100)
+#
+#     class Meta:
+#         ordering = ('number',)

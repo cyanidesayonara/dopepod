@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
-    "sendgrid",
+    'sendgrid',
 
     # django-allauth
     'allauth',
@@ -68,6 +68,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.reddit',
 ]
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

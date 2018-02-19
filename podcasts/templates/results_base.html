@@ -125,19 +125,13 @@ Listen to episodes of {{ podcast.title }} on dopepod
           {% endif %}
           {% for letter in results.alphabet %}
           {% if letter == results.selected_q|capfirst %}
-          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter|urlencode }}" id="alphabet-{{ letter }}">
             {% else %}
-            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter }}" id="alphabet-{{ letter }}">
+            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter|urlencode }}" id="alphabet-{{ letter }}">
               {% endif %}
-                {% if letter == '0' %}
-                  <span>
-                    #
-                  </span>
-                {% else %}
-                  <span>
-                    {{ letter }}
-                  </span>
-                {% endif %}
+                <span>
+                  {{ letter }}
+                </span>
               </a>
             {% endfor %}
         </div>
