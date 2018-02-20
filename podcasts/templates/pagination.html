@@ -7,13 +7,9 @@
     {% endif %}
     {% for i in results.pagination.pages %}
       {% if results.pagination.page == i %}
-        {% if i == 1 %}
-          <a class="btn-dope page-button active" href="{{ results.urls.full_url }}">
-        {% else %}
-          <a class="btn-dope page-button active" href="{{ results.urls.full_url }}&page={{ i }}">
-        {% endif %}
+        <button class="btn-dope page-button active">
           {{ i }}
-        </a>
+        </button>
       {% else %}
         {% if i == 1 %}
           <a class="btn-dope page-button" href="{{ results.urls.full_url }}">
@@ -25,7 +21,7 @@
       {% endif %}
     {% endfor %}
     {% if results.pagination.end %}
-      <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.podcasts.paginator.num_pages }}">
+      <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.num_pages }}">
         <i class="fas fa-angle-double-right"></i>
       </a>
     {% endif %}

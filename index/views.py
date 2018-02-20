@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, Http404, HttpResponse, get_object
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode, Played_Episode, Playlist_Episode, Order
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
@@ -76,16 +75,7 @@ def charts(request):
         if provider not in providers:
             provider = providers[0]
 
-        cachestring = ''
-        if genre:
-            cachestring += str(genre)
-        cachestring += provider
-        charts = cache.get(cachestring)
-        if not charts:
-            charts = Chart.get_charts(genre=genre, provider=provider)
-            cache.add(cachestring, charts, 60 * 60)
-            print(cachestring)
-
+        charts = Chart.get_charts(genre=genre, provider=provider)
 
         if request.is_ajax():
             context = {
@@ -155,45 +145,17 @@ def search(request):
             page = 1
 
         explicit = True
-        if user.is_authenticated:
-            if not user.profile.show_explicit:
-                explicit = False
+        if user.is_authenticated and not user.profile.show_explicit:
+            explicit = False
 
-        # TODO make this json sheesh
-        cachestring = ''
-        if q:
-            cachestring += q
-        if page:
-            cachestring += 'page' + str(page)
-        if genre:
-            cachestring += genre.url_format()
-        if language:
-            cachestring += language.url_format()
-        if explicit:
-            cachestring += str(explicit)
-
-        paginator = cache.get(cachestring)
-        if not paginator:
-            print(cachestring)
-            podcasts = Podcast.search(q, genre, language, explicit)
-            paginator = Paginator(podcasts, show)
-            cache.add(cachestring, paginator, 60 * 60)
-
-        try:
-            podcasts = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            podcasts = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            podcasts = paginator.page(paginator.num_pages)
+        podcasts, num_pages, count = Podcast.search(q, genre, language, explicit, page, show)
 
         if not q:
-            results_header = str(paginator.count) + ' podcasts'
-        elif podcasts.count == 1:
-            results_header = str(paginator.count) + ' result for "' + q + '"'
+            results_header = str(count) + ' podcasts'
+        elif count == 1:
+            results_header = str(count) + ' result for "' + q + '"'
         else:
-            results_header = str(paginator.count) + ' results for "' + q + '"'
+            results_header = str(count) + ' results for "' + q + '"'
 
         url = request.path
         querystring = {}
@@ -226,23 +188,25 @@ def search(request):
             urls['full_url'] = url + '?'
 
         results = {}
-        if paginator.num_pages > 1:
-            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= paginator.num_pages else paginator.num_pages) + 1)
+        if num_pages > 1:
+            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= num_pages else num_pages) + 1)
             results['pagination'] = {
                 'start': True if page != 1 else False,
                 'pages': pages,
                 'page': page,
-                'end': True if page != paginator.num_pages else False,
+                'end': True if page != num_pages else False,
             }
         results['alphabet'] = alphabet
         results['podcasts'] = podcasts
+        results['num_pages'] = num_pages
+        results['count'] = count
         one = show // 4
         two = show // 2
         three = show // 2 + show // 4
-        results['podcasts1'] = podcasts[:one]
-        results['podcasts2'] = podcasts[one:two]
-        results['podcasts3'] = podcasts[two:three]
-        results['podcasts4'] = podcasts[three:]
+        results['podcasts1'] = results['podcasts'][:one]
+        results['podcasts2'] = results['podcasts'][one:two]
+        results['podcasts3'] = results['podcasts'][two:three]
+        results['podcasts4'] = results['podcasts'][three:]
 
         results['header'] = results_header
         results['selected_q'] = q
@@ -352,10 +316,7 @@ def showpod(request, podid):
 
             charts = Chart.get_charts()
 
-            episodes = cache.get(podid)
-            if not episodes:
-                episodes = Episode.get_episodes(podcast)
-                cache.add(podid, episodes, 60 * 60)
+            episodes = Episode.get_episodes(podcast)
 
             episodes = Episode.set_new(user, podcast, episodes)
             results = {

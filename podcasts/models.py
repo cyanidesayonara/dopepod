@@ -18,6 +18,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
+from django.core.cache import cache
 import re
 import html
 import idna
@@ -115,48 +116,77 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, explicit):
+    def search(q, genre, language, explicit, page, show):
         """
         returns podcasts matching search terms
         """
 
-        podcasts = Podcast.objects.all()
-
-        # filter by explicit
-        if not explicit:
-            podcasts = podcasts.filter(explicit=False)
-
-        # filter by language
-        if language:
-            podcasts = podcasts.filter(language=language)
-
-        # filter by genre
-        if genre:
-            podcasts = podcasts.filter(
-                Q(genre=genre) |
-                Q(genre__supergenre=genre)
-            )
-
-        # last but not least, filter by title
+        cachestring = ''
         if q:
-            if len(q) > 1:
+            cachestring += 'q=' + q
+        if page:
+            cachestring += 'page=' + str(page)
+        if genre:
+            cachestring += 'genre=' + genre.url_format()
+        if language:
+            cachestring += 'language=' + language.url_format()
+        if explicit:
+            cachestring += 'explicit=' + str(explicit)
+        if show:
+            cachestring += 'show=' + str(show)
+
+        podcasts_tpl = cache.get(cachestring)
+
+        if podcasts_tpl:
+            return podcasts_tpl
+        else:
+            podcasts = Podcast.objects.all()
+
+            # filter by explicit
+            if not explicit:
+                podcasts = podcasts.filter(explicit=False)
+
+            # filter by language
+            if language:
+                podcasts = podcasts.filter(language=language)
+
+            # filter by genre
+            if genre:
                 podcasts = podcasts.filter(
-                    Q(title__istartswith=q) |
-                    Q(title__icontains=q)
+                    Q(genre=genre) |
+                    Q(genre__supergenre=genre)
                 )
-            else:
-                if q == '#':
-                    query = Q()
-                    for letter in string.ascii_lowercase:
-                        query = query | Q(title__istartswith=letter)
-                    podcasts = podcasts.exclude(query)
-                else:
+
+            # last but not least, filter by title
+            if q:
+                if len(q) > 1:
                     podcasts = podcasts.filter(
                         Q(title__istartswith=q) |
-                        Q(title__istartswith='the ' + q)
+                        Q(title__icontains=q)
                     )
-                return podcasts.order_by('title')
-        return podcasts.order_by('rank')
+                else:
+                    if q == '#':
+                        query = Q()
+                        for letter in string.ascii_lowercase:
+                            query = query | Q(title__istartswith=letter)
+                        podcasts = podcasts.exclude(query)
+                    else:
+                        podcasts = podcasts.filter(
+                            Q(title__istartswith=q) |
+                            Q(title__istartswith='the ' + q)
+                        )
+                    podcasts = podcasts.order_by('title')
+            podcasts = podcasts.order_by('rank')
+
+            end = show * page
+            start = end - show
+            count = podcasts.count()
+            num_pages = int(count / show) + (count % show > 0)
+            if end > count:
+                end = count
+            podcasts_tpl = (podcasts[start:end], num_pages, count)
+            cache.set(cachestring, podcasts_tpl, 60 * 60 * 24)
+            return podcasts_tpl
 
     def subscribe_or_unsubscribe(self, user):
         """
@@ -431,52 +461,59 @@ class Chart(models.Model):
         return podcasts
 
     def get_charts(provider='dopepod', genre=None):
-        genres = Genre.get_primary_genres()
-        chart = get_object_or_404(Chart, provider=provider, genre=genre)
-        orders = Order.objects.filter(chart=chart).order_by('position')
-
-        podcasts = []
-        for order in orders:
-            podcast = order.podcast
-            podcast.position = order.position
-            podcasts.append(podcast)
-
-        url = '/charts/'
-        querystring = {}
-        urls = {}
-
+        cachestring = ''
         if genre:
-            querystring['genre'] = genre
+            cachestring += 'genre=' + str(genre)
         if provider:
-            querystring['provider'] = provider
-
-        if genre or provider:
-            querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-            urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
-
-            querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
-            urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
-
-            urls['full_url'] = url + '?' + urlencode(querystring)
+            cachestring += 'provider=' + provider
+        results = cache.get(cachestring)
+        if results:
+            return results
         else:
-            urls['q_url'] = url + '?'
-            urls['genre_url'] = url + '?'
-            urls['language_url'] = url + '?'
-            urls['provider_url'] = url + '?'
-            urls['full_url'] = url + '?'
+            genres = Genre.get_primary_genres()
+            chart = get_object_or_404(Chart, provider=provider, genre=genre)
+            orders = Order.objects.filter(chart=chart).order_by('position')
 
-        results = {}
-        results['drop'] = '-charts'
-        results['podcasts'] = podcasts
-        results['header'] = chart.header
-        results['selected_genre'] = genre
-        results['genres'] = genres
-        results['providers'] = Chart.get_providers()
-        results['selected_provider'] = provider
-        results['view'] = 'charts'
-        results['urls'] = urls
+            podcasts = []
+            for order in orders:
+                podcast = order.podcast
+                podcast.position = order.position
+                podcasts.append(podcast)
 
-        return results
+            url = '/charts/'
+            querystring = {}
+            urls = {}
+
+            if genre:
+                querystring['genre'] = genre
+            if provider:
+                querystring['provider'] = provider
+
+            if genre or provider:
+                querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
+                urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
+
+                querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
+                urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
+
+                urls['full_url'] = url + '?' + urlencode(querystring)
+            else:
+                urls['genre_url'] = url + '?'
+                urls['provider_url'] = url + '?'
+                urls['full_url'] = url + '?'
+
+            results = {}
+            results['drop'] = '-charts'
+            results['podcasts'] = podcasts
+            results['header'] = chart.header
+            results['selected_genre'] = genre
+            results['genres'] = genres
+            results['providers'] = Chart.get_providers()
+            results['selected_provider'] = provider
+            results['view'] = 'charts'
+            results['urls'] = urls
+            cache.add(cachestring, results, 60 * 60 * 24)
+            return results
 
 class Order(models.Model):
     position = models.IntegerField()
@@ -501,132 +538,137 @@ class Episode(models.Model):
         returns a list of episodes using requests and lxml etree
         """
 
-        ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-            'atom': 'http://www.w3.org/2005/Atom',
-            'im': 'http://itunes.apple.com/rss',
-        }
+        episodes = cache.get(podcast.podid)
+        if episodes:
+            return episodes
+        else:
+            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+                'atom': 'http://www.w3.org/2005/Atom',
+                'im': 'http://itunes.apple.com/rss',
+            }
 
-        # useragent for requests
-        headers = {
-            'User-Agent': str(ua.random)
-        }
-        episodes = []
+            # useragent for requests
+            headers = {
+                'User-Agent': str(ua.random)
+            }
+            episodes = []
 
-        try:
-            response = session.get(podcast.feedUrl, headers=headers, timeout=5)
-            response.raise_for_status()
             try:
-                root = etree.XML(response.content)
-                ns.update(root.nsmap)
-                tree = root.find('channel')
+                response = session.get(podcast.feedUrl, headers=headers, timeout=5)
+                response.raise_for_status()
+                try:
+                    root = etree.XML(response.content)
+                    ns.update(root.nsmap)
+                    tree = root.find('channel')
 
-                for item in tree.findall('item'):
-                    episode = {}
+                    for item in tree.findall('item'):
+                        episode = {}
 
-                    # try to get pubdate + parse & convert it to datetime
-                    try:
-                        pubdate = item.find('pubDate').text
-                        pubdate = parse(pubdate, default=parse("00:00Z"))
-                        episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
-                    # if episode data not found, skip episode
-                    except AttributeError as e:
-                        logger.error('can\'t get pubDate', podcast.feedUrl)
-                        continue
-
-                    # try to get title & description
-                    try:
-                        episode['title'] = item.find('title').text
-                    except AttributeError:
+                        # try to get pubdate + parse & convert it to datetime
                         try:
-                            episode['title'] = item.find('itunes:subtitle').text
-                        except AttributeError as e:
-                            logger.error('can\'t get title', podcast.feedUrl)
-                            continue
-                    try:
-                        description = item.find('description').text
-                    except AttributeError:
-                        # or try with itunes namespace
-                        try:
-                            description = item.find('itunes:summary', ns).text
+                            pubdate = item.find('pubDate').text
+                            pubdate = parse(pubdate, default=parse("00:00Z"))
+                            episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                         # if episode data not found, skip episode
                         except AttributeError as e:
-                            description = ''
-                            logger.error('can\'t get description', podcast.feedUrl)
+                            logger.error('can\'t get pubDate', podcast.feedUrl)
+                            continue
 
-                    if not description:
-                        description = ''
-                    else:
-                        description = html.unescape(description)
-
-                    # strip html tags+ split + join again by single space
-                    episode['description'] = ' '.join(strip_tags(description).split())
-
-                    # try to get length
-                    try:
-                        length = item.find('itunes:duration', ns).text
-                    except AttributeError as e:
+                        # try to get title & description
                         try:
-                            length = item.find('duration').text
-                        except AttributeError as e:
-                            length = None
-                            logger.error('can\'t get length', podcast.feedUrl)
+                            episode['title'] = item.find('title').text
+                        except AttributeError:
+                            try:
+                                episode['title'] = item.find('itunes:subtitle').text
+                            except AttributeError as e:
+                                logger.error('can\'t get title', podcast.feedUrl)
+                                continue
+                        try:
+                            description = item.find('description').text
+                        except AttributeError:
+                            # or try with itunes namespace
+                            try:
+                                description = item.find('itunes:summary', ns).text
+                            # if episode data not found, skip episode
+                            except AttributeError as e:
+                                description = ''
+                                logger.error('can\'t get description', podcast.feedUrl)
 
-                    if length:
-                        # convert length to timedelta
-                        if length.isdigit() and length != 0:
-                            delta = timedelta(seconds=int(length))
-                            episode['length'] = str(delta)
+                        if not description:
+                            description = ''
                         else:
-                            if re.search('[1-9]', length):
-                                if '.' in length:
-                                    length = length.split('.')
-                                elif ':' in length:
-                                    length = length.split(':')
+                            description = html.unescape(description)
 
-                                try:
-                                    hours = int(length[0])
-                                    minutes = int(length[1])
-                                    seconds = int(length[2])
-                                    delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
-                                    episode['length'] = str(delta)
-                                except (ValueError, IndexError):
+                        # strip html tags+ split + join again by single space
+                        episode['description'] = ' '.join(strip_tags(description).split())
+
+                        # try to get length
+                        try:
+                            length = item.find('itunes:duration', ns).text
+                        except AttributeError as e:
+                            try:
+                                length = item.find('duration').text
+                            except AttributeError as e:
+                                length = None
+                                logger.error('can\'t get length', podcast.feedUrl)
+
+                        if length:
+                            # convert length to timedelta
+                            if length.isdigit() and length != 0:
+                                delta = timedelta(seconds=int(length))
+                                episode['length'] = str(delta)
+                            else:
+                                if re.search('[1-9]', length):
+                                    if '.' in length:
+                                        length = length.split('.')
+                                    elif ':' in length:
+                                        length = length.split(':')
+
                                     try:
-                                        minutes = int(length[0])
-                                        seconds = int(length[1])
-                                        delta = timedelta(minutes=minutes, seconds=seconds)
+                                        hours = int(length[0])
+                                        minutes = int(length[1])
+                                        seconds = int(length[2])
+                                        delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
                                         episode['length'] = str(delta)
                                     except (ValueError, IndexError):
-                                        logger.error('can\'t parse length', podcast.feedUrl)
+                                        try:
+                                            minutes = int(length[0])
+                                            seconds = int(length[1])
+                                            delta = timedelta(minutes=minutes, seconds=seconds)
+                                            episode['length'] = str(delta)
+                                        except (ValueError, IndexError):
+                                            logger.error('can\'t parse length', podcast.feedUrl)
 
-                    episode['podid'] = podcast.podid
+                        episode['podid'] = podcast.podid
 
-                    # link to episode
-                    # enclosure might be missing, have alternatives
-                    enclosure = item.find('enclosure')
-                    try:
-                        size = enclosure.get('length')
-                        if size and int(size) > 1:
-                            episode['size'] = format_bytes(int(size))
-                    except (AttributeError, ValueError):
-                        logger.error('can\'t get episode size', podcast.feedUrl)
+                        # link to episode
+                        # enclosure might be missing, have alternatives
+                        enclosure = item.find('enclosure')
+                        try:
+                            size = enclosure.get('length')
+                            if size and int(size) > 1:
+                                episode['size'] = format_bytes(int(size))
+                        except (AttributeError, ValueError):
+                            logger.error('can\'t get episode size', podcast.feedUrl)
 
-                    try:
-                        episode['url'] = enclosure.get('url').replace('http:', '')
-                        episode['type'] = enclosure.get('type')
+                        try:
+                            episode['url'] = enclosure.get('url').replace('http:', '')
+                            episode['type'] = enclosure.get('type')
 
-                        # create signature
-                        episode['signature'] = signing.dumps(episode)
-                        episode['pubDate'] = pubdate
-                        episodes.append(episode)
-                    except AttributeError as e:
-                        logger.error('can\'t get episode url/type/size', podcast.feedUrl)
+                            # create signature
+                            episode['signature'] = signing.dumps(episode)
+                            episode['pubDate'] = pubdate
+                            episodes.append(episode)
+                        except AttributeError as e:
+                            logger.error('can\'t get episode url/type/size', podcast.feedUrl)
 
-            except etree.XMLSyntaxError:
-                logger.error('trouble with xml')
+                except etree.XMLSyntaxError:
+                    logger.error('trouble with xml')
 
-        except requests.exceptions.HTTPError as e:
-            logger.error(str(e))
-        return episodes
+            except requests.exceptions.HTTPError as e:
+                logger.error(str(e))
+            cache.set(podcast.podid, episodes, 60 * 60)
+            return episodes
 
     def set_new(user, podcast, episodes):
         if user.is_authenticated:
