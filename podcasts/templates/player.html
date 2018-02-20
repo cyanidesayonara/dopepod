@@ -1,35 +1,41 @@
 {% if player.episode %}
-<div class="col-12 col-md-4 ml-auto">
-  <div class="color-4-trans" id="player-wrapper">
-    <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
-      <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
-    </a>
-    <div id="player-buttons">
-      <a class="btn-dope player-button" id="player-minimize" href="#" aria-label="Minimize">
-        <i class="fas fa-minus-circle icon"></i>
+<div class="container">
+  <div class="col-12 col-md-4 ml-auto">
+    <div class="color-4-trans" id="player-wrapper">
+      <a class="showpod" id="player-image" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+        <img class="img-fluid" src="//images.weserv.nl/?url={{ player.episode.podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
       </a>
-      <a class="btn-dope player-button" id="player-close" href="#" aria-label="Close">
-        <i class="fas fa-times-circle icon"></i>
-      </a>
-    </div>
-    <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
-      <div id="player-title">
-        <h1>
-          {{ player.episode.podcast.title }}
-        </h1>
+      <div id="player-buttons">
+        <a class="btn-dope player-button" id="player-minimize" href="#" aria-label="Minimize">
+          <i class="fas fa-minus-circle icon"></i>
+        </a>
+        <a class="btn-dope player-button" id="player-close" href="#" aria-label="Close">
+          <i class="fas fa-times-circle icon"></i>
+        </a>
       </div>
-    </a>
-    <p id="player-date">
-      {{ player.episode.pubDate|date:'d-m-Y H:i' }}
-    </p>
-    <p id="player-episode">
-      {{ player.episode.title }}
-    </p>
-    <div id="audio-el">
-      <audio controls preload="metadata" autoplay>
-        <source src="{{ player.episode.url }}"/>
-      </audio>
+      <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+        <div id="player-title">
+          <h1>
+            {{ player.episode.podcast.title }}
+          </h1>
+        </div>
+      </a>
+      <p id="player-date">
+        {{ player.episode.pubDate|date:'d-m-Y H:i' }}
+      </p>
+      <p id="player-episode">
+        {{ player.episode.title }}
+      </p>
+      <div id="audio-el">
+        <audio controls preload="metadata" autoplay>
+          <source src="{{ player.episode.url }}"/>
+        </audio>
+      </div>
     </div>
   </div>
+</div>
+{% elif cookies %}
+<div class="col-12 color-4-trans" id="cookie-banner">
+  <h1>COOKIES!</h1>
 </div>
 {% endif %}

@@ -128,11 +128,11 @@ LOGOUT_URL = '/account/logout/'
 
 ROOT_URLCONF = 'dopepod.urls'
 
-SESSION_COOKIE_NAME = 'dopepod'
+SESSION_COOKIE_NAME = 'sessionid'
 #SESSION_COOKIE_DOMAIN = local_settings.SESSION_COOKIE_DOMAIN
 
 SESSION_COOKIE_SECURE = False
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # SOCIALACCOUNT_PROVIDERS = {
 #     'github': {

@@ -21,6 +21,14 @@ a.color-link :hover {
   background: rgba(0, 0, 0, 1);
   color: rgb(255, 255, 255);
 }
+#cookie-banner {
+  text-align: center;
+  padding: 0;
+}
+#cookie-banner h1 {
+  margin: 0;
+  font-size: 20px;
+}
 
 .noselect {
   -webkit-touch-callout: none;
@@ -52,7 +60,7 @@ a.color-link :hover {
   display: inline-block;
   transition: all .15s ease-in-out;
 }
-.active {
+.btn-dope.active {
   color: #fff;
   background: rgba(0, 191,165, 1);
 }

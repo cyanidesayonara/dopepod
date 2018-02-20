@@ -40,6 +40,10 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
+        sessionid = request.COOKIES.get('sessionid', '')
+        if not sessionid:
+            context['cookies'] = True
+
         last_played = Played_Episode.get_last_played()
         charts = Chart.get_charts()
         context.update({
@@ -150,10 +154,9 @@ def search(request):
         except ValueError:
             page = 1
 
+        explicit = True
         if user.is_authenticated:
-            if user.profile.show_explicit:
-                explicit = True
-            else:
+            if not user.profile.show_explicit:
                 explicit = False
 
         # TODO make this json sheesh
