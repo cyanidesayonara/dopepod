@@ -50,15 +50,15 @@
             </div>
           </div>
           <div class="col-12 order-2 col-md-6 order-md-3" id="right">
-            <!-- LAST PLAYED -->
-            <div class="row color-5-trans" id="last-played-header">
-              <div class="col-12">
+            <div class="row">
+              <div class="col-12 color-5-trans last-played-box results-header">
                 <h1>
                   Last played
                 </h1>
               </div>
             </div>
-            <div class="row color-5-trans" id="last-played">
+            <!-- LAST PLAYED -->
+            <div class="row" id="last-played">
               {% if last_played %}
                 {% include 'last_played.html' %}
               {% endif %}

@@ -1,6 +1,6 @@
 {% for episode in last_played %}
-<div class="col-12 last-played-box">
-  <div class="last-played-top">
+<div class="col-12 last-played-box color-5-trans">
+  <div class="last-played-top clearfix">
     <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
       {% if episode.length %}
         <span class="result-length">
@@ -9,12 +9,12 @@
       {% endif %}
       <img class="img-fluid" src="//images.weserv.nl/?url={{ episode.podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
     </a>
-    <a class="showpod color-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-      <h1 class="result-title">
+    <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+      <h1>
         {{ episode.podcast.title }}
       </h1>
     </a>
-    <p class="result-episode">
+    <p>
       {{ episode.title }}
     </p>
     <ul>
@@ -26,15 +26,14 @@
       </li>
     </ul>
   </div>
-  <div class="last-played-bottom">
-    <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
-      <span class="last-played-description">
+  <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
+      <p>
         {% if episode.description %}
-        {{ episode.description }}
+          {{ episode.description }}
         {% else %}
-        No description
+          No description
         {% endif %}
-      </span>
+      </p>
       <div class="last-played-buttons">
         <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
           {% csrf_token %}
@@ -43,19 +42,20 @@
             Play
           </button>
         </form>
-        <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="signature" value="{{ episode.signature }}" />
-          <button class="btn-dope play-button active" type="submit">
-            Add to Playlist
-          </button>
-        </form>
+        {% if user.is_authenticated %}
+          <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="signature" value="{{ episode.signature }}" />
+            <button class="btn-dope play-button active" type="submit">
+              Add to Playlist
+            </button>
+          </form>
+        {% endif %}
         <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
           Download
         </a>
       </div>
     </div>
-  </div>
   <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
     <i class="fas fa-angle-down"></i>
   </button>

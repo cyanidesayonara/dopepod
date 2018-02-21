@@ -2,16 +2,16 @@
   <div class="row">
     {% for podcast in results.podcasts %}
       <div class="col-12 charts-box">
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
-          <div class="charts-result">
+        <div class="charts-result clearfix">
+          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
             <span class="charts-rank">
               {{ podcast.position }}
             </span>
             <img class="img-fluid" src="//images.weserv.nl/?url={{ podcast.artworkUrl }}360x360bb.jpg&w=100&h=100&t=absolute" />
-            <h1 class="result-title">
+            <h1>
               {{ podcast.title }}
             </h1>
-            <p class="result-artist">
+            <p>
               <span>by </span>
               {{ podcast.artist }}
             </p>
@@ -23,8 +23,8 @@
                 {{ podcast.language }}
               </li>
             </ul>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
     {% endfor %}
   </div>

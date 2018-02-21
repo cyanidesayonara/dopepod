@@ -57,7 +57,7 @@
       </tr>
       <tr>
         <td colspan="5" class="hidden-row">
-          <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+          <div class="collapse more-collapse clearfix" id="more-collapse{{ forloop.counter }}">
             <p class="episode-description">
               {% if episode.description %}
                 {{ episode.description }}
@@ -73,13 +73,24 @@
                   Play
                 </button>
               </form>
-              <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                <button class="btn-dope play-button active" type="submit">
-                  Add to Playlist
-                </button>
-              </form>
+              {% if user.is_authenticated %}
+                {% if results.view == 'playlist' %}
+                  <a class="btn-dope playlist-move-up active" href="#" title="Move Up">
+                    Move Up
+                  </a>
+                  <a class="btn-dope playlist-move-down active" href="#" title="Move Down">
+                    Move Down
+                  </a>
+                {% else %}
+                  <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                    <button class="btn-dope play-button active" type="submit">
+                      Add to Playlist
+                    </button>
+                  </form>
+                {% endif %}
+              {% endif %}
               <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
                 Download
               </a>

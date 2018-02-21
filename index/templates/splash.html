@@ -10,14 +10,20 @@ dopepod
     <h1>
       Search for and listen to thousands of free podcasts on
     </h1>
-    <div class="splash-logo noselect color-3">
-    <span class="char char-1">d</span>
-    <span class="char char-2">o</span>
-    <span class="char char-3">p</span>
-    <span class="char char-4">e</span>
-    <span class="char char-5">p</span>
-    <span class="char char-6">o</span>
-  </div>
+    <div class="splash-errors">
+      {{ errors.general }}
+      {{ errors.email }}
+      {{ errors.password1 }}
+      {{ errors.password2 }}
+      <div class="splash-logo noselect color-3">
+        <span class="char char-1">d</span>
+        <span class="char char-2">o</span>
+        <span class="char char-3">p</span>
+        <span class="char char-4">e</span>
+        <span class="char char-5">p</span>
+        <span class="char char-6">o</span>
+      </div>
+    </div>
     <div class="tab-content">
       {% if view == 'signup' %}
         <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
@@ -49,7 +55,7 @@ dopepod
             </div>
             <div class="form-row">
               <div class="col">
-                <a class="password-link color-link" href="/?view=password">
+                <a class="password-link" href="/?view=password">
                   Forgot Password?
                 </a>
               </div>
@@ -63,36 +69,16 @@ dopepod
           </form>
         </div>
         <div class="tab-pane fade show active" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
-          {% if errors.general %}
-            <div class="error-message">
-              {{ errors.general }}
-            </div>
-          {% endif %}
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            {% if errors.email %}
-              <div class="error-message">
-                {{ errors.email }}
-              </div>
-            {% endif %}
             <div class="login-form-group">
               <label class="sr-only" for="signup-email">Email</label>
               <input class="form-control login-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
             </div>
-            {% if errors.password1 %}
-              <div class="error-message">
-                {{ errors.password1 }}
-              </div>
-            {% endif %}
             <div class="login-form-group">
               <label class="sr-only" for="signup-password1">Password</label>
               <input class="form-control login-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
             </div>
-            {% if errors.password2 %}
-            <div class="error-message">
-              {{ errors.password2 }}
-            </div>
-            {% endif %}
             <div class="form-row">
               <div class="col login-form-group">
                 <label class="sr-only" for="signup-password2">Password (again)</label>
@@ -136,27 +122,12 @@ dopepod
           </span>
         </div>
         <div class="tab-pane fade show active" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
-          {% if errors.general %}
-            <div class="error-message">
-              {{ errors.general }}
-            </div>
-          {% endif %}
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            {% if errors.email %}
-              <div class="error-message">
-                {{ errors.email }}
-              </div>
-            {% endif %}
             <div class="login-form-group">
               <label class="sr-only" for="login-login">Email</label>
               <input class="form-control login-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
             </div>
-            {% if errors.password %}
-            <div class="error-message">
-              {{ errors.password }}
-            </div>
-            {% endif %}
             <div class="form-row">
               <div class="col login-form-group">
                 <label class="sr-only" for="login-password">Password</label>
@@ -168,7 +139,7 @@ dopepod
             </div>
             <div class="form-row">
               <div class="col">
-                <a class="password-link color-link" href="/?view=password">
+                <a class="password-link" href="/?view=password">
                   Forgot Password?
                 </a>
               </div>
@@ -252,7 +223,7 @@ dopepod
             </div>
             <div class="form-row">
               <div class="col">
-                <a class="password-link color-link" href="/?view=password">
+                <a class="password-link" href="/?view=password">
                   Forgot Password?
                 </a>
               </div>
@@ -291,18 +262,8 @@ dopepod
           <p>
             Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
           </p>
-          {% if errors.general %}
-            <div class="error-message">
-              {{ errors.general }}
-            </div>
-          {% endif %}
           <form class="password-form" method="POST" action="{% url 'password_reset' %}">
             {% csrf_token %}
-            {% if errors.email %}
-              <div class="error-message">
-                {{ errors.email }}
-              </div>
-            {% endif %}
             <div class="form-row">
               <div class="col login-form-group">
                 <label class="sr-only" for="forgot-email">Email</label>
@@ -346,7 +307,7 @@ dopepod
             </div>
             <div class="form-row">
               <div class="col">
-                <a class="password-link color-link" href="/?view=password">
+                <a class="password-link" href="/?view=password">
                   Forgot Password?
                 </a>
               </div>

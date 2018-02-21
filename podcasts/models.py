@@ -81,6 +81,10 @@ class Podcast(models.Model):
     def __str__(self):
         return self.title
 
+    def cache_index():
+        Podcast.search()
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
+
     def set_discriminated(self):
         bad_url = 'is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/'
         bad_genre = Genre.objects.get(genreid=1314)
@@ -88,13 +92,6 @@ class Podcast(models.Model):
         if self.artworkUrl == bad_url or self.genre == bad_genre:
             self.discriminate = True
             self.save()
-
-    def set_ranks():
-        podcasts = Podcast.objects.all().order_by('discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump')
-        for i, podcast in enumerate(podcasts, start=1):
-            podcast.rank = i
-            podcast.bump = False
-            podcast.save()
 
     def get_ranks(self):
         orders = Order.objects.filter(podcast__podid=self.podid, chart__provider='dopepod')
@@ -118,7 +115,7 @@ class Podcast(models.Model):
 
     def search(q, genre, language, explicit, page, show):
         """
-        returns podcasts matching search terms
+        returns a tuple of (podcasts, num_pages and count) matching search terms
         """
 
         cachestring = ''
@@ -361,29 +358,24 @@ class Chart(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        # sets bump = True for selected
-        for genre in genres:
-            podcasts = Chart.parse_itunes_charts(genre)
-            for podcast in podcasts:
-                podcast.bump = True
-                podcast.save()
-
-        # sets bump = False for all
-        Podcast.set_ranks()
+        itunes_charts = {}
 
         for genre in genres:
             itunes_charts = Chart.parse_itunes_charts(genre)
+            for podcast in itunes_charts:
+                podcast.bump = True
 
+            podcasts = Podcast.objects.all()
             if genre:
-                podcasts = Podcast.objects.filter(
+                podcasts = podcasts.filter(
                     Q(genre=genre) |
                     Q(genre__supergenre=genre)
                 )
-            else:
-                podcasts = Podcast.objects.all()
-            dopepod_charts = podcasts.order_by('rank')
+            dopepod_charts = podcasts.order_by(
+                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump'
+            )
 
-            providers = [('dopepod', dopepod_charts[:number]), ('itunes', itunes_charts[:number])]
+            providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts[:number])]
             for provider, podcasts in providers:
                 size = len(podcasts)
                 chart, created = Chart.objects.update_or_create(
@@ -402,9 +394,9 @@ class Chart(models.Model):
                         podcast=podcast,
                         position=position,
                     )
-
-        # end by re-counting filterables
-        Filterable.count_n_podcasts()
+                    if not genre and provider == 'dopepod':
+                        podcast.rank = position
+                        podcast.save()
 
     def parse_itunes_charts(genre=None):
         """
@@ -460,14 +452,21 @@ class Chart(models.Model):
 
         return podcasts
 
-    def get_charts(provider='dopepod', genre=None):
+    def cache_charts():
+        genres = list(Genre.get_primary_genres())
+        genres.append(None)
+        for provider in Chart.get_providers():
+            for genre in genres:
+                Chart.get_charts(provider, genre, True)
+
+    def get_charts(provider='dopepod', genre=None, force_cache=False):
         cachestring = ''
         if genre:
             cachestring += 'genre=' + str(genre)
         if provider:
             cachestring += 'provider=' + provider
         results = cache.get(cachestring)
-        if results:
+        if results and not force_cache:
             return results
         else:
             genres = Genre.get_primary_genres()

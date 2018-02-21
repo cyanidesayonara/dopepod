@@ -71,16 +71,6 @@ function addIcons() {
   }
 }
 
-// function collapseCollapses() {
-//   var el = $("#episodes-table");
-//   if (el.length) {
-//     var collapses = el.find(".more-collapse");
-//     collapses.each(function() {
-//       $(this).collapse("hide");
-//     })
-//   }
-// }
-
 function scrollSpy() {
   $(window).scroll(function () {
     keepAspectRatio();
@@ -191,9 +181,8 @@ function refreshCookie() {
 function refreshPage() {
   var url = "/dopebar/";
   var drop = $("#dopebar");
-  loadResults([url, drop, loadResults, ["/", "#center-stage"]]);
+  loadResults([url, drop, loadResults, ["/", "#center-stage", loadResults, ["/last_played/", "#last-played"]]]);
 }
-
 function checkForXHR(url) {
   var urls = ["dopebar", "charts", "episodes", "last_played"];
   for (i = 0; i < urls.length; i++) {
@@ -233,15 +222,20 @@ function loadResults(args) {
     });
 }
 
-// SCROLLTO
+// SCROLLERS
 function scrollToTop() {
   $("html, body").animate({
     scrollTop: $("body").offset().top
   }, 250);
 }
-function scrollToMultibar() {
+function scrollToCharts() {
   $("html, body").animate({
-    scrollTop: 400
+    scrollTop: $("#left").offset().top - 44
+  }, 250);
+}
+function scrollToLastPlayed() {
+  $("html, body").animate({
+    scrollTop: $("#right").offset().top - 44
   }, 250);
 }
 function scrollText(box, text) {
@@ -262,21 +256,21 @@ function changeTheme(theme) {
   if (theme) {
     $("body").addClass("darken");
   }
-  else if (!theme) {
-    $("body").removeClass("darken");
-  }
   else {
-    if ($("body").hasClass("darken")) {
-      $("body").removeClass("darken");
-    }
-    else {
-      $("body").addClass("darken");
-    }
+    $("body").removeClass("darken");
   }
 }
 
 function replaceChars(q) {
-  return q.replace(/([^a-z0-9 ']+)/gi, "");
+  q = q.replace(/&+/g, "+");
+  q = q.replace(/\s+/g, "+");
+  q = q.replace(/([^a-zA-Z0-9\u0080-\uFFFF +']+)/gi, "");
+  return q;
+}
+
+function cookieBannerClose() {
+  console.log("dsds")
+  $("#player").empty();
 }
 
 $(document)
@@ -368,6 +362,14 @@ $(document)
       scrollToTop();
     }, 250);
   })
+  .on("click", ".charts-link", function(e) {
+    e.preventDefault();
+    scrollToCharts();
+  })
+  .on("click", ".last-played-link", function(e) {
+    e.preventDefault();
+    scrollToLastPlayed();
+  })
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -404,6 +406,7 @@ $(document)
   .on("submit", "#settings-form", function (e) {
     e.preventDefault();
     var button = $(this).find("#settings-save");
+    var theme = $(this).find("input[name=dark_theme]").is(":checked");
     button.text("Saving...");
     var data = $(this).serialize();
     var method = this.method;
@@ -418,12 +421,9 @@ $(document)
         button.text("Save");
       })
       .done(function(response) {
+        changeTheme(theme);
         $("#center-stage").html(response);
       });
-  })
-  .on("click", ".dark_theme", function(e) {
-    var theme = $(this).is(":checked");
-    changeTheme(theme);
   })
   .on("submit", "#sub-form", function(e) {
     e.preventDefault();
@@ -489,6 +489,7 @@ $(document)
         setTimeout(function() {
           var box = $("#player-title");
           var text = $("#player-title h1");
+          console.log(box, text)
           scrollText(box, text);
         }, 1000);
       });
