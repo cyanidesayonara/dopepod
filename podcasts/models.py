@@ -471,7 +471,7 @@ class Chart(models.Model):
         else:
             genres = Genre.get_primary_genres()
             chart = get_object_or_404(Chart, provider=provider, genre=genre)
-            orders = Order.objects.filter(chart=chart).order_by('position')
+            orders = Order.objects.filter(chart=chart).order_by('position')[:48]
 
             podcasts = []
             for order in orders:

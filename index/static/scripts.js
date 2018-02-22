@@ -260,6 +260,31 @@ function changeTheme(theme) {
     $("body").removeClass("darken");
   }
 }
+function subscribeOrUnsubscribe(form) {
+  var url = form.action;
+  var method = form.method;
+  form = $(form);
+  form.find(".sub-button").text("Loading...");
+  var podid = form.find("input[name=podid]").val();
+  var data = {
+    "podid": podid,
+  };
+  $.ajax({
+    method: method,
+    url: url,
+    data: data,
+  })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      $("#center-stage").html(xhr.responseText);
+      replaceState("/");
+    })
+    .done(function(response) {
+      $("#center-stage").html(response);
+      var url = "/episodes/" + podid + "/";
+      var drop = $("#episodes-collapse");
+      loadResults([url, drop]);
+    });
+};
 
 function replaceChars(q) {
   q = q.replace(/&+/g, "+");
@@ -427,28 +452,7 @@ $(document)
   })
   .on("submit", "#sub-form", function(e) {
     e.preventDefault();
-    var form = $(this);
-    var button = form.find(".sub-button");
-    button.text("Loading...");
-    var data = form.serialize();
-    var url = this.action;
-    var method = this.method;
-    $.ajax({
-      method: method,
-      url: url,
-      data: data,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText);
-        replaceState("/");
-      })
-      .done(function(response) {
-        $("#center-stage").html(response);
-        var podid = form.find("input[name=podid]").val();
-        var url = "/episodes/" + podid + "/";
-        var drop = $("#episodes-collapse");
-        loadResults([url, drop]);
-      });
+    subscribeOrUnsubscribe(this);
   })
   .on("click", ".add-to-playlist", function(e) {
     e.preventDefault();

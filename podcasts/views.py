@@ -176,7 +176,6 @@ def subscribe(request):
     if not logged in, redirects to login
     """
 
-    # validate request
     if request.method == 'POST':
         user = request.user
         if user.is_authenticated:
