@@ -462,7 +462,7 @@ class Chart(models.Model):
     def get_charts(provider='dopepod', genre=None, force_cache=False):
         cachestring = ''
         if genre:
-            cachestring += 'genre=' + str(genre)
+            cachestring += 'genre=' + str(genre).replace(' ', '')
         if provider:
             cachestring += 'provider=' + provider
         results = cache.get(cachestring)
