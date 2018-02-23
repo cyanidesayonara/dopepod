@@ -7,7 +7,7 @@
           {{ episode.length }}
         </span>
       {% endif %}
-      <img class="img-fluid" src="//img.dopepod.me/{{ podcast.artworkUrl }}100x100bb.jpg" />
+      <img class="img-fluid" src="http://img.dopepod.me/{{ episode.podcast.artworkUrl }}100x100bb.jpg" />
     </a>
     <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
       <h1>
