@@ -8,7 +8,7 @@ class PodcastAdmin(admin.ModelAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'podcast', 'last_updated', 'new_episodes')
+    list_display = ('user', 'podcast', 'last_updated', 'new_episodes',)
     fields = ('user', 'podcast', 'last_updated', 'new_episodes',)
 
 @admin.register(Chart)
@@ -23,13 +23,13 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Played_Episode)
 class Played_EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at')
-    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at')
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'user',)
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'user',)
 
 @admin.register(Playlist_Episode)
 class Playlist_EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user')
-    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user')
+    list_display = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user',)
+    fields = ('podcast', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'added_at', 'user',)
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
