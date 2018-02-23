@@ -354,7 +354,6 @@ class Chart(models.Model):
 
         # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
 
-        number = 50
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
@@ -375,7 +374,7 @@ class Chart(models.Model):
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump'
             )
 
-            providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts[:number])]
+            providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts)]
             for provider, podcasts in providers:
                 size = len(podcasts)
                 chart, created = Chart.objects.update_or_create(
@@ -462,7 +461,7 @@ class Chart(models.Model):
     def get_charts(provider='dopepod', genre=None, force_cache=False):
         cachestring = ''
         if genre:
-            cachestring += 'genre=' + str(genre)
+            cachestring += 'genre=' + str(genre).replace(' ', '')
         if provider:
             cachestring += 'provider=' + provider
         results = cache.get(cachestring)
@@ -471,7 +470,7 @@ class Chart(models.Model):
         else:
             genres = Genre.get_primary_genres()
             chart = get_object_or_404(Chart, provider=provider, genre=genre)
-            orders = Order.objects.filter(chart=chart).order_by('position')
+            orders = Order.objects.filter(chart=chart).order_by('position')[:50]
 
             podcasts = []
             for order in orders:
