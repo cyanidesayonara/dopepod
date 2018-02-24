@@ -8,5 +8,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Chart.set_charts()
         Chart.cache_charts()
-
         Filterable.count_n_podcasts()

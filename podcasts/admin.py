@@ -13,8 +13,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(Chart)
 class ChartAdmin(admin.ModelAdmin):
-    list_display = ('header', 'size', 'provider', 'genre',)
-    fields = ('header', 'size', 'provider', 'genre',)
+    list_display = ('provider', 'genre', 'language', 'size',)
+    fields = ('provider', 'genre', 'language', 'size',)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

@@ -132,6 +132,7 @@ function replaceState(url) {
   history.replaceState(state, "", url);
 }
 function updateTitle() {
+  // TODO center-stage contains title string
   var title = "dopepod";
   var el = $("#player-wrapper");
   if (el.length) {

@@ -78,6 +78,8 @@ class Podcast(models.Model):
     rank = models.IntegerField(default=1000000)
     bump = models.BooleanField(default=False)
 
+    # TODO show primary genre 
+
     def __str__(self):
         return self.title
 
@@ -100,13 +102,14 @@ class Podcast(models.Model):
             genre = self.genre.supergenre
         else:
             genre = self.genre
+        language = self.language
 
         try:
-            self.global_rank = orders.get(chart__genre=None).position
+            self.genre_rank = orders.get(chart__genre=genre, chart__language=None).position
         except Order.DoesNotExist:
             pass
         try:
-            self.genre_rank = orders.get(chart__genre=genre).position
+            self.language_rank = orders.get(chart__genre=None, chart__language=language).position
         except Order.DoesNotExist:
             pass
 
@@ -341,8 +344,8 @@ class Chart(models.Model):
     podcasts = models.ManyToManyField(Podcast, through='Order')
     size = models.IntegerField(default=0)
     provider = models.CharField(max_length=16)
-    header = models.CharField(max_length=16, default='Top 50 podcasts')
     genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.PROTECT)
+    language = models.ForeignKey('podcasts.Language', null=True, default=None, on_delete=models.PROTECT)
 
     def get_providers():
         return Chart.objects.all().distinct('provider').values_list('provider', flat=True)
@@ -357,45 +360,57 @@ class Chart(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
+        languages = list(Language.objects.all())
+        languages.append(None)
+
         itunes_charts = {}
 
-        for genre in genres:
-            itunes_charts = Chart.parse_itunes_charts(genre)
-            for podcast in itunes_charts:
-                podcast.bump = True
+        for language in languages:
+            for genre in genres:
+                if language:
+                    itunes_charts = []
+                else:
+                    itunes_charts = Chart.parse_itunes_charts(genre)
+                    if itunes_charts:
+                        for podcast in itunes_charts:
+                            podcast.bump = True
 
-            podcasts = Podcast.objects.all()
-            if genre:
-                podcasts = podcasts.filter(
-                    Q(genre=genre) |
-                    Q(genre__supergenre=genre)
-                )
-            dopepod_charts = podcasts.order_by(
-                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump'
-            )
-
-            providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts)]
-            for provider, podcasts in providers:
-                size = len(podcasts)
-                chart, created = Chart.objects.update_or_create(
-                    provider=provider,
-                    genre=genre,
-                    defaults={
-                        'size': size
-                    },
-                )
-
-                Order.objects.filter(chart=chart).delete()
-
-                for position, podcast in enumerate(podcasts, start=1):
-                    Order.objects.create(
-                        chart=chart,
-                        podcast=podcast,
-                        position=position,
+                podcasts = Podcast.objects.all()
+                if genre:
+                    podcasts = podcasts.filter(
+                        Q(genre=genre) |
+                        Q(genre__supergenre=genre)
                     )
-                    if not genre and provider == 'dopepod':
-                        podcast.rank = position
-                        podcast.save()
+                if language:
+                    podcasts = podcasts.filter(language=language)
+                dopepod_charts = podcasts.order_by(
+                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump'
+                )
+
+                providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts)]
+                for provider, podcasts in providers:
+                    if podcasts:
+                        size = len(podcasts)
+                        chart, created = Chart.objects.update_or_create(
+                            provider=provider,
+                            genre=genre,
+                            language=language,
+                            defaults={
+                                'size': size
+                            },
+                        )
+
+                        Order.objects.filter(chart=chart).delete()
+
+                        for position, podcast in enumerate(podcasts, start=1):
+                            Order.objects.create(
+                                chart=chart,
+                                podcast=podcast,
+                                position=position,
+                            )
+                            if not genre and not language and provider == 'dopepod':
+                                podcast.rank = position
+                                podcast.save()
 
     def parse_itunes_charts(genre=None):
         """
@@ -446,33 +461,54 @@ class Chart(models.Model):
 
         except requests.exceptions.HTTPError as e:
             logger.error('http error', url)
+            return None
         except requests.exceptions.ReadTimeout:
             logger.error('timed out', url)
-
+            return None
+        except requests.exceptions.RetryError:
+            logger.error('too many retries:', url)
+            return None
         return podcasts
 
     def cache_charts():
         genres = list(Genre.get_primary_genres())
         genres.append(None)
-        for provider in Chart.get_providers():
-            for genre in genres:
-                Chart.get_charts(provider, genre, True)
 
-    def get_charts(provider='dopepod', genre=None, force_cache=False):
+        for provider in Chart.get_providers():
+            if provider == 'dopepod':
+                languages = list(Language.objects.all())
+                languages.append(None)
+            else:
+                languages = [None]
+            for language in languages:
+                for genre in genres:
+                    Chart.get_charts(provider, genre, language, True)
+
+    def get_charts(provider='dopepod', genre=None, language=None, force_cache=False):
         cachestring = ''
-        if genre:
-            cachestring += 'genre=' + str(genre).replace(' ', '')
         if provider:
             cachestring += 'provider=' + provider
+        if genre:
+            cachestring += 'genre=' + str(genre).replace(' ', '')
+        if language:
+            cachestring += 'language=' + str(language).replace(' ', '')
         results = cache.get(cachestring)
         if results and not force_cache:
             return results
         else:
-            genres = Genre.get_primary_genres()
-            chart = get_object_or_404(Chart, provider=provider, genre=genre)
-            orders = Order.objects.filter(chart=chart).order_by('position')[:50]
-
             podcasts = []
+            genres = Genre.get_primary_genres()
+            if provider == 'dopepod':
+                languages = Language.objects.all()
+            else:
+                language = None
+                languages = None
+            try:
+                chart = Chart.objects.get(provider=provider, genre=genre, language=language)
+            except Chart.DoesNotExist:
+                chart = None
+
+            orders = Order.objects.filter(chart=chart).order_by('position')[:50]
             for order in orders:
                 podcast = order.podcast
                 podcast.position = order.position
@@ -482,32 +518,35 @@ class Chart(models.Model):
             querystring = {}
             urls = {}
 
-            if genre:
-                querystring['genre'] = genre
             if provider:
                 querystring['provider'] = provider
+            if genre:
+                querystring['genre'] = genre
+            if language:
+                querystring['language'] = language
 
-            if genre or provider:
-                querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-                urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
+            querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
+            urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
 
-                querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
-                urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
+            querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
+            urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
 
-                urls['full_url'] = url + '?' + urlencode(querystring)
-            else:
-                urls['genre_url'] = url + '?'
-                urls['provider_url'] = url + '?'
-                urls['full_url'] = url + '?'
+            querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
+            urls['language_url'] = url + '?' + urlencode(querystring_wo_language)
+
+            urls['full_url'] = url + '?' + urlencode(querystring)
 
             results = {}
             results['drop'] = '-charts'
             results['podcasts'] = podcasts
-            results['header'] = chart.header
-            results['selected_genre'] = genre
-            results['genres'] = genres
+            results['header'] = 'Top ' + str(len(podcasts)) + ' podcasts' if podcasts else 'N/A'
             results['providers'] = Chart.get_providers()
             results['selected_provider'] = provider
+            results['genres'] = genres
+            results['selected_genre'] = genre
+            if languages:
+                results['languages'] = languages
+                results['selected_language'] = language
             results['view'] = 'charts'
             results['urls'] = urls
             cache.add(cachestring, results, 60 * 60 * 24)

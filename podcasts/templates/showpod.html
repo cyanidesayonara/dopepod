@@ -31,6 +31,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
           </button>
         </form>
       {% endif %}
+      <!-- TODO fix these ids -->
       <h1 id="showpod-title">
         {{ podcast.title }}
       </h1>
@@ -46,41 +47,17 @@ Listen to episodes of {{ podcast.title }} on dopepod
     </div>
     <div class="col-12 col-lg-3" id="showpod-r">
       <ul class="showpod-side-list">
-        {% if podcast.global_rank %}
+        {% if podcast.rank %}
           <li>
-            <span class="global_rank">
-              #{{ podcast.global_rank }} in
+            #{{ podcast.rank }} in
+            <a class="browse-link" href="{% url 'browse' %}">
               podcasts
-            </span>
+            </a>
           </li>
         {% endif %}
         {% if podcast.genre_rank %}
           <li>
-            <span class="genre_rank">
-              #{{ podcast.genre_rank }} in
-              {% if podcast.genre.supergenre %}
-                <a class="browse-link" href="/browse/?genre={{ podcast.genre.supergenre.url_format }}">
-                  {{ podcast.genre.supergenre }}
-                </a>
-              {% else %}
-                <a class="browse-link" href="/browse/?genre={{ podcast.genre.url_format }}">
-                  {{ podcast.genre }}
-                </a>
-              {% endif %}
-            </span>
-          </li>
-        {% endif %}
-        <li>
-          <span class="subscriber">
-            Subscribers:
-          </span>
-          <span class="n_subscribers">
-            {{ podcast.n_subscribers }}
-          </span>
-        </li>
-        <li>
-          <span class="genre">
-            Genre:
+            #{{ podcast.genre_rank }} in
             {% if podcast.genre.supergenre %}
               <a class="browse-link" href="/browse/?genre={{ podcast.genre.supergenre.url_format }}">
                 {{ podcast.genre.supergenre }}
@@ -90,62 +67,61 @@ Listen to episodes of {{ podcast.title }} on dopepod
                 {{ podcast.genre }}
               </a>
             {% endif %}
-          </span>
-        </li>
-        <li>
-          <span class="language">
-            Language:
+          </li>
+        {% endif %}
+        {% if podcast.language_rank %}
+          <li>
+            #{{ podcast.language_rank }} in
             <a class="browse-link" href="/browse/?language={{ podcast.language.url_format }}">
               {{ podcast.language }}
             </a>
-          </span>
+          </li>
+        {% endif %}
+        <li>
+          Subscribers: {{ podcast.n_subscribers }}
         </li>
         <li>
-          <span>
-            Content:
-          </span>
-          <span class="showpod-explicit">
-            {% if podcast.explicit %}
+          Content:
+          {% if podcast.explicit %}
             explicit
-            {% else %}
+          {% else %}
             clean
-            {% endif %}
-          </span>
+          {% endif %}
         </li>
         <li>
           <a class="showpod-podcastUrl" href="{{ podcast.podcastUrl }}">
-            <span>
-              Podcast website
-            </span>
+            Podcast website
           </a>
         </li>
         <li>
           <a class="showpod-feedUrl" href="{{ podcast.feedUrl }}">
-            <span>
-              Podcast RSS feed
-            </span>
+            Podcast RSS feed
           </a>
         </li>
         <li>
           <em>
-            <span id="showpod-copyright">
-              {{ podcast.copyrighttext }}
-            </span>
+            {{ podcast.copyrighttext }}
           </em>
         </li>
       </ul>
       <div class="showpod-options">
-        <a class="btn-dope toggle show-episodes" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+        <a class="btn-dope toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+          Episodes
+        </a>
+        <a class="btn-dope toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
           Episodes
         </a>
         <button class="btn-dope btn-dope-disabled">
-          <span>
-            Reviews
-          </span>
+          Reviews
         </button>
       </div>
     </div>
-    <div class="col-12 collapse show" id="episodes-collapse">
+    <div class="col-12 showpod-collapse collapse show" id="episodes-collapse">
+      {% if results.episodes %}
+        {% include 'episodes.html' %}
+      {% endif%}
+    </div>
+    <div class="col-12 showpod-collapse collapse show" id="reviews-collapse">
       {% if results.episodes %}
         {% include 'episodes.html' %}
       {% endif%}

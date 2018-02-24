@@ -5,16 +5,16 @@ body {
   transition: background 0.5s ease;
 }
 a {
-  color: rgba(0, 191, 165, 1);
+  color: rgb(0, 191, 165);
   font-weight: 600;
 }
 a:hover {
-  color: rgba(0, 105, 92, 1);
+  color: rgb(0, 105, 92);
   text-decoration: none;
 }
 .darken {
   transition: all 0.5s ease;
-  background: rgba(0, 0, 0, 1);
+  background: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
 }
 
@@ -87,34 +87,6 @@ a:hover {
 .reverse-toggle[aria-expanded="false"] {
   color: #fff;
   background: rgba(0, 191, 165, 1);
-}
-.last-played-toggle {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  text-align: center;
-  cursor: pointer;
-  height: 34px;
-  width: 34px;
-  font-size: 20px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 191, 165, 1);
-  color: unset;
-  background: rgba(0, 0, 0, 0);
-  transition: all .25s ease-in-out;
-}
-.last-played-toggle:focus {
-  outline: none;
-}
-.last-played-toggle:hover {
-  transition: all .25s ease-in-out;
-  background: rgba(0, 191, 165, 1);
-  color: rgb(255, 255, 255);
-
-}
-.last-played-toggle[aria-expanded="true"] {
-  transition: all .25s ease-in-out;
-  transform: rotate(-180deg);
 }
 .btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled, .btn-dope-disabled:focus  {
   color: rgb(46, 46, 46);
@@ -603,11 +575,15 @@ a:hover {
 #dopebar-collapse {
   padding: 15px 10px 0;
 }
-#dopebar-collapse > * {
-  margin: 5px 0;
+#dopebar-collapse ul {
+  margin: 10px 0 0;
+}
+#dopebar-collapse ul li {
+  margin: 10px 0 0;
 }
 #dopebar-collapse .lights-toggle {
-  margin-left: 10px;
+  float: right;
+  margin-right: 5px;
 }
 .dopebar-link  {
   padding: 5px;
@@ -737,8 +713,11 @@ a:hover {
 }
 
 /* DASHBOARD */
-#dashboard-top {
+#dashboard {
   text-align: center;
+}
+#dashboard h1 {
+  font-size: 20px;
 }
 
 /* SETTINGS */
@@ -1018,7 +997,7 @@ a:hover {
 .charts-box {
   padding: 10px 10px 0 10px;
 }
-.charts-box a, .result-box a, .playlist-box a, #dashboard-top a {
+.charts-box a, .result-box a, .playlist-box a {
   color: unset;
   font-weight: unset;
 }
@@ -1140,6 +1119,31 @@ a:hover {
   height: 40px;
   overflow: hidden;
   font-size: 14px;
+}
+.last-played-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  text-align: center;
+  cursor: pointer;
+  height: 34px;
+  width: 34px;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 191, 165, 1);
+  color: unset;
+  background: rgba(0, 0, 0, 0);
+  transition: all .25s ease-in-out;
+}
+.last-played-toggle:hover, .last-played-toggle:focus {
+  outline: none;
+  transition: all .25s ease-in-out;
+  background: rgba(0, 191, 165, 1);
+  color: rgb(255, 255, 255);
+}
+.last-played-toggle[aria-expanded="true"] {
+  transition: all .25s ease-in-out;
+  transform: rotate(-180deg);
 }
 
 /* SEARCH RESULTS */

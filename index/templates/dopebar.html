@@ -101,7 +101,7 @@
       </li>
     </ul>
   </div>
-  <div class="collapse" id="dopebar-collapse">
+  <div class="collapse d-xl-none" id="dopebar-collapse">
     <form class="form-inline search-form d-inline-block d-xl-none" method="GET" action="{% url 'search' %}">
       <label for="q" class="sr-only">Search for podcasts</label>
       <input class="q" type="text" name="q" type="search" placeholder="Search for podcasts"
@@ -115,7 +115,7 @@
     <a class="dopebar-link lights-toggle" href="#">
       <i class="far fa-lightbulb"></i>
     </a>
-    <ul class="d-inline-block d-xl-none">
+    <ul>
       <li>
         <a class="dopebar-link browse-link" href="{% url 'browse' %}">
           Browse

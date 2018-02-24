@@ -5,10 +5,10 @@ dopepod
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-12 results color-5-trans" id="dashboard-top">
-  <p>
+<div class="col-12 results color-5-trans" id="dashboard">
+  <h1>
     Dashboard
-  </p>
+  </h1>
   <p>
     You have {{ user.subscription.count }}
     <a class="subscriptions-link" href="{% url 'subscriptions' %}">

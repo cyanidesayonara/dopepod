@@ -9,6 +9,14 @@ import logging
 from django.core.cache import cache
 logger = logging.getLogger(__name__)
 
+def cookie_test(session):
+    if session.test_cookie_worked():
+        session.delete_test_cookie()
+        return False
+    else:
+        session.set_test_cookie()
+        return True
+
 def dopebar(request):
     """
     returns navbar (for refreshing)
@@ -39,9 +47,7 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
-        sessionid = request.COOKIES.get('sessionid', '')
-        if not sessionid:
-            context['cookies'] = True
+        context['cookie_banner'] = cookie_test(request.session)
 
         last_played = Played_Episode.get_last_played()
         charts = Chart.get_charts()
@@ -69,13 +75,18 @@ def charts(request):
             genre = Genre.objects.get(name=genre)
         except Genre.DoesNotExist:
             genre = None
+        language = request.GET.get('language', None)
+        try:
+            language = Language.objects.get(name=language)
+        except Language.DoesNotExist:
+            language = None
 
-        providers = ['dopepod', 'itunes']
         provider = request.GET.get('provider', None)
+        providers = ['dopepod', 'itunes']
         if provider not in providers:
             provider = providers[0]
 
-        charts = Chart.get_charts(genre=genre, provider=provider)
+        charts = Chart.get_charts(provider=provider, genre=genre, language=language)
 
         if request.is_ajax():
             context = {
