@@ -1,4 +1,4 @@
-<div class="col-12 results-content">
+<div class="col-12">
   {% if results.view == 'list' %}
   <div class="row collapse results-collapse">
   {% else %}
@@ -7,15 +7,13 @@
     {% for podcast in results.podcasts %}
       <div class="col-lg-2 col-md-3 col-4 result-box">
         <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
-          <div class="search-result">
-            <img class="img-fluid" src="https://dopepod.me/img/200x200/{{ podcast.artworkUrl }}200x200bb.jpg" />
+            <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg" />
             <h1>
               {{ podcast.title }}
             </h1>
             <p>
               by {{ podcast.artist }}
             </p>
-          </div>
         </a>
       </div>
     {% endfor %}

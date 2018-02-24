@@ -3,7 +3,6 @@ $(document)
     xhr = null;
     timeout = 0;
     refreshCookie();
-    // collapseCollapses();
     addIcons();
     keepAspectRatio()
     showpodBadge();
@@ -294,7 +293,6 @@ function replaceChars(q) {
 }
 
 function cookieBannerClose() {
-  console.log("dsds")
   $("#player").empty();
 }
 
@@ -339,7 +337,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".page-buttons a, .genre-buttons a, .language-buttons a, .alphabet-buttons a, .provider-button", function(e) {
+  .on("click", ".page-button, .genre-button, .language-button, .alphabet-button, .provider-button", function(e) {
     e.preventDefault();
     var el = $(this);
     clearTimeout(timeout);

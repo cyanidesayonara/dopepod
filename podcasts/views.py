@@ -59,6 +59,8 @@ def play(request):
 
     if request.method == 'POST':
         user = request.user
+        if not user.is_authenticated:
+            user = None
         try:
             signature = request.POST['signature']
             data = signing.loads(signature)
