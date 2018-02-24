@@ -1077,6 +1077,7 @@ a:hover {
 }
 .charts-box a, .result-box a, .playlist-box a, #dashboard-top a {
   color: unset;
+  font-weight: unset;
 }
 .charts-result {
   display: inline-block;
