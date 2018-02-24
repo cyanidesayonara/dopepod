@@ -334,105 +334,6 @@ a:hover {
   width: 15px;
   height: 44px;
 }
-@keyframes Fade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-  }
-}
-@-webkit-keyframes Fade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes upFade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@-webkit-keyframes upFade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes downFade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-    transform: translateY(40px);
-    -webkit-transform: translateY(40px); /** Chrome & Safari **/
-    -o-transform: translateY(40px); /** Opera **/
-    -moz-transform: translateY(40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@-webkit-keyframes downFade {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0);
-    transform: translateY(40px);
-    -webkit-transform: translateY(40px); /** Chrome & Safari **/
-    -o-transform: translateY(40px); /** Opera **/
-    -moz-transform: translateY(40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes disappear {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  100% {
-    color: rgba(0, 0, 0, 0);
-  }
-}
-@keyframes appear {
-  0% {
-    color: rgba(0, 0, 0, 0);
-  }
-  100% {
-    color: rgba(0, 0, 0, 1);
-  }
-}
 .loading-a-1 {
   left: -62px;
   animation: appear .25s ease-in .45s forwards, upFade .5s ease-in 1s forwards;
@@ -505,26 +406,125 @@ a:hover {
 }
 .loading-a {
   position: absolute;
-  color: rgba(255, 255, 255, 0);
+  opacity: 0;
   top: -2px;
   height: 36px;
   font-size: 32px!important;
 }
 .loading-b {
   position: absolute;
-  color: rgba(255, 255, 255, 0);
+  opacity: 0;
   top: 0;
   height: 36px;
 }
 .loading-c {
   display: inline-flex;
   position: absolute;
-  color: rgba(255, 255, 255, 0);
+  opacity: 0;
   top: 0;
   left: -60px;
   height: 36px;
   animation: appear .5s ease-in 5s forwards;
   -webkit-animation: appear .5s ease-in 5s forwards;
+}
+@keyframes Fade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes Fade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(-40px);
+    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
+    -o-transform: translateY(-40px); /** Opera **/
+    -moz-transform: translateY(-40px); /** Firefox **/
+  }
+  100% {
+    display: none;
+  }
+}
+@keyframes upFade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(-40px);
+    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
+    -o-transform: translateY(-40px); /** Opera **/
+    -moz-transform: translateY(-40px); /** Firefox **/
+  }
+  100% {
+    display: none;
+  }
+}
+@-webkit-keyframes upFade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(-40px);
+    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
+    -o-transform: translateY(-40px); /** Opera **/
+    -moz-transform: translateY(-40px); /** Firefox **/
+  }
+  100% {
+    display: none;
+  }
+}
+@keyframes downFade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(40px);
+    -webkit-transform: translateY(40px); /** Chrome & Safari **/
+    -o-transform: translateY(40px); /** Opera **/
+    -moz-transform: translateY(40px); /** Firefox **/
+  }
+  100% {
+    display: none;
+  }
+}
+@-webkit-keyframes downFade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(40px);
+    -webkit-transform: translateY(40px); /** Chrome & Safari **/
+    -o-transform: translateY(40px); /** Opera **/
+    -moz-transform: translateY(40px); /** Firefox **/
+  }
+  100% {
+    display: none;
+  }
+}
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* MAIN */
