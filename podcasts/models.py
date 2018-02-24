@@ -691,6 +691,7 @@ class Episode(models.Model):
 
 class Played_Episode(Episode):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='played_episode')
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='played_episode')
     played_at = models.DateTimeField(default=timezone.now)
 
     class Meta:

@@ -58,6 +58,7 @@ def play(request):
     """
 
     if request.method == 'POST':
+        user = request.user
         try:
             signature = request.POST['signature']
             data = signing.loads(signature)
@@ -84,6 +85,7 @@ def play(request):
             size = None
 
         episode = Played_Episode.objects.create(
+            user=user,
             url=url,
             kind=kind,
             title=title,
