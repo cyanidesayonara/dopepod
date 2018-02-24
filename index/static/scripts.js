@@ -604,6 +604,7 @@ $(document)
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".more-collapse", function(e) {
+    e.stopPropagation()
     $(".more-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
@@ -611,9 +612,6 @@ $(document)
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
     $(".options-collapse.show").collapse("hide");
-  })
-  .on("show.bs.collapse", ".results-collapse", function (e) {
-    $(".results-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
     $(".showpod-collapse.show").collapse("hide");
