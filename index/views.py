@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 def cookie_test(session):
     if session.test_cookie_worked():
+        session['cookie'] = True
         session.delete_test_cookie()
         return False
     else:
@@ -47,7 +48,8 @@ def index(request):
             else:
                 return render(request, 'splash.html', context)
 
-        context['cookie_banner'] = cookie_test(request.session)
+        if not request.session.get('cookie', None):
+            context['cookie_banner'] = cookie_test(request.session)
 
         last_played = Played_Episode.get_last_played()
         charts = Chart.get_charts()

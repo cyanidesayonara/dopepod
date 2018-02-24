@@ -615,6 +615,9 @@ $(document)
   .on("show.bs.collapse", ".results-collapse", function (e) {
     $(".results-collapse.show").collapse("hide");
   })
+  .on("show.bs.collapse", ".showpod-collapse", function (e) {
+    $(".showpod-collapse.show").collapse("hide");
+  })
   .on("shown.bs.collapse", "#dopebar-collapse", function (e) {
     var top = 60 + $("#dopebar-collapse")[0].clientHeight;
     $(".showpod-badge").css("top", top + "px");
