@@ -6,6 +6,7 @@ body {
 }
 a {
   color: rgba(0, 191, 165, 1);
+  font-weight: 600;
 }
 a:hover {
   color: rgba(0, 105, 92, 1);
@@ -1076,6 +1077,7 @@ a:hover {
 }
 .charts-box a, .result-box a, .playlist-box a, #dashboard-top a {
   color: unset;
+  font-weight: unset;
 }
 .charts-result {
   padding: 10px;
