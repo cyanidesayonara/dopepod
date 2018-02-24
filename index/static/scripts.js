@@ -337,9 +337,10 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".page-button, .genre-button, .language-button, .alphabet-button, .provider-button", function(e) {
+  .on("click", "a.page-button, a.options-button, a.provider-button", function(e) {
     e.preventDefault();
     var el = $(this);
+    console.log(el)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var url = el[0].href;
