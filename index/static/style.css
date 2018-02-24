@@ -1078,8 +1078,6 @@ a:hover {
   color: unset;
 }
 .charts-result {
-  display: inline-block;
-  width: 100%;
   padding: 10px;
   border-radius: .25rem;
   border: 2px solid rgba(0, 191,165, 0);
