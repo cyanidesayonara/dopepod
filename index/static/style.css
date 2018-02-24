@@ -6,6 +6,7 @@ body {
 }
 a {
   color: rgba(0, 191, 165, 1);
+  font-weight: 600;
 }
 a:hover {
   color: rgba(0, 105, 92, 1);
