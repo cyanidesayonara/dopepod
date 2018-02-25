@@ -5,7 +5,7 @@
         <div class="charts-result clearfix">
           <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
             <span class="charts-rank">
-              {{ podcast.position }}
+              {{ forloop.counter }}
             </span>
             <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg" />
             <h1>

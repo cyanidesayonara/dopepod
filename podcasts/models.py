@@ -75,10 +75,13 @@ class Podcast(models.Model):
     discriminate = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
     plays = models.IntegerField(default=0)
-    rank = models.IntegerField(default=1000000)
-    bump = models.BooleanField(default=False)
+    rank = models.IntegerField(default=None, null=True)
+    genre_rank = models.IntegerField(default=None, null=True)
+    language_rank = models.IntegerField(default=None, null=True)
+    itunes_rank = models.IntegerField(default=None, null=True)
+    itunes_genre_rank = models.IntegerField(default=None, null=True)
 
-    # TODO show primary genre 
+    # TODO show primary genre
 
     def __str__(self):
         return self.title
@@ -94,24 +97,6 @@ class Podcast(models.Model):
         if self.artworkUrl == bad_url or self.genre == bad_genre:
             self.discriminate = True
             self.save()
-
-    def get_ranks(self):
-        orders = Order.objects.filter(podcast__podid=self.podid, chart__provider='dopepod')
-
-        if self.genre.supergenre:
-            genre = self.genre.supergenre
-        else:
-            genre = self.genre
-        language = self.language
-
-        try:
-            self.genre_rank = orders.get(chart__genre=genre, chart__language=None).position
-        except Order.DoesNotExist:
-            pass
-        try:
-            self.language_rank = orders.get(chart__genre=None, chart__language=language).position
-        except Order.DoesNotExist:
-            pass
 
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
@@ -313,43 +298,6 @@ class Podcast(models.Model):
         except KeyError:
             logger.error('Missing data: ', feedUrl)
 
-class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
-    last_updated = models.DateTimeField(null=True, default=None)
-    new_episodes = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ('podcast__title',)
-
-    def update(self):
-        self.last_updated = timezone.now()
-
-    def get_subscriptions(user):
-        subscriptions = Subscription.objects.filter(user=user)
-        if subscriptions.count() == 1:
-            results_header = str(subscriptions.count()) + ' subscription'
-        else:
-            results_header = str(subscriptions.count()) + ' subscriptions'
-
-        results = {}
-        results['podcasts'] = subscriptions
-        results['header'] = results_header
-        results['view'] = 'subscriptions'
-        results['subscriptions'] = True
-        results['extra_options'] = True
-        return results
-
-class Chart(models.Model):
-    podcasts = models.ManyToManyField(Podcast, through='Order')
-    size = models.IntegerField(default=0)
-    provider = models.CharField(max_length=16)
-    genre = models.ForeignKey('podcasts.Genre', null=True, default=None, on_delete=models.PROTECT)
-    language = models.ForeignKey('podcasts.Language', null=True, default=None, on_delete=models.PROTECT)
-
-    def get_providers():
-        return Chart.objects.all().distinct('provider').values_list('provider', flat=True)
-
     def set_charts():
         """
         sets genre_rank and global_rank for top ranking podcasts
@@ -360,57 +308,54 @@ class Chart(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        languages = list(Language.objects.all())
-        languages.append(None)
+        # set ranks to None
+        for podcast in Podcast.objects.all():
+            podcast.itunes_rank = None
+            podcast.itunes_genre_rank = None
+            podcast.rank = None
+            podcast.genre_rank = None
+            podcast.language_rank = None
+            podcast.save()
 
-        itunes_charts = {}
-
-        for language in languages:
-            for genre in genres:
-                if language:
-                    itunes_charts = []
-                else:
-                    itunes_charts = Chart.parse_itunes_charts(genre)
-                    if itunes_charts:
-                        for podcast in itunes_charts:
-                            podcast.bump = True
-
-                podcasts = Podcast.objects.all()
+        for genre in genres:
+            # list of episodes parsed from itunes charts
+            podcasts = Podcast.parse_itunes_charts(genre)
+            for i, podcast in enumerate(podcasts, start=1):
                 if genre:
-                    podcasts = podcasts.filter(
-                        Q(genre=genre) |
-                        Q(genre__supergenre=genre)
-                    )
-                if language:
-                    podcasts = podcasts.filter(language=language)
-                dopepod_charts = podcasts.order_by(
-                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', '-bump'
+                    podcast.itunes_genre_rank = i
+                    podcast.save()
+                else:
+                    podcast.itunes_rank = i
+                    podcast.save()
+
+            podcasts = Podcast.objects.all()
+            if genre:
+                podcasts = podcasts.filter(
+                    Q(genre=genre) |
+                    Q(genre__supergenre=genre)
+                ).order_by(
+                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
+                )
+            else:
+                podcasts = podcasts.order_by(
+                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
                 )
 
-                providers = [('dopepod', dopepod_charts), ('itunes', itunes_charts)]
-                for provider, podcasts in providers:
-                    if podcasts:
-                        size = len(podcasts)
-                        chart, created = Chart.objects.update_or_create(
-                            provider=provider,
-                            genre=genre,
-                            language=language,
-                            defaults={
-                                'size': size
-                            },
-                        )
+            for i, podcast in enumerate(podcasts, start=1):
+                if genre:
+                    podcast.genre_rank = i
+                    podcast.save()
+                else:
+                    podcast.rank = i
+                    podcast.save()
 
-                        Order.objects.filter(chart=chart).delete()
-
-                        for position, podcast in enumerate(podcasts, start=1):
-                            Order.objects.create(
-                                chart=chart,
-                                podcast=podcast,
-                                position=position,
-                            )
-                            if not genre and not language and provider == 'dopepod':
-                                podcast.rank = position
-                                podcast.save()
+        for language in Language.objects.all():
+            podcasts = Podcast.objects.filter(language=language).order_by(
+                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
+            )
+            for i, podcast in enumerate(podcasts, start=1):
+                podcast.language_rank = i
+                podcast.save()
 
     def parse_itunes_charts(genre=None):
         """
@@ -423,6 +368,7 @@ class Chart(models.Model):
         }
 
         number = 100
+        podcasts = []
 
         if genre:
             url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
@@ -443,8 +389,6 @@ class Chart(models.Model):
             ns.update(root.nsmap)
             del ns[None]
 
-            podcasts = []
-
             for entry in root.findall('atom:entry', ns):
                 element = entry.find('atom:id', ns)
                 podid = element.xpath('./@im:id', namespaces=ns)[0]
@@ -461,20 +405,17 @@ class Chart(models.Model):
 
         except requests.exceptions.HTTPError as e:
             logger.error('http error', url)
-            return None
         except requests.exceptions.ReadTimeout:
             logger.error('timed out', url)
-            return None
         except requests.exceptions.RetryError:
             logger.error('too many retries:', url)
-            return None
         return podcasts
 
     def cache_charts():
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        for provider in Chart.get_providers():
+        for provider in ['dopepod', 'itunes']:
             if provider == 'dopepod':
                 languages = list(Language.objects.all())
                 languages.append(None)
@@ -482,7 +423,7 @@ class Chart(models.Model):
                 languages = [None]
             for language in languages:
                 for genre in genres:
-                    Chart.get_charts(provider, genre, language, True)
+                    Podcast.get_charts(provider, genre, language, True)
 
     def get_charts(provider='dopepod', genre=None, language=None, force_cache=False):
         cachestring = ''
@@ -496,23 +437,25 @@ class Chart(models.Model):
         if results and not force_cache:
             return results
         else:
-            podcasts = []
             genres = Genre.get_primary_genres()
+            podcasts = Podcast.objects.all()
             if provider == 'dopepod':
                 languages = Language.objects.all()
+                if not genre and not language:
+                    podcasts = podcasts.order_by('rank')
+                if genre:
+                    podcasts = podcasts.filter(genre=genre)
+                    if not language:
+                        podcasts = podcasts.order_by('genre_rank')
+                if language:
+                    podcasts = podcasts.filter(language=language).order_by('language_rank')
             else:
-                language = None
                 languages = None
-            try:
-                chart = Chart.objects.get(provider=provider, genre=genre, language=language)
-            except Chart.DoesNotExist:
-                chart = None
-
-            orders = Order.objects.filter(chart=chart).order_by('position')[:50]
-            for order in orders:
-                podcast = order.podcast
-                podcast.position = order.position
-                podcasts.append(podcast)
+                if genre:
+                    podcasts = podcasts.filter(genre=genre).order_by('itunes_genre_rank')
+                else:
+                    podcasts = podcasts.order_by('itunes_rank')
+            podcasts = podcasts[:50]
 
             url = '/charts/'
             querystring = {}
@@ -540,7 +483,7 @@ class Chart(models.Model):
             results['drop'] = '-charts'
             results['podcasts'] = podcasts
             results['header'] = 'Top ' + str(len(podcasts)) + ' podcasts' if podcasts else 'N/A'
-            results['providers'] = Chart.get_providers()
+            results['providers'] = ['dopepod', 'itunes']
             results['selected_provider'] = provider
             results['genres'] = genres
             results['selected_genre'] = genre
@@ -552,10 +495,32 @@ class Chart(models.Model):
             cache.add(cachestring, results, 60 * 60 * 24)
             return results
 
-class Order(models.Model):
-    position = models.IntegerField()
-    podcast = models.ForeignKey(Podcast, on_delete=models.PROTECT)
-    chart = models.ForeignKey(Chart, on_delete=models.PROTECT)
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
+    last_updated = models.DateTimeField(null=True, default=None)
+    new_episodes = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('podcast__title',)
+
+    def update(self):
+        self.last_updated = timezone.now()
+
+    def get_subscriptions(user):
+        subscriptions = Subscription.objects.filter(user=user)
+        if subscriptions.count() == 1:
+            results_header = str(subscriptions.count()) + ' subscription'
+        else:
+            results_header = str(subscriptions.count()) + ' subscriptions'
+
+        results = {}
+        results['podcasts'] = subscriptions
+        results['header'] = results_header
+        results['view'] = 'subscriptions'
+        results['subscriptions'] = True
+        results['extra_options'] = True
+        return results
 
 class Episode(models.Model):
     pubDate = models.DateTimeField()

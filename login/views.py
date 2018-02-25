@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from allauth.account import views as allauth
-from podcasts.models import Genre, Language, Chart, Subscription, Podcast
+from podcasts.models import Genre, Language, Subscription, Podcast
 import json
 
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
@@ -44,7 +44,7 @@ def login(request):
             else:
                 return render(request, 'splash.html', context, status=400)
         else:
-            context = Chart.get_charts(context)
+            context = Podcast.get_charts(context)
             if response.status_code == 200:
                 return redirect('/')
             else:
@@ -79,7 +79,7 @@ def signup(request):
             else:
                 return render(request, 'splash.html', context, status=400)
         else:
-            context = Chart.get_charts(context)
+            context = Podcast.get_charts(context)
             if response.status_code == 200:
                 return redirect('/')
             else:
@@ -122,7 +122,7 @@ def password_reset(request):
             'view': 'password',
         }
 
-        context = Chart.get_charts(context)
+        context = Podcast.get_charts(context)
 
         if ajax:
             return render(request, 'splash.html', context, status=400)

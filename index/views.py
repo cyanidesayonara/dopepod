@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Chart, Subscription, Podcast, Episode, Played_Episode, Playlist_Episode, Order
+from podcasts.models import Genre, Language, Subscription, Podcast, Episode, Played_Episode, Playlist_Episode
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
@@ -52,7 +52,7 @@ def index(request):
             context['cookie_banner'] = cookie_test(request.session)
 
         last_played = Played_Episode.get_last_played()
-        charts = Chart.get_charts()
+        charts = Podcast.get_charts()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -88,7 +88,7 @@ def charts(request):
         if provider not in providers:
             provider = providers[0]
 
-        charts = Chart.get_charts(provider=provider, genre=genre, language=language)
+        charts = Podcast.get_charts(provider=provider, genre=genre, language=language)
 
         if request.is_ajax():
             context = {
@@ -239,7 +239,7 @@ def search(request):
 
         results['extend'] = True
 
-        charts = Chart.get_charts()
+        charts = Podcast.get_charts()
         last_played = Played_Episode.get_last_played()
 
         context.update({
@@ -268,7 +268,7 @@ def subscriptions(request):
 
         subscriptions['extend'] = True
 
-        charts = Chart.get_charts()
+        charts = Podcast.get_charts()
         last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
@@ -291,7 +291,7 @@ def playlist(request):
 
         playlist['extend'] = True
 
-        charts = Chart.get_charts()
+        charts = Podcast.get_charts()
         last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
@@ -318,8 +318,6 @@ def showpod(request, podid):
             if user.is_authenticated:
                 podcast.is_subscribed(user)
 
-            podcast.get_ranks()
-
             context = {
                 'podcast': podcast,
             }
@@ -327,10 +325,8 @@ def showpod(request, podid):
             if request.is_ajax():
                 return render(request, 'showpod.html', context)
 
-            charts = Chart.get_charts()
-
+            charts = Podcast.get_charts()
             episodes = Episode.get_episodes(podcast)
-
             episodes = Episode.set_new(user, podcast, episodes)
             results = {
                 'episodes': episodes,
@@ -366,7 +362,7 @@ def settings(request):
             if request.is_ajax():
                 return render(request, 'settings.html', context)
 
-            charts = Chart.get_charts()
+            charts = Podcast.get_charts()
             last_played = Played_Episode.get_last_played()
             context.update({
                 'charts': charts,
@@ -414,7 +410,7 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, 'settings.html', context, status=400)
 
-                charts = Chart.get_charts()
+                charts = Podcast.get_charts()
                 last_played = Played_Episode.get_last_played()
                 context.update({
                     'charts': charts,

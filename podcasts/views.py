@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import Podcast, Subscription, Episode, Chart, Played_Episode, Playlist_Episode
+from .models import Podcast, Subscription, Episode, Played_Episode, Playlist_Episode
 import logging
 from datetime import datetime, timedelta
 from django.core import signing
@@ -162,7 +162,7 @@ def add_to_playlist(request):
 
         episodes['extend'] = True
 
-        charts = Chart.get_charts()
+        charts = Podcast.get_charts()
         last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
