@@ -431,23 +431,33 @@ class Podcast(models.Model):
         else:
             genres = Genre.get_primary_genres()
             podcasts = Podcast.objects.all()
+            languages = None
             if provider == 'dopepod':
                 languages = Language.objects.all()
                 if not genre and not language:
                     podcasts = podcasts.order_by('rank')
                 if genre:
-                    podcasts = podcasts.filter(genre=genre)
+                    podcasts = podcasts.filter(
+                        Q(genre=genre) |
+                        Q(genre__supergenre=genre)
+                    )
                     if not language:
                         podcasts = podcasts.order_by('genre_rank')
                 if language:
                     podcasts = podcasts.filter(language=language).order_by('language_rank')
             else:
-                languages = None
                 if genre:
-                    podcasts = podcasts.filter(genre=genre).order_by('itunes_genre_rank')
+                    podcasts = podcasts.filter(
+                        Q(genre=genre) |
+                        Q(genre__supergenre=genre)
+                    ).order_by('itunes_genre_rank')
                 else:
                     podcasts = podcasts.order_by('itunes_rank')
-            podcasts = podcasts[:50]
+            if podcasts:
+                podcasts = podcasts[:50]
+            else:
+                genre = None
+                return Podcast.get_charts(provider, genre, language)
 
             url = '/charts/'
             querystring = {}

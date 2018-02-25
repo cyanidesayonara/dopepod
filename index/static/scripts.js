@@ -50,6 +50,12 @@ function addIcons() {
       $(this).find(".view-icon-list").html("<i class='fas fa-bars'></i>");
     })
   }
+  var back_buttons = $(".results-back");
+  if (back_buttons.length) {
+    back_buttons.each(function() {
+      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
+    })
+  }
   var minimize_buttons = $(".results-minimize");
   if (minimize_buttons.length) {
     minimize_buttons.each(function() {
