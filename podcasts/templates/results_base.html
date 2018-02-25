@@ -42,14 +42,14 @@ dopepod
     <div class="col-12 px-0 clearfix">
       <div class="results-buttons">
         {% if results.view == 'grid' %}
-          <a class="btn-dope view-button view-icon view-icon-grid d-none" href="{{ results.urls.full_url }}&view=list">
+          <a class="btn-dope view-button view-icon view-icon-grid d-none active" href="{{ results.urls.full_url }}&view=list">
             {% if request.is_ajax %}
               <i class="fas fa-th"></i>
             {% else %}
               Grid
             {% endif %}
           </a>
-          <a class="btn-dope view-button view-icon view-icon-list" href="{{ results.urls.full_url }}&view=grid">
+          <a class="btn-dope view-button view-icon view-icon-list active" href="{{ results.urls.full_url }}&view=grid">
             {% if request.is_ajax %}
               <i class="fas fa-bars"></i>
             {% else %}
@@ -57,14 +57,14 @@ dopepod
             {% endif %}
           </a>
         {% elif results.view == 'list' %}
-          <a class="btn-dope view-button view-icon view-icon-grid" href="{{ results.urls.full_url }}&view=grid">
+          <a class="btn-dope view-button view-icon view-icon-grid active" href="{{ results.urls.full_url }}&view=grid">
             {% if request.is_ajax %}
               <i class="fas fa-bars"></i>
             {% else %}
               List
             {% endif %}
           </a>
-          <a class="btn-dope view-button view-icon view-icon-list d-none" href="{{ results.urls.full_url }}&view=list">
+          <a class="btn-dope view-button view-icon view-icon-list d-none active" href="{{ results.urls.full_url }}&view=list">
             {% if request.is_ajax %}
               <i class="fas fa-th"></i>
             {% else %}
