@@ -5,24 +5,17 @@ dopepod
 {% endblock %}
 
 {% block center-stage %}
-<div class="col results color-5-trans">
+<div class="col-12 results color-5-trans">
   <div id="login-wrapper">
     <h1>
       Search for and listen to thousands of free podcasts on
     </h1>
+    {% include 'logo.html' %}
     <div class="splash-errors">
       {{ errors.general }}
       {{ errors.email }}
       {{ errors.password1 }}
       {{ errors.password2 }}
-      <div class="splash-logo noselect color-3">
-        <span class="char char-1">d</span>
-        <span class="char char-2">o</span>
-        <span class="char char-3">p</span>
-        <span class="char char-4">e</span>
-        <span class="char char-5">p</span>
-        <span class="char char-6">o</span>
-      </div>
     </div>
     <div class="tab-content">
       {% if view == 'signup' %}
@@ -50,7 +43,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope login-button">Log in</button>
+                <button type="submit" class="btn-dope login-button active">Log in</button>
               </div>
             </div>
             <div class="form-row">
@@ -85,7 +78,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope signup-button">Sign Up</button>
+                <button type="submit" class="btn-dope signup-button active">Sign Up</button>
               </div>
             </div>
           </form>
@@ -134,7 +127,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope login-button">Log in</button>
+                <button type="submit" class="btn-dope login-button active">Log in</button>
               </div>
             </div>
             <div class="form-row">
@@ -169,7 +162,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope signup-button">Sign up</button>
+                <button type="submit" class="btn-dope signup-button active">Sign up</button>
               </div>
             </div>
           </form>
@@ -218,7 +211,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope login-button">Log in</button>
+                <button type="submit" class="btn-dope login-button active">Log in</button>
               </div>
             </div>
             <div class="form-row">
@@ -253,7 +246,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope signup-button">Sign up</button>
+                <button type="submit" class="btn-dope signup-button active">Sign up</button>
               </div>
             </div>
           </form>
@@ -302,7 +295,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope login-button">Log in</button>
+                <button type="submit" class="btn-dope login-button active">Log in</button>
               </div>
             </div>
             <div class="form-row">
@@ -337,7 +330,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope signup-button">Sign up</button>
+                <button type="submit" class="btn-dope signup-button active">Sign up</button>
               </div>
             </div>
           </form>
