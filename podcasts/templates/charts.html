@@ -1,35 +1,33 @@
-<div class="col">
-  <div class="row">
-    {% for podcast in results.podcasts %}
-      <div class="col-12 charts-box">
-        <div class="charts-result clearfix">
-          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
-            <span class="charts-rank">
-              {{ forloop.counter }}
-            </span>
-            <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg" />
-            <h1>
-              {{ podcast.title }}
-            </h1>
-            <p>
-              <span>by </span>
-              {{ podcast.artist }}
-            </p>
-            <ul>
-              <li>
-                {{ podcast.language }}
-              </li>
-              <li>
-                {% if podcast.genre.supergenre %}
-                  {{ podcast.genre.supergenre }}
-                {% else %}
-                  {{ podcast.genre }}
-                {% endif %}
-              </li>
-            </ul>
-          </a>
-        </div>
+<div class="row">
+  {% for podcast in results.podcasts %}
+    <div class="col-12 charts-box">
+      <div class="charts-result clearfix">
+        <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+          <span class="charts-rank">
+            {{ forloop.counter }}
+          </span>
+          <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg" />
+          <h1>
+            {{ podcast.title }}
+          </h1>
+          <p>
+            <span>by </span>
+            {{ podcast.artist }}
+          </p>
+          <ul>
+            <li>
+              {{ podcast.language }}
+            </li>
+            <li>
+              {% if podcast.genre.supergenre %}
+                {{ podcast.genre.supergenre }}
+              {% else %}
+                {{ podcast.genre }}
+              {% endif %}
+            </li>
+          </ul>
+        </a>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
 </div>
