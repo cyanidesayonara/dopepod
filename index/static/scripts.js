@@ -376,7 +376,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      if (!drop.find("#dashboard-top").length) {
+      if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
         loadResults([url, drop]);
       }
       scrollToTop();
@@ -642,10 +642,10 @@ $(document)
   .on("click", ".showpod-badge", function(e) {
     scrollToTop();
   })
-  .on("click", ".btn-dope, .dopebar-link, #episodes-table tbody tr", function(e) {
+  .on("click", ".btn-dope, .dopebar-link, .index-link, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
-  .on("click", "body, #dopebar-wrapper .dopebar-link", function(e) {
+  .on("click", "body, #dopebar-wrapper .dopebar-link, .index-link", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
   })
   .on("click", "#dopebar", function(e) {
