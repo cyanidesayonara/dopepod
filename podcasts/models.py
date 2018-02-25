@@ -315,7 +315,6 @@ class Podcast(models.Model):
             podcast.rank = None
             podcast.genre_rank = None
             podcast.language_rank = None
-            podcast.save()
 
         for genre in genres:
             # list of episodes parsed from itunes charts
@@ -323,31 +322,24 @@ class Podcast(models.Model):
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
-                    podcast.save()
                 else:
                     podcast.itunes_rank = i
-                    podcast.save()
 
             podcasts = Podcast.objects.all()
             if genre:
                 podcasts = podcasts.filter(
                     Q(genre=genre) |
                     Q(genre__supergenre=genre)
-                ).order_by(
-                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
                 )
-            else:
-                podcasts = podcasts.order_by(
-                    'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
-                )
+            podcasts = podcasts.order_by(
+                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
+            )
 
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.genre_rank = i
-                    podcast.save()
                 else:
                     podcast.rank = i
-                    podcast.save()
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
