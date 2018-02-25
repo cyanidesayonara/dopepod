@@ -498,6 +498,7 @@ class Subscription(models.Model):
 
     def update(self):
         self.last_updated = timezone.now()
+        self.save()
 
     def get_subscriptions(user):
         subscriptions = Subscription.objects.filter(user=user)
@@ -697,15 +698,12 @@ class Played_Episode(Episode):
         self.podcast.plays += 1
         self.podcast.save()
 
-    def get_last_played():
-        return Played_Episode.objects.all()
-
     def played_ago(self):
         ago = timezone.now() - self.played_at
         seconds = ago.total_seconds()
-        days = int(seconds // 86400)
-        hours = int((seconds % 86400) // 3600)
-        minutes = int((seconds % 3600) // 60)
+        days = int(seconds // 60 * 60 * 24)
+        hours = int((seconds % 60 * 60 * 24) // 60 * 60)
+        minutes = int((seconds % 60 * 60) // 60)
         seconds = int(seconds % 60)
         ago = ''
         if days:
@@ -729,6 +727,9 @@ class Playlist_Episode(Episode):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='playlist_episode')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlist_episode')
     added_at = models.DateTimeField(default=timezone.now)
+
+    def delete_from_playlist():
+        Playlist_Episode.objects.filter(user=user).order_by('-added_at')
 
     def get_playlist(user):
         playlist = Playlist_Episode.objects.filter(user=user).order_by('-added_at')
