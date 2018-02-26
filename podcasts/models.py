@@ -308,22 +308,28 @@ class Podcast(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        # set ranks to None
-        for podcast in Podcast.objects.all():
-            podcast.itunes_rank = None
-            podcast.itunes_genre_rank = None
-            podcast.rank = None
-            podcast.genre_rank = None
-            podcast.language_rank = None
-
         for genre in genres:
             # list of episodes parsed from itunes charts
             podcasts = Podcast.parse_itunes_charts(genre)
+
+            # set ranks to None
+            if podcasts:
+                if genre:
+                    for podcast in Podcast.objects.filter(genre=genre):
+                        podcast.itunes_genre_rank = None
+                        podcast.save()
+                else:
+                    for podcast in Podcast.objects.all():
+                        podcast.itunes_rank = None
+                        podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
+                    podcast.save()
                 else:
                     podcast.itunes_rank = i
+                    podcast.save()
 
             podcasts = Podcast.objects.all()
             if genre:
@@ -335,16 +341,33 @@ class Podcast(models.Model):
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
 
+            if podcasts:
+                if genre:
+                    for podcast in Podcast.objects.filter(genre=genre):
+                        podcast.genre_rank = None
+                        podcast.save()
+                else:
+                    for podcast in Podcast.objects.all():
+                        podcast.rank = None
+                        podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.genre_rank = i
+                    podcast.save()
                 else:
                     podcast.rank = i
+                    podcast.save()
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
+            if podcasts:
+                for podcast in Podcast.objects.filter(language=language):
+                    podcast.language_rank = None
+                    podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 podcast.language_rank = i
                 podcast.save()
