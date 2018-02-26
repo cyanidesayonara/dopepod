@@ -157,11 +157,7 @@ def search(request):
         except ValueError:
             page = 1
 
-        explicit = True
-        if user.is_authenticated and not user.profile.show_explicit:
-            explicit = False
-
-        podcasts, num_pages, count = Podcast.search(q, genre, language, explicit, page, show)
+        podcasts, num_pages, count = Podcast.search(q, genre, language, page, show)
 
         if not q:
             results_header = str(count) + ' podcasts'

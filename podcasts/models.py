@@ -81,7 +81,11 @@ class Podcast(models.Model):
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
-    # TODO show primary genre
+    def get_primary_genre(self):
+        return self.genre if self.genre.supergenre == None else self.genre.supergenre
+
+    def get_n_subscribers(self):
+        return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
 
     def __str__(self):
         return self.title
@@ -101,7 +105,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, explicit, page, show):
+    def search(q, genre, language, page, show):
         """
         returns a tuple of (podcasts, num_pages and count) matching search terms
         """
@@ -115,8 +119,6 @@ class Podcast(models.Model):
             cachestring += 'genre=' + genre.url_format()
         if language:
             cachestring += 'language=' + language.url_format()
-        if explicit:
-            cachestring += 'explicit=' + str(explicit)
         if show:
             cachestring += 'show=' + str(show)
 
@@ -126,10 +128,6 @@ class Podcast(models.Model):
             return podcasts_tpl
         else:
             podcasts = Podcast.objects.all()
-
-            # filter by explicit
-            if not explicit:
-                podcasts = podcasts.filter(explicit=False)
 
             # filter by language
             if language:

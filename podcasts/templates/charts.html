@@ -16,14 +16,13 @@
           </p>
           <ul>
             <li>
+              {{ podcast.get_n_subscribers }} subscribers
+            </li>
+            <li>
               {{ podcast.language }}
             </li>
             <li>
-              {% if podcast.genre.supergenre %}
-                {{ podcast.genre.supergenre }}
-              {% else %}
-                {{ podcast.genre }}
-              {% endif %}
+              {{ podcast.get_primary_genre }}
             </li>
           </ul>
         </a>
