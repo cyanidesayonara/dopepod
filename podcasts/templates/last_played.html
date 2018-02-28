@@ -1,37 +1,37 @@
-{% for episode in last_played %}
-<div class="col-12 last-played-box color-5-trans">
-  <div class="last-played-top clearfix">
-    <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-      {% if episode.length %}
+<div class="row">
+  {% for episode in results.episodes %}
+  <div class="col-12 last-played-box">
+    <div class="last-played-result clearfix">
+      <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+        {% if episode.length %}
         <span class="result-length">
           {{ episode.length }}
         </span>
-      {% endif %}
-      <img class="img-fluid" src="https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg" />
-    </a>
-    <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-      <h1>
-        {{ episode.podcast.title }}
-      </h1>
-    </a>
-    <p>
-      {{ episode.title }}
-    </p>
-    <ul>
-      <li>
-        played: {{ episode.played_ago }}
-      </li>
-      <li>
-        released: {{ episode.pubDate|date:'d-m-Y H:i' }}
-      </li>
-    </ul>
-  </div>
-  <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
+        {% endif %}
+        <img class="img-fluid" src="https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg" />
+      </a>
+      <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+        <h1>
+          {{ episode.podcast.title }}
+        </h1>
+      </a>
+      <p>
+        {{ episode.title }}
+      </p>
+      <ul>
+        <li>
+          played: {{ episode.played_ago }}
+        </li>
+        <li>
+          released: {{ episode.pubDate|date:'d-m-Y H:i' }}
+        </li>
+      </ul>
+      <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
       <p>
         {% if episode.description %}
-          {{ episode.description }}
+        {{ episode.description }}
         {% else %}
-          No description
+        No description
         {% endif %}
       </p>
       <div class="last-played-buttons">
@@ -43,21 +43,23 @@
           </button>
         </form>
         {% if user.is_authenticated %}
-          <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope play-button active" type="submit">
-              Add to Playlist
-            </button>
-          </form>
+        <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="signature" value="{{ episode.signature }}" />
+          <button class="btn-dope play-button active" type="submit">
+            Add to Playlist
+          </button>
+        </form>
         {% endif %}
         <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
           Download
         </a>
       </div>
     </div>
-  <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
-    <i class="fas fa-angle-down"></i>
-  </button>
+      <button class="last-played-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
+        <i class="fas fa-angle-down"></i>
+      </button>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-{% endfor %}

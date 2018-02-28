@@ -63,9 +63,12 @@ a:hover {
   display: inline-block;
   transition: all .15s ease-in-out;
 }
-.btn-dope.active {
+.active {
   color: #fff;
   background: rgba(0, 191, 165, 1);
+}
+.active h1 {
+  color: #000;
 }
 .btn-dope:hover, .btn-dope:focus {
   color: #fff;
@@ -1046,14 +1049,14 @@ a:hover {
 }
 
 /* CHARTS */
-.charts-box {
+.charts-box, .last-played-box {
   padding: 10px 10px 0 10px;
 }
 .charts-box a, .result-box a, .playlist-box a {
   color: unset;
   font-weight: unset;
 }
-.charts-result {
+.charts-result, .subscriptions-result, .last-played-result {
   padding: 10px;
   border-radius: .25rem;
   border: 2px solid rgba(0, 191, 165, 0);
@@ -1111,18 +1114,14 @@ a:hover {
 }
 
 /* LAST PLAYED */
-.last-played-box {
+.last-played-result {
+  position: relative;
   padding: 10px;
-  margin-top: 15px;
   border-radius: .25rem;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 5px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 5px;
-  box-shadow: rgba(0,0,0,.3) 0 0 5px;
   border: 2px solid rgba(0, 191, 165, 1);
-}
-.last-played-box h1 {
-  font-size: 20px;
-  margin: 0;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
 }
 .last-played-collapse {
   margin-top: 10px;
@@ -1130,20 +1129,16 @@ a:hover {
 .last-played-collapse p {
   margin: 0;
 }
-.last-played-top ul {
+.last-played-result ul {
   font-size: 12px;
   padding: 0;
   margin: 0;
-  float: left;
   list-style: none;
 }
 .last-played-buttons {
   margin: 10px 40px 0 0;
 }
-.last-played-top {
-  position: relative;
-}
-.last-played-top img {
+.last-played-result img {
   border-radius: .25rem;
   float: left;
   margin-right: 5px;
@@ -1151,7 +1146,7 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
-.last-played-top .result-length {
+.last-played-result .result-length {
   position: absolute;
   top: 5px;
   left: 5px;
@@ -1159,14 +1154,14 @@ a:hover {
   padding: 0 4px;
   background: rgba(0, 0, 0, .5);
 }
-.last-played-top h1 {
+.last-played-result h1 {
   font-size: 16px;
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.last-played-top p {
+.last-played-result p {
   margin-bottom: 3px;
   height: 40px;
   overflow: hidden;
@@ -1175,8 +1170,7 @@ a:hover {
 .last-played-toggle {
   position: absolute;
   bottom: 10px;
-  right: 15px;
-  text-align: center;
+  right: 10px;
   cursor: pointer;
   height: 34px;
   width: 34px;
@@ -1240,13 +1234,13 @@ a:hover {
   float: left;
   margin-right: 5px;
 }
-.subscriptions-box .result-title {
+.subscriptions-box h1 {
   font-size: 16px;
-  height: 36px;
+  height: 38px;
   margin-bottom: 4px;
   overflow: hidden;
 }
-.subscriptions-box .last-updated {
+.subscriptions-box p {
   margin-bottom: 4px;
   font-weight: 400;
   overflow: hidden;

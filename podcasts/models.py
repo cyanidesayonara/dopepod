@@ -748,9 +748,9 @@ class Played_Episode(Episode):
     def played_ago(self):
         ago = timezone.now() - self.played_at
         seconds = ago.total_seconds()
-        days = int(seconds // 60 * 60 * 24)
-        hours = int((seconds % 60 * 60 * 24) // 60 * 60)
-        minutes = int((seconds % 60 * 60) // 60)
+        days = int(seconds // (60 * 60 * 24))
+        hours = int((seconds % (60 * 60 * 24)) // (60 * 60))
+        minutes = int((seconds % (60 * 60)) // 60)
         seconds = int(seconds % 60)
         ago = ''
         if days:
@@ -763,6 +763,19 @@ class Played_Episode(Episode):
             ago += str(seconds) + 's '
         ago += ' ago'
         return ago
+
+    def get_last_played():
+        last_played = Played_Episode.objects.all()
+        if last_played.count() == 1:
+            results_header = str(last_played.count()) + ' episode'
+        else:
+            results_header = str(last_played.count()) + ' episodes'
+
+        results = {}
+        results['episodes'] = last_played
+        results['header'] = results_header
+        results['view'] = 'last_played'
+        return results
 
 @receiver(post_save, sender=Played_Episode)
 def limit_episodes(sender, instance, created, **kwargs):
