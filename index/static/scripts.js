@@ -4,9 +4,6 @@ $(document)
     timeout = 0;
     refreshCookie();
     addIcons();
-    keepAspectRatio()
-    showpodBadge();
-    scrollSpy();
     updateLastPlayed();
     updateCharts();
   })
@@ -50,6 +47,14 @@ function addIcons() {
       $(this).find(".view-icon-list").html("<i class='fas fa-bars'></i>");
     })
   }
+  var view_buttons = $(".episode-buttons");
+  if (view_buttons.length) {
+    view_buttons.each(function() {
+      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle icon'></i>");
+      $(this).find(".playlist-move-up").html("<i class='fas fa-arrow-circle-up'></i>");
+      $(this).find(".playlist-move-down").html("<i class='fas fa-arrow-circle-down'></i>");
+    })
+  }
   var back_buttons = $(".results-back");
   if (back_buttons.length) {
     back_buttons.each(function() {
@@ -73,23 +78,6 @@ function addIcons() {
     back_buttons.each(function() {
       $(this).html("<i class='fas fa-arrow-circle-left'></i>");
     })
-  }
-}
-
-function scrollSpy() {
-  $(window).scroll(function () {
-    keepAspectRatio();
-    showpodBadge();
-  })
-}
-
-function showpodBadge() {
-  var scroll = $(window).scrollTop();
-  if (scroll > 300) {
-    $(".showpod-image").addClass("showpod-badge");
-  }
-  else {
-    $(".showpod-image").removeClass("showpod-badge");
   }
 }
 
@@ -621,14 +609,6 @@ $(document)
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
     $(".showpod-collapse.show").collapse("hide");
   })
-  .on("shown.bs.collapse", "#dopebar-collapse", function (e) {
-    var top = 60 + $("#dopebar-collapse")[0].clientHeight;
-    $(".showpod-badge").css("top", top + "px");
-  })
-  .on("hidden.bs.collapse", "#dopebar-collapse", function (e) {
-    var top = 60 + $("#dopebar-collapse")[0].clientHeight;
-    $(".showpod-badge").css("top", top + "px");
-  })
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
     var el = $("body");
@@ -638,9 +618,6 @@ $(document)
     else {
       el.addClass("darken");
     }
-  })
-  .on("click", ".showpod-badge", function(e) {
-    scrollToTop();
   })
   .on("click", ".btn-dope, .dopebar-link, .index-link, #episodes-table tbody tr", function(e) {
     $(this).blur();
@@ -655,9 +632,11 @@ $(document)
     var el = $(this);
     if (el.hasClass("active")) {
       el.removeClass("active");
+      el.parent().removeClass("active");
     }
     else {
       el.addClass("active");
+      el.parent().addClass("active");
     }
   })
   .on("click", ".unsubscribe-button", function(e) {

@@ -51,7 +51,7 @@ def index(request):
         if not request.session.get('cookie', None):
             context['cookie_banner'] = cookie_test(request.session)
 
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
         charts = Podcast.get_charts()
         context.update({
             'charts': charts,
@@ -97,7 +97,7 @@ def charts(request):
 
             return render(request, 'results_base.html', context)
 
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -236,7 +236,7 @@ def search(request):
         results['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
 
         context.update({
             'charts': charts,
@@ -265,7 +265,7 @@ def subscriptions(request):
         subscriptions['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -288,7 +288,7 @@ def playlist(request):
         playlist['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -328,7 +328,7 @@ def showpod(request, podid):
                 'episodes': episodes,
             }
 
-            last_played = Played_Episode.objects.all()
+            last_played = Played_Episode.get_last_played()
             context.update({
                 'charts': charts,
                 'results': results,
@@ -359,7 +359,7 @@ def settings(request):
                 return render(request, 'settings.html', context)
 
             charts = Podcast.get_charts()
-            last_played = Played_Episode.objects.all()
+            last_played = Played_Episode.get_last_played()
             context.update({
                 'charts': charts,
                 'last_played': last_played,
@@ -407,7 +407,7 @@ def settings(request):
                     return render(request, 'settings.html', context, status=400)
 
                 charts = Podcast.get_charts()
-                last_played = Played_Episode.objects.all()
+                last_played = Played_Episode.get_last_played()
                 context.update({
                     'charts': charts,
                     'last_played': last_played,

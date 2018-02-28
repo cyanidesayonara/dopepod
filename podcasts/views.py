@@ -42,11 +42,11 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            last_played = Played_Episode.objects.all()
+            last_played = Played_Episode.get_last_played()
             context = {
-                'last_played': last_played,
+                'results': last_played,
             }
-            return render(request, 'last_played.html', context)
+            return render(request, 'results_base.html', context)
         else:
             return redirect('/')
 
@@ -163,7 +163,7 @@ def add_to_playlist(request):
         episodes['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.objects.all()
+        last_played = Played_Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,

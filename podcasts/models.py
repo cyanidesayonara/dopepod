@@ -494,7 +494,7 @@ class Podcast(models.Model):
                     ).order_by('itunes_genre_rank')
                 else:
                     podcasts = podcasts.order_by('itunes_rank')
-            if podcasts and podcasts.count() > 50:
+            if podcasts:
                 podcasts = podcasts[:50]
             else:
                 genre = None
@@ -752,9 +752,9 @@ class Played_Episode(Episode):
     def played_ago(self):
         ago = timezone.now() - self.played_at
         seconds = ago.total_seconds()
-        days = int(seconds // 60 * 60 * 24)
-        hours = int((seconds % 60 * 60 * 24) // 60 * 60)
-        minutes = int((seconds % 60 * 60) // 60)
+        days = int(seconds // (60 * 60 * 24))
+        hours = int((seconds % (60 * 60 * 24)) // (60 * 60))
+        minutes = int((seconds % (60 * 60)) // 60)
         seconds = int(seconds % 60)
         ago = ''
         if days:
@@ -768,10 +768,19 @@ class Played_Episode(Episode):
         ago += ' ago'
         return ago
 
+    def get_last_played():
+        last_played = Played_Episode.objects.all()
+
+        results = {}
+        results['episodes'] = last_played
+        results['header'] = 'Last played'
+        results['view'] = 'last_played'
+        return results
+
 @receiver(post_save, sender=Played_Episode)
 def limit_episodes(sender, instance, created, **kwargs):
     if created:
-        wannakeep = Played_Episode.objects.all()[:48]
+        wannakeep = Played_Episode.objects.all()[:50]
         Played_Episode.objects.exclude(pk__in=wannakeep).delete()
 
 class Playlist_Episode(Episode):

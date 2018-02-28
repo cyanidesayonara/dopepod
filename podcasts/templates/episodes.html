@@ -66,20 +66,28 @@
               {% endif %}
             </p>
             <div class="episode-buttons">
-              <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
-                {% csrf_token %}
-                <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                <button class="btn-dope play-button active" type="submit">
-                  Play
-                </button>
-              </form>
               {% if user.is_authenticated %}
                 {% if results.view == 'playlist' %}
+                  <a class="btn-dope playlist-remove active" href="#" title="Move Down">
+                    {% if request.is_ajax %}
+                      <i class="fas fa-times-circle icon"></i>
+                    {% else %}
+                      Down
+                    {% endif %}
+                  </a>
                   <a class="btn-dope playlist-move-up active" href="#" title="Move Up">
-                    Move Up
+                    {% if request.is_ajax %}
+                      <i class="fas fa-arrow-circle-up"></i>
+                    {% else %}
+                      Up
+                    {% endif %}
                   </a>
                   <a class="btn-dope playlist-move-down active" href="#" title="Move Down">
-                    Move Down
+                    {% if request.is_ajax %}
+                      <i class="fas fa-arrow-circle-down"></i>
+                    {% else %}
+                      Down
+                    {% endif %}
                   </a>
                 {% else %}
                   <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
@@ -91,6 +99,13 @@
                   </form>
                 {% endif %}
               {% endif %}
+              <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+                {% csrf_token %}
+                <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                <button class="btn-dope play-button active" type="submit">
+                  Play
+                </button>
+              </form>
               <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
                 Download
               </a>

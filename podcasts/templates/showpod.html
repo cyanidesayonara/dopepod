@@ -50,7 +50,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         {% if podcast.rank %}
           <li>
             #{{ podcast.rank }} in
-            <a class="browse-link" href="{% url 'browse' %}">
+            <a class="browse-link" href="/search/?view=grid">
               Podcasts
             </a>
           </li>
@@ -58,7 +58,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         {% if podcast.genre_rank %}
           <li>
             #{{ podcast.genre_rank }} in
-            <a class="browse-link" href="/browse/?genre={{ podcast.get_primary_genre.url_format }}">
+            <a class="browse-link" href="/search/?genre={{ podcast.get_primary_genre.url_format }}&view=grid">
               {{ podcast.get_primary_genre }}
             </a>
           </li>
@@ -66,7 +66,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         {% if podcast.language_rank %}
           <li>
             #{{ podcast.language_rank }} in
-            <a class="browse-link" href="/browse/?language={{ podcast.language.url_format }}">
+            <a class="browse-link" href="/search/?language={{ podcast.language.url_format }}&view=grid">
               {{ podcast.language }}
             </a>
           </li>
