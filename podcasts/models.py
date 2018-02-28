@@ -22,6 +22,7 @@ from django.core.cache import cache
 import re
 import html
 import idna
+import json
 
 ua = UserAgent()
 
@@ -414,6 +415,30 @@ class Podcast(models.Model):
         except requests.exceptions.RetryError:
             logger.error('too many retries:', url)
         return podcasts
+
+        # xml parser for backup
+            # ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            #         'atom': 'http://www.w3.org/2005/Atom',
+            #         'im': 'http://itunes.apple.com/rss',
+            # }
+            #
+            # # delete None from namespaces, use atom instead
+            # ns.update(root.nsmap)
+            # del ns[None]
+            #
+            # for entry in root.findall('atom:entry', ns):
+            #     element = entry.find('atom:id', ns)
+            #     podid = element.xpath('./@im:id', namespaces=ns)[0]
+            #
+            #     try:
+            #         podcast = Podcast.objects.get(podid=podid)
+            #     # if podcast don't exists, scrape it and create it
+            #     except Podcast.DoesNotExist:
+            #         logger.error('can\'t get pod, scraping')
+            #         podcast = Podcast.scrape_podcast(podid)
+            #
+            #     if podcast:
+            #         podcasts.append(podcast)
 
     def cache_charts():
         genres = list(Genre.get_primary_genres())
