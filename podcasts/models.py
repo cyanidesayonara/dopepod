@@ -766,14 +766,10 @@ class Played_Episode(Episode):
 
     def get_last_played():
         last_played = Played_Episode.objects.all()
-        if last_played.count() == 1:
-            results_header = str(last_played.count()) + ' episode'
-        else:
-            results_header = str(last_played.count()) + ' episodes'
 
         results = {}
         results['episodes'] = last_played
-        results['header'] = results_header
+        results['header'] = 'Last played'
         results['view'] = 'last_played'
         return results
 
