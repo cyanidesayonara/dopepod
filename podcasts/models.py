@@ -381,9 +381,11 @@ class Podcast(models.Model):
             'User-Agent': str(ua.random)
         }
 
+        # number of chart entries to list, 100 seems to be max
         number = 100
         podcasts = []
 
+        # urls to use
         if genre:
             url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/json'
         else:
@@ -394,6 +396,7 @@ class Podcast(models.Model):
             response.raise_for_status()
             jsonresponse = response.json()
 
+            # iterate thru every entry, extract podid
             for x in jsonresponse['feed']['entry']:
                 podid = x['id']['attributes']['im:id']
 
@@ -401,6 +404,7 @@ class Podcast(models.Model):
                     try:
                         podcast = Podcast.objects.get(podid=podid)
                     # if podcast don't exists, scrape it and create it
+                    # TODO maybe use this to update pods every time
                     except Podcast.DoesNotExist:
                         logger.error('can\'t get pod, scraping')
                         podcast = Podcast.scrape_podcast(podid)
