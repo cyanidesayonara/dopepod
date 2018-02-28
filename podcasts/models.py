@@ -22,6 +22,7 @@ from django.core.cache import cache
 import re
 import html
 import idna
+import json
 
 ua = UserAgent()
 
@@ -81,7 +82,11 @@ class Podcast(models.Model):
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
-    # TODO show primary genre
+    def get_primary_genre(self):
+        return self.genre if self.genre.supergenre == None else self.genre.supergenre
+
+    def get_n_subscribers(self):
+        return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
 
     def __str__(self):
         return self.title
@@ -101,7 +106,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, explicit, page, show):
+    def search(q, genre, language, page, show):
         """
         returns a tuple of (podcasts, num_pages and count) matching search terms
         """
@@ -115,8 +120,6 @@ class Podcast(models.Model):
             cachestring += 'genre=' + genre.url_format()
         if language:
             cachestring += 'language=' + language.url_format()
-        if explicit:
-            cachestring += 'explicit=' + str(explicit)
         if show:
             cachestring += 'show=' + str(show)
 
@@ -126,10 +129,6 @@ class Podcast(models.Model):
             return podcasts_tpl
         else:
             podcasts = Podcast.objects.all()
-
-            # filter by explicit
-            if not explicit:
-                podcasts = podcasts.filter(explicit=False)
 
             # filter by language
             if language:
@@ -308,22 +307,28 @@ class Podcast(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        # set ranks to None
-        for podcast in Podcast.objects.all():
-            podcast.itunes_rank = None
-            podcast.itunes_genre_rank = None
-            podcast.rank = None
-            podcast.genre_rank = None
-            podcast.language_rank = None
-
         for genre in genres:
             # list of episodes parsed from itunes charts
             podcasts = Podcast.parse_itunes_charts(genre)
+
+            # set ranks to None
+            if podcasts:
+                if genre:
+                    for podcast in Podcast.objects.filter(genre=genre):
+                        podcast.itunes_genre_rank = None
+                        podcast.save()
+                else:
+                    for podcast in Podcast.objects.all():
+                        podcast.itunes_rank = None
+                        podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
+                    podcast.save()
                 else:
                     podcast.itunes_rank = i
+                    podcast.save()
 
             podcasts = Podcast.objects.all()
             if genre:
@@ -335,16 +340,33 @@ class Podcast(models.Model):
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
 
+            if podcasts:
+                if genre:
+                    for podcast in Podcast.objects.filter(genre=genre):
+                        podcast.genre_rank = None
+                        podcast.save()
+                else:
+                    for podcast in Podcast.objects.all():
+                        podcast.rank = None
+                        podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.genre_rank = i
+                    podcast.save()
                 else:
                     podcast.rank = i
+                    podcast.save()
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
+            if podcasts:
+                for podcast in Podcast.objects.filter(language=language):
+                    podcast.language_rank = None
+                    podcast.save()
+
             for i, podcast in enumerate(podcasts, start=1):
                 podcast.language_rank = i
                 podcast.save()
@@ -363,37 +385,38 @@ class Podcast(models.Model):
         podcasts = []
 
         if genre:
-            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/xml'
+            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/json'
         else:
-            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/xml'
+            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/json'
 
         try:
             response = session.get(url, headers=headers, timeout=10)
             response.raise_for_status()
-            root = etree.XML(response.content)
+            root = json.loads(response.content)
+            print(root)
 
-            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-                    'atom': 'http://www.w3.org/2005/Atom',
-                    'im': 'http://itunes.apple.com/rss',
-            }
-
-            # delete None from namespaces, use atom instead
-            ns.update(root.nsmap)
-            del ns[None]
-
-            for entry in root.findall('atom:entry', ns):
-                element = entry.find('atom:id', ns)
-                podid = element.xpath('./@im:id', namespaces=ns)[0]
-
-                try:
-                    podcast = Podcast.objects.get(podid=podid)
-                # if podcast don't exists, scrape it and create it
-                except Podcast.DoesNotExist:
-                    logger.error('can\'t get pod, scraping')
-                    podcast = Podcast.scrape_podcast(podid)
-
-                if podcast:
-                    podcasts.append(podcast)
+            # ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            #         'atom': 'http://www.w3.org/2005/Atom',
+            #         'im': 'http://itunes.apple.com/rss',
+            # }
+            #
+            # # delete None from namespaces, use atom instead
+            # ns.update(root.nsmap)
+            # del ns[None]
+            #
+            # for entry in root.findall('atom:entry', ns):
+            #     element = entry.find('atom:id', ns)
+            #     podid = element.xpath('./@im:id', namespaces=ns)[0]
+            #
+            #     try:
+            #         podcast = Podcast.objects.get(podid=podid)
+            #     # if podcast don't exists, scrape it and create it
+            #     except Podcast.DoesNotExist:
+            #         logger.error('can\'t get pod, scraping')
+            #         podcast = Podcast.scrape_podcast(podid)
+            #
+            #     if podcast:
+            #         podcasts.append(podcast)
 
         except requests.exceptions.HTTPError as e:
             logger.error('http error', url)
