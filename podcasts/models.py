@@ -490,7 +490,7 @@ class Podcast(models.Model):
                     ).order_by('itunes_genre_rank')
                 else:
                     podcasts = podcasts.order_by('itunes_rank')
-            if podcasts and podcasts.count() > 50:
+            if podcasts:
                 podcasts = podcasts[:50]
             else:
                 genre = None
@@ -776,7 +776,7 @@ class Played_Episode(Episode):
 @receiver(post_save, sender=Played_Episode)
 def limit_episodes(sender, instance, created, **kwargs):
     if created:
-        wannakeep = Played_Episode.objects.all()[:48]
+        wannakeep = Played_Episode.objects.all()[:50]
         Played_Episode.objects.exclude(pk__in=wannakeep).delete()
 
 class Playlist_Episode(Episode):
