@@ -1148,8 +1148,10 @@ a:hover {
 }
 .last-played-result .result-length {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  top: 15px;
+  left: 15px;
   color: #fff;
   padding: 0 4px;
   background: rgba(0, 0, 0, .5);
