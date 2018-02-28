@@ -453,7 +453,7 @@ class Podcast(models.Model):
                     ).order_by('itunes_genre_rank')
                 else:
                     podcasts = podcasts.order_by('itunes_rank')
-            if podcasts:
+            if podcasts and podcasts.count() > 50:
                 podcasts = podcasts[:50]
             else:
                 genre = None

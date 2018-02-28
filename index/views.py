@@ -51,7 +51,7 @@ def index(request):
         if not request.session.get('cookie', None):
             context['cookie_banner'] = cookie_test(request.session)
 
-        last_played = Played_Episode.get_last_played()
+        last_played = Played_Episode.objects.all()
         charts = Podcast.get_charts()
         context.update({
             'charts': charts,
