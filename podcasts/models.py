@@ -22,7 +22,6 @@ from django.core.cache import cache
 import re
 import html
 import idna
-import json
 
 ua = UserAgent()
 
@@ -106,10 +105,14 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, page, show, view, alphabet, genres, languages):
+    def search(q, genre, language, page, show, view):
         """
         returns a tuple of (podcasts, num_pages and count) matching search terms
         """
+
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
+        languages = Language.objects.all()
+        genres = Genre.get_primary_genres()
 
         cachestring = 'search'
         if q:
@@ -371,7 +374,8 @@ class Podcast(models.Model):
         sets genre_rank and global_rank for top ranking podcasts
         """
 
-        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/xml
+        # TODO parse reviews
+        # reviews https://itunes.apple.com/us/rss/customerreviews/id=xxx/json
 
         genres = list(Genre.get_primary_genres())
         genres.append(None)
@@ -383,21 +387,20 @@ class Podcast(models.Model):
             # set ranks to None
             if podcasts:
                 if genre:
-                    for podcast in Podcast.objects.filter(genre=genre):
+                    for podcast in Podcast.objects.filter(genre=genre).exclude(itunes_genre_rank=None):
                         podcast.itunes_genre_rank = None
                         podcast.save()
                 else:
-                    for podcast in Podcast.objects.all():
+                    for podcast in Podcast.objects.all().exclude(itunes_rank=None):
                         podcast.itunes_rank = None
                         podcast.save()
 
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
-                    podcast.save()
                 else:
                     podcast.itunes_rank = i
-                    podcast.save()
+                podcast.save()
 
             podcasts = Podcast.objects.all()
             if genre:
@@ -409,32 +412,25 @@ class Podcast(models.Model):
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
 
-            if podcasts:
+            for podcast in podcasts:
                 if genre:
-                    for podcast in Podcast.objects.filter(genre=genre):
-                        podcast.genre_rank = None
-                        podcast.save()
+                    podcast.genre_rank = None
                 else:
-                    for podcast in Podcast.objects.all():
-                        podcast.rank = None
-                        podcast.save()
+                    podcast.rank = None
 
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.genre_rank = i
-                    podcast.save()
                 else:
                     podcast.rank = i
-                    podcast.save()
+                podcast.save()
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
                 'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
             )
-            if podcasts:
-                for podcast in Podcast.objects.filter(language=language):
-                    podcast.language_rank = None
-                    podcast.save()
+            for podcast in podcasts:
+                podcast.language_rank = None
 
             for i, podcast in enumerate(podcasts, start=1):
                 podcast.language_rank = i
@@ -489,30 +485,6 @@ class Podcast(models.Model):
             logger.error('too many retries:', url)
         return podcasts
 
-        # xml parser for backup
-            # ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-            #         'atom': 'http://www.w3.org/2005/Atom',
-            #         'im': 'http://itunes.apple.com/rss',
-            # }
-            #
-            # # delete None from namespaces, use atom instead
-            # ns.update(root.nsmap)
-            # del ns[None]
-            #
-            # for entry in root.findall('atom:entry', ns):
-            #     element = entry.find('atom:id', ns)
-            #     podid = element.xpath('./@im:id', namespaces=ns)[0]
-            #
-            #     try:
-            #         podcast = Podcast.objects.get(podid=podid)
-            #     # if podcast don't exists, scrape it and create it
-            #     except Podcast.DoesNotExist:
-            #         logger.error('can\'t get pod, scraping')
-            #         podcast = Podcast.scrape_podcast(podid)
-            #
-            #     if podcast:
-            #         podcasts.append(podcast)
-
     def cache_charts():
         genres = list(Genre.get_primary_genres())
         genres.append(None)
@@ -555,14 +527,14 @@ class Podcast(models.Model):
                         podcasts = podcasts.order_by('genre_rank')
                 if language:
                     podcasts = podcasts.filter(language=language).order_by('language_rank')
-            else:
+            if provider == 'itunes':
                 if genre:
-                    podcasts = podcasts.filter(
+                    podcasts = podcasts.exclude(itunes_genre_rank=None).filter(
                         Q(genre=genre) |
                         Q(genre__supergenre=genre)
                     ).order_by('itunes_genre_rank')
                 else:
-                    podcasts = podcasts.order_by('itunes_rank')
+                    podcasts = podcasts.exclude(itunes_rank=None).order_by('itunes_rank')
             if podcasts:
                 podcasts = podcasts[:50]
             else:
@@ -594,7 +566,7 @@ class Podcast(models.Model):
             results = {}
             results['drop'] = '-charts'
             results['podcasts'] = podcasts
-            results['header'] = 'Top ' + str(len(podcasts)) + ' podcasts' if podcasts else 'N/A'
+            results['header'] = 'Top ' + str(len(podcasts)) + ' podcasts'
             results['providers'] = ['dopepod', 'itunes']
             results['selected_provider'] = provider
             results['genres'] = genres

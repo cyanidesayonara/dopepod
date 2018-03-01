@@ -119,9 +119,6 @@ def search(request):
 
     if request.method == 'GET':
         user = request.user
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
-        languages = Language.objects.all()
-        genres = Genre.get_primary_genres()
 
         q = request.GET.get('q', None)
         if q:
@@ -132,14 +129,14 @@ def search(request):
         genre = request.GET.get('genre', None)
         if genre:
             try:
-                genre = genres.get(name=genre)
+                genre = Genre.objects.get(name=genre)
             except Genre.DoesNotExist:
                 genre = None
 
         language = request.GET.get('language', None)
         if language:
             try:
-                language = languages.get(name=language)
+                language = Language.objects.get(name=language)
             except Language.DoesNotExist:
                 language = None
 
@@ -154,7 +151,7 @@ def search(request):
 
         show = 100
 
-        results = Podcast.search(q, genre, language, page, show, view, alphabet, genres, languages)
+        results = Podcast.search(q, genre, language, page, show, view)
 
         context = {
             'results': results,
@@ -183,15 +180,15 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        subscriptions = Subscription.get_subscriptions(user)
+        results = Subscription.get_subscriptions(user)
 
         context = {
-            'results': subscriptions,
+            'results': results,
         }
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
-        subscriptions['extend'] = True
+        results['extend'] = True
 
         charts = Podcast.get_charts()
         last_played = Played_Episode.get_last_played()
