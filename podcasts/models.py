@@ -389,15 +389,18 @@ class Podcast(models.Model):
                 if genre:
                     for podcast in Podcast.objects.filter(genre=genre).exclude(itunes_genre_rank=None):
                         podcast.itunes_genre_rank = None
+                        podcast.save()
                 else:
                     for podcast in Podcast.objects.all().exclude(itunes_rank=None):
                         podcast.itunes_rank = None
+                        podcast.save()
 
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
                 else:
                     podcast.itunes_rank = i
+                podcast.save()
 
             podcasts = Podcast.objects.all()
             if genre:
@@ -413,6 +416,7 @@ class Podcast(models.Model):
                     podcast.genre_rank = i
                 else:
                     podcast.rank = i
+                podcast.save()
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
