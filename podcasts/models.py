@@ -106,12 +106,12 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, page, show):
+    def search(q, genre, language, page, show, view, alphabet, genres, languages):
         """
         returns a tuple of (podcasts, num_pages and count) matching search terms
         """
 
-        cachestring = ''
+        cachestring = 'search'
         if q:
             cachestring += 'q=' + q
         if page:
@@ -123,10 +123,10 @@ class Podcast(models.Model):
         if show:
             cachestring += 'show=' + str(show)
 
-        podcasts_tpl = cache.get(cachestring)
+        results = cache.get(cachestring)
 
-        if podcasts_tpl:
-            return podcasts_tpl
+        if results:
+            return results
         else:
             podcasts = Podcast.objects.all()
 
@@ -168,9 +168,78 @@ class Podcast(models.Model):
             num_pages = int(count / show) + (count % show > 0)
             if end > count:
                 end = count
-            podcasts_tpl = (podcasts[start:end], num_pages, count)
-            cache.set(cachestring, podcasts_tpl, 60 * 60 * 24)
-            return podcasts_tpl
+
+            if not q:
+                results_header = str(count) + ' podcasts'
+            elif count == 1:
+                results_header = str(count) + ' result for "' + q + '"'
+            else:
+                results_header = str(count) + ' results for "' + q + '"'
+
+            url = '/search/'
+            querystring = {}
+            urls = {}
+
+            if q:
+                querystring['q'] = q
+            if genre:
+                querystring['genre'] = genre
+            if language:
+                querystring['language'] = language
+            if view:
+                querystring['view'] = view
+
+            if q or genre or language:
+                querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
+                urls['q_url'] = url + '?' + urlencode(querystring_wo_q)
+
+                querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
+                urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
+
+                querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
+                urls['language_url'] = url + '?' + urlencode(querystring_wo_language)
+
+                urls['full_url'] = url + '?' + urlencode(querystring)
+            else:
+                urls['q_url'] = url + '?'
+                urls['genre_url'] = url + '?'
+                urls['language_url'] = url + '?'
+                urls['full_url'] = url + '?'
+
+            results = {}
+            if num_pages > 1:
+                pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= num_pages else num_pages) + 1)
+                results['pagination'] = {
+                    'start': True if page != 1 else False,
+                    'pages': pages,
+                    'page': page,
+                    'end': True if page != num_pages else False,
+                }
+
+            results['alphabet'] = alphabet
+            results['podcasts'] = podcasts[:show]
+            results['num_pages'] = num_pages
+            results['count'] = count
+            one = show // 4
+            two = show // 2
+            three = show // 2 + show // 4
+            results['podcasts1'] = results['podcasts'][:one]
+            results['podcasts2'] = results['podcasts'][one:two]
+            results['podcasts3'] = results['podcasts'][two:three]
+            results['podcasts4'] = results['podcasts'][three:]
+
+            results['header'] = results_header
+            results['selected_q'] = q
+            results['selected_genre'] = genre
+            results['selected_language'] = language
+            results['genres'] = genres
+            results['languages'] = languages
+            results['view'] = view
+            results['urls'] = urls
+            results['extra_options'] = True
+
+            cache.set(cachestring, results, 60 * 60 * 24)
+            return results
 
     def subscribe_or_unsubscribe(self, user):
         """
@@ -459,7 +528,7 @@ class Podcast(models.Model):
                     Podcast.get_charts(provider, genre, language, True)
 
     def get_charts(provider='dopepod', genre=None, language=None, force_cache=False):
-        cachestring = ''
+        cachestring = 'charts'
         if provider:
             cachestring += 'provider=' + provider
         if genre:

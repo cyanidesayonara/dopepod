@@ -118,8 +118,8 @@ def search(request):
     """
 
     if request.method == 'GET':
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
         user = request.user
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
         languages = Language.objects.all()
         genres = Genre.get_primary_genres()
 
@@ -145,87 +145,16 @@ def search(request):
 
         view = request.GET.get('view', None)
         if not view:
-            if q and len(q) > 1:
-                view = 'grid'
-            else:
-                view = 'list'
-
-        show = 100
+            view = 'grid'
 
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
 
-        podcasts, num_pages, count = Podcast.search(q, genre, language, page, show)
+        show = 100
 
-        if not q:
-            results_header = str(count) + ' podcasts'
-        elif count == 1:
-            results_header = str(count) + ' result for "' + q + '"'
-        else:
-            results_header = str(count) + ' results for "' + q + '"'
-
-        url = request.path
-        querystring = {}
-        urls = {}
-
-        if q:
-            querystring['q'] = q
-        if genre:
-            querystring['genre'] = genre
-        if language:
-            querystring['language'] = language
-        if view:
-            querystring['view'] = view
-
-        if q or genre or language:
-            querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
-            urls['q_url'] = url + '?' + urlencode(querystring_wo_q)
-
-            querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-            urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
-
-            querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
-            urls['language_url'] = url + '?' + urlencode(querystring_wo_language)
-
-            urls['full_url'] = url + '?' + urlencode(querystring)
-        else:
-            urls['q_url'] = url + '?'
-            urls['genre_url'] = url + '?'
-            urls['language_url'] = url + '?'
-            urls['full_url'] = url + '?'
-
-        results = {}
-        if num_pages > 1:
-            pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= num_pages else num_pages) + 1)
-            results['pagination'] = {
-                'start': True if page != 1 else False,
-                'pages': pages,
-                'page': page,
-                'end': True if page != num_pages else False,
-            }
-        results['alphabet'] = alphabet
-        results['podcasts'] = podcasts
-        results['num_pages'] = num_pages
-        results['count'] = count
-        one = show // 4
-        two = show // 2
-        three = show // 2 + show // 4
-        results['podcasts1'] = results['podcasts'][:one]
-        results['podcasts2'] = results['podcasts'][one:two]
-        results['podcasts3'] = results['podcasts'][two:three]
-        results['podcasts4'] = results['podcasts'][three:]
-
-        results['header'] = results_header
-        results['selected_q'] = q
-        results['selected_genre'] = genre
-        results['selected_language'] = language
-        results['genres'] = genres
-        results['languages'] = languages
-        results['view'] = view
-        results['urls'] = urls
-        results['extra_options'] = True
+        results = Podcast.search(q, genre, language, page, show, view, alphabet, genres, languages)
 
         context = {
             'results': results,

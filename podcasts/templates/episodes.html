@@ -68,11 +68,11 @@
             <div class="episode-buttons">
               {% if user.is_authenticated %}
                 {% if results.view == 'playlist' %}
-                  <a class="btn-dope playlist-remove active" href="#" title="Move Down">
+                  <a class="btn-dope playlist-remove active" href="#" title="Remove">
                     {% if request.is_ajax %}
                       <i class="fas fa-times-circle icon"></i>
                     {% else %}
-                      Down
+                      Remove
                     {% endif %}
                   </a>
                   <a class="btn-dope playlist-move-up active" href="#" title="Move Up">

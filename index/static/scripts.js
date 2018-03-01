@@ -8,14 +8,6 @@ $(document)
     updateCharts();
   })
 
-function keepAspectRatio() {
-  if ($("#showpod-l").length) {
-    var scroll = $(window).scrollTop();
-    var width = $("#showpod-l")[0].clientWidth;
-    $("#showpod-l").css("min-height", width - 30);
-  }
-}
-
 function updateLastPlayed() {
   setInterval(function() {
     var url = "/last_played/";

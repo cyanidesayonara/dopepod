@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^charts/$', index.charts, name="charts"),
     url(r'^last_played/$', podcasts.last_played, name="last_played"),
     url(r'^search/$', index.search, name='search'),
-    url(r'^browse/$', index.search, name='browse'),
     url(r'^subscriptions/$', index.subscriptions, name='subscriptions'),
     url(r'^showpod/(?P<podid>\d+)/$', index.showpod, name='showpod'),
     url(r'^episodes/(?P<podid>\d+)/$', podcasts.episodes, name='episodes'),
