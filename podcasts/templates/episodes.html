@@ -22,7 +22,11 @@
     {% for episode in results.episodes %}
       <tr class="hover toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
         <th scope="row">
-          {{ forloop.revcounter }}
+          {% if results.view == 'playlist' %}
+            {{ forloop.counter }}
+          {% else %}
+            {{ forloop.revcounter }}
+          {% endif %}
         </th>
         <td class="title">
           {% if results.view == 'playlist' %}
@@ -68,41 +72,62 @@
             <div class="episode-buttons">
               {% if user.is_authenticated %}
                 {% if results.view == 'playlist' %}
-                  <a class="btn-dope playlist-remove active" href="#" title="Remove">
-                    {% if request.is_ajax %}
-                      <i class="fas fa-times-circle icon"></i>
-                    {% else %}
-                      Remove
-                    {% endif %}
-                  </a>
-                  <a class="btn-dope playlist-move-up active" href="#" title="Move Up">
-                    {% if request.is_ajax %}
-                      <i class="fas fa-arrow-circle-up"></i>
-                    {% else %}
-                      Up
-                    {% endif %}
-                  </a>
-                  <a class="btn-dope playlist-move-down active" href="#" title="Move Down">
-                    {% if request.is_ajax %}
-                      <i class="fas fa-arrow-circle-down"></i>
-                    {% else %}
-                      Down
-                    {% endif %}
-                  </a>
-                {% else %}
-                  <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
+                  <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
+                    <input type="hidden" name="mode" value="remove" />
+                    <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                    <button class="btn-dope playlist-remove active" type="submit">
+                      {% if request.is_ajax %}
+                        <i class="fas fa-times-circle icon"></i>
+                      {% else %}
+                        Remove
+                      {% endif %}
+                    </button>
+                  </form>
+                  <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="mode" value="up" />
+                    <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                    <button class="btn-dope playlist-move-up active" type="submit">
+                      {% if request.is_ajax %}
+                        <i class="fas fa-arrow-circle-up"></i>
+                      {% else %}
+                        Up
+                      {% endif %}
+                    </button>
+                  </form>
+                  <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="mode" value="down" />
+                    <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                    <button class="btn-dope playlist-move-down active" type="submit">
+                      {% if request.is_ajax %}
+                        <i class="fas fa-arrow-circle-down"></i>
+                      {% else %}
+                        Down
+                      {% endif %}
+                    </button>
+                  </form>
+                {% else %}
+                  <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="mode" value="add" />
                     <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                    <button class="btn-dope play-button active" type="submit">
+                    <button class="btn-dope playlist-add active" type="submit">
                       Add to Playlist
                     </button>
                   </form>
                 {% endif %}
               {% endif %}
-              <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+              <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST" target="_blank">
                 {% csrf_token %}
-                <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                <button class="btn-dope play-button active" type="submit">
+                <input type="hidden" name="mode" value="play" />
+                {% if results.view == 'playlist' %}
+                  <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                {% else %}
+                  <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                {% endif %}
+                <button class="btn-dope playlist-play active" type="submit">
                   Play
                 </button>
               </form>

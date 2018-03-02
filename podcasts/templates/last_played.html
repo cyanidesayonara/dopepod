@@ -15,9 +15,9 @@
           {{ episode.podcast.title }}
         </h1>
       </a>
-      <p>
+      <h2>
         {{ episode.title }}
-      </p>
+      </h2>
       <ul>
         <li>
           played: {{ episode.played_ago }}
@@ -46,21 +46,23 @@
           {% endif %}
         </p>
         <div class="last-played-buttons">
-          <form class="play d-inline" action="{% url 'play' %}" method="POST" target="_blank">
+          <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST" target="_blank">
             {% csrf_token %}
+            <input type="hidden" name="mode" value="play" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope play-button active" type="submit">
+            <button class="btn-dope active" type="submit">
               Play
             </button>
           </form>
           {% if user.is_authenticated %}
-          <form class="add-to-playlist d-inline" action="{% url 'add_to_playlist' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope play-button active" type="submit">
-              Add to Playlist
-            </button>
-          </form>
+            <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="mode" value="add" />
+              <input type="hidden" name="signature" value="{{ episode.signature }}" />
+              <button class="btn-dope active" type="submit">
+                Add to Playlist
+              </button>
+            </form>
           {% endif %}
           <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
             Download

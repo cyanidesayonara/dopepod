@@ -439,11 +439,12 @@ $(document)
     e.preventDefault();
     subscribeOrUnsubscribe(this);
   })
-  .on("click", ".add-to-playlist", function(e) {
+  .on("submit", ".playlist-form", function(e) {
     e.preventDefault();
     var data = $(this).serialize();
     var url = this.action;
     var method = this.method;
+    var mode = $(this).find("input[name=mode]").val();
     $.ajax({
       method: method,
       url: url,
@@ -452,35 +453,26 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
       })
       .done(function(response) {
-        $("#center-stage").html(response);
-      });
-  })
-  // PLAYER
-  // put episode in player
-  .on("click", ".play", function(e) {
-    e.preventDefault();
-    var data = $(this).serialize();
-    var url = this.action;
-    var method = this.method;
-    $.ajax({
-      method: method,
-      url: url,
-      data: data,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-      })
-      .done(function(response) {
-        var player = $("#player");
-        $("#player").removeClass("minimize");
-        player.html(response);
-        updateTitle();
-        // gotta wait a sec here
-        setTimeout(function() {
-          var box = $("#player-title");
-          var text = $("#player-title h1");
-          console.log(box, text)
-          scrollText(box, text);
-        }, 1000);
+        if (mode == "play") {
+          var player = $("#player");
+          player.removeClass("minimize");
+          player.html(response);
+          updateTitle();
+          // gotta wait a sec here
+          setTimeout(function() {
+            var box = $("#player-title");
+            var text = $("#player-title h1");
+            scrollText(box, text);
+          }, 1000);
+        }
+        if (mode == "add") {
+          // TODO "added to playlist"
+        }
+        else {
+          var drop = $("#center-stage");
+          loadResults(["/playlist/", drop]);
+          scrollToTop();
+        }
       });
   })
   // close player

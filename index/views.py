@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
-from podcasts.models import Genre, Language, Subscription, Podcast, Episode, Played_Episode, Playlist_Episode
+from podcasts.models import Genre, Language, Subscription, Podcast, Episode
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
 import json
@@ -51,7 +51,7 @@ def index(request):
         if not request.session.get('cookie', None):
             context['cookie_banner'] = cookie_test(request.session)
 
-        last_played = Played_Episode.get_last_played()
+        last_played = Episode.get_last_played()
         charts = Podcast.get_charts()
         context.update({
             'charts': charts,
@@ -97,7 +97,7 @@ def charts(request):
 
             return render(request, 'results_base.html', context)
 
-        last_played = Played_Episode.get_last_played()
+        last_played = Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -162,7 +162,7 @@ def search(request):
         results['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.get_last_played()
+        last_played = Episode.get_last_played()
 
         context.update({
             'charts': charts,
@@ -191,7 +191,7 @@ def subscriptions(request):
         results['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.get_last_played()
+        last_played = Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -203,18 +203,84 @@ def subscriptions(request):
 def playlist(request):
     if request.method == 'GET':
         user = request.user
-        playlist = Playlist_Episode.get_playlist(user)
+        if user.is_authenticated:
+            playlist = Episode.get_playlist(user)
+
+            context = {
+                'results': playlist,
+            }
+            if request.is_ajax():
+                return render(request, 'results_base.html', context)
+
+            playlist['extend'] = True
+
+            charts = Podcast.get_charts()
+            last_played = Episode.get_last_played()
+            context.update({
+                'charts': charts,
+                'last_played': last_played,
+            })
+
+            return render(request, 'results_base.html', context)
+
+    if request.method == 'POST':
+        user = request.user
+        try:
+            mode = request.POST['mode']
+            if mode == 'play':
+                # returns html5 audio element
+                # POST request in a popup
+                # POST ajax request
+
+                try:
+                    signature = request.POST['signature']
+                    episode = Episode.add(signature, user)
+                except KeyError:
+                    try:
+                        position = int(request.POST['pos']) + 1
+                        episode = Episode.objects.get(user=user, position=position)
+                    except (KeyError, Episode.DoesNotExist):
+                        raise Http404()
+
+                episode.play()
+
+                player = {
+                    'episode': episode,
+                }
+                context = {
+                    'player': player,
+                }
+                return render(request, 'player.html', context)
+            if user.is_authenticated:
+                if mode == 'add':
+                    signature = request.POST['signature']
+                    Episode.add(signature, user)
+                elif mode == 'remove':
+                    pos = int(request.POST['pos'])
+                    Episode.remove(pos, user)
+                elif mode == 'up':
+                    pos = int(request.POST['pos'])
+                    Episode.up(pos, user)
+                elif mode == 'down':
+                    pos = int(request.POST['pos'])
+                    Episode.down(pos, user)
+            else:
+                raise Http404()
+        except (KeyError, TypeError):
+            raise Http404()
+
+        episodes = Episode.get_playlist(user)
 
         context = {
-            'results': playlist,
+            'results': episodes,
         }
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
-        playlist['extend'] = True
+        episodes['extend'] = True
 
         charts = Podcast.get_charts()
-        last_played = Played_Episode.get_last_played()
+        last_played = Episode.get_last_played()
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -254,7 +320,7 @@ def showpod(request, podid):
                 'episodes': episodes,
             }
 
-            last_played = Played_Episode.get_last_played()
+            last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,
                 'results': results,
@@ -285,7 +351,7 @@ def settings(request):
                 return render(request, 'settings.html', context)
 
             charts = Podcast.get_charts()
-            last_played = Played_Episode.get_last_played()
+            last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,
                 'last_played': last_played,
@@ -333,7 +399,7 @@ def settings(request):
                     return render(request, 'settings.html', context, status=400)
 
                 charts = Podcast.get_charts()
-                last_played = Played_Episode.get_last_played()
+                last_played = Episode.get_last_played()
                 context.update({
                     'charts': charts,
                     'last_played': last_played,

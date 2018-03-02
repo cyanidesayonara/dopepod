@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models import Q
+from django.db.models import F, Q, Max
 from lxml import etree, html as lxml_html
 from datetime import time, timedelta, datetime
 from dateutil.parser import parse
@@ -391,7 +391,7 @@ class Podcast(models.Model):
                         podcast.itunes_genre_rank = None
                         podcast.save()
                 else:
-                    for podcast in Podcast.objects.all().exclude(itunes_rank=None):
+                    for podcast in Podcast.objects.exclude(itunes_rank=None):
                         podcast.itunes_rank = None
                         podcast.save()
 
@@ -409,7 +409,7 @@ class Podcast(models.Model):
                     Q(genre__supergenre=genre)
                 )
             podcasts = podcasts.order_by(
-                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
+                'discriminate', '-n_subscribers', '-views', '-plays', 'itunes_rank', 'itunes_genre_rank', 'rank'
             )
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
@@ -420,7 +420,7 @@ class Podcast(models.Model):
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
-                'discriminate', '-n_subscribers', '-views', '-plays', 'rank', 'itunes_rank', 'itunes_genre_rank'
+                'discriminate', '-n_subscribers', '-views', '-plays', 'itunes_rank', 'itunes_genre_rank', 'rank'
             )
             for i, podcast in enumerate(podcasts, start=1):
                 podcast.language_rank = i
@@ -598,6 +598,8 @@ class Subscription(models.Model):
         return results
 
 class Episode(models.Model):
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='episode')
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='episode')
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -606,9 +608,9 @@ class Episode(models.Model):
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
     signature = models.CharField(max_length=5000)
-
-    class Meta:
-        abstract = True
+    added_at = models.DateTimeField(default=timezone.now)
+    played_at = models.DateTimeField(default=None, null=True)
+    position = models.IntegerField(default=None, null=True)
 
     def get_episodes(podcast):
         """
@@ -768,69 +770,146 @@ class Episode(models.Model):
                 pass
         return episodes
 
-class Played_Episode(Episode):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='played_episode')
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='played_episode')
-    played_at = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        ordering = ('-played_at',)
-
-    def play(self):
-        self.podcast.plays += 1
-        self.podcast.save()
-
     def played_ago(self):
-        ago = timezone.now() - self.played_at
-        seconds = ago.total_seconds()
-        days = int(seconds // (60 * 60 * 24))
-        hours = int((seconds % (60 * 60 * 24)) // (60 * 60))
-        minutes = int((seconds % (60 * 60)) // 60)
-        seconds = int(seconds % 60)
-        ago = ''
-        if days:
-            ago += str(days) + 'd '
-        if hours:
-            ago += str(hours) + 'h '
-        if minutes:
-            ago += str(minutes) + 'm '
-        if seconds:
-            ago += str(seconds) + 's '
-        ago += ' ago'
-        return ago
+        if self.played_at:
+            ago = timezone.now() - self.played_at
+            seconds = ago.total_seconds()
+            days = int(seconds // (60 * 60 * 24))
+            hours = int((seconds % (60 * 60 * 24)) // (60 * 60))
+            minutes = int((seconds % (60 * 60)) // 60)
+            seconds = int(seconds % 60)
+            ago = ''
+            if days:
+                ago += str(days) + 'd '
+            if hours:
+                ago += str(hours) + 'h '
+            if minutes:
+                ago += str(minutes) + 'm '
+            if seconds:
+                ago += str(seconds) + 's '
+            ago += ' ago'
+            return ago
 
     def get_last_played():
-        last_played = Played_Episode.objects.all()
-
+        last_played = Episode.objects.exclude(played_at=None).order_by('-played_at',)
         results = {}
         results['episodes'] = last_played
         results['header'] = 'Last played'
         results['view'] = 'last_played'
         return results
 
-@receiver(post_save, sender=Played_Episode)
-def limit_episodes(sender, instance, created, **kwargs):
-    if created:
-        wannakeep = Played_Episode.objects.all()[:50]
-        Played_Episode.objects.exclude(pk__in=wannakeep).delete()
+    def play(self):
+        episodes = Episode.objects.filter(user=self.user).order_by('position')
+        try:
+            for episode in episodes[self.position:]:
+                episode.position = F("position") - 1
+                episode.save()
+        except (IndexError, AssertionError):
+            return
 
-class Playlist_Episode(Episode):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='playlist_episode')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlist_episode')
-    added_at = models.DateTimeField(default=timezone.now)
+        self.podcast.plays = F("plays") + 1
+        self.podcast.save()
+        self.played_at = timezone.now()
+        self.position = None
+        self.user = None
+        self.save()
 
-    def delete_from_playlist():
-        Playlist_Episode.objects.filter(user=user).order_by('-added_at')
+        played_episodes = Episode.objects.exclude(played_at=None).order_by('-played_at')
+        wannakeep = played_episodes[:50]
+        played_episodes.exclude(pk__in=wannakeep).delete()
+
+    def add(signature, user):
+        try:
+            data = signing.loads(signature)
+            podid = data['podid']
+            podcast = Podcast.objects.get(podid=podid)
+            url = data['url']
+            kind = data['type']
+            title = data['title']
+            pubDate = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
+            description = data['description']
+
+            try:
+                length = data['length']
+                t = datetime.strptime(length,"%H:%M:%S")
+                length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+            except (KeyError, ValueError):
+                length = None
+
+            try:
+                size = data['size']
+            except KeyError:
+                size = None
+
+            if user.is_authenticated:
+                position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
+                if position:
+                    position += 1
+                else:
+                    position = 1
+            else:
+                user = None
+                position = None
+
+            return Episode.objects.create(
+                user=user,
+                url=url,
+                kind=kind,
+                title=title,
+                pubDate=pubDate,
+                podcast=podcast,
+                length=length,
+                size=size,
+                description=description,
+                signature=signature,
+                position=position,
+            )
+        except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
+            return
+
+    def remove(pos, user):
+        episodes = Episode.objects.filter(user=user).order_by('position')
+        try:
+            episodes[pos].delete()
+            for episode in episodes[pos:]:
+                episode.position = F("position") - 1
+                episode.save()
+        except (IndexError, AssertionError):
+            return
+
+    def up(pos, user):
+        episodes = Episode.objects.filter(user=user).order_by('position')
+        try:
+            episode1 = episodes[pos - 1]
+            episode2 = episodes[pos]
+            episode1.position = F("position") + 1
+            episode2.position = F("position") - 1
+            episode1.save()
+            episode2.save()
+        except (IndexError, AssertionError):
+            return
+
+    def down(pos, user):
+        episodes = Episode.objects.filter(user=user).order_by('position')
+        try:
+            episode1 = episodes[pos + 1]
+            episode2 = episodes[pos]
+            episode1.position = F("position") - 1
+            episode2.position = F("position") + 1
+            episode1.save()
+            episode2.save()
+        except (IndexError, AssertionError):
+            return
 
     def get_playlist(user):
-        playlist = Playlist_Episode.objects.filter(user=user).order_by('-added_at')
-        if playlist.count() == 1:
-            results_header = str(playlist.count()) + ' episode'
+        episodes = Episode.objects.filter(user=user).order_by('position')
+        if episodes.count() == 1:
+            results_header = str(episodes.count()) + ' episode'
         else:
-            results_header = str(playlist.count()) + ' episodes'
+            results_header = str(episodes.count()) + ' episodes'
 
         results = {}
-        results['episodes'] = playlist
+        results['episodes'] = episodes
         results['header'] = results_header
         results['view'] = 'playlist'
         results['extra_options'] = True
