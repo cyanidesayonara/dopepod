@@ -220,7 +220,7 @@ class Podcast(models.Model):
                 }
 
             results['alphabet'] = alphabet
-            results['podcasts'] = podcasts[:show]
+            results['podcasts'] = podcasts[(page - 1) * show:page * show]
             results['num_pages'] = num_pages
             results['count'] = count
             one = show // 4
