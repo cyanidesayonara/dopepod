@@ -89,12 +89,6 @@ a:hover {
   color: #fff;
   background: rgba(0, 191, 165, 1);
 }
-.btn-dope-disabled, .btn-dope-disabled.active, .btn-dope-disabled:hover, .btn-dope-disabled, .btn-dope-disabled:focus  {
-  color: rgb(46, 46, 46);
-  background: #aaa;
-  box-shadow: none;
-  border: 2px solid #aaa;
-}
 
 /* BOOTSTRAP COLLAPSE */
 .collapsing {
@@ -134,18 +128,8 @@ a:hover {
 
 /* LOADING ANIMATION */
 .results-loading {
-  border: 2px solid rgba(0, 191, 165, 1);
   margin: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
   text-align: center;
-  width: 200px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: .25rem;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 5px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 5px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 5px ;
 }
 .loading {
   margin: auto;
@@ -442,6 +426,9 @@ a:hover {
 }
 #dopebar-collapse .lights-toggle {
   float: right;
+}
+.lights-toggle {
+  margin: 0 5px;
 }
 .dopebar-link  {
   padding: 5px;
@@ -1085,7 +1072,7 @@ a:hover {
   text-align: center;
   height: 34px;
   width: 34px;
-  font-size: 19px;
+  font-size: 19px!important;
   font-weight: 600;
   border-radius: 50%;
   border: 2px solid rgba(0, 191, 165, 1);

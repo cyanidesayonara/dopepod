@@ -14,12 +14,17 @@
           Browse
         </a>
       </li>
+      <li>
+        <a class="dopebar-link charts-link" href="#">
+          Charts
+        </a>
+      </li>
+      <li>
+        <a class="dopebar-link last-played-link" href="#">
+          Last played
+        </a>
+      </li>
       {% if user.is_authenticated %}
-        <li>
-          <a class="dopebar-link index-link" href="/">
-            Dashboard
-          </a>
-        </li>
         <li>
           <a class="dopebar-link subscriptions-link" href="{% url 'subscriptions' %}">
             Subscriptions
@@ -28,17 +33,6 @@
         <li>
           <a class="dopebar-link playlist-link" href="{% url 'playlist' %}">
             Playlist
-          </a>
-        </li>
-      {% else %}
-        <li>
-          <a class="dopebar-link charts-link" href="#">
-            Charts
-          </a>
-        </li>
-        <li>
-          <a class="dopebar-link last-played-link" href="#">
-            Last played
           </a>
         </li>
       {% endif %}
@@ -123,12 +117,17 @@
           Browse
         </a>
       </li>
+      <li>
+        <a class="dopebar-link charts-link" href="#">
+          Charts
+        </a>
+      </li>
+      <li>
+        <a class="dopebar-link last-played-link" href="#">
+          Last played
+        </a>
+      </li>
       {% if user.is_authenticated %}
-        <li>
-          <a class="dopebar-link index-link" href="/">
-            Dashboard
-          </a>
-        </li>
         <li>
           <a class="dopebar-link subscriptions-link" href="{% url 'subscriptions' %}">
             Subscriptions
@@ -153,16 +152,6 @@
           </form>
         </li>
       {% else %}
-        <li>
-          <a class="dopebar-link charts-link" href="#">
-            Charts
-          </a>
-        </li>
-        <li>
-          <a class="dopebar-link last-played-link" href="#">
-            Last played
-          </a>
-        </li>
         <li>
           <a class="dopebar-link ajax-login d-inline-block d-xl-none" href="/?view=login">
             Login
