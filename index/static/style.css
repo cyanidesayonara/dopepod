@@ -1031,7 +1031,7 @@ a:hover {
 }
 
 /* CHARTS */
-.charts-box, .last-played-box {
+.charts-box, .last-played-box, .subscriptions-box {
   padding: 10px 10px 0 10px;
 }
 .charts-box a, .result-box a {
@@ -1212,9 +1212,6 @@ a:hover {
 }
 
 /* SUBSCRIPTIONS */
-.subscriptions-box {
-  padding: 10px;
-}
 .subscriptions-box img {
   float: left;
   margin-right: 5px;

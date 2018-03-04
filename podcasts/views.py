@@ -17,16 +17,8 @@ def episodes(request, podid):
     if request.method == 'GET':
         if request.is_ajax():
             user = request.user
-            try:
-                podcast = Podcast.objects.get(podid=podid)
-            except Podcast.DoesNotExist:
-                raise Http404()
-
-            episodes = Episode.get_episodes(podcast)
-            episodes = Episode.set_new(user, podcast, episodes)
-            results = {
-                'episodes': episodes,
-            }
+            results = Episode.get_episodes(podid)
+            Episode.set_new(user, podid, results['episodes'])
             context = {
                 'results': results,
             }
@@ -62,8 +54,8 @@ def subscribe(request):
         user = request.user
         if user.is_authenticated:
             try:
-                podid = request.POST['podid']
-                podcast = Podcast.objects.get(podid=int(podid))
+                podid = int(request.POST['podid'])
+                podcast = Podcast.objects.get(podid=podid)
                 podcast.subscribe_or_unsubscribe(user)
                 podcast.is_subscribed(user)
             except (ValueError, KeyError, Podcast.DoesNotExist) as e:

@@ -4,6 +4,7 @@ from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast, Episode
 from django.views.decorators.vary import vary_on_headers
 from urllib.parse import urlencode
+from django.db.models import F
 import json
 import logging
 from django.core.cache import cache
@@ -252,6 +253,10 @@ def playlist(request):
                 }
                 return render(request, 'player.html', context)
             if user.is_authenticated:
+                episodes = Episode.get_playlist(user)
+                context = {
+                    'results': episodes,
+                }
                 if mode == 'add':
                     signature = request.POST['signature']
                     Episode.add(signature, user)
@@ -264,16 +269,13 @@ def playlist(request):
                 elif mode == 'down':
                     pos = int(request.POST['pos'])
                     Episode.down(pos, user)
+                else:
+                    raise Http404()
             else:
                 raise Http404()
         except (KeyError, TypeError):
             raise Http404()
 
-        episodes = Episode.get_playlist(user)
-
-        context = {
-            'results': episodes,
-        }
         if request.is_ajax():
             return render(request, 'results_base.html', context)
 
@@ -301,7 +303,7 @@ def showpod(request, podid):
         user = request.user
         try:
             podcast = Podcast.objects.get(podid=podid)
-            podcast.views += 1
+            podcast.views = F('views') + 1
             podcast.save()
             if user.is_authenticated:
                 podcast.is_subscribed(user)
@@ -314,12 +316,8 @@ def showpod(request, podid):
                 return render(request, 'showpod.html', context)
 
             charts = Podcast.get_charts()
-            episodes = Episode.get_episodes(podcast)
-            episodes = Episode.set_new(user, podcast, episodes)
-            results = {
-                'episodes': episodes,
-            }
-
+            results = Episode.get_episodes(podid)
+            Episode.set_new(user, podid, results['episodes'])
             last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,

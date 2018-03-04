@@ -19,14 +19,14 @@ dopepod
         <div class="extra-options">
           <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse" aria-label="Minimize">
             {% if request.is_ajax %}
-              <i class="fas fa-minus-circle icon"></i>
+              <i class="fas fa-minus-circle"></i>
             {% else %}
               -
             {% endif %}
           </a>
           <a class="btn-dope results-close" href="#" aria-label="Close">
             {% if request.is_ajax %}
-              <i class="fas fa-times-circle icon"></i>
+              <i class="fas fa-times-circle"></i>
             {% else %}
               x
             {% endif %}
@@ -126,7 +126,7 @@ dopepod
         <div class="options-group">
           {% if results.selected_q|capfirst in results.alphabet %}
             <a class="btn-dope options-button alphabet-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
-              <i class="fas fa-times-circle icon"></i>
+              <i class="fas fa-times-circle"></i>
             </a>
           {% endif %}
           {% for letter in results.alphabet %}
@@ -148,7 +148,7 @@ dopepod
         <div class="options-group">
           {% if results.selected_genre %}
             <a class="btn-dope options-button nix-button" href="{{ results.urls.genre_url }}">
-              <i class="fas fa-times-circle icon"></i>
+              <i class="fas fa-times-circle"></i>
             </a>
           {% endif %}
           {% for genre in results.genres %}
@@ -166,7 +166,7 @@ dopepod
         <div class="options-group">
           {% if results.selected_language %}
             <a class="btn-dope options-button nix-button" href="{{ results.urls.language_url }}">
-              <i class="fas fa-times-circle icon"></i>
+              <i class="fas fa-times-circle"></i>
             </a>
           {% endif %}
           {% for language in results.languages %}
