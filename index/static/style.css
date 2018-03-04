@@ -44,10 +44,11 @@ a:hover {
 
 /* BUTTONS */
 .btn-dope {
-  font-size: 14px;
+  position: relative;
+  font-size: 14px!important;
   color: inherit;
   border: 2px solid rgba(0, 191, 165, 1);
-  padding: .25rem .5rem;
+  padding: 4px 8px;
   cursor: pointer;
   font-weight: 600;
   background: inherit;
@@ -127,210 +128,112 @@ a:hover {
 }
 
 /* LOADING ANIMATION */
-.results-loading {
-  margin: auto;
-  text-align: center;
-}
 .loading {
+  position: absolute;
+  background: inherit;
   margin: auto;
-  position: relative;
-  font-size: 28px!important;
-  font-weight: 600;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  width: 15px;
-  height: 44px;
+  width: 85%;
+  height: 22px;
 }
 .loading-a-1 {
-  left: -62px;
-  animation: appear .25s ease-in .45s forwards, upFade .5s ease-in 1s forwards;
-  -webkit-animation: appear .25s ease-in .45s forwards, upFade .5s ease-in 1s forwards;
+  left: 0;
+  animation: fade 2s ease-in .45s infinite;
+  -webkit-animation: fade 2s ease-in .45s infinite;
 }
 .loading-a-2 {
-  left: -42px;
-  animation: appear .25s ease-in .3s forwards, Fade .5s ease-in 1.1s forwards;
-  -webkit-animation: appear .25s ease-in .3s forwards, Fade .5s ease-in 1.1s forwards;
+  left: 8px;
+  animation: fade 2s ease-in .3s infinite;
+  -webkit-animation: fade 2s ease-in .3s infinite;
 }
 .loading-a-3 {
-  left: -22px;
-  animation: appear .25s ease-in .15s forwards, downFade .5s ease-in 1.2s forwards;
-  -webkit-animation: appear .25s ease-in .15s forwards, downFade .5s ease-in 1.2s forwards;
+  left: 16px;
+  animation: fade 2s ease-in .15s infinite;
+  -webkit-animation: fade 2s ease-in .15s infinite;
 }
 .loading-a-4 {
-  left: -2px;
-  animation: appear .25s ease-in forwards, Fade .5s ease-in 1.3s forwards;
-  -webkit-animation: appear .25s ease-in forwards, Fade .5s ease-in 1.3s forwards;
+  left: 24px;
+  animation: fade 2s ease-in infinite;
+  -webkit-animation: fade 2s ease-in infinite;
 }
 .loading-a-5 {
-  right: -22px;
-  animation: appear .25s ease-in .15s forwards, downFade .5s ease-in 1.4s forwards;
-  -webkit-animation: appear .25s ease-in .15s forwards, downFade .5s ease-in 1.4s forwards;
+  left: 32px;
+  animation: fade 2s ease-in .15s infinite;
+  -webkit-animation: fade 2s ease-in .15s infinite;
 }
 .loading-a-6 {
-  right: -42px;
-  animation: appear .25s ease-in .3s forwards, Fade .5s ease-in 1.5s forwards;
-  -webkit-animation: appear .25s ease-in .3s forwards, Fade .5s ease-in 1.5s forwards;
+  left: 40px;
+  animation: fade 2s ease-in .3s infinite;
+  -webkit-animation: fade 2s ease-in .3s infinite;
 }
 .loading-a-7 {
-  right: -62px;
-  animation: appear .25s ease-in .45s forwards, upFade .5s ease-in 1.6s forwards;
-  -webkit-animation: appear .25s ease-in .45s forwards, upFade .5s ease-in 1.6s forwards;
+  left: 48px;
+  animation: fade 2s ease-in .45s infinite;
+  -webkit-animation: fade 2s ease-in .45s infinite;
 }
 .loading-b-1 {
-  left: -60px;
-  animation: appear .25s ease-in 1s forwards, disappear .25s ease-in 4s forwards;
-  -webkit-animation: appear .25s ease-in 1s forwards, disappear .25s ease-in 4s forwards;
+  left: 0;
+  animation: fade 2s ease-in 1.45s infinite;
+  -webkit-animation: fade 2s ease-in 1.45s infinite;
 }
 .loading-b-2 {
-  left: -40px;
-  animation: appear .25s ease-in 1.1s forwards, disappear .25s ease-in 4.1s forwards;
-  -webkit-animation: appear .25s ease-in 1.1s forwards, disappear .25s ease-in 4.1s forwards;
+  left: 8px;
+  animation: fade 2s ease-in 1.3s infinite;
+  -webkit-animation: fade 2s ease-in 1.3s infinite;
 }
 .loading-b-3 {
-  left: -20px;
-  animation: appear .25s ease-in 1.2s forwards, disappear .25s ease-in 4.2s forwards;
-  -webkit-animation: appear .25s ease-in 1.2s forwards, disappear .25s ease-in 4.2s forwards;
+  left: 16px;
+  animation: fade 2s ease-in 1.15s infinite;
+  -webkit-animation: fade 2s ease-in 1.15s infinite;
 }
 .loading-b-4 {
-  left: 0;
-  animation: appear .25s ease-in 1.3s forwards, disappear .25s ease-in 4.3s forwards;
-  -webkit-animation: appear .25s ease-in 1.3s forwards, disappear .25s ease-in 4.3s forwards;
+  left: 24px;
+  animation: fade 2s ease-in 1s infinite;
+  -webkit-animation: fade 2s ease-in 1s infinite;
 }
 .loading-b-5 {
-  right: -20px;
-  animation: appear .25s ease-in 1.4s forwards, disappear .25s ease-in 4.2s forwards;
-  -webkit-animation: appear .25s ease-in 1.4s forwards, disappear .25s ease-in 4.2s forwards;
+  left: 32px;
+  animation: fade 2s ease-in 1.15s infinite;
+  -webkit-animation: fade 2s ease-in 1.15s infinite;
 }
 .loading-b-6 {
-  right: -40px;
-  animation: appear .25s ease-in 1.5s forwards, disappear .25s ease-in 4.1s forwards;
-  -webkit-animation: appear .25s ease-in 1.5s forwards, disappear .25s ease-in 4.1s forwards;
+  left: 40px;
+  animation: fade 2s ease-in 1.3s infinite;
+  -webkit-animation: fade 2s ease-in 1.3s infinite;
 }
 .loading-b-7 {
-  right: -60px;
-  animation: appear .25s ease-in 1.6s forwards, disappear .25s ease-in 4s forwards;
-  -webkit-animation: appear .25s ease-in 1.6s forwards, disappear .25s ease-in 4s forwards;
+  left: 48px;
+  animation: fade 2s ease-in 1.45s infinite;
+  -webkit-animation: fade 2s ease-in 1.45s infinite;
 }
 .loading-a {
   position: absolute;
   opacity: 0;
-  top: -2px;
-  height: 36px;
-  font-size: 32px!important;
 }
 .loading-b {
   position: absolute;
   opacity: 0;
-  top: 0;
-  height: 36px;
 }
-.loading-c {
-  display: inline-flex;
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  left: -60px;
-  height: 36px;
-  animation: appear .5s ease-in 5s forwards;
-  -webkit-animation: appear .5s ease-in 5s forwards;
-}
-@keyframes Fade {
+@-webkit-keyframes fade {
   0% {
     opacity: 1;
+
   }
-  50% {
-    opacity: 0;
-  }
-}
-@-webkit-keyframes Fade {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes upFade {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@-webkit-keyframes upFade {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px); /** Chrome & Safari **/
-    -o-transform: translateY(-40px); /** Opera **/
-    -moz-transform: translateY(-40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes downFade {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(40px);
-    -webkit-transform: translateY(40px); /** Chrome & Safari **/
-    -o-transform: translateY(40px); /** Opera **/
-    -moz-transform: translateY(40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@-webkit-keyframes downFade {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(40px);
-    -webkit-transform: translateY(40px); /** Chrome & Safari **/
-    -o-transform: translateY(40px); /** Opera **/
-    -moz-transform: translateY(40px); /** Firefox **/
-  }
-  100% {
-    display: none;
-  }
-}
-@keyframes disappear {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes appear {
-  0% {
+  66% {
     opacity: 0;
   }
   100% {
+    transform: scale(2);
+  }
+}
+@keyframes fade {
+  0% {
     opacity: 1;
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2);
   }
 }
 

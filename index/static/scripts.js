@@ -204,6 +204,9 @@ function loadResults(args) {
       if (callback) {
         callback(args);
       }
+      else {
+        $(".loading").remove();
+      }
       replaceState(url);
     });
 }
@@ -368,8 +371,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      loadResults([url, drop]);
-      scrollToTop();
+      if (!drop.find(".list").length) {
+        loadResults([url, drop]);
+        scrollToTop();
+      }
     }, 250);
   })
   .on("click", ".charts-link", function(e) {
@@ -386,8 +391,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      loadResults([url, drop]);
-      scrollToTop();
+      if (!drop.find(".subscriptions").length) {
+        loadResults([url, drop]);
+        scrollToTop();
+      }
     }, 250);
   })
   .on("click", ".settings-link", function(e) {
@@ -408,8 +415,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      loadResults([url, drop]);
-      scrollToTop();
+      if (!drop.find(".playlist").length) {
+        loadResults([url, drop]);
+        scrollToTop();
+      }
     }, 250);
   })
   // FORMS
@@ -569,13 +578,17 @@ $(document)
       $(this).collapse("toggle");
     })
     $(".view-icon").each(function() {
-      var icon = $(this);
-      if (icon.hasClass("d-none")) {
-        icon.removeClass("d-none");
-      }
-      else {
-        icon.addClass("d-none");
-      }
+      $(this).toggleClass("d-none");
+    });
+  })
+  .on("mouseenter", ".view-button", function() {
+    $(".view-icon").each(function() {
+      $(this).toggleClass("d-none");
+    });
+  })
+  .on("mouseleave", ".view-button", function() {
+    $(".view-icon").each(function() {
+      $(this).toggleClass("d-none");
     });
   })
   // BOOTSTRAP COLLAPSES

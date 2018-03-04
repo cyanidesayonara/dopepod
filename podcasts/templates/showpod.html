@@ -102,10 +102,13 @@ Listen to episodes of {{ podcast.title }} on dopepod
         </li>
       </ul>
       <div class="showpod-options">
-        <a class="btn-dope toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+        <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+          {% if request.is_ajax %}
+            {% include 'loading.html' %}
+          {% endif %}
           Episodes
         </a>
-        <a class="btn-dope toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
+        <a class="btn-dope reviews-button toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
           Reviews
         </a>
       </div>
