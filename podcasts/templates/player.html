@@ -7,10 +7,10 @@
       </a>
       <div id="player-buttons">
         <a class="btn-dope" id="player-minimize" href="#" aria-label="Minimize">
-          <i class="fas fa-minus-circle icon"></i>
+          <i class="fas fa-minus-circle"></i>
         </a>
         <a class="btn-dope" id="player-close" href="#" aria-label="Close">
-          <i class="fas fa-times-circle icon"></i>
+          <i class="fas fa-times-circle"></i>
         </a>
       </div>
       <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
@@ -38,7 +38,7 @@
 <div class="col-12 color-4-trans" id="cookie-banner">
   <h1>This site uses cookies</h1>
   <button class="btn-dope" onclick="cookieBannerClose()" id="cookie-banner-close">
-    <i class="fas fa-times-circle icon"></i>
+    <i class="fas fa-times-circle"></i>
   </button>
 </div>
 {% endif %}

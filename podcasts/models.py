@@ -85,7 +85,8 @@ class Podcast(models.Model):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
 
     def get_n_subscribers(self):
-        return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
+        if type(self.n_subscribers) == int:
+            return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
 
     def __str__(self):
         return self.title
@@ -255,10 +256,10 @@ class Podcast(models.Model):
             user=user,
         )
         if created:
-            self.n_subscribers += 1
+            self.n_subscribers = F('n_subscribers') + 1
         else:
             subscription.delete()
-            self.n_subscribers -= 1
+            self.n_subscribers = F('n_subscribers') - 1
         self.save()
 
     def unsubscribe(self, user):
@@ -272,7 +273,7 @@ class Podcast(models.Model):
             user=user,
         )
         subscription.delete()
-        self.n_subscribers -= 1
+        self.n_subscribers = F('n_subscribers') - 1
         self.save()
 
     def is_subscribed(self, user):
@@ -464,9 +465,6 @@ class Podcast(models.Model):
                         logger.error('can\'t get pod, scraping')
                         podcast = Podcast.scrape_podcast(podid)
 
-                    if podcast:
-                        podcasts.append(podcast)
-
         except requests.exceptions.HTTPError as e:
             logger.error('http error', url)
         except requests.exceptions.ReadTimeout:
@@ -612,15 +610,47 @@ class Episode(models.Model):
     played_at = models.DateTimeField(default=None, null=True)
     position = models.IntegerField(default=None, null=True)
 
-    def get_episodes(podcast):
+    # def count_episodes(podid):
+    #     ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    #         'atom': 'http://www.w3.org/2005/Atom',
+    #         'im': 'http://itunes.apple.com/rss',
+    #     }
+    #
+    #     # useragent for requests
+    #     headers = {
+    #         'User-Agent': str(ua.random)
+    #     }
+    #     count = 0
+    #
+    #     try:
+    #         response = session.get(podcast.feedUrl, headers=headers, timeout=5)
+    #         response.raise_for_status()
+    #         try:
+    #             root = etree.XML(response.content)
+    #             ns.update(root.nsmap)
+    #             tree = root.find('channel')
+    #
+    #             for item in tree.findall('item'):
+    #                 count += 1
+    #         except etree.XMLSyntaxError:
+    #             logger.error('trouble with xml')
+    #     except requests.exceptions.HTTPError as e:
+    #         logger.error(str(e))
+    #     return count
+
+    def get_episodes(podid):
         """
         returns a list of episodes using requests and lxml etree
         """
 
-        episodes = cache.get(podcast.podid)
-        if episodes:
-            return episodes
+        results = cache.get(podid)
+        if results:
+            return results
         else:
+            try:
+                podcast = Podcast.objects.get(podid=podid)
+            except Podcast.DoesNotExist:
+                raise Http404()
             ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
                 'atom': 'http://www.w3.org/2005/Atom',
                 'im': 'http://itunes.apple.com/rss',
@@ -718,7 +748,7 @@ class Episode(models.Model):
                                         except (ValueError, IndexError):
                                             logger.error('can\'t parse length', podcast.feedUrl)
 
-                        episode['podid'] = podcast.podid
+                        episode['podid'] = podid
 
                         # link to episode
                         # enclosure might be missing, have alternatives
@@ -746,23 +776,23 @@ class Episode(models.Model):
 
             except requests.exceptions.HTTPError as e:
                 logger.error(str(e))
-            cache.set(podcast.podid, episodes, 60 * 60)
-            return episodes
+            results = {
+                'episodes': episodes,
+                'view': 'episodes'
+            }
+            cache.set(podid, results, 60 * 60)
+            return results
 
-    def set_new(user, podcast, episodes):
+    def set_new(user, podid, episodes):
         if user.is_authenticated:
             try:
-                subscription = Subscription.objects.get(user=user, podcast=podcast)
+                subscription = Subscription.objects.get(user=user, podcast__podid=podid)
                 i = 0
                 for episode in episodes:
-                    if not subscription.last_updated:
-                        pass
-                    elif subscription.last_updated < episode['pubDate']:
-                        pass
-                    else:
-                        continue
-                    i += 1
-                    episode['is_new'] = True
+                    if not subscription.last_updated or subscription.last_updated < episode['pubDate']:
+                        i += 1
+                        episode['is_new'] = True
+
                 subscription.last_updated = timezone.now()
                 subscription.new_episodes = i
                 subscription.save()
@@ -819,6 +849,15 @@ class Episode(models.Model):
         played_episodes.exclude(pk__in=wannakeep).delete()
 
     def add(signature, user):
+        if user.is_authenticated:
+            position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
+            if position:
+                position += 1
+            else:
+                position = 1
+        else:
+            user = None
+            position = None
         try:
             data = signing.loads(signature)
             podid = data['podid']
@@ -841,16 +880,6 @@ class Episode(models.Model):
             except KeyError:
                 size = None
 
-            if user.is_authenticated:
-                position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
-                if position:
-                    position += 1
-                else:
-                    position = 1
-            else:
-                user = None
-                position = None
-
             return Episode.objects.create(
                 user=user,
                 url=url,
@@ -872,7 +901,7 @@ class Episode(models.Model):
         try:
             episodes[pos].delete()
             for episode in episodes[pos:]:
-                episode.position = F("position") - 1
+                episode.position -= 1
                 episode.save()
         except (IndexError, AssertionError):
             return
@@ -882,8 +911,8 @@ class Episode(models.Model):
         try:
             episode1 = episodes[pos - 1]
             episode2 = episodes[pos]
-            episode1.position = F("position") + 1
-            episode2.position = F("position") - 1
+            episode1.position += 1
+            episode2.position -= 1
             episode1.save()
             episode2.save()
         except (IndexError, AssertionError):
@@ -894,8 +923,8 @@ class Episode(models.Model):
         try:
             episode1 = episodes[pos + 1]
             episode2 = episodes[pos]
-            episode1.position = F("position") - 1
-            episode2.position = F("position") + 1
+            episode1.position -= 1
+            episode2.position += 1
             episode1.save()
             episode2.save()
         except (IndexError, AssertionError):

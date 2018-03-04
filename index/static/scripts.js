@@ -42,7 +42,7 @@ function addIcons() {
   var view_buttons = $(".episode-buttons");
   if (view_buttons.length) {
     view_buttons.each(function() {
-      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle icon'></i>");
+      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle'></i>");
       $(this).find(".playlist-move-up").html("<i class='fas fa-arrow-circle-up'></i>");
       $(this).find(".playlist-move-down").html("<i class='fas fa-arrow-circle-down'></i>");
     })
@@ -465,13 +465,12 @@ $(document)
             scrollText(box, text);
           }, 1000);
         }
-        if (mode == "add") {
+        else if (mode == "add") {
           // TODO "added to playlist"
         }
         else {
           var drop = $("#center-stage");
           loadResults(["/playlist/", drop]);
-          scrollToTop();
         }
       });
   })
