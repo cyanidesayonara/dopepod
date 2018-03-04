@@ -1236,6 +1236,9 @@ a:hover {
 .subscriptions-result.active h1 {
   color: #000;
 }
+.subscriptions-result.active h1:hover {
+  color: #fff;
+}
 .select-subscription {
   float: right;
 }
