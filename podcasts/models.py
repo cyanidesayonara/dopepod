@@ -539,7 +539,7 @@ class Podcast(models.Model):
                 querystring['genre'] = genre
             if language:
                 querystring['language'] = language
-
+            
             querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
             urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
 

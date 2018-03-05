@@ -144,6 +144,10 @@ def search(request):
         view = request.GET.get('view', None)
         if not view:
             view = 'grid'
+            if not q:
+                if not genre:
+                    if not language:
+                        view = 'list'
 
         try:
             page = int(request.GET.get('page', '1'))
