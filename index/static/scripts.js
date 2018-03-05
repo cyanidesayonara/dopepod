@@ -10,17 +10,13 @@ $(document)
 
 function updateLastPlayed() {
   setInterval(function() {
-    var url = "/last_played/";
-    var drop = $("#last-played");
-    loadResults([url, drop]);
+    loadResults(["/last_played/", $("#last-played")]);
   }, 60000);
 }
 
 function updateCharts() {
   setInterval(function() {
-    var url = "/charts/";
-    var drop = $("#charts");
-    loadResults([url, drop]);
+    loadResults(["/charts/", $("#charts")]);
   }, 86400000);
 }
 
@@ -63,12 +59,6 @@ function addIcons() {
   if (close_buttons.length) {
     close_buttons.each(function() {
       $(this).html("<i class='fas fa-times-circle icon'></i>");
-    })
-  }
-  var back_buttons = $(".back-button");
-  if (back_buttons.length) {
-    back_buttons.each(function() {
-      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
     })
   }
 }
@@ -191,7 +181,7 @@ function loadResults(args) {
   checkForXHR(url);
   pushState(url);
   if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    drop.load("/static/loading.html");
+    drop.load("/static/circle-loading.html");
   }
   xhr = $.ajax({
     type: "GET",
@@ -287,11 +277,6 @@ function cookieBannerClose() {
 }
 
 $(document)
-  .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
-    $(".logo-wrapper").children().each(function() {
-      $(this).addClass("logo-final");
-    })
-  })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", ".search-form", function() {
@@ -361,6 +346,9 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
         loadResults([url, drop]);
+      }
+      else {
+        $("#splash-tab").tab("show");
       }
       scrollToTop();
     }, 250);
@@ -510,7 +498,15 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    loadResults([url, drop]);
+    if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
+      loadResults([url, drop]);
+    }
+    else if ($(this).hasClass("ajax-login")) {
+      $("#login-tab").tab("show");
+    }
+    else {
+      $("#signup-tab").tab("show");
+    }
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {

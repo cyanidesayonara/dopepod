@@ -14,7 +14,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
       </div>
     </div>
     <div class="col-12 col-lg-5" id="showpod-c" data-podid="{{ podcast.podid }}">
-      <button class="btn-dope back-button" onclick="window.history.back()">
+      <button class="btn-dope results-back" onclick="window.history.back()">
         <i class="fas fa-arrow-circle-left"></i>
       </button>
       {% if user.is_authenticated %}
@@ -71,9 +71,6 @@ Listen to episodes of {{ podcast.title }} on dopepod
             </a>
           </li>
         {% endif %}
-        <li>
-          Subscribers: {{ podcast.n_subscribers }}
-        </li>
         <li>
           {{ podcast.get_n_subscribers }} subscribers
         </li>
