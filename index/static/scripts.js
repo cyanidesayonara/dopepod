@@ -191,7 +191,7 @@ function loadResults(args) {
   checkForXHR(url);
   pushState(url);
   if (!drop.find(".results-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    drop.load("/static/loading.html");
+    drop.load("/static/circle-loading.html");
   }
   xhr = $.ajax({
     type: "GET",
@@ -287,11 +287,6 @@ function cookieBannerClose() {
 }
 
 $(document)
-  .on("webkitAnimationEnd oanimationend msAnimationEnd animationend", "#nothing", function(e) {
-    $(".logo-wrapper").children().each(function() {
-      $(this).addClass("logo-final");
-    })
-  })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup", ".search-form", function() {
