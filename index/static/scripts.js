@@ -10,17 +10,13 @@ $(document)
 
 function updateLastPlayed() {
   setInterval(function() {
-    var url = "/last_played/";
-    var drop = $("#last-played");
-    loadResults([url, drop]);
+    loadResults(["/last_played/", $("#last-played")]);
   }, 60000);
 }
 
 function updateCharts() {
   setInterval(function() {
-    var url = "/charts/";
-    var drop = $("#charts");
-    loadResults([url, drop]);
+    loadResults(["/charts/", $("#charts")]);
   }, 86400000);
 }
 
@@ -63,12 +59,6 @@ function addIcons() {
   if (close_buttons.length) {
     close_buttons.each(function() {
       $(this).html("<i class='fas fa-times-circle icon'></i>");
-    })
-  }
-  var back_buttons = $(".back-button");
-  if (back_buttons.length) {
-    back_buttons.each(function() {
-      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
     })
   }
 }
@@ -357,6 +347,9 @@ $(document)
       if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
         loadResults([url, drop]);
       }
+      else {
+        $("#splash-tab").tab("show");
+      }
       scrollToTop();
     }, 250);
   })
@@ -505,7 +498,15 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    loadResults([url, drop]);
+    if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
+      loadResults([url, drop]);
+    }
+    else if ($(this).hasClass("ajax-login")) {
+      $("#login-tab").tab("show");
+    }
+    else {
+      $("#signup-tab").tab("show");
+    }
     scrollToTop();
   })
   .on("click", ".password-link", function(e) {

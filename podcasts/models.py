@@ -81,6 +81,15 @@ class Podcast(models.Model):
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['title']),
+            models.Index(fields=['artist']),
+            models.Index(fields=['genre']),
+            models.Index(fields=['language']),
+            models.Index(fields=['rank']),
+        ]
+
     def get_primary_genre(self):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
 
@@ -149,8 +158,8 @@ class Podcast(models.Model):
             if q:
                 if len(q) > 1:
                     podcasts = podcasts.filter(
-                        Q(title__istartswith=q) |
-                        Q(title__icontains=q)
+                        Q(title__icontains=q) |
+                        Q(artist__icontains=q)
                     )
                 else:
                     if q == '#':
@@ -159,10 +168,7 @@ class Podcast(models.Model):
                             query = query | Q(title__istartswith=letter)
                         podcasts = podcasts.exclude(query)
                     else:
-                        podcasts = podcasts.filter(
-                            Q(title__istartswith=q) |
-                            Q(title__istartswith='the ' + q)
-                        )
+                        podcasts = podcasts.filter(title__istartswith=q)
                     podcasts = podcasts.order_by('title')
             podcasts = podcasts.order_by('rank')
 

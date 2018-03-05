@@ -255,9 +255,6 @@ a:hover {
 }
 
 /* OPTIONS BUTTONS */
-.page-button {
-  min-width: 30px;
-}
 .options-collapse {
   margin-top: 10px;
 }
@@ -431,10 +428,7 @@ a:hover {
   margin-top: 10px;
   display: block;
 }
-#login-buttons a {
-  margin: 0 4px;
-}
-#social-buttons {
+.social-buttons {
   margin-top: 10px;
 }
 .error-message {
@@ -475,54 +469,11 @@ a:hover {
   box-shadow: rgba(0,0,0,1) 0 0 5px;
 }
 /* LOGO */
-/* TODO make these look like btn-dope */
 .logo-wrapper {
-  display: block;
-  position: relative;
-  width: 270px;
-  height: 40px;
   margin: auto;
-  padding: 0;
 }
-.logo {
-  position: absolute;
-  color: inherit;
-  top: 4px;
-  min-width: 36px;
-  padding: 2px;
-  padding-top: 0;
-  font-size: 20px;
-  border: 2px solid rgba(0, 191, 165, 0);
-  font-weight: 600;
-  background: inherit;
-  border-radius: .25rem;
-  text-align: center;
-  transition: all .15s ease-in-out
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  transition: all .15s ease-in-out;
-}
-.logo-1 {
-  left: 0px;
-}
-.logo-2 {
-  left: 39px;
-}
-.logo-3 {
-  left: 78px;
-}
-.logo-4 {
-  left: 117px;
-}
-.logo-5 {
-  left: 156px;
-}
-.logo-6 {
-  left: 195px;
-}
-.logo-7 {
-  left: 234px;
+.logo-wrapper > * {
+  cursor: default;
 }
 
 /* DASHBOARD */
@@ -724,10 +675,8 @@ a:hover {
 }
 .results-buttons {
   float: right;
+  margin: 10px 0;
   padding: 0 10px;
-}
-.results-buttons > * {
-  margin-top: 10px;
 }
 .results-back {
   float: left;
@@ -735,6 +684,9 @@ a:hover {
 }
 .extra-options {
   float: right;
+}
+.results-content {
+  min-height: 0;
 }
 .results-collapse {
 }
@@ -747,7 +699,7 @@ a:hover {
 
 /* CHARTS */
 .charts-box, .last-played-box, .subscriptions-box {
-  padding: 10px 10px 0 10px;
+  padding: 0 10px 10px 10px;
 }
 .charts-box a, .result-box a {
   color: unset;
@@ -961,8 +913,8 @@ a:hover {
 }
 .browse-results-list {
   font-size: 14px;
+  margin-bottom: 10px;
   padding-left: 0;
-  margin-bottom: 0;
   list-style: none;
 }
 .browse-results-list li {

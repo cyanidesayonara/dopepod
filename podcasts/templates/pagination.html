@@ -1,26 +1,26 @@
 <div class="col-12 results-pagination">
   {% if results.pagination.start %}
-    <a class="btn-dope page-button" href="{{ results.urls.full_url }}">
+    <a class="btn-dope alphabet-button" href="{{ results.urls.full_url }}">
       <i class="fas fa-angle-double-left"></i>
     </a>
   {% endif %}
   {% for i in results.pagination.pages %}
     {% if results.pagination.page == i %}
-      <button class="btn-dope page-button active">
+      <button class="btn-dope alphabet-button active">
         {{ i }}
       </button>
     {% else %}
       {% if i == 1 %}
-        <a class="btn-dope page-button" href="{{ results.urls.full_url }}">
+        <a class="btn-dope alphabet-button" href="{{ results.urls.full_url }}">
       {% else %}
-        <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ i }}">
+        <a class="btn-dope alphabet-button" href="{{ results.urls.full_url }}&page={{ i }}">
       {% endif %}
         {{ i }}
       </a>
     {% endif %}
   {% endfor %}
   {% if results.pagination.end %}
-    <a class="btn-dope page-button" href="{{ results.urls.full_url }}&page={{ results.num_pages }}">
+    <a class="btn-dope alphabet-button" href="{{ results.urls.full_url }}&page={{ results.num_pages }}">
       <i class="fas fa-angle-double-right"></i>
     </a>
   {% endif %}
