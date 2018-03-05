@@ -991,7 +991,6 @@ a:hover {
   overflow: hidden;
 }
 .results-wrapper {
-  padding: 10px 0;
   border-top: 2px solid rgba(0, 191, 165, 1);
 }
 .results-bar {
@@ -1006,12 +1005,15 @@ a:hover {
   margin: 0;
 }
 .results-pagination {
-  margin-top: 10px;
+  margin: 10px 0;
   padding: 0 10px;
 }
 .results-buttons {
   float: right;
   padding: 0 10px;
+}
+.results-buttons > * {
+  margin-top: 10px;
 }
 .results-back {
   float: left;
@@ -1021,7 +1023,6 @@ a:hover {
   float: right;
 }
 .results-collapse {
-  padding: 10px 0;
 }
 .results-collapse.show {
   display: -ms-flexbox;
