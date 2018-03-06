@@ -7,7 +7,7 @@ dopepod
 {% block center-stage %}
 <div class="col-12 results color-5-trans {{ results.view }}">
   <div class="row results-bar">
-    <div class="col-12 results-header">
+    <div class="col-12 results-header" data-q="{{ results.selected_q }}">
       {% if results.extra_options %}
         <button class="btn-dope results-back" onclick="window.history.back()">
           {% if request.is_ajax %}
@@ -41,34 +41,24 @@ dopepod
   <div class="row collapse show results-wrapper" id="results-collapse{{ results.drop }}">
     <div class="col-12 px-0 clearfix">
       <div class="results-buttons">
-        {% if results.view == 'grid' %}
-          <a class="btn-dope view-button view-icon view-icon-grid d-none active" href="{{ results.urls.full_url }}&view=list">
-            {% if request.is_ajax %}
-              <i class="fas fa-th"></i>
-            {% else %}
-              Grid
-            {% endif %}
-          </a>
-          <a class="btn-dope view-button view-icon view-icon-list active" href="{{ results.urls.full_url }}&view=grid">
-            {% if request.is_ajax %}
-              <i class="fas fa-bars"></i>
-            {% else %}
-              List
-            {% endif %}
-          </a>
-        {% elif results.view == 'list' %}
-          <a class="btn-dope view-button view-icon view-icon-grid active" href="{{ results.urls.full_url }}&view=grid">
-            {% if request.is_ajax %}
-              <i class="fas fa-bars"></i>
-            {% else %}
-              List
-            {% endif %}
-          </a>
-          <a class="btn-dope view-button view-icon view-icon-list d-none active" href="{{ results.urls.full_url }}&view=list">
-            {% if request.is_ajax %}
-              <i class="fas fa-th"></i>
-            {% else %}
-              Grid
+        {% if results.view == 'grid' or results.view == 'list' %}
+          <a class="btn-dope view-button active" href="{{ results.urls.full_url }}">
+            {% if results.view == 'grid' %}
+              {% if request.is_ajax %}
+                <i class="fas fa-th"></i>
+                <i class="fas fa-bars d-none"></i>
+              {% else %}
+                <span class="d-none">List</span>
+                <span>Grid</span>
+              {% endif %}
+            {% elif results.view == 'list' %}
+              {% if request.is_ajax %}
+                <i class="fas fa-th d-none"></i>
+                <i class="fas fa-bars"></i>
+              {% else %}
+                <span>List</span>
+                <span class="d-none">Grid</span>
+              {% endif %}
             {% endif %}
           </a>
         {% endif %}
@@ -107,11 +97,13 @@ dopepod
         {% endif %}
         {% if results.selected_provider == 'dopepod' %}
           <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=itunes">
-            On dopepod
+            <span>On dopepod</span>
+            <span class="d-none">On itunes</span>
           </a>
         {% elif results.selected_provider == 'itunes' %}
           <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=dopepod">
-            On iTunes
+            <span class="d-none">On dopepod</span>
+            <span>On itunes</span>
           </a>
         {% endif %}
         {% if results.subscriptions %}
@@ -125,21 +117,21 @@ dopepod
       <div class="collapse options-collapse" id="alphabet-collapse{{ results.drop }}">
         <div class="options-group">
           {% if results.selected_q|capfirst in results.alphabet %}
-            <a class="btn-dope options-button alphabet-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
+            <a class="btn-dope options-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
               <i class="fas fa-times-circle"></i>
             </a>
           {% endif %}
           {% for letter in results.alphabet %}
-          {% if letter == results.selected_q|capfirst %}
-          <a class="btn-dope active options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter|urlencode }}" id="alphabet-{{ letter }}">
+            {% if letter == results.selected_q|capfirst %}
+            <a class="btn-dope options-button active" href="{{ results.urls.q_url }}">
+              {{ letter }}
+            </a>
             {% else %}
-            <a class="btn-dope options-button alphabet-button" href="{{ results.urls.q_url }}&q={{ letter|urlencode }}" id="alphabet-{{ letter }}">
-              {% endif %}
-                <span>
-                  {{ letter }}
-                </span>
+              <a class="btn-dope options-button" href="{{ results.urls.q_url }}&q={{ letter|urlencode }}">
+                {{ letter }}
               </a>
-            {% endfor %}
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
     {% endif %}
@@ -152,7 +144,11 @@ dopepod
             </a>
           {% endif %}
           {% for genre in results.genres %}
-            {% if not results.selected_genre == genre %}
+            {% if results.selected_genre == genre %}
+            <a class="btn-dope options-button active" href="{{ results.urls.genre_url }}">
+              {{ genre }}
+            </a>
+            {% else %}
               <a class="btn-dope options-button" href="{{ results.urls.genre_url }}&genre={{ genre.url_format }}">
                 {{ genre }}
               </a>
@@ -170,7 +166,11 @@ dopepod
             </a>
           {% endif %}
           {% for language in results.languages %}
-            {% if not results.selected_language == language %}
+            {% if results.selected_language == language %}
+              <a class="btn-dope options-button active" href="{{ results.urls.language_url }}">
+                {{ language }}
+              </a>
+            {% else %}
               <a class="btn-dope options-button" href="{{ results.urls.language_url }}&language={{ language.url_format }}">
                 {{ language }}
               </a>
@@ -183,8 +183,8 @@ dopepod
       {% include 'pagination.html' %}
     {% endif %}
 
-    <div class="col-12 results-content">
-      {% if results.podcasts or results.episodes %}
+    {% if results.podcasts or results.episodes %}
+      <div class="col-12 results-content">
         {% if results.view == 'grid' or results.view == 'list' %}
           {% include 'search.html' %}
         {% elif results.view == 'charts' %}
@@ -196,8 +196,8 @@ dopepod
         {% elif results.view == 'last_played'%}
           {% include 'last_played.html' %}
         {% endif %}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
     {% if results.pagination %}
       {% include 'pagination.html' %}

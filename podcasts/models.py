@@ -685,7 +685,7 @@ class Episode(models.Model):
                             pubdate = parse(pubdate, default=parse("00:00Z"))
                             episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                         # if episode data not found, skip episode
-                        except AttributeError as e:
+                        except (AttributeError, ValueError) as e:
                             logger.error('can\'t get pubDate', podcast.feedUrl)
                             continue
 
