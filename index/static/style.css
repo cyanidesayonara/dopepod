@@ -742,6 +742,7 @@ button.btn-dope {
 }
 .charts-result:hover .charts-rank {
   background: rgba(0, 191,165, 1);
+  color: #fff;
 }
 .charts-result img {
   margin-left: 5px;
