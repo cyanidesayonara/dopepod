@@ -975,14 +975,15 @@ button.btn-dope {
   display: inline;
   white-space: nowrap;
 }
-#player-date {
+#player p {
   font-size: 12px;
   margin-bottom: 3px;
+  font-weight: 600;
+}
+#player-date {
 }
 #player-episode {
-  font-size: 12px;
   height: 52px;
-  margin-bottom: 3px;
   overflow: hidden;
 }
 #player-buttons {

@@ -248,8 +248,7 @@ function subscribeOrUnsubscribe(form) {
   var url = form.action;
   var method = form.method;
   form = $(form);
-  var loading = $(".button-loading").clone();
-  form.find(".sub-button").html(loading);
+  form.find(".sub-button").html(getButtonLoading());
   var podid = form.find("input[name=podid]").val();
   var data = {
     "podid": podid,
@@ -282,6 +281,10 @@ function cookieBannerClose() {
   $("#player").empty();
 }
 
+function getButtonLoading() {
+  return $(".button-loading").first().clone();
+}
+
 $(document)
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -310,8 +313,6 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var loading = $(".button-loading").clone();
-      button.html(loading);
       var drop = $(button.parents(".results").parent());
       loadResults([url, drop]);
     }, 250);
@@ -411,8 +412,7 @@ $(document)
     var data = $(this).serialize();
     var button = $(this).find(".settings-save");
     var text = button[0].innerText;
-    var loading = $(".button-loading").clone();
-    button.html(loading);
+    button.html(getButtonLoading());
     var theme = $(this).find("input[name=dark_theme]").is(":checked");
     $.ajax({
       data: data,
@@ -441,8 +441,7 @@ $(document)
     var mode = $(this).find("input[name=mode]").val();
     var button = $(this).find("button");
     var text = button[0].innerText;
-    var loading = $(".button-loading").clone();
-    button.html(loading);
+    button.html(getButtonLoading());
     $.ajax({
       method: method,
       url: url,
@@ -527,8 +526,7 @@ $(document)
     var url = this.action;
     var button = $(this).find(".login-button");
     var text = button[0].innerText;
-    var loading = $(".button-loading").clone();
-    button.html(loading);
+    button.html(getButtonLoading());
     $.ajax({
       data: data,
       method: method,
@@ -552,8 +550,7 @@ $(document)
     var url = this.action;
     var button = $(this).find(".password-button");
     var text = button[0].innerText;
-    var loading = $(".button-loading").clone();
-    button.html(loading);
+    button.html(getButtonLoading());
     $.ajax({
       data: data,
       method: method,
@@ -653,8 +650,7 @@ $(document)
     }
     var button = $(this);
     var text = button[0].innerText;
-    var loading = $(".button-loading").clone();
-    button.html(loading);
+    button.html(getButtonLoading());
     $.ajax({
       method: "POST",
       url: url,
