@@ -5,9 +5,9 @@ settings
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-12 results color-5-trans" id="settings">
-  <form id="settings-form" action="{% url 'settings' %}" method="POST">
-    <button type="submit" id="settings-save"class="btn-dope active">Save</button>
+<div class="col-12 results color-5-trans settings">
+  <form class="settings-form" action="{% url 'settings' %}" method="POST">
+    <button type="submit" class="btn-dope active settings-save">Save</button>
     <h3>
       Settings
     </h3>
