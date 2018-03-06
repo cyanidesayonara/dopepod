@@ -81,14 +81,14 @@ class Podcast(models.Model):
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
-    class Meta:
-        indexes = [
-            models.Index(fields=['title']),
-            models.Index(fields=['artist']),
-            models.Index(fields=['genre']),
-            models.Index(fields=['language']),
-            models.Index(fields=['rank']),
-        ]
+    # class Meta:
+    #     indexes = [
+    #         models.Index(fields=['title']),
+    #         models.Index(fields=['artist']),
+    #         models.Index(fields=['genre']),
+    #         models.Index(fields=['language']),
+    #         models.Index(fields=['rank']),
+    #     ]
 
     def get_primary_genre(self):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
@@ -545,7 +545,7 @@ class Podcast(models.Model):
                 querystring['genre'] = genre
             if language:
                 querystring['language'] = language
-            
+
             querystring_wo_provider = {x: querystring[x] for x in querystring if x not in {'provider'}}
             urls['provider_url'] = url + '?' + urlencode(querystring_wo_provider)
 

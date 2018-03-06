@@ -3,7 +3,8 @@
   <div class="col-12 col-md-4 ml-auto">
     <div class="color-4-trans" id="player-wrapper">
       <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
-        <img class="img-fluid" src="https://dopepod.me/img/{{ player.episode.podcast.artworkUrl }}100x100bb.jpg" />
+        <img class="img-fluid" src="https://dopepod.me/img/{{ player.episode.podcast.artworkUrl }}100x100bb.jpg"
+        onerror="this.src='https://{{ podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
       <div id="player-buttons">
         <a class="btn-dope" id="player-minimize" href="#" aria-label="Minimize">
