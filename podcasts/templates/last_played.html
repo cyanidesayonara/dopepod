@@ -9,7 +9,7 @@
         </span>
         {% endif %}
         <img class="img-fluid" src="https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='https://{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
+        onerror="this.src='http://{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
       <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
         <h1>
