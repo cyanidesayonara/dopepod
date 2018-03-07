@@ -57,7 +57,7 @@ a:hover {
   border-radius: .25rem;
   text-align: center;
   white-space: nowrap;
-  vertical-align: middle;
+  vertical-align: bottom;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -74,7 +74,7 @@ button.btn-dope {
   color: #fff;
   background: rgba(0, 191, 165, 1);
 }
-.btn-dope:focus {
+.btn-dope:focus, .btn-dope:hover {
   color: #fff;
   outline: none;
   background: rgba(0, 191, 165, 1);
@@ -359,7 +359,11 @@ button.btn-dope {
 }
 /* LOGO */
 .logo-wrapper {
+  display: inline-block;
   margin: auto;
+}
+.logo-wrapper:hover .spin {
+  color: #000;
 }
 
 /* DASHBOARD */
@@ -744,6 +748,9 @@ button.btn-dope {
 .charts-result:hover .charts-rank {
   background: rgba(0, 191,165, 1);
   color: #fff;
+  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 .charts-result img {
   margin-left: 5px;
@@ -864,6 +871,9 @@ button.btn-dope {
   transition: all .25s ease-in-out;
   background: rgba(0, 191, 165, 1);
   color: rgb(255, 255, 255);
+  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 .last-played-toggle[aria-expanded="true"] {
   transition: all .25s ease-in-out;

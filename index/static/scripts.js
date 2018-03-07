@@ -359,8 +359,8 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find(".list").length) {
         loadResults([url, drop]);
-        scrollToTop();
       }
+      scrollToTop();
     }, 250);
   })
   .on("click", ".charts-link", function(e) {
@@ -379,8 +379,8 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find(".subscriptions").length) {
         loadResults([url, drop]);
-        scrollToTop();
       }
+      scrollToTop();
     }, 250);
   })
   .on("click", ".settings-link", function(e) {
@@ -403,8 +403,8 @@ $(document)
       var drop = $("#center-stage");
       if (!drop.find(".playlist").length) {
         loadResults([url, drop]);
-        scrollToTop();
       }
+      scrollToTop();
     }, 250);
   })
   // FORMS
@@ -430,6 +430,7 @@ $(document)
       .done(function(response) {
         changeTheme(theme);
         $("#center-stage").html(response);
+        scrollToTop();
       });
   })
   .on("submit", "#sub-form", function(e) {
@@ -614,6 +615,9 @@ $(document)
     else {
       el.addClass("darken");
     }
+  })
+  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
+    $(this).blur();
   })
   .on("click", "body, .dopebar-link", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
