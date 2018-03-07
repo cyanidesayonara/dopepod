@@ -81,14 +81,14 @@ class Podcast(models.Model):
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
-    # class Meta:
-    #     indexes = [
-    #         models.Index(fields=['title']),
-    #         models.Index(fields=['artist']),
-    #         models.Index(fields=['genre']),
-    #         models.Index(fields=['language']),
-    #         models.Index(fields=['rank']),
-    #     ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['title']),
+            models.Index(fields=['artist']),
+            models.Index(fields=['genre']),
+            models.Index(fields=['language']),
+            models.Index(fields=['rank']),
+        ]
 
     def get_primary_genre(self):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
@@ -570,7 +570,7 @@ class Podcast(models.Model):
                 results['selected_language'] = language
             results['view'] = 'charts'
             results['urls'] = urls
-            cache.add(cachestring, results, 60 * 60 * 24)
+            cache.add(cachestring, results, 60 * 60 * 24 * 30)
             return results
 
 class Subscription(models.Model):
