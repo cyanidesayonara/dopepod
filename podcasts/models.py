@@ -831,7 +831,7 @@ class Episode(models.Model):
         results = {}
         results['episodes'] = last_played
         results['header'] = 'Last played'
-        results['view'] = 'last_played'
+        results['view'] = 'last-played'
         return results
 
     def play(self):

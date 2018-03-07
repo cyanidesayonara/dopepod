@@ -615,9 +615,6 @@ $(document)
       el.addClass("darken");
     }
   })
-  .on("click", ".btn-dope, .dopebar-link, .index-link, #episodes-table tbody tr", function(e) {
-    $(this).blur();
-  })
   .on("click", "body, .dopebar-link", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
   })
