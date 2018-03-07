@@ -362,9 +362,9 @@ button.btn-dope {
   display: inline-block;
   margin: auto;
 }
-.logo-wrapper:hover .spin {
+/* .logo-wrapper:hover .spin {
   color: #000;
-}
+} */
 
 /* DASHBOARD */
 #dashboard {
