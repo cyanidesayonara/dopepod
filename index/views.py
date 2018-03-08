@@ -96,13 +96,13 @@ def charts(request):
                 'results': charts,
             }
 
-            return render(request, 'results_base.html', context)
+            return render(rebquest, 'results_base.html', context)
 
         last_played = Episode.get_last_played()
-        context.update({
+        context = {
             'charts': charts,
             'last_played': last_played,
-        })
+        }
 
         if user.is_authenticated:
             return render(request, 'dashboard.html', context)

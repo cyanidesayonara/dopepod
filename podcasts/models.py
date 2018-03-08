@@ -117,12 +117,8 @@ class Podcast(models.Model):
 
     def search(q, genre, language, page, show, view):
         """
-        returns a tuple of (podcasts, num_pages and count) matching search terms
+        returns a dictionary with podcasts matching search terms etc
         """
-
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
-        languages = Language.objects.all()
-        genres = Genre.get_primary_genres()
 
         cachestring = 'search'
         if q:
@@ -141,6 +137,9 @@ class Podcast(models.Model):
         if results:
             return results
         else:
+            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
+            languages = Language.objects.all()
+            genres = Genre.get_primary_genres()
             podcasts = Podcast.objects.all()
 
             # filter by language
@@ -616,34 +615,6 @@ class Episode(models.Model):
     played_at = models.DateTimeField(default=None, null=True)
     position = models.IntegerField(default=None, null=True)
 
-    # def count_episodes(podid):
-    #     ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-    #         'atom': 'http://www.w3.org/2005/Atom',
-    #         'im': 'http://itunes.apple.com/rss',
-    #     }
-    #
-    #     # useragent for requests
-    #     headers = {
-    #         'User-Agent': str(ua.random)
-    #     }
-    #     count = 0
-    #
-    #     try:
-    #         response = session.get(podcast.feedUrl, headers=headers, timeout=5)
-    #         response.raise_for_status()
-    #         try:
-    #             root = etree.XML(response.content)
-    #             ns.update(root.nsmap)
-    #             tree = root.find('channel')
-    #
-    #             for item in tree.findall('item'):
-    #                 count += 1
-    #         except etree.XMLSyntaxError:
-    #             logger.error('trouble with xml')
-    #     except requests.exceptions.HTTPError as e:
-    #         logger.error(str(e))
-    #     return count
-
     def get_episodes(podid):
         """
         returns a list of episodes using requests and lxml etree
@@ -780,7 +751,7 @@ class Episode(models.Model):
                 except etree.XMLSyntaxError:
                     logger.error('trouble with xml')
 
-            except requests.exceptions.HTTPError as e:
+            except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
                 logger.error(str(e))
             results = {
                 'episodes': episodes,
@@ -855,10 +826,14 @@ class Episode(models.Model):
         played_episodes.exclude(pk__in=wannakeep).delete()
 
     def add(signature, user):
+        # max 20 episodes for now
         if user.is_authenticated:
             position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
             if position:
-                position += 1
+                if position == 20:
+                    return
+                else:
+                    position += 1
             else:
                 position = 1
         else:
