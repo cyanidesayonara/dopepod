@@ -368,7 +368,6 @@ button.btn-dope {
 .logo-wrapper {
   display: inline-block;
   margin: auto;
-  font-size: 30px!important;
 }
 .logo-wrapper .spin {
   -webkit-transition: all .25s ease-in-out;
