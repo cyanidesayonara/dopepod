@@ -94,10 +94,16 @@ button.btn-dope {
 .toggle[aria-expanded="true"] {
   color: #fff;
   background: rgba(0, 191, 165, 1);
+  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 .reverse-toggle[aria-expanded="false"] {
   color: #fff;
   background: rgba(0, 191, 165, 1);
+  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 
 /* BOOTSTRAP COLLAPSE */
