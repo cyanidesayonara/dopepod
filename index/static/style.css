@@ -16,7 +16,7 @@ a:hover {
   transition: all .5s ease;
   -moz-transition: all .5s ease;
   -webkit-transition: all .5s ease;
-b  background: rgb(0, 0, 0);
+  background: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
 }
 
@@ -368,6 +368,7 @@ button.btn-dope {
 .logo-wrapper {
   display: inline-block;
   margin: auto;
+  font-size: 30px!important;
 }
 .logo-wrapper .spin {
   -webkit-transition: all .25s ease-in-out;
