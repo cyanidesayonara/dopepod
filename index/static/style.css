@@ -50,7 +50,7 @@ a:hover {
   font-size: 16px!important;
   color: inherit;
   border: 2px solid rgba(0, 191, 165, 1);
-  min-width: 30px;
+  min-width: 34px;
   height: 33px;
   padding: 2px 8px;
   cursor: pointer;
@@ -171,7 +171,7 @@ button.btn-dope {
   border-top: 2px solid rgba(0, 191, 165, 1);
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
-.options-button, .options-button:focus, .options-button.focus {
+.options-button, .results-button {
   margin-left: 4px;
   margin-bottom: 4px;
 }
@@ -312,8 +312,7 @@ button.btn-dope {
 #login-wrapper {
   text-align: center;
   padding: 10px;
-  max-width: 400px;
-  height: 100%;
+  max-width: 300px;
   margin: auto;
 }
 #login-wrapper h1 {
@@ -321,7 +320,7 @@ button.btn-dope {
   margin-bottom: 10px;
 }
 #login-wrapper .tab-content {
-  margin-top: 25px;
+  margin-top: 15px;
   height: 125px;
 }
 .splash-errors {
@@ -443,8 +442,10 @@ button.btn-dope {
   float: right;
 }
 .showpod-options {
-  margin-bottom: 10px;
   float: right;
+}
+.showpod-options a {
+  margin-bottom: 10px;
 }
 #showpod-copyright {
 }
@@ -714,12 +715,15 @@ button.btn-dope {
   text-align: center;
 }
 .results-header h1 {
-  font-size: 20px;
+  font-size: 24px;
   margin: 0;
 }
 .results-buttons {
-  float: right;
-  margin: 10px;
+  padding: 10px 10px 6px 6px;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 .results-back {
   float: left;

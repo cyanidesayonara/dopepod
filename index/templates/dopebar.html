@@ -5,11 +5,6 @@
     </a>
     <ul class="d-none d-xl-inline-block">
       <li>
-        <a class="dopebar-link lights-toggle" href="#">
-          <i class="far fa-lightbulb"></i>
-        </a>
-      </li>
-      <li>
         <a class="dopebar-link browse-link" href="{% url 'search' %}">
           Browse
         </a>
@@ -22,6 +17,11 @@
       <li>
         <a class="dopebar-link last-played-link" href="#">
           Last played
+        </a>
+      </li>
+      <li>
+        <a class="dopebar-link lights-toggle" href="#">
+          <i class="far fa-lightbulb"></i>
         </a>
       </li>
       {% if user.is_authenticated %}

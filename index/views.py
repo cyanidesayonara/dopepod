@@ -96,7 +96,7 @@ def charts(request):
                 'results': charts,
             }
 
-            return render(rebquest, 'results_base.html', context)
+            return render(request, 'results_base.html', context)
 
         last_played = Episode.get_last_played()
         context = {

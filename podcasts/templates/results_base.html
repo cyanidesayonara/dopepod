@@ -39,79 +39,77 @@ dopepod
     </div>
   </div>
   <div class="row collapse show results-wrapper" id="results-collapse{{ results.drop }}">
-    <div class="col-12 px-0 clearfix">
-      <div class="results-buttons">
-        {% if results.view == 'grid' or results.view == 'list' %}
-          <a class="btn-dope view-button active" href="{{ results.urls.full_url }}">
-            {% if results.view == 'grid' %}
-              {% if request.is_ajax %}
-                <i class="fas fa-th"></i>
-                <i class="fas fa-bars d-none"></i>
-              {% else %}
-                <span class="d-none">List</span>
-                <span>Grid</span>
-              {% endif %}
-            {% elif results.view == 'list' %}
-              {% if request.is_ajax %}
-                <i class="fas fa-th d-none"></i>
-                <i class="fas fa-bars"></i>
-              {% else %}
-                <span>List</span>
-                <span class="d-none">Grid</span>
-              {% endif %}
+    <div class="col-12 results-buttons">
+      {% if results.view == 'grid' or results.view == 'list' %}
+        <a class="btn-dope results-button view-button active" href="{{ results.urls.full_url }}">
+          {% if results.view == 'grid' %}
+            {% if request.is_ajax %}
+              <i class="fas fa-th"></i>
+              <i class="fas fa-bars d-none"></i>
+            {% else %}
+              <span class="d-none">List</span>
+              <span>Grid</span>
             {% endif %}
-          </a>
-        {% endif %}
-        {% if results.alphabet %}
-          {% if results.selected_q|capfirst in results.alphabet %}
-            <a class="btn-dope active toggle" data-toggle="collapse" href="#alphabet-collapse{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse">
-              {{ results.selected_q|capfirst }}
-            </a>
-          {% else %}
-            <a class="btn-dope toggle" data-toggle="collapse" href="#alphabet-collapse{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse">
-              A-Z
-            </a>
+          {% elif results.view == 'list' %}
+            {% if request.is_ajax %}
+              <i class="fas fa-th d-none"></i>
+              <i class="fas fa-bars"></i>
+            {% else %}
+              <span>List</span>
+              <span class="d-none">Grid</span>
+            {% endif %}
           {% endif %}
-        {% endif %}
-        {% if results.genres %}
-          {% if results.selected_genre %}
-            <a class="btn-dope active toggle" data-toggle="collapse" href="#genre-collapse{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse">
-              {{ results.selected_genre }}
-            </a>
-          {% else %}
-            <a class="btn-dope toggle" data-toggle="collapse" href="#genre-collapse{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse">
-              All Genres
-            </a>
-          {% endif %}
-        {% endif %}
-        {% if results.languages %}
-          {% if results.selected_language %}
-            <a class="btn-dope active toggle" data-toggle="collapse" href="#language-collapse{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse">
-              {{ results.selected_language }}
-            </a>
-          {% else %}
-            <a class="btn-dope toggle" data-toggle="collapse" href="#language-collapse{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse">
-              All Languages
-            </a>
-          {% endif %}
-        {% endif %}
-        {% if results.selected_provider == 'dopepod' %}
-          <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=itunes">
-            <span>On dopepod</span>
-            <span class="d-none">On itunes</span>
+        </a>
+      {% endif %}
+      {% if results.alphabet %}
+        {% if results.selected_q|capfirst in results.alphabet %}
+          <a class="btn-dope results-button active toggle" data-toggle="collapse" href="#alphabet-collapse{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse">
+            {{ results.selected_q|capfirst }}
           </a>
-        {% elif results.selected_provider == 'itunes' %}
-          <a class="btn-dope active provider-button" href="{{ results.urls.provider_url }}&provider=dopepod">
-            <span class="d-none">On dopepod</span>
-            <span>On itunes</span>
+        {% else %}
+          <a class="btn-dope results-button toggle" data-toggle="collapse" href="#alphabet-collapse{{ results.drop }}" aria-expanded="false" aria-controls="alphabet-collapse">
+            A-Z
           </a>
         {% endif %}
-        {% if results.subscriptions %}
-          <a class="btn-dope unsubscribe-button" href="{% url 'unsubscribe' %}">
-            Unsubscribe
+      {% endif %}
+      {% if results.genres %}
+        {% if results.selected_genre %}
+          <a class="btn-dope results-button active toggle" data-toggle="collapse" href="#genre-collapse{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse">
+            {{ results.selected_genre }}
+          </a>
+        {% else %}
+          <a class="btn-dope results-button toggle" data-toggle="collapse" href="#genre-collapse{{ results.drop }}" aria-expanded="false" aria-controls="genre-collapse">
+            All Genres
           </a>
         {% endif %}
-      </div>
+      {% endif %}
+      {% if results.languages %}
+        {% if results.selected_language %}
+          <a class="btn-dope results-button active toggle" data-toggle="collapse" href="#language-collapse{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse">
+            {{ results.selected_language }}
+          </a>
+        {% else %}
+          <a class="btn-dope results-button toggle" data-toggle="collapse" href="#language-collapse{{ results.drop }}" aria-expanded="false" aria-controls="language-collapse">
+            All Languages
+          </a>
+        {% endif %}
+      {% endif %}
+      {% if results.selected_provider == 'dopepod' %}
+        <a class="btn-dope results-button active provider-button" href="{{ results.urls.provider_url }}&provider=itunes">
+          <span>On dopepod</span>
+          <span class="d-none">On itunes</span>
+        </a>
+      {% elif results.selected_provider == 'itunes' %}
+        <a class="btn-dope results-button active provider-button" href="{{ results.urls.provider_url }}&provider=dopepod">
+          <span class="d-none">On dopepod</span>
+          <span>On itunes</span>
+        </a>
+      {% endif %}
+      {% if results.subscriptions %}
+        <a class="btn-dope results-button unsubscribe-button" href="{% url 'unsubscribe' %}">
+          Unsubscribe
+        </a>
+      {% endif %}
     </div>
     {% if results.alphabet %}
       <div class="collapse options-collapse" id="alphabet-collapse{{ results.drop }}">
