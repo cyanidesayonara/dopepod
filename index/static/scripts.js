@@ -184,8 +184,7 @@ function loadResults(args) {
   checkForXHR(url);
   pushState(url);
   if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    var loading = $(".circle-loading").clone();
-    drop.html(loading);
+    drop.html(getCircleLoading());
   }
   xhr = $.ajax({
     type: "GET",
@@ -287,6 +286,9 @@ function cookieBannerClose() {
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 }
+function getCircleLoading() {
+  return $(".circle-loading").first().clone();
+}
 
 $(document)
   // SEARCH
@@ -310,7 +312,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", "a.alphabet-button, a.options-button, a.provider-button", function(e) {
+  .on("click", ".options-button", function(e) {
     e.preventDefault();
     var url = this.href;
     var button = $(this);
@@ -487,16 +489,9 @@ $(document)
   })
   .on("click", "#player-minimize", function(e) {
     e.preventDefault();
-    if ($("#player").hasClass("minimize")) {
-      $("#player").removeClass("minimize");
-      $("#audio-el").removeClass("d-none");
-      $(this).removeClass("active");
-    }
-    else {
-      $("#player").addClass("minimize");
-      $("#audio-el").addClass("d-none");
-      $(this).addClass("active");
-    }
+    $("#player").toggleClass("minimize");
+    $("#audio-el").toggleClass("d-none");
+    $(this).toggleClass("active");
   })
   // LOGIN & SIGNUP
   // open login / register
@@ -608,13 +603,7 @@ $(document)
   })
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
-    var el = $("body");
-    if (el.hasClass("darken")) {
-      el.removeClass("darken");
-    }
-    else {
-      el.addClass("darken");
-    }
+    $("body").toggleClass("darken");
   })
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
     $(this).blur();
@@ -626,21 +615,14 @@ $(document)
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    var button = $(this);
-    if (button.hasClass("active")) {
-      button.removeClass("active");
-      button.parent().removeClass("active");
-    }
-    else {
-      button.addClass("active");
-      button.parent().addClass("active");
-    }
+    $(this).parent().toggleClass("active");
   })
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var url = this.href;
-    var buttons = $(this).parents(".results").find($(".select-subscription.active"));
+    var buttons = $(this).parents(".results").find($(".subscriptions-result.active"));
     var podids = [];
+    console.log(podids)
     buttons.each(function(i, button) {
       podids[i] = $(button).data("podid");
     })

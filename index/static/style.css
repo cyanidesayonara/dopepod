@@ -161,28 +161,16 @@ button.btn-dope {
 }
 
 /* OPTIONS BUTTONS */
-.options-group {
-  padding: 10px 10px 6px 6px;
+.options-buttons {
   margin-bottom: 10px;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  justify-content: flex-end;
   border-top: 2px solid rgba(0, 191, 165, 1);
   border-bottom: 2px solid rgba(0, 191, 165, 1);
-}
-.options-button, .results-button {
-  margin-left: 4px;
-  margin-bottom: 4px;
 }
 .provider-button {
   width: 120px;
 }
 .nix-button {
   margin-right: auto;
-}
-.pagination {
-  padding: 0 10px 6px 6px;
 }
 
 /* MULTI BAR */
@@ -441,11 +429,19 @@ button.btn-dope {
   margin-left: 5px;
   float: right;
 }
-.showpod-options {
-  float: right;
+.showpod-buttons {
+  padding: 10px 10px 6px 6px;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-.showpod-options a {
-  margin-bottom: 10px;
+.showpod-buttons > * {
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+.showpod-back {
+  margin-right: auto;
 }
 #showpod-copyright {
 }
@@ -718,16 +714,22 @@ button.btn-dope {
   font-size: 24px;
   margin: 0;
 }
-.results-buttons {
+.results-buttons, .options-buttons {
+  justify-content: flex-end;
+}
+.results-buttons, .pages-buttons, .options-buttons {
   padding: 10px 10px 6px 6px;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  justify-content: flex-end;
+}
+.results-buttons > *, .pages-buttons > *, .options-buttons > * {
+  margin-left: 4px;
+  margin-bottom: 4px;
 }
 .results-back {
-  float: left;
   margin-right: 38px;
+  float: left;
 }
 .extra-options {
   float: right;
@@ -958,6 +960,9 @@ button.btn-dope {
   margin-bottom: 4px;
   font-weight: 400;
   overflow: hidden;
+}
+.subscriptions-result {
+  border: 2px solid rgba(0, 191, 165, 1);
 }
 .subscriptions-result.active {
   background: rgba(0, 191, 165, 1);

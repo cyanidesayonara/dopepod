@@ -50,15 +50,13 @@
             </div>
           </div>
           <div class="col-12 order-2 col-md-6 order-md-3" id="right">
+            <!-- LAST PLAYED -->
             <div class="row" id="last-played">
               {% with last_played as results %}
                 {% if last_played %}
                   {% include 'results_base.html' %}
                 {% endif %}
               {% endwith %}
-            </div>
-            <!-- LAST PLAYED -->
-            <div class="row" >
             </div>
           </div>
         </div>
@@ -68,30 +66,7 @@
         {% include 'player.html' %}
       </div>
       <div class="loaders d-none">
-        <div class="button-loading">
-          <span class="loading-a loading-a-1">&#9679;</span>
-          <span class="loading-b loading-b-1">d</span>
-          <span class="loading-a loading-a-2">&#9679;</span>
-          <span class="loading-b loading-b-2">o</span>
-          <span class="loading-a loading-a-3">&#9679;</span>
-          <span class="loading-b loading-b-3">p</span>
-          <span class="loading-a loading-a-4">&#9679;</span>
-          <span class="loading-b loading-b-4">e</span>
-          <span class="loading-a loading-a-5">&#9679;</span>
-          <span class="loading-b loading-b-5">p</span>
-          <span class="loading-a loading-a-6">&#9679;</span>
-          <span class="loading-b loading-b-6">o</span>
-          <span class="loading-a loading-a-7">&#9679;</span>
-          <span class="loading-b loading-b-7">d</span>
-        </div>
-        <div class="circle-loading">
-          <span class="char char-1">d</span>
-          <span class="char char-2">o</span>
-          <span class="char char-3">p</span>
-          <span class="char char-4">e</span>
-          <span class="char char-5">p</span>
-          <span class="char char-6">o</span>
-        </div>
+        {% include 'circle_loading.html' %}
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
