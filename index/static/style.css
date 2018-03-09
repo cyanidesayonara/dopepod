@@ -473,8 +473,8 @@ button.btn-dope {
   margin: auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  animation: spin 1.5s ease-in-out infinite;
-  -webkit-animation: spin 1.5s ease-in-out infinite;
+  animation: spin 1.5s ease-in-out .25s infinite;
+  -webkit-animation: spin 1.5s ease-in-out .25s infinite;
 }
 .circle-loading .char {
   left: 27px;
@@ -501,7 +501,7 @@ button.btn-dope {
   transform: rotate(300deg);
 }
 @-webkit-keyframes spin {
-  10% {
+  0% {
     transform: rotate(0deg);
   }
   100% {
@@ -509,7 +509,7 @@ button.btn-dope {
   }
 }
 @keyframes spin {
-  10% {
+  0% {
     transform: rotate(0deg);
   }
   100% {
