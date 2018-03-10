@@ -50,6 +50,7 @@ a:hover {
   font-size: 16px!important;
   color: inherit;
   border: 2px solid rgba(0, 191, 165, 1);
+  line-height: 24px;
   min-width: 32px;
   height: 32px;
   padding: 3px 6px;
@@ -794,11 +795,10 @@ button.btn-dope {
   float: left;
   margin-right: 10px;
   text-align: center;
+  line-height: 32px;
   height: 34px;
   width: 34px;
-  padding-top: 2px;
-  padding-left: 1px;
-  font-size: 19px!important;
+  font-size: 18px!important;
   font-weight: 600;
   border-radius: 50%;
   border: 2px solid rgba(0, 191, 165, 1);
@@ -883,6 +883,7 @@ button.btn-dope {
   bottom: 10px;
   right: 10px;
   cursor: pointer;
+  line-height: 32px;
   height: 34px;
   width: 34px;
   font-size: 20px;
