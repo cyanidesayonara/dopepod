@@ -796,10 +796,10 @@ button.btn-dope {
   font-size: 16px;
   overflow: hidden;
   height: 19px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 .charts-result h2 {
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   font-size: 14px;
   overflow: hidden;
   height: 19px;
@@ -820,14 +820,15 @@ button.btn-dope {
   -moz-transition: all .15s ease-in-out;
   -webkit-transition: all .15s ease-in-out;
 }
-.last-played-collapse {
-  margin-top: 10px;
-}
-.last-played-collapse p {
-  margin: 0;
-}
 .last-played-buttons {
-  margin: 10px 40px 0 0;
+  padding: 6px 40px 0 0;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.last-played-buttons > * {
+  margin-right: 4px;
+  margin-top: 4px;
 }
 .last-played-result img {
   border-radius: .25rem;
@@ -850,13 +851,13 @@ button.btn-dope {
 .last-played-result h1 {
   font-size: 16px;
   height: 20px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .last-played-result h2 {
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   height: 32px;
   overflow: hidden;
   font-size: 14px;
@@ -866,6 +867,12 @@ button.btn-dope {
   padding: 0;
   margin: 0;
   list-style: none;
+}
+.last-played-result p {
+  margin: 10px 0;
+}
+.last-played-collapse {
+  margin-top: 10px;
 }
 .last-played-toggle {
   position: absolute;
@@ -947,7 +954,7 @@ button.btn-dope {
 .subscriptions-box h1 {
   font-size: 16px;
   height: 38px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   overflow: hidden;
 }
 .subscriptions-box p {
