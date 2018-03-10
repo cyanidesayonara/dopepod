@@ -728,7 +728,7 @@ button.btn-dope {
   margin-bottom: 4px;
 }
 .results-back {
-  margin-right: 38px;
+  margin-right: 39px;
   float: left;
 }
 .extra-options {
@@ -992,7 +992,7 @@ button.btn-dope {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 .browse-results-list li a {
   color: unset;
