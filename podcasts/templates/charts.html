@@ -9,12 +9,16 @@
           <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg"
           onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" />
           <h1>
-            {{ podcast.title }}
+            <strong>
+              {{ podcast.title }}
+            </strong>
           </h1>
-          <p>
-            <span>by </span>
-            {{ podcast.artist }}
-          </p>
+          <h2>
+            by
+            <strong>
+              {{ podcast.artist }}
+            </strong>
+          </h2>
           <ul>
             <li>
               {{ podcast.get_n_subscribers }} subscribers

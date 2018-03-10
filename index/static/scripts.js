@@ -120,7 +120,7 @@ function updateTitle() {
     title = "Now playing: " + title + " - " + episode + " | dopepod";
   }
   else if ($("#showpod-c").length) {
-      title = "Listen to episodes of " + $("#showpod-title")[0].innerText + " on dopepod";
+      title = "Listen to episodes of " + $("#showpod-c h1")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
   return title;

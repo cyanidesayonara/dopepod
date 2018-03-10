@@ -8,12 +8,14 @@
             onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" />
           </a>
           <a class="showpod color-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
-            <h1 class="result-title">
-              {{ podcast.title }}
+            <h1>
+              <strong>
+                {{ podcast.title }}
+              </strong>
             </h1>
           </a>
-          <p class="last-updated">
-            <span>Last updated: </span>
+          <p>
+            Last updated:
             {{ subscription.last_updated|date:'d-m-Y H:i' }}
           </p>
           <!-- <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">

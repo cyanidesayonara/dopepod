@@ -13,14 +13,17 @@ Listen to episodes of {{ podcast.title }} on dopepod
     </div>
     <div class="col-12 col-lg-5" id="showpod-c" data-podid="{{ podcast.podid }}">
       <!-- TODO fix these ids -->
-      <h1 id="showpod-title">
-        {{ podcast.title }}
+      <h1>
+        <strong>
+          {{ podcast.title }}
+        </strong>
       </h1>
-      <span id="showpod-artist">
+      <h2>
         By
-        <h2>
+        <strong>
           {{ podcast.artist }}
-        </h2>
+        </strong>
+      </h2>
       </span>
       <p id="showpod-description">
         {{ podcast.description }}

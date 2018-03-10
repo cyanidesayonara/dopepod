@@ -13,11 +13,15 @@
       </a>
       <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
         <h1>
-          {{ episode.podcast.title }}
+          <strong>
+            {{ episode.podcast.title }}
+          </strong>
         </h1>
       </a>
       <h2>
-        {{ episode.title }}
+        <strong>
+          {{ episode.title }}
+        </strong>
       </h2>
       <ul>
         <li>

@@ -95,10 +95,10 @@ class Podcast(models.Model):
 
     def get_n_subscribers(self):
         if type(self.n_subscribers) == int:
-            return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
+            return str(self.n_subscribers) if self.n_subscribers > 100 else '<1k'
         else:
-            return '<100'
-            
+            return '<1k'
+
     def __str__(self):
         return self.title
 

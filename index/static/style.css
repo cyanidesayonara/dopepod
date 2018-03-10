@@ -4,8 +4,10 @@ body {
   background: rgb(255, 250, 240);
   transition: background 0.5s ease;
   font-family: 'Exo', sans-serif;
+  letter-spacing: .025rem;
 }
 a {
+  font-weight: 600;
   color: rgb(0, 191, 165);
 }
 a:hover {
@@ -54,7 +56,7 @@ a:hover {
   height: 32px;
   padding: 3px 6px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   background: inherit;
   border-radius: .25rem;
   text-align: center;
@@ -221,6 +223,7 @@ button.btn-dope {
 .dopebar-link  {
   padding: 5px;
   cursor: pointer;
+  display: inline-block;
   font-weight: 600;
   background: none!important;
   border: none;
@@ -236,20 +239,11 @@ button.btn-dope {
 }
 #dopebar-c h1 {
   font-family: Orbitron;
+  line-height: 28px;
   font-size: 28px!important;
   font-weight: 400;
   margin: 0;
   text-align: center;
-}
-.index-link {
-  color: rgb(46, 46, 46);
-  transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  -webkit-transition: all .25s ease-in-out;
-}
-.index-link:hover, .index-link:focus {
-  color: rgba(255, 255, 255, 1);
-  outline: none;
 }
 
 /* SEARCH */
@@ -445,16 +439,12 @@ button.btn-dope {
 }
 #showpod-copyright {
 }
-#showpod-title {
+#showpod-c h1 {
   margin: 10px 0;
   font-size: 20px;
 }
-#showpod-artist {
-  display: block;
+#showpod-c h2 {
   margin-bottom: 4px;
-}
-#showpod-artist h2 {
-  display: inline;
   font-size: 16px;
 }
 #showpod-description {
@@ -668,7 +658,7 @@ button.btn-dope {
   word-wrap: break-word;
 }
 #episodes-table .date {
-  width: 130px;
+  width: 135px;
 }
 #episodes-table .size {
   width: 60px;
@@ -713,7 +703,7 @@ button.btn-dope {
 .results-header h1 {
   font-size: 24px;
   margin: 0;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 .results-buttons, .options-buttons {
   justify-content: flex-end;
@@ -808,7 +798,7 @@ button.btn-dope {
   height: 19px;
   margin-bottom: 3px;
 }
-.charts-result p {
+.charts-result h2 {
   margin-bottom: 3px;
   font-size: 14px;
   overflow: hidden;
@@ -941,9 +931,9 @@ button.btn-dope {
   overflow: hidden;
   height: 57px;
 }
-.result-box p {
+.result-box h2 {
   font-size: 14px;
-  height: 40px;
+  height: 32px;
   overflow: hidden;
   margin: 0;
 }

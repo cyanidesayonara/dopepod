@@ -31,32 +31,36 @@
           </a>
         </li>
       {% endif %}
+    </ul>
+  </div>
+  <div class="col-6 col-lg-2" id="dopebar-c">
+    <a class="dopebar-link index-link" href="/" title="dopepod">
+      <h1>dopepod</h1>
+    </a>
+  </div>
+  <div class="col-3 col-lg-5" id="dopebar-r">
+    <ul class="d-none d-xl-inline-block">
       <li>
         <a class="dopebar-link lights-toggle" href="#">
           <i class="far fa-lightbulb"></i>
         </a>
       </li>
-    </ul>
-  </div>
-  <div class="col-6 col-lg-2" id="dopebar-c">
-    <a class="index-link" href="/" title="dopepod">
-      <h1>dopepod</h1>
-    </a>
-  </div>
-  <div class="col-3 col-lg-5" id="dopebar-r">
-    {% if user.is_authenticated %}
-      <form class="logout-form d-inline-block d-xl-none" method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button class="dopebar-link ajax-logout dopebar-icon" type="submit">
+      {% if user.is_authenticated %}
+      <li>
+        <form class="logout-form d-inline-block d-xl-none" method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="dopebar-link ajax-logout dopebar-icon" type="submit">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </li>
+      {% else %}
+      <li>
+        <a class="dopebar-link ajax-login dopebar-icon d-inline-block d-xl-none" href="/?view=login">
           <i class="fas fa-sign-out-alt"></i>
-        </button>
-      </form>
-    {% else %}
-      <a class="dopebar-link ajax-login dopebar-icon d-inline-block d-xl-none" href="/?view=login">
-        <i class="fas fa-sign-out-alt"></i>
-      </a>
-    {% endif %}
-    <ul class="d-none d-xl-inline-block">
+        </a>
+      </li>
+      {% endif %}
       {% if user.is_authenticated %}
       <li>
         <a class="dopebar-link settings-link" href="{% url 'settings' %}">
@@ -146,19 +150,19 @@
         <li>
           <form class="logout-form" method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button class="dopebar-link ajax-logout d-inline-block d-xl-none" type="submit">
+            <button class="dopebar-link ajax-logout" type="submit">
               Logout
             </button>
           </form>
         </li>
       {% else %}
         <li>
-          <a class="dopebar-link ajax-login d-inline-block d-xl-none" href="/?view=login">
+          <a class="dopebar-link ajax-login" href="/?view=login">
             Login
           </a>
         </li>
         <li>
-          <a class="dopebar-link ajax-signup d-inline-block d-xl-none" href="/?view=signup">
+          <a class="dopebar-link ajax-signup" href="/?view=signup">
             Signup
           </a>
         </li>
