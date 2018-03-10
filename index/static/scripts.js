@@ -184,8 +184,7 @@ function loadResults(args) {
   checkForXHR(url);
   pushState(url);
   if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    var loading = $(".circle-loading").clone();
-    drop.html(loading);
+    drop.html(getCircleLoading());
   }
   xhr = $.ajax({
     type: "GET",
@@ -287,6 +286,9 @@ function cookieBannerClose() {
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 }
+function getCircleLoading() {
+  return $(".circle-loading").first().clone();
+}
 
 $(document)
   // SEARCH
@@ -310,7 +312,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", "a.alphabet-button, a.options-button, a.provider-button", function(e) {
+  .on("click", ".options-button", function(e) {
     e.preventDefault();
     var url = this.href;
     var button = $(this);
@@ -487,16 +489,9 @@ $(document)
   })
   .on("click", "#player-minimize", function(e) {
     e.preventDefault();
-    if ($("#player").hasClass("minimize")) {
-      $("#player").removeClass("minimize");
-      $("#audio-el").removeClass("d-none");
-      $(this).removeClass("active");
-    }
-    else {
-      $("#player").addClass("minimize");
-      $("#audio-el").addClass("d-none");
-      $(this).addClass("active");
-    }
+    $("#player").toggleClass("minimize");
+    $("#audio-el").toggleClass("d-none");
+    $(this).toggleClass("active");
   })
   // LOGIN & SIGNUP
   // open login / register
@@ -584,6 +579,7 @@ $(document)
       $(this).collapse("toggle");
     })
     $(this).children().each(function() {
+      // TODO stop this from flickering
       $(this).toggleClass("d-none");
     });
   })
@@ -608,60 +604,66 @@ $(document)
   })
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
-    var el = $("body");
-    if (el.hasClass("darken")) {
-      el.removeClass("darken");
-    }
-    else {
-      el.addClass("darken");
-    }
+    $("body").toggleClass("darken");
   })
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
-  .on("click", "body, .dopebar-link", function(e) {
+  .on("click", "body, .dopebar-link, .search-button", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
   })
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    var button = $(this);
-    if (button.hasClass("active")) {
-      button.removeClass("active");
-      button.parent().removeClass("active");
+    $(this).parent().toggleClass("selected");
+    var buttons = $(this).parents(".results").find(".subscriptions-result")
+    var selected = $(this).parents(".results").find(".subscriptions-result.selected");
+    if (buttons.length == selected.length) {
+      $(".select-all-button").addClass("active");
     }
     else {
-      button.addClass("active");
-      button.parent().addClass("active");
+      $(".select-all-button").removeClass("active");
     }
+  })
+  .on("click", ".select-all-button", function() {
+    if ($(this).hasClass("active")) {
+      $(this).parents().siblings().find(".subscriptions-result").removeClass("selected");
+    }
+    else {
+      $(this).parents().siblings().find(".subscriptions-result").addClass("selected");
+    }
+    $(this).toggleClass("active");
   })
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
-    var url = this.href;
-    var buttons = $(this).parents(".results").find($(".select-subscription.active"));
-    var podids = [];
-    buttons.each(function(i, button) {
-      podids[i] = $(button).data("podid");
-    })
-    var data = {
-      "podids": podids,
+    var buttons = $(this).parents(".results").find($(".subscriptions-result.selected"));
+    if (buttons.length) {
+      var url = this.href;
+      var podids = [];
+      buttons.each(function(i, button) {
+        podids[i] = $(button).data("podid");
+      })
+      var data = {
+        "podids": podids,
+      }
+      var button = $(this);
+      var text = button[0].innerText;
+      button.html(getButtonLoading());
+      console.log(podids)
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: data,
+      })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+        button.text(text);
+        $("#center-stage").html(xhr.responseText);
+        replaceState("/");
+      })
+      .done(function(response) {
+        $("#center-stage").html(response);
+        replaceState(url);
+      });
     }
-    var button = $(this);
-    var text = button[0].innerText;
-    button.html(getButtonLoading());
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: data,
-    })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      button.text(text);
-      $("#center-stage").html(xhr.responseText);
-      replaceState("/");
-    })
-    .done(function(response) {
-      $("#center-stage").html(response);
-      replaceState(url);
-    });
   })

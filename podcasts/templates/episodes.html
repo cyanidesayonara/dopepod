@@ -127,7 +127,7 @@
                     Play
                   </button>
                 </form>
-                {% if results.view == 'episodes' %}
+                {% if user.is_authenticated and results.view == 'episodes' %}
                   <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="add" />

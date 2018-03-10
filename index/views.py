@@ -96,7 +96,7 @@ def charts(request):
                 'results': charts,
             }
 
-            return render(rebquest, 'results_base.html', context)
+            return render(request, 'results_base.html', context)
 
         last_played = Episode.get_last_played()
         context = {
@@ -309,8 +309,7 @@ def showpod(request, podid):
             podcast = Podcast.objects.get(podid=podid)
             podcast.views = F('views') + 1
             podcast.save()
-            if user.is_authenticated:
-                podcast.is_subscribed(user)
+            podcast.is_subscribed(user)
 
             context = {
                 'podcast': podcast,
