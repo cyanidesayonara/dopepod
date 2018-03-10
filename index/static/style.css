@@ -223,6 +223,9 @@ button.btn-dope {
 .lights-toggle {
   margin: 0 5px;
 }
+.lights-toggle.lit {
+  color: #fff;
+}
 .dopebar-link  {
   padding: 5px;
   cursor: pointer;
@@ -799,10 +802,10 @@ button.btn-dope {
   font-size: 16px;
   overflow: hidden;
   height: 19px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 .charts-result h2 {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   font-size: 14px;
   overflow: hidden;
   height: 19px;

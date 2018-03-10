@@ -52,11 +52,19 @@
       </a>
     {% endif %}
     <ul class="d-none d-xl-inline-block">
-      <li>
-        <a class="dopebar-link lights-toggle" href="#">
-          <i class="far fa-lightbulb"></i>
-        </a>
-      </li>
+      {% if user.profile.dark_theme %}
+        <li>
+          <a class="dopebar-link lights-toggle" href="#">
+            <i class="far fa-lightbulb"></i>
+          </a>
+        </li>
+      {% else %}
+        <li>
+          <a class="dopebar-link lights-toggle lit" href="#">
+            <i class="far fa-lightbulb"></i>
+          </a>
+        </li>
+      {% endif %}
       {% if user.is_authenticated %}
         <li>
           <a class="dopebar-link settings-link" href="{% url 'settings' %}">
@@ -116,9 +124,15 @@
         {% endif %}
       </button>
     </form>
-    <a class="dopebar-link lights-toggle" href="#">
-      <i class="far fa-lightbulb"></i>
-    </a>
+    {% if user.profile.dark_theme %}
+      <a class="dopebar-link lights-toggle" href="#">
+        <i class="far fa-lightbulb"></i>
+      </a>
+    {% else %}
+      <a class="dopebar-link lights-toggle lit" href="#">
+        <i class="far fa-lightbulb"></i>
+      </a>
+    {% endif %}
     <ul>
       <li>
         <a class="dopebar-link browse-link" href="{% url 'search' %}">
