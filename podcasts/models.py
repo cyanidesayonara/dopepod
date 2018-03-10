@@ -96,7 +96,9 @@ class Podcast(models.Model):
     def get_n_subscribers(self):
         if type(self.n_subscribers) == int:
             return str(self.n_subscribers) if self.n_subscribers > 100 else '<100'
-
+        else:
+            return '<100'
+            
     def __str__(self):
         return self.title
 
@@ -285,8 +287,8 @@ class Podcast(models.Model):
         """
         sets self.is_subscribed = True if subscribed
         """
-
-        self.is_subscribed = Subscription.objects.filter(user=user, podcast__podid=self.podid).exists()
+        if user.is_authenticated:
+            self.is_subscribed = Subscription.objects.filter(user=user, podcast__podid=self.podid).exists()
 
     def scrape_podcast(podid):
         """

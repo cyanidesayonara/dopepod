@@ -86,6 +86,7 @@ def unsubscribe(request):
     # validate request
     if request.method == 'POST':
         user = request.user
+        print("dsdad")
         if user.is_authenticated:
             try:
                 podids = request.POST.getlist('podids[]')

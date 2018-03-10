@@ -47,8 +47,8 @@ dopepod
               <i class="fas fa-th"></i>
               <i class="fas fa-bars d-none"></i>
             {% else %}
-              <span class="d-none">List</span>
               <span>Grid</span>
+              <span class="d-none">List</span>
             {% endif %}
           {% elif results.view == 'list' %}
             {% if request.is_ajax %}
@@ -106,6 +106,9 @@ dopepod
         </a>
       {% endif %}
       {% if results.subscriptions %}
+        <a class="btn-dope select-all-button" href="#">
+          Select All
+        </a>
         <a class="btn-dope unsubscribe-button" href="{% url 'unsubscribe' %}">
           Unsubscribe
         </a>

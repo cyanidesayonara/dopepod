@@ -579,6 +579,7 @@ $(document)
       $(this).collapse("toggle");
     })
     $(this).children().each(function() {
+      // TODO stop this from flickering
       $(this).toggleClass("d-none");
     });
   })
@@ -608,42 +609,61 @@ $(document)
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
     $(this).blur();
   })
-  .on("click", "body, .dopebar-link", function(e) {
+  .on("click", "body, .dopebar-link, .search-button", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
   })
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    $(this).parent().toggleClass("active");
+    $(this).parent().toggleClass("selected");
+    var buttons = $(this).parents(".results").find(".subscriptions-result")
+    var selected = $(this).parents(".results").find(".subscriptions-result.selected");
+    if (buttons.length == selected.length) {
+      $(".select-all-button").addClass("active");
+    }
+    else {
+      $(".select-all-button").removeClass("active");
+    }
+  })
+  .on("click", ".select-all-button", function() {
+    if ($(this).hasClass("active")) {
+      $(this).parents().siblings().find(".subscriptions-result").removeClass("selected");
+    }
+    else {
+      $(this).parents().siblings().find(".subscriptions-result").addClass("selected");
+    }
+    $(this).toggleClass("active");
   })
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
-    var url = this.href;
-    var buttons = $(this).parents(".results").find($(".subscriptions-result.active"));
-    var podids = [];
-    console.log(podids)
-    buttons.each(function(i, button) {
-      podids[i] = $(button).data("podid");
-    })
-    var data = {
-      "podids": podids,
+    var buttons = $(this).parents(".results").find($(".subscriptions-result.selected"));
+    if (buttons.length) {
+      var url = this.href;
+      var podids = [];
+      buttons.each(function(i, button) {
+        podids[i] = $(button).data("podid");
+      })
+      var data = {
+        "podids": podids,
+      }
+      var button = $(this);
+      var text = button[0].innerText;
+      button.html(getButtonLoading());
+      console.log(podids)
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: data,
+      })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+        button.text(text);
+        $("#center-stage").html(xhr.responseText);
+        replaceState("/");
+      })
+      .done(function(response) {
+        $("#center-stage").html(response);
+        replaceState(url);
+      });
     }
-    var button = $(this);
-    var text = button[0].innerText;
-    button.html(getButtonLoading());
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: data,
-    })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      button.text(text);
-      $("#center-stage").html(xhr.responseText);
-      replaceState("/");
-    })
-    .done(function(response) {
-      $("#center-stage").html(response);
-      replaceState(url);
-    });
   })

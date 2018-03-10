@@ -309,8 +309,7 @@ def showpod(request, podid):
             podcast = Podcast.objects.get(podid=podid)
             podcast.views = F('views') + 1
             podcast.save()
-            if user.is_authenticated:
-                podcast.is_subscribed(user)
+            podcast.is_subscribed(user)
 
             context = {
                 'podcast': podcast,

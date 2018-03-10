@@ -949,6 +949,7 @@ button.btn-dope {
 .subscriptions-box img {
   float: left;
   margin-right: 5px;
+  border-radius: .25rem;
 }
 .subscriptions-box h1 {
   font-size: 16px;
@@ -964,13 +965,13 @@ button.btn-dope {
 .subscriptions-result {
   border: 2px solid rgba(0, 191, 165, 1);
 }
-.subscriptions-result.active {
+.subscriptions-result.selected {
   background: rgba(0, 191, 165, 1);
 }
-.subscriptions-result.active h1 {
+.subscriptions-result.selected h1 {
   color: #000;
 }
-.subscriptions-result.active h1:hover {
+.subscriptions-result.selected h1:hover {
   color: #fff;
 }
 .select-subscription {
