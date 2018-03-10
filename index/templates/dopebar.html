@@ -103,9 +103,13 @@
       <input class="q" type="text" name="q" type="search" placeholder="Search for podcasts"
       aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8">
       <button class="search-button" type="submit">
-        <span>
-          Go
-        </span>
+        {% if request.is_ajax %}
+          <i class="fa fa-search icon"></i>
+        {% else %}
+          <span>
+            Go
+          </span>
+        {% endif %}
       </button>
     </form>
     <a class="dopebar-link lights-toggle" href="#">

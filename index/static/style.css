@@ -187,6 +187,9 @@ button.btn-dope {
 #dopebar-l, #dopebar-c, #dopebar-r {
   padding: 0 10px;
 }
+#dopebar-c {
+  text-align: center;
+}
 #dopebar-wrapper {
   padding: 0;
 }
