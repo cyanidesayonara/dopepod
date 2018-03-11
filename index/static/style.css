@@ -620,7 +620,7 @@ button.btn-dope {
 }
 
 /* EPISODES */
-.hidden-row {
+.episode-content {
   padding: 0 !important;
   background: rgba(204, 204, 204, .5);
 }
@@ -629,50 +629,43 @@ button.btn-dope {
   padding: 10px;
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
-.more-collapse .episode-description {
+.episode-content p {
   margin: 0;
 }
-.more-collapse img {
-  float: left;
-}
-#episodes-collapse {
-  overflow: hidden;
-  padding: 0 10px;
-}
-#episodes-table {
+.episodes-table {
   table-layout: fixed;
   margin-bottom: 10px;
 }
-#episodes-table th, #episodes-table td {
+.episodes-table th, .episodes-table td {
   padding: 5px;
   border: none;
 }
-#episodes-table thead th {
+.episodes-table thead th {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
-#episodes-table tbody tr.hover {
+.episode-header {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
-#episodes-table tbody tr.hover:hover {
+.episode-header:hover {
   background: rgba(0, 191, 165, 1);
   color: #fff;
 }
-#episodes-table .number {
+.episodes-table .number {
   width: 45px;
 }
-#episodes-table .title {
+.episodes-table .title {
   word-wrap: break-word;
 }
-#episodes-table .date {
+.episodes-table .date {
   width: 140px;
 }
-#episodes-table .size {
+.episodes-table .size {
   width: 65px;
 }
-#episodes-table .length {
+.episodes-table .length {
   width: 65px;
 }
-#episodes-table .new {
+.episodes-table .new {
   color: rgba(0, 191, 165, 1);
   background: rgb(255, 255, 255);
   padding: 0 2px;
@@ -680,8 +673,15 @@ button.btn-dope {
   border: 2px solid rgba(0, 191, 165, 1);
 }
 .episode-buttons {
-  margin-top: 10px;
-  float: right;
+  justify-content: flex-end;
+  padding: 6px 0 0 6px;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.episode-buttons > * {
+  margin-left: 4px;
+  margin-top: 4px;
 }
 
 /* RESULTS BASE */
@@ -1065,16 +1065,16 @@ button.btn-dope {
   body {
     font-size: 12px;
   }
-  #episodes-table .number {
+  .episodes-table .number {
     width: 35px;
   }
-  #episodes-table .date {
+  .episodes-table .date {
     width: 60px;
   }
-  #episodes-table .size {
+  .episodes-table .size {
     width: 50px;
   }
-  #episodes-table .length {
+  .episodes-table .length {
     width: 50px;
   }
   .player-wrapper {
@@ -1086,16 +1086,16 @@ button.btn-dope {
   body {
     font-size: 13px;
   }
-  #episodes-table .number {
+  .episodes-table .number {
     width: 40px;
   }
-  #episodes-table .date {
+  .episodes-table .date {
     width: 65px;
   }
-  #episodes-table .size {
+  .episodes-table .size {
     width: 55px;
   }
-  #episodes-table .length {
+  .episodes-table .length {
     width: 55px;
   }
 }

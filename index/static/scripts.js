@@ -2,8 +2,17 @@
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
-    var el = $("#main")[0];
-    $(el).html(state.context);
+    var url = state.url;
+    var urls = ["settings", "playlist", "subscriptions"];
+    for (i = 0; i < urls.length; i++) {
+      if (url.includes(urls[i])) {
+        var drop = $("#center-stage");
+        loadResults([url, drop], true);
+        return;
+      }
+    }
+    var main = $("#main")[0];
+    $(main).html(state.context);
     $("title")[0].innerText = state.title;
   }
 })
@@ -14,12 +23,13 @@ function pushState(url) {
       return;
     }
   }
-  var el = $("#main")[0];
-  var context = el.innerHTML;
+  var main = $("#main")[0];
+  var context = main.innerHTML;
   var title = updateTitle();
   var state = {
     "context": context,
     "title": title,
+    "url": url,
   };
   history.pushState(state, "", url);
 }
@@ -33,12 +43,13 @@ function replaceState(url) {
       return;
     }
   }
-  var el = $("#main")[0];
-  var context = el.innerHTML;
+  var main = $("#main")[0];
+  var context = main.innerHTML;
   var title = updateTitle();
   var state = {
     "context": context,
     "title": title,
+    "url": url,
   };
   history.replaceState(state, "", url);
 }
@@ -163,13 +174,16 @@ function checkForXHR(url) {
 }
 
 // LOADER
-function loadResults(args) {
+function loadResults(args, no_push) {
   var url = args[0];
   var drop = $(args[1]);
   var callback = args[2];
   var args = args[3];
   checkForXHR(url);
-  pushState(url);
+  if (!no_push) {
+    console.log("sdfsdf")
+    pushState(url);
+  }
   if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
     drop.html(getCircleLoading());
   }
@@ -388,7 +402,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      if (!drop.find("#settings").length) {
+      if (!drop.find(".settings").length) {
         loadResults([url, drop]);
       }
       scrollToTop();
@@ -427,9 +441,11 @@ $(document)
         scrollToTop();
       })
       .done(function(response) {
+        pushState(url);
         changeTheme(theme);
         $("#center-stage").html(response);
         scrollToTop();
+        replaceState("/");
       });
   })
   .on("submit", "#sub-form", function(e) {
@@ -468,7 +484,7 @@ $(document)
           }, 1000);
         }
         else if (mode == "add") {
-          button.text(text);
+          // button.text(text);
         }
         else {
           var drop = $("#center-stage");
@@ -604,7 +620,7 @@ $(document)
     $("body").toggleClass("darken");
     $(".lights-toggle").toggleClass("lit");
   })
-  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
+  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episodes-table tbody tr", function(e) {
     $(this).blur();
   })
   .on("click", "body, .dopebar-link, .search-button", function(e) {
