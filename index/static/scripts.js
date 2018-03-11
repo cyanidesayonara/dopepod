@@ -193,7 +193,14 @@ function loadResults(args) {
     .fail(function(xhr, ajaxOptions, thrownError) {
   })
     .done(function(response) {
-       drop.html(response);
+      drop.html(response);
+      try {
+        if (args[2]) {
+         changeTheme(!$(".lights-toggle").hasClass("lit"));
+        }
+      }
+      catch (e) {
+      }
       if (callback) {
         callback(args);
       }
@@ -605,6 +612,7 @@ $(document)
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
     $("body").toggleClass("darken");
+    $(".lights-toggle").toggleClass("lit");
   })
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, #episodes-table tbody tr", function(e) {
     $(this).blur();
