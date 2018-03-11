@@ -181,7 +181,6 @@ function loadResults(args, no_push) {
   var args = args[3];
   checkForXHR(url);
   if (!no_push) {
-    console.log("sdfsdf")
     pushState(url);
   }
   if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
@@ -484,7 +483,7 @@ $(document)
           }, 1000);
         }
         else if (mode == "add") {
-          // button.text(text);
+          button.text(text);
         }
         else {
           var drop = $("#center-stage");
