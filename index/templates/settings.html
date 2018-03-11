@@ -8,9 +8,9 @@ settings
 <div class="col-12 results color-5-trans settings">
   <form class="settings-form" action="{% url 'settings' %}" method="POST">
     <button type="submit" class="btn-dope active settings-save">Save</button>
-    <h3>
+    <h1>
       Settings
-    </h3>
+    </h1>
     <div id="settings-errors">
       {% if errors %}
         {% for k, v in errors.items %}

@@ -1,71 +1,3 @@
-$(document)
-  .ready(function() {
-    xhr = null;
-    timeout = 0;
-    refreshCookie();
-    addIcons();
-    updateLastPlayed();
-    updateCharts();
-  })
-
-function updateLastPlayed() {
-  setInterval(function() {
-    loadResults(["/last_played/", $("#last-played")]);
-  }, 60000);
-}
-
-function updateCharts() {
-  setInterval(function() {
-    loadResults(["/charts/", $("#charts")]);
-  }, 86400000);
-}
-
-function addIcons() {
-  $(".search-button").html("<i class='fa fa-search icon'></i>");
-  var login_buttons = $("#login-buttons");
-  if (login_buttons.length) {
-    login_buttons.find("#login-tab")[0].href = "#tabs-login";
-    login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
-    $("#google-icon").html("<i class='fab fa-google icon'></i>");
-  }
-  var view_buttons = $(".view-button");
-  if (view_buttons.length) {
-    view_buttons.each(function() {
-      if ($(this).innerText == 'List') {
-        $(this).html("<i class='fas fa-th d-none'></i><i class='fas fa-bars'></i>");
-      } else {
-        $(this).html("<i class='fas fa-th'></i><i class='fas fa-bars d-none'></i>");
-      }
-    })
-  }
-  var view_buttons = $(".episode-buttons");
-  if (view_buttons.length) {
-    view_buttons.each(function() {
-      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle'></i>");
-      $(this).find(".playlist-move-up").html("<i class='fas fa-arrow-circle-up'></i>");
-      $(this).find(".playlist-move-down").html("<i class='fas fa-arrow-circle-down'></i>");
-    })
-  }
-  var back_buttons = $(".results-back");
-  if (back_buttons.length) {
-    back_buttons.each(function() {
-      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
-    })
-  }
-  var minimize_buttons = $(".results-minimize");
-  if (minimize_buttons.length) {
-    minimize_buttons.each(function() {
-      $(this).html("<i class='fas fa-minus-circle icon'></i>");
-    })
-  }
-  var close_buttons = $(".results-close");
-  if (close_buttons.length) {
-    close_buttons.each(function() {
-      $(this).html("<i class='fas fa-times-circle icon'></i>");
-    })
-  }
-}
-
 // HISTORY API
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
@@ -110,14 +42,69 @@ function replaceState(url) {
   };
   history.replaceState(state, "", url);
 }
+function updateLastPlayed() {
+  setInterval(function() {
+    loadResults(["/last_played/", $("#last-played")]);
+  }, 60000);
+}
+function updateCharts() {
+  setInterval(function() {
+    loadResults(["/charts/", $("#charts")]);
+  }, 86400000);
+}
+function addIcons() {
+  $(".search-button").html("<i class='fa fa-search icon'></i>");
+  var login_buttons = $(".login-buttons");
+  if (login_buttons.length) {
+    login_buttons.find("#login-tab")[0].href = "#tabs-login";
+    login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
+    login_buttons.find("#google-icon").html("<i class='fab fa-google icon'></i>");
+  }
+  var view_buttons = $(".view-button");
+  if (view_buttons.length) {
+    view_buttons.each(function() {
+      if ($(this).innerText == 'List') {
+        $(this).html("<i class='fas fa-th d-none'></i><i class='fas fa-bars'></i>");
+      } else {
+        $(this).html("<i class='fas fa-th'></i><i class='fas fa-bars d-none'></i>");
+      }
+    })
+  }
+  var view_buttons = $(".episode-buttons");
+  if (view_buttons.length) {
+    view_buttons.each(function() {
+      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle'></i>");
+      $(this).find(".playlist-move-up").html("<i class='fas fa-arrow-circle-up'></i>");
+      $(this).find(".playlist-move-down").html("<i class='fas fa-arrow-circle-down'></i>");
+    })
+  }
+  var back_buttons = $(".results-back");
+  if (back_buttons.length) {
+    back_buttons.each(function() {
+      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
+    })
+  }
+  var minimize_buttons = $(".results-minimize");
+  if (minimize_buttons.length) {
+    minimize_buttons.each(function() {
+      $(this).html("<i class='fas fa-minus-circle icon'></i>");
+    })
+  }
+  var close_buttons = $(".results-close");
+  if (close_buttons.length) {
+    close_buttons.each(function() {
+      $(this).html("<i class='fas fa-times-circle icon'></i>");
+    })
+  }
+}
 function updateTitle() {
   // TODO center-stage contains title string
   var title = "dopepod";
-  var el = $("#player-wrapper");
-  if (el.length) {
-    title = el.find("#player-title")[0].innerText;
-    var episode = el.find("#player-episode")[0].innerText;
-    title = "Now playing: " + title + " - " + episode + " | dopepod";
+  var player = $(".player-wrapper");
+  if (player.length) {
+    title = player.find(".player-title")[0].innerText;
+    var episode = player.find(".player-episode")[0].innerText;
+    title = "Now playing: " + title + " - " + episode + " | on dopepod";
   }
   else if ($("#showpod-c").length) {
       title = "Listen to episodes of " + $("#showpod-c h1")[0].innerText + " on dopepod";
@@ -194,6 +181,7 @@ function loadResults(args) {
   })
     .done(function(response) {
       drop.html(response);
+      // double callback - login refresh - changes theme at login
       try {
         if (args[2]) {
          changeTheme(!$(".lights-toggle").hasClass("lit"));
@@ -201,15 +189,12 @@ function loadResults(args) {
       }
       catch (e) {
       }
+      // loads episodes
       if (callback) {
         callback(args);
       }
       else {
         $(".episodes-button").text("Episodes");
-        clearTimeout(timeout);
-        timeout = setTimeout(function() {
-          $("#dopebar-collapse.show").collapse("hide");
-        }, 1000)
       }
       replaceState(url);
     });
@@ -278,18 +263,15 @@ function subscribeOrUnsubscribe(form) {
       loadResults([url, drop]);
     });
 };
-
 function replaceChars(q) {
   q = q.replace(/&+/g, "+");
   q = q.replace(/\s+/g, "+");
   q = q.replace(/([^a-zA-Z0-9\u0080-\uFFFF +']+)/gi, "");
   return q;
 }
-
 function cookieBannerClose() {
   $("#player").empty();
 }
-
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 }
@@ -298,6 +280,14 @@ function getCircleLoading() {
 }
 
 $(document)
+  .ready(function() {
+    xhr = null;
+    timeout = 0;
+    refreshCookie();
+    addIcons();
+    updateLastPlayed();
+    updateCharts();
+  })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
   .on("keyup submit", ".search-form", function(e) {
@@ -351,7 +341,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = $("#center-stage");
-      if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
+      if (!drop.find(".login").length && !drop.find(".dashboard").length) {
         loadResults([url, drop]);
       }
       else {
@@ -472,8 +462,8 @@ $(document)
           button.text(text);
           // gotta wait a sec here
           setTimeout(function() {
-            var box = $("#player-title");
-            var text = $("#player-title h1");
+            var box = $(".player-title");
+            var text = $(".player-title h1");
             scrollText(box, text);
           }, 1000);
         }
@@ -487,17 +477,17 @@ $(document)
       });
   })
   // close player
-  .on("click", "#player-close", function(e) {
+  .on("click", ".player-close", function(e) {
     e.preventDefault();
-    $("#audio-el audio")[0].preload="none";
+    $(".audio-el audio")[0].preload="none";
     $("#player").empty();
     $("#player").removeClass("minimize");
     updateTitle();
   })
-  .on("click", "#player-minimize", function(e) {
+  .on("click", ".player-minimize", function(e) {
     e.preventDefault();
     $("#player").toggleClass("minimize");
-    $("#audio-el").toggleClass("d-none");
+    $(".audio-el").toggleClass("d-none");
     $(this).toggleClass("active");
   })
   // LOGIN & SIGNUP
@@ -506,7 +496,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.find("#login-wrapper").length && !drop.find("#dashboard").length) {
+    if (!drop.find(".login").length && !drop.find(".dashboard").length) {
       loadResults([url, drop]);
     }
     else if ($(this).hasClass("ajax-login")) {
