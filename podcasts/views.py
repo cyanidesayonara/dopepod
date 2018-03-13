@@ -88,6 +88,7 @@ def unsubscribe(request):
         user = request.user
         if user.is_authenticated:
             try:
+                print(request.POST)
                 podids = request.POST.getlist('podids[]')
                 for podid in podids:
                     podcast = Podcast.objects.get(podid=int(podid))

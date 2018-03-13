@@ -184,7 +184,7 @@ function loadResults(args, no_push) {
     pushState(url);
   }
   if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    drop.html(getCircleLoading());
+    drop.find(".results").html(getCircleLoading());
   }
   xhr = $.ajax({
     type: "GET",
@@ -650,32 +650,41 @@ $(document)
   })
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
-    var buttons = $(this).parents(".results").find($(".subscriptions-result.selected"));
-    if (buttons.length) {
-      var url = this.href;
-      var podids = [];
-      buttons.each(function(i, button) {
-        podids[i] = $(button).data("podid");
-      })
-      var data = {
-        "podids": podids,
-      }
-      var button = $(this);
-      var text = button[0].innerText;
-      button.html(getButtonLoading());
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data,
-      })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        button.text(text);
-        $("#center-stage").html(xhr.responseText);
-        replaceState("/");
-      })
-      .done(function(response) {
-        $("#center-stage").html(response);
-        replaceState(url);
-      });
+    var url = this.href;
+    if ($(this).hasClass("sub-nix")) {
+      var podids = [$(this).parent().data("podid")];
     }
+    else {
+      var podids = [];
+      var buttons = $(this).parents(".results").find(".subscriptions-result.selected");
+      if (buttons.length) {
+        buttons.each(function(i, button) {
+          podids[i] = $(button).data("podid");
+        })
+      }
+      else {
+        return;
+      }
+    }
+    console.log(podids)
+    var data = {
+      "podids": podids,
+    }
+    var button = $(this);
+    var text = button[0].innerText;
+    button.html(getButtonLoading());
+    $.ajax({
+      method: "POST",
+      url: url,
+      data: data,
+    })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+      button.text(text);
+      $("#center-stage").html(xhr.responseText);
+      replaceState("/");
+    })
+    .done(function(response) {
+      $("#center-stage").html(response);
+      replaceState(url);
+    });
   })

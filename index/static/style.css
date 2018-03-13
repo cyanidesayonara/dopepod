@@ -992,6 +992,10 @@ button.btn-dope {
 .subscriptions-buttons > * {
   margin-left: 4px;
 }
+.sub-nix {
+  float: right;
+  margin-left: 5px;
+}
 
 /* BROWSE RESULTS */
 .browse-results {
