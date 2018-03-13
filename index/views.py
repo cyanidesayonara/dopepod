@@ -184,24 +184,29 @@ def subscriptions(request):
 
     if request.method == 'GET':
         user = request.user
-        results = Subscription.get_subscriptions(user)
+        if user.is_authenticated:
+            results = Subscription.get_subscriptions(user)
 
-        context = {
-            'results': results,
-        }
-        if request.is_ajax():
+            context = {
+                'results': results,
+            }
+            if request.is_ajax():
+                return render(request, 'results_base.html', context)
+
+            results['extend'] = True
+
+            charts = Podcast.get_charts()
+            last_played = Episode.get_last_played()
+            context.update({
+                'charts': charts,
+                'last_played': last_played,
+            })
+
             return render(request, 'results_base.html', context)
-
-        results['extend'] = True
-
-        charts = Podcast.get_charts()
-        last_played = Episode.get_last_played()
-        context.update({
-            'charts': charts,
-            'last_played': last_played,
-        })
-
-        return render(request, 'results_base.html', context)
+        else:
+            if request.is_ajax():
+                return render(request, 'splash.html', {})
+            return redirect('/')
 
 @vary_on_headers('Accept')
 def playlist(request):
@@ -226,6 +231,10 @@ def playlist(request):
             })
 
             return render(request, 'results_base.html', context)
+        else:
+            if request.is_ajax():
+                return render(request, 'splash.html', {})
+            return redirect('/')
 
     if request.method == 'POST':
         user = request.user

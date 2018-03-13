@@ -650,6 +650,7 @@ button.btn-dope {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
 .episode-header {
+  cursor: pointer;
   border-bottom: 2px solid rgba(0, 191, 165, 1);
 }
 .episode-header:hover {
