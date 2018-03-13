@@ -64,9 +64,6 @@ a:hover {
   -moz-transition: all .15s ease;
   -webkit-transition: all .15s ease;
 }
-button.btn-dope {
-  cursor: default;
-}
 .btn-dope.active {
   color: #fff;
   background: rgba(0, 191, 165, 1);
@@ -360,6 +357,9 @@ button.btn-dope {
 }
 .login-buttons:hover .spin {
   transform: rotateY(-180deg);
+}
+.login-buttons button {
+  cursor: default;
 }
 
 /* DASHBOARD */
