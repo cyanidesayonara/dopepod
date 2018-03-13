@@ -19,17 +19,32 @@
               {{ podcast.artist }}
             </strong>
           </h2>
-          <ul>
-            <li>
-              {{ podcast.get_n_subscribers }} subscribers
-            </li>
-            <li>
-              {{ podcast.language }}
-            </li>
-            <li>
-              {{ podcast.get_primary_genre }}
-            </li>
-          </ul>
+          <table>
+            <tr>
+              <td>
+                Genre
+              </td>
+              <td>
+                {{ podcast.get_primary_genre }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language
+              </td>
+              <td>
+                {{ podcast.language }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Subscribers
+              </td>
+              <td>
+                {{ podcast.get_n_subscribers }}
+              </td>
+            </tr>
+          </table>
         </a>
       </div>
     </div>

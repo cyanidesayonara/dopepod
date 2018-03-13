@@ -12,7 +12,6 @@ Listen to episodes of {{ podcast.title }} on dopepod
       onerror="this.src='http://{{ podcast.artworkUrl }}380x380bb.jpg'" />
     </div>
     <div class="col-12 col-lg-5" id="showpod-c" data-podid="{{ podcast.podid }}">
-      <!-- TODO fix these ids -->
       <h1>
         <strong>
           {{ podcast.title }}
@@ -24,8 +23,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
           {{ podcast.artist }}
         </strong>
       </h2>
-      </span>
-      <p id="showpod-description">
+      <p>
         {{ podcast.description }}
       </p>
     </div>
@@ -88,7 +86,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
         <i class="fas fa-arrow-circle-left"></i>
       </button>
       {% if user.is_authenticated %}
-        <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
+        <form class="d-inline sub-form" action="{% url 'subscribe' %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="podid" value="{{ podcast.podid }}">
           {% if podcast.is_subscribed %}

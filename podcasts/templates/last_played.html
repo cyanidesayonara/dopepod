@@ -23,26 +23,51 @@
           {{ episode.title }}
         </strong>
       </h2>
-      <ul>
-        <li>
-          played: {{ episode.played_ago }}
-        </li>
-        <li>
-          released: {{ episode.pubDate|date:'d-m-Y H:i' }}
-        </li>
-      </ul>
+      <table>
+        <tr>
+          <td>
+            released
+          </td>
+          <td>
+            {{ episode.pubDate|date:'d-m-Y H:i' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            played
+          </td>
+          <td>
+            {{ episode.played_ago }}
+          </td>
+        </tr>
+      </table>
       <div class="collapse last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
-        <ul>
-          <li>
-            {{ episode.podcast.get_n_subscribers }} subscribers
-          </li>
-          <li>
-            {{ episode.podcast.language }}
-          </li>
-          <li>
-            {{ episode.podcast.get_primary_genre }}
-          </li>
-        </ul>
+        <table>
+          <tr>
+            <td>
+              Genre
+            </td>
+            <td>
+              {{ episode.podcast.get_primary_genre }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Language
+            </td>
+            <td>
+              {{ episode.podcast.language }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Subscribers
+            </td>
+            <td>
+              {{ episode.podcast.get_n_subscribers }}
+            </td>
+          </tr>
+        </table>
         <p>
           {% if episode.description %}
             {{ episode.description }}
