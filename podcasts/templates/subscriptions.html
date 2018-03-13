@@ -18,16 +18,18 @@
             Last updated:
             {{ subscription.last_updated|date:'d-m-Y H:i' }}
           </p>
-          <!-- <form class="d-inline" id="sub-form" action="{% url 'subscribe' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="podid" value="{{ podcast.podid }}">
-            <button type="submit" class="btn-dope sub-button">
-              Unsubscribe
+          <div class="subscriptions-buttons">
+            <form class="d-inline sub-form" action="{% url 'subscribe' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="podid" value="{{ podcast.podid }}">
+              <button type="submit" class="btn-dope sub-button">
+                Unsubscribe
+              </button>
+            </form>
+            <button class="btn-dope select-subscription">
+              Select
             </button>
-          </form> -->
-          <button class="btn-dope select-subscription">
-            Select
-          </button>
+          </div>
         </div>
       </div>
     {% endwith %}

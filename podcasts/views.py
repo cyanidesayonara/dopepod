@@ -67,7 +67,7 @@ def subscribe(request):
 
             if request.is_ajax():
                 return render(request, 'showpod.html', context)
-            return redirect('/showpod/' + podid + '/')
+            return redirect('/showpod/' + str(podid) + '/')
 
         else:
             if request.is_ajax():
@@ -86,7 +86,6 @@ def unsubscribe(request):
     # validate request
     if request.method == 'POST':
         user = request.user
-        print("dsdad")
         if user.is_authenticated:
             try:
                 podids = request.POST.getlist('podids[]')

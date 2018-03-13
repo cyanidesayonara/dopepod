@@ -70,6 +70,11 @@
                   No description
                 {% endif %}
               </p>
+              {% if results.view == 'playlist' %}
+              <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+                <h1>{{ episode.podcast }}</h1>
+              </a>
+              {% endif %}
               <div class="episode-buttons">
                 {% if user.is_authenticated %}
                   {% if results.view == 'playlist' %}

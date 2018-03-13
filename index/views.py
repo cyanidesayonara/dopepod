@@ -39,15 +39,17 @@ def index(request):
         user = request.user
         view = request.GET.get('view' , None)
 
+        if user.is_authenticated:
+            template = 'dashboard.html'
+        else:
+            template = 'splash.html'
+
         context = {
             'view': view,
         }
 
         if request.is_ajax():
-            if user.is_authenticated:
-                return render(request, 'dashboard.html', context)
-            else:
-                return render(request, 'splash.html', context)
+            return render(request, template, context)
 
         if not request.session.get('cookie', None):
             context['cookie_banner'] = cookie_test(request.session)
@@ -59,10 +61,7 @@ def index(request):
             'last_played': last_played,
         })
 
-        if user.is_authenticated:
-            return render(request, 'dashboard.html', context)
-        else:
-            return render(request, 'splash.html', context)
+        return render(request, template, context)
 
 @vary_on_headers('Accept')
 def charts(request):

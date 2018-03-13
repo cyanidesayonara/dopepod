@@ -447,7 +447,7 @@ $(document)
         replaceState("/");
       });
   })
-  .on("submit", "#sub-form", function(e) {
+  .on("submit", ".sub-form", function(e) {
     e.preventDefault();
     subscribeOrUnsubscribe(this);
   })
@@ -629,7 +629,7 @@ $(document)
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    $(this).parent().toggleClass("selected");
+    $(this).parents(".subscriptions-result").toggleClass("selected");
     var buttons = $(this).parents(".results").find(".subscriptions-result")
     var selected = $(this).parents(".results").find(".subscriptions-result.selected");
     if (buttons.length == selected.length) {
@@ -641,10 +641,10 @@ $(document)
   })
   .on("click", ".select-all-button", function() {
     if ($(this).hasClass("active")) {
-      $(this).parents().siblings().find(".subscriptions-result").removeClass("selected");
+      $(this).parent().siblings().find(".subscriptions-result").removeClass("selected");
     }
     else {
-      $(this).parents().siblings().find(".subscriptions-result").addClass("selected");
+      $(this).parent().siblings().find(".subscriptions-result").addClass("selected");
     }
     $(this).toggleClass("active");
   })
@@ -663,7 +663,6 @@ $(document)
       var button = $(this);
       var text = button[0].innerText;
       button.html(getButtonLoading());
-      console.log(podids)
       $.ajax({
         method: "POST",
         url: url,

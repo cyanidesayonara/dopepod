@@ -454,7 +454,7 @@ button.btn-dope {
   margin-bottom: 4px;
   font-size: 16px;
 }
-#showpod-description {
+#showpod-c p {
   text-align: justify;
   margin-bottom: 4px;
 }
@@ -633,6 +633,11 @@ button.btn-dope {
 .episode-content p {
   margin: 0;
 }
+.episode-content h1 {
+  display: inline-block;
+  margin: 10px 0 0;
+  font-size: 16px;
+}
 .episodes-table {
   table-layout: fixed;
   margin-bottom: 10px;
@@ -779,11 +784,15 @@ button.btn-dope {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
 }
-.charts-result ul {
+.charts-result table, .last-played-result table {
   font-size: 12px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+}
+.charts-result table tr td, .last-played-result table tr td {
+  padding: 2px 5px 0 0;
+}
+.charts-result table tr td:first-child:before, .last-played-result table tr td:first-child:before {
+  content: "●";
+  color: rgba(0, 191,165, 1);
 }
 .charts-rank {
   float: left;
@@ -800,11 +809,11 @@ button.btn-dope {
 .charts-result h1 {
   font-size: 16px;
   overflow: hidden;
-  height: 20px;
-  margin-bottom: 4px;
+  height: 18px;
+  margin-bottom: 3px;
 }
 .charts-result h2 {
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   font-size: 14px;
   overflow: hidden;
   height: 16px;
@@ -826,7 +835,7 @@ button.btn-dope {
   -webkit-transition: all .15s ease-in-out;
 }
 .last-played-buttons {
-  padding: 6px 40px 0 0;
+  padding: 6px 35px 0 0;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -856,13 +865,13 @@ button.btn-dope {
 .last-played-result h1 {
   font-size: 16px;
   height: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .last-played-result h2 {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   height: 32px;
   overflow: hidden;
   font-size: 14px;
@@ -874,7 +883,7 @@ button.btn-dope {
   list-style: none;
 }
 .last-played-result p {
-  margin: 10px 0;
+  margin: 10px 0 0;
 }
 .last-played-collapse {
   margin-top: 10px;
@@ -973,8 +982,14 @@ button.btn-dope {
 .subscriptions-result.selected h1:hover {
   color: #fff;
 }
-.select-subscription {
-  float: right;
+.subscriptions-buttons {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.subscriptions-buttons > * {
+  margin-left: 4px;
 }
 
 /* BROWSE RESULTS */
