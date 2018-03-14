@@ -183,8 +183,8 @@ function loadResults(args, no_push) {
   if (!no_push) {
     pushState(url);
   }
-  if (!drop.find(".circle-loading").length && url != "/dopebar/" && url != "/last_played/") {
-    drop.find(".results").html(getCircleLoading());
+  if (!drop.find(".loading").length && url != "/dopebar/" && url != "/last_played/") {
+    drop.find(".results").replaceWith(getLoading());
   }
   xhr = $.ajax({
     type: "GET",
@@ -288,8 +288,8 @@ function cookieBannerClose() {
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 }
-function getCircleLoading() {
-  return $(".circle-loading").first().clone();
+function getLoading() {
+  return $(".loading").first().clone();
 }
 
 $(document)
