@@ -605,6 +605,10 @@ a:hover {
     opacity: 0;
   }
   100% {
+    -moz-transform: scale(2);
+    -webkit-transform: scale(2);
+    -o-transform: scale(2);
+    -ms-transform: scale(2);
     transform: scale(2);
   }
 }
@@ -616,6 +620,10 @@ a:hover {
     opacity: 0;
   }
   100% {
+    -moz-transform: scale(2);
+    -webkit-transform: scale(2);
+    -o-transform: scale(2);
+    -ms-transform: scale(2);
     transform: scale(2);
   }
 }
@@ -933,19 +941,16 @@ a:hover {
 .result-box img {
   border-radius: .25rem;
   margin-bottom: 5px;
-  transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  -webkit-transition: all .25s ease-in-out;
   box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .result-box img:hover {
-  -moz-transform: scale(1.05);
-  -webkit-transform: scale(1.05);
-  -o-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  transform: scale(1.05);
+  -moz-transform: scale(1.02);
+  -webkit-transform: scale(1.02);
+  -o-transform: scale(1.02);
+  -ms-transform: scale(1.02);
+  transform: scale(1.02);
 }
 .result-box h1, .result-box h2 {
   font-size: 14px;
