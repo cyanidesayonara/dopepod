@@ -5,7 +5,7 @@
 {% endif %}
   {% for podcast in results.podcasts %}
     <div class="col-lg-2 col-md-3 col-4 result-box">
-      <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+      <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
           <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg"
           onerror="this.src='http://{{ podcast.artworkUrl }}200x200bb.jpg'" />
           <h1>
@@ -32,7 +32,7 @@
     <ul class="browse-results-list">
       {% for podcast in results.podcasts1 %}
         <li>
-          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
             {{ podcast.title }}
           </a>
         </li>
@@ -43,7 +43,7 @@
     <ul class="browse-results-list">
       {% for podcast in results.podcasts2 %}
         <li>
-          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
             {{ podcast.title }}
           </a>
         </li>
@@ -54,7 +54,7 @@
     <ul class="browse-results-list">
       {% for podcast in results.podcasts3 %}
         <li>
-          <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
             {{ podcast.title }}
           </a>
         </li>
@@ -65,7 +65,7 @@
       <ul class="browse-results-list">
         {% for podcast in results.podcasts4 %}
           <li>
-            <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+            <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
               {{ podcast.title }}
             </a>
           </li>

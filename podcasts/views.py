@@ -88,7 +88,6 @@ def unsubscribe(request):
         user = request.user
         if user.is_authenticated:
             try:
-                print(request.POST)
                 podids = request.POST.getlist('podids[]')
                 for podid in podids:
                     podcast = Podcast.objects.get(podid=int(podid))
@@ -96,12 +95,10 @@ def unsubscribe(request):
             except (ValueError, KeyError, Podcast.DoesNotExist) as e:
                 raise Http404()
 
-            subscriptions = Subscription.get_subscriptions(user)
-
+            results = Subscription.get_subscriptions(user)
             context = {
-                'results': subscriptions,
+                'results': results,
             }
             return render(request, 'results_base.html', context)
-
         else:
             return render(request, 'splash.html', {})

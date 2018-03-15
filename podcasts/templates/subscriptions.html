@@ -3,14 +3,11 @@
     {% with subscription.podcast as podcast %}
       <div class="col-12 col-md-4 subscriptions-box">
         <div class="subscriptions-result clearfix" data-podid="{{ podcast.podid }}">
-          <a class="showpod" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
             <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg"
             onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" />
           </a>
-          <a class="btn-dope unsubscribe-button sub-nix" href="{% url 'unsubscribe' %}" >
-            <i class="fas fa-times-circle"></i>
-          </a>
-          <a class="showpod color-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/">
             <h1>
               <strong>
                 {{ podcast.title }}
@@ -22,6 +19,9 @@
             {{ subscription.last_updated|date:'d-m-Y H:i' }}
           </p>
           <div class="subscriptions-buttons">
+            <a class="btn-dope unsubscribe-button sub-nix" href="{% url 'unsubscribe' %}" >
+              <i class="fas fa-times-circle"></i>
+            </a>
             <button class="btn-dope select-subscription">
               <i class="fas fa-check-circle"></i>
             </button>

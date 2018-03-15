@@ -2,6 +2,7 @@
 $(window).on("popstate", function(event) {
   var state = event.originalEvent.state;
   if (state) {
+    // if url in urls, reload results (and don't push)
     var url = state.url;
     var urls = ["settings", "playlist", "subscriptions"];
     for (i = 0; i < urls.length; i++) {
@@ -11,20 +12,20 @@ $(window).on("popstate", function(event) {
         return;
       }
     }
-    var main = $("#main")[0];
-    $(main).html(state.context);
+    $("#main").html(state.context);
     $("title")[0].innerText = state.title;
   }
 })
 function pushState(url) {
+  // return if url in urls
   var urls = ["dopebar", "charts", "episodes", "last_played", "unsubscribe"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
   }
-  var main = $("#main")[0];
-  var context = main.innerHTML;
+  var main = $("#main");
+  var context = main[0].innerHTML;
   var title = updateTitle();
   var state = {
     "context": context,
@@ -34,17 +35,19 @@ function pushState(url) {
   history.pushState(state, "", url);
 }
 function replaceState(url) {
-  if (!url || url.includes("unsubscribe") || url.includes("episodes")) {
-    url = $("#main")[0].baseURI;
-  }
+  // return if url in urls
   var urls = ["dopebar", "charts", "last_played"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
   }
-  var main = $("#main")[0];
-  var context = main.innerHTML;
+  var main = $("#main");
+  // ignore these urls, use current url instead
+  if (!url || url.includes("unsubscribe") || url.includes("episodes")) {
+    url = main[0].baseURI;
+  }
+  var context = main[0].innerHTML;
   var title = updateTitle();
   var state = {
     "context": context,
@@ -55,14 +58,15 @@ function replaceState(url) {
 }
 function updateLastPlayed() {
   setInterval(function() {
-    loadResults(["/last_played/", $("#last-played")]);
+    loadResults(["/last_played/", "#last-played"]);
   }, 60000);
 }
 function updateCharts() {
   setInterval(function() {
-    loadResults(["/charts/", $("#charts")]);
+    loadResults(["/charts/", "#charts"]);
   }, 86400000);
 }
+// adds font awesome icons (in case no js) TODO this is dumb, figure out a better way
 function addIcons() {
   $(".search-button").html("<i class='fa fa-search icon'></i>");
   var login_buttons = $(".login-buttons");
@@ -108,23 +112,25 @@ function addIcons() {
     })
   }
 }
+// updates page title
 function updateTitle() {
-  // TODO center-stage contains title string
+  // default title
   var title = "dopepod";
   var player = $(".player-wrapper");
+  // if episode is playing
   if (player.length) {
     title = player.find(".player-title")[0].innerText;
     var episode = player.find(".player-episode")[0].innerText;
     title = "Now playing: " + title + " - " + episode + " | on dopepod";
   }
+  // if showpod
   else if ($("#showpod-c").length) {
       title = "Listen to episodes of " + $("#showpod-c h1")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
   return title;
 }
-
-// PAGE REFRESH STUFF
+// extracts csrftoken (or other data) from cookies
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie !== "") {
@@ -140,12 +146,12 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+// these HTTP methods do not require CSRF protection
 function csrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+// for sending csrf token on every ajax POST request
 function refreshCookie() {
-  // for sending csrf token on every ajax POST request
   var csrftoken = getCookie("csrftoken");
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
@@ -155,31 +161,34 @@ function refreshCookie() {
     }
   });
 }
+// refreshes page on login
 function refreshPage() {
   var url = "/dopebar/";
-  var drop = $("#dopebar");
+  var drop = "#dopebar";
   loadResults([url, drop, loadResults, ["/last_played/", "#last-played"]]);
 }
+// abort previous ajax request if url not in urls
 function checkForXHR(url) {
-  var urls = ["dopebar", "charts", "episodes", "last_played"];
-  for (i = 0; i < urls.length; i++) {
-    if (url.includes(urls[i])) {
-      return;
-    }
-  }
   if(xhr != null) {
+    var urls = ["dopebar", "charts", "episodes", "last_played"];
+    for (i = 0; i < urls.length; i++) {
+      if (url.includes(urls[i])) {
+        return;
+      }
+    }
     xhr.abort();
     xhr = null;
   }
 }
-
 // LOADER
 function loadResults(args, no_push) {
   var url = args[0];
+  // sometimes object, sometimes just a string
   var drop = $(args[1]);
   var callback = args[2];
   var args = args[3];
   checkForXHR(url);
+  // don't push when loading results via popstate
   if (!no_push) {
     pushState(url);
   }
@@ -194,20 +203,21 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
-      // loads episodes / refresh
+      // loads episodes / page refresh
       if (callback) {
         callback(args);
+        // if page refresh, apply theme
         if (url == "/dopebar/") {
           changeTheme(!$(".lights-toggle").hasClass("lit"));
         }
       }
-      else {
+      // episodes loaded, remove loading anim
+      else if ($(response).hasClass("episodes-table")) {
         $(".episodes-button").text("Episodes");
       }
       replaceState(url);
     });
 }
-
 // SCROLLERS
 function scrollToTop() {
   $("html, body").animate({
@@ -224,6 +234,7 @@ function scrollToLastPlayed() {
     scrollTop: $("#right").offset().top - 44
   }, 250);
 }
+// scrolls header text in player if text is wider than bax
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
   var textWidth = text.width();
@@ -250,15 +261,14 @@ function subscribeOrUnsubscribe(form) {
   var url = form.action;
   var method = form.method;
   form = $(form);
-  form.find(".sub-button").html(getButtonLoading());
   var podid = form.find("input[name=podid]").val();
-  var data = {
-    "podid": podid,
-  };
+  form.find("button[type=submit]").html(getButtonLoading());
   $.ajax({
     method: method,
     url: url,
-    data: data,
+    data: {
+      "podid": podid,
+    },
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
@@ -267,10 +277,11 @@ function subscribeOrUnsubscribe(form) {
     .done(function(response) {
       $("#center-stage").html(response);
       var url = "/episodes/" + podid + "/";
-      var drop = $("#episodes-collapse");
+      var drop = "#episodes-collapse";
       loadResults([url, drop]);
     });
 };
+// replaces spaces/&s with +, removes unwanted chars
 function replaceChars(q) {
   q = q.replace(/&+/g, "+");
   q = q.replace(/\s+/g, "+");
@@ -323,12 +334,12 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = $(button.parents(".results").parent());
+      var drop = button.parents(".results").parent();
       loadResults([url, drop]);
     }, 250);
   })
   // NAVIGATION
-  .on("click", ".showpod", function(e) {
+  .on("click", ".showpod-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var button = $(this);
@@ -343,7 +354,7 @@ $(document)
       scrollToTop();
     }, 250);
   })
-  .on("click", ".index-link", function(e) {
+  .on("click", ".index-link, .results-close", function(e) {
     e.preventDefault();
     var url = this.href;
     clearTimeout(timeout);
@@ -414,23 +425,21 @@ $(document)
       scrollToTop();
     }, 250);
   })
-  // FORMS
+  // save settings, apply theme
   .on("submit", ".settings-form", function (e) {
     e.preventDefault();
     var method = this.method;
     var url = this.action;
-    var data = $(this).serialize();
-    var button = $(this).find(".settings-save");
-    var text = button[0].innerText;
-    button.html(getButtonLoading());
-    var theme = $(this).find("input[name=dark_theme]").is(":checked");
+    var form = $(this)
+    var data = form.serialize();
+    var theme = form.find("input[name=dark_theme]").is(":checked");
+    form.find("button[type=submit]").html(getButtonLoading());
     $.ajax({
       data: data,
       method: method,
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        button.text(text);
         $("#center-stage").html(xhr.responseText);
         scrollToTop();
       })
@@ -442,17 +451,20 @@ $(document)
         replaceState("/");
       });
   })
+  // sub or unsub
   .on("submit", ".sub-form", function(e) {
     e.preventDefault();
     subscribeOrUnsubscribe(this);
   })
+  // playlist - play, add, move, or delete episode
   .on("submit", ".playlist-form", function(e) {
     e.preventDefault();
-    var data = $(this).serialize();
     var url = this.action;
     var method = this.method;
-    var mode = $(this).find("input[name=mode]").val();
-    var button = $(this).find("button");
+    var form = $(this);
+    var data = form.serialize();
+    var mode = form.find("input[name=mode]").val();
+    var button = form.find("button[type=submit]");
     var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({
@@ -482,7 +494,8 @@ $(document)
         }
         else {
           var drop = $("#center-stage");
-          loadResults(["/playlist/", drop]);
+          var url = "/playlist/";
+          loadResults([url, drop]);
         }
       });
   })
@@ -494,6 +507,7 @@ $(document)
     $("#player").removeClass("minimize");
     updateTitle();
   })
+  // minimize player
   .on("click", ".player-minimize", function(e) {
     e.preventDefault();
     $("#player").toggleClass("minimize");
@@ -501,7 +515,7 @@ $(document)
     $(this).toggleClass("active");
   })
   // LOGIN & SIGNUP
-  // open login / register
+  // show login / register tab
   .on("click", ".ajax-login, .ajax-signup", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -517,20 +531,19 @@ $(document)
     }
     scrollToTop();
   })
+  // show password reset tab
   .on("click", ".password-link", function(e) {
     e.preventDefault();
     $("#password-tab").tab("show");
   })
-  .on("click", ".login-toggle", function() {
-    $(".error-message").remove();
-  })
-  // login or signup, refresh after
+  // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form", function (e) {
     e.preventDefault();
-    var data = $(this).serialize();
     var method = this.method;
     var url = this.action;
-    var button = $(this).find("button[type=submit]");
+    var form = $(this);
+    var data = form.serialize();
+    var button = form.find("button[type=submit]");
     var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({
@@ -538,45 +551,45 @@ $(document)
       method: method,
       url: url,
     })
+      // returns errors
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
         $(".splash-errors").html(xhr.responseText);
+        // deletes error text when clicking anywhere
         $("html").on("click", "body", function() {
           $(".splash-errors").empty();
         })
         scrollToTop();
       })
+      // returns splashboard
       .done(function(response) {
         $("#center-stage").html(response);
+        // if password reset, show login
         if (text == "Send") {
-
+          $("#login-tab").tab("show");
         }
+        // else logged in, refresh page
         else {
-          console.log(text)
           refreshCookie();
           refreshPage();
         }
         scrollToTop();
         });
   })
-  .on("click", ".results-close", function(e) {
-    e.preventDefault();
-    $(this).parents(".results").remove();
-    var drop = $("#center-stage");
-    loadResults(["/", drop]);
-    scrollToTop();
-  })
+  // toggle search results collapse & view icon on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var collapses = $(this).parents(".results").find($(".results-collapse"));
+    var button = $(this);
+    var collapses = button.parents(".results").find($(".results-collapse"));
     collapses.each(function() {
       $(this).collapse("toggle");
     })
-    $(this).children().each(function() {
+    button.children().each(function() {
       // TODO stop this from flickering
       $(this).toggleClass("d-none");
     });
   })
+  // toggle button icon on hover
   .on("mouseenter mouseleave", ".view-button, .provider-button", function() {
     $(this).children().each(function() {
       $(this).toggleClass("d-none");
@@ -596,24 +609,29 @@ $(document)
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
     $(".showpod-collapse.show").collapse("hide");
   })
+  // toggles background theme
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
     $("body").toggleClass("darken");
     $(".lights-toggle").toggleClass("lit");
   })
+  // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episodes-table tbody tr", function(e) {
     $(this).blur();
   })
+  // hides dopebar-collapse...
   .on("click", "body, .dopebar-link, .search-button", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
   })
+  // ...except when dopebar-collapose is clicked
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    $(this).parents(".subscriptions-result").toggleClass("selected");
-    var buttons = $(this).parents(".results").find(".subscriptions-result")
-    var selected = $(this).parents(".results").find(".subscriptions-result.selected");
+    var button = $(this);
+    button.parents(".subscriptions-result").toggleClass("selected");
+    var buttons = button.parents(".results").find(".subscriptions-result")
+    var selected = buttons.find(".selected");
     if (buttons.length == selected.length) {
       $(".select-all-button").addClass("active");
     }
@@ -621,51 +639,56 @@ $(document)
       $(".select-all-button").removeClass("active");
     }
   })
+  // selects all subscriptions (and maybe all playlist episodes as well TODO?)
   .on("click", ".select-all-button", function() {
-    if ($(this).hasClass("active")) {
-      $(this).parent().siblings().find(".subscriptions-result").removeClass("selected");
+    var button = $(this);
+    if (button.hasClass("active")) {
+      button.parent().siblings().find(".subscriptions-result").removeClass("selected");
     }
     else {
-      $(this).parent().siblings().find(".subscriptions-result").addClass("selected");
+      button.parent().siblings().find(".subscriptions-result").addClass("selected");
     }
-    $(this).toggleClass("active");
+    button.toggleClass("active");
   })
+  // unsubscribe one or more podcasts
+  // POST ajax request, data is array of podids
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var url = this.href;
-    if ($(this).hasClass("sub-nix")) {
-      var podids = [$(this).parent().data("podid")];
+    var button = $(this);
+    var podids = [];
+    // array of one podid
+    if (button.hasClass("sub-nix")) {
+      podids[0] = button.parent().parent().data("podid");
     }
     else {
-      var podids = [];
-      var buttons = $(this).parents(".results").find(".subscriptions-result.selected");
+      // aray of all selected podids
+      var buttons = button.parent().siblings().find(".subscriptions-result.selected");
       if (buttons.length) {
         buttons.each(function(i, button) {
           podids[i] = $(button).data("podid");
         })
       }
+      // if nothing selected, do nothing
       else {
         return;
       }
     }
-    var data = {
-      "podids": podids,
-    }
-    var button = $(this);
-    var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({
       method: "POST",
       url: url,
-      data: data,
+      data: {
+        "podids": podids,
+      },
     })
+    // returns splash
     .fail(function(xhr, ajaxOptions, thrownError) {
-      button.text(text);
       $("#center-stage").html(xhr.responseText);
       replaceState("/");
     })
+    // returns results
     .done(function(response) {
       $("#center-stage").html(response);
-      replaceState(url);
     });
   })

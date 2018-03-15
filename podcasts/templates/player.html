@@ -2,7 +2,7 @@
 <div class="container px-0">
   <div class="col-12 col-lg-4 ml-auto">
     <div class="color-4-trans player-wrapper">
-      <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+      <a class="showpod-link" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ player.episode.podcast.artworkUrl }}100x100bb.jpg"
         onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
@@ -14,7 +14,7 @@
           <i class="fas fa-times-circle"></i>
         </a>
       </div>
-      <a class="showpod" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
+      <a class="showpod-link" data-podid="{{ player.episode.podcast.podid }}" href="{% url 'showpod' podid=player.episode.podcast.podid %}">
         <div class="player-title">
           <h1>
             {{ player.episode.podcast.title }}
