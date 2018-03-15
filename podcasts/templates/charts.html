@@ -2,7 +2,7 @@
   {% for podcast in results.podcasts %}
     <div class="col-12 charts-box">
       <div class="charts-result clearfix">
-        <a class="showpod" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+        <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
           <span class="charts-rank">
             {{ forloop.counter }}
           </span>

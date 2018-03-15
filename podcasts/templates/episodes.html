@@ -71,7 +71,7 @@
                 {% endif %}
               </p>
               {% if results.view == 'playlist' %}
-              <a class="showpod" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+              <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
                 <h1>{{ episode.podcast }}</h1>
               </a>
               {% endif %}

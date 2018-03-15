@@ -88,7 +88,7 @@ def charts(request):
         if provider not in providers:
             provider = providers[0]
 
-        charts = Podcast.get_charts(provider=provider, genre=genre, language=language)
+        charts = Podcast.get_charts(provider, genre, language)
 
         if request.is_ajax():
             context = {
@@ -119,7 +119,6 @@ def search(request):
 
     if request.method == 'GET':
         user = request.user
-
         q = request.GET.get('q', None)
         if q:
             q.strip()
@@ -153,7 +152,7 @@ def search(request):
         except ValueError:
             page = 1
 
-        show = 50
+        show = 60
 
         results = Podcast.search(q, genre, language, page, show, view)
 

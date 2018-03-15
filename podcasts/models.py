@@ -119,21 +119,20 @@ class Podcast(models.Model):
 
     def search(q, genre, language, page, show, view):
         """
-        returns a dictionary with podcasts matching search terms etc
+        returns podcasts matching search terms
         """
 
         cachestring = 'search'
         if q:
-            cachestring += 'q=' + q
+            cachestring += '&q=' + q.replace(' ', '+')
         if page:
-            cachestring += 'page=' + str(page)
+            cachestring += '&page=' + str(page)
         if genre:
-            cachestring += 'genre=' + genre.url_format()
+            cachestring += '&genre=' + genre.url_format()
         if language:
-            cachestring += 'language=' + language.url_format()
+            cachestring += '&language=' + language.url_format()
         if show:
-            cachestring += 'show=' + str(show)
-
+            cachestring += '&show=' + str(show)
         results = cache.get(cachestring)
 
         if results:
@@ -158,10 +157,11 @@ class Podcast(models.Model):
             # last but not least, filter by title
             if q:
                 if len(q) > 1:
-                    podcasts = podcasts.filter(
-                        Q(title__icontains=q) |
-                        Q(artist__icontains=q)
-                    )
+                    q_split = q.split(' ')
+                    query = Q()
+                    for word in q_split:
+                        query = query | Q(title__icontains=word) | Q(artist__icontains=word)
+                    podcasts = podcasts.filter(query).distinct()
                 else:
                     if q == '#':
                         query = Q()
@@ -498,12 +498,13 @@ class Podcast(models.Model):
     def get_charts(provider='dopepod', genre=None, language=None, force_cache=False):
         cachestring = 'charts'
         if provider:
-            cachestring += 'provider=' + provider
+            cachestring += '&provider=' + provider
         if genre:
-            cachestring += 'genre=' + str(genre).replace(' ', '')
+            cachestring += '&genre=' + genre.url_format()
         if language:
-            cachestring += 'language=' + str(language).replace(' ', '')
+            cachestring += '&language=' + language.url_format()
         results = cache.get(cachestring)
+
         if results and not force_cache:
             return results
         else:

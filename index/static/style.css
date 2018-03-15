@@ -130,7 +130,7 @@ a:hover {
 
 /* MAIN */
 #main-wrapper {
-  padding-top: 50px;
+  padding-top: 44px;
   padding-bottom: 15px;
   min-height: 100vh;
 }
@@ -158,8 +158,7 @@ a:hover {
   margin-right: auto;
 }
 
-/* MULTI BAR */
-/* TODO navbar goes crazy over search hover */
+/* DOPEBAR */
 #dopebar {
   padding: 5px 0;
   min-height: 44px;
@@ -406,6 +405,9 @@ a:hover {
 #showpod-l img {
   margin-bottom: 10px;
   border-radius: .25rem;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 #showpod-r {
   padding: 0 10px;
@@ -414,11 +416,11 @@ a:hover {
 .showpod-side-list {
   list-style: none;
   padding: 0;
-  margin-bottom: 20px;
+  margin: 0;
 }
 .showpod-side-list li {
   border-bottom: 2px solid rgba(0, 191, 165, 1);
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .showpod-side-list li a {
     color: rgba(0, 191, 165, 1);
@@ -721,8 +723,7 @@ a:hover {
 }
 .results-header h1 {
   font-size: 24px;
-  margin: 0;
-  margin-top: 2px;
+  margin: 2px 0;
 }
 .results-buttons, .options-buttons {
   justify-content: flex-end;
@@ -757,7 +758,7 @@ a:hover {
 }
 
 /* CHARTS */
-.charts-box, .last-played-box, .subscriptions-box, .result-box {
+.charts-box, .last-played-box, .subscriptions-box {
   padding: 0 10px 10px;
 }
 .charts-box a, .result-box a {
@@ -765,6 +766,7 @@ a:hover {
   font-weight: unset;
 }
 .charts-result, .subscriptions-result, .last-played-result {
+  overflow: hidden;
   padding: 10px;
   border-radius: .25rem;
   border: 2px solid rgba(0, 191, 165, 0);
@@ -789,9 +791,9 @@ a:hover {
   margin-left: 5px;
   float: right;
   border-radius: .25rem;
-  box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .charts-result table, .last-played-result table {
   font-size: 12px;
@@ -819,10 +821,10 @@ a:hover {
   font-size: 16px;
   overflow: hidden;
   height: 18px;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .charts-result h2 {
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   font-size: 14px;
   overflow: hidden;
   height: 16px;
@@ -857,9 +859,9 @@ a:hover {
   border-radius: .25rem;
   float: left;
   margin-right: 5px;
-  box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 0 3px;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 3px;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .last-played-result .result-length {
   position: absolute;
@@ -874,13 +876,13 @@ a:hover {
 .last-played-result h1 {
   font-size: 16px;
   height: 20px;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .last-played-result h2 {
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   height: 32px;
   overflow: hidden;
   font-size: 14px;
@@ -914,7 +916,7 @@ a:hover {
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
 }
-.last-played-toggle:hover, .last-played-toggle:focus {
+.last-played-toggle:hover, .last-played-toggle:focus, .last-played-toggle[aria-expanded="true"] {
   outline: none;
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
@@ -926,21 +928,16 @@ a:hover {
   box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 .last-played-toggle[aria-expanded="true"] {
-  transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  -webkit-transition: all .25s ease-in-out;
   transform: rotate(-180deg);
-  background: rgba(0, 191, 165, 1);
-  color: rgb(255, 255, 255);
-  -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
-  -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
-  box-shadow: rgba(0,0,0,.8) 0 0px 5px;
 }
 
 /* SEARCH RESULTS */
+.result-box {
+  padding: 10px;
+}
 .result-box img {
   border-radius: .25rem;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
@@ -964,11 +961,14 @@ a:hover {
   float: left;
   margin-right: 5px;
   border-radius: .25rem;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .subscriptions-box h1 {
   font-size: 16px;
   height: 38px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   overflow: hidden;
 }
 .subscriptions-box p {
@@ -997,10 +997,6 @@ a:hover {
 .subscriptions-buttons > * {
   margin-left: 4px;
 }
-.sub-nix {
-  float: right;
-  margin-left: 5px;
-}
 
 /* BROWSE RESULTS */
 .browse-results {
@@ -1016,7 +1012,7 @@ a:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 5px 0;
+  padding: 8px 0;
 }
 .browse-results-list li a {
   color: unset;
@@ -1050,6 +1046,9 @@ a:hover {
   float: left;
   margin-right: 5px;
   border-radius: .25rem;
+  box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .player-title {
   overflow: hidden;
