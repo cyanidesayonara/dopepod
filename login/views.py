@@ -17,9 +17,9 @@ def get_form_errors(data):
             if field == 'login':
                 field = 'email'
             errors[field] = error
-    if data['form']['fields']['login']:
+    try:
         email = data['form']['fields']['login']['value']
-    else:
+    except KeyError:
         email = data['form']['fields']['email']['value']
     return (email, errors)
 
@@ -95,24 +95,23 @@ def password_reset(request):
         request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         response = allauth.password_reset(request)
         data = json.loads(response.content)
-        context = {
-            'view': 'password',
-        }
 
         if response.status_code == 200:
-            context.update({
+            context = {
+                'view': "login",
                 'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
-            })
+            }
             if ajax:
                 return render(request, 'splash.html', context)
             else:
                 return redirect('/')
         else:
             email, errors = get_form_errors(data)
-            context.update({
-                'errors': errors,
-                'email': email,
-            })
+            context = {
+            'view': 'password',
+            'errors': errors,
+            'email': email,
+            }
             if ajax:
                 return render(request, 'splash-errors.html', context, status=400)
             else:

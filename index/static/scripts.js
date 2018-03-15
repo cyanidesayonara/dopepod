@@ -176,7 +176,7 @@ function checkForXHR(url) {
 // LOADER
 function loadResults(args, no_push) {
   var url = args[0];
-  var drop = $(args[1]);
+  var drop = args[1];
   var callback = args[2];
   var args = args[3];
   checkForXHR(url);
