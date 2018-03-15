@@ -218,8 +218,9 @@ class Podcast(models.Model):
                 urls['full_url'] = url + '?'
 
             results = {}
+            spread = 3
             if num_pages > 1:
-                pages = range((page - 2 if page - 2 > 1 else 1), (page + 2 if page + 2 <= num_pages else num_pages) + 1)
+                pages = range((page - spread if page - spread > 1 else 1), (page + spread if page + spread <= num_pages else num_pages) + 1)
                 results['pagination'] = {
                     'start': True if page != 1 else False,
                     'pages': pages,
