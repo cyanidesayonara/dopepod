@@ -153,7 +153,7 @@ def search(request):
         except ValueError:
             page = 1
 
-        show = 100
+        show = 50
 
         results = Podcast.search(q, genre, language, page, show, view)
 
@@ -172,7 +172,6 @@ def search(request):
             'charts': charts,
             'last_played': last_played,
         })
-
         return render(request, 'results_base.html', context)
 
 @vary_on_headers('Accept')

@@ -6,47 +6,51 @@ import json
 
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
 
+def get_form_errors(data):
+    errors = {}
+    # non-field errors
+    for error in data['form']['errors']:
+        errors['general'] = error
+    # field-specific errors
+    for field in data['form']['fields']:
+        for error in data['form']['fields'][field]['errors']:
+            if field == 'login':
+                field = 'email'
+            errors[field] = error
+    if data['form']['fields']['login']:
+        email = data['form']['fields']['login']['value']
+    else:
+        email = data['form']['fields']['email']['value']
+    return (email, errors)
+
 def login(request):
     """
     relays stuff to and from allauth
     """
 
     if request.method == 'POST':
-        # request sent to allauth is always ajax
+        # request sent to allauth is always ajax so the output is json
         ajax = request.is_ajax()
         request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         response = allauth.login(request)
-
         # parse json response
         data = json.loads(response.content)
-        errors = {}
-
-        # non-field errors
-        for error in data['form']['errors']:
-            errors['general'] = error
-        # field-specific errors
-        for field in data['form']['fields']:
-            for error in data['form']['fields'][field]['errors']:
-                if field == 'login':
-                    field = 'email'
-                errors[field] = error
-        email = data['form']['fields']['login']['value']
-
         context = {
-            'errors': errors,
-            'email': email,
             'view': 'login',
         }
-
-        if ajax:
-            if response.status_code == 200:
-                return HttpResponse('')
+        if response.status_code == 200:
+            if ajax:
+                return render(request, 'dashboard.html', context)
             else:
-                return render(request, 'splash.html', context, status=400)
-        else:
-            context = Podcast.get_charts(context)
-            if response.status_code == 200:
                 return redirect('/')
+        else:
+            email, errors = get_form_errors(data)
+            context.update({
+                'errors': errors,
+                'email': email,
+            })
+            if ajax:
+                return render(request, 'splash-errors.html', context, status=400)
             else:
                 return render(request, 'splash.html', context)
     else:
@@ -58,30 +62,23 @@ def signup(request):
         request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         response = allauth.signup(request)
         data = json.loads(response.content)
-        errors = {}
-
-        for error in data['form']['errors']:
-            errors['general'] = error
-        for field in data['form']['fields']:
-            for error in data['form']['fields'][field]['errors']:
-                errors[field] = error
-        email = data['form']['fields']['email']['value']
-
         context = {
-            'errors': errors,
-            'email': email,
             'view': 'signup',
         }
 
-        if ajax:
-            if response.status_code == 200:
-                return HttpResponse('')
+        if response.status_code == 200:
+            if ajax:
+                return render(request, 'dashboard.html', context)
             else:
-                return render(request, 'splash.html', context, status=400)
-        else:
-            context = Podcast.get_charts(context)
-            if response.status_code == 200:
                 return redirect('/')
+        else:
+            email, errors = get_form_errors(data)
+            context.update({
+                'errors': errors,
+                'email': email,
+            })
+            if ajax:
+                return render(request, 'splash-errors.html', context, status=400)
             else:
                 return render(request, 'splash.html', context)
     else:
@@ -98,36 +95,28 @@ def password_reset(request):
         request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         response = allauth.password_reset(request)
         data = json.loads(response.content)
-
-        if response.status_code == 200:
-            context = {
-                'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
-            }
-            if ajax:
-                return render(request, 'account/done.html', context)
-            else:
-                return render(request, 'splash.html', context)
-
-        errors = {}
-        for error in data['form']['errors']:
-            errors['general'] = error
-        for field in data['form']['fields']:
-            for error in data['form']['fields'][field]['errors']:
-                errors[field] = error.replace('The e-mail', 'This email')
-        email = data['form']['fields']['email']['value']
-
         context = {
-            'errors': errors,
-            'email': email,
             'view': 'password',
         }
 
-        context = Podcast.get_charts(context)
-
-        if ajax:
-            return render(request, 'splash.html', context, status=400)
+        if response.status_code == 200:
+            context.update({
+                'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
+            })
+            if ajax:
+                return render(request, 'splash.html', context)
+            else:
+                return redirect('/')
         else:
-            return redirect('/')
+            email, errors = get_form_errors(data)
+            context.update({
+                'errors': errors,
+                'email': email,
+            })
+            if ajax:
+                return render(request, 'splash-errors.html', context, status=400)
+            else:
+                return render(request, 'splash.html', context)
     else:
         return redirect('/?view=password')
 

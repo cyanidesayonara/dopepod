@@ -158,7 +158,7 @@ function refreshCookie() {
 function refreshPage() {
   var url = "/dopebar/";
   var drop = $("#dopebar");
-  loadResults([url, drop, loadResults, ["/", "#center-stage", loadResults, ["/last_played/", "#last-played"]]]);
+  loadResults([url, drop, loadResults, ["/last_played/", "#last-played"]]);
 }
 function checkForXHR(url) {
   var urls = ["dopebar", "charts", "episodes", "last_played"];
@@ -194,17 +194,12 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
-      // double callback - login refresh - changes theme at login
-      try {
-        if (args[2]) {
-         changeTheme(!$(".lights-toggle").hasClass("lit"));
-        }
-      }
-      catch (e) {
-      }
-      // loads episodes
+      // loads episodes / refresh
       if (callback) {
         callback(args);
+        if (url == "/dopebar/") {
+          changeTheme(!$(".lights-toggle").hasClass("lit"));
+        }
       }
       else {
         $(".episodes-button").text("Episodes");
@@ -530,12 +525,12 @@ $(document)
     $(".error-message").remove();
   })
   // login or signup, refresh after
-  .on("submit", ".login-form, .signup-form", function (e) {
+  .on("submit", ".login-form, .signup-form, .password-form", function (e) {
     e.preventDefault();
     var data = $(this).serialize();
     var method = this.method;
     var url = this.action;
-    var button = $(this).find(".login-button");
+    var button = $(this).find("button[type=submit]");
     var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({
@@ -545,37 +540,24 @@ $(document)
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
-        $("#center-stage").html(xhr.responseText);
-        scrollToTop();
-      })
-      .done(function(response) {
-        refreshCookie();
-        refreshPage();
-        scrollToTop();
-        });
-  })
-  .on("submit", ".password-form", function (e) {
-    e.preventDefault();
-    var data = $(this).serialize();
-    var method = this.method;
-    var url = this.action;
-    var button = $(this).find(".password-button");
-    var text = button[0].innerText;
-    button.html(getButtonLoading());
-    $.ajax({
-      data: data,
-      method: method,
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        button.text(text);
-        $("#center-stage").html(xhr.responseText);
+        $(".splash-errors").html(xhr.responseText);
+        $("html").on("click", "body", function() {
+          $(".splash-errors").empty();
+        })
         scrollToTop();
       })
       .done(function(response) {
         $("#center-stage").html(response);
+        if (text == "Send") {
+
+        }
+        else {
+          console.log(text)
+          refreshCookie();
+          refreshPage();
+        }
         scrollToTop();
-      });
+        });
   })
   .on("click", ".results-close", function(e) {
     e.preventDefault();
@@ -666,7 +648,6 @@ $(document)
         return;
       }
     }
-    console.log(podids)
     var data = {
       "podids": podids,
     }
