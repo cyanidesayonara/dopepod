@@ -289,8 +289,8 @@ function getLoading() {
 
 $(document)
   .ready(function() {
-    xhr = null;
-    timeout = 0;
+    var xhr = null;
+    var timeout = 0;
     refreshCookie();
     addIcons();
     updateLastPlayed();
@@ -444,7 +444,10 @@ $(document)
   })
   .on("submit", ".sub-form", function(e) {
     e.preventDefault();
-    subscribeOrUnsubscribe(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      subscribeOrUnsubscribe(this);
+    }, 10000);
   })
   .on("submit", ".playlist-form", function(e) {
     e.preventDefault();
