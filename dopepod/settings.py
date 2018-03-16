@@ -98,7 +98,7 @@ CACHES = {
 }
 
 # django.contrib.sites
-SITE_ID = 1
+SITE_ID = local_settings.SITE_ID
 
 # django-allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
