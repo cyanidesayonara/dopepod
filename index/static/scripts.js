@@ -409,6 +409,12 @@ $(document)
       })
       .done(function(response) {
         pushState(url);
+        if (theme) {
+          $(".lights-toggle").removeClass("lit");
+        }
+        else {
+          $(".lights-toggle").addClass("lit");
+        }
         changeTheme(theme);
         $("#center-stage").html(response);
         scrollToTop();
@@ -522,7 +528,7 @@ $(document)
   .on("click", ".view-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var collapses = button.parents(".results").find($(".results-collapse"));
+    var collapses = button.parents(".results").find($(".view-collapse"));
     collapses.each(function() {
       $(this).collapse("toggle");
     })
@@ -561,8 +567,8 @@ $(document)
   // toggles background theme
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
-    $("body").toggleClass("darken");
     $(".lights-toggle").toggleClass("lit");
+    changeTheme(!$(".lights-toggle").hasClass("lit"));
   })
   // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episodes-table tbody tr", function(e) {

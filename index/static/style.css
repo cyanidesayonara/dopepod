@@ -71,6 +71,9 @@ a:hover {
   color: #fff;
   background: rgb(0, 191, 165);
 }
+.darken .reverse-toggle[aria-expanded="false"] {
+  color: rgb(46, 46, 46);
+}
 .btn-dope:focus,
 .btn-dope:hover,
 .last-played-toggle:hover,
@@ -560,7 +563,7 @@ a:hover {
 .results-content {
   min-height: 0;
 }
-.results-collapse.show {
+.results-collapse.show, .view-collapse.show {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
