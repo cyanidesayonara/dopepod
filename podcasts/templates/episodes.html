@@ -62,7 +62,7 @@
         </tr>
         <tr>
           <td colspan="5" class="episode-content">
-            <div class="collapse more-collapse" id="more-collapse{{ forloop.counter }}">
+            <div class="collapse fade more-collapse" id="more-collapse{{ forloop.counter }}">
               <p>
                 {% if episode.description %}
                   {{ episode.description }}
@@ -82,12 +82,8 @@
                       {% csrf_token %}
                       <input type="hidden" name="mode" value="remove" />
                       <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
-                      <button class="btn-dope playlist-remove active" type="submit">
-                        {% if request.is_ajax %}
-                          <i class="fas fa-times-circle icon"></i>
-                        {% else %}
-                          Remove
-                        {% endif %}
+                      <button class="btn-dope playlist-remove active" type="submit" title="Remove">
+                        <i class="fas fa-times icon"></i>
                       </button>
                     </form>
                     {% if not forloop.first %}
@@ -95,12 +91,8 @@
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="up" />
                         <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
-                        <button class="btn-dope playlist-move-up active" type="submit">
-                          {% if request.is_ajax %}
-                            <i class="fas fa-arrow-circle-up"></i>
-                          {% else %}
-                            Up
-                          {% endif %}
+                        <button class="btn-dope playlist-move-up active" type="submit" title="Move Up">
+                          <i class="fas fa-arrow-up"></i>
                         </button>
                       </form>
                     {% endif %}
@@ -109,12 +101,8 @@
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="down" />
                         <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
-                        <button class="btn-dope playlist-move-down active" type="submit">
-                          {% if request.is_ajax %}
-                            <i class="fas fa-arrow-circle-down"></i>
-                          {% else %}
-                            Down
-                          {% endif %}
+                        <button class="btn-dope playlist-move-down active" type="submit" title="Move Down">
+                          <i class="fas fa-arrow-down"></i>
                         </button>
                       </form>
                     {% endif %}
@@ -128,8 +116,8 @@
                   {% else %}
                     <input type="hidden" name="signature" value="{{ episode.signature }}" />
                   {% endif %}
-                  <button class="btn-dope playlist-play active" type="submit">
-                    Play
+                  <button class="btn-dope playlist-play active" type="submit" title="Play">
+                    <i class="fas fa-play"></i>
                   </button>
                 </form>
                 {% if user.is_authenticated and results.view == 'episodes' %}
@@ -137,13 +125,13 @@
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="add" />
                     <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                    <button class="btn-dope active" type="submit">
+                    <button class="btn-dope active" type="submit" title="Add to Playlist">
                       Add to Playlist
                     </button>
                   </form>
                 {% endif %}
                 <a class="btn-dope active" href="{{ episode.url }}" title="Download" download>
-                  Download
+                  <i class="fas fa-download"></i>
                 </a>
               </div>
             </div>

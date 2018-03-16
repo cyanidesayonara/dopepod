@@ -1,21 +1,22 @@
 // HISTORY API
-$(window).on("popstate", function(event) {
-  var state = event.originalEvent.state;
-  if (state) {
-    // if url in urls, reload results (and don't push)
-    var url = state.url;
-    var urls = ["settings", "playlist", "subscriptions"];
-    for (i = 0; i < urls.length; i++) {
-      if (url.includes(urls[i])) {
-        var drop = $("#center-stage");
-        loadResults([url, drop], true);
-        return;
+$(window)
+  .on("popstate", function(event) {
+    var state = event.originalEvent.state;
+    if (state) {
+      // if url in urls, reload results (and don't push)
+      var url = state.url;
+      var urls = ["settings", "playlist", "subscriptions"];
+      for (i = 0; i < urls.length; i++) {
+        if (url.includes(urls[i])) {
+          var drop = $("#center-stage");
+          loadResults([url, drop], true);
+          return;
+        }
       }
+      $("#main").html(state.context);
+      $("title")[0].innerText = state.title;
     }
-    $("#main").html(state.context);
-    $("title")[0].innerText = state.title;
-  }
-})
+  });
 function pushState(url) {
   // return if url in urls
   var urls = ["dopebar", "charts", "episodes", "last_played", "unsubscribe"];
@@ -33,7 +34,7 @@ function pushState(url) {
     "url": url,
   };
   history.pushState(state, "", url);
-}
+};
 function replaceState(url) {
   // return if url in urls
   var urls = ["dopebar", "charts", "last_played"];
@@ -55,63 +56,17 @@ function replaceState(url) {
     "url": url,
   };
   history.replaceState(state, "", url);
-}
+};
 function updateLastPlayed() {
   setInterval(function() {
     loadResults(["/last_played/", "#last-played"]);
   }, 60000);
-}
+};
 function updateCharts() {
   setInterval(function() {
     loadResults(["/charts/", "#charts"]);
   }, 86400000);
-}
-// adds font awesome icons (in case no js) TODO this is dumb, figure out a better way
-function addIcons() {
-  $(".search-button").html("<i class='fa fa-search icon'></i>");
-  var login_buttons = $(".login-buttons");
-  if (login_buttons.length) {
-    login_buttons.find("#login-tab")[0].href = "#tabs-login";
-    login_buttons.find("#signup-tab")[0].href = "#tabs-signup";
-    login_buttons.find("#google-icon").html("<i class='fab fa-google icon'></i>");
-  }
-  var view_buttons = $(".view-button");
-  if (view_buttons.length) {
-    view_buttons.each(function() {
-      if ($(this).innerText == 'List') {
-        $(this).html("<i class='fas fa-th d-none'></i><i class='fas fa-bars'></i>");
-      } else {
-        $(this).html("<i class='fas fa-th'></i><i class='fas fa-bars d-none'></i>");
-      }
-    })
-  }
-  var view_buttons = $(".episode-buttons");
-  if (view_buttons.length) {
-    view_buttons.each(function() {
-      $(this).find(".playlist-remove").html("<i class='fas fa-times-circle'></i>");
-      $(this).find(".playlist-move-up").html("<i class='fas fa-arrow-circle-up'></i>");
-      $(this).find(".playlist-move-down").html("<i class='fas fa-arrow-circle-down'></i>");
-    })
-  }
-  var back_buttons = $(".results-back");
-  if (back_buttons.length) {
-    back_buttons.each(function() {
-      $(this).html("<i class='fas fa-arrow-circle-left'></i>");
-    })
-  }
-  var minimize_buttons = $(".results-minimize");
-  if (minimize_buttons.length) {
-    minimize_buttons.each(function() {
-      $(this).html("<i class='fas fa-minus-circle icon'></i>");
-    })
-  }
-  var close_buttons = $(".results-close");
-  if (close_buttons.length) {
-    close_buttons.each(function() {
-      $(this).html("<i class='fas fa-times-circle icon'></i>");
-    })
-  }
-}
+};
 // updates page title
 function updateTitle() {
   // default title
@@ -129,7 +84,7 @@ function updateTitle() {
   }
   $("title")[0].innerText = title;
   return title;
-}
+};
 // extracts csrftoken (or other data) from cookies
 function getCookie(name) {
   var cookieValue = null;
@@ -145,11 +100,11 @@ function getCookie(name) {
     }
   }
   return cookieValue;
-}
+};
 // these HTTP methods do not require CSRF protection
 function csrfSafeMethod(method) {
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+};
 // for sending csrf token on every ajax POST request
 function refreshCookie() {
   var csrftoken = getCookie("csrftoken");
@@ -160,13 +115,13 @@ function refreshCookie() {
       }
     }
   });
-}
+};
 // refreshes page on login
 function refreshPage() {
   var url = "/dopebar/";
   var drop = "#dopebar";
   loadResults([url, drop, loadResults, ["/last_played/", "#last-played"]]);
-}
+};
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
@@ -179,7 +134,7 @@ function checkForXHR(url) {
     xhr.abort();
     xhr = null;
   }
-}
+};
 // LOADER
 function loadResults(args, no_push) {
   var url = args[0];
@@ -217,23 +172,23 @@ function loadResults(args, no_push) {
       }
       replaceState(url);
     });
-}
+};
 // SCROLLERS
 function scrollToTop() {
   $("html, body").animate({
     scrollTop: $("body").offset().top
   }, 250);
-}
+};
 function scrollToCharts() {
   $("html, body").animate({
     scrollTop: $("#left").offset().top - 44
   }, 250);
-}
+};
 function scrollToLastPlayed() {
   $("html, body").animate({
     scrollTop: $("#right").offset().top - 44
   }, 250);
-}
+};
 // scrolls header text in player if text is wider than bax
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
@@ -248,7 +203,7 @@ function scrollText(box, text) {
         }, 1000);
       })
   }
-}
+};
 function changeTheme(theme) {
   if (theme) {
     $("body").addClass("darken");
@@ -256,7 +211,7 @@ function changeTheme(theme) {
   else {
     $("body").removeClass("darken");
   }
-}
+};
 function subscribeOrUnsubscribe(form) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -290,23 +245,21 @@ function replaceChars(q) {
   q = q.replace(/\s+/g, "+");
   q = q.replace(/([^a-zA-Z0-9\u0080-\uFFFF +']+)/gi, "");
   return q;
-}
+};
 function cookieBannerClose() {
   $("#player").empty();
-}
+};
 function getButtonLoading() {
   return $(".button-loading").first().clone();
-}
+};
 function getLoading() {
   return $(".loading").first().clone();
-}
-
+};
 $(document)
   .ready(function() {
     xhr = null;
     timeout = 0;
     refreshCookie();
-    addIcons();
     updateLastPlayed();
     updateCharts();
   })
@@ -346,43 +299,54 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var button = $(this);
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var podid = button.data("podid");
-      var drop = $("#center-stage");
-      if (!(drop.find("#showpod-c").data("podid") == podid)) {
-        var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
-        loadResults([url, drop, loadResults, args]);
-      }
-      scrollToTop();
-    }, 250);
+    var podid = button.data("podid");
+    var drop = $("#center-stage");
+    if (!(drop.find("#showpod-c").data("podid") == podid)) {
+      var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
+      loadResults([url, drop, loadResults, args]);
+    }
+    scrollToTop();
   })
-  .on("click", ".index-link, .results-close", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    // LOGIN & SIGNUP
+    // show splash / dashboard / login / register / password reset
+    .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function (e) {
+      e.preventDefault();
+      var url = this.href;
       var drop = $("#center-stage");
+      var link = $(this);
       if (!drop.find(".login").length && !drop.find(".dashboard").length) {
         loadResults([url, drop]);
       }
       else {
-        $("#splash-tab").tab("show");
-      }
+        if (link.hasClass("login-link")) {
+          $("#login-collapse").collapse("show");
+        }
+        else if (link.hasClass("signup-link")) {
+          $("#signup-collapse").collapse("show");
+        }
+        else if (link.hasClass("password-link")) {
+          $("#password-collapse").collapse("show");
+        }
+        else {
+          $("#splash-collapse").collapse("show");
+        }
+      } 
       scrollToTop();
-    }, 250);
+    })
+  .on("click", "", function(e) {
+
   })
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var drop = $("#center-stage");
-      if (!drop.find(".list").length) {
-        loadResults([url, drop]);
-      }
-      scrollToTop();
-    }, 250);
+    var drop = $("#center-stage");
+    if (!drop.find(".list").length) {
+      loadResults([url, drop]);
+    }
+    else {
+      $(".results-collapse").collapse("show");
+    }
+    scrollToTop();
   })
   .on("click", ".charts-link", function(e) {
     e.preventDefault();
@@ -395,38 +359,35 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var drop = $("#center-stage");
-      if (!drop.find(".subscriptions").length) {
-        loadResults([url, drop]);
-      }
-      scrollToTop();
-    }, 250);
+    var drop = $("#center-stage");
+    if (!drop.find(".subscriptions").length) {
+      loadResults([url, drop]);
+    }
+    else {
+      $(".results-collapse").collapse("show");
+    }
+    scrollToTop();
   })
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var drop = $("#center-stage");
-      if (!drop.find(".settings").length) {
-        loadResults([url, drop]);
-      }
-      scrollToTop();
-    }, 250);
+    var drop = $("#center-stage");
+    if (!drop.find(".settings").length) {
+      loadResults([url, drop]);
+    }
+    scrollToTop();
   })
   .on("click", ".playlist-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var drop = $("#center-stage");
-      if (!drop.find(".playlist").length) {
-        loadResults([url, drop]);
-      }
-      scrollToTop();
-    }, 250);
+    var drop = $("#center-stage");
+    if (!drop.find(".playlist").length) {
+      loadResults([url, drop]);
+    }
+    else {
+      $(".results-collapse").collapse("show");
+    }
+    scrollToTop();
   })
   // save settings, apply theme
   .on("submit", ".settings-form", function (e) {
@@ -517,28 +478,6 @@ $(document)
     $(".audio-el").toggleClass("d-none");
     $(this).toggleClass("active");
   })
-  // LOGIN & SIGNUP
-  // show login / register tab
-  .on("click", ".ajax-login, .ajax-signup", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    var drop = $("#center-stage");
-    if (!drop.find(".login").length && !drop.find(".dashboard").length) {
-      loadResults([url, drop]);
-    }
-    else if ($(this).hasClass("ajax-login")) {
-      $("#login-tab").tab("show");
-    }
-    else {
-      $("#signup-tab").tab("show");
-    }
-    scrollToTop();
-  })
-  // show password reset tab
-  .on("click", ".password-link", function(e) {
-    e.preventDefault();
-    $("#password-tab").tab("show");
-  })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form", function (e) {
     e.preventDefault();
@@ -599,17 +538,24 @@ $(document)
     });
   })
   // BOOTSTRAP COLLAPSES
+  .on("show.bs.collapse", ".login-collapse", function (e) {
+    e.stopPropagation()
+    $(".login-collapse.show").collapse("hide");
+  })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation()
     $(".more-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
+    e.stopPropagation()
     $(".last-played-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
+    e.stopPropagation()
     $(".options-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
+    e.stopPropagation()
     $(".showpod-collapse.show").collapse("hide");
   })
   // toggles background theme
@@ -631,10 +577,9 @@ $(document)
     e.stopPropagation();
   })
   .on("click", ".select-subscription", function() {
-    var button = $(this);
-    button.parents(".subscriptions-result").toggleClass("selected");
-    var buttons = button.parents(".results").find(".subscriptions-result")
-    var selected = buttons.find(".selected");
+    var box = $(this).parents(".subscriptions-result").toggleClass("selected");
+    var buttons = box.parents(".results").find(".subscriptions-result");
+    var selected = box.parents(".results").find(".selected");
     if (buttons.length == selected.length) {
       $(".select-all-button").addClass("active");
     }

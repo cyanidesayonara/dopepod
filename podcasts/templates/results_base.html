@@ -10,54 +10,37 @@ dopepod
     <div class="col-12 results-header" data-q="{{ results.selected_q }}">
       {% if results.extra_options %}
         <button class="btn-dope results-back" onclick="window.history.back()">
-          {% if request.is_ajax %}
-            <i class="fas fa-arrow-circle-left"></i>
-          {% else %}
-            &laquo;
-          {% endif %}
+          <i class="fas fa-arrow-left" title="Back"></i>
         </button>
         <div class="extra-options">
-          <a class="btn-dope reverse-toggle results-minimize" data-toggle="collapse" href="#results-collapse{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse" aria-label="Minimize">
-            {% if request.is_ajax %}
-              <i class="fas fa-minus-circle"></i>
-            {% else %}
-              -
-            {% endif %}
+          <a class="btn-dope results-minimize" data-toggle="collapse" href="#results-collapse{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse">
+            <i class="fas fa-minus" title="Minimize"></i>
           </a>
-          <a class="btn-dope results-close" href="/" aria-label="Close">
-            {% if request.is_ajax %}
-              <i class="fas fa-times-circle"></i>
-            {% else %}
-              x
-            {% endif %}
+          <a class="btn-dope results-close" href="/">
+            <i class="fas fa-times" title="Close"></i>
           </a>
         </div>
       {% endif %}
       <h1>
-        {{ results.header }}
+        <strong>
+          {{ results.header }}
+        </strong>
       </h1>
     </div>
   </div>
-  <div class="row collapse show" id="results-collapse{{ results.drop }}">
-    <div class="results-buttons">
+  <div class="row collapse results-collapse fade show" id="results-collapse{{ results.drop }}">
+    {% if results.pagination %}
+      {% include 'pagination.html' %}
+    {% endif %}
+    <div class="col results-buttons">
       {% if results.view == 'grid' or results.view == 'list' %}
         <a class="btn-dope view-button active" href="{{ results.urls.full_url }}">
           {% if results.view == 'grid' %}
-            {% if request.is_ajax %}
-              <i class="fas fa-th"></i>
-              <i class="fas fa-bars d-none"></i>
-            {% else %}
-              <span>Grid</span>
-              <span class="d-none">List</span>
-            {% endif %}
+            <i class="fas fa-th" title="Toggle View"></i>
+            <i class="fas fa-bars d-none" title="Toggle View"></i>
           {% elif results.view == 'list' %}
-            {% if request.is_ajax %}
-              <i class="fas fa-th d-none"></i>
-              <i class="fas fa-bars"></i>
-            {% else %}
-              <span>List</span>
-              <span class="d-none">Grid</span>
-            {% endif %}
+            <i class="fas fa-th d-none" title="Toggle View"></i>
+            <i class="fas fa-bars" title="Toggle View"></i>
           {% endif %}
         </a>
       {% endif %}
@@ -115,11 +98,11 @@ dopepod
       {% endif %}
     </div>
     {% if results.alphabet %}
-      <div class="collapse options-collapse" id="alphabet-collapse{{ results.drop }}">
+      <div class="collapse fade options-collapse" id="alphabet-collapse{{ results.drop }}">
         <div class="options-buttons">
           {% if results.selected_q|capfirst in results.alphabet %}
             <a class="btn-dope options-button nix-button" href="{{ results.urls.q_url }}" id="alphabet-nix">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times" title="Undo Selection"></i>
             </a>
           {% endif %}
           {% for letter in results.alphabet %}
@@ -137,11 +120,11 @@ dopepod
       </div>
     {% endif %}
     {% if results.genres %}
-      <div class="collapse options-collapse" id="genre-collapse{{ results.drop }}">
+      <div class="collapse fade options-collapse" id="genre-collapse{{ results.drop }}">
         <div class="options-buttons">
           {% if results.selected_genre %}
             <a class="btn-dope options-button nix-button" href="{{ results.urls.genre_url }}">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times" title="Undo Selection"></i>
             </a>
           {% endif %}
           {% for genre in results.genres %}
@@ -159,11 +142,11 @@ dopepod
       </div>
     {% endif %}
     {% if results.languages %}
-      <div class="collapse options-collapse" id="language-collapse{{ results.drop }}">
+      <div class="collapse fade options-collapse" id="language-collapse{{ results.drop }}">
         <div class="options-buttons">
           {% if results.selected_language %}
             <a class="btn-dope options-button nix-button" href="{{ results.urls.language_url }}">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times" title="Undo Selection"></i>
             </a>
           {% endif %}
           {% for language in results.languages %}
@@ -179,9 +162,6 @@ dopepod
           {% endfor %}
         </div>
       </div>
-    {% endif %}
-    {% if results.pagination %}
-      {% include 'pagination.html' %}
     {% endif %}
 
     {% if results.podcasts or results.episodes %}

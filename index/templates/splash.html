@@ -16,9 +16,9 @@ dopepod
     <div class="splash-errors">
       {% include 'splash-errors.html' %}
     </div>
-    <div class="tab-content">
+    <div class="login-content">
       {% if view == 'signup' %}
-        <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+        <div class="collapse fade login-collapse" id="splash-collapse">
           <p>
             is a free, mobile-friendly podcast web app that
             scours the internet for fresh podcasts so you don't have to.
@@ -27,7 +27,7 @@ dopepod
             Sign up now to subscribe to all your favorite podcasts.
           </p>
         </div>
-        <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+        <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -58,7 +58,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade show active" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+        <div class="collapse fade login-collapse show active" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -80,7 +80,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+        <div class="collapse fade login-collapse" id="password-collapse">
           <p>
             Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
           </p>
@@ -100,7 +100,7 @@ dopepod
           </form>
         </div>
       {% elif view == 'login' %}
-        <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+        <div class="collapse fade login-collapse" id="splash-collapse">
           <p>
             is a free, mobile-friendly podcast web app that
             scours the internet for fresh podcasts so you don't have to.
@@ -109,7 +109,7 @@ dopepod
             Sign up now to subscribe to all your favorite podcasts.
           </p>
         </div>
-        <div class="tab-pane fade show active" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+        <div class="collapse fade login-collapse show active" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -140,7 +140,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+        <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -162,7 +162,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+        <div class="collapse fade login-collapse" id="password-collapse">
           <p>
             Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
           </p>
@@ -182,7 +182,7 @@ dopepod
           </form>
         </div>
       {% elif view == 'password' %}
-        <div class="tab-pane fade" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+        <div class="collapse fade login-collapse" id="splash-collapse">
           <p>
             is a free, mobile-friendly podcast web app that
             scours the internet for fresh podcasts so you don't have to.
@@ -191,7 +191,7 @@ dopepod
             Sign up now to subscribe to all your favorite podcasts.
           </p>
         </div>
-        <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+        <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -222,7 +222,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+        <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -244,7 +244,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade show active" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+        <div class="collapse fade login-collapse show active" id="password-collapse">
           <p>
             Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
           </p>
@@ -264,7 +264,7 @@ dopepod
           </form>
         </div>
       {% else %}
-        <div class="tab-pane fade show active" id="tabs-splash" role="tabpanel" aria-labelledby="splash-tab">
+        <div class="collapse fade login-collapse show active" id="splash-collapse">
           <p>
             is a free, mobile-friendly podcast web app that
             scours the internet for fresh podcasts so you don't have to.
@@ -273,7 +273,7 @@ dopepod
             Sign up now to subscribe to all your favorite podcasts.
           </p>
         </div>
-        <div class="tab-pane fade" id="tabs-login" role="tabpanel" aria-labelledby="login-tab">
+        <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -304,7 +304,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-signup" role="tabpanel" aria-labelledby="signup-tab">
+        <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="login-form-group">
@@ -326,7 +326,7 @@ dopepod
             </div>
           </form>
         </div>
-        <div class="tab-pane fade" id="tabs-password" role="tabpanel" aria-labelledby="password-tab">
+        <div class="collapse fade login-collapse" id="password-collapse">
           <p>
             Forgot your password? Enter your email address below, and we'll send you an email with a link allowing you to reset it.
           </p>
@@ -346,88 +346,39 @@ dopepod
           </form>
         </div>
       {% endif %}
-    </div>
-    <div class="nav login-buttons" role="tablist">
-      {% if view == 'signup' %}
-        {% if request.is_ajax %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope active signup-link" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% else %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="/?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope active signup-link" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% endif %}
-      {% elif view == 'login' %}
-        {% if request.is_ajax %}
-          <a class="btn-dope active login-link" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% else %}
-          <a class="btn-dope active login-link" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% endif %}
-      {% elif view == 'password' %}
-        {% if request.is_ajax %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% else %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="true">
-            Sign up
-          </a>
-        {% endif %}
-      {% else %}
-        {% if request.is_ajax %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="#tabs-login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="#tabs-signup" role="tab" aria-controls="tabs-signup" aria-selected="false">
-            Sign up
-          </a>
-        {% else %}
-          <a class="btn-dope login-link" id="login-tab" data-toggle="pill" href="?view=login" role="tab" aria-controls="tabs-login" aria-selected="false">
-            Log in
-          </a>
-          <a class="btn-dope signup-link" id="signup-tab" data-toggle="pill" href="/?view=signup" role="tab" aria-controls="tabs-signup" aria-selected="false">
-            Sign up
-          </a>
-        {% endif %}
-      {% endif %}
-      <a class="d-none" id="splash-tab" data-toggle="pill" href="#tabs-splash" role="tab" aria-controls="tabs-splash" aria-selected="false"></a>
-      <a class="d-none" id="password-tab" data-toggle="pill" href="#tabs-password" role="tab" aria-controls="tabs-password" aria-selected="false"></a>
     </div>
     <div class="login-buttons">
-      <a class="btn-dope btn-dope-social socialaccount_provider google social-link" href="/account/google/login/?process=login" title="Sign in with Google">
-        <div class="social-button social-icon" id="google-icon">
-          {% if request.is_ajax %}
-            <i class='fab fa-google'></i>
-          {% else %}
-            G
-          {% endif %}
-        </div>
-        <div class="social-button">
+      {% if view == 'signup' %}
+        <a class="btn-dope login-link" href="/?view=login">
+          Log in
+        </a>
+        <a class="btn-dope active signup-link" href="/?view=signup">
+          Sign up
+        </a>
+      {% elif view == 'login' %}
+        <a class="btn-dope active login-link" href="?view=login">
+          Log in
+        </a>
+        <a class="btn-dope signup-link" href="/?view=signup">
+          Sign up
+        </a>
+      {% else %}
+        <a class="btn-dope login-link" href="?view=login">
+          Log in
+        </a>
+        <a class="btn-dope signup-link" href="/?view=signup">
+          Sign up
+        </a>
+      {% endif %}
+    </div>
+    <div class="login-buttons">
+      <a class="btn-dope btn-dope-social socialaccount_provider" href="/account/google/login/?process=login">
+        <span class="social-icon">
+          <i class='fab fa-google' title="Google Login"></i>
+        </span>
+        <span class="social-button">
           Sign in with Google
-        </div>
+        </span>
       </a>
     </div>
   </div>

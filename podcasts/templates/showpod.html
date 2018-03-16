@@ -9,7 +9,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
   <div class="row" id="showpod">
     <div class="col-12 col-lg-4" id="showpod-l">
       <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}380x380bb.jpg"
-      onerror="this.src='http://{{ podcast.artworkUrl }}380x380bb.jpg'" />
+      onerror="this.src='http://{{ podcast.artworkUrl }}380x380bb.jpg'" alt="{{ podcast.title }}" />
     </div>
     <div class="col-12 col-lg-5" id="showpod-c" data-podid="{{ podcast.podid }}">
       <h1>
@@ -82,41 +82,41 @@ Listen to episodes of {{ podcast.title }} on dopepod
       </ul>
     </div>
     <div class="col-12 showpod-buttons">
-      <button class="btn-dope showpod-back" onclick="window.history.back()">
-        <i class="fas fa-arrow-circle-left"></i>
+      <button class="btn-dope showpod-back" onclick="window.history.back()" title="Back">
+        <i class="fas fa-arrow-left"></i>
       </button>
       {% if user.is_authenticated %}
         <form class="d-inline sub-form" action="{% url 'subscribe' %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="podid" value="{{ podcast.podid }}">
           {% if podcast.is_subscribed %}
-            <button type="submit" class="btn-dope sub-button">
+            <button type="submit" class="btn-dope sub-button" title="Unsubscribe">
               Unsubscribe
             </button>
           {% else %}
-            <button type="submit" class="btn-dope active sub-button">
+            <button type="submit" class="btn-dope active sub-button" title="Subscribe">
               Subscribe
             </button>
           {% endif %}
         </form>
       {% endif %}
-      <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+      <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse" title="Episodes">
         {% if request.is_ajax %}
           {% include 'button_loading.html' %}
         {% else %}
           Episodes
         {% endif %}
       </a>
-      <a class="btn-dope reviews-button toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
+      <a class="btn-dope reviews-button toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse" title="Reviews">
         Reviews
       </a>
     </div>
-    <div class="col-12 showpod-collapse collapse show" id="episodes-collapse">
+    <div class="col-12 showpod-collapse fade collapse show" id="episodes-collapse">
       {% if results.episodes %}
         {% include 'episodes.html' %}
       {% endif%}
     </div>
-    <div class="col-12 showpod-collapse collapse" id="reviews-collapse">
+    <div class="col-12 showpod-collapse fade collapse" id="reviews-collapse">
       <p>
         Coming soon
       </p>
