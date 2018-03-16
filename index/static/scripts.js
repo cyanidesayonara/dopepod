@@ -258,18 +258,20 @@ function changeTheme(theme) {
   }
 }
 function subscribeOrUnsubscribe(form) {
-  var url = form.action;
-  var method = form.method;
-  form = $(form);
-  var podid = form.find("input[name=podid]").val();
-  form.find("button[type=submit]").html(getButtonLoading());
-  $.ajax({
-    method: method,
-    url: url,
-    data: {
-      "podid": podid,
-    },
-  })
+  clearTimeout(timeout);
+  timeout = setTimeout(function() {
+    var url = form.action;
+    var method = form.method;
+    form = $(form);
+    var podid = form.find("input[name=podid]").val();
+    form.find("button[type=submit]").html(getButtonLoading());
+    $.ajax({
+      method: method,
+      url: url,
+      data: {
+        "podid": podid,
+      },
+    })
     .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
       replaceState("/");
@@ -280,6 +282,7 @@ function subscribeOrUnsubscribe(form) {
       var drop = "#episodes-collapse";
       loadResults([url, drop]);
     });
+  }, 250);
 };
 // replaces spaces/&s with +, removes unwanted chars
 function replaceChars(q) {
@@ -300,8 +303,8 @@ function getLoading() {
 
 $(document)
   .ready(function() {
-    var xhr = null;
-    var timeout = 0;
+    xhr = null;
+    timeout = 0;
     refreshCookie();
     addIcons();
     updateLastPlayed();
@@ -454,10 +457,7 @@ $(document)
   // sub or unsub
   .on("submit", ".sub-form", function(e) {
     e.preventDefault();
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      subscribeOrUnsubscribe(this);
-    }, 10000);
+    subscribeOrUnsubscribe(this);
   })
   // playlist - play, add, move, or delete episode
   .on("submit", ".playlist-form", function(e) {
