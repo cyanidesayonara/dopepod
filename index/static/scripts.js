@@ -429,7 +429,7 @@ $(document)
     var data = form.serialize();
     var mode = form.find("input[name=mode]").val();
     var button = form.find("button[type=submit]");
-    var text = button[0].innerText;
+    var text = button[0].innerHTML;
     button.html(getButtonLoading());
     $.ajax({
       method: method,
@@ -437,7 +437,7 @@ $(document)
       data: data,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        button.text(text);
+        button.html(text);
       })
       .done(function(response) {
         if (mode == "play") {
@@ -445,7 +445,7 @@ $(document)
           player.removeClass("minimize");
           player.html(response);
           updateTitle();
-          button.text(text);
+          button.html(text);
           // gotta wait a sec here
           setTimeout(function() {
             var box = $(".player-title");
