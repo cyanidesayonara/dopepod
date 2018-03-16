@@ -1,4 +1,4 @@
-{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
+{% extends request.is_ajax|yesno:'ajax.min.html,base.min.html' %}
 
 {% block title %}
 Listen to episodes of {{ podcast.title }} on dopepod
@@ -102,7 +102,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
       {% endif %}
       <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse" title="Episodes">
         {% if request.is_ajax %}
-          {% include 'button_loading.html' %}
+          {% include 'button_loading.min.html' %}
         {% else %}
           Episodes
         {% endif %}
@@ -113,7 +113,7 @@ Listen to episodes of {{ podcast.title }} on dopepod
     </div>
     <div class="col-12 showpod-collapse fade collapse show" id="episodes-collapse">
       {% if results.episodes %}
-        {% include 'episodes.html' %}
+        {% include 'episodes.min.html' %}
       {% endif%}
     </div>
     <div class="col-12 showpod-collapse fade collapse" id="reviews-collapse">

@@ -22,7 +22,7 @@ def episodes(request, podid):
             context = {
                 'results': results,
             }
-            return render(request, 'episodes.html', context)
+            return render(request, 'episodes.min.html', context)
         else:
             return redirect('/showpod/' + podid + '/')
 
@@ -37,7 +37,7 @@ def last_played(request):
             context = {
                 'results': last_played,
             }
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
         else:
             return redirect('/')
 
@@ -66,12 +66,12 @@ def subscribe(request):
             }
 
             if request.is_ajax():
-                return render(request, 'showpod.html', context)
+                return render(request, 'showpod.min.html', context)
             return redirect('/showpod/' + str(podid) + '/')
 
         else:
             if request.is_ajax():
-                return render(request, 'splash.html', {})
+                return render(request, 'splash.min.html', {})
             return redirect('/?next=/showpod/' + podid + '/')
 
 def unsubscribe(request):
@@ -99,6 +99,6 @@ def unsubscribe(request):
             context = {
                 'results': results,
             }
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
         else:
-            return render(request, 'splash.html', {})
+            return render(request, 'splash.min.html', {})

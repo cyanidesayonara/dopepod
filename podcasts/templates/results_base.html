@@ -1,4 +1,4 @@
-{% extends results.extend|yesno:'base.html,ajax.html' %}
+{% extends results.extend|yesno:'base.min.html,ajax.min.html' %}
 
 {% block title %}
 dopepod
@@ -13,7 +13,7 @@ dopepod
           <i class="fas fa-arrow-left" title="Back"></i>
         </button>
         <div class="extra-options">
-          <a class="btn-dope results-minimize" data-toggle="collapse" href="#results-collapse{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse">
+          <a class="btn-dope results-minimize reverse-toggle" data-toggle="collapse" href="#results-collapse{{ results.drop }}" aria-expanded="true" aria-controls="results-collapse">
             <i class="fas fa-minus" title="Minimize"></i>
           </a>
           <a class="btn-dope results-close" href="/">
@@ -30,7 +30,7 @@ dopepod
   </div>
   <div class="row collapse results-collapse fade show" id="results-collapse{{ results.drop }}">
     {% if results.pagination %}
-      {% include 'pagination.html' %}
+      {% include 'pagination.min.html' %}
     {% endif %}
     <div class="col results-buttons">
       {% if results.view == 'grid' or results.view == 'list' %}
@@ -167,21 +167,21 @@ dopepod
     {% if results.podcasts or results.episodes %}
       <div class="col-12 results-content">
         {% if results.view == 'grid' or results.view == 'list' %}
-          {% include 'search.html' %}
+          {% include 'search.min.html' %}
         {% elif results.view == 'charts' %}
-          {% include 'charts.html' %}
+          {% include 'charts.min.html' %}
         {% elif results.view == 'subscriptions'%}
-          {% include 'subscriptions.html' %}
+          {% include 'subscriptions.min.html' %}
         {% elif results.view == 'playlist'%}
-          {% include 'episodes.html' %}
+          {% include 'episodes.min.html' %}
         {% elif results.view == 'last-played'%}
-          {% include 'last_played.html' %}
+          {% include 'last_played.min.html' %}
         {% endif %}
       </div>
     {% endif %}
 
     {% if results.pagination %}
-      {% include 'pagination.html' %}
+      {% include 'pagination.min.html' %}
     {% endif %}
   </div>
 </div>

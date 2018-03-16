@@ -66,7 +66,8 @@ a:hover {
   -moz-transition: all .25s ease;
   -webkit-transition: all .25s ease;
 }
-.btn-dope.active {
+.btn-dope.active,
+.reverse-toggle[aria-expanded="false"] {
   color: #fff;
   background: rgb(0, 191, 165);
 }
@@ -487,14 +488,14 @@ a:hover {
 }
 .episode-buttons {
   justify-content: flex-end;
-  padding: 5px 10px 10px 5px;
+  padding: 6px 10px 10px 6px;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 .episode-buttons > * {
-  margin-left: 5px;
-  margin-top: 5px;
+  margin-left: 4px;
+  margin-top: 4px;
 }
 
 /* RESULTS BASE */
@@ -515,6 +516,9 @@ a:hover {
   text-align: center;
   font-size: 20px;
   margin: 4px 0;
+}
+.options-collapse {
+  width: 100%;
 }
 .results-buttons,
 .options-buttons,

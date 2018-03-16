@@ -1,4 +1,4 @@
-{% extends request.is_ajax|yesno:'ajax.html,base.html' %}
+{% extends request.is_ajax|yesno:'ajax.min.html,base.min.html' %}
 
 {% block title %}
 dopepod
@@ -12,9 +12,9 @@ dopepod
         Discover and listen to thousands of free podcasts on
       </strong>
     </h1>
-    {% include 'logo.html' %}
+    {% include 'logo.min.html' %}
     <div class="splash-errors">
-      {% include 'splash-errors.html' %}
+      {% include 'splash-errors.min.html' %}
     </div>
     <div class="login-content">
       {% if view == 'signup' %}
@@ -40,7 +40,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Log in</button>
+                <button type="submit" class="btn-dope active">Login</button>
               </div>
             </div>
             <div class="form-row">
@@ -75,7 +75,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Sign Up</button>
+                <button type="submit" class="btn-dope active">SignUp</button>
               </div>
             </div>
           </form>
@@ -122,7 +122,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Log in</button>
+                <button type="submit" class="btn-dope active">Login</button>
               </div>
             </div>
             <div class="form-row">
@@ -157,7 +157,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Sign up</button>
+                <button type="submit" class="btn-dope active">Signup</button>
               </div>
             </div>
           </form>
@@ -204,7 +204,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Log in</button>
+                <button type="submit" class="btn-dope active">Login</button>
               </div>
             </div>
             <div class="form-row">
@@ -239,7 +239,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Sign up</button>
+                <button type="submit" class="btn-dope active">Signup</button>
               </div>
             </div>
           </form>
@@ -286,7 +286,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password" placeholder="Password" required id="login-password">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Log in</button>
+                <button type="submit" class="btn-dope active">Login</button>
               </div>
             </div>
             <div class="form-row">
@@ -321,7 +321,7 @@ dopepod
                 <input class="form-control login-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Sign up</button>
+                <button type="submit" class="btn-dope active">Signup</button>
               </div>
             </div>
           </form>
@@ -349,26 +349,26 @@ dopepod
     </div>
     <div class="login-buttons">
       {% if view == 'signup' %}
-        <a class="btn-dope login-link" href="/?view=login">
-          Log in
-        </a>
-        <a class="btn-dope active signup-link" href="/?view=signup">
-          Sign up
-        </a>
+        <button class="btn-dope toggle" href="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          Login
+        </button>
+        <button class="btn-dope active toggle" href="#signup-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="signup-collapse">
+          Signup
+        </button>
       {% elif view == 'login' %}
-        <a class="btn-dope active login-link" href="?view=login">
-          Log in
-        </a>
-        <a class="btn-dope signup-link" href="/?view=signup">
-          Sign up
-        </a>
+        <button class="btn-dope toggle" href="#login-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="login-collapse">
+          Login
+        </button>
+        <button class="btn-dope toggle" href="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          Signup
+        </button>
       {% else %}
-        <a class="btn-dope login-link" href="?view=login">
-          Log in
-        </a>
-        <a class="btn-dope signup-link" href="/?view=signup">
-          Sign up
-        </a>
+        <button class="btn-dope toggle" href="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          Login
+        </button>
+        <button class="btn-dope toggle" href="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          Signup
+        </button>
       {% endif %}
     </div>
     <div class="login-buttons">

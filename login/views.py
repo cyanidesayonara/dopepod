@@ -40,7 +40,7 @@ def login(request):
         }
         if response.status_code == 200:
             if ajax:
-                return render(request, 'dashboard.html', context)
+                return render(request, 'dashboard.min.html', context)
             else:
                 return redirect('/')
         else:
@@ -50,9 +50,9 @@ def login(request):
                 'email': email,
             })
             if ajax:
-                return render(request, 'splash-errors.html', context, status=400)
+                return render(request, 'splash-errors.min.html', context, status=400)
             else:
-                return render(request, 'splash.html', context)
+                return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=login')
 
@@ -68,7 +68,7 @@ def signup(request):
 
         if response.status_code == 200:
             if ajax:
-                return render(request, 'dashboard.html', context)
+                return render(request, 'dashboard.min.html', context)
             else:
                 return redirect('/')
         else:
@@ -78,9 +78,9 @@ def signup(request):
                 'email': email,
             })
             if ajax:
-                return render(request, 'splash-errors.html', context, status=400)
+                return render(request, 'splash-errors.min.html', context, status=400)
             else:
-                return render(request, 'splash.html', context)
+                return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=signup')
 
@@ -102,7 +102,7 @@ def password_reset(request):
                 'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
             }
             if ajax:
-                return render(request, 'splash.html', context)
+                return render(request, 'splash.min.html', context)
             else:
                 return redirect('/')
         else:
@@ -113,9 +113,9 @@ def password_reset(request):
             'email': email,
             }
             if ajax:
-                return render(request, 'splash-errors.html', context, status=400)
+                return render(request, 'splash-errors.min.html', context, status=400)
             else:
-                return render(request, 'splash.html', context)
+                return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=password')
 

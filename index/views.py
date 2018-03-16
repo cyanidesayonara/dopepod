@@ -26,7 +26,7 @@ def dopebar(request):
 
     if request.method == 'GET':
         if request.is_ajax():
-            return render(request, 'dopebar.html', {})
+            return render(request, 'dopebar.min.html', {})
 
 @vary_on_headers('Accept')
 def index(request):
@@ -40,9 +40,9 @@ def index(request):
         view = request.GET.get('view' , None)
 
         if user.is_authenticated:
-            template = 'dashboard.html'
+            template = 'dashboard.min.html'
         else:
-            template = 'splash.html'
+            template = 'splash.min.html'
 
         context = {
             'view': view,
@@ -95,7 +95,7 @@ def charts(request):
                 'results': charts,
             }
 
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
 
         last_played = Episode.get_last_played()
         context = {
@@ -104,9 +104,9 @@ def charts(request):
         }
 
         if user.is_authenticated:
-            return render(request, 'dashboard.html', context)
+            return render(request, 'dashboard.min.html', context)
         else:
-            return render(request, 'splash.html', context)
+            return render(request, 'splash.min.html', context)
 
 @vary_on_headers('Accept')
 def search(request):
@@ -160,7 +160,7 @@ def search(request):
             'results': results,
         }
         if request.is_ajax():
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
 
         results['extend'] = True
 
@@ -171,7 +171,7 @@ def search(request):
             'charts': charts,
             'last_played': last_played,
         })
-        return render(request, 'results_base.html', context)
+        return render(request, 'results_base.min.html', context)
 
 @vary_on_headers('Accept')
 def subscriptions(request):
@@ -189,7 +189,7 @@ def subscriptions(request):
                 'results': results,
             }
             if request.is_ajax():
-                return render(request, 'results_base.html', context)
+                return render(request, 'results_base.min.html', context)
 
             results['extend'] = True
 
@@ -200,10 +200,10 @@ def subscriptions(request):
                 'last_played': last_played,
             })
 
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
         else:
             if request.is_ajax():
-                return render(request, 'splash.html', {})
+                return render(request, 'splash.min.html', {})
             return redirect('/')
 
 @vary_on_headers('Accept')
@@ -217,7 +217,7 @@ def playlist(request):
                 'results': playlist,
             }
             if request.is_ajax():
-                return render(request, 'results_base.html', context)
+                return render(request, 'results_base.min.html', context)
 
             playlist['extend'] = True
 
@@ -228,10 +228,10 @@ def playlist(request):
                 'last_played': last_played,
             })
 
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
         else:
             if request.is_ajax():
-                return render(request, 'splash.html', {})
+                return render(request, 'splash.min.html', {})
             return redirect('/')
 
     if request.method == 'POST':
@@ -261,7 +261,7 @@ def playlist(request):
                 context = {
                     'player': player,
                 }
-                return render(request, 'player.html', context)
+                return render(request, 'player.min.html', context)
             if user.is_authenticated:
                 episodes = Episode.get_playlist(user)
                 context = {
@@ -287,7 +287,7 @@ def playlist(request):
             raise Http404()
 
         if request.is_ajax():
-            return render(request, 'results_base.html', context)
+            return render(request, 'results_base.min.html', context)
 
         episodes['extend'] = True
 
@@ -298,7 +298,7 @@ def playlist(request):
             'last_played': last_played,
         })
 
-        return render(request, 'results_base.html', context)
+        return render(request, 'results_base.min.html', context)
 
 @vary_on_headers('Accept')
 def showpod(request, podid):
@@ -322,7 +322,7 @@ def showpod(request, podid):
             }
 
             if request.is_ajax():
-                return render(request, 'showpod.html', context)
+                return render(request, 'showpod.min.html', context)
 
             charts = Podcast.get_charts()
             results = Episode.get_episodes(podid)
@@ -334,7 +334,7 @@ def showpod(request, podid):
                 'last_played': last_played,
             })
 
-            return render(request, 'showpod.html', context)
+            return render(request, 'showpod.min.html', context)
         except Podcast.DoesNotExist:
             raise Http404
 
@@ -355,7 +355,7 @@ def settings(request):
             }
 
             if request.is_ajax():
-                return render(request, 'settings.html', context)
+                return render(request, 'settings.min.html', context)
 
             charts = Podcast.get_charts()
             last_played = Episode.get_last_played()
@@ -364,7 +364,7 @@ def settings(request):
                 'last_played': last_played,
             })
 
-            return render(request, 'settings.html', context)
+            return render(request, 'settings.min.html', context)
 
         if request.method == 'POST':
             user_form = UserForm(instance=request.user, data=request.POST)
@@ -379,7 +379,7 @@ def settings(request):
                 user_form.save()
                 profile_form.save()
                 if request.is_ajax():
-                    return render(request, 'dashboard.html', context)
+                    return render(request, 'dashboard.min.html', context)
                 return redirect('/')
             else:
                 errors = {}
@@ -403,7 +403,7 @@ def settings(request):
                 })
 
                 if request.is_ajax:
-                    return render(request, 'settings.html', context, status=400)
+                    return render(request, 'settings.min.html', context, status=400)
 
                 charts = Podcast.get_charts()
                 last_played = Episode.get_last_played()
@@ -412,8 +412,8 @@ def settings(request):
                     'last_played': last_played,
                 })
 
-                return render(request, 'settings.html', context)
+                return render(request, 'settings.min.html', context)
     else:
         if request.is_ajax():
-            return render(request, 'splash.html', {})
+            return render(request, 'splash.min.html', {})
         return redirect('/?next=/settings/')
