@@ -1,53 +1,51 @@
 {% if episode %}
 <div class="container px-0">
-  <div class="col-12 col-lg-4 ml-auto">
-    <div class="color-4-trans player-wrapper">
-      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-        <img class="img-fluid" src="https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
-      </a>
-      <a class="btn-dope player-close" href="#">
-        <i class="fas fa-times" title="Close"></i>
-      </a>
-      <a class="btn-dope player-minimize" href="#">
-        <i class="fas fa-minus" title="Minimize"></i>
-      </a>
-      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-        <div class="player-title">
-          <h1>
-            {{ episode.podcast.title }}
-          </h1>
-        </div>
-      </a>
-      <p class="player-episode">
-        {{ episode.title }}
-      </p>
-      <p class="player-date">
-         Released
-        {{ episode.pubDate|date:'d-m-Y H:i' }}
-      </p>
-      <button class="last-played-toggle" data-toggle="collapse" data-target="#player-collapse"
-        aria-expanded="false">
-        <i class="fas fa-angle-down" title="Expand"></i>
-      </button>
-      <div class="collapse fade player-collapse" id="player-collapse">
-        <p class="player-description">
-          {{ episode.description }}
-        </p>
-        <div class="player-buttons">
-          <a class="btn-dope" href="{{ episode.url }}" title="Download" download>
-            <i class="fas fa-download"></i>
-          </a>
-        </div>
+  <div class="col-12 col-lg-4 ml-auto color-1-trans player-wrapper">
+    <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+      <img class="img-fluid" src="https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg"
+      onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
+    </a>
+    <a class="btn-dope player-close" href="#">
+      <i class="fas fa-times" title="Close"></i>
+    </a>
+    <a class="btn-dope player-minimize" href="#">
+      <i class="fas fa-minus" title="Minimize"></i>
+    </a>
+    <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
+      <div class="player-title">
+        <h1>
+          {{ episode.podcast.title }}
+        </h1>
       </div>
-      <audio {% if user.is_authenticated %}onended="playNext()"{% endif %} controls preload="metadata" autoplay>
-        <source src="{{ episode.url }}"/>
-      </audio>
+    </a>
+    <p class="player-episode">
+      {{ episode.title }}
+    </p>
+    <p class="player-date">
+        Released
+      {{ episode.pubDate|date:'d-m-Y H:i' }}
+    </p>
+    <button class="last-played-toggle" data-toggle="collapse" data-target="#player-collapse"
+      aria-expanded="false">
+      <i class="fas fa-angle-down" title="Expand"></i>
+    </button>
+    <div class="collapse fade player-collapse" id="player-collapse">
+      <p class="player-description">
+        {{ episode.description }}
+      </p>
+      <div class="player-buttons">
+        <a class="btn-dope" href="{{ episode.url }}" title="Download" download>
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
     </div>
+    <audio {% if user.is_authenticated %}onended="playNext()"{% endif %} controls preload="metadata" autoplay>
+      <source src="{{ episode.url }}"/>
+    </audio>
   </div>
 </div>
 {% elif cookie_banner %}
-<div class="col-12 color-4-trans cookie-banner">
+<div class="col-12 color-1-trans cookie-banner">
   <h1>This site uses cookies</h1>
   <button class="btn-dope" onclick="cookieBannerClose()">
     <i class="fas fa-times"></i>

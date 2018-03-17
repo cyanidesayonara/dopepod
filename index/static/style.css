@@ -21,7 +21,7 @@ a:hover {
   transition: all .25s ease;
   -moz-transition: all .25s ease;
   -webkit-transition: all .25s ease;
-  background: rgb(0, 0, 0);
+  background: #000;
   color: #fff;
 }
 
@@ -36,7 +36,7 @@ a:hover {
   margin: 0;
   font-size: 16px;
 }
-.cookie-banner-close {
+.cookie-banner button {
   margin-left: 5px;
 }
 
@@ -101,32 +101,14 @@ a:hover {
 }
 
 /* COLORS */
-.color-1 {
-  background: rgba(0, 105, 92, 1);
-}
 .color-1-trans {
-  background: rgba(0, 105, 92, .9);
-}
-.color-2 {
-  background: rgba(224, 242, 241, 1);
-}
-.color-2-trans {
-  background: rgba(224, 242, 241, .9);
-}
-.color-3 {
-  background: rgba(100, 255, 218, 1);
-}
-.color-4 {
-  background: rgba(0, 191, 165, 1);
-}
-.color-4-trans {
   background: rgba(0, 191, 165, .95);
 }
-.color-5 {
-  background: rgba(255, 255, 255, 1);
-}
-.color-5-trans {
+.color-2-trans {
   background: rgba(255, 255, 255, .2);
+}
+.color-3-trans {
+  background: rgba(204, 204, 204, .5);
 }
 
 /* MAIN */
@@ -135,14 +117,10 @@ a:hover {
   padding-bottom: 15px;
   min-height: 100vh;
 }
-#left {
-  padding: 0 20px;
-}
-#main {
-  min-height: unset;
-  padding: 0 20px;
-}
+#left,
+#main,
 #right {
+  min-height: unset;
   padding: 0 20px;
 }
 
@@ -190,7 +168,6 @@ a:hover {
   font-family: Orbitron;
   line-height: 24px;
   font-size: 28px!important;
-  font-weight: 400;
   margin: 0;
   text-align: center;
 }
@@ -198,9 +175,7 @@ a:hover {
   padding: 15px 10px 0;
   width: 100%;
 }
-#dopebar-collapse ul {
-  margin: 10px 0 0;
-}
+#dopebar-collapse ul,
 #dopebar-collapse ul li {
   margin: 10px 0 0;
 }
@@ -217,7 +192,7 @@ a:hover {
   color: #fff;
 }
 .dopebar-link  {
-  padding: 5px;
+  padding: 5px 6px;
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
@@ -304,7 +279,7 @@ a:hover {
 }
 .login-field {
   font-size: unset;
-  padding: .25rem .5rem;
+  padding: 4px 8px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
   margin-bottom: 10px;
@@ -334,15 +309,7 @@ a:hover {
   flex-wrap: wrap;
 }
 .login-buttons > * {
-  margin: 4px 2px;
-}
-.login-buttons .spin {
-  -webkit-transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  transition: all .25s ease-in-out;
-}
-.login-buttons:hover .spin {
-  transform: rotateY(-180deg);
+  margin: 5px 2.5px;
 }
 .login-buttons button {
   cursor: default;
@@ -435,7 +402,6 @@ a:hover {
 /* EPISODES */
 .episode-content {
   padding: 0 !important;
-  background: rgba(204, 204, 204, .5);
 }
 .more-collapse {
   border-bottom: 2px solid rgb(0, 191, 165);
@@ -491,14 +457,14 @@ a:hover {
 }
 .episode-buttons {
   justify-content: flex-end;
-  padding: 6px 10px 10px 6px;
+  padding: 5px 10px 10px 5px;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 .episode-buttons > * {
-  margin-left: 4px;
-  margin-top: 4px;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 /* RESULTS BASE */
@@ -513,7 +479,7 @@ a:hover {
 }
 .results-bar {
   background: rgb(0, 191, 165);
-  padding: 10px 0;
+  padding: 8px 0 10px;
 }
 .results-header h1 {
   text-align: center;
@@ -532,7 +498,7 @@ a:hover {
 .pages-buttons,
 .options-buttons,
 .showpod-buttons {
-  padding: 10px 10px 6px 6px;
+  padding: 10px 10px 5px 5px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
@@ -542,8 +508,8 @@ a:hover {
 .pages-buttons > *,
 .options-buttons > *,
 .showpod-buttons > * {
-  margin-left: 4px;
-  margin-bottom: 4px;
+  margin-left: 5px;
+  margin-bottom: 5px;
 }
 .results-back {
   margin-right: 42px;
@@ -558,7 +524,7 @@ a:hover {
   flex-wrap: wrap;
 }
 .extra-options > * {
-  margin-left: 4px;
+  margin-left: 5px;
 }
 .results-content {
   min-height: 0;
@@ -627,6 +593,7 @@ a:hover {
 .last-played-result table tr td:first-child:before {
   content: "●";
   color: rgb(0, 191,165);
+  margin-right: 5px;
 }
 .charts-rank {
   float: left;
@@ -664,15 +631,15 @@ a:hover {
   -webkit-transition: all .15s ease-in-out;
 }
 .last-played-buttons {
-  padding: 6px 35px 0 0;
+  padding: 5px 35px 0 0;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 .last-played-buttons > * {
-  margin-right: 4px;
-  margin-top: 4px;
+  margin-right: 5px;
+  margin-top: 5px;
 }
 .last-played-result img {
   border-radius: .25rem;
@@ -716,7 +683,7 @@ a:hover {
   text-align: justify;
   margin: 10px 0 0;
 }
-.last-played-collapse {
+.last-played-collapse table {
   margin-top: 10px;
 }
 .last-played-toggle {
@@ -805,7 +772,7 @@ a:hover {
   flex-wrap: wrap;
 }
 .subscriptions-buttons > * {
-  margin-left: 4px;
+  margin-left: 5px;
 }
 
 /* BROWSE RESULTS */
@@ -831,16 +798,9 @@ a:hover {
 }
 
 /* PLAYER */
-#player {
-  padding: 0;
-}
 .player-wrapper {
   z-index: 9000;
   color: rgb(46, 46, 46);
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
   padding: 10px 10px 0;
   border: 2px solid rgb(0, 191, 165);
   border-bottom: none;
@@ -858,8 +818,7 @@ a:hover {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 .player-title,
-.player-description,
-.player-date {
+.player-description {
   overflow: hidden;
   margin: 8px 0;
 }
@@ -873,7 +832,7 @@ a:hover {
 .player-minimize,
 .player-close {
   float: right;
-  margin-left: 4px;
+  margin-left: 5px;
 }
 .player-title h1:hover {
   color: #fff;
@@ -882,12 +841,18 @@ a:hover {
   font-weight: 600;
 }
 .player-episode {
-  margin-bottom: 6px;
+  font-size: 14px;
+  margin: 0;
   height: 40px;
   overflow: hidden;
 }
 .player-date {
   font-size: 12px;
+  margin: 8px 0 0; 
+}
+.player-description {
+  text-align: justify;
+  max-height: 400px;
 }
 .player-wrapper.minimize {
   bottom: -105px;
@@ -952,8 +917,8 @@ a:hover {
 .button-loading {
   position: relative;
   background: inherit;
-  height: 21px;
-  width: 55px;
+  height: 22px;
+  width: 57px;
 }
 .loading-a-1 {
   left: 0;
@@ -1085,6 +1050,11 @@ a:hover {
   .player-wrapper {
     border-radius: 0;
   }
+  /* fade disabled on mobile */
+  .fade {
+    opacity: 1;
+    transition: none;
+  }
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {
@@ -1102,6 +1072,10 @@ a:hover {
   }
   .episodes-table .length {
     width: 55px;
+  }
+  .fade {
+    opacity: 1;
+    transition: none;
   }
 }
 /* tablets/desktops and up ----------- */
