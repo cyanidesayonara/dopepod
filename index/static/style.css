@@ -798,11 +798,11 @@ a:hover {
   color: #fff;
 }
 .subscriptions-buttons {
+  justify-content: flex-end;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  justify-content: flex-end;
 }
 .subscriptions-buttons > * {
   margin-left: 4px;
@@ -835,8 +835,8 @@ a:hover {
   padding: 0;
 }
 .player-wrapper {
-  color: rgb(46, 46, 46);
   z-index: 9000;
+  color: rgb(46, 46, 46);
   position: absolute;
   bottom: 0;
   right: 0;
@@ -857,9 +857,11 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
-.player-title {
+.player-title,
+.player-description,
+.player-date {
   overflow: hidden;
-  margin-bottom: 3px;
+  margin: 8px 0;
 }
 .player-title h1 {
   color: rgb(46, 46, 46);
@@ -868,24 +870,31 @@ a:hover {
   white-space: nowrap;
   font-weight: 600;
 }
+.player-minimize,
+.player-close {
+  float: right;
+  margin-left: 4px;
+}
+.player-title h1:hover {
+  color: #fff;
+}
 .player-wrapper p {
-  font-size: 12px;
-  margin-bottom: 3px;
   font-weight: 600;
 }
 .player-episode {
-  height: 52px;
+  margin-bottom: 6px;
+  height: 40px;
   overflow: hidden;
 }
-.player-buttons {
-  margin-left: 4px;
-  float: right;
+.player-date {
+  font-size: 12px;
 }
-#player.minimize {
-  bottom: -55px;
+.player-wrapper.minimize {
+  bottom: -105px;
 }
-.audio-el {
-  padding-top: 5px;
+.player-wrapper audio {
+  display: block;
+  margin-top: 10px;
 }
 
 /* LOADERS */

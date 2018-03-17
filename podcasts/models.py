@@ -606,7 +606,7 @@ class Subscription(models.Model):
 
 class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='episode')
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='episode')
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='episode', default=None)
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -832,6 +832,7 @@ class Episode(models.Model):
     def add(signature, user):
         # max 20 episodes for now
         if user.is_authenticated:
+            # get position of last episode
             position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
             if position:
                 if position == 20:

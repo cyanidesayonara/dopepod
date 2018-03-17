@@ -254,12 +254,8 @@ def playlist(request):
                         raise Http404()
 
                 episode.play()
-
-                player = {
-                    'episode': episode,
-                }
                 context = {
-                    'player': player,
+                    'episode': episode,
                 }
                 return render(request, 'player.min.html', context)
             if user.is_authenticated:
@@ -297,7 +293,6 @@ def playlist(request):
             'charts': charts,
             'last_played': last_played,
         })
-
         return render(request, 'results_base.min.html', context)
 
 @vary_on_headers('Accept')

@@ -239,6 +239,53 @@ function subscribeOrUnsubscribe(form) {
     });
   }, 250);
 };
+function yeOldePlaylistFunction(url, data, mode, button) {
+  var text = button[0].innerHTML;
+  button.html(getButtonLoading());
+  $.ajax({
+      method: "POST",
+      url: url,
+      data: data,
+    })
+    // nothing to continue
+    .fail(function (xhr, ajaxOptions, thrownError) {
+      button.html(text);
+      $("#player").empty();
+    })
+    .done(function (response) {
+      if (mode == "play") {
+        var player = $("#player");
+        player.html(response);
+        updateTitle();
+        button.html(text);
+        // gotta wait a sec here
+        setTimeout(function () {
+          var box = $(".player-title");
+          var text = $(".player-title h1");
+          scrollText(box, text);
+        }, 1000);
+      }
+      else if (mode == "add") {
+        button.text(text);
+      }
+      // if playlist is visible, update it
+      if ($("#center-stage").find(".playlist").length) {
+        var drop = $("#center-stage");
+        var url = "/playlist/";
+        loadResults([url, drop]);
+      }
+    });
+};
+function playNext() {
+  var url = "/playlist/";
+  var data = {
+    "pos": "0",
+    "mode": "play",
+  };
+  var mode = "play";
+  var button = $(".playlist-link");
+  yeOldePlaylistFunction(url, data, mode, button);
+};
 // replaces spaces/&s with +, removes unwanted chars
 function replaceChars(q) {
   q = q.replace(/&+/g, "+");
@@ -306,7 +353,7 @@ $(document)
       loadResults([url, drop, loadResults, args]);
     }
     scrollToTop();
-  })
+  })  
     // LOGIN & SIGNUP
     // show splash / dashboard / login / register / password reset
     .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function (e) {
@@ -427,62 +474,29 @@ $(document)
     subscribeOrUnsubscribe(this);
   })
   // playlist - play, add, move, or delete episode
-  .on("submit", ".playlist-form", function(e) {
+  .on("submit", ".playlist-form", function (e) {
     e.preventDefault();
-    var url = this.action;
-    var method = this.method;
     var form = $(this);
-    var data = form.serialize();
-    var mode = form.find("input[name=mode]").val();
-    var button = form.find("button[type=submit]");
-    var text = button[0].innerHTML;
-    button.html(getButtonLoading());
-    $.ajax({
-      method: method,
-      url: url,
-      data: data,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        button.html(text);
-      })
-      .done(function(response) {
-        if (mode == "play") {
-          var player = $("#player");
-          player.removeClass("minimize");
-          player.html(response);
-          updateTitle();
-          button.html(text);
-          // gotta wait a sec here
-          setTimeout(function() {
-            var box = $(".player-title");
-            var text = $(".player-title h1");
-            scrollText(box, text);
-          }, 1000);
-        }
-        else if (mode == "add") {
-          button.text(text);
-        }
-        else {
-          var drop = $("#center-stage");
-          var url = "/playlist/";
-          loadResults([url, drop]);
-        }
-      });
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      var url = form[0].action;
+      var data = form.serialize();
+      var mode = form.find("input[name=mode]").val();
+      var button = form.find("button[type=submit]");
+      yeOldePlaylistFunction(url, data, mode, button);
+    }, 250);
   })
   // close player
   .on("click", ".player-close", function(e) {
     e.preventDefault();
-    $(".audio-el audio")[0].preload="none";
+    $(this).siblings("audio")[0].preload="none";
     $("#player").empty();
-    $("#player").removeClass("minimize");
     updateTitle();
   })
   // minimize player
   .on("click", ".player-minimize", function(e) {
     e.preventDefault();
-    $("#player").toggleClass("minimize");
-    $(".audio-el").toggleClass("d-none");
-    $(this).toggleClass("active");
+    $(this).toggleClass("active").parents(".player-wrapper").toggleClass("minimize");
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form", function (e) {
