@@ -496,6 +496,7 @@ $(document)
   // minimize player
   .on("click", ".player-minimize", function(e) {
     e.preventDefault();
+    $("#player-collapse").collapse("hide");
     $(this).toggleClass("active").parents(".player-wrapper").toggleClass("minimize");
   })
   // login or signup and refresh page/send password link
