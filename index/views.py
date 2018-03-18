@@ -118,13 +118,15 @@ def search(request):
     """
 
     if request.method == 'GET':
-        user = request.user
+        
+        # get q
         q = request.GET.get('q', None)
         if q:
             q.strip()
             if len(q) > 30:
                 q = q[:30]
 
+        # get genre
         genre = request.GET.get('genre', None)
         if genre:
             try:
@@ -132,6 +134,7 @@ def search(request):
             except Genre.DoesNotExist:
                 genre = None
 
+        # get lang
         language = request.GET.get('language', None)
         if language:
             try:
@@ -139,22 +142,27 @@ def search(request):
             except Language.DoesNotExist:
                 language = None
 
+        # get view
         view = request.GET.get('view', None)
         if not view:
-            view = 'grid'
-            if not q:
-                if not genre:
-                    if not language:
-                        view = 'list'
+            if q and len(q) > 1:
+                view = 'grid'
+            else:
+                view = 'list'        
 
+        # page
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
 
+        # get show
         show = 60
 
-        results = Podcast.search(q, genre, language, page, show, view)
+        # get url
+        url = request.get_full_path()
+
+        results = Podcast.search(q, genre, language, page, show, view, url)
 
         context = {
             'results': results,

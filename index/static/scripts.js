@@ -136,6 +136,9 @@ function checkForXHR(url) {
   }
 };
 // LOADER
+function loadLastPlayed() {
+  
+}
 function loadResults(args, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
@@ -287,11 +290,11 @@ function playNext() {
   yeOldePlaylistFunction(url, data, mode, button);
 };
 // replaces spaces/&s with +, removes unwanted chars
-function replaceChars(q) {
+function cleanString(q) {
   q = q.replace(/&+/g, "+");
   q = q.replace(/\s+/g, "+");
   q = q.replace(/([^a-zA-Z0-9\u0080-\uFFFF +']+)/gi, "");
-  return q;
+  return q.toLowerCase();
 };
 function cookieBannerClose() {
   $("#player").empty();
@@ -320,7 +323,7 @@ $(document)
     timeout = setTimeout(function() {
       var q = form.find(".q").val();
       if (q) {
-        q = replaceChars(q);
+        q = cleanString(q);
         var drop = $("#center-stage");
         url = url + '?q=' + q;
         if (!(drop.find(".results-header").data("q") == q)) {

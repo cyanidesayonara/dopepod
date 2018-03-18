@@ -13,6 +13,7 @@ from dateutil.parser import parse
 import logging
 import string
 from urllib.parse import quote_plus, unquote_plus, urlencode
+import furl
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -117,30 +118,16 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, page, show, view):
+    def search(q, genre, language, page, show, view, url):
         """
         returns podcasts matching search terms
         """
 
-        cachestring = 'search'
-        if q:
-            cachestring += '&q=' + q.replace(' ', '+')
-        if page:
-            cachestring += '&page=' + str(page)
-        if genre:
-            cachestring += '&genre=' + genre.url_format()
-        if language:
-            cachestring += '&language=' + language.url_format()
-        if show:
-            cachestring += '&show=' + str(show)
-        results = cache.get(cachestring)
-
-        if results:
+        # try to return cached results
+        # results = cache.get(url)
+        if None:
             return results
         else:
-            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
-            languages = Language.objects.all()
-            genres = Genre.get_primary_genres()
             podcasts = Podcast.objects.all()
 
             # filter by language
@@ -187,30 +174,18 @@ class Podcast(models.Model):
             else:
                 results_header = str(count) + ' results for "' + q + '"'
 
-            url = '/search/'
-            querystring = {}
             urls = {}
 
-            if q:
-                querystring['q'] = q
-            if genre:
-                querystring['genre'] = genre
-            if language:
-                querystring['language'] = language
-            if view:
-                querystring['view'] = view
-
             if q or genre or language:
-                querystring_wo_q = {x: querystring[x] for x in querystring if x not in {'q'}}
-                urls['q_url'] = url + '?' + urlencode(querystring_wo_q)
-
-                querystring_wo_genre = {x: querystring[x] for x in querystring if x not in {'genre'}}
-                urls['genre_url'] = url + '?' + urlencode(querystring_wo_genre)
-
-                querystring_wo_language = {x: querystring[x] for x in querystring if x not in {'language'}}
-                urls['language_url'] = url + '?' + urlencode(querystring_wo_language)
-
-                urls['full_url'] = url + '?' + urlencode(querystring)
+                f = furl.furl(url)
+                urls['q_url'] = f.remove(['q']).url
+                f = furl.furl(url)
+                urls['genre_url'] = f.remove(['genre']).url
+                print(urls['genre_url'])
+                print(url)
+                f = furl.furl(url)
+                urls['language_url'] = f.remove(['language']).url
+                urls['full_url'] = url
             else:
                 urls['q_url'] = url + '?'
                 urls['genre_url'] = url + '?'
@@ -228,7 +203,7 @@ class Podcast(models.Model):
                     'end': True if page != num_pages else False,
                 }
 
-            results['alphabet'] = alphabet
+            results['alphabet'] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
             results['podcasts'] = podcasts[(page - 1) * show:page * show]
             results['num_pages'] = num_pages
             results['count'] = count
@@ -240,6 +215,9 @@ class Podcast(models.Model):
             results['podcasts3'] = results['podcasts'][two:three]
             results['podcasts4'] = results['podcasts'][three:]
 
+            languages = Language.objects.all()
+            genres = Genre.get_primary_genres()
+
             results['header'] = results_header
             results['selected_q'] = q
             results['selected_genre'] = genre
@@ -250,7 +228,7 @@ class Podcast(models.Model):
             results['urls'] = urls
             results['extra_options'] = True
 
-            cache.set(cachestring, results, 60 * 60 * 24)
+            cache.set(url, results, 60 * 60 * 24)
             return results
 
     def subscribe_or_unsubscribe(self, user):
