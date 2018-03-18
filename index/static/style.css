@@ -587,13 +587,13 @@ a:hover {
 }
 .charts-result table tr td,
 .last-played-result table tr td {
-  padding: 2px 5px 0 0;
+  padding: 2px 10px 0 0 ;
 }
 .charts-result table tr td:first-child:before,
 .last-played-result table tr td:first-child:before {
   content: "●";
   color: rgb(0, 191,165);
-  margin-right: 5px;
+  margin-right: 5px; 
 }
 .charts-rank {
   float: left;
