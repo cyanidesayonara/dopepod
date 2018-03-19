@@ -13,7 +13,7 @@ from dateutil.parser import parse
 import logging
 import string
 from urllib.parse import quote_plus, unquote_plus, urlencode
-import furl
+from furl import furl
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -118,13 +118,43 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(q, genre, language, page, show, view, url):
+    def search(q, genre, language, show, page, view, url):
         """
         returns podcasts matching search terms
         """
 
-        # try to return cached results
-        # results = cache.get(url)
+        f = furl(url)
+        f.args.clear()
+
+        if q:
+            f.args['q'] = q
+        else:
+            f.args['q'] = "x"
+        if genre:
+            f.args['genre'] = genre
+        else:
+            f.args['genre'] = "x"
+        if language:
+            f.args['language'] = language
+        else:
+            f.args['language'] = "x"
+        if show:
+            f.args['show'] = show
+        else:
+            f.args['show'] = "x"
+        if page:
+            f.args['page'] = page
+        else:
+            f.args['page'] = "x"
+
+        # results = cache.get(f.url)
+        
+        if view:
+            f.args['view'] = view
+        else:
+            f.args['view'] = "x"
+        url = f.url
+
         if None:
             return results
         else:
@@ -160,12 +190,79 @@ class Podcast(models.Model):
                     podcasts = podcasts.order_by('title')
             podcasts = podcasts.order_by('rank')
 
-            end = show * page
-            start = end - show
+            results = {}
+
+            genres = Genre.get_primary_genres()
+            genres_urls = []
+            languages = Language.objects.all()
+            languages_urls = []
+            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
+            alphabet_urls = []
+
+            print(url)
+            for alpha in alphabet:
+                if alpha == q:
+                    alphabet_urls.append('None')
+                else:
+                    f = furl(url)
+                    f.args['q'] = alpha
+                    alphabet_urls.append(f.url)
+            if q:
+                results['selected_q'] = q
+                if len(q) == 1:
+                    f = furl(url)
+                    del f.args['q']
+                    results['alphabet_nix_url'] = f.url
+            else:
+                del f.args['q']            
+
+            for gen in genres:
+                if gen == genre:
+                    genres_urls.append(None)
+                else:
+                    f = furl(url)
+                    f.args['genre'] = gen
+                    genres_urls.append(f.url)
+            if genre:
+                results['selected_genre'] = genre
+                f = furl(url)
+                del f.args['genre']
+                results['genre_nix_url'] = f.url
+            else:
+                del f.args['genre']
+
+            for lang in languages:
+                if lang == language:
+                    languages_urls.append('None')
+                else:
+                    f = furl(url)
+                    f.args['language'] = lang
+                    languages_urls.append(f.url)
+            if language:
+                results['selected_language'] = language
+                f = furl(url)
+                del f.args['language']
+                results['language_nix_url'] = f.url
+            if not language:
+                del f.args['language']
+
+            f = furl(url)
+            url = f.url
+                
+            results['view'] = view
+            f = furl(url)
+            f.args['view'] = view
+            results['view_url'] = f.url
+            
+            results['alphabet'] = zip(alphabet, alphabet_urls)
+            results['genres'] = zip(genres, genres_urls)
+            results['languages'] = zip(languages, languages_urls)
+
+            # finally
+            results['full_url'] = url
+
             count = podcasts.count()
             num_pages = int(count / show) + (count % show > 0)
-            if end > count:
-                end = count
 
             if not q:
                 results_header = str(count) + ' podcasts'
@@ -173,26 +270,8 @@ class Podcast(models.Model):
                 results_header = str(count) + ' result for "' + q + '"'
             else:
                 results_header = str(count) + ' results for "' + q + '"'
-
-            urls = {}
-
-            if q or genre or language:
-                f = furl.furl(url)
-                urls['q_url'] = f.remove(['q']).url
-                f = furl.furl(url)
-                urls['genre_url'] = f.remove(['genre']).url
-                print(urls['genre_url'])
-                print(url)
-                f = furl.furl(url)
-                urls['language_url'] = f.remove(['language']).url
-                urls['full_url'] = url
-            else:
-                urls['q_url'] = url + '?'
-                urls['genre_url'] = url + '?'
-                urls['language_url'] = url + '?'
-                urls['full_url'] = url + '?'
-
-            results = {}
+            results['header'] = results_header
+            
             spread = 3
             if num_pages > 1:
                 pages = range((page - spread if page - spread > 1 else 1), (page + spread if page + spread <= num_pages else num_pages) + 1)
@@ -203,32 +282,22 @@ class Podcast(models.Model):
                     'end': True if page != num_pages else False,
                 }
 
-            results['alphabet'] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
-            results['podcasts'] = podcasts[(page - 1) * show:page * show]
+            podcasts = podcasts[(page - 1) * show:page * show]
+
             results['num_pages'] = num_pages
             results['count'] = count
             one = show // 4
             two = show // 2
             three = show // 2 + show // 4
-            results['podcasts1'] = results['podcasts'][:one]
-            results['podcasts2'] = results['podcasts'][one:two]
-            results['podcasts3'] = results['podcasts'][two:three]
-            results['podcasts4'] = results['podcasts'][three:]
+            results['podcasts'] = True
+            results['podcasts1'] = podcasts[:one]
+            results['podcasts2'] = podcasts[one:two]
+            results['podcasts3'] = podcasts[two:three]
+            results['podcasts4'] = podcasts[three:]
 
-            languages = Language.objects.all()
-            genres = Genre.get_primary_genres()
-
-            results['header'] = results_header
-            results['selected_q'] = q
-            results['selected_genre'] = genre
-            results['selected_language'] = language
-            results['genres'] = genres
-            results['languages'] = languages
-            results['view'] = view
-            results['urls'] = urls
             results['extra_options'] = True
+            # cache.set(url, results, 60 * 60 * 24)
 
-            cache.set(url, results, 60 * 60 * 24)
             return results
 
     def subscribe_or_unsubscribe(self, user):
@@ -474,6 +543,9 @@ class Podcast(models.Model):
                     Podcast.get_charts(provider, genre, language, True)
 
     def get_charts(provider='dopepod', genre=None, language=None, force_cache=False):
+        # try to return cached results
+        # results = cache.get(url)
+
         cachestring = 'charts'
         if provider:
             cachestring += '&provider=' + provider
@@ -483,7 +555,7 @@ class Podcast(models.Model):
             cachestring += '&language=' + language.url_format()
         results = cache.get(cachestring)
 
-        if results and not force_cache:
+        if None and not force_cache:
             return results
         else:
             genres = Genre.get_primary_genres()
@@ -551,7 +623,7 @@ class Podcast(models.Model):
                 results['selected_language'] = language
             results['view'] = 'charts'
             results['urls'] = urls
-            cache.add(cachestring, results, 60 * 60 * 24 * 30)
+            cache.add(url, results, 60 * 60 * 24 * 30)
             return results
 
 class Subscription(models.Model):

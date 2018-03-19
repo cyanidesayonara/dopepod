@@ -57,16 +57,6 @@ function replaceState(url) {
   };
   history.replaceState(state, "", url);
 };
-function updateLastPlayed() {
-  setInterval(function() {
-    loadResults(["/last_played/", "#last-played"]);
-  }, 60000);
-};
-function updateCharts() {
-  setInterval(function() {
-    loadResults(["/charts/", "#charts"]);
-  }, 86400000);
-};
 // updates page title
 function updateTitle() {
   // default title
@@ -305,13 +295,12 @@ function getButtonLoading() {
 function getLoading() {
   return $(".loading").first().clone();
 };
+
 $(document)
   .ready(function() {
     xhr = null;
     timeout = 0;
     refreshCookie();
-    updateLastPlayed();
-    updateCharts();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -542,24 +531,18 @@ $(document)
         scrollToTop();
         });
   })
-  // toggle search results collapse & view icon on click
+  // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var button = $(this);
-    var collapses = button.parents(".results").find($(".view-collapse"));
-    collapses.each(function() {
-      $(this).collapse("toggle");
-    })
-    button.children().each(function() {
-      // TODO stop this from flickering
-      $(this).toggleClass("d-none");
-    });
+    $(this).children().toggleClass("d-none")
+      .parents().siblings(".results-content").find($(".view-collapse"))
+      .each(function() {
+        $(this).collapse("toggle");
+      })
   })
   // toggle button icon on hover
   .on("mouseenter mouseleave", ".view-button, .provider-button", function() {
-    $(this).children().each(function() {
-      $(this).toggleClass("d-none");
-    });
+    $(this).children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function (e) {
