@@ -140,7 +140,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return reverse('podinfo', args='self.podid')
 
-    def search(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None):
+    def search(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None, force_cache=False):
         """
         returns podcasts matching search terms
         """
@@ -151,7 +151,7 @@ class Podcast(models.Model):
 
         # if cached, return results
         results = cache.get(url)
-        if results:
+        if results and not force_cache:
             return results
         else:
             podcasts = Podcast.objects.all()
@@ -642,7 +642,7 @@ class Podcast(models.Model):
                 languages = [None]
             for language in languages:
                 for genre in genres:
-                    Podcast.search(provider=provider, genre=genre, language=language, True)
+                    Podcast.search(provider=provider, genre=genre, language=language, force_cache=True)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
