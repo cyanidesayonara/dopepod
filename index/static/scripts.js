@@ -267,6 +267,12 @@ function yeOldePlaylistFunction(url, data, mode, button) {
         var url = "/playlist/";
         loadResults([url, drop]);
       }
+      // if dashboard is visible, update it
+      else if ($("#center-stage").find(".dashboard").length) {
+        var drop = $("#center-stage");
+        var url = "/";
+        loadResults([url, drop]);
+      }
     });
 };
 function playNext() {

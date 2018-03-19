@@ -78,7 +78,7 @@
               <div class="episode-buttons">
                 {% if user.is_authenticated %}
                   {% if results.view == 'playlist' %}
-                    <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                    <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                       {% csrf_token %}
                       <input type="hidden" name="mode" value="remove" />
                       <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
@@ -87,7 +87,7 @@
                       </button>
                     </form>
                     {% if not forloop.first %}
-                      <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                      <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="up" />
                         <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
@@ -97,7 +97,7 @@
                       </form>
                     {% endif %}
                     {% if not forloop.last %}
-                      <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                      <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="down" />
                         <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
@@ -108,7 +108,7 @@
                     {% endif %}
                   {% endif %}
                 {% endif %}
-                <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST" target="_blank">
+                <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
                   {% csrf_token %}
                   <input type="hidden" name="mode" value="play" />
                   {% if results.view == 'playlist' %}
@@ -121,7 +121,7 @@
                   </button>
                 </form>
                 {% if user.is_authenticated and results.view == 'episodes' %}
-                  <form class="playlist-form d-inline" action="{% url 'playlist' %}" method="POST">
+                  <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="add" />
                     <input type="hidden" name="signature" value="{{ episode.signature }}" />

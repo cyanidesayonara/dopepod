@@ -52,6 +52,13 @@ def login(request):
             if ajax:
                 return render(request, 'splash-errors.min.html', context, status=400)
             else:
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider='dopepod')
+                last_played = Episode.get_last_played()
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
                 return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=login')
@@ -80,6 +87,13 @@ def signup(request):
             if ajax:
                 return render(request, 'splash-errors.min.html', context, status=400)
             else:
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider='dopepod')
+                last_played = Episode.get_last_played()
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
                 return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=signup')
@@ -115,6 +129,13 @@ def password_reset(request):
             if ajax:
                 return render(request, 'splash-errors.min.html', context, status=400)
             else:
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider='dopepod')
+                last_played = Episode.get_last_played()
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
                 return render(request, 'splash.min.html', context)
     else:
         return redirect('/?view=password')

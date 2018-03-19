@@ -55,7 +55,10 @@ def index(request):
             context['cookie_banner'] = cookie_test(request.session)
 
         last_played = Episode.get_last_played()
-        charts = Podcast.get_charts()
+
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider='dopepod')
+
         context.update({
             'charts': charts,
             'last_played': last_played,
@@ -89,19 +92,20 @@ def charts(request):
             provider = providers[0]
 
         url = request.get_full_path()
-
-        charts = Podcast.get_charts(provider, genre, language, url)
+        results = Podcast.search(
+            url=url, provider=provider, genre=genre, language=language
+        )
 
         if request.is_ajax():
             context = {
-                'results': charts,
+                'results': results,
             }
 
             return render(request, 'results_base.min.html', context)
 
         last_played = Episode.get_last_played()
         context = {
-            'charts': charts,
+            'charts': results,
             'last_played': last_played,
         }
 
@@ -146,25 +150,25 @@ def search(request):
 
         # get view
         view = request.GET.get('view', None)
-        if not view:
-            if q and len(q) > 1:
-                view = 'grid'
-            else:
-                view = 'list'        
+     
 
         # page
-        try:
-            page = int(request.GET.get('page', '1'))
-        except ValueError:
-            page = 1
+        page = request.GET.get('page', None)
+        if page:
+            try:
+                page = int(page)
+            except ValueError:
+                page = 1
 
         # get show
-        show = 60
+        show = None
 
         # get url
         url = request.get_full_path()
 
-        results = Podcast.search(q, genre, language, show, page, view, url)
+        results = Podcast.search(
+            url=url, q=q, genre=genre, language=language, show=show, page=page, view=view
+        )
 
         context = {
             'results': results,
@@ -174,7 +178,7 @@ def search(request):
 
         results['extend'] = True
 
-        charts = Podcast.get_charts()
+        charts = Podcast.search(url=url, provider='dopepod')
         last_played = Episode.get_last_played()
 
         context.update({
@@ -203,7 +207,8 @@ def subscriptions(request):
 
             results['extend'] = True
 
-            charts = Podcast.get_charts()
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider='dopepod')
             last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,
@@ -231,7 +236,8 @@ def playlist(request):
 
             playlist['extend'] = True
 
-            charts = Podcast.get_charts()
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider='dopepod')
             last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,
@@ -297,7 +303,8 @@ def playlist(request):
 
         episodes['extend'] = True
 
-        charts = Podcast.get_charts()
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider='dopepod')
         last_played = Episode.get_last_played()
         context.update({
             'charts': charts,
@@ -329,7 +336,8 @@ def showpod(request, podid):
             if request.is_ajax():
                 return render(request, 'showpod.min.html', context)
 
-            charts = Podcast.get_charts()
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider='dopepod')
             results = Episode.get_episodes(podid)
             Episode.set_new(user, podid, results['episodes'])
             last_played = Episode.get_last_played()
@@ -362,7 +370,8 @@ def settings(request):
             if request.is_ajax():
                 return render(request, 'settings.min.html', context)
 
-            charts = Podcast.get_charts()
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider='dopepod')
             last_played = Episode.get_last_played()
             context.update({
                 'charts': charts,
@@ -410,7 +419,8 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, 'settings.min.html', context, status=400)
 
-                charts = Podcast.get_charts()
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider='dopepod')
                 last_played = Episode.get_last_played()
                 context.update({
                     'charts': charts,
