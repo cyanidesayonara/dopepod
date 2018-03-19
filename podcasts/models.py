@@ -145,9 +145,11 @@ class Podcast(models.Model):
         returns podcasts matching search terms
         """
 
+        # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                        show=show, page=page)
 
+        # if cached, return results
         results = cache.get(url)
         if results:
             return results
@@ -165,23 +167,29 @@ class Podcast(models.Model):
                     Q(genre__supergenre=genre)
                 )
 
+            # SEARCH
             # last but not least, filter by title
             if q:
+                # if q is > 1, split & query each word
                 if len(q) > 1:
                     q_split = q.split(' ')
                     query = Q()
                     for word in q_split:
                         query = query | Q(title__icontains=word) | Q(artist__icontains=word)
                     podcasts = podcasts.filter(query).distinct()
+                    podcasts = podcasts.order_by('rank')
                 else:
+                    # search for pods not starting w/ letter
                     if q == '#':
                         query = Q()
                         for letter in string.ascii_lowercase:
                             query = query | Q(title__istartswith=letter)
                         podcasts = podcasts.exclude(query)
+                    # search for pods starting w/ letter
                     else:
                         podcasts = podcasts.filter(title__istartswith=q)
                     podcasts = podcasts.order_by('title')
+            # CHARTS
             elif provider == 'dopepod':
                 if not genre and not language:
                     podcasts = podcasts.order_by('rank')
@@ -224,6 +232,8 @@ class Podcast(models.Model):
                 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
                 alphabet_urls = []
 
+            # create urls for buttons
+            # starting with alphabet
             url = make_url(url=url, q='x', genre=genre, language=language,
                            show=show, view=view)
             for alpha in alphabet:
@@ -240,6 +250,7 @@ class Podcast(models.Model):
                     del f.args['q']
                     results['alphabet_nix_url'] = f.url
 
+            # genre buttons
             url = make_url(url=url, provider=provider, q=q, genre='x', language=language,
                         show=show, view=view)
             for gen in genres:
@@ -255,6 +266,7 @@ class Podcast(models.Model):
                 del f.args['genre']
                 results['genre_nix_url'] = f.url
 
+            # language buttons
             url = make_url(url=url, provider=provider, q=q, genre=genre, language='x',
                         show=show, view=view)
             for lang in languages:
@@ -270,9 +282,9 @@ class Podcast(models.Model):
                 del f.args['language']
                 results['language_nix_url'] = f.url
 
+            # provider button
             url = make_url(url=url, q=q, genre=genre, language=language,
                         show=show, page=page, view=view)
-            
             if provider:
                 view = 'charts'
                 f = furl(url)
@@ -282,6 +294,7 @@ class Podcast(models.Model):
                     f.args['provider'] = 'dopepod'
                 results['provider_url'] = f.url
 
+            # view button
             if not view:
                 if q and len(q) > 1:
                     view = 'grid'
@@ -297,23 +310,28 @@ class Podcast(models.Model):
             
             results['view'] = view
 
+            # zip button text w/ url
             results['genres'] = zip(genres, genres_urls)
             if not provider:
                 results['alphabet'] = zip(alphabet, alphabet_urls)
             if not provider == 'itunes':
                 results['languages'] = zip(languages, languages_urls)
 
-            # finally
+            # finally, the real url
             results['full_url'] = url
 
+            # if charts
             if provider:
+                # show top {number here}
                 if not show:
                     show = 50
                 podcasts = podcasts[:show]
+                # if no results, try w/o genre
                 if not podcasts:
                     url = make_url(url=url, provider=provider,
                                    language=language)
                     return Podcast.search(url=url, provider=provider, language=language, view=view)
+            # if search
             else:
                 if not page:
                     page = 1
@@ -322,11 +340,13 @@ class Podcast(models.Model):
 
             count = podcasts.count()
 
+            # charts header
             if provider:
                 results['podcasts'] = podcasts
                 results['header'] = 'Top ' + str(count) + ' podcasts'
                 results['providers'] = ['dopepod', 'itunes']
                 results['selected_provider'] = provider
+            # search header & pages
             else:
                 num_pages = int(count / show) + (count % show > 0)
 
@@ -342,7 +362,7 @@ class Podcast(models.Model):
                             f = furl(url)
                             f.args['page'] = p
                             pages_urls.append(f.url)
-
+                    #  zip pages & use list to make it reusable
                     results['pages'] = list(zip(pages, pages_urls))
 
                     if page != num_pages:
@@ -363,6 +383,7 @@ class Podcast(models.Model):
                     results_header = str(count) + ' results for "' + q + '"'
                 results['header'] = results_header
 
+                # show selected page
                 podcasts = podcasts[(page - 1) * show:page * show]
 
                 results['num_pages'] = num_pages
@@ -370,15 +391,15 @@ class Podcast(models.Model):
                 one = show // 4
                 two = show // 2
                 three = show // 2 + show // 4
-                results['podcasts'] = True if podcasts else False
                 results['podcasts1'] = podcasts[:one]
                 results['podcasts2'] = podcasts[one:two]
                 results['podcasts3'] = podcasts[two:three]
                 results['podcasts4'] = podcasts[three:]
 
                 results['extra_options'] = True
+            
+            # finally (finally!) cache results so we don't have to go thru this every time
             cache.set(url, results, 60 * 60 * 24)
-
             return results
 
     def subscribe_or_unsubscribe(self, user):
@@ -621,7 +642,7 @@ class Podcast(models.Model):
                 languages = [None]
             for language in languages:
                 for genre in genres:
-                    Podcast.get_charts(provider, genre, language, True)
+                    Podcast.search(provider=provider, genre=genre, language=language, True)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
