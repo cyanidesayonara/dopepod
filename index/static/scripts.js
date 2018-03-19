@@ -126,9 +126,6 @@ function checkForXHR(url) {
   }
 };
 // LOADER
-function loadLastPlayed() {
-  
-}
 function loadResults(args, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
@@ -172,14 +169,9 @@ function scrollToTop() {
     scrollTop: $("body").offset().top
   }, 250);
 };
-function scrollToCharts() {
+function scrollTo(obj) {
   $("html, body").animate({
-    scrollTop: $("#left").offset().top - 44
-  }, 250);
-};
-function scrollToLastPlayed() {
-  $("html, body").animate({
-    scrollTop: $("#right").offset().top - 44
+    scrollTop: obj.offset().top - 44
   }, 250);
 };
 // scrolls header text in player if text is wider than bax
@@ -337,6 +329,7 @@ $(document)
     timeout = setTimeout(function() {
       var drop = button.parents(".results").parent();
       loadResults([url, drop]);
+      scrollTo(drop);
     }, 250);
   })
   // NAVIGATION
@@ -352,34 +345,40 @@ $(document)
     }
     scrollToTop();
   })  
-    // LOGIN & SIGNUP
-    // show splash / dashboard / login / register / password reset
-    .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function (e) {
-      e.preventDefault();
-      var url = this.href;
-      var drop = $("#center-stage");
-      var link = $(this);
-      if (!drop.find(".login").length && !drop.find(".dashboard").length) {
-        loadResults([url, drop]);
+  // LOGIN & SIGNUP
+  // show splash / dashboard / login / register / password reset
+  .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    var link = $(this);
+    if (link.hasClass("results-close")) {
+      while (true) {
+        if (confirm("Are you sure, buddy?")) {
+          break;
+        } else {
+          return;
+        }
+      }  
+    }
+    if (!drop.find(".login").length && !drop.find(".dashboard").length) {
+      loadResults([url, drop]);
+    }
+    else {
+      if (link.hasClass("login-link")) {
+        $("#login-collapse").collapse("show");
+      }
+      else if (link.hasClass("signup-link")) {
+        $("#signup-collapse").collapse("show");
+      }
+      else if (link.hasClass("password-link")) {
+        $("#password-collapse").collapse("show");
       }
       else {
-        if (link.hasClass("login-link")) {
-          $("#login-collapse").collapse("show");
-        }
-        else if (link.hasClass("signup-link")) {
-          $("#signup-collapse").collapse("show");
-        }
-        else if (link.hasClass("password-link")) {
-          $("#password-collapse").collapse("show");
-        }
-        else {
-          $("#splash-collapse").collapse("show");
-        }
-      } 
-      scrollToTop();
-    })
-  .on("click", "", function(e) {
-
+        $("#splash-collapse").collapse("show");
+      }
+    } 
+    scrollToTop();
   })
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
@@ -395,11 +394,11 @@ $(document)
   })
   .on("click", ".charts-link", function(e) {
     e.preventDefault();
-    scrollToCharts();
+    scrollTo($("#charts"));
   })
   .on("click", ".last-played-link", function(e) {
     e.preventDefault();
-    scrollToLastPlayed();
+    scrollTo($("#last-played"));
   })
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
@@ -487,6 +486,15 @@ $(document)
   // close player
   .on("click", ".player-close", function(e) {
     e.preventDefault();
+    // TODO make pretty
+    while(true) {
+      if (confirm("Are you sure, buddy?")) {
+        break;
+      }
+      else {
+        return;
+      }
+    }
     $(this).siblings("audio")[0].preload="none";
     $("#player").empty();
     updateTitle();
@@ -558,10 +566,18 @@ $(document)
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation()
     $(".more-collapse.show").collapse("hide");
+    var obj = $(this).parents("tr").prev();
+    timeout = setTimeout(function () {
+      scrollTo(obj);
+    }, 250);
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
     e.stopPropagation()
     $(".last-played-collapse.show").collapse("hide");
+    var obj = $(this).parents();
+    timeout = setTimeout(function () {
+      scrollTo(obj);
+    }, 250);
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
     e.stopPropagation()
@@ -578,7 +594,7 @@ $(document)
     changeTheme(!$(".lights-toggle").hasClass("lit"));
   })
   // removes focus from buttons when clicked
-  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episodes-table tbody tr", function(e) {
+  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episode-header", function(e) {
     $(this).blur();
   })
   // hides dopebar-collapse...

@@ -642,7 +642,7 @@ class Podcast(models.Model):
                 languages = [None]
             for language in languages:
                 for genre in genres:
-                    Podcast.search(provider=provider, genre=genre, language=language, force_cache=True)
+                    Podcast.search(url='/charts/', provider=provider, genre=genre, language=language, force_cache=True)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
@@ -682,7 +682,7 @@ class Episode(models.Model):
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
-    signature = models.CharField(max_length=5000)
+    signature = models.CharField(max_length=7000)
     added_at = models.DateTimeField(default=timezone.now)
     played_at = models.DateTimeField(default=None, null=True)
     position = models.IntegerField(default=None, null=True)
