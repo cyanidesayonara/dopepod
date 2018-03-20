@@ -179,13 +179,19 @@ dopepod
         {% if results.view == 'grid' or results.view == 'list' %}
           {% include 'search.min.html' %}
         {% elif results.view == 'charts' %}
-          {% include 'charts.min.html' %}
+          <div class="row">
+            {% include 'charts.min.html' %}
+          </div>
         {% elif results.view == 'subscriptions'%}
-          {% include 'subscriptions.min.html' %}
+          <div class="row">
+            {% include 'subscriptions.min.html' %}
+          </div>
         {% elif results.view == 'playlist'%}
           {% include 'episodes.min.html' %}
         {% elif results.view == 'last-played'%}
-          {% include 'last_played.min.html' %}
+          <div class="row">
+            {% include 'last_played.min.html' %}
+          </div>
         {% endif %}
       </div>
     {% endif %}

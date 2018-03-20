@@ -3,6 +3,8 @@ from django.http import Http404
 from .models import Podcast, Subscription, Episode
 import logging
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,9 @@ def episodes(request, podid):
             context = {
                 'results': results,
             }
-            return render(request, 'episodes.min.html', context)
+            return JsonResponse({
+                "payload": render_to_string('episodes.min.html', context, request=request),
+            })
         else:
             return redirect('/showpod/' + podid + '/')
 
@@ -33,11 +37,13 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            last_played = Episode.get_last_played()
+            results = Episode.get_last_played()
             context = {
-                'results': last_played,
+                'results': results,
             }
-            return render(request, 'results_base.min.html', context)
+            return JsonResponse({
+                "payload": render_to_string('results_base.min.html', context, request=request),
+            })
         else:
             return redirect('/')
 
@@ -66,12 +72,15 @@ def subscribe(request):
             }
 
             if request.is_ajax():
-                return render(request, 'showpod.min.html', context)
+                return JsonResponse({
+                    "payload": render_to_string('showpod.min.html', context, request=request),
+                })
             return redirect('/showpod/' + str(podid) + '/')
-
         else:
             if request.is_ajax():
-                return render(request, 'splash.min.html', {})
+                return JsonResponse({
+                    "payload": render_to_string('splash.min.html', {}, request=request),
+                })
             return redirect('/?next=/showpod/' + podid + '/')
 
 def unsubscribe(request):
@@ -99,6 +108,10 @@ def unsubscribe(request):
             context = {
                 'results': results,
             }
-            return render(request, 'results_base.min.html', context)
+            return JsonResponse({
+                "payload": render_to_string('showpod.min.html', context, request=request),
+            })
         else:
-            return render(request, 'splash.min.html', {})
+            return JsonResponse({
+                "payload": render_to_string('splash.min.html', {}, request=request),
+            })

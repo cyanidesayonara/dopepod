@@ -110,7 +110,7 @@ function refreshCookie() {
 function refreshPage() {
   var url = "/dopebar/";
   var drop = "#dopebar";
-  loadResults([url, drop, loadResults, ["/last_played/", "#last-played"]]);
+  loadResults([url, drop]);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -147,7 +147,13 @@ function loadResults(args, no_push) {
     .fail(function(xhr, ajaxOptions, thrownError) {
   })
     .done(function(response) {
-      drop.html(response);
+      drop.html(response.payload);
+      if ("charts" in response) {
+        $("#charts").html(response.charts);
+      }
+      if ("last-played" in response) {
+        $("#last-played").html(response.last_played);
+      }
       // loads episodes / page refresh
       if (callback) {
         callback(args);
@@ -157,7 +163,7 @@ function loadResults(args, no_push) {
         }
       }
       // episodes loaded, remove loading anim
-      else if ($(response).hasClass("episodes-table")) {
+      else if ($(response.payload).hasClass("episodes-table")) {
         $(".episodes-button").text("Episodes");
       }
       replaceState(url);
@@ -213,11 +219,11 @@ function subscribeOrUnsubscribe(form) {
       },
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
+      $("#center-stage").html(xhr.responseText.payload);
       replaceState("/");
     })
     .done(function(response) {
-      $("#center-stage").html(response);
+      $("#center-stage").html(response.payload);
       var url = "/episodes/" + podid + "/";
       var drop = "#episodes-collapse";
       loadResults([url, drop]);
@@ -239,8 +245,7 @@ function yeOldePlaylistFunction(url, data, mode, button) {
     })
     .done(function (response) {
       if (mode == "play") {
-        var player = $("#player");
-        player.html(response);
+        $("#player").html(response.payload);
         updateTitle();
         button.html(text);
         // gotta wait a sec here
@@ -250,20 +255,13 @@ function yeOldePlaylistFunction(url, data, mode, button) {
           scrollText(box, text);
         }, 1000);
       }
-      else if (mode == "add") {
-        button.text(text);
-      }
-      // if playlist is visible, update it
-      if ($("#center-stage").find(".playlist").length) {
-        var drop = $("#center-stage");
-        var url = "/playlist/";
-        loadResults([url, drop]);
-      }
-      // if dashboard is visible, update it
-      else if ($("#center-stage").find(".dashboard").length) {
-        var drop = $("#center-stage");
-        var url = "/";
-        loadResults([url, drop]);
+      else {
+        if (mode == "add") {
+          button.text(text);
+        }
+        pushState(url);
+        $("#center-stage").html(response.payload);
+        replaceState(url);
       }
     });
 };
@@ -448,7 +446,7 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText);
+        $("#center-stage").html(xhr.responseText.payload);
         scrollToTop();
       })
       .done(function(response) {
@@ -460,7 +458,7 @@ $(document)
           $(".lights-toggle").addClass("lit");
         }
         changeTheme(theme);
-        $("#center-stage").html(response);
+        $("#center-stage").html(response.payload);
         scrollToTop();
         replaceState("/");
       });
@@ -523,7 +521,7 @@ $(document)
       // returns errors
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
-        $(".splash-errors").html(xhr.responseText);
+        $(".splash-errors").html(xhr.responseText.payload);
         // deletes error text when clicking anywhere
         $("html").on("click", "body", function() {
           $(".splash-errors").empty();
@@ -532,7 +530,7 @@ $(document)
       })
       // returns splashboard
       .done(function(response) {
-        $("#center-stage").html(response);
+        $("#center-stage").html(response.payload);
         // if password reset, show login
         if (text == "Send") {
           $("#login-tab").tab("show");
@@ -661,11 +659,11 @@ $(document)
     })
     // returns splash
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
+      $("#center-stage").html(xhr.responseText.payload);
       replaceState("/");
     })
     // returns results
     .done(function(response) {
-      $("#center-stage").html(response);
+      $("#center-stage").html(response.payload);
     });
   })

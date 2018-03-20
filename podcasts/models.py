@@ -825,6 +825,11 @@ class Episode(models.Model):
 
             except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
                 logger.error(str(e))
+            
+            # TODO sort by pubDate just to be sure
+            episodes = sorted(
+                episodes, key=lambda k: k['pubDate'], reverse=True)
+
             results = {
                 'episodes': episodes,
                 'view': 'episodes'
