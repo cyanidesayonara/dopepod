@@ -465,7 +465,7 @@ class Podcast(models.Model):
             artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')[7:]
             genre = data['primaryGenreName']
             explicit = True if data['collectionExplicitness'] == 'explicit' else False
-            reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/xml'
+            reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/json'
 
             # get more data from itunes artist page
             response = requests.get(itunesUrl, headers=headers, timeout=10)
@@ -586,7 +586,7 @@ class Podcast(models.Model):
 
     def parse_itunes_charts(genre=None):
         """
-        parses itunes chart xml data
+        parses itunes chart json data
         returns list of podcasts
         """
 
@@ -821,12 +821,12 @@ class Episode(models.Model):
                             logger.error('can\'t get episode url/type/size', podcast.feedUrl)
 
                 except etree.XMLSyntaxError:
-                    logger.error('trouble with xml')
+                    logger.error('trouble with xml', podcast.feedUrl)
 
             except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
                 logger.error(str(e))
             
-            # TODO sort by pubDate just to be sure
+            # sort by pubDate just to be sure
             episodes = sorted(
                 episodes, key=lambda k: k['pubDate'], reverse=True)
 
@@ -909,7 +909,8 @@ class Episode(models.Model):
             position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
             if position:
                 if position == 20:
-                    return
+                    user = None
+                    position = None
                 else:
                     position += 1
             else:

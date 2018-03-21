@@ -76,7 +76,8 @@ a:hover {
 }
 .btn-dope:focus,
 .btn-dope:hover,
-.last-played-toggle:hover,
+.episode-header:hover,
+.episode-header:focus,
 .last-played-toggle:hover,
 .last-played-toggle:focus,
 .last-played-toggle[aria-expanded="true"],
@@ -90,6 +91,14 @@ a:hover {
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
+}
+#scroll-up {
+  transform: rotate(180deg);
+  z-index: 9001;
+  position: fixed;
+  top: 55px;
+  right: 12px;
+  background: rgb(0, 191, 165);
 }
 
 /* BOOTSTRAP COLLAPSE */
@@ -139,12 +148,12 @@ a:hover {
 
 /* DOPEBAR */
 #dopebar {
+  z-index: 9000;
   padding: 5px 0;
   min-height: 44px;
   -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
   box-shadow: rgba(0,0,0,.5) 0 2px 3px;
-  z-index: 100;
 }
 #dopebar-c {
   text-align: center;
@@ -178,9 +187,6 @@ a:hover {
 #dopebar-collapse ul,
 #dopebar-collapse ul li {
   margin: 10px 0 0;
-}
-#dopebar-collapse .lights-toggle {
-  float: right;
 }
 .lights-toggle {
   margin: 0 5px;
@@ -336,10 +342,6 @@ a:hover {
 .settings h1 {
   font-size: 20px;
 }
-.settings-form {
-  margin: auto;
-  max-width: 300px;
-}
 .settings-save {
   float: right;
 }
@@ -395,7 +397,6 @@ a:hover {
   font-size: 16px;
 }
 #showpod-c p {
-  text-align: justify;
   margin-bottom: 4px;
 }
 
@@ -407,8 +408,8 @@ a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .episode-content p {
-  text-align: justify;
   margin: 10px 10px 0;
+  word-wrap: break-word;
 }
 .episode-content h1 {
   display: inline-block;
@@ -429,10 +430,6 @@ a:hover {
 .episode-header {
   cursor: pointer;
   border-bottom: 2px solid rgb(0, 191, 165);
-}
-.episode-header:hover {
-  background: rgb(0, 191, 165);
-  color: #fff;
 }
 .episodes-table .number {
   width: 45px;
@@ -679,7 +676,6 @@ a:hover {
   list-style: none;
 }
 .last-played-result p {
-  text-align: justify;
   margin: 10px 0 0;
 }
 .last-played-collapse table {
@@ -798,7 +794,7 @@ a:hover {
 
 /* PLAYER */
 .player-wrapper {
-  z-index: 9000;
+  z-index: 1000;
   color: rgb(46, 46, 46);
   padding: 10px 10px 0;
   border: 2px solid rgb(0, 191, 165);
@@ -850,8 +846,8 @@ a:hover {
   margin: 8px 0 0; 
 }
 .player-description {
-  text-align: justify;
-  max-height: 400px;
+  max-height: calc(100vh - 245px);
+  overflow-y: scroll;
 }
 .player-wrapper.minimize {
   bottom: -105px;
@@ -877,7 +873,7 @@ a:hover {
 }
 .circle-loading .char {
   left: 27px;
-  top: -20px;
+  top: -19px;
   position: absolute;
   width: 24px;
   transform-origin: bottom center;
@@ -1040,9 +1036,7 @@ a:hover {
   .episodes-table .date {
     width: 60px;
   }
-  .episodes-table .size {
-    width: 50px;
-  }
+  .episodes-table .size,
   .episodes-table .length {
     width: 50px;
   }
@@ -1061,9 +1055,7 @@ a:hover {
   .episodes-table .date {
     width: 65px;
   }
-  .episodes-table .size {
-    width: 55px;
-  }
+  .episodes-table .size,
   .episodes-table .length {
     width: 55px;
   }

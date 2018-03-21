@@ -170,6 +170,20 @@ function loadResults(args, no_push) {
     });
 };
 // SCROLLERS
+function scrollSpy() {
+  $(window).scroll(function() {
+    scrollUp();
+  });
+}
+function scrollUp() {
+  var scroll = $(window).scrollTop();
+  if (scroll > 300) {
+    $("#scroll-up").removeClass("d-none");
+  }
+  else {
+    $("#scroll-up").addClass("d-none");
+  }
+}
 function scrollToTop() {
   $("html, body").animate({
     scrollTop: $("body").offset().top
@@ -272,7 +286,8 @@ function playNext() {
     "mode": "play",
   };
   var mode = "play";
-  var button = $(".playlist-link");
+  var button = $(".player-wrapper");
+  button.find("audio")[0].preload = "none";
   yeOldePlaylistFunction(url, data, mode, button);
 };
 // replaces spaces/&s with +, removes unwanted chars
@@ -297,6 +312,8 @@ $(document)
     xhr = null;
     timeout = 0;
     refreshCookie();
+    scrollUp();
+    scrollSpy();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -602,6 +619,9 @@ $(document)
   // ...except when dopebar-collapose is clicked
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
+  })
+  .on("click", "#scroll-up", function (e) {
+    scrollToTop();
   })
   .on("click", ".select-subscription", function() {
     var box = $(this).parents(".subscriptions-result").toggleClass("selected");
