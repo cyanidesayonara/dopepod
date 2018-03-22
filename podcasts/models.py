@@ -152,7 +152,7 @@ class Podcast(models.Model):
                        show=show, page=page)
         # if cached, return results
         results = cache.get(url)
-        print(results)
+
         if results and not force_cache:
             return results
         else:
@@ -684,7 +684,7 @@ class Subscription(models.Model):
 
 class EpisodeManager(models.Manager):
     def get_queryset(self):
-        return super(EpisodeManager, self).get_queryset().prefetch_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
+        return super(EpisodeManager, self).get_queryset().select_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
 
 class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='episode')

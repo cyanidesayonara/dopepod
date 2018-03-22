@@ -88,6 +88,14 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'dopepod.settings.show_toolbar',
+}
+
+
+def show_toolbar(request):
+    pass
+    #return request.user and request.user.username == "cyanidesayonara"
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
