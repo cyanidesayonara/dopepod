@@ -5,6 +5,7 @@ from podcasts.models import Podcast, Subscription, Genre, Language, Episode
 class PodcastAdmin(admin.ModelAdmin):
     list_display = ('title', 'artist', 'podid', 'rank', 'genre_rank', 'language_rank', 'itunes_rank', 'itunes_genre_rank', 'views', 'plays', 'genre', 'language', 'feedUrl', 'n_subscribers', 'discriminate',)
     fields = ('title', 'artist', 'podid', 'rank', 'genre_rank', 'language_rank', 'itunes_rank', 'itunes_genre_rank', 'views', 'plays', 'genre', 'language', 'feedUrl', 'explicit', 'n_subscribers', 'copyrighttext', 'description', 'reviewsUrl', 'artworkUrl', 'podcastUrl', 'discriminate',)
+    list_select_related = ('genre', 'language')
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):

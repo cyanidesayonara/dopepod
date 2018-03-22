@@ -538,7 +538,7 @@ $(document)
       // returns errors
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
-        $(".splash-errors").html(xhr.responseText.payload);
+        $(".splash-errors").html(xhr.responseText);
         // deletes error text when clicking anywhere
         $("html").on("click", "body", function() {
           $(".splash-errors").empty();
@@ -547,7 +547,7 @@ $(document)
       })
       // returns splashboard
       .done(function(response) {
-        $("#center-stage").html(response.payload);
+        $("#center-stage").html(response);
         // if password reset, show login
         if (text == "Send") {
           $("#login-tab").tab("show");

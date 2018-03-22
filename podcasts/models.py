@@ -81,14 +81,18 @@ def make_url(url, provider=None, q=None, genre=None, language=None, show=None, p
         f.args['view'] = view
     return f.url
 
+class PodcastManager(models.Manager):
+    def get_queryset(self):
+        return super(PodcastManager, self).get_queryset().select_related('genre', 'genre__supergenre', 'language')
+
 class Podcast(models.Model):
     podid = models.IntegerField(unique=True)
     feedUrl = models.CharField(max_length=1000)
     title = models.CharField(max_length=1000)
     artist = models.CharField(max_length=1000)
-    genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE)
+    genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, related_name='podcast')
     explicit = models.BooleanField()
-    language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE)
+    language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE, related_name='podcast')
     copyrighttext = models.CharField(max_length=5000)
     description = models.TextField(max_length=5000, null=True, blank=True)
     n_subscribers = models.IntegerField(default=0)
@@ -103,6 +107,8 @@ class Podcast(models.Model):
     language_rank = models.IntegerField(default=None, null=True)
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
+
+    objects = PodcastManager()
 
     class Meta:
         indexes = [
@@ -125,10 +131,6 @@ class Podcast(models.Model):
     def __str__(self):
         return self.title
 
-    def cache_index():
-        Podcast.search()
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
-
     def set_discriminated(self):
         bad_url = 'is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/'
         bad_genre = Genre.objects.get(genreid=1314)
@@ -148,9 +150,9 @@ class Podcast(models.Model):
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                        show=show, page=page)
-
         # if cached, return results
         results = cache.get(url)
+
         if results and not force_cache:
             return results
         else:
@@ -283,7 +285,7 @@ class Podcast(models.Model):
                 results['language_nix_url'] = f.url
 
             # provider button
-            url = make_url(url=url, q=q, genre=genre, language=language,
+            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                         show=show, page=page, view=view)
             if provider:
                 view = 'charts'
@@ -339,7 +341,7 @@ class Podcast(models.Model):
                     show = 60
 
             count = podcasts.count()
-
+            
             # charts header
             if provider:
                 results['podcasts'] = podcasts
@@ -397,7 +399,7 @@ class Podcast(models.Model):
                 results['podcasts4'] = podcasts[three:]
 
                 results['extra_options'] = True
-            
+
             # finally (finally!) cache results so we don't have to go thru this every time
             cache.set(url, results, 60 * 60 * 24)
             return results
@@ -644,11 +646,18 @@ class Podcast(models.Model):
                 for genre in genres:
                     Podcast.search(url='/charts/', provider=provider, genre=genre, language=language, force_cache=True)
 
+
+class SubscriptionManager(models.Manager):
+    def get_queryset(self):
+        return super(SubscriptionManager, self).get_queryset().select_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
+
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
     last_updated = models.DateTimeField(null=True, default=None)
     new_episodes = models.IntegerField(default=0)
+
+    objects = SubscriptionManager()
 
     class Meta:
         ordering = ('podcast__title',)
@@ -672,6 +681,11 @@ class Subscription(models.Model):
         results['extra_options'] = True
         return results
 
+
+class EpisodeManager(models.Manager):
+    def get_queryset(self):
+        return super(EpisodeManager, self).get_queryset().prefetch_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
+
 class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='episode')
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='episode', default=None)
@@ -686,6 +700,8 @@ class Episode(models.Model):
     added_at = models.DateTimeField(default=timezone.now)
     played_at = models.DateTimeField(default=None, null=True)
     position = models.IntegerField(default=None, null=True)
+
+    objects = EpisodeManager()
 
     def get_episodes(podid):
         """
@@ -875,7 +891,8 @@ class Episode(models.Model):
             return ago
 
     def get_last_played():
-        last_played = Episode.objects.exclude(played_at=None).order_by('-played_at',)
+        last_played = Episode.objects.exclude(played_at=None).order_by(
+            '-played_at',)
         results = {}
         results['episodes'] = last_played
         results['header'] = 'Last played'
@@ -991,7 +1008,8 @@ class Episode(models.Model):
             return
 
     def get_playlist(user):
-        episodes = Episode.objects.filter(user=user).order_by('position')
+        episodes = Episode.objects.filter(user=user).order_by(
+            'position')
         if episodes.count() == 1:
             results_header = str(episodes.count()) + ' episode'
         else:
@@ -1041,9 +1059,16 @@ class Filterable(models.Model):
             language.n_podcasts = Podcast.objects.filter(language=language).count()
             language.save()
 
+
+class GenreManager(models.Manager):
+    def get_queryset(self):
+        return super(GenreManager, self).get_queryset().select_related('supergenre')
+
 class Genre(Filterable):
     genreid = models.IntegerField()
     supergenre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, blank=True, null=True)
+
+    objects = GenreManager()
 
     class Meta:
         ordering = ('name',)
