@@ -391,8 +391,14 @@ def settings(request):
 
     user = request.user
     if user.is_authenticated:
+        results = {
+            'header': 'Settings',
+            'view': 'settings',
+            'extra_options': True,
+        }
         if request.method == 'GET':
             context = {
+                'results': results,
                 'user_form': UserForm(instance=request.user),
                 'profile_form': ProfileForm(instance=request.user.profile),
             }
@@ -402,23 +408,26 @@ def settings(request):
 
             if request.is_ajax():
                 return JsonResponse({
-                    "payload": render_to_string("settings.min.html", {'context': context}, request=request),
+                    "payload": render_to_string("results_base.min.html", {'context': context}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
                     "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
                 })
+
+            results['extend'] = True
 
             context.update({
                 'charts': charts,
                 'last_played': last_played,
             })
 
-            return render(request, 'settings.min.html', context)
+            return render(request, 'results_base.min.html', context)
 
         if request.method == 'POST':
             user_form = UserForm(instance=request.user, data=request.POST)
             profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
 
             context = {
+                'results': results,
                 'user_form': user_form,
                 'profile_form': profile_form,
             }
@@ -459,19 +468,18 @@ def settings(request):
 
                 if request.is_ajax:
                     return JsonResponse({
-                        "payload": render_to_string('settings.min.html', context, request=request),
+                        "payload": render_to_string('results_base.min.html', context, request=request),
                         # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
                         "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
                     }, status=400)
 
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider='dopepod')
-                last_played = Episode.get_last_played()
+                results['extend'] = True
+
                 context.update({
                     'charts': charts,
                     'last_played': last_played,
                 })
-                return render(request, 'settings.min.html', context)
+                return render(request, 'results_base.min.html', context)
     else:
         if request.is_ajax():
             url = request.get_full_path()

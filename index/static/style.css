@@ -336,14 +336,11 @@ a:hover {
 }
 
 /* SETTINGS */
-.settings {
-  padding: 10px;
+.settings-form {
+  width: 100%;
 }
 .settings h1 {
   font-size: 20px;
-}
-.settings-save {
-  float: right;
 }
 
 /* SHOWPOD */
@@ -568,6 +565,9 @@ a:hover {
   -webkit-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
   -moz-box-shadow: rgba(0,0,0,.8) 0 0px 5px;
   box-shadow: rgba(0,0,0,.8) 0 0px 5px;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
 }
 .charts-result img {
   margin-left: 5px;
@@ -606,11 +606,11 @@ a:hover {
 .charts-result h1 {
   font-size: 16px;
   overflow: hidden;
-  height: 18px;
-  margin-bottom: 4px;
+  height: 20px;
+  margin-bottom: 3px;
 }
 .charts-result h2 {
-  margin-bottom: 2px;
+  margin-bottom: 0;
   font-size: 14px;
   overflow: hidden;
   height: 16px;

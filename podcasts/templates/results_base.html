@@ -6,28 +6,7 @@ dopepod
 
 {% block center-stage %}
 <div class="col-12 results color-2-trans {{ results.view }}">
-  <div class="row results-bar">
-    <div class="col-12 results-header" data-q="{{ results.selected_q }}">
-      {% if results.extra_options %}
-        <button class="btn-dope results-back" onclick="window.history.back()">
-          <i class="fas fa-arrow-left" title="Back"></i>
-        </button>
-        <div class="extra-options">
-          <a class="btn-dope results-minimize reverse-toggle" data-toggle="collapse" href="#results-collapse-{{ results.view }}" aria-expanded="true" aria-controls="results-collapse">
-            <i class="fas fa-minus" title="Minimize"></i>
-          </a>
-          <a class="btn-dope results-close" href="/">
-            <i class="fas fa-times" title="Close"></i>
-          </a>
-        </div>
-      {% endif %}
-      <h1>
-        <strong>
-          {{ results.header }}
-        </strong>
-      </h1>
-    </div>
-  </div>
+  {% include 'results-bar.html' %}
   <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
     {% if results.pages %}
       {% include 'pagination.min.html' %}
@@ -98,13 +77,16 @@ dopepod
           <span>On itunes</span>
         </a>
       {% endif %}
-      {% if results.subscriptions %}
+      {% if results.view == 'subscriptions' %}
         <a class="btn-dope select-all-button" href="#">
           Select All
         </a>
         <a class="btn-dope unsubscribe-button" href="{% url 'unsubscribe' %}">
           Unsubscribe
         </a>
+      {% endif %}
+      {% if results.view == 'settings' %}
+        <button type="submit" class="btn-dope active settings-save">Save</button>
       {% endif %}
     </div>
     {% if results.alphabet %}
@@ -174,27 +156,27 @@ dopepod
       </div>
     {% endif %}
 
-    {% if results.podcasts or results.podcasts1 or results.episodes %}
-      <div class="col-12 results-content">
-        {% if results.view == 'grid' or results.view == 'list' %}
-          {% include 'search.min.html' %}
-        {% elif results.view == 'charts' %}
-          <div class="row">
-            {% include 'charts.min.html' %}
-          </div>
-        {% elif results.view == 'subscriptions'%}
-          <div class="row">
-            {% include 'subscriptions.min.html' %}
-          </div>
-        {% elif results.view == 'playlist'%}
-          {% include 'episodes.min.html' %}
-        {% elif results.view == 'last-played'%}
-          <div class="row">
-            {% include 'last_played.min.html' %}
-          </div>
-        {% endif %}
-      </div>
-    {% endif %}
+    <div class="col-12 results-content">
+      {% if results.view == 'grid' or results.view == 'list' %}
+        {% include 'search.min.html' %}
+      {% elif results.view == 'charts' %}
+        <div class="row">
+          {% include 'charts.min.html' %}
+        </div>
+      {% elif results.view == 'subscriptions'%}
+        <div class="row">
+          {% include 'subscriptions.min.html' %}
+        </div>
+      {% elif results.view == 'playlist'%}
+        {% include 'episodes.min.html' %}
+      {% elif results.view == 'last-played'%}
+        <div class="row">
+          {% include 'last_played.min.html' %}
+        </div>
+      {% elif results.view == 'settings' %}
+        {% include 'settings.min.html' %}
+      {% endif %}
+    </div>
 
     {% if results.pages %}
       {% include 'pagination.min.html' %}
