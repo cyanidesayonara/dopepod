@@ -628,6 +628,7 @@ class Podcast(models.Model):
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
+                        podcasts.append(podcast)
                     # if podcast don't exists, scrape it and create it
                     except Podcast.DoesNotExist:
                         pass
