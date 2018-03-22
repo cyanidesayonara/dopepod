@@ -575,11 +575,11 @@ $(document)
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function (e) {
-    e.stopPropagation()
+    e.stopPropagation();
     $(".login-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
-    e.stopPropagation()
+    e.stopPropagation();
     $(".more-collapse.show").collapse("hide");
     var obj = $(this).parents("tr").prev();
     timeout = setTimeout(function () {
@@ -587,7 +587,7 @@ $(document)
     }, 250);
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
-    e.stopPropagation()
+    e.stopPropagation();
     $(".last-played-collapse.show").collapse("hide");
     var obj = $(this).parents();
     timeout = setTimeout(function () {

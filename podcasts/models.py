@@ -85,6 +85,11 @@ class PodcastManager(models.Manager):
     def get_queryset(self):
         return super(PodcastManager, self).get_queryset().select_related('genre', 'genre__supergenre', 'language')
 
+
+class OGPodcastManager(models.Manager):
+    def get_queryset(self):
+        return super(OGPodcastManager, self).get_queryset()
+
 class Podcast(models.Model):
     podid = models.IntegerField(unique=True)
     feedUrl = models.CharField(max_length=1000)
@@ -109,6 +114,7 @@ class Podcast(models.Model):
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
     objects = PodcastManager()
+    og_objects = OGPodcastManager()
 
     class Meta:
         indexes = [
@@ -451,7 +457,7 @@ class Podcast(models.Model):
         headers = {
             'User-Agent': str(ua.random)
         }
-
+        logger.error('scraping', podid)
         try:
             # get data from itunes lookup
             lookupUrl = 'https://itunes.apple.com/lookup?id=' + podid
@@ -489,13 +495,14 @@ class Podcast(models.Model):
             # make sure feedUrl works before creating podcast
             response = requests.get(feedUrl, headers=headers, timeout=10)
             response.raise_for_status()
+
             genre, created = Genre.objects.get_or_create(
                 name=genre
             )
             language, created = Language.objects.get_or_create(
                 name=language,
             )
-            podcast, created = Podcast.objects.update_or_create(
+            podcast, created = Podcast.og_objects.update_or_create(
                 podid=podid,
                 defaults={
                     'feedUrl': feedUrl,
@@ -540,6 +547,7 @@ class Podcast(models.Model):
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
+
         for genre in genres:
             # list of episodes parsed from itunes charts
             podcasts = Podcast.parse_itunes_charts(genre)
@@ -563,6 +571,7 @@ class Podcast(models.Model):
                 podcast.save()
 
             podcasts = Podcast.objects.all()
+
             if genre:
                 podcasts = podcasts.filter(
                     Q(genre=genre) |
@@ -616,13 +625,12 @@ class Podcast(models.Model):
                 podid = x['id']['attributes']['im:id']
 
                 if podid:
+                    Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
                     # if podcast don't exists, scrape it and create it
-                    # TODO maybe use this to update pods every time
                     except Podcast.DoesNotExist:
-                        logger.error('can\'t get pod, scraping')
-                        podcast = Podcast.scrape_podcast(podid)
+                        pass
 
         except requests.exceptions.HTTPError as e:
             logger.error('http error', url)
@@ -645,7 +653,6 @@ class Podcast(models.Model):
             for language in languages:
                 for genre in genres:
                     Podcast.search(url='/charts/', provider=provider, genre=genre, language=language, force_cache=True)
-
 
 class SubscriptionManager(models.Manager):
     def get_queryset(self):
@@ -1058,7 +1065,6 @@ class Filterable(models.Model):
         for language in languages:
             language.n_podcasts = Podcast.objects.filter(language=language).count()
             language.save()
-
 
 class GenreManager(models.Manager):
     def get_queryset(self):
