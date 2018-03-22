@@ -152,7 +152,7 @@ class Podcast(models.Model):
                        show=show, page=page)
         # if cached, return results
         results = cache.get(url)
-
+        print(results)
         if results and not force_cache:
             return results
         else:
