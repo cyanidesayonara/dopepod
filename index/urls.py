@@ -1,7 +1,6 @@
 from django.conf.urls import url, include
 from index import views as index
 from podcasts import views as podcasts
-from login import views as login
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
@@ -16,9 +15,9 @@ urlpatterns = [
     url(r'^playlist/$', index.playlist, name='playlist'),
     url(r'^subscribe/$', podcasts.subscribe, name='subscribe'),
     url(r'^unsubscribe/$', podcasts.unsubscribe, name='unsubscribe'),
-    url(r'^login/$', login.login, name='login'),
-    url(r'^signup/$', login.signup, name='signup'),
-    url(r'^logout/$', login.logout, name='logout'),
-    url(r'^password_reset/$', login.password_reset, name='password_reset'),
-    url(r"^account/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$", login.password_reset_from_key, name="account_reset_password_from_key"),
+    url(r'^login/$', index.login, name='login'),
+    url(r'^signup/$', index.signup, name='signup'),
+    url(r'^logout/$', index.logout, name='logout'),
+    url(r'^password_reset/$', index.password_reset, name='password_reset'),
+    url(r"^account/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$", index.password_reset_from_key, name="account_reset_password_from_key"),
 ]

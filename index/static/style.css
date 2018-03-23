@@ -587,7 +587,7 @@ a:hover {
 }
 .charts-result table tr td:first-child:before,
 .last-played-result table tr td:first-child:before {
-  content: "●";
+  content: "\25CF";
   color: rgb(0, 191,165);
   margin-right: 5px; 
 }

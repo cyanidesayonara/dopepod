@@ -10,16 +10,29 @@ import json
 import logging
 from django.core.cache import cache
 from django.template.loader import render_to_string
+from django.utils import timezone
+from datetime import datetime
+from allauth.account import views as allauth
 logger = logging.getLogger(__name__)
 
 def cookie_test(session):
-    if session.test_cookie_worked():
-        session['cookie'] = True
-        session.delete_test_cookie()
-        return False
-    else:
-        session.set_test_cookie()
-        return True
+    try:
+        session['last_seen']
+    except KeyError:
+        if session.test_cookie_worked():
+            session.delete_test_cookie()
+            return False
+        else:
+            session.set_test_cookie()
+            return True
+
+def get_last_seen(session):
+    try:
+        last_seen = datetime.strptime(session['last_seen'], "%b %d %Y %X %z")
+    except (KeyError, ValueError):
+        last_seen = timezone.now()
+    session['last_seen'] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
+    return last_seen
 
 def dopebar(request):
     """
@@ -50,7 +63,9 @@ def index(request):
         context = {
             'view': view,
         }
-        last_played = Episode.get_last_played()
+
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
         url = request.get_full_path()
         charts = Podcast.search(url=url, provider='dopepod')
 
@@ -58,15 +73,14 @@ def index(request):
             return JsonResponse({
                 "payload": render_to_string(template, context, request=request),
                 # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
             })
 
         context.update({
             'charts': charts,
             'last_played': last_played,
         })
-        if not request.session.get('cookie', None):
-            context['cookie_banner'] = cookie_test(request.session)
+        context['cookie_banner'] = cookie_test(request.session)
 
         return render(request, template, context)
 
@@ -100,7 +114,8 @@ def charts(request):
             url=url, provider=provider, genre=genre, language=language
         )
 
-        last_played = Episode.get_last_played()
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
         context = {
             'results': results,
         }
@@ -108,7 +123,7 @@ def charts(request):
         if request.is_ajax():
             return JsonResponse({
                 "payload": render_to_string("results_base.min.html", context, request=request),
-                "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
             })
 
         context = {
@@ -176,13 +191,14 @@ def search(request):
             url=url, q=q, genre=genre, language=language, show=show, page=page, view=view
         )
         charts = Podcast.search(url=url, provider='dopepod')
-        last_played = Episode.get_last_played()
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
 
         if request.is_ajax():
             return JsonResponse({
                 "payload": render_to_string("results_base.min.html", {'results': results}, request=request),
                 # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
             })
 
         results['extend'] = True
@@ -207,13 +223,14 @@ def subscriptions(request):
             results = Subscription.get_subscriptions(user)
             url = request.get_full_path()
             charts = Podcast.search(url=url, provider='dopepod')
-            last_played = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
 
             if request.is_ajax():
                 return JsonResponse({
                     "payload": render_to_string("results_base.min.html", {'results': results}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
 
             results['extend'] = True
@@ -229,11 +246,12 @@ def subscriptions(request):
             if request.is_ajax():
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider='dopepod')
-                last_played = Episode.get_last_played()
+                last_seen = get_last_seen(request.session)
+                last_played, last_played_latest = Episode.get_last_played(last_seen)
                 return JsonResponse({
                     "payload": render_to_string('splash.min.html', {}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
             return redirect('/')
 
@@ -245,13 +263,14 @@ def playlist(request):
             results = Episode.get_playlist(user)
             url = request.get_full_path()
             charts = Podcast.search(url=url, provider='dopepod')
-            last_played = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
 
             if request.is_ajax():
                 return JsonResponse({
                     "payload": render_to_string("results_base.min.html", {'results': results}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
 
             results['extend'] = True
@@ -266,11 +285,12 @@ def playlist(request):
             if request.is_ajax():
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider='dopepod')
-                last_played = Episode.get_last_played()
+                last_seen = get_last_seen(request.session)
+                last_played, last_played_latest = Episode.get_last_played(last_seen)
                 return JsonResponse({
                     "payload": render_to_string('splash.min.html', {}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
             return redirect('/')
 
@@ -323,12 +343,13 @@ def playlist(request):
         results = Episode.get_playlist(user)
         url = request.get_full_path()
         charts = Podcast.search(url=url, provider='dopepod')
-        last_played = Episode.get_last_played()
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
         if request.is_ajax():
             return JsonResponse({
                 "payload": render_to_string("results_base.min.html", {'results': results}, request=request),
                 # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
             })
 
         results['extend'] = True
@@ -359,13 +380,14 @@ def showpod(request, podid):
 
             url = request.get_full_path()
             charts = Podcast.search(url=url, provider='dopepod')
-            last_played = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
 
             if request.is_ajax():
                 return JsonResponse({
                     "payload": render_to_string("showpod.min.html", {'podcast': podcast}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
 
             results = Episode.get_episodes(podid)
@@ -404,13 +426,14 @@ def settings(request):
             }
             url = request.get_full_path()
             charts = Podcast.search(url=url, provider='dopepod')
-            last_played = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
 
             if request.is_ajax():
                 return JsonResponse({
                     "payload": render_to_string("results_base.min.html", {'context': context}, request=request),
                     # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                    "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                 })
 
             results['extend'] = True
@@ -425,6 +448,10 @@ def settings(request):
         if request.method == 'POST':
             user_form = UserForm(instance=request.user, data=request.POST)
             profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider='dopepod')
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
 
             context = {
                 'results': results,
@@ -437,9 +464,9 @@ def settings(request):
                 profile_form.save()
                 if request.is_ajax():
                     return JsonResponse({
-                        "payload": render_to_string("dashboard.min.html", {}, request=request),
+                        "payload": render_to_string("dashboard.min.html", context, request=request),
                         # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                        "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                        "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                     })
                 return redirect('/')
             else:
@@ -462,15 +489,12 @@ def settings(request):
                 context.update({
                     'errors': errors,
                 })
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider='dopepod')
-                last_played = Episode.get_last_played()
 
                 if request.is_ajax:
                     return JsonResponse({
                         "payload": render_to_string('results_base.min.html', context, request=request),
                         # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                        "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                        "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
                     }, status=400)
 
                 results['extend'] = True
@@ -484,10 +508,189 @@ def settings(request):
         if request.is_ajax():
             url = request.get_full_path()
             charts = Podcast.search(url=url, provider='dopepod')
-            last_played = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
             return JsonResponse({
                 "payload": render_to_string('splash.min.html', {}, request=request),
                 # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
-                "last_played": render_to_string("results_base.min.html", {'results': last_played}, request=request),
+                "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
             })
         return redirect('/?next=/settings/')
+
+# https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
+
+def get_form_errors(data):
+    errors = {}
+    # non-field errors
+    for error in data['form']['errors']:
+        errors['general'] = error
+    # field-specific errors
+    for field in data['form']['fields']:
+        for error in data['form']['fields'][field]['errors']:
+            if field == 'login':
+                field = 'email'
+            errors[field] = error
+    try:
+        email = data['form']['fields']['login']['value']
+    except KeyError:
+        email = data['form']['fields']['email']['value']
+    return (email, errors)
+
+def login(request):
+    """
+    relays stuff to and from allauth
+    """
+
+    if request.method == 'POST':
+        # request sent to allauth is always ajax so the output is json
+        ajax = request.is_ajax()
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = allauth.login(request)
+        # parse json response
+        data = json.loads(response.content)
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider='dopepod')
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
+
+        context = {
+            'view': 'login',
+        }
+
+        if response.status_code == 200:
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                })
+            else:
+                return redirect('/')
+        else:
+            email, errors = get_form_errors(data)
+            context.update({
+                'errors': errors,
+                'email': email,
+            })
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                }, status=400)
+            else:
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
+                return render(request, 'splash.min.html', context)
+    else:
+        return redirect('/?view=login')
+
+def signup(request):
+    if request.method == 'POST':
+        ajax = request.is_ajax()
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = allauth.signup(request)
+        data = json.loads(response.content)
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider='dopepod')
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
+
+        context = {
+            'view': 'signup',
+        }
+
+        if response.status_code == 200:
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                })
+            else:
+                return redirect('/')
+        else:
+            email, errors = get_form_errors(data)
+            context.update({
+                'errors': errors,
+                'email': email,
+            })
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                }, status=400)
+            else:
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
+                return render(request, 'splash.min.html', context)
+    else:
+        return redirect('/?view=signup')
+
+def logout(request):
+    if request.method == 'POST':
+        response = allauth.logout(request)
+        return response
+
+def password_reset(request):
+    if request.method == 'POST':
+        ajax = request.is_ajax()
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = allauth.password_reset(request)
+        data = json.loads(response.content)
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider='dopepod')
+        last_seen = get_last_seen(request.session)
+        last_played, last_played_latest = Episode.get_last_played(last_seen)
+
+        if response.status_code == 200:
+            context = {
+                'view': "login",
+                'message': 'We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.',
+            }
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                })
+            else:
+                return redirect('/')
+        else:
+            email, errors = get_form_errors(data)
+            context = {
+                'view': 'password',
+                'errors': errors,
+                'email': email,
+            }
+            if ajax:
+                return JsonResponse({
+                    "payload": render_to_string('dashboard.min.html', context, request=request),
+                    # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                    "last_played": render_to_string("results_base.min.html", {'results': last_played_latest}, request=request),
+                }, status=400)
+            else:
+                context.update({
+                    'charts': charts,
+                    'last_played': last_played,
+                })
+                return render(request, 'splash.min.html', context)
+    else:
+        return redirect('/?view=password')
+
+
+def password_reset_from_key(request, uidb36, key):
+    if request.method == 'GET':
+        response = allauth.password_reset_from_key(
+            request, uidb36=uidb36, key=key)
+        return response
+
+    if request.method == 'POST':
+        response = allauth.password_reset_from_key(
+            request, uidb36=uidb36, key=key)
+        return response
