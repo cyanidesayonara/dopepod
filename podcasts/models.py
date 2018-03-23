@@ -923,7 +923,8 @@ class Episode(models.Model):
         self.user = None
         self.save()
 
-        played_episodes = Episode.objects.exclude(played_at=None).order_by('-played_at')
+        played_episodes = Episode.objects.exclude(played_at=None, title=self.title).order_by('-played_at')
+        print(played_episodes)
         wannakeep = played_episodes[:50]
         played_episodes.exclude(pk__in=wannakeep).delete()
 

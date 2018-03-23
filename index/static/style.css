@@ -676,6 +676,7 @@ a:hover {
   list-style: none;
 }
 .last-played-result p {
+  word-wrap: break-word;
   margin: 10px 0 0;
 }
 .last-played-collapse table {

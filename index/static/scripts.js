@@ -148,10 +148,12 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response.payload);
+      console.log(response)
       if ("charts" in response) {
         $("#charts").html(response.charts);
       }
-      if ("last-played" in response) {
+      if ("last_played" in response) {
+        $(".last-played-collapse.show").collapse("hide");
         $("#last-played").html(response.last_played);
       }
       // loads episodes / page refresh
