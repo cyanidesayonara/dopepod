@@ -110,7 +110,7 @@ function refreshCookie() {
 function refreshPage() {
   var url = "/dopebar/";
   var drop = "#dopebar";
-  loadResults([url, drop]);
+  loadResults([url, drop, loadResults, ["/", "#center-stage"]]);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -148,13 +148,19 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response.payload);
-      console.log(response)
       if ("charts" in response) {
         $("#charts").html(response.charts);
       }
       if ("last_played" in response) {
         $(".last-played-collapse.show").collapse("hide");
-        $("#last-played").html(response.last_played);
+        var new_last_played = $(response.last_played);
+        var old_last_played = $(".last-played-box");
+        if (new_last_played.length && old_last_played.length >= 50) {
+          for (var i = old_last_played.length - 1; i > old_last_played.length - new_last_played.length - 1; i--) {
+            old_last_played[i].remove();
+          }
+        }
+        $("#last-played .results-content .row").prepend(new_last_played);
       }
       // loads episodes / page refresh
       if (callback) {

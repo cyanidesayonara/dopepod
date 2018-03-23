@@ -37,7 +37,7 @@ a:hover {
   font-size: 16px;
 }
 .cookie-banner button {
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 /* BUTTONS */
@@ -799,6 +799,10 @@ a:hover {
 .player-wrapper {
   z-index: 1000;
   color: rgb(46, 46, 46);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
   padding: 10px 10px 0;
   border: 2px solid rgb(0, 191, 165);
   border-bottom: none;
