@@ -898,14 +898,23 @@ class Episode(models.Model):
             ago += ' ago'
             return ago
 
-    def get_last_played():
-        last_played = Episode.objects.exclude(played_at=None).order_by(
-            '-played_at',)
+    def get_last_played(last_seen):
+        """ 
+        returns all last played and all episodes played after last_seen (for ajax) in a tuple
+        """
+
+        last_played = Episode.objects.exclude(played_at=None).order_by('-played_at',)
+
         results = {}
         results['episodes'] = last_played
         results['header'] = 'Last played'
         results['view'] = 'last-played'
-        return results
+
+        # return episodes newer than last_seen
+        latest_results = {
+            'episodes': last_played.filter(played_at__lt=last_seen),
+        }
+        return (results, latest_results)
 
     def play(self):
         episodes = Episode.objects.filter(user=self.user).order_by('position')
@@ -923,10 +932,12 @@ class Episode(models.Model):
         self.user = None
         self.save()
 
-        played_episodes = Episode.objects.exclude(played_at=None, title=self.title).order_by('-played_at')
-        print(played_episodes)
-        wannakeep = played_episodes[:50]
-        played_episodes.exclude(pk__in=wannakeep).delete()
+        played_episodes = Episode.objects.exclude(played_at=None).order_by('-played_at')
+        if played_episodes.count() > 1:
+            if played_episodes[0].signature == played_episodes[1].signature:
+                played_episodes[1].delete()
+            else:
+                played_episodes[played_episodes.count() - 1].delete()
 
     def add(signature, user):
         # max 20 episodes for now

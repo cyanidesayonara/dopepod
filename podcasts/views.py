@@ -37,9 +37,10 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            results = Episode.get_last_played()
+            last_seen = get_last_seen(request.session)
+            last_played, last_played_latest = Episode.get_last_played(last_seen)
             context = {
-                'results': results,
+                'results': last_played_latest,
             }
             return JsonResponse({
                 "payload": render_to_string('results_base.min.html', context, request=request),
@@ -64,7 +65,7 @@ def subscribe(request):
                 podcast = Podcast.objects.get(podid=podid)
                 podcast.subscribe_or_unsubscribe(user)
                 podcast.is_subscribed(user)
-            except (ValueError, KeyError, Podcast.DoesNotExist) as e:
+            except (ValueError, KeyError, Podcast.DoesNotExist):
                 raise Http404()
 
             context = {
@@ -101,7 +102,7 @@ def unsubscribe(request):
                 for podid in podids:
                     podcast = Podcast.objects.get(podid=int(podid))
                     podcast.unsubscribe(user)
-            except (ValueError, KeyError, Podcast.DoesNotExist) as e:
+            except (ValueError, KeyError, Podcast.DoesNotExist):
                 raise Http404()
 
             results = Subscription.get_subscriptions(user)

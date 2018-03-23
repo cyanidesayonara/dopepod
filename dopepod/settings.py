@@ -43,7 +43,6 @@ ALLOWED_HOSTS = local_settings.ALLOWED_HOSTS
 INSTALLED_APPS = [
     'index',
     'podcasts',
-    'login',
 
     'django.contrib.admin',
     'django.contrib.auth',
