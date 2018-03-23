@@ -92,7 +92,7 @@ a:hover {
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
 }
-#scroll-up {
+.scroll-up {
   transform: rotate(180deg);
   z-index: 9001;
   position: fixed;
@@ -414,6 +414,7 @@ a:hover {
   font-size: 16px;
 }
 .episodes-table {
+  table-layout: fixed;
   margin-bottom: 10px;
 }
 .episodes-table th,
@@ -682,7 +683,8 @@ a:hover {
 .last-played-collapse table {
   margin-top: 10px;
 }
-.last-played-toggle {
+.last-played-toggle,
+.scroll-up {
   position: absolute;
   bottom: 10px;
   right: 10px;
