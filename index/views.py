@@ -312,9 +312,17 @@ def playlist(request):
                 context = {
                     'episode': episode,
                 }
-                return JsonResponse({
-                    "payload": render_to_string('player.min.html', context, request=request),
-                })
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider='dopepod')
+                last_seen, cookie = get_last_seen(request.session)
+                last_played = Episode.get_last_played(last_seen, request.is_ajax())
+                if request.is_ajax():
+                    return JsonResponse({
+                        "payload": render_to_string('player.min.html', context, request=request),
+                        # "charts": render_to_string("results_base.min.html", {'results': charts}, request=request),
+                        "last_played": render_to_string("last_played.min.html", {'results': last_played}, request=request),
+                    })
+                return render(request, 'player.min.html', context)
             if user.is_authenticated:
                 if mode == 'add':
                     signature = request.POST['signature']

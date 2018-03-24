@@ -20,6 +20,7 @@ from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
 from django.core import signing
 from django.core.cache import cache
+from django.db import transaction
 import re
 import html
 import idna
@@ -932,12 +933,15 @@ class Episode(models.Model):
         self.user = None
         self.save()
 
-        played_episodes = Episode.objects.select_for_update().exclude(played_at=None).order_by('-played_at')
-        if played_episodes.count() > 1:
-            if played_episodes[0].signature == played_episodes[1].signature:
-                played_episodes[1].delete()
-            elif played_episodes.count() > 50:
-                played_episodes[played_episodes.count() - 1].delete()
+        # if played is same as previous, delete previous
+        # else if list is longer than 50, delete last
+        with transaction.atomic():
+            played_episodes = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by('-played_at')
+            if played_episodes.count() > 1:
+                if played_episodes[0].signature == played_episodes[1].signature:
+                    played_episodes[0].delete()
+                elif played_episodes.count() > 50:
+                    played_episodes[played_episodes.count() - 1].delete()
 
     def add(signature, user):
         # max 20 episodes for now

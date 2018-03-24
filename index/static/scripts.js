@@ -154,12 +154,23 @@ function loadResults(args, no_push) {
       if ("last_played" in response) {
         $(".last-played-collapse.show").collapse("hide");
         var new_lp = $(response.last_played);
-        var old_lp = $(".last-played-box");
-        if (new_lp.length && old_lp.length >= 50) {
-          for (var i = old_lp.length - 1; i > old_lp.length - new_lp.length - 1; i--) {
-            old_lp[i].remove();h
-          }
+        // if new episodes
+        if (new_lp.length) {
+          // add new eps at beginning
           $("#last-played .results-content .row").prepend(new_lp);
+          var last_played = $(".last-played-box");
+          // if episode list longer than 50, remove extras
+          if (last_played.length > 50) {
+            last_played.length = 50;
+          }
+          // update order numbering
+          for (var i = 0; i < last_played.length; i++) {
+            var num = (i + 1);
+            var id = "last-played-collapse" + num;
+            $(last_played[i]).find(".last-played-collapse").attr("id", id);
+            $(last_played[i]).find(".last-played-toggle").attr("tabindex", num);
+            $(last_played[i]).find(".last-played-toggle")[0].dataset.target = "#" + id;
+          }
         }
       }
       // loads episodes / page refresh
@@ -252,43 +263,47 @@ function subscribeOrUnsubscribe(form) {
     });
   }, 250);
 };
-function yeOldePlaylistFunction(url, data, mode, button) {
+function yeOldePlaylistFunction(data, mode, button) {
+  var url = "/playlist/";
+  var drop = $("#center-stage");
   var text = button[0].innerHTML;
   button.html(getButtonLoading());
   $.ajax({
-      method: "POST",
-      url: url,
-      data: data,
-    })
-    // nothing to continue
-    .fail(function (xhr, ajaxOptions, thrownError) {
+    method: "POST",
+    url: url,
+    data: data,
+  })
+  // nothing to continue
+  .fail(function (xhr, ajaxOptions, thrownError) {
+    button.html(text);
+    $("#player").empty();
+  })
+  .done(function (response) {
+    if (mode == "play") {
+      $("#player").html(response.payload);
+      updateTitle();
       button.html(text);
-      $("#player").empty();
-    })
-    .done(function (response) {
-      if (mode == "play") {
-        $("#player").html(response.payload);
-        updateTitle();
-        button.html(text);
-        // gotta wait a sec here
-        setTimeout(function () {
-          var box = $(".player-title");
-          var text = $(".player-title h1");
-          scrollText(box, text);
-        }, 1000);
+      // gotta wait a sec here
+      setTimeout(function () {
+        var box = $(".player-title");
+        var text = $(".player-title h1");
+        scrollText(box, text);
+      }, 1000);
+      if (drop.find(".playlist").length) {
+        loadResults([url, drop]);
       }
-      else {
-        if (mode == "add") {
-          button.text(text);
-        }
-        pushState(url);
-        $("#center-stage").html(response.payload);
-        replaceState(url);
+    }
+    else {
+      if (mode == "add") {
+        button.text(text);
       }
-    });
+      if (drop.find(".playlist").length) {
+        loadResults([url, drop]);
+      }
+    }
+  });
 };
 function playNext() {
-  var url = "/playlist/";
   var data = {
     "pos": "0",
     "mode": "play",
@@ -296,7 +311,7 @@ function playNext() {
   var mode = "play";
   var button = $(".player-wrapper");
   button.find("audio")[0].preload = "none";
-  yeOldePlaylistFunction(url, data, mode, button);
+  yeOldePlaylistFunction(data, mode, button);
 };
 // replaces spaces/&s with +, removes unwanted chars
 function cleanString(q) {
@@ -499,11 +514,10 @@ $(document)
     var form = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function () {
-      var url = form[0].action;
       var data = form.serialize();
       var mode = form.find("input[name=mode]").val();
       var button = form.find("button[type=submit]");
-      yeOldePlaylistFunction(url, data, mode, button);
+      yeOldePlaylistFunction(data, mode, button);
     }, 250);
   })
   // close player
