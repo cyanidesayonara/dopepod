@@ -932,11 +932,11 @@ class Episode(models.Model):
         self.user = None
         self.save()
 
-        played_episodes = Episode.objects.exclude(played_at=None).order_by('-played_at')
+        played_episodes = Episode.objects.select_for_update().exclude(played_at=None).order_by('-played_at')
         if played_episodes.count() > 1:
             if played_episodes[0].signature == played_episodes[1].signature:
                 played_episodes[1].delete()
-            else:
+            elif played_episodes.count() > 50:
                 played_episodes[played_episodes.count() - 1].delete()
 
     def add(signature, user):

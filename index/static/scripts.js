@@ -153,14 +153,14 @@ function loadResults(args, no_push) {
       }
       if ("last_played" in response) {
         $(".last-played-collapse.show").collapse("hide");
-        var new_last_played = $(response.last_played);
-        var old_last_played = $(".last-played-box");
-        if (new_last_played.length && old_last_played.length >= 50) {
-          for (var i = old_last_played.length - 1; i > old_last_played.length - new_last_played.length - 1; i--) {
-            old_last_played[i].remove();
+        var new_lp = $(response.last_played);
+        var old_lp = $(".last-played-box");
+        if (new_lp.length && old_lp.length >= 50) {
+          for (var i = old_lp.length - 1; i > old_lp.length - new_lp.length - 1; i--) {
+            old_lp[i].remove();h
           }
+          $("#last-played .results-content .row").prepend(new_lp);
         }
-        $("#last-played .results-content .row").prepend(new_last_played);
       }
       // loads episodes / page refresh
       if (callback) {
