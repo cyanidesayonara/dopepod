@@ -40,25 +40,25 @@ retry = Retry(
     status_forcelist=status_forcelist,
 )
 adapter = requests.adapters.HTTPAdapter(max_retries=retry)
-session.mount('http://', adapter)
-session.mount('https://', adapter)
+session.mount("http://", adapter)
+session.mount("https://", adapter)
 
 logger = logging.getLogger(__name__)
 
 def format_bytes(bytes):
     #2**10 = 1024
     power = 2**10
-    suffixes = {1:'KB', 2:'MB', 3:'GB', 4:'TB'}
+    suffixes = {1:"KB", 2:"MB", 3:"GB", 4:"TB"}
 
     n = 1
     if bytes <= power**2 :
         bytes /= power
-        return '{0:4.1f}{1}'.format(bytes, suffixes[n])
+        return "{0:4.1f}{1}".format(bytes, suffixes[n])
     else:
         while bytes > power :
             n  += 1
             bytes /=  power**n
-        return '{0:4.1f}{1}'.format(bytes, suffixes[n])
+        return "{0:4.1f}{1}".format(bytes, suffixes[n])
 
 
 def make_url(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None):
@@ -66,25 +66,25 @@ def make_url(url, provider=None, q=None, genre=None, language=None, show=None, p
     f.args.clear()
 
     if provider:
-        f.path = '/charts/'
-        f.args['provider'] = provider
+        f.path = "/charts/"
+        f.args["provider"] = provider
     if q:
-        f.args['q'] = q
+        f.args["q"] = q
     if genre:
-        f.args['genre'] = genre
+        f.args["genre"] = genre
     if language:
-        f.args['language'] = language
+        f.args["language"] = language
     if show:
-        f.args['show'] = show
+        f.args["show"] = show
     if page:
-        f.args['page'] = page
+        f.args["page"] = page
     if view:
-        f.args['view'] = view
+        f.args["view"] = view
     return f.url
 
 class PodcastManager(models.Manager):
     def get_queryset(self):
-        return super(PodcastManager, self).get_queryset().select_related('genre', 'genre__supergenre', 'language')
+        return super(PodcastManager, self).get_queryset().select_related("genre", "genre__supergenre", "language")
 
 
 class OGPodcastManager(models.Manager):
@@ -96,9 +96,9 @@ class Podcast(models.Model):
     feedUrl = models.CharField(max_length=1000)
     title = models.CharField(max_length=1000)
     artist = models.CharField(max_length=1000)
-    genre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, related_name='podcast')
+    genre = models.ForeignKey("podcasts.Genre", on_delete=models.CASCADE, related_name="podcast")
     explicit = models.BooleanField()
-    language = models.ForeignKey('podcasts.Language', on_delete=models.CASCADE, related_name='podcast')
+    language = models.ForeignKey("podcasts.Language", on_delete=models.CASCADE, related_name="podcast")
     copyrighttext = models.CharField(max_length=5000)
     description = models.TextField(max_length=5000, null=True, blank=True)
     n_subscribers = models.IntegerField(default=0)
@@ -119,11 +119,11 @@ class Podcast(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['title']),
-            models.Index(fields=['artist']),
-            models.Index(fields=['genre']),
-            models.Index(fields=['language']),
-            models.Index(fields=['rank']),
+            models.Index(fields=["title"]),
+            models.Index(fields=["artist"]),
+            models.Index(fields=["genre"]),
+            models.Index(fields=["language"]),
+            models.Index(fields=["rank"]),
         ]
 
     def get_primary_genre(self):
@@ -131,15 +131,15 @@ class Podcast(models.Model):
 
     def get_n_subscribers(self):
         if type(self.n_subscribers) == int:
-            return str(self.n_subscribers) if self.n_subscribers > 100 else '<1k'
+            return str(self.n_subscribers) if self.n_subscribers > 100 else "<1k"
         else:
-            return '<1k'
+            return "<1k"
 
     def __str__(self):
         return self.title
 
     def set_discriminated(self):
-        bad_url = 'is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/'
+        bad_url = "is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/"
         bad_genre = Genre.objects.get(genreid=1314)
 
         if self.artworkUrl == bad_url or self.genre == bad_genre:
@@ -147,7 +147,7 @@ class Podcast(models.Model):
             self.save()
 
     def get_absolute_url(self):
-        return reverse('podinfo', args='self.podid')
+        return reverse("podinfo", args="self.podid")
 
     def search(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None, force_cache=False):
         """
@@ -181,15 +181,15 @@ class Podcast(models.Model):
             if q:
                 # if q is > 1, split & query each word
                 if len(q) > 1:
-                    q_split = q.split(' ')
+                    q_split = q.split(" ")
                     query = Q()
                     for word in q_split:
                         query = query | Q(title__icontains=word) | Q(artist__icontains=word)
                     podcasts = podcasts.filter(query).distinct()
-                    podcasts = podcasts.order_by('rank')
+                    podcasts = podcasts.order_by("rank")
                 else:
                     # search for pods not starting w/ letter
-                    if q == '#':
+                    if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
                             query = query | Q(title__istartswith=letter)
@@ -197,38 +197,38 @@ class Podcast(models.Model):
                     # search for pods starting w/ letter
                     else:
                         podcasts = podcasts.filter(title__istartswith=q)
-                    podcasts = podcasts.order_by('title')
+                    podcasts = podcasts.order_by("title")
             # CHARTS
-            elif provider == 'dopepod':
+            elif provider == "dopepod":
                 if not genre and not language:
-                    podcasts = podcasts.order_by('rank')
+                    podcasts = podcasts.order_by("rank")
                 if genre:
                     podcasts = podcasts.filter(
                         Q(genre=genre) |
                         Q(genre__supergenre=genre)
                     )
                     if not language:
-                        podcasts = podcasts.order_by('genre_rank')
+                        podcasts = podcasts.order_by("genre_rank")
                 if language:
                     podcasts = podcasts.filter(
-                        language=language).order_by('language_rank')
-            elif provider == 'itunes':
+                        language=language).order_by("language_rank")
+            elif provider == "itunes":
                 if genre:
                     podcasts = podcasts.exclude(itunes_genre_rank=None).filter(
                         Q(genre=genre) |
                         Q(genre__supergenre=genre)
-                    ).order_by('itunes_genre_rank')
+                    ).order_by("itunes_genre_rank")
                 else:
                     podcasts = podcasts.exclude(
-                        itunes_rank=None).order_by('itunes_rank')
+                        itunes_rank=None).order_by("itunes_rank")
             else:
-                podcasts = podcasts.order_by('rank')
+                podcasts = podcasts.order_by("rank")
 
             results = {}
 
             genres = Genre.get_primary_genres()
             genres_urls = []
-            if provider == 'itunes':
+            if provider == "itunes":
                 languages = []
                 language = None
             else:
@@ -236,98 +236,98 @@ class Podcast(models.Model):
                 languages_urls = []
 
             if provider:
-                alphabet = ''
+                alphabet = ""
             else:
-                alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'
+                alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#"
                 alphabet_urls = []
 
             # create urls for buttons
             # starting with alphabet
-            url = make_url(url=url, q='x', genre=genre, language=language,
+            url = make_url(url=url, q="x", genre=genre, language=language,
                            show=show, view=view)
             for alpha in alphabet:
                 if alpha.lower() == q:
                     alphabet_urls.append(None)
                 else:
                     f = furl(url)
-                    f.args['q'] = alpha
+                    f.args["q"] = alpha
                     alphabet_urls.append(f.url)
             if q:
-                results['selected_q'] = q
+                results["selected_q"] = q
                 if len(q) == 1:
                     f = furl(url)
-                    del f.args['q']
-                    results['alphabet_nix_url'] = f.url
+                    del f.args["q"]
+                    results["alphabet_nix_url"] = f.url
 
             # genre buttons
-            url = make_url(url=url, provider=provider, q=q, genre='x', language=language,
+            url = make_url(url=url, provider=provider, q=q, genre="x", language=language,
                         show=show, view=view)
             for gen in genres:
                 if gen == genre:
                     genres_urls.append(None)
                 else:
                     f = furl(url)
-                    f.args['genre'] = gen
+                    f.args["genre"] = gen
                     genres_urls.append(f.url)
             if genre:
-                results['selected_genre'] = genre
+                results["selected_genre"] = genre
                 f = furl(url)
-                del f.args['genre']
-                results['genre_nix_url'] = f.url
+                del f.args["genre"]
+                results["genre_nix_url"] = f.url
 
             # language buttons
-            url = make_url(url=url, provider=provider, q=q, genre=genre, language='x',
+            url = make_url(url=url, provider=provider, q=q, genre=genre, language="x",
                         show=show, view=view)
             for lang in languages:
                 if lang == language:
                     languages_urls.append(None)
                 else:
                     f = furl(url)
-                    f.args['language'] = lang
+                    f.args["language"] = lang
                     languages_urls.append(f.url)
             if language:
-                results['selected_language'] = language
+                results["selected_language"] = language
                 f = furl(url)
-                del f.args['language']
-                results['language_nix_url'] = f.url
+                del f.args["language"]
+                results["language_nix_url"] = f.url
 
             # provider button
             url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                         show=show, page=page, view=view)
             if provider:
-                view = 'charts'
+                view = "charts"
                 f = furl(url)
-                if provider == 'dopepod':
-                    f.args['provider'] = 'itunes'
+                if provider == "dopepod":
+                    f.args["provider"] = "itunes"
                 else:
-                    f.args['provider'] = 'dopepod'
-                results['provider_url'] = f.url
+                    f.args["provider"] = "dopepod"
+                results["provider_url"] = f.url
 
             # view button
             if not view:
                 if q and len(q) > 1:
-                    view = 'grid'
+                    view = "grid"
                 else:
-                    view = 'list' 
+                    view = "list" 
 
                 f = furl(url)
-                if view == 'grid':
-                    f.args['view'] = 'list'
+                if view == "grid":
+                    f.args["view"] = "list"
                 else:
-                    f.args['view'] = 'grid'
-                results['view_url'] = f.url
+                    f.args["view"] = "grid"
+                results["view_url"] = f.url
             
-            results['view'] = view
+            results["view"] = view
 
             # zip button text w/ url
-            results['genres'] = zip(genres, genres_urls)
+            results["genres"] = zip(genres, genres_urls)
             if not provider:
-                results['alphabet'] = zip(alphabet, alphabet_urls)
-            if not provider == 'itunes':
-                results['languages'] = zip(languages, languages_urls)
+                results["alphabet"] = zip(alphabet, alphabet_urls)
+            if not provider == "itunes":
+                results["languages"] = zip(languages, languages_urls)
 
             # finally, the real url
-            results['full_url'] = url
+            results["full_url"] = url
 
             # if charts
             if provider:
@@ -351,10 +351,10 @@ class Podcast(models.Model):
             
             # charts header
             if provider:
-                results['podcasts'] = podcasts
-                results['header'] = 'Top ' + str(count) + ' podcasts'
-                results['providers'] = ['dopepod', 'itunes']
-                results['selected_provider'] = provider
+                results["podcasts"] = podcasts
+                results["header"] = "Top " + str(count) + " podcasts"
+                results["providers"] = ["dopepod", "itunes"]
+                results["selected_provider"] = provider
             # search header & pages
             else:
                 num_pages = int(count / show) + (count % show > 0)
@@ -369,45 +369,45 @@ class Podcast(models.Model):
                             pages_urls.append(None)
                         else:
                             f = furl(url)
-                            f.args['page'] = p
+                            f.args["page"] = p
                             pages_urls.append(f.url)
                     #  zip pages & use list to make it reusable
-                    results['pages'] = list(zip(pages, pages_urls))
+                    results["pages"] = list(zip(pages, pages_urls))
 
                     if page != num_pages:
                         f = furl(url)
-                        f.args['page'] = num_pages
-                        results['end_url'] = f.url
+                        f.args["page"] = num_pages
+                        results["end_url"] = f.url
                     
                     if page != 1:
                         f = furl(url)
-                        del f.args['page']
-                        results['start_url'] = f.url
+                        del f.args["page"]
+                        results["start_url"] = f.url
                 
                 if not q:
-                    results_header = str(count) + ' podcasts'
+                    results_header = str(count) + " podcasts"
                 elif count == 1:
-                    results_header = str(count) + ' result for "' + q + '"'
+                    results_header = str(count) + " result for \"" + q + "\""
                 else:
-                    results_header = str(count) + ' results for "' + q + '"'
-                results['header'] = results_header
+                    results_header = str(count) + " results for \"" + q + "\""
+                results["header"] = results_header
 
                 # show selected page
                 podcasts = podcasts[(page - 1) * show:page * show]
 
-                results['num_pages'] = num_pages
-                results['count'] = count
+                results["num_pages"] = num_pages
+                results["count"] = count
                 one = show // 4
                 two = show // 2
                 three = show // 2 + show // 4
-                results['podcasts1'] = podcasts[:one]
-                results['podcasts2'] = podcasts[one:two]
-                results['podcasts3'] = podcasts[two:three]
-                results['podcasts4'] = podcasts[three:]
+                results["podcasts1"] = podcasts[:one]
+                results["podcasts2"] = podcasts[one:two]
+                results["podcasts3"] = podcasts[two:three]
+                results["podcasts4"] = podcasts[three:]
 
-                results['extra_options'] = True
+                results["extra_options"] = True
 
-            # finally (finally!) cache results so we don't have to go thru this every time
+            # finally (finally!) cache results so we don"t have to go thru this every time
             cache.set(url, results, 60 * 60 * 24)
             return results
 
@@ -422,10 +422,10 @@ class Podcast(models.Model):
             user=user,
         )
         if created:
-            self.n_subscribers = F('n_subscribers') + 1
+            self.n_subscribers = F("n_subscribers") + 1
         else:
             subscription.delete()
-            self.n_subscribers = F('n_subscribers') - 1
+            self.n_subscribers = F("n_subscribers") - 1
         self.save()
 
     def unsubscribe(self, user):
@@ -439,7 +439,7 @@ class Podcast(models.Model):
             user=user,
         )
         subscription.delete()
-        self.n_subscribers = F('n_subscribers') - 1
+        self.n_subscribers = F("n_subscribers") - 1
         self.save()
 
     def is_subscribed(self, user):
@@ -456,42 +456,42 @@ class Podcast(models.Model):
 
         # useragent for requests
         headers = {
-            'User-Agent': str(ua.random)
+            "User-Agent": str(ua.random)
         }
-        logger.error('scraping', podid)
+        logger.error("scraping", podid)
         try:
             # get data from itunes lookup
-            lookupUrl = 'https://itunes.apple.com/lookup?id=' + podid
+            lookupUrl = "https://itunes.apple.com/lookup?id=" + podid
             response = requests.get(lookupUrl, headers=headers, timeout=10)
             response.raise_for_status()
             jsonresponse = response.json()
-            data = jsonresponse['results'][0]
-            itunesUrl = data['collectionViewUrl'].split('?')[0]
-            podid = data['collectionId']
-            feedUrl = data['feedUrl']
-            title = data['collectionName']
-            artist = data['artistName']
-            artworkUrl = data['artworkUrl600'].replace('600x600bb.jpg', '')[7:]
-            genre = data['primaryGenreName']
-            explicit = True if data['collectionExplicitness'] == 'explicit' else False
-            reviewsUrl = 'https://itunes.apple.com/us/rss/customerreviews/id=' + str(podid) + '/json'
+            data = jsonresponse["results"][0]
+            itunesUrl = data["collectionViewUrl"].split("?")[0]
+            podid = data["collectionId"]
+            feedUrl = data["feedUrl"]
+            title = data["collectionName"]
+            artist = data["artistName"]
+            artworkUrl = data["artworkUrl600"].replace("600x600bb.jpg", "")[7:]
+            genre = data["primaryGenreName"]
+            explicit = True if data["collectionExplicitness"] == "explicit" else False
+            reviewsUrl = "https://itunes.apple.com/us/rss/customerreviews/id=" + str(podid) + "/json"
 
             # get more data from itunes artist page
             response = requests.get(itunesUrl, headers=headers, timeout=10)
             response.raise_for_status()
             tree = lxml_html.fromstring(response.text)
-            language = tree.xpath('//li[@class="language"]/text()')[0]
-            podcastUrl = tree.xpath('//div[@class="extra-list"]/ul[@class="list"]/li/a/@href')[0]
+            language = tree.xpath("//li[@class='language']/text()")[0]
+            podcastUrl = tree.xpath("//div[@class='extra-list']/ul[@class='list']/li/a/@href")[0]
 
             try:
-                description = tree.xpath('//div[@class="product-review"]/p/text()')[0]
+                description = tree.xpath("//div[@class='product-review']/p/text()")[0]
             except IndexError:
-                description = ''
+                description = ""
 
             try:
-                copyrighttext = tree.xpath('//li[@class="copyright"]/text()')[0]
+                copyrighttext = tree.xpath("//li[@class='copyright']/text()")[0]
             except IndexError:
-                copyrighttext = '© All rights reserved'
+                copyrighttext = "© All rights reserved"
 
             # make sure feedUrl works before creating podcast
             response = requests.get(feedUrl, headers=headers, timeout=10)
@@ -506,36 +506,36 @@ class Podcast(models.Model):
             podcast, created = Podcast.og_objects.update_or_create(
                 podid=podid,
                 defaults={
-                    'feedUrl': feedUrl,
-                    'title': title,
-                    'artist': artist,
-                    'genre': genre,
-                    'explicit': explicit,
-                    'language': language,
-                    'copyrighttext': copyrighttext,
-                    'description': description,
-                    'reviewsUrl': reviewsUrl,
-                    'artworkUrl': artworkUrl,
-                    'podcastUrl': podcastUrl,
+                    "feedUrl": feedUrl,
+                    "title": title,
+                    "artist": artist,
+                    "genre": genre,
+                    "explicit": explicit,
+                    "language": language,
+                    "copyrighttext": copyrighttext,
+                    "description": description,
+                    "reviewsUrl": reviewsUrl,
+                    "artworkUrl": artworkUrl,
+                    "podcastUrl": podcastUrl,
                 }
             )
             if created:
-                logger.error('created podcast', title, feedUrl)
+                logger.error("created podcast", title, feedUrl)
             else:
-                logger.error('updated podcast', title, feedUrl)
+                logger.error("updated podcast", title, feedUrl)
             podcast.set_discriminated()
             return podcast
 
         except requests.exceptions.HTTPError:
-            logger.error('no response from url:', feedUrl)
+            logger.error("no response from url:", feedUrl)
         except requests.exceptions.ReadTimeout:
-            logger.error('timed out:', feedUrl)
+            logger.error("timed out:", feedUrl)
         except requests.exceptions.InvalidSchema:
-            logger.error('invalid schema:', feedUrl)
+            logger.error("invalid schema:", feedUrl)
         except idna.IDNAError:
-            logger.error('goddam idna error', feedUrl)
+            logger.error("goddam idna error", feedUrl)
         except KeyError:
-            logger.error('Missing data: ', feedUrl)
+            logger.error("Missing data: ", feedUrl)
 
     def set_charts():
         """
@@ -579,7 +579,7 @@ class Podcast(models.Model):
                     Q(genre__supergenre=genre)
                 )
             podcasts = podcasts.order_by(
-                'discriminate', '-n_subscribers', '-views', '-plays', 'itunes_rank', 'itunes_genre_rank', 'rank'
+                "discriminate", "-n_subscribers", "-views", "-plays", "itunes_rank", "itunes_genre_rank", "rank"
             )
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
@@ -590,7 +590,7 @@ class Podcast(models.Model):
 
         for language in Language.objects.all():
             podcasts = Podcast.objects.filter(language=language).order_by(
-                'discriminate', '-n_subscribers', '-views', '-plays', 'itunes_rank', 'itunes_genre_rank', 'rank'
+                "discriminate", "-n_subscribers", "-views", "-plays", "itunes_rank", "itunes_genre_rank", "rank"
             )
             for i, podcast in enumerate(podcasts, start=1):
                 podcast.language_rank = i
@@ -603,7 +603,7 @@ class Podcast(models.Model):
         """
 
         headers = {
-            'User-Agent': str(ua.random)
+            "User-Agent": str(ua.random)
         }
 
         # number of chart entries to list, 100 seems to be max
@@ -612,9 +612,9 @@ class Podcast(models.Model):
 
         # urls to use
         if genre:
-            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/genre=' + str(genre.genreid) + '/json'
+            url = "https://itunes.apple.com/us/rss/topaudiopodcasts/limit=" + str(number) + "/genre=" + str(genre.genreid) + "/json"
         else:
-            url = 'https://itunes.apple.com/us/rss/topaudiopodcasts/limit=' + str(number) + '/json'
+            url = "https://itunes.apple.com/us/rss/topaudiopodcasts/limit=" + str(number) + "/json"
 
         try:
             response = session.get(url, headers=headers, timeout=10)
@@ -622,54 +622,54 @@ class Podcast(models.Model):
             jsonresponse = response.json()
 
             # iterate thru every entry, extract podid
-            for x in jsonresponse['feed']['entry']:
-                podid = x['id']['attributes']['im:id']
+            for x in jsonresponse["feed"]["entry"]:
+                podid = x["id"]["attributes"]["im:id"]
 
                 if podid:
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
                         podcasts.append(podcast)
-                    # if podcast don't exists, scrape it and create it
+                    # if podcast don"t exists, scrape it and create it
                     except Podcast.DoesNotExist:
                         pass
 
         except requests.exceptions.HTTPError as e:
-            logger.error('http error', url)
+            logger.error("http error", url)
         except requests.exceptions.ReadTimeout:
-            logger.error('timed out', url)
+            logger.error("timed out", url)
         except requests.exceptions.RetryError:
-            logger.error('too many retries:', url)
+            logger.error("too many retries:", url)
         return podcasts
 
     def cache_charts():
         genres = list(Genre.get_primary_genres())
         genres.append(None)
 
-        for provider in ['dopepod', 'itunes']:
-            if provider == 'dopepod':
+        for provider in ["dopepod", "itunes"]:
+            if provider == "dopepod":
                 languages = list(Language.objects.all())
                 languages.append(None)
             else:
                 languages = [None]
             for language in languages:
                 for genre in genres:
-                    Podcast.search(url='/charts/', provider=provider, genre=genre, language=language, force_cache=True)
+                    Podcast.search(url="/charts/", provider=provider, genre=genre, language=language, force_cache=True)
 
 class SubscriptionManager(models.Manager):
     def get_queryset(self):
-        return super(SubscriptionManager, self).get_queryset().select_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
+        return super(SubscriptionManager, self).get_queryset().select_related("podcast__genre", "podcast__genre__supergenre", "podcast__language")
 
 class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='subscription')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription")
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name="subscription")
     last_updated = models.DateTimeField(null=True, default=None)
     new_episodes = models.IntegerField(default=0)
 
     objects = SubscriptionManager()
 
     class Meta:
-        ordering = ('podcast__title',)
+        ordering = ("podcast__title",)
 
     def update(self):
         self.last_updated = timezone.now()
@@ -678,26 +678,26 @@ class Subscription(models.Model):
     def get_subscriptions(user):
         subscriptions = Subscription.objects.filter(user=user)
         if subscriptions.count() == 1:
-            results_header = str(subscriptions.count()) + ' subscription'
+            results_header = str(subscriptions.count()) + " subscription"
         else:
-            results_header = str(subscriptions.count()) + ' subscriptions'
+            results_header = str(subscriptions.count()) + " subscriptions"
 
         results = {}
-        results['podcasts'] = subscriptions
-        results['header'] = results_header
-        results['view'] = 'subscriptions'
-        results['subscriptions'] = True
-        results['extra_options'] = True
+        results["podcasts"] = subscriptions
+        results["header"] = results_header
+        results["view"] = "subscriptions"
+        results["subscriptions"] = True
+        results["extra_options"] = True
         return results
 
 
 class EpisodeManager(models.Manager):
     def get_queryset(self):
-        return super(EpisodeManager, self).get_queryset().select_related('podcast__genre', 'podcast__genre__supergenre', 'podcast__language')
+        return super(EpisodeManager, self).get_queryset().select_related("podcast__genre", "podcast__genre__supergenre", "podcast__language")
 
 class Episode(models.Model):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='episode')
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='episode', default=None)
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name="episode")
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="episode", default=None)
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -725,14 +725,14 @@ class Episode(models.Model):
                 podcast = Podcast.objects.get(podid=podid)
             except Podcast.DoesNotExist:
                 raise Http404()
-            ns = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-                'atom': 'http://www.w3.org/2005/Atom',
-                'im': 'http://itunes.apple.com/rss',
+            ns = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
+                "atom": "http://www.w3.org/2005/Atom",
+                "im": "http://itunes.apple.com/rss",
             }
 
             # useragent for requests
             headers = {
-                'User-Agent': str(ua.random)
+                "User-Agent": str(ua.random)
             }
             episodes = []
 
@@ -742,122 +742,122 @@ class Episode(models.Model):
                 try:
                     root = etree.XML(response.content)
                     ns.update(root.nsmap)
-                    tree = root.find('channel')
+                    tree = root.find("channel")
 
-                    for item in tree.findall('item'):
+                    for item in tree.findall("item"):
                         episode = {}
 
                         # try to get pubdate + parse & convert it to datetime
                         try:
-                            pubdate = item.find('pubDate').text
+                            pubdate = item.find("pubDate").text
                             pubdate = parse(pubdate, default=parse("00:00Z"))
-                            episode['pubDate'] = datetime.strftime(pubdate,"%b %d %Y %X %z")
+                            episode["pubDate"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                         # if episode data not found, skip episode
                         except (AttributeError, ValueError) as e:
-                            logger.error('can\'t get pubDate', podcast.feedUrl)
+                            logger.error("can\'t get pubDate", podcast.feedUrl)
                             continue
 
                         # try to get title & description
                         try:
-                            episode['title'] = item.find('title').text
+                            episode["title"] = item.find("title").text
                         except AttributeError:
                             try:
-                                episode['title'] = item.find('itunes:subtitle').text
+                                episode["title"] = item.find("itunes:subtitle").text
                             except AttributeError as e:
-                                logger.error('can\'t get title', podcast.feedUrl)
+                                logger.error("can\'t get title", podcast.feedUrl)
                                 continue
                         try:
-                            description = item.find('description').text
+                            description = item.find("description").text
                         except AttributeError:
                             # or try with itunes namespace
                             try:
-                                description = item.find('itunes:summary', ns).text
+                                description = item.find("itunes:summary", ns).text
                             # if episode data not found, skip episode
                             except AttributeError as e:
-                                description = ''
-                                logger.error('can\'t get description', podcast.feedUrl)
+                                description = ""
+                                logger.error("can\'t get description", podcast.feedUrl)
 
                         if not description:
-                            description = ''
+                            description = ""
                         else:
                             description = html.unescape(description)
 
                         # strip html tags+ split + join again by single space
-                        episode['description'] = ' '.join(strip_tags(description).split())
+                        episode["description"] = " ".join(strip_tags(description).split())
 
                         # try to get length
                         try:
-                            length = item.find('itunes:duration', ns).text
+                            length = item.find("itunes:duration", ns).text
                         except AttributeError as e:
                             try:
-                                length = item.find('duration').text
+                                length = item.find("duration").text
                             except AttributeError as e:
                                 length = None
-                                logger.error('can\'t get length', podcast.feedUrl)
+                                logger.error("can\'t get length", podcast.feedUrl)
 
                         if length:
                             # convert length to timedelta
                             if length.isdigit() and length != 0:
                                 delta = timedelta(seconds=int(length))
-                                episode['length'] = str(delta)
+                                episode["length"] = str(delta)
                             else:
-                                if re.search('[1-9]', length):
-                                    if '.' in length:
-                                        length = length.split('.')
-                                    elif ':' in length:
-                                        length = length.split(':')
+                                if re.search("[1-9]", length):
+                                    if "." in length:
+                                        length = length.split(".")
+                                    elif ":" in length:
+                                        length = length.split(":")
 
                                     try:
                                         hours = int(length[0])
                                         minutes = int(length[1])
                                         seconds = int(length[2])
                                         delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
-                                        episode['length'] = str(delta)
+                                        episode["length"] = str(delta)
                                     except (ValueError, IndexError):
                                         try:
                                             minutes = int(length[0])
                                             seconds = int(length[1])
                                             delta = timedelta(minutes=minutes, seconds=seconds)
-                                            episode['length'] = str(delta)
+                                            episode["length"] = str(delta)
                                         except (ValueError, IndexError):
-                                            logger.error('can\'t parse length', podcast.feedUrl)
+                                            logger.error("can\'t parse length", podcast.feedUrl)
 
-                        episode['podid'] = podid
+                        episode["podid"] = podid
 
                         # link to episode
                         # enclosure might be missing, have alternatives
-                        enclosure = item.find('enclosure')
+                        enclosure = item.find("enclosure")
                         try:
-                            size = enclosure.get('length')
+                            size = enclosure.get("length")
                             if size and int(size) > 1:
-                                episode['size'] = format_bytes(int(size))
+                                episode["size"] = format_bytes(int(size))
                         except (AttributeError, ValueError):
-                            logger.error('can\'t get episode size', podcast.feedUrl)
+                            logger.error("can\'t get episode size", podcast.feedUrl)
 
                         try:
-                            episode['url'] = enclosure.get('url').replace('http:', '')
-                            episode['type'] = enclosure.get('type')
+                            episode["url"] = enclosure.get("url").replace("http:", "")
+                            episode["type"] = enclosure.get("type")
 
                             # create signature
-                            episode['signature'] = signing.dumps(episode)
-                            episode['pubDate'] = pubdate
+                            episode["signature"] = signing.dumps(episode)
+                            episode["pubDate"] = pubdate
                             episodes.append(episode)
                         except AttributeError as e:
-                            logger.error('can\'t get episode url/type/size', podcast.feedUrl)
+                            logger.error("can\'t get episode url/type/size", podcast.feedUrl)
 
                 except etree.XMLSyntaxError:
-                    logger.error('trouble with xml', podcast.feedUrl)
+                    logger.error("trouble with xml", podcast.feedUrl)
 
             except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
                 logger.error(str(e))
             
             # sort by pubDate just to be sure
             episodes = sorted(
-                episodes, key=lambda k: k['pubDate'], reverse=True)
+                episodes, key=lambda k: k["pubDate"], reverse=True)
 
             results = {
-                'episodes': episodes,
-                'view': 'episodes'
+                "episodes": episodes,
+                "view": "episodes"
             }
             cache.set(podid, results, 60 * 60)
             return results
@@ -868,9 +868,9 @@ class Episode(models.Model):
                 subscription = Subscription.objects.get(user=user, podcast__podid=podid)
                 i = 0
                 for episode in episodes:
-                    if not subscription.last_updated or subscription.last_updated < episode['pubDate']:
+                    if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
                         i += 1
-                        episode['is_new'] = True
+                        episode["is_new"] = True
 
                 subscription.last_updated = timezone.now()
                 subscription.new_episodes = i
@@ -887,31 +887,33 @@ class Episode(models.Model):
             hours = int((seconds % (60 * 60 * 24)) // (60 * 60))
             minutes = int((seconds % (60 * 60)) // 60)
             seconds = int(seconds % 60)
-            ago = ''
+            ago = ""
             if days:
-                ago += str(days) + 'd '
+                ago += str(days) + "d "
             if hours:
-                ago += str(hours) + 'h '
+                ago += str(hours) + "h "
             if minutes:
-                ago += str(minutes) + 'm '
+                ago += str(minutes) + "m "
             if seconds:
-                ago += str(seconds) + 's '
-            ago += ' ago'
+                ago += str(seconds) + "s "
+            ago += " ago"
+            if ago[0] == " ":
+                ago = "0s ago"
             return ago
 
     def get_last_played():
         """ 
         returns all last played and all episodes played after last_seen (for ajax) in a tuple
         """
-        episodes = Episode.objects.exclude(played_at=None).order_by('-played_at',)
+        episodes = Episode.objects.exclude(played_at=None).order_by("-played_at",)
         results = {}
-        results['episodes'] = episodes
-        results['header'] = 'Last played'
-        results['view'] = 'last-played'
+        results["episodes"] = episodes
+        results["header"] = "Last played"
+        results["view"] = "last-played"
         return results
 
     def play(self):
-        episodes = Episode.objects.filter(user=self.user).order_by('position')
+        episodes = Episode.objects.filter(user=self.user).order_by("position")
         try:
             for episode in episodes[self.position:]:
                 episode.position = F("position") - 1
@@ -929,10 +931,10 @@ class Episode(models.Model):
         # if played is same as previous, delete previous
         # else if list is longer than 50, delete last
         with transaction.atomic():
-            played_episodes = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by('-played_at')
+            played_episodes = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
             if played_episodes.count() > 1:
                 if played_episodes[0].signature == played_episodes[1].signature:
-                    played_episodes[0].delete()
+                    played_episodes[1].delete()
                 elif played_episodes.count() > 50:
                     played_episodes[played_episodes.count() - 1].delete()
 
@@ -940,7 +942,7 @@ class Episode(models.Model):
         # max 20 episodes for now
         if user.is_authenticated:
             # get position of last episode
-            position = Episode.objects.filter(user=user).aggregate(Max('position'))['position__max']
+            position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
             if position:
                 if position == 20:
                     user = None
@@ -954,23 +956,23 @@ class Episode(models.Model):
             position = None
         try:
             data = signing.loads(signature)
-            podid = data['podid']
+            podid = data["podid"]
             podcast = Podcast.objects.get(podid=podid)
-            url = data['url']
-            kind = data['type']
-            title = data['title']
-            pubDate = datetime.strptime(data['pubDate'],"%b %d %Y %X %z")
-            description = data['description']
+            url = data["url"]
+            kind = data["type"]
+            title = data["title"]
+            pubDate = datetime.strptime(data["pubDate"],"%b %d %Y %X %z")
+            description = data["description"]
 
             try:
-                length = data['length']
+                length = data["length"]
                 t = datetime.strptime(length,"%H:%M:%S")
                 length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
             except (KeyError, ValueError):
                 length = None
 
             try:
-                size = data['size']
+                size = data["size"]
             except KeyError:
                 size = None
 
@@ -991,7 +993,7 @@ class Episode(models.Model):
             return
 
     def remove(pos, user):
-        episodes = Episode.objects.filter(user=user).order_by('position')
+        episodes = Episode.objects.filter(user=user).order_by("position")
         try:
             episodes[pos].delete()
             for episode in episodes[pos:]:
@@ -1001,7 +1003,7 @@ class Episode(models.Model):
             return
 
     def up(pos, user):
-        episodes = Episode.objects.filter(user=user).order_by('position')
+        episodes = Episode.objects.filter(user=user).order_by("position")
         try:
             episode1 = episodes[pos - 1]
             episode2 = episodes[pos]
@@ -1013,7 +1015,7 @@ class Episode(models.Model):
             return
 
     def down(pos, user):
-        episodes = Episode.objects.filter(user=user).order_by('position')
+        episodes = Episode.objects.filter(user=user).order_by("position")
         try:
             episode1 = episodes[pos + 1]
             episode2 = episodes[pos]
@@ -1026,17 +1028,17 @@ class Episode(models.Model):
 
     def get_playlist(user):
         episodes = Episode.objects.filter(user=user).order_by(
-            'position')
+            "position")
         if episodes.count() == 1:
-            results_header = str(episodes.count()) + ' episode'
+            results_header = str(episodes.count()) + " episode"
         else:
-            results_header = str(episodes.count()) + ' episodes'
+            results_header = str(episodes.count()) + " episodes"
 
         results = {}
-        results['episodes'] = episodes
-        results['header'] = results_header
-        results['view'] = 'playlist'
-        results['extra_options'] = True
+        results["episodes"] = episodes
+        results["header"] = results_header
+        results["view"] = "playlist"
+        results["extra_options"] = True
         return results
 
 class Filterable(models.Model):
@@ -1078,16 +1080,16 @@ class Filterable(models.Model):
 
 class GenreManager(models.Manager):
     def get_queryset(self):
-        return super(GenreManager, self).get_queryset().select_related('supergenre')
+        return super(GenreManager, self).get_queryset().select_related("supergenre")
 
 class Genre(Filterable):
     genreid = models.IntegerField()
-    supergenre = models.ForeignKey('podcasts.Genre', on_delete=models.CASCADE, blank=True, null=True)
+    supergenre = models.ForeignKey("podcasts.Genre", on_delete=models.CASCADE, blank=True, null=True)
 
     objects = GenreManager()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ("name",)
 
     def get_primary_genres():
         """
@@ -1099,11 +1101,11 @@ class Genre(Filterable):
 class Language(Filterable):
 
     class Meta:
-        ordering = ('-n_podcasts',)
+        ordering = ("-n_podcasts",)
 
 # class SearchTerm(models.Model):
 #     number = models.IntegerField()
 #     text = models.CharField(max_length=100)
 #
 #     class Meta:
-#         ordering = ('number',)
+#         ordering = ("number",)

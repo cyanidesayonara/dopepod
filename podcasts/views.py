@@ -16,32 +16,32 @@ def episodes(request, podid):
     """
 
     # ajax using POST
-    if request.method == 'GET':
+    if request.method == "GET":
         if request.is_ajax():
             user = request.user
             results = Episode.get_episodes(podid)
-            Episode.set_new(user, podid, results['episodes'])
+            Episode.set_new(user, podid, results["episodes"])
             context = {
-                'results': results,
+                "results": results,
             }
-            return render(request, 'episodes.min.html', context)
+            return render(request, "episodes.min.html", context)
         else:
-            return redirect('/showpod/' + podid + '/')
+            return redirect("/showpod/" + podid + "/")
 
 def last_played(request):
     """
     returns n number of last played
     """
-    # TODO update only new episodes
-    if request.method == 'GET':
+
+    if request.method == "GET":
         if request.is_ajax():
             last_played = Episode.get_last_played()
             context = {
-                'results': last_played_latest,
+                "results": last_played,
             }
-            return render(request, 'results_base.min.html', context)
+            return render(request, "results_base.min.html", context)
         else:
-            return redirect('/')
+            return redirect("/")
 
 def subscribe(request):
     """
@@ -52,11 +52,11 @@ def subscribe(request):
     if not logged in, redirects to login
     """
 
-    if request.method == 'POST':
+    if request.method == "POST":
         user = request.user
         if user.is_authenticated:
             try:
-                podid = int(request.POST['podid'])
+                podid = int(request.POST["podid"])
                 podcast = Podcast.objects.get(podid=podid)
                 podcast.subscribe_or_unsubscribe(user)
                 podcast.is_subscribed(user)
@@ -64,16 +64,16 @@ def subscribe(request):
                 raise Http404()
 
             context = {
-                'podcast': podcast,
+                "podcast": podcast,
             }
 
             if request.is_ajax():
-                return render(request, 'showpod.min.html', context)
-            return redirect('/showpod/' + str(podid) + '/')
+                return render(request, "showpod.min.html", context)
+            return redirect("/showpod/" + str(podid) + "/")
         else:
             if request.is_ajax():
-                return render(request, 'splash.min.html', context)
-            return redirect('/?next=/showpod/' + podid + '/')
+                return render(request, "splash.min.html", context)
+            return redirect("/?next=/showpod/" + podid + "/")
 
 def unsubscribe(request):
     """
@@ -85,11 +85,11 @@ def unsubscribe(request):
     """
 
     # validate request
-    if request.method == 'POST':
+    if request.method == "POST":
         user = request.user
         if user.is_authenticated:
             try:
-                podids = request.POST.getlist('podids[]')
+                podids = request.POST.getlist("podids[]")
                 for podid in podids:
                     podcast = Podcast.objects.get(podid=int(podid))
                     podcast.unsubscribe(user)
@@ -98,8 +98,8 @@ def unsubscribe(request):
 
             results = Subscription.get_subscriptions(user)
             context = {
-                'results': results,
+                "results": results,
             }
-            return render(request, 'showpod.min.html', context)
+            return render(request, "showpod.min.html", context)
         else:
-            return render(request, 'splash.min.html', context)
+            return render(request, "splash.min.html", context)

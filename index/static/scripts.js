@@ -157,7 +157,7 @@ function loadResults(args, no_push) {
         }
       }
       // episodes loaded, remove loading anim
-      else if ($(response.payload).hasClass("episodes-table")) {
+      else if ($(response).hasClass("episodes-table")) {
         $(".episodes-button").text("Episodes");
       }
       replaceState(url);
@@ -227,11 +227,11 @@ function subscribeOrUnsubscribe(form) {
       },
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText.payload);
+      $("#center-stage").html(xhr.responseText);
       replaceState("/");
     })
     .done(function(response) {
-      $("#center-stage").html(response.payload);
+      $("#center-stage").html(response);
       var url = "/episodes/" + podid + "/";
       var drop = "#episodes-collapse";
       loadResults([url, drop]);
@@ -255,7 +255,7 @@ function yeOldePlaylistFunction(data, mode, button) {
   })
   .done(function (response) {
     if (mode == "play") {
-      $("#player").html(response.payload);
+      $("#player").html(response);
       updateTitle();
       button.html(text);
       // gotta wait a sec here
@@ -461,7 +461,7 @@ $(document)
       url: url,
     })
       .fail(function(xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText.payload);
+        $("#center-stage").html(xhr.responseText);
         scrollToTop();
       })
       .done(function(response) {
@@ -473,7 +473,7 @@ $(document)
           $(".lights-toggle").addClass("lit");
         }
         changeTheme(theme);
-        $("#center-stage").html(response.payload);
+        $("#center-stage").html(response);
         scrollToTop();
         replaceState("/");
       });
@@ -676,11 +676,11 @@ $(document)
     })
     // returns splash
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText.payload);
+      $("#center-stage").html(xhr.responseText);
       replaceState("/");
     })
     // returns results
     .done(function(response) {
-      $("#center-stage").html(response.payload);
+      $("#center-stage").html(response);
     });
   })
