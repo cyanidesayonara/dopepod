@@ -899,22 +899,15 @@ class Episode(models.Model):
             ago += ' ago'
             return ago
 
-    def get_last_played(last_seen, ajax):
+    def get_last_played():
         """ 
         returns all last played and all episodes played after last_seen (for ajax) in a tuple
         """
         episodes = Episode.objects.exclude(played_at=None).order_by('-played_at',)
-        # return episodes newer than last_seen
-        if ajax:
-            episodes = episodes.filter(played_at__gt=last_seen)
-            results = {
-                'episodes': episodes,
-            }
-        else:
-            results = {}
-            results['episodes'] = episodes
-            results['header'] = 'Last played'
-            results['view'] = 'last-played'
+        results = {}
+        results['episodes'] = episodes
+        results['header'] = 'Last played'
+        results['view'] = 'last-played'
         return results
 
     def play(self):

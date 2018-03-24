@@ -24,9 +24,7 @@ def episodes(request, podid):
             context = {
                 'results': results,
             }
-            return JsonResponse({
-                "payload": render_to_string('episodes.min.html', context, request=request),
-            })
+            return render(request, 'episodes.min.html', context)
         else:
             return redirect('/showpod/' + podid + '/')
 
@@ -37,14 +35,11 @@ def last_played(request):
     # TODO update only new episodes
     if request.method == 'GET':
         if request.is_ajax():
-            last_seen = get_last_seen(request.session)
-            last_played, last_played_latest = Episode.get_last_played(last_seen)
+            last_played = Episode.get_last_played()
             context = {
                 'results': last_played_latest,
             }
-            return JsonResponse({
-                "payload": render_to_string('results_base.min.html', context, request=request),
-            })
+            return render(request, 'results_base.min.html', context)
         else:
             return redirect('/')
 
@@ -73,15 +68,11 @@ def subscribe(request):
             }
 
             if request.is_ajax():
-                return JsonResponse({
-                    "payload": render_to_string('showpod.min.html', context, request=request),
-                })
+                return render(request, 'showpod.min.html', context)
             return redirect('/showpod/' + str(podid) + '/')
         else:
             if request.is_ajax():
-                return JsonResponse({
-                    "payload": render_to_string('splash.min.html', {}, request=request),
-                })
+                return render(request, 'splash.min.html', context)
             return redirect('/?next=/showpod/' + podid + '/')
 
 def unsubscribe(request):
@@ -109,10 +100,6 @@ def unsubscribe(request):
             context = {
                 'results': results,
             }
-            return JsonResponse({
-                "payload": render_to_string('showpod.min.html', context, request=request),
-            })
+            return render(request, 'showpod.min.html', context)
         else:
-            return JsonResponse({
-                "payload": render_to_string('splash.min.html', {}, request=request),
-            })
+            return render(request, 'splash.min.html', context)

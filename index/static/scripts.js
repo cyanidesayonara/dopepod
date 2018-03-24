@@ -147,32 +147,7 @@ function loadResults(args, no_push) {
     .fail(function(xhr, ajaxOptions, thrownError) {
   })
     .done(function(response) {
-      drop.html(response.payload);
-      if ("charts" in response) {
-        $("#charts").html(response.charts);
-      }
-      if ("last_played" in response) {
-        $(".last-played-collapse.show").collapse("hide");
-        var new_lp = $(response.last_played);
-        // if new episodes
-        if (new_lp.length) {
-          // add new eps at beginning
-          $("#last-played .results-content .row").prepend(new_lp);
-          var last_played = $(".last-played-box");
-          // if episode list longer than 50, remove extras
-          if (last_played.length > 50) {
-            last_played.length = 50;
-          }
-          // update order numbering
-          for (var i = 0; i < last_played.length; i++) {
-            var num = (i + 1);
-            var id = "last-played-collapse" + num;
-            $(last_played[i]).find(".last-played-collapse").attr("id", id);
-            $(last_played[i]).find(".last-played-toggle").attr("tabindex", num);
-            $(last_played[i]).find(".last-played-toggle")[0].dataset.target = "#" + id;
-          }
-        }
-      }
+      drop.html(response);
       // loads episodes / page refresh
       if (callback) {
         callback(args);
