@@ -896,7 +896,7 @@ a:hover {
   overflow-y: auto;
 }
 #player-wrapper.minimize {
-  bottom: -60px;
+  bottom: -65px;
 }
 #player-wrapper audio {
   display: block;
