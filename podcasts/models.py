@@ -335,11 +335,11 @@ class Podcast(models.Model):
                 if not show:
                     show = 50
                 podcasts = podcasts[:show]
-                # if no results, try w/o genre
+                # if no results, try w/o language
                 if not podcasts:
                     url = make_url(url=url, provider=provider,
-                                   language=language)
-                    return Podcast.search(url=url, provider=provider, language=language, view=view)
+                                   genre=genre)
+                    return Podcast.search(url=url, provider=provider, genre=genre, view=view)
             # if search
             else:
                 if not page:
