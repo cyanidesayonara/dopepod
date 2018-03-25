@@ -85,6 +85,11 @@ dopepod
           Unsubscribe
         </a>
       {% endif %}
+      {% if results.view == 'playlist' %}
+        <a class="btn-dope update-playlist" href="{% url 'playlist' %}">
+          Update
+        </a>
+      {% endif %}
       {% if results.view == 'settings' %}
         <button type="submit" class="btn-dope active settings-save">Save</button>
       {% endif %}

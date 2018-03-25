@@ -172,10 +172,10 @@ function scrollSpy() {
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
-    $("#scroll-up").removeClass("d-none");
+    $(".scroll-up").removeClass("d-none");
   }
   else {
-    $("#scroll-up").addClass("d-none");
+    $(".scroll-up").addClass("d-none");
   }
 }
 function scrollToTop() {
@@ -284,9 +284,13 @@ function playNext() {
     "mode": "play",
   };
   var mode = "play";
-  var button = $(".player-wrapper");
-  button.find("audio")[0].preload = "none";
-  yeOldePlaylistFunction(data, mode, button);
+  var wrapper = $(".player-wrapper");
+  wrapper.find("audio")[0].preload = "none";
+  wrapper.empty();
+  // wait a sec here
+  timeout = setTimeout(function () {
+    yeOldePlaylistFunction(data, mode, wrapper);
+  }, 500);
 };
 // replaces spaces/&s with +, removes unwanted chars
 function cleanString(q) {
@@ -365,15 +369,6 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     var link = $(this);
-    if (link.hasClass("results-close")) {
-      while (true) {
-        if (confirm("Are you sure, buddy?")) {
-          break;
-        } else {
-          return;
-        }
-      }  
-    }
     if (!drop.find(".login").length && !drop.find(".dashboard").length) {
       loadResults([url, drop]);
     }
@@ -388,6 +383,9 @@ $(document)
         $("#password-collapse").collapse("show");
       }
       else {
+        $("#splash-collapse").collapse("show");
+      }
+      if (link.hasClass("collapsed")) {
         $("#splash-collapse").collapse("show");
       }
     } 
@@ -446,6 +444,12 @@ $(document)
     }
     scrollToTop();
   })
+  .on("click", ".update-playlist", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    loadResults([url, drop]);
+  })
   // save settings, apply theme
   .on("submit", ".settings-form", function (e) {
     e.preventDefault();
@@ -487,27 +491,20 @@ $(document)
   .on("submit", ".playlist-form", function (e) {
     e.preventDefault();
     var form = $(this);
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      var data = form.serialize();
-      var mode = form.find("input[name=mode]").val();
-      var button = form.find("button[type=submit]");
-      yeOldePlaylistFunction(data, mode, button);
-    }, 250);
+    if (!form.find(".button-loading").length) {
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        var data = form.serialize();
+        var mode = form.find("input[name=mode]").val();
+        var button = form.find("button[type=submit]");
+        yeOldePlaylistFunction(data, mode, button);
+      }, 250);
+    }
   })
   // close player
   .on("click", ".player-close", function(e) {
     e.preventDefault();
-    // TODO make pretty
-    while(true) {
-      if (confirm("Are you sure, buddy?")) {
-        break;
-      }
-      else {
-        return;
-      }
-    }
-    $(this).siblings("audio")[0].preload="none";
+    $(this).parents().siblings("audio")[0].preload="none";
     $("#player").empty();
     updateTitle();
   })
@@ -613,7 +610,7 @@ $(document)
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
-  .on("click", "#scroll-up", function (e) {
+  .on("click", ".scroll-up", function (e) {
     scrollToTop();
   })
   .on("click", ".select-subscription", function() {
