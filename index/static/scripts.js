@@ -545,12 +545,8 @@ $(document)
       // returns splashboard
       .done(function(response) {
         $("#center-stage").html(response);
-        // if password reset, show login
-        if (text == "Send") {
-          $("#login-tab").tab("show");
-        }
-        // else logged in, refresh page
-        else {
+        // if not password reset, refresh page
+        if (text != "Send") {
           refreshCookie();
           refreshPage();
         }

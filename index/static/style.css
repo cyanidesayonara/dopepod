@@ -368,6 +368,7 @@ a:hover {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 #showpod-r ul {
+  margin-top: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
