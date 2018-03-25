@@ -535,7 +535,7 @@ $(document)
       // returns errors
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
-        $(".splash-errors").html(xhr.responseText);
+        $("#center-stage").html(xhr.responseText);
         // deletes error text when clicking anywhere
         $("html").on("click", "body", function() {
           $(".splash-errors").empty();

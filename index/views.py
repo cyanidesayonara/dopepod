@@ -523,7 +523,7 @@ def login(request):
                 "email": email,
             })
             if ajax:
-                return render(request, "dashboard.min.html", context, status=400)
+                return render(request, "splash.min.html", context, status=400)
             else:
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider="dopepod")
@@ -561,7 +561,7 @@ def signup(request):
                 "email": email,
             })
             if ajax:
-                return render(request, "dashboard.min.html", context, status=400)
+                return render(request, "splash.min.html", context, status=400)
             else:
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider="dopepod")
@@ -594,7 +594,7 @@ def password_reset(request):
                 "message": "We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.",
             }
             if ajax:
-                return render(request, "dashboard.min.html", context)
+                return render(request, "splash.min.html", context)
             else:
                 return redirect("/")
         else:
@@ -605,7 +605,7 @@ def password_reset(request):
                 "email": email,
             }
             if ajax:
-                return render(request, "dashboard.min.html", context, status=400)
+                return render(request, "splash.min.html", context, status=400)
             else:
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider="dopepod")
