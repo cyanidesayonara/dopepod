@@ -935,8 +935,10 @@ class Episode(models.Model):
             if played_episodes.count() > 1:
                 if played_episodes[0].signature == played_episodes[1].signature:
                     played_episodes[1].delete()
-                elif played_episodes.count() > 50:
-                    played_episodes[49:played_episodes.count() - 1].delete()
+                if played_episodes.count() > 50:
+                    excess = played_episodes[49:played_episodes.count() - 1]
+                    for episode in excess:
+                        episode.delete()
 
     def add(signature, user):
         # max 20 episodes for now
