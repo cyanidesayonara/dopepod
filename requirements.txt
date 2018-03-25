@@ -13,7 +13,11 @@ cssselect==1.0.3
 defusedxml==0.5.0
 Django==2.0.3
 django-allauth==0.35.0
+django-debug-toolbar==1.9.1
 django-extensions==2.0.6
+django-haystack==2.8.0
+django-haystack-elasticsearch==0.1.0
+elasticsearch==5.5.2
 fake-useragent==0.1.10
 first==2.0.1
 furl==1.0.1
@@ -37,6 +41,7 @@ pylint==1.8.3
 pyOpenSSL==17.5.0
 python-dateutil==2.7.0
 python-http-client==3.0.0
+python-memcached==1.59
 python3-openid==3.1.0
 pytz==2018.3
 queuelib==1.5.0
@@ -48,6 +53,7 @@ sendgrid==3.6.5
 sendgrid-django==4.2.0
 service-identity==17.0.0
 six==1.11.0
+sqlparse==0.2.4
 Twisted==17.9.0
 typing==3.6.4
 urllib3==1.22

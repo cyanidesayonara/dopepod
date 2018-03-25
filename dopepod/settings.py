@@ -57,6 +57,8 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
 
+    'haystack',
+
     'sendgrid',
 
     # django-allauth
@@ -95,6 +97,14 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack_elasticsearch.elasticsearch5.Elasticsearch5SearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
 
 CACHES = {
     'default': {

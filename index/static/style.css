@@ -289,7 +289,7 @@ a:hover {
 /* LOGIN-SIGNUP */
 .login-wrapper {
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
   max-width: 320px;
   margin: auto;
 }
@@ -825,7 +825,7 @@ a:hover {
 }
 
 /* PLAYER */
-.player-wrapper {
+#player-wrapper {
   z-index: 1000;
   color: rgb(46, 46, 46);
   position: absolute;
@@ -840,7 +840,7 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
   box-shadow: rgba(0,0,0,.3) 0 1px 3px;
 }
-.player-wrapper img {
+#player-wrapper img {
   float: left;
   margin-right: 5px;
   border-radius: .25rem;
@@ -860,10 +860,10 @@ a:hover {
   white-space: nowrap;
   font-weight: 600;
 }
-.player-close-collapse {
+#player-close-collapse {
   text-align: center;
 }
-.player-close-collapse p {
+#player-close-collapse p {
   font-size: 16px;
   display: inline-block;
   color: #fff;
@@ -877,7 +877,7 @@ a:hover {
 .player-buttons button[aria-expanded="true"] {
   color: #fff;
 }
-.player-wrapper p {
+#player-wrapper p {
   font-weight: 600;
 }
 .player-episode {
@@ -893,12 +893,12 @@ a:hover {
 .player-description {
   max-height: 250px;
   max-height: calc(100vh - 350px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
-.player-wrapper.minimize {
-  bottom: -110px;
+#player-wrapper.minimize {
+  bottom: -60px;
 }
-.player-wrapper audio {
+#player-wrapper audio {
   display: block;
   margin: 8px 0;
 }
@@ -1086,7 +1086,7 @@ a:hover {
   .episodes-table .length {
     width: 50px;
   }
-  .player-wrapper {
+  #player-wrapper {
     border-radius: 0;
   }
 }

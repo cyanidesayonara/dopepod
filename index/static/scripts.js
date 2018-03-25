@@ -1,22 +1,3 @@
-// HISTORY API
-$(window)
-  .on("popstate", function(event) {
-    var state = event.originalEvent.state;
-    if (state) {
-      // if url in urls, reload results (and don't push)
-      var url = state.url;
-      var urls = ["settings", "playlist", "subscriptions"];
-      for (i = 0; i < urls.length; i++) {
-        if (url.includes(urls[i])) {
-          var drop = $("#center-stage");
-          loadResults([url, drop], true);
-          return;
-        }
-      }
-      $("#main").html(state.context);
-      $("title")[0].innerText = state.title;
-    }
-  });
 function pushState(url) {
   // return if url in urls
   var urls = ["dopebar", "charts", "episodes", "last_played", "unsubscribe"];
@@ -61,7 +42,7 @@ function replaceState(url) {
 function updateTitle() {
   // default title
   var title = "dopepod";
-  var player = $(".player-wrapper");
+  var player = $("#player-wrapper");
   // if episode is playing
   if (player.length) {
     title = player.find(".player-title")[0].innerText;
@@ -284,7 +265,7 @@ function playNext() {
     "mode": "play",
   };
   var mode = "play";
-  var wrapper = $(".player-wrapper");
+  var wrapper = $("#player-wrapper");
   wrapper.find("audio")[0].preload = "none";
   wrapper.empty();
   // wait a sec here
@@ -308,14 +289,28 @@ function getButtonLoading() {
 function getLoading() {
   return $(".loading").first().clone();
 };
+function updateLastPlayed() {
+  last_played = setInterval(function () {
+    loadResults(["/last_played/", "#last-played"]);
+  }, 1000 * 60);
+}
+function updateCharts() {
+  charts = setInterval(function () {
+    loadResults(["/charts/", "#charts"]);
+  }, 1000 * 60 * 60 * 24);
+}
 
 $(document)
   .ready(function() {
     xhr = null;
     timeout = 0;
+    last_played = 0;
+    charts = 0;
     refreshCookie();
     scrollUp();
     scrollSpy();
+    updateLastPlayed();
+    updateCharts();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -447,12 +442,27 @@ $(document)
   .on("click", ".update-playlist", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");
-    loadResults([url, drop]);
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      var drop = $("#center-stage");
+      loadResults([url, drop]);
+    }, 250);
+  })
+  .on("click", ".update-last-played", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      var drop = $("#last-played");
+      loadResults([url, drop]);
+    }, 250);
   })
   // save settings, apply theme
   .on("submit", ".settings-form", function (e) {
-    e.preventDefault();
+    e.preventDefault();    last_played = 0;
+    charts = 0;
+    updateLastPlayed();
+    updateCharts();
     var method = this.method;
     var url = this.action;
     var form = $(this)
@@ -512,7 +522,10 @@ $(document)
   .on("click", ".player-minimize", function(e) {
     e.preventDefault();
     $("#player-collapse").collapse("hide");
-    $(this).toggleClass("active").parents(".player-wrapper").toggleClass("minimize");
+    $("#player-close-collapse").collapse("hide");
+    $(this).toggleClass("active")
+    .parents("#player-wrapper").toggleClass("minimize")
+    .children("audio").toggleClass("d-none");
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form", function (e) {
@@ -676,4 +689,31 @@ $(document)
     .done(function(response) {
       $("#center-stage").html(response);
     });
+  });
+
+$(window)
+  .on("popstate", function (event) {
+    var state = event.originalEvent.state;
+    if (state) {
+      // if url in urls, reload results (and don't push)
+      var url = state.url;
+      var urls = ["settings", "playlist", "subscriptions"];
+      for (i = 0; i < urls.length; i++) {
+        if (url.includes(urls[i])) {
+          var drop = $("#center-stage");
+          loadResults([url, drop], true);
+          return;
+        }
+      }
+      $("#main").html(state.context);
+      $("title")[0].innerText = state.title;
+    }
   })
+  .on("blur", function () {
+    window.clearInterval(charts);
+    window.clearInterval(last_played);
+  })
+  .on("focus", function () {
+    updateLastPlayed();
+    updateCharts();
+  });
