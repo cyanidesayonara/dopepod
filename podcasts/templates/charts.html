@@ -1,21 +1,21 @@
 {% for podcast in results.podcasts %}
   <div class="col-12 charts-box">
     <div class="charts-result clearfix">
-      <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+      <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
         <span class="charts-rank">
           {{ forloop.counter }}
         </span>
-        <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.title }}" />
+        <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}100x100bb.jpg"
+        onerror="this.src='http://{{ podcast.object.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.object.title }}" />
         <h1>
           <strong>
-            {{ podcast.title }}
+            {{ podcast.object.title }}
           </strong>
         </h1>
         <h2>
           by
           <strong>
-            {{ podcast.artist }}
+            {{ podcast.object.artist }}
           </strong>
         </h2>
         <table>
@@ -24,7 +24,7 @@
               Genre
             </td>
             <td>
-              {{ podcast.get_primary_genre }}
+              {{ podcast.object.get_primary_genre }}
             </td>
           </tr>
           <tr>
@@ -32,7 +32,7 @@
               Language
             </td>
             <td>
-              {{ podcast.language }}
+              {{ podcast.object.language }}
             </td>
           </tr>
           <tr>
@@ -40,7 +40,7 @@
               Subscribers
             </td>
             <td>
-              {{ podcast.get_n_subscribers }}
+              {{ podcast.object.get_n_subscribers }}
             </td>
           </tr>
         </table>

@@ -459,10 +459,7 @@ $(document)
   })
   // save settings, apply theme
   .on("submit", ".settings-form", function (e) {
-    e.preventDefault();    last_played = 0;
-    charts = 0;
-    updateLastPlayed();
-    updateCharts();
+    e.preventDefault();
     var method = this.method;
     var url = this.action;
     var form = $(this)

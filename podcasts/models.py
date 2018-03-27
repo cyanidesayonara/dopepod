@@ -21,6 +21,7 @@ from fake_useragent import UserAgent
 from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
+from haystack.query import SearchQuerySet
 import re
 import html
 import idna
@@ -86,11 +87,6 @@ class PodcastManager(models.Manager):
     def get_queryset(self):
         return super(PodcastManager, self).get_queryset().select_related("genre", "genre__supergenre", "language")
 
-
-class OGPodcastManager(models.Manager):
-    def get_queryset(self):
-        return super(OGPodcastManager, self).get_queryset()
-
 class Podcast(models.Model):
     podid = models.IntegerField(unique=True)
     feedUrl = models.CharField(max_length=1000)
@@ -115,7 +111,6 @@ class Podcast(models.Model):
     itunes_genre_rank = models.IntegerField(default=None, null=True)
 
     objects = PodcastManager()
-    og_objects = OGPodcastManager()
 
     class Meta:
         indexes = [
@@ -163,64 +158,48 @@ class Podcast(models.Model):
         if results and not force_cache:
             return results
         else:
-            podcasts = Podcast.objects.all()
+            podcasts = SearchQuerySet().all().load_all()
 
             # filter by language
             if language:
-                podcasts = podcasts.filter(language=language)
+                podcasts = podcasts.filter(language__exact=language)
 
             # filter by genre
             if genre:
                 podcasts = podcasts.filter(
-                    Q(genre=genre) |
-                    Q(genre__supergenre=genre)
-                )
+                    Q(genre__exact=genre))
 
             # SEARCH
-            # last but not least, filter by title
+            # last, but not least, filter by title
             if q:
                 # if q is > 1, split & query each word
                 if len(q) > 1:
-                    q_split = q.split(" ")
-                    query = Q()
-                    for word in q_split:
-                        query = query | Q(title__icontains=word) | Q(artist__icontains=word)
-                    podcasts = podcasts.filter(query).distinct()
-                    podcasts = podcasts.order_by("rank")
+                    podcasts = podcasts.filter(content__contains=q).order_by("rank")
                 else:
                     # search for pods not starting w/ letter
                     if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
-                            query = query | Q(title__istartswith=letter)
+                            query = query | Q(title__startswith=letter)
                         podcasts = podcasts.exclude(query)
                     # search for pods starting w/ letter
                     else:
-                        podcasts = podcasts.filter(title__istartswith=q)
-                    podcasts = podcasts.order_by("title")
+                        podcasts = podcasts.filter(title__startswith=q)
+
             # CHARTS
             elif provider == "dopepod":
-                if not genre and not language:
-                    podcasts = podcasts.order_by("rank")
-                if genre:
-                    podcasts = podcasts.filter(
-                        Q(genre=genre) |
-                        Q(genre__supergenre=genre)
-                    )
-                    if not language:
-                        podcasts = podcasts.order_by("genre_rank")
                 if language:
-                    podcasts = podcasts.filter(
-                        language=language).order_by("language_rank")
+                    podcasts = podcasts.order_by("language_rank")
+                elif genre:
+                    podcasts = podcasts.order_by("genre_rank")
+                else:
+                    podcasts = podcasts.order_by("rank")
             elif provider == "itunes":
                 if genre:
-                    podcasts = podcasts.exclude(itunes_genre_rank=None).filter(
-                        Q(genre=genre) |
-                        Q(genre__supergenre=genre)
-                    ).order_by("itunes_genre_rank")
+                    podcasts = podcasts.exclude(_missing_="itunes_genre_rank").order_by("itunes_genre_rank")
                 else:
-                    podcasts = podcasts.exclude(
-                        itunes_rank=None).order_by("itunes_rank")
+
+                    podcasts = podcasts.exclude(_missing_="itunes_rank").order_by("itunes_rank")
             else:
                 podcasts = podcasts.order_by("rank")
 
@@ -292,7 +271,7 @@ class Podcast(models.Model):
                 results["language_nix_url"] = f.url
 
             # provider button
-            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
+            url = make_url(url=url, provider=provider, q=q, genre=genre, 
                         show=show, page=page, view=view)
             if provider:
                 view = "charts"
@@ -335,6 +314,7 @@ class Podcast(models.Model):
                 if not show:
                     show = 50
                 podcasts = podcasts[:show]
+                count = len(podcasts)
                 # if no results, try w/o language
                 if not podcasts:
                     url = make_url(url=url, provider=provider,
@@ -346,8 +326,7 @@ class Podcast(models.Model):
                     page = 1
                 if not show:
                     show = 60
-
-            count = podcasts.count()
+                count = podcasts.count()
             
             # charts header
             if provider:
@@ -503,7 +482,7 @@ class Podcast(models.Model):
             language, created = Language.objects.get_or_create(
                 name=language,
             )
-            podcast, created = Podcast.og_objects.update_or_create(
+            podcast, created = Podcast.objects.select_related(None).update_or_create(
                 podid=podid,
                 defaults={
                     "feedUrl": feedUrl,
