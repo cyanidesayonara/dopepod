@@ -148,10 +148,10 @@ class Podcast(models.Model):
         """
         returns podcasts matching search terms
         """
-
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                        show=show, page=page)
+
         # if cached, return results
         results = cache.get(url)
 
@@ -180,11 +180,12 @@ class Podcast(models.Model):
                     if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
-                            query = query | Q(title__startswith=letter)
+                            query = query | Q(initial__exact=letter)
                         podcasts = podcasts.exclude(query)
                     # search for pods starting w/ letter
                     else:
-                        podcasts = podcasts.filter(title__startswith=q)
+                        podcasts = podcasts.filter(initial__exact=q)
+                    podcasts = podcasts.order_by("rank")
 
             # CHARTS
             elif provider == "dopepod":
@@ -282,6 +283,9 @@ class Podcast(models.Model):
                     f.args["provider"] = "dopepod"
                 results["provider_url"] = f.url
 
+            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
+                show=show, page=page, view=view)
+            
             # view button
             if not view:
                 if q and len(q) > 1:
@@ -304,6 +308,9 @@ class Podcast(models.Model):
                 results["alphabet"] = zip(alphabet, alphabet_urls)
             if not provider == "itunes":
                 results["languages"] = zip(languages, languages_urls)
+
+            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
+                            show=show, page=page)
 
             # finally, the real url
             results["full_url"] = url
@@ -460,7 +467,17 @@ class Podcast(models.Model):
             response.raise_for_status()
             tree = lxml_html.fromstring(response.text)
             language = tree.xpath("//li[@class='language']/text()")[0]
+            
             podcastUrl = tree.xpath("//div[@class='extra-list']/ul[@class='list']/li/a/@href")[0]
+            try:
+                if podcastUrl[:2] == "//" or podcastUrl[:4] == "http":
+                    pass
+                elif podcastUrl[:1] == "/" or "." not in podcastUrl:
+                    podcastUrl == ""
+                else:
+                    podcastUrl = "//" + podcastUrl
+            except IndexError:
+                pass
 
             try:
                 description = tree.xpath("//div[@class='product-review']/p/text()")[0]
@@ -884,6 +901,8 @@ class Episode(models.Model):
         """ 
         returns all last played and all episodes played after last_seen (for ajax) in a tuple
         """
+
+        # TODO howzabout we cache these too?
         episodes = Episode.objects.exclude(played_at=None).order_by("-played_at",)
         results = {}
         results["episodes"] = episodes

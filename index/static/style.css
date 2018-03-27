@@ -566,7 +566,7 @@ a:hover {
   font-weight: unset;
 }
 .charts-result {
-  border: 2px solid rgba(0, 191, 165, 0);
+  border: 2px solid rgb(0, 191, 165);
 }
 .charts-result,
 .subscriptions-result,
@@ -582,7 +582,6 @@ a:hover {
   box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
-  border: 2px solid rgb(0, 191,165);
 }
 .charts-result:hover .charts-rank {
   background: rgb(0, 191,165);
