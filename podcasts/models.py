@@ -160,6 +160,14 @@ class Podcast(models.Model):
         else:
             podcasts = SearchQuerySet().all().load_all()
 
+            # filter by language
+            if language:
+                podcasts = podcasts.filter(language__exact=language)
+
+            # filter by genre
+            if genre:
+                podcasts = podcasts.filter(genre__exact=genre)
+            
             # SEARCH
             # filter by title
             if q:
@@ -195,46 +203,22 @@ class Podcast(models.Model):
             else:
                 podcasts = podcasts.order_by("rank")
 
-            genres = Genre.get_primary_genres()
-            languages = Language.get_languages()
-
-            # filter by language
-            if language or q:
-                if language:
-                    podcasts_l = podcasts.filter(language__exact=language)
-                else:
-                    podcasts_l = podcasts
-                genres_set = set(podcasts_l.values_list("genre", flat=True))
-                genres = genres.filter(name__in=genres_set)
-            # filter by genre
-            if genre or q:
-                if genre:
-                    podcasts_g = podcasts.filter(genre__exact=genre)
-                else:
-                    podcasts_g = podcasts
-                languages_set = set(podcasts_g.values_list("language", flat=True))
-                languages = languages.filter(name__in=languages_set)
-
-            # unionize results for genre & language if need be
-            if q or (genre and language):
-                podcasts = podcasts_g & podcasts_l
-            elif genre:
-                podcasts = podcasts_g
-            elif language:
-                podcasts = podcasts_l
-
-            # if not provider, make alphabet
-            if not provider:
-                alphabet_urls = []
-                alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ#")
-
             results = {}
 
+            # if not provider, make alphabet
+            if provider:
+                alphabet = ""
+            else:
+                alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#"
+                alphabet_urls = []
+
+            genres = Genre.get_primary_genres()
             genres_urls = []
             if provider == "itunes":
                 languages = []
                 language = None
             else:
+                languages = Language.get_languages()
                 languages_urls = []
 
             if not provider:
