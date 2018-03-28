@@ -197,7 +197,7 @@ class Podcast(models.Model):
                 podcasts = podcasts.order_by("rank")
 
             genres = Genre.get_primary_genres()
-            languages = Language.objects.all()
+            languages = Language.get_languages()
 
             # filter by language
             if language or q:
@@ -219,24 +219,23 @@ class Podcast(models.Model):
                     alpha_podcasts_g = alpha_podcasts
                 languages_set = set(podcasts_g.values_list("language", flat=True))
                 languages = languages.filter(name__in=languages_set)
-            if q:
+
+            # unionize results for genre & language if need be
+            if q or (genre and language):
                 podcasts = podcasts_g & podcasts_l
                 alpha_podcasts = alpha_podcasts_g & alpha_podcasts_l
-            elif genre and language:
-                podcasts = podcasts_g & podcasts_l
-                alpha_podcasts = alpha_podcasts_g & alpha_podcasts_l
-            else:
-                if genre:
-                    podcasts = podcasts_g
-                    alpha_podcasts = alpha_podcasts_g
-                elif language:
-                    podcasts = podcasts_l
-                    alpha_podcasts = alpha_podcasts_l
+            elif genre:
+                podcasts = podcasts_g
+                alpha_podcasts = alpha_podcasts_g
+            elif language:
+                podcasts = podcasts_l
+                alpha_podcasts = alpha_podcasts_l
+
+            # if not provider, make alphabet
             if not provider:
                 alphabet_urls = []
                 alphabet = []
-                if (q and len(q) == 1) or genre or language:
-                    print("sdsad")
+                if q or genre or language:
                     initials = set()
                     alphabet = []
                     titles = alpha_podcasts.values_list("title", flat=True)
@@ -625,7 +624,7 @@ class Podcast(models.Model):
                     podcast.rank = i
                 podcast.save()
 
-        for language in Language.objects.all():
+        for language in Language.get_languages():
             podcasts = Podcast.objects.filter(language=language).order_by(
                 "discriminate", "-n_subscribers", "-views", "-plays", "itunes_rank", "itunes_genre_rank", "rank"
             )
@@ -685,7 +684,7 @@ class Podcast(models.Model):
 
         for provider in ["dopepod", "itunes"]:
             if provider == "dopepod":
-                languages = list(Language.objects.all())
+                languages = list(Language.get_languages())
                 languages.append(None)
             else:
                 languages = [None]
@@ -896,7 +895,7 @@ class Episode(models.Model):
                 "episodes": episodes,
                 "view": "episodes"
             }
-            cache.set(podid, results, 60 * 60)
+            cache.set(podid, results, 60 * 60 * 24)
             return results
 
     def set_new(user, podid, episodes):
@@ -940,16 +939,20 @@ class Episode(models.Model):
 
     def get_last_played():
         """ 
-        returns all last played and all episodes played after last_seen (for ajax) in a tuple
+        returns all last played episodes
         """
 
-        # TODO howzabout we cache these too?
-        episodes = Episode.objects.exclude(played_at=None).order_by("-played_at",)
-        results = {}
-        results["episodes"] = episodes
-        results["header"] = "Last played"
-        results["view"] = "last_played"
-        return results
+        results = cache.get("last_played")
+        if results:
+            return results
+        else:
+            last_played = Episode.objects.exclude(played_at=None).order_by("-played_at",)
+            results = {}
+            results["episodes"] = last_played
+            results["header"] = "Last played"
+            results["view"] = "last_played"
+            cache.set("last_played", results, 60 * 60 * 24)
+            return results
 
     def play(self):
         episodes = Episode.objects.filter(user=self.user).order_by("position")
@@ -968,16 +971,24 @@ class Episode(models.Model):
         self.save()
 
         # if played is same as previous, delete previous
-        # else if list is longer than 50, delete last
+        # if list is longer than 50, delete excess
         with transaction.atomic():
-            played_episodes = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
-            if played_episodes.count() > 1:
-                if played_episodes[0].signature == played_episodes[1].signature:
-                    played_episodes[1].delete()
-                if played_episodes.count() > 50:
-                    excess = played_episodes[49:played_episodes.count() - 1]
+            last_played = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
+            if last_played.count() > 1:
+                if last_played[0].signature == last_played[1].signature:
+                    last_played[1].delete()
+                if last_played.count() > 50:
+                    excess = last_played[49:last_played.count() - 1]
                     for episode in excess:
                         episode.delete()
+
+        # let's cache those bad boys
+        last_played = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
+        results = {}
+        results["episodes"] = last_played
+        results["header"] = "Last played"
+        results["view"] = "last_played"
+        cache.set("last_played", results, 60 * 60 * 24)                        
 
     def add(signature, user):
         # max 20 episodes for now
@@ -1114,7 +1125,7 @@ class Filterable(models.Model):
                 genre.n_podcasts += Podcast.objects.filter(genre__supergenre=genre).count()
             genre.save()
 
-        languages = Language.objects.all()
+        languages = Language.get_languages()
         for language in languages:
             language.n_podcasts = Podcast.objects.filter(language=language).count()
             language.save()
@@ -1136,13 +1147,30 @@ class Genre(Filterable):
         """
         returns primary genres
         """
-
-        return Genre.objects.filter(supergenre=None)
+        results = cache.get("genres")
+        if results:
+            return results
+        else:
+            results = Genre.objects.filter(supergenre=None)
+            cache.set("genres", results, 60 * 60 * 24)
+            return results 
 
 class Language(Filterable):
     
     class Meta:
         ordering = ("-n_podcasts",)
+
+    def get_languages():
+        """
+        returns languages
+        """
+        results = cache.get("languages")
+        if results:
+            return results
+        else:
+            results = Language.objects.all()
+            cache.set("languages", results, 60 * 60 * 24)
+            return results 
 
 # class SearchTerm(models.Model):
 #     number = models.IntegerField()

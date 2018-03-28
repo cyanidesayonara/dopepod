@@ -16,7 +16,10 @@ class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
     itunes_genre_rank = indexes.IntegerField(model_attr='itunes_genre_rank', indexed=False, null=True)
 
     def prepare_initial(self, obj):
-        return obj.title[0]
+        if obj.title.split(" ")[0].capitalize() == "The":
+            return obj.title.split(" ")[1][0].lower()
+        else:
+            return obj.title[0].lower()
 
     def get_model(self):
         return Podcast
