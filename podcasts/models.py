@@ -159,30 +159,22 @@ class Podcast(models.Model):
             return results
         else:
             podcasts = SearchQuerySet().all().load_all()
-
-            # filter by language
-            if language:
-                podcasts = podcasts.filter(language__exact=language)
-
-            # filter by genre
-            if genre:
-                podcasts = podcasts.filter(
-                    Q(genre__exact=genre))
+            alpha_podcasts = SearchQuerySet().all().load_all()
 
             # SEARCH
-            # last, but not least, filter by title
+            # filter by title
             if q:
                 # if q is > 1, split & query each word
                 if len(q) > 1:
                     podcasts = podcasts.filter(content__contains=q).order_by("rank")
                 else:
-                    # search for pods not starting w/ letter
+                    # exclude pods not starting w/ letter
                     if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
                             query = query | Q(initial__exact=letter)
                         podcasts = podcasts.exclude(query)
-                    # search for pods starting w/ letter
+                    # filter pods starting w/ letter
                     else:
                         podcasts = podcasts.filter(initial__exact=q)
                     podcasts = podcasts.order_by("rank")
@@ -204,40 +196,88 @@ class Podcast(models.Model):
             else:
                 podcasts = podcasts.order_by("rank")
 
+            genres = Genre.get_primary_genres()
+            languages = Language.objects.all()
+
+            # filter by language
+            if language or q:
+                if language:
+                    podcasts_l = podcasts.filter(language__exact=language)
+                    alpha_podcasts_l = alpha_podcasts.filter(language__exact=language)
+                else:
+                    podcasts_l = podcasts
+                    alpha_podcasts_l = alpha_podcasts
+                genres_set = set(podcasts_l.values_list("genre", flat=True))
+                genres = genres.filter(name__in=genres_set)
+            # filter by genre
+            if genre or q:
+                if genre:
+                    podcasts_g = podcasts.filter(genre__exact=genre)
+                    alpha_podcasts_g = alpha_podcasts.filter(genre__exact=genre)
+                else:
+                    podcasts_g = podcasts
+                    alpha_podcasts_g = alpha_podcasts
+                languages_set = set(podcasts_g.values_list("language", flat=True))
+                languages = languages.filter(name__in=languages_set)
+            if q:
+                podcasts = podcasts_g & podcasts_l
+                alpha_podcasts = alpha_podcasts_g & alpha_podcasts_l
+            elif genre and language:
+                podcasts = podcasts_g & podcasts_l
+                alpha_podcasts = alpha_podcasts_g & alpha_podcasts_l
+            else:
+                if genre:
+                    podcasts = podcasts_g
+                    alpha_podcasts = alpha_podcasts_g
+                elif language:
+                    podcasts = podcasts_l
+                    alpha_podcasts = alpha_podcasts_l
+            if not provider:
+                alphabet_urls = []
+                alphabet = []
+                if (q and len(q) == 1) or genre or language:
+                    print("sdsad")
+                    initials = set()
+                    alphabet = []
+                    titles = alpha_podcasts.values_list("title", flat=True)
+                    for title in titles:
+                        initials.add(title[0].upper())
+                    for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                        if letter in initials:
+                            alphabet.append(letter)
+                            initials.remove(letter)
+                    if len(initials) > 0:
+                        alphabet.append("#")
+                else:
+                    alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ#")
+
             results = {}
 
-            genres = Genre.get_primary_genres()
             genres_urls = []
             if provider == "itunes":
                 languages = []
                 language = None
             else:
-                languages = Language.objects.all()
                 languages_urls = []
 
-            if provider:
-                alphabet = ""
-            else:
-                alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#"
-                alphabet_urls = []
-
-            # create urls for buttons
-            # starting with alphabet
-            url = make_url(url=url, q="x", genre=genre, language=language,
-                           show=show, view=view)
-            for alpha in alphabet:
-                if alpha.lower() == q:
-                    alphabet_urls.append(None)
-                else:
-                    f = furl(url)
-                    f.args["q"] = alpha
-                    alphabet_urls.append(f.url)
-            if q:
-                results["selected_q"] = q
-                if len(q) == 1:
-                    f = furl(url)
-                    del f.args["q"]
-                    results["alphabet_nix_url"] = f.url
+            if not provider:
+                # create urls for buttons
+                # starting with alphabet
+                url = make_url(url=url, q="x", genre=genre, language=language,
+                            show=show, view=view)
+                for alpha in alphabet:
+                    if alpha.lower() == q:
+                        alphabet_urls.append(None)
+                    else:
+                        f = furl(url)
+                        f.args["q"] = alpha
+                        alphabet_urls.append(f.url)
+                if q:
+                    results["selected_q"] = q
+                    if len(q) == 1:
+                        f = furl(url)
+                        del f.args["q"]
+                        results["alphabet_nix_url"] = f.url
 
             # genre buttons
             url = make_url(url=url, provider=provider, q=q, genre="x", language=language,
@@ -251,6 +291,7 @@ class Podcast(models.Model):
                     genres_urls.append(f.url)
             if genre:
                 results["selected_genre"] = genre
+
                 f = furl(url)
                 del f.args["genre"]
                 results["genre_nix_url"] = f.url
@@ -1099,7 +1140,7 @@ class Genre(Filterable):
         return Genre.objects.filter(supergenre=None)
 
 class Language(Filterable):
-
+    
     class Meta:
         ordering = ("-n_podcasts",)
 

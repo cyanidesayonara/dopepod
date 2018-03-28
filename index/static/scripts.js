@@ -89,9 +89,8 @@ function refreshCookie() {
 };
 // refreshes page on login
 function refreshPage() {
-  var url = "/dopebar/";
-  var drop = "#dopebar";
-  loadResults([url, drop, loadResults, ["/", "#center-stage"]]);
+  loadResults(["/dopebar/", "#dopebar"]);
+  loadResults(["/last_played/", "#last-played"])
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -129,7 +128,7 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
-      // loads episodes / page refresh
+      // loads episodes (cuz drop dun exist yet)
       if (callback) {
         callback(args);
         // if page refresh, apply theme

@@ -3,7 +3,7 @@ from .models import Podcast
 
 
 class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
+    text = indexes.EdgeNgramField(document=True, use_template=True)
     title = indexes.CharField(model_attr='title')
     initial = indexes.CharField()
     artist = indexes.CharField(model_attr='artist')
@@ -16,7 +16,7 @@ class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
     itunes_genre_rank = indexes.IntegerField(model_attr='itunes_genre_rank', indexed=False, null=True)
 
     def prepare_initial(self, obj):
-        return obj.title[:1]
+        return obj.title[0]
 
     def get_model(self):
         return Podcast
