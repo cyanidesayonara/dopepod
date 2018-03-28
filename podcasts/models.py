@@ -159,7 +159,6 @@ class Podcast(models.Model):
             return results
         else:
             podcasts = SearchQuerySet().all().load_all()
-            alpha_podcasts = SearchQuerySet().all().load_all()
 
             # SEARCH
             # filter by title
@@ -203,52 +202,31 @@ class Podcast(models.Model):
             if language or q:
                 if language:
                     podcasts_l = podcasts.filter(language__exact=language)
-                    alpha_podcasts_l = alpha_podcasts.filter(language__exact=language)
                 else:
                     podcasts_l = podcasts
-                    alpha_podcasts_l = alpha_podcasts
                 genres_set = set(podcasts_l.values_list("genre", flat=True))
                 genres = genres.filter(name__in=genres_set)
             # filter by genre
             if genre or q:
                 if genre:
                     podcasts_g = podcasts.filter(genre__exact=genre)
-                    alpha_podcasts_g = alpha_podcasts.filter(genre__exact=genre)
                 else:
                     podcasts_g = podcasts
-                    alpha_podcasts_g = alpha_podcasts
                 languages_set = set(podcasts_g.values_list("language", flat=True))
                 languages = languages.filter(name__in=languages_set)
 
             # unionize results for genre & language if need be
             if q or (genre and language):
                 podcasts = podcasts_g & podcasts_l
-                alpha_podcasts = alpha_podcasts_g & alpha_podcasts_l
             elif genre:
                 podcasts = podcasts_g
-                alpha_podcasts = alpha_podcasts_g
             elif language:
                 podcasts = podcasts_l
-                alpha_podcasts = alpha_podcasts_l
 
             # if not provider, make alphabet
             if not provider:
                 alphabet_urls = []
-                alphabet = []
-                if q or genre or language:
-                    initials = set()
-                    alphabet = []
-                    titles = alpha_podcasts.values_list("title", flat=True)
-                    for title in titles:
-                        initials.add(title[0].upper())
-                    for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                        if letter in initials:
-                            alphabet.append(letter)
-                            initials.remove(letter)
-                    if len(initials) > 0:
-                        alphabet.append("#")
-                else:
-                    alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ#")
+                alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ#")
 
             results = {}
 

@@ -767,11 +767,11 @@ a:hover {
 .subscriptions-box h1 {
   font-size: 16px;
   height: 38px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   overflow: hidden;
 }
 .subscriptions-box p {
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   font-weight: 400;
   overflow: hidden;
 }
