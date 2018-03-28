@@ -112,15 +112,6 @@ class Podcast(models.Model):
 
     objects = PodcastManager()
 
-    class Meta:
-        indexes = [
-            models.Index(fields=["title"]),
-            models.Index(fields=["artist"]),
-            models.Index(fields=["genre"]),
-            models.Index(fields=["language"]),
-            models.Index(fields=["rank"]),
-        ]
-
     def get_primary_genre(self):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
 
@@ -148,6 +139,7 @@ class Podcast(models.Model):
         """
         returns podcasts matching search terms
         """
+        
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                        show=show, page=page)
@@ -167,7 +159,7 @@ class Podcast(models.Model):
             # filter by genre
             if genre:
                 podcasts = podcasts.filter(genre__exact=genre)
-            
+
             # SEARCH
             # filter by title
             if q:
