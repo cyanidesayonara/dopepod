@@ -983,12 +983,12 @@ class Episode(models.Model):
                         episode.delete()
 
         # let's cache those bad boys
-        last_played = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
+        last_played = Episode.objects.exclude(played_at=None).order_by("-played_at")
         results = {}
         results["episodes"] = last_played
         results["header"] = "Last played"
         results["view"] = "last_played"
-        cache.set("last_played", results, 60 * 60 * 24)                        
+        cache.set("last_played", results, 60 * 60 * 24)
 
     def add(signature, user):
         # max 20 episodes for now

@@ -17,9 +17,11 @@ class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_initial(self, obj):
         if obj.title.split(" ")[0].capitalize() == "The":
-            return obj.title.split(" ")[1][0].lower()
-        else:
-            return obj.title[0].lower()
+            try:
+                return obj.title.split(" ")[1][0].lower()
+            except IndexError:
+                pass
+        return obj.title[0].lower()
 
     def get_model(self):
         return Podcast
