@@ -1,6 +1,6 @@
-<form class="settings-form" action="{% url 'settings' %}" method="POST">
-  <div class="row">
-    <div class="col-12 col-md-6">
+<div class="row">
+  <div class="col-12 col-md-4 offset-md-4">
+    <form class="settings-form" action="{% url 'settings' %}" method="POST">
       <div class="settings-errors">
         {% if errors %} {% for k, v in errors.items %}
         <div class="error-message">
@@ -10,18 +10,16 @@
       </div>
       <div class="login-form-group">
         <label for="email">Email</label>
-        <input class="form-control login-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
+        <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
       </div>
       <div class="login-form-group">
         <label for="location">Location</label>
-        <input class="form-control login-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
+        <input class="dope-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
       </div>
       <div class="login-form-group">
         <label for="bio">Bio</label>
-        <textarea class="form-control login-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
+        <textarea class="dope-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
       </div>
-    </div>
-    <div class="col-12 col-md-6">
       <div class="login-form-group">
         <div class="form-check">
           <label class="form-check-label" for="show_explicit">
@@ -37,8 +35,8 @@
             <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" /> {% endif %} Use dark theme
           </label>
         </div>
-        <button class="btn-dope">Delete Account</button>
       </div>
-    </div>
+      <button type="submit" class="btn-dope active settings-save">Save</button>        
+    </form>
   </div>
-</form>
+</div>

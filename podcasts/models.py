@@ -163,21 +163,20 @@ class Podcast(models.Model):
             # SEARCH
             # filter by title
             if q:
-                # if q is > 1, split & query each word
                 if len(q) > 1:
                     podcasts = podcasts.filter(content__contains=q).order_by("rank")
                 else:
-                    # exclude pods not starting w/ letter
+                    # exclude pods not starting w/ an alphabet
                     if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
-                            query = query | Q(initial__exact=letter)
+                            query = query | Q(initial__exact=letter + letter)
                         podcasts = podcasts.exclude(query)
-                    # filter pods starting w/ letter
+                    # filter pods starting w/ an alphabet
                     else:
-                        podcasts = podcasts.filter(initial__exact=q)
+                        podcasts = podcasts.filter(initial__exact=q + q)
                     podcasts = podcasts.order_by("rank")
-
+                print(podcasts.count())
             # CHARTS
             elif provider == "dopepod":
                 if language:
