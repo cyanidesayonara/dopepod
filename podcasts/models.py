@@ -22,6 +22,7 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
+import time
 import re
 import html
 import idna
@@ -492,28 +493,29 @@ class Podcast(models.Model):
             language, created = Language.objects.get_or_create(
                 name=language,
             )
-            podcast, created = Podcast.objects.select_related(None).update_or_create(
-                podid=podid,
-                defaults={
-                    "feedUrl": feedUrl,
-                    "title": title,
-                    "artist": artist,
-                    "genre": genre,
-                    "explicit": explicit,
-                    "language": language,
-                    "copyrighttext": copyrighttext,
-                    "description": description,
-                    "reviewsUrl": reviewsUrl,
-                    "artworkUrl": artworkUrl,
-                    "podcastUrl": podcastUrl,
-                }
-            )
-            if created:
-                logger.error("created podcast", title, feedUrl)
-            else:
-                logger.error("updated podcast", title, feedUrl)
-            podcast.set_discriminated()
-            return podcast
+            with transaction.atomic():
+                podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
+                    podid=podid,
+                    defaults={
+                        "feedUrl": feedUrl,
+                        "title": title,
+                        "artist": artist,
+                        "genre": genre,
+                        "explicit": explicit,
+                        "language": language,
+                        "copyrighttext": copyrighttext,
+                        "description": description,
+                        "reviewsUrl": reviewsUrl,
+                        "artworkUrl": artworkUrl,
+                        "podcastUrl": podcastUrl,
+                    }
+                )
+                if created:
+                    logger.error("created podcast", title, feedUrl)
+                else:
+                    logger.error("updated podcast", title, feedUrl)
+                podcast.set_discriminated()
+                return podcast
 
         except requests.exceptions.HTTPError:
             logger.error("no response from url:", feedUrl)
@@ -615,6 +617,8 @@ class Podcast(models.Model):
                 podid = x["id"]["attributes"]["im:id"]
 
                 if podid:
+                    # slow down scraping
+                    time.sleep(5)
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
