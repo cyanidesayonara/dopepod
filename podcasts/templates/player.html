@@ -39,7 +39,7 @@
         Released
         {{ episode.pubDate|date:'d-m-Y H:i' }}
       </p>
-      <button class="last-played-toggle" data-toggle="collapse" data-target="#player-collapse"
+      <button class="dope-toggle" data-toggle="collapse" data-target="#player-collapse"
         aria-expanded="false">
         <i class="fas fa-angle-down" title="Expand"></i>
       </button>
@@ -58,10 +58,12 @@
   </div>
 </div>
 {% elif cookie_banner %}
-<div class="col-12 color-1-trans cookie-banner">
-  <h1>This site uses cookies</h1>
-  <button class="btn-dope" onclick="cookieBannerClose()">
-    <i class="fas fa-times"></i>
-  </button>
+<div class="col-12">
+  <div class="color-1-trans" id="cookie-banner">
+    <h1>This site uses cookies</h1>
+    <button class="btn-dope" onclick="cookieBannerClose()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
 </div>
 {% endif %}

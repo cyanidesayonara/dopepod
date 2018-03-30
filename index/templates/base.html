@@ -27,10 +27,10 @@
       {% include 'dopebar.min.html' %}
     </nav>
     <div class="container" id="main-wrapper">
+      <button class="scroll-up d-none">
+        <i class="fas fa-angle-down" title="Expand"></i>
+      </button>
       <div class="row">
-        <button class="scroll-up d-none">
-          <i class="fas fa-angle-down" title="Expand"></i>
-        </button>
         <div class="col-12 order-3 col-md-6 order-md-2" id="left">
           <!-- CHARTS -->
           <div class="row" id="charts">
@@ -55,6 +55,28 @@
     <div class="container-fluid fixed-bottom px-0" id="player">
       {% include 'player.min.html' %}
     </div>
+    <!-- FOOTER -->
+    <footer class="footer color-1-trans" id="footer">
+      <div class="container px-0">
+        <ul>
+          <li>
+            <a class="dopebar-link" href="#">
+              About
+            </a>
+          </li>
+          <li>
+            <a class="dopebar-link" href="#">
+              About
+            </a>
+          </li>
+          <li>
+            <a class="dopebar-link" href="#">
+              About
+            </a>
+          </li>
+        </ul>
+      </div>
+    </footer>
     <div class="loaders d-none">
       {% include 'circle_loading.min.html' %} {% include 'button_loading.min.html' %}
     </div>

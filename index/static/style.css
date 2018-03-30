@@ -26,20 +26,26 @@ a:hover {
 }
 
 /* COOKIE BANNER */
-.cookie-banner {
+#cookie-banner {
+  z-index: 1000;
   color: rgb(46, 46, 46);
+  position: absolute;
+  overflow: hidden;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-shadow: rgba(0, 0, 0, .3) 0 -1px 3px;
+  -moz-box-shadow: rgba(0, 0, 0, .3) 0 -1px 3px;
+  box-shadow: rgba(0, 0, 0, .3) 0 -1px 3px;
   text-align: center;
   padding: 5px 0;
-  -webkit-box-shadow: rgba(0, 0, 0, .3) 0 1px 3px;
-  -moz-box-shadow: rgba(0, 0, 0, .3) 0 1px 3px;
-  box-shadow: rgba(0, 0, 0, .3) 0 1px 3px;
 }
-.cookie-banner h1 {
+#cookie-banner h1 {
   display: inline-block;
   margin: 0;
   font-size: 16px;
 }
-.cookie-banner button {
+#cookie-banner button {
   margin-left: 10px;
 }
 
@@ -81,9 +87,9 @@ a:hover {
 .btn-dope:hover,
 .episode-header:hover,
 .episode-header:focus,
-.last-played-toggle:hover,
-.last-played-toggle:focus,
-.last-played-toggle[aria-expanded="true"],
+.dope-toggle:hover,
+.dope-toggle:focus,
+.dope-toggle[aria-expanded="true"],
 .toggle[aria-expanded="true"] {
   color: #fff;
   outline: none;
@@ -148,7 +154,7 @@ a:hover {
 /* MAIN */
 #main-wrapper {
   padding-top: 44px;
-  padding-bottom: 15px;
+  padding-bottom: 30px;
   min-height: 100vh;
 }
 #left,
@@ -172,13 +178,14 @@ a:hover {
 }
 
 /* DOPEBAR */
-#dopebar {
+#dopebar,
+#footer {
   z-index: 9000;
   padding: 5px 0;
   min-height: 44px;
-  -webkit-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
-  -moz-box-shadow: rgba(0,0,0,.5) 0 2px 3px;
-  box-shadow: rgba(0,0,0,.5) 0 2px 3px;
+  -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
+  -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
+  box-shadow: rgba(0,0,0,.5) 0 0 5px;
 }
 #dopebar-c {
   text-align: center;
@@ -186,12 +193,14 @@ a:hover {
 #dopebar-wrapper {
   padding: 0;
 }
-#dopebar ul {
+#dopebar ul,
+#footer ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-#dopebar ul li {
+#dopebar ul li,
+#footer ul li {
   display: inline-block;
   vertical-align: middle;
 }
@@ -281,6 +290,7 @@ a:hover {
   -moz-transition: all .15s ease-in-out;
   -webkit-transition: all .15s ease-in-out;
 }
+.q:hover,
 .q:focus {
   border: 1px solid rgb(46, 46, 46);
   -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 10px, inset rgba(0,0,0,.2) 1px 1px 10px;
@@ -711,7 +721,7 @@ a:hover {
 .last-played-collapse table {
   margin-top: 10px;
 }
-.last-played-toggle {
+.dope-toggle {
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -728,7 +738,7 @@ a:hover {
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
 }
-.last-played-toggle[aria-expanded="true"] {
+.dope-toggle[aria-expanded="true"] {
   transform: rotate(-180deg);
 }
 
@@ -833,16 +843,15 @@ a:hover {
   z-index: 1000;
   color: rgb(46, 46, 46);
   position: absolute;
+  overflow: hidden;
   bottom: 0;
   right: 0;
   width: 100%;
   padding: 10px 10px 0;
-  border: 2px solid rgb(0, 191, 165);
-  border-bottom: none;
   border-radius: .25rem .25rem 0 0;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
+  box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
 }
 #player-wrapper img {
   float: left;
@@ -852,10 +861,13 @@ a:hover {
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
+#player-wrapper p {
+  margin: 1px 0 0;
+}
 .player-title,
 .player-description {
   overflow: hidden;
-  margin: 8px 0;
+  margin: 10px 0;
 }
 .player-title h1 {
   color: rgb(46, 46, 46);
@@ -871,7 +883,7 @@ a:hover {
   font-size: 16px;
   display: inline-block;
   color: #fff;
-  margin: 0 10px 10px 0;
+  margin: 5px 10px 18px 0;
 }
 .player-buttons > * {
   margin-bottom: 5px;
@@ -886,13 +898,11 @@ a:hover {
 }
 .player-episode {
   font-size: 14px;
-  margin: 0;
   height: 40px;
   overflow: hidden;
 }
 .player-date {
   font-size: 12px;
-  margin: 5px 0 0; 
 }
 .player-description {
   max-height: 250px;
@@ -900,11 +910,21 @@ a:hover {
   overflow-y: auto;
 }
 #player-wrapper.minimize {
-  bottom: -65px;
+  height: 50px;
+}
+#player-wrapper.minimize .dope-toggle {
+  position: static;
 }
 #player-wrapper audio {
   display: block;
   margin: 8px 0;
+}
+
+/* FOOTER */
+#footer {
+}
+#footer ul {
+  text-align: center;
 }
 
 /* LOADERS */

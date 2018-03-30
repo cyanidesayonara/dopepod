@@ -147,7 +147,18 @@ function loadResults(args, no_push) {
 function scrollSpy() {
   $(window).scroll(function() {
     scrollUp();
+    footer();
   });
+}
+function footer() {
+  var x = $("#footer").offset().top;
+  var y = $(window).scrollTop() + $(window).height();
+  if (x > y) {
+    $("#player").addClass("fixed-bottom");
+  }
+  else {
+    $("#player").removeClass("fixed-bottom");
+  }
 }
 function scrollUp() {
   var scroll = $(window).scrollTop();
@@ -307,6 +318,8 @@ $(document)
     charts = 0;
     refreshCookie();
     scrollUp();
+    footer();
+    scrollToTop();
     scrollSpy();
     updateLastPlayed();
     updateCharts();
