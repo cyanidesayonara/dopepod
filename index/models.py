@@ -5,13 +5,19 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 
+
+class ProfileManager(models.Manager):
+    def get_queryset(self):
+        return super(ProfileManager, self).get_queryset().select_related("user")
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    show_explicit = models.BooleanField(default=True)
     dark_theme = models.BooleanField(default=False)
     joined_at = models.DateTimeField(default=timezone.now)
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user.email

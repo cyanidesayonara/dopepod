@@ -176,8 +176,8 @@ class Podcast(models.Model):
                     # filter pods starting w/ an alphabet
                     else:
                         podcasts = podcasts.filter(initial__exact=q + q)
-                    podcasts = podcasts.order_by("rank")
-                print(podcasts.count())
+                    podcasts = podcasts.order_by("title_rank")
+
             # CHARTS
             elif provider == "dopepod":
                 if language:
@@ -319,14 +319,14 @@ class Podcast(models.Model):
                 # if no results, try w/o language
                 if not podcasts:
                     url = make_url(url=url, provider=provider,
-                                   genre=genre)
-                    return Podcast.search(url=url, provider=provider, genre=genre, view=view)
+                                   language=language)
+                    return Podcast.search(url=url, provider=provider, language=language, view=view)
             # if search
             else:
                 if not page:
                     page = 1
                 if not show:
-                    show = 60
+                    show = 120
                 count = podcasts.count()
             
             # charts header
@@ -617,7 +617,7 @@ class Podcast(models.Model):
                 podid = x["id"]["attributes"]["im:id"]
 
                 if podid:
-                    # slow down scraping
+                    # slow down scraping so as to not get blocked
                     time.sleep(5)
                     Podcast.scrape_podcast(podid)
                     try:

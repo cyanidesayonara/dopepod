@@ -10,7 +10,6 @@ class ProfileAdmin(admin.ModelAdmin):
 ##    list_filter = ('user',)
     model = Profile
 
-
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False

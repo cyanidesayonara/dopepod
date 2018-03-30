@@ -399,16 +399,16 @@ a:hover {
   margin-top: 10px;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 10px 0;
 }
-.showpod-side-list li {
+#showpod-r ul li {
   border-bottom: 2px solid rgb(0, 191, 165);
   margin-bottom: 10px;
 }
-.showpod-side-list li a {
+#showpod-r ul li a {
   color: rgb(0, 191, 165);
 }
-.showpod-side-list li a:hover {
+#showpod-r ul li a:hover {
   color: rgb(0, 105, 92);
 }
 .showpod-back {
