@@ -862,15 +862,12 @@ a:hover {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 #player-wrapper p {
-  margin: 1px 0 0;
+  margin: 2px 0 0;
   font-weight: 600;
 }
-#player-wrapper h1,
-#player-wrapper .player-description {
+#player-wrapper h1 {
   overflow: hidden;
   margin: 10px 0;
-}
-#player-wrapper h1 {
   color: rgb(46, 46, 46);
   font-size: 16px;
   white-space: nowrap;
@@ -905,6 +902,7 @@ a:hover {
   font-size: 12px;
 }
 #player-wrapper .player-description {
+  padding: 10px 0;
   max-height: 250px;
   max-height: calc(100vh - 350px);
   overflow-y: auto;
