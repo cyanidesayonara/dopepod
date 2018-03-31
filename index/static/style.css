@@ -847,11 +847,11 @@ a:hover {
   bottom: 0;
   right: 0;
   width: 100%;
-  padding: 10px 10px 0;
+  padding: 10px;
   border-radius: .25rem .25rem 0 0;
-  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
-  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
-  box-shadow: rgba(0,0,0,.3) 0 -1px 5px;
+  -webkit-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
+  -moz-box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
+  box-shadow: rgba(0,0,0,.3) 0 -1px 3px;
 }
 #player-wrapper img {
   float: left;
@@ -863,18 +863,21 @@ a:hover {
 }
 #player-wrapper p {
   margin: 1px 0 0;
+  font-weight: 600;
 }
-.player-title,
-.player-description {
+#player-wrapper h1,
+#player-wrapper .player-description {
   overflow: hidden;
   margin: 10px 0;
 }
-.player-title h1 {
+#player-wrapper h1 {
   color: rgb(46, 46, 46);
   font-size: 16px;
-  display: inline;
   white-space: nowrap;
   font-weight: 600;
+}
+#player-wrapper h1 span {
+  display: inline;
 }
 #player-close-collapse {
   text-align: center;
@@ -889,12 +892,9 @@ a:hover {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-.player-title h1:hover,
+#player-wrapper h1:hover,
 .player-buttons button[aria-expanded="true"] {
   color: #fff;
-}
-#player-wrapper p {
-  font-weight: 600;
 }
 .player-episode {
   font-size: 14px;
@@ -904,7 +904,7 @@ a:hover {
 .player-date {
   font-size: 12px;
 }
-.player-description {
+#player-wrapper .player-description {
   max-height: 250px;
   max-height: calc(100vh - 350px);
   overflow-y: auto;
@@ -917,7 +917,7 @@ a:hover {
 }
 #player-wrapper audio {
   display: block;
-  margin: 8px 0;
+  margin-top: 10px;
 }
 
 /* FOOTER */

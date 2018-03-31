@@ -26,11 +26,11 @@
         </button>
       </div>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-        <div class="player-title">
-          <h1>
+        <h1>
+          <span>
             {{ episode.podcast.title }}
-          </h1>
-        </div>
+          </span>
+        </h1>
       </a>
       <p class="player-episode">
         {{ episode.title }}

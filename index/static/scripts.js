@@ -6,12 +6,11 @@ function pushState(url) {
       return;
     }
   }
+  updateTitle();
   var main = $("#main");
   var context = main[0].innerHTML;
-  var title = updateTitle();
   var state = {
     "context": context,
-    "title": title,
     "url": url,
   };
   history.pushState(state, "", url);
@@ -29,11 +28,10 @@ function replaceState(url) {
   if (!url || url.includes("unsubscribe") || url.includes("episodes")) {
     url = main[0].baseURI;
   }
+  updateTitle();
   var context = main[0].innerHTML;
-  var title = updateTitle();
   var state = {
     "context": context,
-    "title": title,
     "url": url,
   };
   history.replaceState(state, "", url);
@@ -45,7 +43,7 @@ function updateTitle() {
   var player = $("#player-wrapper");
   // if episode is playing
   if (player.length) {
-    title = player.find(".player-title")[0].innerText;
+    title = player.find("h1")[0].innerText;
     var episode = player.find(".player-episode")[0].innerText;
     title = "Now playing: " + title + " - " + episode + " | on dopepod";
   }
@@ -54,7 +52,6 @@ function updateTitle() {
       title = "Listen to episodes of " + $("#showpod-c h1")[0].innerText + " on dopepod";
   }
   $("title")[0].innerText = title;
-  return title;
 };
 // extracts csrftoken (or other data) from cookies
 function getCookie(name) {
@@ -251,8 +248,8 @@ function yeOldePlaylistFunction(data, mode, button) {
       button.html(text);
       // gotta wait a sec here
       setTimeout(function () {
-        var box = $(".player-title");
-        var text = $(".player-title h1");
+        var box = $("#player-wrapper h1");
+        var text = $("#player-wrapper h1 span");
         scrollText(box, text);
       }, 1000);
       if (drop.find(".playlist").length) {
@@ -715,7 +712,7 @@ $(window)
         }
       }
       $("#main").html(state.context);
-      $("title")[0].innerText = state.title;
+      updateTitle();
     }
   })
   .on("blur", function () {
