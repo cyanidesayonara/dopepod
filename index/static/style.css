@@ -382,12 +382,6 @@ a:hover {
 }
 
 /* SHOWPOD */
-#showpod {
-  padding-top: 10px;
-}
-#showpod-l,
-#showpod-c,
-#showpod-r,
 #dopebar-l,
 #dopebar-c,
 #dopebar-r,
@@ -395,11 +389,15 @@ a:hover {
 .results-header {
   padding: 0 10px;
 }
+#showpod-l,
+#showpod-c,
+#showpod-r {
+  padding: 10px 10px 0;
+}
 #showpod-l {
   text-align: center;
 }
 #showpod-l img {
-  margin-bottom: 10px;
   border-radius: .25rem;
   box-shadow: rgba(0,0,0,.3) 0 0 10px;
   -moz-box-shadow: rgba(0,0,0,.3) 0 0 10px;
@@ -437,6 +435,9 @@ a:hover {
 }
 
 /* EPISODES */
+.episodes {
+  padding: 0 10px;
+}
 .episode-content {
   padding: 0 !important;
 }

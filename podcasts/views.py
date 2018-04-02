@@ -19,7 +19,23 @@ def episodes(request, podid):
     if request.method == "GET":
         if request.is_ajax():
             user = request.user
-            results = Episode.get_episodes(podid)
+
+            # page
+            page = request.GET.get("page", None)
+            try:
+                page = int(page)
+            except (TypeError, ValueError):
+                page = 1
+            
+            url = request.get_full_path()
+            episodes = Episode.get_episodes(url, podid, page)
+            
+            results = {
+                "episodes": episodes,
+            }
+
+            for page in episodes:
+                results.update(page)
             Episode.set_new(user, podid, results["episodes"])
             context = {
                 "results": results,
@@ -63,12 +79,19 @@ def subscribe(request):
             except (ValueError, KeyError, Podcast.DoesNotExist):
                 raise Http404()
 
-            context = {
+            results = {
+                "view": "showpod",
+                "extra_options": True,
+                "header": podcast.title,
                 "podcast": podcast,
             }
 
+            context = {
+                "results": results,
+            }
+
             if request.is_ajax():
-                return render(request, "showpod.min.html", context)
+                return render(request, "results_base.min.html", context)
             return redirect("/showpod/" + str(podid) + "/")
         else:
             if request.is_ajax():
@@ -100,6 +123,6 @@ def unsubscribe(request):
             context = {
                 "results": results,
             }
-            return render(request, "showpod.min.html", context)
+            return render(request, "results_base.min.html", context)
         else:
             return render(request, "splash.min.html", context)

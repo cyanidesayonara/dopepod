@@ -1,6 +1,7 @@
 function pushState(url) {
+  url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "episodes", "last_played", "unsubscribe"];
+  var urls = ["dopebar", "charts", "last_played", "unsubscribe"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -16,6 +17,7 @@ function pushState(url) {
   history.pushState(state, "", url);
 };
 function replaceState(url) {
+  url = url.replace("episodes", "showpod");
   // return if url in urls
   var urls = ["dopebar", "charts", "last_played"];
   for (i = 0; i < urls.length; i++) {
@@ -25,7 +27,7 @@ function replaceState(url) {
   }
   var main = $("#main");
   // ignore these urls, use current url instead
-  if (!url || url.includes("unsubscribe") || url.includes("episodes")) {
+  if (!url || url.includes("unsubscribe")) {
     url = main[0].baseURI;
   }
   updateTitle();
@@ -129,12 +131,12 @@ function loadResults(args, no_push) {
       if (callback) {
         callback(args);
         // if page refresh, apply theme
-        if (url == "/dopebar/") {
-          changeTheme(!$(".lights-toggle").hasClass("lit"));
+        if (drop.is("#dopebar")) {
+          changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
         }
       }
       // episodes loaded, remove loading anim
-      else if ($(response).hasClass("episodes-table")) {
+      else if (drop.is("#episodes-collapse")) {
         $(".episodes-button").text("Episodes");
       }
       replaceState(url);
@@ -349,6 +351,19 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".results").parent();
+      loadResults([url, drop]);
+      scrollTo(drop);
+    }, 250);
+  })
+  // search when user clicks buttons
+  .on("click", "#episodes-collapse .options-button", function (e) {
+    e.preventDefault();
+    // redirect to episodes
+    var url = this.href.replace("showpod", "episodes");
+    var button = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      var drop = button.parents("#episodes-collapse");
       loadResults([url, drop]);
       scrollTo(drop);
     }, 250);

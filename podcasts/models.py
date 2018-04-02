@@ -26,6 +26,7 @@ import time
 import re
 import html
 import idna
+import copy
 
 ua = UserAgent()
 
@@ -705,14 +706,20 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
-    def get_episodes(podid):
+    def get_episodes(url, podid, selected_page):
         """
         returns a list of episodes using requests and lxml etree
         """
 
-        results = cache.get(podid)
+        f = furl(url)
+        f.path = str(f.path).replace("episodes", "showpod")
+        f.args["page"] = selected_page
+        url = f.url
+        results = cache.get(url)
+
         if results:
-            return results
+            yield results
+            return
         else:
             try:
                 podcast = Podcast.objects.get(podid=podid)
@@ -727,7 +734,14 @@ class Episode(models.Model):
             headers = {
                 "User-Agent": str(ua.random)
             }
+
             episodes = []
+            flag = False
+
+            results = {
+                "episodes": episodes,
+                "view": "episodes",
+            }
 
             try:
                 response = session.get(podcast.feedUrl, headers=headers, timeout=5)
@@ -737,7 +751,20 @@ class Episode(models.Model):
                     ns.update(root.nsmap)
                     tree = root.find("channel")
 
-                    for item in tree.findall("item"):
+                    items = tree.findall("item")
+                    count = len(items)
+                    page = 1
+                    i = 1
+                    show = 50
+
+                    num_pages = int(count / show) + (count % show > 0)
+                    spread = 3
+
+                    if selected_page > num_pages:
+                        Episode.get_episodes(url, podid, num_pages)
+                    
+                    # TODO sort by pubDate
+                    for item in items:
                         episode = {}
 
                         # try to get pubdate + parse & convert it to datetime
@@ -834,36 +861,122 @@ class Episode(models.Model):
                             # create signature
                             episode["signature"] = signing.dumps(episode)
                             episode["pubDate"] = pubdate
+                            episode["position"] = count - i + 1
                             episodes.append(episode)
+
+                            if count < show:
+                                pass
+                            elif i % show == 0:
+                                # paginate
+                                if num_pages > 1:
+                                    pages = range((page - spread if page - spread > 1 else 1),
+                                                (page + spread if page + spread <= num_pages else num_pages) + 1)
+                                    pages_urls = []
+
+                                    for p in pages:
+                                        if p == page:
+                                            pages_urls.append(None)
+                                        else:
+                                            f = furl(url)
+                                            f.args["page"] = p
+                                            pages_urls.append(f.url)
+                                    #  zip pages & use list to make it reusable
+                                    results["pages"] = list(zip(pages, pages_urls))
+
+                                    if page != num_pages:
+                                        f = furl(url)
+                                        f.args["page"] = num_pages
+                                        results["end_url"] = f.url
+                                    else:
+                                        results["end_url"] = None
+                                    
+                                    if page != 1:
+                                        f = furl(url)
+                                        del f.args["page"]
+                                        results["start_url"] = f.url
+                                    else:
+                                        results["start_url"] = None
+                                
+                                f = furl(url)
+                                f.args["page"] = page
+                                url = f.url
+                                results.update({
+                                    "episodes": episodes,
+                                })
+                                cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
+                                if page == selected_page:
+                                    flag = True
+                                    yield copy.deepcopy(results)
+                                del episodes[:]
+                                page += 1
+                            i += 1
                         except AttributeError as e:
                             logger.error("can\'t get episode url/type/size", podcast.feedUrl)
-
                 except etree.XMLSyntaxError:
                     logger.error("trouble with xml", podcast.feedUrl)
 
             except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
                 logger.error(str(e))
-            
-            # sort by pubDate just to be sure
-            episodes = sorted(
-                episodes, key=lambda k: k["pubDate"], reverse=True)
 
-            results = {
-                "episodes": episodes,
-                "view": "episodes"
-            }
-            cache.set(podid, results, 60 * 60 * 24)
-            return results
+            if episodes:
+                # paginate
+                if num_pages > 1:
+                    pages = range((page - spread if page - spread > 1 else 1),
+                                    (page + spread if page + spread <= num_pages else num_pages) + 1)
+                    pages_urls = []
 
+                    for p in pages:
+                        if p == page:
+                            pages_urls.append(None)
+                        else:
+                            f = furl(url)
+                            f.args["page"] = p
+                            pages_urls.append(f.url)
+                    #  zip pages & use list to make it reusable
+                    results["pages"] = list(
+                        zip(pages, pages_urls))
+
+                    if page != num_pages:
+                        f = furl(url)
+                        f.args["page"] = num_pages
+                        results["end_url"] = f.url
+                    else:
+                        results["end_url"] = None
+
+                    if page != 1:
+                        f = furl(url)
+                        del f.args["page"]
+                        results["start_url"] = f.url
+                    else:
+                        results["start_url"] = None
+
+                f = furl(url)
+                f.args["page"] = page
+                url = f.url
+
+                results.update({
+                    "episodes": episodes,
+                })
+                cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
+            else:
+                pass
+            if flag:
+                return
+            else:
+                yield results
+                
     def set_new(user, podid, episodes):
         if user.is_authenticated:
             try:
                 subscription = Subscription.objects.get(user=user, podcast__podid=podid)
                 i = 0
+                # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
                     if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
                         i += 1
                         episode["is_new"] = True
+                    else:
+                        break
 
                 subscription.last_updated = timezone.now()
                 subscription.new_episodes = i

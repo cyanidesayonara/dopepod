@@ -157,11 +157,10 @@ def search(request):
      
         # page
         page = request.GET.get("page", None)
-        if page:
-            try:
-                page = int(page)
-            except ValueError:
-                page = 1
+        try:
+            page = int(page)
+        except (TypeError, ValueError):
+            page = 1
 
         # get show
         show = None
@@ -277,7 +276,7 @@ def playlist(request):
                     episode = Episode.add(signature, user)
                 except KeyError:
                     try:
-                        position = int(request.POST["pos"]) + 1
+                        position = int(request.POST["pos"])
                         episode = Episode.objects.get(user=user, position=position)
                     except (KeyError, Episode.DoesNotExist):
                         raise Http404()
@@ -351,17 +350,37 @@ def showpod(request, podid):
             podcast.save()
             podcast.is_subscribed(user)
 
-            context = {
+            results = {
+                "view": "showpod",
+                "extra_options": True,
+                "header": podcast.title,
                 "podcast": podcast,
             }
 
+            context = {
+                "results": results,
+            }
             if request.is_ajax():
-                return render(request, "showpod.min.html", context)
+                return render(request, "results_base.min.html", context)
 
-            results = Episode.get_episodes(podid)
-            Episode.set_new(user, podid, results["episodes"])
-            
+            # page
+            page = request.GET.get("page", None)
+            try:
+                page = int(page)
+            except (TypeError, ValueError):
+                page = 1
+
             url = request.get_full_path()
+            episodes = Episode.get_episodes(url, podid, page)
+            for page in episodes:
+                results.update(page)
+            Episode.set_new(user, podid, results["episodes"])
+
+            results.update({
+                "extend": True,
+                "view": "showpod",
+            })
+            
             charts = Podcast.search(url=url, provider="dopepod")
             last_seen, cookie = get_last_seen(request.session)
             last_played = Episode.get_last_played()
@@ -372,8 +391,7 @@ def showpod(request, podid):
                 "results": results,
                 "last_played": last_played,
             })
-
-            return render(request, "showpod.min.html", context)
+            return render(request, "results_base.min.html", context)
         except Podcast.DoesNotExist:
             raise Http404
 

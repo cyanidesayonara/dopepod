@@ -1,8 +1,13 @@
+{% if results.pages %}
+  <div class="row">
+    {% include "pagination.min.html" %}
+  </div>
+{% endif %}
 {% if results.podcasts1 %}
   <div class="row collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
     {% for podcast in results.podcasts1 %}
     <div class="col-lg-2 col-md-3 col-4 result-box">
-      <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+      <a class="showpod-link" href="{% url 'showpod' podid=podcast.object.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='http://{{ podcast.object.artworkUrl }}200x200bb.jpg'"
           alt="{{ podcast.object.title }}" />
         <h1>
@@ -123,4 +128,9 @@
       </ul>
     </div>
   </div>
+{% endif %}
+{% if results.pages %}
+<div class="row">
+  {% include "pagination.min.html" %}
+</div>
 {% endif %}

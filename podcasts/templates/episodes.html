@@ -1,4 +1,6 @@
 {% if results.episodes %}
+{% if results.pages %} {% include "pagination.min.html" %} {% endif %}
+<div class="col-12 episodes">
   <table class="table episodes-table">
     <thead>
       <tr>
@@ -21,12 +23,12 @@
     </thead>
     <tbody>
       {% for episode in results.episodes %}
-        <tr class="episode-header toggle" data-toggle="collapse" data-target="#more-collapse{{ forloop.counter }}" aria-expanded="false">
+        <tr class="episode-header toggle" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
           <th scope="row">
             {% if results.view == 'playlist' %}
-              {{ forloop.counter }}
+              {{ episode.position }}
             {% else %}
-              {{ forloop.revcounter }}
+              {{ episode.position }}
             {% endif %}
           </th>
           <td class="title">
@@ -62,7 +64,7 @@
         </tr>
         <tr>
           <td colspan="5" class="episode-content color-3-trans">
-            <div class="collapse fade more-collapse" id="more-collapse{{ forloop.counter }}">
+            <div class="collapse fade more-collapse" id="more-collapse{{ episode.position }}">
               <p>
                 {% if episode.description %}
                   {{ episode.description }}
@@ -81,7 +83,7 @@
                     <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                       {% csrf_token %}
                       <input type="hidden" name="mode" value="remove" />
-                      <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                      <input type="hidden" name="pos" value="{{ episode.position }}" />
                       <button class="btn-dope playlist-remove active" type="submit" title="Remove">
                         <i class="fas fa-times icon"></i>
                       </button>
@@ -90,7 +92,7 @@
                       <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="up" />
-                        <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                        <input type="hidden" name="pos" value="{{ episode.position }}" />
                         <button class="btn-dope playlist-move-up active" type="submit" title="Move Up">
                           <i class="fas fa-arrow-up"></i>
                         </button>
@@ -100,7 +102,7 @@
                       <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="mode" value="down" />
-                        <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                        <input type="hidden" name="pos" value="{{ episode.position }}" />
                         <button class="btn-dope playlist-move-down active" type="submit" title="Move Down">
                           <i class="fas fa-arrow-down"></i>
                         </button>
@@ -112,7 +114,7 @@
                   {% csrf_token %}
                   <input type="hidden" name="mode" value="play" />
                   {% if results.view == 'playlist' %}
-                    <input type="hidden" name="pos" value="{{ forloop.counter0 }}" />
+                    <input type="hidden" name="pos" value="{{ episode.position }}" />
                   {% else %}
                     <input type="hidden" name="signature" value="{{ episode.signature }}" />
                   {% endif %}
@@ -140,4 +142,6 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+{% if results.pages %} {% include "pagination.min.html" %} {% endif %}
 {% endif %}
