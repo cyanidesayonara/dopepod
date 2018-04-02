@@ -138,7 +138,7 @@ function loadResults(args, no_push) {
         }
       }
       // episodes loaded, remove loading anim
-      else if (drop.is("#episodes-collapse")) {
+      else if (drop.is("#episodes")) {
         $(".episodes-button").text("Episodes");
       }
       replaceState(url);
@@ -225,7 +225,7 @@ function subscribeOrUnsubscribe(form) {
     .done(function(response) {
       $("#center-stage").html(response);
       var url = "/episodes/" + podid + "/";
-      var drop = "#episodes-collapse";
+      var drop = "#episodes";
       loadResults([url, drop]);
     });
   }, 250);
@@ -358,7 +358,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", "#episodes-collapse .options-button", function (e) {
+  .on("click", "#episodes .options-button", function (e) {
     e.preventDefault();
     // redirect to episodes
     var url = this.href.replace("showpod", "episodes");
@@ -366,9 +366,9 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function () {
       button.html(getButtonLoading());
-      var drop = button.parents("#episodes-collapse");
+      var drop = button.parents("#episodes");
       loadResults([url, drop]);
-      scrollToTop();
+      scrollTo(drop);
     }, 250);
   })
   // NAVIGATION
@@ -379,7 +379,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.find("#showpod-c").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", "#episodes-collapse"];
+      var args = ["/episodes/" + podid + "/", "#episodes"];
       loadResults([url, drop, loadResults, args]);
     }
     scrollToTop();
@@ -624,10 +624,6 @@ $(document)
   .on("show.bs.collapse", ".options-collapse", function (e) {
     e.stopPropagation()
     $(".options-collapse.show").collapse("hide");
-  })
-  .on("show.bs.collapse", ".showpod-collapse", function (e) {
-    e.stopPropagation()
-    $(".showpod-collapse.show").collapse("hide");
   })
   // toggles background theme
   .on("click", ".lights-toggle", function(e) {

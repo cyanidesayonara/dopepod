@@ -1,8 +1,9 @@
-{% if results.pages %}
-  <div class="row">
-    {% include "pagination.min.html" %}
-  </div>
-{% endif %}
+<div class="row">
+  {% if results.pages %}
+  {% include "pagination.min.html" %}
+  {% endif %}
+  {% include "results_buttons.min.html" %}
+</div>
 {% if results.podcasts1 %}
   <div class="row collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
     {% for podcast in results.podcasts1 %}

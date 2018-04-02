@@ -740,7 +740,7 @@ class Episode(models.Model):
 
             results = {
                 "episodes": episodes,
-                "view": "episodes",
+                "view": "showpod",
             }
 
             try:
@@ -1063,6 +1063,7 @@ class Episode(models.Model):
     def add(signature, user):
         # max 20 episodes for now
         if user.is_authenticated:
+            # TODO if playlist full, delete episode
             # get position of last episode
             position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
             if position:
@@ -1117,8 +1118,8 @@ class Episode(models.Model):
     def remove(pos, user):
         episodes = Episode.objects.filter(user=user).order_by("position")
         try:
-            episodes[pos].delete()
-            for episode in episodes[pos:]:
+            episodes[pos - 1].delete()
+            for episode in episodes[pos - 1:]:
                 episode.position -= 1
                 episode.save()
         except (IndexError, AssertionError):
@@ -1127,8 +1128,8 @@ class Episode(models.Model):
     def up(pos, user):
         episodes = Episode.objects.filter(user=user).order_by("position")
         try:
-            episode1 = episodes[pos - 1]
-            episode2 = episodes[pos]
+            episode1 = episodes[pos - 1 - 1]
+            episode2 = episodes[pos - 1]
             episode1.position += 1
             episode2.position -= 1
             episode1.save()
@@ -1139,10 +1140,10 @@ class Episode(models.Model):
     def down(pos, user):
         episodes = Episode.objects.filter(user=user).order_by("position")
         try:
-            episode1 = episodes[pos + 1]
+            episode1 = episodes[pos - 1]
             episode2 = episodes[pos]
-            episode1.position -= 1
-            episode2.position += 1
+            episode1.position += 1
+            episode2.position -= 1
             episode1.save()
             episode2.save()
         except (IndexError, AssertionError):

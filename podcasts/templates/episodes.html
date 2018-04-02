@@ -1,5 +1,6 @@
-{% if results.episodes %}
 {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
+{% include "results_buttons.min.html" %}
+{% if results.episodes %}
 <div class="col-12 episodes">
   <table class="table episodes-table">
     <thead>
@@ -122,7 +123,7 @@
                     <i class="fas fa-play"></i>
                   </button>
                 </form>
-                {% if user.is_authenticated and results.view == 'episodes' %}
+                {% if user.is_authenticated and results.view == 'showpod' %}
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="add" />
@@ -143,5 +144,5 @@
     </tbody>
   </table>
 </div>
-{% if results.pages %} {% include "pagination.min.html" %} {% endif %}
 {% endif %}
+{% if results.pages %} {% include "pagination.min.html" %} {% endif %}

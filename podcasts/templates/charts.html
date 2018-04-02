@@ -1,50 +1,55 @@
-{% for podcast in results.podcasts %}
-  <div class="col-12 charts-box">
-    <div class="charts-result clearfix">
-      <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-        <span class="charts-rank">
-          {{ forloop.counter }}
-        </span>
-        <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='http://{{ podcast.object.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.object.title }}" />
-        <h1>
-          <strong>
-            {{ podcast.object.title }}
-          </strong>
-        </h1>
-        <h2>
-          by
-          <strong>
-            {{ podcast.object.artist }}
-          </strong>
-        </h2>
-        <table>
-          <tr>
-            <td>
-              Genre
-            </td>
-            <td>
-              {{ podcast.object.get_primary_genre }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Language
-            </td>
-            <td>
-              {{ podcast.object.language }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Subscribers
-            </td>
-            <td>
-              {{ podcast.object.get_n_subscribers }}
-            </td>
-          </tr>
-        </table>
-      </a>
+<div class="row">
+  {% include "results_buttons.min.html" %}
+</div>
+<div class="row">
+  {% for podcast in results.podcasts %}
+    <div class="col-12 charts-box">
+      <div class="charts-result clearfix">
+        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+          <span class="charts-rank">
+            {{ forloop.counter }}
+          </span>
+          <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}100x100bb.jpg"
+          onerror="this.src='http://{{ podcast.object.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.object.title }}" />
+          <h1>
+            <strong>
+              {{ podcast.object.title }}
+            </strong>
+          </h1>
+          <h2>
+            by
+            <strong>
+              {{ podcast.object.artist }}
+            </strong>
+          </h2>
+          <table>
+            <tr>
+              <td>
+                Genre
+              </td>
+              <td>
+                {{ podcast.object.get_primary_genre }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language
+              </td>
+              <td>
+                {{ podcast.object.language }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Subscribers
+              </td>
+              <td>
+                {{ podcast.object.get_n_subscribers }}
+              </td>
+            </tr>
+          </table>
+        </a>
+      </div>
     </div>
-  </div>
-{% endfor %}
+  {% endfor %}
+</div>

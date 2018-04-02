@@ -376,15 +376,12 @@ def showpod(request, podid):
                 results.update(page)
             Episode.set_new(user, podid, results["episodes"])
 
-            results.update({
-                "extend": True,
-                "view": "showpod",
-            })
-            
             charts = Podcast.search(url=url, provider="dopepod")
             last_seen, cookie = get_last_seen(request.session)
             last_played = Episode.get_last_played()
 
+            results["extend"] = True
+    
             context.update({
                 "cookie_banner": cookie,
                 "charts": charts,
