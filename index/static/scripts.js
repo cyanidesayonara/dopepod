@@ -661,10 +661,10 @@ $(document)
   .on("click", ".select-all-button", function() {
     var button = $(this);
     if (button.hasClass("active")) {
-      button.parent().siblings().find(".subscriptions-result").removeClass("selected");
+      button.parent().parent().siblings().find(".subscriptions-result").removeClass("selected");
     }
     else {
-      button.parent().siblings().find(".subscriptions-result").addClass("selected");
+      button.parent().parent().siblings().find(".subscriptions-result").addClass("selected");
     }
     button.toggleClass("active");
   })
@@ -681,7 +681,7 @@ $(document)
     }
     else {
       // aray of all selected podids
-      var buttons = button.parent().siblings().find(".subscriptions-result.selected");
+      var buttons = button.parent().parent().siblings().find(".subscriptions-result.selected");
       if (buttons.length) {
         buttons.each(function(i, button) {
           podids[i] = $(button).data("podid");
