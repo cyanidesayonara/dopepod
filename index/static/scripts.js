@@ -117,7 +117,9 @@ function loadResults(args, no_push) {
     pushState(url);
   }
   if (!drop.find(".loading").length && url != "/dopebar/" && url != "/last_played/") {
-    drop.find(".results").replaceWith(getLoading());
+    if (drop.children(".results").length) {
+      drop.children(".results").replaceWith(getLoading());
+    }
   }
   xhr = $.ajax({
     type: "GET",
@@ -363,9 +365,10 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function () {
+      button.html(getButtonLoading());
       var drop = button.parents("#episodes-collapse");
       loadResults([url, drop]);
-      scrollTo(drop);
+      scrollToTop();
     }, 250);
   })
   // NAVIGATION
