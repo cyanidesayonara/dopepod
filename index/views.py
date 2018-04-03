@@ -372,49 +372,48 @@ def showpod(request, podid):
             podcast.views = F("views") + 1
             podcast.save()
             podcast.is_subscribed(user)
-
-            results = {
-                "view": "showpod",
-                "extra_options": True,
-                "header": podcast.title,
-                "podcast": podcast,
-            }
-
-            context = {
-                "results": results,
-            }
-            if request.is_ajax():
-                return render(request, "results_base.min.html", context)
-
-            # page
-            page = request.GET.get("page", None)
-            try:
-                page = int(page)
-            except (TypeError, ValueError):
-                page = 1
-
-            url = request.get_full_path()
-            episodes = Episode.get_episodes(url, podid, page)
-            for page in episodes:
-                results.update(page)
-            Episode.set_new(user, podid, results["episodes"])
-            results["podcast"].is_subscribed(user)
-
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-    
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "results": results,
-                "last_played": last_played,
-            })
-            return render(request, "results_base.min.html", context)
         except Podcast.DoesNotExist:
             raise Http404
+
+        results = {
+            "view": "showpod",
+            "extra_options": True,
+            "header": podcast.title,
+            "podcast": podcast,
+        }
+
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, "results_base.min.html", context)
+
+        # page
+        page = request.GET.get("page", None)
+        try:
+            page = int(page)
+        except (TypeError, ValueError):
+            page = 1
+
+        url = request.get_full_path()
+        episodes = Episode.get_episodes(url, podcast, page)
+        for page in episodes:
+            results.update(page)
+        Episode.set_new(user, podcast, results["episodes"])
+
+        charts = Podcast.search(url=url, provider="dopepod")
+        last_seen, cookie = get_last_seen(request.session)
+        last_played = Episode.get_last_played()
+
+        results["extend"] = True
+
+        context.update({
+            "cookie_banner": cookie,
+            "charts": charts,
+            "results": results,
+            "last_played": last_played,
+        })
+        return render(request, "results_base.min.html", context)
 
 @vary_on_headers("Accept")
 def settings(request):

@@ -24,7 +24,7 @@
   <div class="container-fluid px-0">
     <!-- MULTIBAR -->
     <nav class="navbar fixed-top color-1-trans" id="dopebar">
-      {% include 'dopebar.min.html' %}
+      {% include "dopebar.min.html" %}
     </nav>
     <div class="container" id="main-wrapper">
       <button class="scroll-up d-none">
@@ -34,7 +34,7 @@
         <div class="col-12 order-3 col-md-6 order-md-2" id="left">
           <!-- CHARTS -->
           <div class="row" id="charts">
-            {% if charts %} {% with charts as results %} {% include 'results_base.min.html' %} {% endwith %} {% endif %}
+            {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
           </div>
         </div>
         <div class="col-12 order-1" id="main">
@@ -46,39 +46,21 @@
         <div class="col-12 order-2 col-md-6 order-md-3" id="right">
           <!-- LAST PLAYED -->
           <div class="row" id="last-played">
-            {% if last_played %} {% with last_played as results %} {% include 'results_base.min.html' %} {% endwith %} {% endif %}
+            {% if last_played %} {% with last_played as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
           </div>
         </div>
       </div>
     </div>
     <!-- PLAYER -->
     <div class="container-fluid fixed-bottom px-0" id="player">
-      {% include 'player.min.html' %}
+      {% include "player.min.html" %}
     </div>
     <!-- FOOTER -->
     <footer class="footer color-1-trans" id="footer">
-      <div class="container px-0">
-        <ul>
-          <li>
-            <a class="dopebar-link" href="#">
-              About
-            </a>
-          </li>
-          <li>
-            <a class="dopebar-link" href="#">
-              About
-            </a>
-          </li>
-          <li>
-            <a class="dopebar-link" href="#">
-              About
-            </a>
-          </li>
-        </ul>
-      </div>
+      {% include "footer.min.html" %}
     </footer>
     <div class="loaders d-none">
-      {% include 'circle_loading.min.html' %} {% include 'button_loading.min.html' %}
+      {% include "circle_loading.min.html" %} {% include "button_loading.min.html" %}
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

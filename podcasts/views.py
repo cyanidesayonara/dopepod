@@ -19,6 +19,11 @@ def episodes(request, podid):
     if request.method == "GET":
         if request.is_ajax():
             user = request.user
+            try:
+                podcast = Podcast.objects.get(podid=podid)
+                podcast.is_subscribed(user)
+            except Podcast.DoesNotExist:
+                raise Http404
 
             # page
             page = request.GET.get("page", None)
@@ -28,14 +33,13 @@ def episodes(request, podid):
                 page = 1
             
             url = request.get_full_path()
-            episodes = Episode.get_episodes(url, podid, page)
+            episodes = Episode.get_episodes(url, podcast, page)
             
             results = {}
 
             for page in episodes:
                 results.update(page)
-            Episode.set_new(user, podid, results["episodes"])
-            results["podcast"].is_subscribed(user)
+            Episode.set_new(user, podcast, results["episodes"])
 
             context = {
                 "results": results,

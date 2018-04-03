@@ -332,7 +332,7 @@ $(document)
       if (q) {
         q = cleanString(q);
         var drop = $("#center-stage");
-        url = url + '?q=' + q;
+        url = url + "?q=" + q;
         if (!(drop.find(".results-header").data("q") == q)) {
           loadResults([url, drop]);
         }
@@ -586,10 +586,6 @@ $(document)
       .fail(function(xhr, ajaxOptions, thrownError) {
         button.text(text);
         $("#center-stage").html(xhr.responseText);
-        // deletes error text when clicking anywhere
-        $("html").on("click", "body", function() {
-          $(".splash-errors").empty();
-        })
         scrollToTop();
       })
       // returns splashboard
@@ -651,6 +647,14 @@ $(document)
   .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episode-header", function(e) {
     $(this).blur();
   })
+  // empties search field when link or button is clicked
+  .on("click", "a, button", function() {
+    $(".q").val("");
+  })
+  // deletes error text (after delay) when clicking anywhere
+  .on("click", "body", function() {
+    $(".errors").delay(2000).fadeOut();
+  })
   // hides dopebar-collapse...
   .on("click", "body, .dopebar-link, .search-button", function(e) {
     $("#dopebar-collapse.show").collapse("hide");
@@ -659,7 +663,7 @@ $(document)
   .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
-  .on("click", ".scroll-up", function (e) {
+  .on("click", ".scroll-up", function() {
     scrollToTop();
   })
   .on("click", ".select-subscription", function() {

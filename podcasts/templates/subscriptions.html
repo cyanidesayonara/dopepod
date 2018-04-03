@@ -19,7 +19,11 @@
           </a>
           <p>
             Last updated:
-            {{ subscription.last_updated|date:'d-m-Y H:i' }}
+            {% if subscription.last_updated %}
+              {{ subscription.last_updated|date:"d-m-Y H:i" }}
+            {% else %}
+              Never
+            {% endif %}
           </p>
           <div class="subscriptions-buttons">
             <form class="d-inline subscriptions-form" action="{% url 'subscriptions' %}" method="POST">

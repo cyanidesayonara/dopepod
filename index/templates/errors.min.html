@@ -1,0 +1,1 @@
+{% for k, v in errors.items %}<p>{% if k %} {{ k|capfirst }}: {{ v }} {% else %} {{ v }} {% endif %}</p>{% endfor %} {% if message %}<p>{{ message }}</p>{% endif %}

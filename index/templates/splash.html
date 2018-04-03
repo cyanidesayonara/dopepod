@@ -1,4 +1,4 @@
-{% extends request.is_ajax|yesno:'ajax.min.html,base.min.html' %}
+{% extends request.is_ajax|yesno:"ajax.min.html,base.min.html" %}
 
 {% block title %}
 dopepod
@@ -7,18 +7,18 @@ dopepod
 {% block center-stage %}
 <div class="col-12 results color-2-trans login">
   <div class="row">
-    <div class="col-12 col-md-4 offset-md-4 login-wrapper">
+    <div class="col-12 col-lg-4 login-wrapper">
       <h1>
         <strong>
           Discover and listen to thousands of free podcasts on
         </strong>
       </h1>
-      {% include 'logo.min.html' %}
-      <div class="splash-errors">
-        {% include 'splash-errors.min.html' %}
+      {% include "logo.min.html" %}
+      <div class="errors">
+        {% include "errors.min.html" %}
       </div>
       <div class="login-content">
-        {% if view == 'signup' %}
+        {% if view == "signup" %}
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
@@ -100,7 +100,7 @@ dopepod
               </div>
             </form>
           </div>
-        {% elif view == 'login' %}
+        {% elif view == "login" %}
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
@@ -182,7 +182,7 @@ dopepod
               </div>
             </form>
           </div>
-        {% elif view == 'password' %}
+        {% elif view == "password" %}
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
@@ -349,14 +349,14 @@ dopepod
         {% endif %}
       </div>
       <div class="login-buttons">
-        {% if view == 'signup' %}
+        {% if view == "signup" %}
           <button class="btn-dope toggle login-link collapsed" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
             Login
           </button>
           <button class="btn-dope active toggle signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="signup-collapse">
             Signup
           </button>
-        {% elif view == 'login' %}
+        {% elif view == "login" %}
           <button class="btn-dope toggle login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="login-collapse">
             Login
           </button>
@@ -375,7 +375,7 @@ dopepod
       <div class="login-buttons">
         <a class="btn-dope btn-dope-social socialaccount_provider" href="/account/google/login/?process=login">
           <span class="social-icon">
-            <i class='fab fa-google' title="Google Login"></i>
+            <i class="fab fa-google" title="Google Login"></i>
           </span>
           <span class="social-button">
             Sign in with Google

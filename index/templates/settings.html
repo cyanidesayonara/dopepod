@@ -1,12 +1,11 @@
 <div class="row">
-  <div class="col-12 col-md-4 offset-md-4">
+  {% include "results_buttons.min.html" %}
+</div>
+<div class="row">
+  <div class="col-12 col-lg-4 settings-wrapper">
     <form class="settings-form" action="{% url 'settings' %}" method="POST">
-      <div class="settings-errors">
-        {% if errors %} {% for k, v in errors.items %}
-        <div class="error-message">
-          {% if k %} {{ k|capfirst }}: {{ v }} {% else %} {{ v }} {% endif %}
-        </div>
-        {% endfor %} {% endif %}
+      <div class="errors">
+        {% include "errors.min.html" %}
       </div>
       <div class="login-form-group">
         <label for="email">Email</label>
