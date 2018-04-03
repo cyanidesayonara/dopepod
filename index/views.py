@@ -230,6 +230,29 @@ def subscriptions(request):
                 return render(request, "splash.min.html", context)
             return redirect("/")
 
+    if request.method == "POST":
+        user = request.user
+        if user.is_authenticated:
+            try:
+                podids = request.POST.getlist("podids[]")
+                for podid in podids:
+                    podcast = Podcast.objects.get(podid=int(podid))
+                    podcast.subscribe_or_unsubscribe(user)
+            except (ValueError, KeyError, Podcast.DoesNotExist):
+                raise Http404()
+
+            results = Subscription.get_subscriptions(user)
+            context = {
+                "results": results,
+            }
+            if request.is_ajax():
+                return render(request, "results_base.min.html", context)
+            return redirect("/subscriptions/")
+        else:
+            if request.is_ajax():
+                return render(request, "splash.min.html", context)
+            return redirect("/")
+
 @vary_on_headers("Accept")
 def playlist(request):
     if request.method == "GET":
@@ -375,6 +398,7 @@ def showpod(request, podid):
             for page in episodes:
                 results.update(page)
             Episode.set_new(user, podid, results["episodes"])
+            results["podcast"].is_subscribed(user)
 
             charts = Podcast.search(url=url, provider="dopepod")
             last_seen, cookie = get_last_seen(request.session)

@@ -203,19 +203,15 @@ function changeTheme(theme) {
     $("body").removeClass("darken");
   }
 };
-function subscribeOrUnsubscribe(form) {
+function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
-    var url = form.action;
-    var method = form.method;
-    form = $(form);
-    var podid = form.find("input[name=podid]").val();
-    form.find("button[type=submit]").html(getButtonLoading());
+    button.html(getButtonLoading());
     $.ajax({
-      method: method,
-      url: url,
+      method: "POST",
+      url: "/subscriptions/",
       data: {
-        "podid": podid,
+        "podids": podids,
       },
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
@@ -224,20 +220,19 @@ function subscribeOrUnsubscribe(form) {
     })
     .done(function(response) {
       $("#center-stage").html(response);
-      var url = "/episodes/" + podid + "/";
+      var url = "/episodes/" + podids[0] + "/";
       var drop = "#episodes";
       loadResults([url, drop]);
     });
   }, 250);
 };
-function yeOldePlaylistFunction(data, mode, button) {
-  var url = "/playlist/";
+function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
   var text = button[0].innerHTML;
   button.html(getButtonLoading());
   $.ajax({
     method: "POST",
-    url: url,
+    url: "/playlist/",
     data: data,
   })
   // nothing to continue
@@ -281,7 +276,7 @@ function playNext() {
   wrapper.empty();
   // wait a sec here
   timeout = setTimeout(function () {
-    yeOldePlaylistFunction(data, mode, wrapper);
+    postPlaylist(data, mode, wrapper);
   }, 500);
 };
 // replaces spaces/&s with +, removes unwanted chars
@@ -517,9 +512,31 @@ $(document)
       });
   })
   // sub or unsub
-  .on("submit", ".sub-form", function(e) {
+  .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
-    subscribeOrUnsubscribe(this);
+    var podids = [];
+    podids[0] = $(this).find("input[name^=podids]").val();
+    var button = $(this).find("button[type=submit]");
+    postSubscriptions(podids, button);
+  })
+  // unsubscribe one or more podcasts
+  // POST ajax request, data is array of podids
+  .on("click", ".unsubscribe-button", function (e) {
+    e.preventDefault();
+    var button = $(this);
+    var podids = [];
+    // array of all selected podids
+    var buttons = button.parent().parent().siblings().find(".subscriptions-result.selected");
+    if (buttons.length) {
+      buttons.each(function (i, button) {
+        podids[i] = $(button).data("podid");
+      })
+    }
+    // if nothing selected, do nothing
+    else {
+      return;
+    }
+    postSubscriptions(podids, button);
   })
   // playlist - play, add, move, or delete episode
   .on("submit", ".playlist-form", function (e) {
@@ -531,7 +548,7 @@ $(document)
         var data = form.serialize();
         var mode = form.find("input[name=mode]").val();
         var button = form.find("button[type=submit]");
-        yeOldePlaylistFunction(data, mode, button);
+        postPlaylist(data, mode, button);
       }, 250);
     }
   })
@@ -549,7 +566,6 @@ $(document)
     $("#player-close-collapse").collapse("hide");
     $(this).toggleClass("active")
     .parents("#player-wrapper").toggleClass("minimize")
-    .children("audio").toggleClass("d-none");
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form", function (e) {
@@ -591,7 +607,7 @@ $(document)
   .on("click", ".view-button", function(e) {
     e.preventDefault();
     $(this).children().toggleClass("d-none")
-      .parents().siblings(".results-content").find($(".view-collapse"))
+      .parents().parents().siblings(".view-collapse")
       .each(function() {
         $(this).collapse("toggle");
       })
@@ -667,48 +683,6 @@ $(document)
       button.parent().parent().siblings().find(".subscriptions-result").addClass("selected");
     }
     button.toggleClass("active");
-  })
-  // unsubscribe one or more podcasts
-  // POST ajax request, data is array of podids
-  .on("click", ".unsubscribe-button", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    var button = $(this);
-    var podids = [];
-    // array of one podid
-    if (button.hasClass("sub-nix")) {
-      podids[0] = button.parent().parent().data("podid");
-    }
-    else {
-      // aray of all selected podids
-      var buttons = button.parent().parent().siblings().find(".subscriptions-result.selected");
-      if (buttons.length) {
-        buttons.each(function(i, button) {
-          podids[i] = $(button).data("podid");
-        })
-      }
-      // if nothing selected, do nothing
-      else {
-        return;
-      }
-    }
-    button.html(getButtonLoading());
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: {
-        "podids": podids,
-      },
-    })
-    // returns splash
-    .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
-      replaceState("/");
-    })
-    // returns results
-    .done(function(response) {
-      $("#center-stage").html(response);
-    });
   });
 
 $(window)

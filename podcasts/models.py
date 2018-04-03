@@ -366,7 +366,7 @@ class Podcast(models.Model):
                         results["start_url"] = f.url
                 
                 if not q:
-                    results_header = str(count) + " podcasts"
+                    results_header = "Browsing " + str(count) + " podcasts"
                 elif count == 1:
                     results_header = str(count) + " result for \"" + q + "\""
                 else:
@@ -407,20 +407,6 @@ class Podcast(models.Model):
         else:
             subscription.delete()
             self.n_subscribers = F("n_subscribers") - 1
-        self.save()
-
-    def unsubscribe(self, user):
-        """
-        subscribes to or unsubscribes from podcast
-        """
-
-        # if subscription exists, delete it
-        subscription = Subscription.objects.get(
-            podcast=self,
-            user=user,
-        )
-        subscription.delete()
-        self.n_subscribers = F("n_subscribers") - 1
         self.save()
 
     def is_subscribed(self, user):
@@ -671,19 +657,14 @@ class Subscription(models.Model):
 
     def get_subscriptions(user):
         subscriptions = Subscription.objects.filter(user=user)
-        if subscriptions.count() == 1:
-            results_header = str(subscriptions.count()) + " subscription"
-        else:
-            results_header = str(subscriptions.count()) + " subscriptions"
 
         results = {}
         results["podcasts"] = subscriptions
-        results["header"] = results_header
+        results["header"] = "Subscriptions"
         results["view"] = "subscriptions"
         results["subscriptions"] = True
         results["extra_options"] = True
         return results
-
 
 class EpisodeManager(models.Manager):
     def get_queryset(self):
@@ -1151,16 +1132,11 @@ class Episode(models.Model):
             return
 
     def get_playlist(user):
-        episodes = Episode.objects.filter(user=user).order_by(
-            "position")
-        if episodes.count() == 1:
-            results_header = str(episodes.count()) + " episode"
-        else:
-            results_header = str(episodes.count()) + " episodes"
+        episodes = Episode.objects.filter(user=user).order_by("position")
 
         results = {}
         results["episodes"] = episodes
-        results["header"] = results_header
+        results["header"] = "Playlist"
         results["view"] = "playlist"
         results["extra_options"] = True
         return results

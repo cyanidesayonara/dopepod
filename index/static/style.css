@@ -166,8 +166,6 @@ a:hover {
 
 /* OPTIONS BUTTONS */
 .options-buttons {
-  margin-bottom: 10px;
-  border-top: 2px solid rgb(0, 191, 165);
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .provider-button {
@@ -863,7 +861,7 @@ a:hover {
   -webkit-box-shadow: rgba(0,0,0,.3) 0 0 10px;
 }
 #player-wrapper p {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
   font-weight: 600;
 }
 #player-wrapper h1 {
