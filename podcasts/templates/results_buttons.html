@@ -22,19 +22,19 @@
   </a>
   {% endif %} {% if results.view == "grid" or results.view == "list" %} {% if results.view == "grid" %}
   <a class="btn-dope view-button active" href="{{ results.view_url }}">
-    <span>
+    <span data-view="list">
       <i class="fas fa-th" title="Toggle View"></i>
     </span>
-    <span class="d-none">
+    <span class="d-none" data-view="grid">
       <i class="fas fa-bars" title="Toggle View"></i>
     </span>
   </a>
   {% elif results.view == "list" %}
   <a class="btn-dope view-button active" href="{{ results.view_url }}">
-    <span class="d-none">
+    <span class="d-none" data-view="list">
       <i class="fas fa-th" title="Toggle View"></i>
     </span>
-    <span>
+    <span data-view="grid">
       <i class="fas fa-bars" title="Toggle View"></i>
     </span>
   </a>

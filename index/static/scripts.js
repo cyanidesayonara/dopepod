@@ -345,8 +345,16 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var button = $(this);
+    var view = button.parents(".results").data("view");
     clearTimeout(timeout);
     timeout = setTimeout(function() {
+      if (view) {
+        if (url.includes("view")) {
+          url = url.substring(0, url.indexOf("view")) + "view=" + view;
+        } else {
+          url += "&view=" + view;
+        }
+      }
       var drop = button.parents(".results").parent();
       loadResults([url, drop]);
       scrollTo(drop);
@@ -602,11 +610,13 @@ $(document)
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    $(this).children().toggleClass("d-none")
-      .parents().parents().siblings(".view-collapse")
+    var view = $(this).children(".d-none").data("view");
+    $(this).children().toggleClass("d-none");
+    $(this).parents(".results").attr("data-view", view)
+    $(this).parent().parent().siblings(".view-collapse")
       .each(function() {
         $(this).collapse("toggle");
-      })
+      });
   })
   // toggle button icon on hover
   .on("mouseenter mouseleave", ".view-button, .provider-button", function() {

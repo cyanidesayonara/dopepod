@@ -305,7 +305,7 @@ class Podcast(models.Model):
                 results["languages"] = zip(languages, languages_urls)
 
             url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                            show=show, page=page)
+                            show=show, page=page, view=view)
 
             # finally, the real url
             results["full_url"] = url
