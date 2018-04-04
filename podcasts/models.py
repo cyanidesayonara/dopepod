@@ -172,11 +172,11 @@ class Podcast(models.Model):
                     if q == "#":
                         query = Q()
                         for letter in string.ascii_lowercase:
-                            query = query | Q(initial__exact=letter + letter)
+                            query = query | Q(initial__exact=letter * 2)
                         podcasts = podcasts.exclude(query)
                     # filter pods starting w/ an alphabet
                     else:
-                        podcasts = podcasts.filter(initial__exact=q + q)
+                        podcasts = podcasts.filter(initial__exact=q * 2)
                     podcasts = podcasts.order_by("title_rank")
 
             # CHARTS
@@ -737,7 +737,11 @@ class Episode(models.Model):
                 ns.update(root.nsmap)
                 tree = root.find("channel")
 
-                items = tree.findall("item")
+                try:
+                    items = tree.findall("item")
+                except AttributeError:
+                    logger.error("no can do", podcast.feedUrl)
+
                 count = len(items)
                 page = 1
                 i = 1
@@ -906,8 +910,8 @@ class Episode(models.Model):
                     except AttributeError as e:
                         logger.error("can\'t get episode url/type/size", podcast.feedUrl)
 
-            except (requests.exceptions.HTTPError, requests.exceptions.HTTPError) as e:
-                logger.error(str(e))
+            except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
+                logger.error("connection error", podcast.feedUrl)
 
             if episodes:
                 # paginate
