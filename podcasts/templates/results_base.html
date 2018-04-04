@@ -90,9 +90,7 @@
       {% elif results.view == "subscriptions" %}
         {% include "subscriptions.min.html" %}
       {% elif results.view == "showpod" %}
-        <div class="row" id="episodes">
-          {% include "episodes.min.html" %}
-        </div>
+        {% include "episodes.min.html" %}
       {% elif results.view == "playlist" %}
         <div class="row">
           {% include "episodes.min.html" %}
