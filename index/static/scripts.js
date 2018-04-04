@@ -219,10 +219,16 @@ function postSubscriptions(podids, button) {
       replaceState("/");
     })
     .done(function(response) {
-      $("#center-stage").html(response);
-      var url = "/episodes/" + podids[0] + "/";
-      var drop = "#episodes";
-      loadResults([url, drop]);
+      console.log(button)
+      if (button.hasClass("sub-button")) {
+        var url = "/showpod/" + podids[0] + "/";
+        var drop = "#center-stage";
+        var args = ["/episodes/" + podids[0] + "/", "#episodes"];
+        loadResults([url, drop, loadResults, args]);
+      }
+      else {
+        $("#center-stage").html(response);
+      }
     });
   }, 250);
 };
