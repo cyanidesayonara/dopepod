@@ -137,10 +137,6 @@ function loadResults(args, no_push) {
           changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
         }
       }
-      // episodes loaded, remove loading anim
-      else if (drop.is("#episodes")) {
-        $(".episodes-button").text("Episodes");
-      }
       replaceState(url);
     });
 };
@@ -223,7 +219,7 @@ function postSubscriptions(podids, button) {
       if (button.hasClass("sub-button")) {
         var url = "/showpod/" + podids[0] + "/";
         var drop = "#center-stage";
-        var args = ["/episodes/" + podids[0] + "/", "#episodes"];
+        var args = ["/episodes/" + podids[0] + "/", ".showpod .results-content"];
         loadResults([url, drop, loadResults, args]);
       }
       else {
@@ -367,7 +363,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", "#episodes .options-button", function (e) {
+  .on("click", ".showpod-buttons .options-button", function (e) {
     e.preventDefault();
     // redirect to episodes
     var url = this.href.replace("showpod", "episodes");
@@ -375,7 +371,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function () {
       button.html(getButtonLoading());
-      var drop = button.parents("#episodes");
+      var drop = button.parents(".results-content");
       loadResults([url, drop]);
       scrollTo(drop);
     }, 250);
@@ -388,7 +384,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.find("#showpod-c").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", "#episodes"];
+      var args = ["/episodes/" + podid + "/", ".showpod .results-content"];
       loadResults([url, drop, loadResults, args]);
     }
     scrollToTop();
@@ -650,8 +646,12 @@ $(document)
     }, 250);
   })
   .on("show.bs.collapse", ".options-collapse", function (e) {
-    e.stopPropagation()
+    e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
+  })
+  .on("click", ".episodes-button, .reviews-button", function (e) {
+    e.stopPropagation();
+    $(".showpod-collapse").collapse("toggle");
   })
   // toggles background theme
   .on("click", ".lights-toggle", function(e) {

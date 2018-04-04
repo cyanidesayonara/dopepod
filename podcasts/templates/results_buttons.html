@@ -15,7 +15,7 @@
   </form>
   {% endif %}
   <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
-    {% if request.is_ajax %} {% include "button_loading.min.html" %} {% else %} Episodes {% endif %}
+    {% if request.is_ajax and not results.episodes %} {% include "button_loading.min.html" %} {% else %} Episodes {% endif %}
   </a>
   <a class="btn-dope reviews-button toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
     Reviews
