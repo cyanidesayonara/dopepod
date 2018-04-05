@@ -63,7 +63,6 @@ def format_bytes(bytes):
             bytes /=  power**n
         return "{0:4.1f}{1}".format(bytes, suffixes[n])
 
-
 def make_url(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None):
     f = furl(url)
     f.args.clear()
@@ -769,7 +768,7 @@ class Episode(models.Model):
                             continue
                     try:
                         pubdate = parse(pubdate, default=parse("00:00Z"))
-                        episode["pubdate"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
+                        episode["pubDate"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                     except ValueError:
                         logger.error("can\'t parse pubDate", podcast.feedUrl)
                         continue
@@ -857,7 +856,7 @@ class Episode(models.Model):
 
                         # create signature
                         episode["signature"] = signing.dumps(episode)
-                        episode["pubDate"] = pubdate
+
                         episode["position"] = count - i + 1
                         episodes.append(episode)
 
@@ -967,7 +966,8 @@ class Episode(models.Model):
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
-                    if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
+                    pubdate = datetime.strptime(episode["pubDate"], "%b %d %Y %X %z")
+                    if not subscription.last_updated or subscription.last_updated < pubdate:
                         i += 1
                         episode["is_new"] = True
                     else:
@@ -1072,6 +1072,7 @@ class Episode(models.Model):
         else:
             user = None
             position = None
+
         try:
             data = signing.loads(signature)
             podid = data["podid"]
@@ -1081,34 +1082,33 @@ class Episode(models.Model):
             title = data["title"]
             pubDate = datetime.strptime(data["pubDate"],"%b %d %Y %X %z")
             description = data["description"]
-
-            try:
-                length = data["length"]
-                t = datetime.strptime(length,"%H:%M:%S")
-                length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-            except (KeyError, ValueError):
-                length = None
-
-            try:
-                size = data["size"]
-            except KeyError:
-                size = None
-
-            return Episode.objects.create(
-                user=user,
-                url=url,
-                kind=kind,
-                title=title,
-                pubDate=pubDate,
-                podcast=podcast,
-                length=length,
-                size=size,
-                description=description,
-                signature=signature,
-                position=position,
-            )
         except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
             return
+
+        try:
+            length = data["length"]
+            t = datetime.strptime(length,"%H:%M:%S")
+            length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        except (KeyError, ValueError):
+            length = None
+
+        try:
+            size = data["size"]
+        except KeyError:
+            size = None
+        return Episode.objects.create(
+            user=user,
+            url=url,
+            kind=kind,
+            title=title,
+            pubDate=pubDate,
+            podcast=podcast,
+            length=length,
+            size=size,
+            description=description,
+            signature=signature,
+            position=position,
+        )
 
     def remove(pos, user):
         episodes = Episode.objects.filter(user=user).order_by("position")

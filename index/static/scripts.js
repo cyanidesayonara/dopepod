@@ -43,15 +43,21 @@ function updateTitle() {
   // default title
   var title = "dopepod";
   var player = $("#player-wrapper");
+  var header = $("#center-stage .results-header h1");
   // if episode is playing
   if (player.length) {
     title = player.find("h1")[0].innerText;
     var episode = player.find(".player-episode")[0].innerText;
-    title = "Now playing: " + title + " - " + episode + " | on dopepod";
+    title = "Now playing: " + title + " - " + episode + " | dopepod";
   }
   // if showpod
-  else if ($("#showpod-c").length) {
-      title = "Listen to episodes of " + $("#showpod-c h1")[0].innerText + " on dopepod";
+  else if (header.length) {
+    if ($("#center-stage").children().hasClass("showpod")) {
+      title = "Listen to episodes of " +  header[0].innerText + " | dopepod";
+    }
+    else {
+      title = header[0].innerText + " | dopepod";
+    }
   }
   $("title")[0].innerText = title;
 };
@@ -301,12 +307,12 @@ function updateLastPlayed() {
   last_played = setInterval(function () {
     loadResults(["/last_played/", "#last-played"]);
   }, 1000 * 60);
-}
+};
 function updateCharts() {
   charts = setInterval(function () {
     loadResults(["/charts/", "#charts"]);
   }, 1000 * 60 * 60 * 24);
-}
+};
 
 $(document)
   .ready(function() {
@@ -363,7 +369,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".showpod-buttons .options-button", function (e) {
+  .on("click", ".showpod-buttons .options-button", function(e) {
     e.preventDefault();
     // redirect to episodes
     var url = this.href.replace("showpod", "episodes");
@@ -383,15 +389,18 @@ $(document)
     var button = $(this);
     var podid = button.data("podid");
     var drop = $("#center-stage");
-    if (!(drop.find("#showpod-c").data("podid") == podid)) {
+    if (!(drop.children(".results").data("podid") == podid)) {
       var args = ["/episodes/" + podid + "/", ".showpod .results-content"];
       loadResults([url, drop, loadResults, args]);
+    }
+    else {
+      drop.find(".results-collapse").collapse("show");
     }
     scrollToTop();
   })  
   // LOGIN & SIGNUP
   // show splash / dashboard / login / register / password reset
-  .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function (e) {
+  .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -401,19 +410,19 @@ $(document)
     }
     else {
       if (link.hasClass("login-link")) {
-        $("#login-collapse").collapse("show");
+        drop.find("#login-collapse").collapse("show");
       }
       else if (link.hasClass("signup-link")) {
-        $("#signup-collapse").collapse("show");
+        drop.find("#signup-collapse").collapse("show");
       }
       else if (link.hasClass("password-link")) {
-        $("#password-collapse").collapse("show");
+        drop.find("#password-collapse").collapse("show");
       }
       else {
-        $("#splash-collapse").collapse("show");
+        drop.find("#splash-collapse").collapse("show");
       }
       if (link.hasClass("collapsed")) {
-        $("#splash-collapse").collapse("show");
+        drop.find("#splash-collapse").collapse("show");
       }
     } 
     scrollToTop();
@@ -426,17 +435,9 @@ $(document)
       loadResults([url, drop]);
     }
     else {
-      $(".results-collapse").collapse("show");
+      drop.find(".results-collapse").collapse("show");
     }
     scrollToTop();
-  })
-  .on("click", ".charts-link", function(e) {
-    e.preventDefault();
-    scrollTo($("#charts"));
-  })
-  .on("click", ".last-played-link", function(e) {
-    e.preventDefault();
-    scrollTo($("#last-played"));
   })
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
@@ -446,7 +447,7 @@ $(document)
       loadResults([url, drop]);
     }
     else {
-      $(".results-collapse").collapse("show");
+      drop.find(".results-collapse").collapse("show");
     }
     scrollToTop();
   })
@@ -456,6 +457,9 @@ $(document)
     var drop = $("#center-stage");
     if (!drop.find(".settings").length) {
       loadResults([url, drop]);
+    }
+    else {
+      drop.find(".results-collapse").collapse("show");
     }
     scrollToTop();
   })
@@ -467,9 +471,17 @@ $(document)
       loadResults([url, drop]);
     }
     else {
-      $(".results-collapse").collapse("show");
+      drop.find(".results-collapse").collapse("show");
     }
     scrollToTop();
+  })
+  .on("click", ".charts-link", function(e) {
+    e.preventDefault();
+    scrollTo($("#charts"));
+  })
+  .on("click", ".last-played-link", function(e) {
+    e.preventDefault();
+    scrollTo($("#last-played"));
   })
   .on("click", ".update-playlist", function(e) {
     e.preventDefault();
@@ -480,7 +492,7 @@ $(document)
       loadResults([url, drop]);
     }, 250);
   })
-  .on("click", ".update-last-played", function (e) {
+  .on("click", ".update-last-played", function(e) {
     e.preventDefault();
     var url = this.href;
     clearTimeout(timeout);
@@ -489,49 +501,18 @@ $(document)
       loadResults([url, drop]);
     }, 250);
   })
-  // save settings, apply theme
-  .on("submit", ".settings-form", function (e) {
-    e.preventDefault();
-    var method = this.method;
-    var url = this.action;
-    var form = $(this)
-    var data = form.serialize();
-    var theme = form.find("input[name=dark_theme]").is(":checked");
-    form.find("button[type=submit]").html(getButtonLoading());
-    $.ajax({
-      data: data,
-      method: method,
-      url: url,
-    })
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText);
-        scrollToTop();
-      })
-      .done(function(response) {
-        pushState(url);
-        if (theme) {
-          $(".lights-toggle").removeClass("lit");
-        }
-        else {
-          $(".lights-toggle").addClass("lit");
-        }
-        changeTheme(theme);
-        $("#center-stage").html(response);
-        scrollToTop();
-        replaceState("/");
-      });
-  })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
     var podids = [];
-    podids[0] = $(this).find("input[name^=podids]").val();
-    var button = $(this).find("button[type=submit]");
+    var form = $(this);
+    podids[0] = form.find("input[name^=podids]").val();
+    var button = form.find("button[type=submit]");
     postSubscriptions(podids, button);
   })
   // unsubscribe one or more podcasts
   // POST ajax request, data is array of podids
-  .on("click", ".unsubscribe-button", function (e) {
+  .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
     var podids = [];
@@ -549,7 +530,7 @@ $(document)
     postSubscriptions(podids, button);
   })
   // playlist - play, add, move, or delete episode
-  .on("submit", ".playlist-form", function (e) {
+  .on("submit", ".playlist-form", function(e) {
     e.preventDefault();
     var form = $(this);
     if (!form.find(".button-loading").length) {
@@ -577,8 +558,39 @@ $(document)
     $(this).toggleClass("active")
     .parents("#player-wrapper").toggleClass("minimize")
   })
+  // save settings, apply theme
+  .on("submit", ".settings-form", function(e) {
+    e.preventDefault();
+    var method = this.method;
+    var url = this.action;
+    var form = $(this)
+    var data = form.serialize();
+    var theme = form.find("input[name=dark_theme]").is(":checked");
+    form.find("button[type=submit]").html(getButtonLoading());
+    $.ajax({
+        data: data,
+        method: method,
+        url: url,
+      })
+      .fail(function (xhr, ajaxOptions, thrownError) {
+        $("#center-stage").html(xhr.responseText);
+        scrollToTop();
+      })
+      .done(function (response) {
+        pushState(url);
+        if (theme) {
+          $(".lights-toggle").removeClass("lit");
+        } else {
+          $(".lights-toggle").addClass("lit");
+        }
+        changeTheme(theme);
+        $("#center-stage").html(response);
+        scrollToTop();
+        replaceState("/");
+      });
+  })
   // login or signup and refresh page/send password link
-  .on("submit", ".login-form, .signup-form, .password-form", function (e) {
+  .on("submit", ".login-form, .signup-form, .password-form", function(e) {
     e.preventDefault();
     var method = this.method;
     var url = this.action;
@@ -612,10 +624,11 @@ $(document)
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var view = $(this).children(".d-none").data("view");
-    $(this).children().toggleClass("d-none");
-    $(this).parents(".results").attr("data-view", view)
-    $(this).parent().parent().siblings(".view-collapse")
+    var button = $(this);
+    var view = button.children(".d-none").data("view");
+    button.children().toggleClass("d-none");
+    button.parents(".results").attr("data-view", view)
+    button.parent().parent().siblings(".view-collapse")
       .each(function() {
         $(this).collapse("toggle");
       });
@@ -625,7 +638,7 @@ $(document)
     $(this).children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
-  .on("show.bs.collapse", ".login-collapse", function (e) {
+  .on("show.bs.collapse", ".login-collapse", function(e) {
     e.stopPropagation();
     $(".login-collapse.show").collapse("hide");
   })
@@ -645,11 +658,11 @@ $(document)
       scrollTo(obj);
     }, 250);
   })
-  .on("show.bs.collapse", ".options-collapse", function (e) {
+  .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
-  .on("click", ".episodes-button, .reviews-button", function (e) {
+  .on("click", ".episodes-button, .reviews-button", function(e) {
     e.stopPropagation();
     $(".showpod-collapse").collapse("toggle");
   })
@@ -660,7 +673,7 @@ $(document)
     changeTheme(!$(".lights-toggle").hasClass("lit"));
   })
   // removes focus from buttons when clicked
-  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episode-header", function(e) {
+  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episode-header", function() {
     $(this).blur();
   })
   // empties search field when link or button is clicked
@@ -672,7 +685,7 @@ $(document)
     $(".errors").delay(2000).fadeOut();
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dopebar-link, .search-button", function(e) {
+  .on("click", "body, .dopebar-link, .search-button", function() {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
@@ -706,8 +719,8 @@ $(document)
   });
 
 $(window)
-  .on("popstate", function (event) {
-    var state = event.originalEvent.state;
+  .on("popstate", function(e) {
+    var state = e.originalEvent.state;
     if (state) {
       // if url in urls, reload results (and don't push)
       var url = state.url;
@@ -723,11 +736,11 @@ $(window)
       updateTitle();
     }
   })
-  .on("blur", function () {
+  .on("blur", function() {
     window.clearInterval(charts);
     window.clearInterval(last_played);
   })
-  .on("focus", function () {
+  .on("focus", function() {
     updateLastPlayed();
     updateCharts();
   });

@@ -3,11 +3,13 @@
   {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
   {% include "results_buttons.min.html" %}
 </div>
+{% if not results.view == "playlist" %}
 <div class="row fade collapse showpod-collapse" id="reviews-collapse">
   <div class="col-12 reviews">
     <p>Coming Soon!</p>
   </div>
 </div>
+{% endif %}
 {% if results.episodes %}
 <div class="row fade collapse showpod-collapse show" id="episodes-collapse">
   <div class="col-12 episodes">

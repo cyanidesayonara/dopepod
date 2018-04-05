@@ -2,14 +2,16 @@
 
 {% block title %}
 {% if results.view == "showpod" %}
-  Listen to episodes of {{ podcast.title }} on dopepod
+  Listen to episodes of {{ results.header }} | dopepod
+{% elif results.header %}
+  {{ results.header }} | dopepod
 {% else %}
   dopepod
 {% endif %}
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-12 results color-2-trans {{ results.view }}">
+<div class="col-12 results color-2-trans {{ results.view }}" data-q="{{ results.selected_q }}" data-podid="{{ results.podcast.podid }}">
   {% include "results_bar.html" %}
   <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
     {% if results.view == "showpod" %}
@@ -92,9 +94,7 @@
       {% elif results.view == "showpod" %}
         {% include "episodes.min.html" %}
       {% elif results.view == "playlist" %}
-        <div class="row">
-          {% include "episodes.min.html" %}
-        </div>
+        {% include "episodes.min.html" %}
       {% elif results.view == "last_played"%}
         {% include "last_played.min.html" %}
       {% elif results.view == "settings" %}
