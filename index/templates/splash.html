@@ -8,7 +8,7 @@
       </strong>
     </h1>
     {% include "logo.min.html" %}
-    {% if errors %}
+    {% if errors or message %}
       <div class="errors">
         {% include "errors.min.html" %}
       </div>

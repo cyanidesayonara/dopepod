@@ -122,10 +122,8 @@ function loadResults(args, no_push) {
   if (!no_push) {
     pushState(url);
   }
-  if (!drop.find(".loading").length && url != "/dopebar/" && url != "/last_played/") {
-    if (drop.children(".results").length) {
-      drop.children(".results").replaceWith(getLoading());
-    }
+  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last_played/") {
+    drop.children(".results").replaceWith(getLoading());
   }
   xhr = $.ajax({
     type: "GET",
@@ -221,7 +219,6 @@ function postSubscriptions(podids, button) {
       replaceState("/");
     })
     .done(function(response) {
-      console.log(button)
       if (button.hasClass("sub-button")) {
         var url = "/showpod/" + podids[0] + "/";
         var drop = "#center-stage";
@@ -237,10 +234,11 @@ function postSubscriptions(podids, button) {
 function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
   var text = button[0].innerHTML;
+  var url = "/playlist/";
   button.html(getButtonLoading());
   $.ajax({
     method: "POST",
-    url: "/playlist/",
+    url: url,
     data: data,
   })
   // nothing to continue
@@ -259,7 +257,7 @@ function postPlaylist(data, mode, button) {
         var text = $("#player-wrapper h1 span");
         scrollText(box, text);
       }, 1000);
-      if (drop.find(".playlist").length) {
+      if (drop.children(".playlist").length) {
         loadResults([url, drop]);
       }
     }
@@ -267,7 +265,7 @@ function postPlaylist(data, mode, button) {
       if (mode == "add") {
         button.text(text);
       }
-      if (drop.find(".playlist").length) {
+      if (drop.children(".playlist").length) {
         drop.html(response);
       }
     }
@@ -280,7 +278,7 @@ function playNext() {
   };
   var mode = "play";
   var wrapper = $("#player-wrapper");
-  wrapper.find("audio")[0].preload = "none";
+  wrapper.children("audio")[0].preload = "none";
   wrapper.empty();
   // wait a sec here
   timeout = setTimeout(function () {
@@ -336,12 +334,12 @@ $(document)
     var form = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var q = form.find(".q").val();
+      var q = form.children(".q").val();
       if (q) {
         q = cleanString(q);
         var drop = $("#center-stage");
         url = url + "?q=" + q;
-        if (!(drop.find(".results-header").data("q") == q)) {
+        if (!(drop.children(".results").data("q") == q)) {
           loadResults([url, drop]);
         }
         scrollToTop();
@@ -431,7 +429,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.find(".list").length) {
+    if (!drop.children(".list").length) {
       loadResults([url, drop]);
     }
     else {
@@ -443,7 +441,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.find(".subscriptions").length) {
+    if (!drop.children(".subscriptions").length) {
       loadResults([url, drop]);
     }
     else {
@@ -455,7 +453,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.find(".settings").length) {
+    if (!drop.children(".settings").length) {
       loadResults([url, drop]);
     }
     else {
@@ -467,7 +465,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.find(".playlist").length) {
+    if (!drop.children(".playlist").length) {
       loadResults([url, drop]);
     }
     else {
@@ -506,8 +504,8 @@ $(document)
     e.preventDefault();
     var podids = [];
     var form = $(this);
-    podids[0] = form.find("input[name^=podids]").val();
-    var button = form.find("button[type=submit]");
+    podids[0] = form.children("input[name^=podids]").val();
+    var button = form.children("button[type=submit]");
     postSubscriptions(podids, button);
   })
   // unsubscribe one or more podcasts
@@ -537,8 +535,8 @@ $(document)
       clearTimeout(timeout);
       timeout = setTimeout(function () {
         var data = form.serialize();
-        var mode = form.find("input[name=mode]").val();
-        var button = form.find("button[type=submit]");
+        var mode = form.children("input[name=mode]").val();
+        var button = form.children("button[type=submit]");
         postPlaylist(data, mode, button);
       }, 250);
     }

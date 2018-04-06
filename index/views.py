@@ -662,7 +662,6 @@ def password_reset(request):
         }
         
         if response.status_code == 200:
-
             context = {
                 "results": results,
                 "view": "login",
