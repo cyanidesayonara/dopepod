@@ -10,8 +10,8 @@
     </div>
   </div>
 {% endif %}
-{% if results.episodes %}
-  <div class="row fade collapse showpod-collapse show" id="episodes-collapse">
+<div class="row fade collapse showpod-collapse show" id="episodes-collapse">
+  {% if results.episodes %}
     <div class="col-12 episodes">
       <table class="table episodes-table">
         <thead>
@@ -151,14 +151,14 @@
         </tbody>
       </table>
     </div>
-  </div>
-{% else %}
-  <div class="col-12 col-lg-4 login-wrapper">
-    <p>
-      No subscriptions.
-    </p>
-  </div>
-{% endif %}
+  {% elif not results.episodes and results.view == "playlist" %}
+    <div class="col-12 col-lg-4 login-wrapper">
+      <p>
+        No episodes.
+      </p>
+    </div>
+  {% endif %}
+</div>
 <div class="row showpod-buttons">
   {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
 </div>
