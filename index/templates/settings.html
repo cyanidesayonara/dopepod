@@ -1,12 +1,11 @@
 <div class="row">
-  {% include "results_buttons.min.html" %}
-</div>
-<div class="row">
+  <div class="errors color-1-trans">
+    {% include "errors.min.html" %}
+  </div>
+  <div class="col-12 col-lg-4 settings-wrapper">
+  </div>
   <div class="col-12 col-lg-4 settings-wrapper">
     <form class="settings-form" action="{% url 'settings' %}" method="POST">
-      <div class="errors">
-        {% include "errors.min.html" %}
-      </div>
       <div class="login-form-group">
         <label for="email">Email</label>
         <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
@@ -26,9 +25,12 @@
             <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" checked /> {% else %}
             <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" /> {% endif %} Use dark theme
           </label>
+          <button type="submit" class="btn-dope active settings-save">Save</button>        
         </div>
       </div>
-      <button type="submit" class="btn-dope active settings-save">Save</button>        
     </form>
+  </div>
+  <div class="col-12 col-lg-4 settings-wrapper">
+    <button class="btn-dope">Delete Account</button>
   </div>
 </div>

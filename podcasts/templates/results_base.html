@@ -85,7 +85,11 @@
     {% endif %}
 
     <div class="col-12 results-content">
-      {% if results.view == "grid" or results.view == "list" %}
+      {% if results.view == "splash" %}
+        {% include "splash.min.html" %}
+      {% elif results.view == "dashboard" %}
+        {% include "dashboard.min.html" %}
+      {% elif results.view == "grid" or results.view == "list" %}
         {% include "search.min.html" %}
       {% elif results.view == "charts" %}
         {% include "charts.min.html" %}
@@ -99,6 +103,8 @@
         {% include "last_played.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
+      {% elif results.view == "reset_password" or results.view == "password_reset" or results.view == "confirm_email" %}
+        {% include "password_reset.min.html" %}
       {% endif %}
     </div>
     

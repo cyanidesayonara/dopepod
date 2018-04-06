@@ -298,16 +298,20 @@ a:hover {
 }
 
 /* ERRORS */
+.errors {
+  border-radius: .25rem;
+}
 .errors p {
-  display: inline-block;
-  border-bottom: 2px solid rgb(0, 191, 165);
+  display: block;
+  padding: 10px;
+  margin: 10px;
 }
 
 /* LOGIN-SIGNUP */
 .login-wrapper {
   margin: auto;
   text-align: center;
-  padding: 0 10px;
+  padding: 10px;
   max-width: 320px;
 }
 .login-wrapper h1 {
@@ -319,11 +323,10 @@ a:hover {
   margin-bottom: 10px;
 }
 .login-content {
+  margin-top: 10px;
   height: 130px;
 }
 .dope-field {
-  background: inherit;
-  color: inherit;
   width: 100%;
   padding: 4px 8px;
   border-radius: .25rem;
@@ -356,7 +359,7 @@ a:hover {
   flex-wrap: wrap;
 }
 .login-buttons > * {
-  margin: 0 2.5px 10px;
+  margin: 5px 2.5px;
 }
 .login-buttons button {
   cursor: default;
@@ -364,7 +367,6 @@ a:hover {
 
 /* DASHBOARD */
 .dashboard {
-  padding: 10px;
   text-align: center;
 }
 .dashboard h1 {
@@ -379,10 +381,11 @@ a:hover {
 /* SETTINGS */
 .settings-wrapper {
   max-width: 320px;
-  margin: auto;
+  padding: 10px;
+  margin: auto;  
 }
 .settings-save {
-  margin: 10px 0;
+  float: right;
 }
 
 /* SHOWPOD */

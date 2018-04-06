@@ -86,8 +86,6 @@
   <a class="btn-dope update-playlist" href="{% url 'playlist' %}">
     <i class="fas fa-sync" title="Update"></i>
   </a>
-  {% endif %} {% if results.view == "settings" %}
-  <button class="btn-dope">Delete Account</button>
   {% endif %} {% if results.view == "last_played" %}
   <a class="btn-dope update-last-played" href="{% url 'last_played' %}">
     <i class="fas fa-sync" title="Update"></i>

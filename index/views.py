@@ -45,27 +45,37 @@ def index(request):
         view = request.GET.get("view" , None)
 
         if user.is_authenticated:
-            template = "dashboard.min.html"
+            results = {
+                "view": "dashboard",
+                "header": "Dashboard",
+                "extra_options": True,
+            }
         else:
-            template = "splash.min.html"
+            results = {
+                "view": "splash",
+            }
+
         context = {
+            "results": results,
             "view": view,
         }
 
         if request.is_ajax():
-            return render(request, template, context)
+            return render(request, "results_base.min.html", context)
 
         last_seen, cookie = get_last_seen(request.session)
         last_played = Episode.get_last_played()
         url = request.get_full_path()
         charts = Podcast.search(url=url, provider="dopepod")
 
+        results["extend"] = True
+
         context.update({
             "cookie_banner": cookie,
             "charts": charts,
             "last_played": last_played,
         })
-        return render(request, template, context)
+        return render(request, "results_base.min.html", context)
 
 @vary_on_headers("Accept")
 def charts(request):
@@ -513,6 +523,7 @@ def settings(request):
             return render(request, "splash.min.html", context)
         return redirect("/?next=/settings/")
 
+# allauth stuff
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
 
 def get_form_errors(data):
@@ -529,12 +540,16 @@ def get_form_errors(data):
     try:
         email = data["form"]["fields"]["login"]["value"]
     except KeyError:
-        email = data["form"]["fields"]["email"]["value"]
+        try:
+            email = data["form"]["fields"]["email"]["value"]
+        except KeyError:
+            email = ""
     return (email, errors)
 
 def login(request):
     """
     relays stuff to and from allauth
+    kind of dumb but it works
     """
 
     if request.method == "POST":
@@ -545,34 +560,41 @@ def login(request):
         # parse json response
         data = json.loads(response.content)
 
+        results = {}
+
         context = {
+            "results": results,
             "view": "login",
         }
 
         if response.status_code == 200:
             if ajax:
-                return render(request, "dashboard.min.html", context)
-            else:
-                return redirect("/")
+                results.update({
+                    "view": "dashboard",
+                    "header": "Dashboard",
+                    "extra_options": True,
+                })
+                return render(request, "results_base.min.html", context)
+            return redirect("/")
         else:
+            results["view"] = "splash"
             email, errors = get_form_errors(data)
             context.update({
                 "errors": errors,
                 "email": email,
             })
             if ajax:
-                return render(request, "splash.min.html", context, status=400)
-            else:
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "splash.min.html", context)
+                return render(request, "results_base.min.html", context, status=400)
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider="dopepod")
+            last_seen, cookie = get_last_seen(request.session)
+            last_played = Episode.get_last_played()
+            context.update({
+                "cookie_banner": cookie,
+                "charts": charts,
+                "last_played": last_played,
+            })
+            return render(request, "results_base.min.html", context)
     else:
         return redirect("/?view=login")
 
@@ -583,23 +605,32 @@ def signup(request):
         response = allauth.signup(request)
         data = json.loads(response.content)
 
+        results = {}
+
         context = {
+            "results": results,
             "view": "signup",
         }
 
         if response.status_code == 200:
             if ajax:
-                return render(request, "dashboard.min.html", context)
+                results.update({
+                    "view": "dashboard",
+                    "header": "Dashboard",
+                    "extra_options": True,
+                })
+                return render(request, "results_base.min.html", context)
             else:
                 return redirect("/")
         else:
+            results["view"] = "splash"
             email, errors = get_form_errors(data)
             context.update({
                 "errors": errors,
                 "email": email,
             })
             if ajax:
-                return render(request, "splash.min.html", context, status=400)
+                return render(request, "results_base.min.html", context, status=400)
             else:
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider="dopepod")
@@ -610,7 +641,7 @@ def signup(request):
                     "charts": charts,
                     "last_played": last_played,
                 })
-                return render(request, "splash.min.html", context)
+                return render(request, "results_base.min.html", context)
     else:
         return redirect("/?view=signup")
 
@@ -626,46 +657,180 @@ def password_reset(request):
         response = allauth.password_reset(request)
         data = json.loads(response.content)
 
+        results = {
+            "view": "splash",
+        }
+        
         if response.status_code == 200:
+
             context = {
+                "results": results,
                 "view": "login",
                 "message": "We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.",
             }
+            
             if ajax:
-                return render(request, "splash.min.html", context)
+                return render(request, "results_base.min.html", context)
             else:
                 return redirect("/")
         else:
             email, errors = get_form_errors(data)
             context = {
+                "results": results,
                 "view": "password",
                 "errors": errors,
                 "email": email,
             }
             if ajax:
-                return render(request, "splash.min.html", context, status=400)
+                return render(request, "results_base.min.html", context, status=400)
             else:
                 url = request.get_full_path()
                 charts = Podcast.search(url=url, provider="dopepod")
                 last_seen, cookie = get_last_seen(request.session)
                 last_played = Episode.get_last_played()
+
+                results["extend"] = True
+
                 context.update({
                     "cookie_banner": cookie,
                     "charts": charts,
                     "last_played": last_played,
                 })
-                return render(request, "splash.min.html", context)
+                return render(request, "results_base.min.html", context)
     else:
         return redirect("/?view=password")
 
-
 def password_reset_from_key(request, uidb36, key):
     if request.method == "GET":
-        response = allauth.password_reset_from_key(
-            request, uidb36=uidb36, key=key)
-        return response
+        ajax = request.is_ajax()
+        response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
+        if response.status_code == 200:
+            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+            response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
+            data = json.loads(response.content)
+            email, errors = get_form_errors(data)
+
+            results = {
+                "view": "reset_password",
+                "extra_options": True,
+                "header": "Reset Password",
+            }
+
+            context = {
+                "errors": errors,
+                "results": results,
+                "uidb36": uidb36,
+                "key": key,
+            }
+
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider="dopepod")
+            last_seen, cookie = get_last_seen(request.session)
+            last_played = Episode.get_last_played()
+
+            results["extend"] = True
+
+            context.update({
+                "cookie_banner": cookie,
+                "charts": charts,
+                "last_played": last_played,
+            })
+            return render(request, "results_base.min.html", context)
+        else:
+            return response
 
     if request.method == "POST":
-        response = allauth.password_reset_from_key(
-            request, uidb36=uidb36, key=key)
-        return response
+        ajax = request.is_ajax()
+        response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
+        if response.status_code == 200:
+            results = {
+                "view": "password_reset",
+                "extra_options": True,
+                "header": "Password Reset",
+            }
+
+            context = {
+                "results": results,
+            }
+
+            if ajax:
+                return render(request, "results_base.min.html", context, status=200)
+            url = request.get_full_path()
+            charts = Podcast.search(url=url, provider="dopepod")
+            last_seen, cookie = get_last_seen(request.session)
+            last_played = Episode.get_last_played()
+
+            results["extend"] = True
+
+            context.update({
+                "cookie_banner": cookie,
+                "charts": charts,
+                "last_played": last_played,
+            })
+            return render(request, "results_base.min.html", context, status=200)
+        else:
+            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+            response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
+            data = json.loads(response.content)
+            email, errors = get_form_errors(data)
+
+            results = {
+                "view": "reset_password",
+                "extra_options": True,
+                "header": "Reset Password",
+            }
+
+            context = {
+                "errors": errors,
+                "results": results,
+                "uidb36": uidb36,
+                "key": key,
+            }
+
+            if ajax:
+                return render(request, "results_base.min.html", context, status=400)
+            else:
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider="dopepod")
+                last_seen, cookie = get_last_seen(request.session)
+                last_played = Episode.get_last_played()
+
+                results["extend"] = True
+
+                context.update({
+                    "cookie_banner": cookie,
+                    "charts": charts,
+                    "last_played": last_played,
+                })
+                return render(request, "results_base.min.html", context, status=400)
+
+def confirm_email(request, key):
+    response = allauth.confirm_email(request, key=key)
+    
+    if response.status_code == 200:
+        results = {
+            "header": "Email Confirmed",
+            "view": "confirm_email",
+            "extra_options": True,
+        }
+
+        context = {
+            "results": results,
+        }
+
+        if request.is_ajax():
+            return render(request, "results_base.min.html", context)
+
+        last_seen, cookie = get_last_seen(request.session)
+        last_played = Episode.get_last_played()
+        url = request.get_full_path()
+        charts = Podcast.search(url=url, provider="dopepod")
+
+        results["extend"] = True
+
+        context.update({
+            "cookie_banner": cookie,
+            "charts": charts,
+            "last_played": last_played,
+        })
+        return render(request, "results_base.min.html", context)

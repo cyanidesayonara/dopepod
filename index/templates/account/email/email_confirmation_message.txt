@@ -1,5 +1,3 @@
-{% load account %}
-
 Hello from dopepod!
 
 To confirm your account, go to {{ activate_url }}

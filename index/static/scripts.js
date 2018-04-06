@@ -268,7 +268,7 @@ function postPlaylist(data, mode, button) {
         button.text(text);
       }
       if (drop.find(".playlist").length) {
-        loadResults([url, drop]);
+        drop.html(response);
       }
     }
   });
@@ -405,7 +405,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     var link = $(this);
-    if (!drop.find(".login").length && !drop.find(".dashboard").length) {
+    if (!drop.children(".splash").length && !drop.children(".dashboard").length) {
       loadResults([url, drop]);
     }
     else {
@@ -424,7 +424,7 @@ $(document)
       if (link.hasClass("collapsed")) {
         drop.find("#splash-collapse").collapse("show");
       }
-    } 
+    }
     scrollToTop();
   })
   .on("click", ".browse-link", function(e) {
@@ -590,7 +590,7 @@ $(document)
       });
   })
   // login or signup and refresh page/send password link
-  .on("submit", ".login-form, .signup-form, .password-form", function(e) {
+  .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
     e.preventDefault();
     var method = this.method;
     var url = this.action;
@@ -606,7 +606,6 @@ $(document)
     })
       // returns errors
       .fail(function(xhr, ajaxOptions, thrownError) {
-        button.text(text);
         $("#center-stage").html(xhr.responseText);
         scrollToTop();
       })
@@ -614,7 +613,7 @@ $(document)
       .done(function(response) {
         $("#center-stage").html(response);
         // if not password reset, refresh page
-        if (text != "Send") {
+        if (text != "Send" || text != "Reset") {
           refreshCookie();
           refreshPage();
         }
