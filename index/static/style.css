@@ -439,6 +439,9 @@ a:hover {
 }
 
 /* EPISODES */
+.episodes-content {
+  padding: 0 10px;
+}
 .episode-hidden {
   padding: 0 !important;
 }
