@@ -3,8 +3,6 @@ from django.http import Http404
 from .models import Podcast, Subscription, Episode
 import logging
 from datetime import datetime, timedelta
-from django.http import JsonResponse
-from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 

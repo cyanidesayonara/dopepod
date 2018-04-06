@@ -833,3 +833,9 @@ def confirm_email(request, key):
             "last_played": last_played,
         })
         return render(request, "results_base.min.html", context)
+
+def noshow(request):
+    podid = request.POST.get("podid", None)
+    if podid:
+        print(podid)
+    return HttpResponse("")

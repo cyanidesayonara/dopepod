@@ -110,7 +110,7 @@ function checkForXHR(url) {
     xhr = null;
   }
 };
-// LOADER
+// RESULTS
 function loadResults(args, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
@@ -130,20 +130,38 @@ function loadResults(args, no_push) {
     url: url,
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
+      // if episodes fail, call noshow
+      if (url.includes("/episodes/")) {
+        podid = url.split("/")[2];
+        if (podid) {
+          noshow(podid);
+        }
+      }
   })
     .done(function(response) {
       drop.html(response);
       // loads episodes (cuz drop dun exist yet)
       if (callback) {
         callback(args);
-        // if page refresh, apply theme
-        if (drop.is("#dopebar")) {
-          changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
-        }
+      }
+      // if page refresh, apply theme
+      if (drop.is("#dopebar")) {
+        changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
       }
       replaceState(url);
     });
 };
+// NOSHOW
+function noshow(podid) {
+  console.log(podid)
+  $.ajax({
+      data: {
+        "podid": podid,
+      },
+      method: "POST",
+      url: "/noshow/",
+    });
+}
 // SCROLLERS
 function scrollSpy() {
   $(window).scroll(function() {
@@ -594,7 +612,7 @@ $(document)
     var url = this.action;
     var form = $(this);
     var data = form.serialize();
-    var button = form.find("button[type=submit]");
+    var button = form.children("button[type=submit]");
     var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({

@@ -431,6 +431,13 @@ a:hover {
   margin-bottom: 4px;
 }
 
+/* NOSHOW */
+.noshow {
+  display: none;
+  text-align: center;
+  padding: 10px;
+}
+
 /* EPISODES */
 .episodes {
   padding: 0 10px;
