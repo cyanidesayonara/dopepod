@@ -14,7 +14,7 @@
 <div class="col-12 results color-2-trans {{ results.view }}" data-q="{{ results.selected_q }}" data-podid="{{ results.podcast.podid }}">
   {% include "results_bar.html" %}
   <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
-    {% if results.view == "showpod" %}
+    {% if results.podcast %}
       {% include "showpod.min.html" %}
     {% endif %}
     {% if results.alphabet %}

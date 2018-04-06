@@ -439,20 +439,17 @@ a:hover {
 }
 
 /* EPISODES */
-.episodes {
-  padding: 0 10px;
-}
-.episode-content {
+.episode-hidden {
   padding: 0 !important;
 }
 .more-collapse {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
-.episode-content p {
+.episode-hidden p {
   margin: 10px 10px 0;
   word-wrap: break-word;
 }
-.episode-content h1 {
+.episode-hidden h1 {
   display: inline-block;
   margin: 10px 10px 0;
   font-size: 16px;

@@ -1,38 +1,38 @@
-<div class="row">
+<form class="row settings-form" action="{% url 'settings' %}" method="POST">
   {% if errors %}
     <div class="errors">
       {% include "errors.min.html" %}
     </div>
   {% endif %}
   <div class="col-12 col-lg-4 dope-wrapper">
+    <div class="login-form-group">
+      <label for="email">Email</label>
+      <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
+    </div>
+    <div class="login-form-group">
+      <label for="location">Location</label>
+      <input class="dope-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
+    </div>
   </div>
   <div class="col-12 col-lg-4 dope-wrapper">
-    <form class="settings-form" action="{% url 'settings' %}" method="POST">
-      <div class="login-form-group">
-        <label for="email">Email</label>
-        <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}">
+    <div class="login-form-group">
+      <label for="bio">Bio</label>
+      <textarea class="dope-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
+    </div>
+    <div class="login-form-group">
+      <div class="form-check">
+        <label class="form-check-label" for="dark_theme">
+          {% if profile_form.dark_theme.value %}
+          <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" checked /> {% else %}
+          <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" /> {% endif %} Use dark theme
+        </label>
+        <button type="submit" class="btn-dope active settings-save">Save</button>        
       </div>
-      <div class="login-form-group">
-        <label for="location">Location</label>
-        <input class="dope-field" type="text" name="location" id="location" value="{{ profile_form.location.value }}">
-      </div>
-      <div class="login-form-group">
-        <label for="bio">Bio</label>
-        <textarea class="dope-field" rows="3" name="bio" maxlength="500" id="bio">{{ profile_form.bio.value }}</textarea>
-      </div>
-      <div class="login-form-group">
-        <div class="form-check">
-          <label class="form-check-label" for="dark_theme">
-            {% if profile_form.dark_theme.value %}
-            <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" checked /> {% else %}
-            <input class="form-check-input dark_theme" type="checkbox" name="dark_theme" /> {% endif %} Use dark theme
-          </label>
-          <button type="submit" class="btn-dope active settings-save">Save</button>        
-        </div>
-      </div>
-    </form>
+    </div>
   </div>
   <div class="col-12 col-lg-4 dope-wrapper">
-    <button class="btn-dope">Delete Account</button>
+    <a class="btn-dope solong" href="{ url 'solong' }">
+      Delete Account
+    </a>
   </div>
-</div>
+</form>

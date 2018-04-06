@@ -612,7 +612,7 @@ $(document)
     var url = this.action;
     var form = $(this);
     var data = form.serialize();
-    var button = form.children("button[type=submit]");
+    var button = form.find("button[type=submit]");
     var text = button[0].innerText;
     button.html(getButtonLoading());
     $.ajax({

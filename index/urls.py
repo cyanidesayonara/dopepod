@@ -20,4 +20,5 @@ urlpatterns = [
     url(r"^account/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$", index.password_reset_from_key, name="password_reset_from_key"),
     url(r"^account/confirm-email/(?P<key>[-:\w]+)/$", index.confirm_email, name="confirm_email"),
     url(r"^noshow/$", index.noshow, name="noshow"),
+    url(r"^solong/$", index.solong, name="solong"),
 ]

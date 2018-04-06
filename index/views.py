@@ -839,3 +839,6 @@ def noshow(request):
     if podid:
         print(podid)
     return HttpResponse("")
+
+def solong(request):
+    pass

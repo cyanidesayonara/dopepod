@@ -11,7 +11,7 @@
 {% endif %}
 <div class="row fade collapse showpod-collapse show" id="episodes-collapse">
   {% if results.episodes %}
-    <div class="col-12 episodes">
+    <div class="col-12 episodes-content">
       <table class="table episodes-table">
         <thead>
           <tr>
@@ -70,7 +70,7 @@
               </td>
             </tr>
             <tr>
-              <td colspan="5" class="episode-content color-3-trans">
+              <td colspan="5" class="episode-hidden color-3-trans">
                 <div class="collapse fade more-collapse" id="more-collapse{{ episode.position }}">
                   <p>
                     {% if episode.description %}
