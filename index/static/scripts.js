@@ -681,7 +681,9 @@ $(document)
   })
   // deletes error text (after delay) when clicking anywhere
   .on("click", "body", function() {
-    $(".errors").delay(2000).fadeOut();
+    $(".errors").delay(2000).fadeOut("slow", function() {
+      $(this).remove();
+    });
   })
   // hides dopebar-collapse...
   .on("click", "body, .dopebar-link, .search-button", function() {

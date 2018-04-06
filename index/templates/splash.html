@@ -1,16 +1,18 @@
 <div class="row">
-  <div class="col-12 col-lg-4">
+  <div class="col-12 col-lg-4 dope-wrapper">
   </div>
-  <div class="col-12 col-lg-4 login-wrapper">
+  <div class="col-12 col-lg-4 dope-wrapper">
     <h1>
       <strong>
         Discover and listen to thousands of free podcasts on
       </strong>
     </h1>
     {% include "logo.min.html" %}
-    <div class="errors color-1-trans">
-      {% include "errors.min.html" %}
-    </div>
+    {% if errors %}
+      <div class="errors">
+        {% include "errors.min.html" %}
+      </div>
+    {% endif %}
     <div class="login-content">
       {% if view == "signup" %}
         <div class="collapse fade login-collapse" id="splash-collapse">
@@ -377,6 +379,6 @@
       </a>
     </div>
   </div>
-  <div class="col-12 col-lg-4">
+  <div class="col-12 col-lg-4 dope-wrapper">
   </div>
 </div>

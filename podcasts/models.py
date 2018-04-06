@@ -768,7 +768,8 @@ class Episode(models.Model):
                             continue
                     try:
                         pubdate = parse(pubdate, default=parse("00:00Z"))
-                        episode["pubDate"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
+                        # date as a string (used to create signature)
+                        episode["date_string"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
                     except ValueError:
                         logger.error("can\'t parse pubDate", podcast.feedUrl)
                         continue
@@ -856,8 +857,10 @@ class Episode(models.Model):
 
                         # create signature
                         episode["signature"] = signing.dumps(episode)
-
+                        # datetime date
+                        episode["pubDate"] = pubdate
                         episode["position"] = count - i + 1
+
                         episodes.append(episode)
 
                         if count < show:
@@ -966,8 +969,7 @@ class Episode(models.Model):
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
-                    pubdate = datetime.strptime(episode["pubDate"], "%b %d %Y %X %z")
-                    if not subscription.last_updated or subscription.last_updated < pubdate:
+                    if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
                         i += 1
                         episode["is_new"] = True
                     else:
@@ -1011,7 +1013,7 @@ class Episode(models.Model):
         if results:
             return results
         else:
-            last_played = Episode.objects.exclude(played_at=None).order_by("-played_at",)
+            last_played = Episode.objects.filter(position=None).order_by("-played_at",)
             results = {}
             results["episodes"] = last_played
             results["header"] = "Last played"
@@ -1038,7 +1040,7 @@ class Episode(models.Model):
         # if played is same as previous, delete previous
         # if list is longer than 50, delete excess
         with transaction.atomic():
-            last_played = Episode.objects.select_related(None).select_for_update().exclude(played_at=None).order_by("-played_at")
+            last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if last_played.count() > 1:
                 if last_played[0].signature == last_played[1].signature:
                     last_played[1].delete()
@@ -1048,7 +1050,7 @@ class Episode(models.Model):
                         episode.delete()
 
         # let's cache those bad boys
-        last_played = Episode.objects.exclude(played_at=None).order_by("-played_at")
+        last_played = Episode.objects.filter(position=None).order_by("-played_at")
         results = {}
         results["episodes"] = last_played
         results["header"] = "Last played"
@@ -1080,7 +1082,7 @@ class Episode(models.Model):
             url = data["url"]
             kind = data["type"]
             title = data["title"]
-            pubDate = datetime.strptime(data["pubDate"],"%b %d %Y %X %z")
+            pubDate = datetime.strptime(data["date_string"],"%b %d %Y %X %z")
             description = data["description"]
         except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
             return

@@ -164,6 +164,30 @@ a:hover {
   padding: 0 20px;
 }
 
+.dope-field {
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: .25rem;
+  border: 2px solid rgb(0, 191, 165);
+  margin-bottom: 10px;
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
+}
+.dope-field:hover,
+.dope-field:focus {
+  outline: none;
+  -webkit-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+  -moz-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+  box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+}
+.dope-wrapper {
+  margin: auto;
+  text-align: center;
+  padding: 10px;
+  max-width: 320px;
+}
+
 /* OPTIONS BUTTONS */
 .options-buttons {
   border-bottom: 2px solid rgb(0, 191, 165);
@@ -279,65 +303,36 @@ a:hover {
   outline: none;
 }
 .q {
-  border-radius: .25rem;
+  width: unset;
   font-size: 16px;
   margin: 0 5px;
   padding: 5px 30px 3px 8px;
   border: 1px solid rgb(46, 46, 46);
-  transition: all .15s ease-in-out;
-  -moz-transition: all .15s ease-in-out;
-  -webkit-transition: all .15s ease-in-out;
-}
-.q:hover,
-.q:focus {
-  border: 1px solid rgb(46, 46, 46);
-  -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-  -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-  box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-  outline: none;
 }
 
 /* ERRORS */
-.errors {
-  border-radius: .25rem;
-}
 .errors p {
   display: block;
+  border-radius: .25rem;
   padding: 10px;
   margin: 10px;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 
-/* LOGIN-SIGNUP */
-.login-wrapper {
-  margin: auto;
-  text-align: center;
-  padding: 10px;
-  max-width: 320px;
-}
-.login-wrapper h1 {
+/* SPLASH */
+.splash h1 {
   font-size: 18px;
   margin: 10px 0;
 }
-.login-wrapper p {
+.splash p {
   font-size: 14px;
   margin-bottom: 10px;
 }
 .login-content {
   margin-top: 10px;
   height: 130px;
-}
-.dope-field {
-  width: 100%;
-  padding: 4px 8px;
-  border-radius: .25rem;
-  border: 2px solid rgb(0, 191, 165);
-  margin-bottom: 10px;
-}
-.dope-field:focus {
-  outline: 0;
-  -webkit-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-  -moz-box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
-  box-shadow: inset rgba(0,0,0,.2) -1px -1px 5px, inset rgba(0,0,0,.2) 1px 1px 5px;
 }
 .btn-dope-social {
   display: inline-flex;
@@ -379,11 +374,6 @@ a:hover {
 }
 
 /* SETTINGS */
-.settings-wrapper {
-  max-width: 320px;
-  padding: 10px;
-  margin: auto;  
-}
 .settings-save {
   float: right;
 }
