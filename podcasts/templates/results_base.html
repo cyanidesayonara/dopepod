@@ -83,7 +83,6 @@
         </div>
       </div>
     {% endif %}
-
     <div class="col-12 results-content">
       {% if results.view == "splash" %}
         {% include "splash.min.html" %}
@@ -95,9 +94,7 @@
         {% include "charts.min.html" %}
       {% elif results.view == "subscriptions" %}
         {% include "subscriptions.min.html" %}
-      {% elif results.view == "showpod" %}
-        {% include "episodes.min.html" %}
-      {% elif results.view == "playlist" %}
+      {% elif results.view == "showpod" or results.view == "episodes" or results.view == "playlist" %}
         {% include "episodes.min.html" %}
       {% elif results.view == "last_played"%}
         {% include "last_played.min.html" %}
@@ -107,7 +104,6 @@
         {% include "password_reset.min.html" %}
       {% endif %}
     </div>
-    
   </div>
 </div>
 {% endblock %}

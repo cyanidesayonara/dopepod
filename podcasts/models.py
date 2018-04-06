@@ -671,7 +671,7 @@ class EpisodeManager(models.Manager):
 
 class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name="episode")
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="episode", default=None)
+    user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE, related_name="episode")
     pubDate = models.DateTimeField()
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -716,7 +716,7 @@ class Episode(models.Model):
 
             results = {
                 "episodes": episodes,
-                "view": "showpod",
+                "view": "episodes",
                 "podcast": podcast,
             }
 
