@@ -47,8 +47,6 @@ def index(request):
         if user.is_authenticated:
             results = {
                 "view": "dashboard",
-                "header": "Dashboard",
-                "extra_options": True,
             }
         else:
             results = {
@@ -478,8 +476,13 @@ def settings(request):
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
+
+                context.update({
+                    "message": "Saved!",
+                })
+
                 if request.is_ajax():
-                    return render(request, "dashboard.min.html", context)
+                    return render(request, "results_base.min.html", context)
                 return redirect("/")
             else:
                 errors = {}
