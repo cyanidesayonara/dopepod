@@ -37,7 +37,11 @@
       </p>
       <p class="player-date">
         Released
-        {{ episode.pubDate|date:'d-m-Y H:i' }}
+        {% if episode.pubDate %}
+          {{ episode.pubDate|date:"d-m-Y H:i" }}
+        {% else %}
+          N/A
+        {% endif %}
       </p>
       <button class="dope-toggle" data-toggle="collapse" data-target="#player-collapse"
         aria-expanded="false">

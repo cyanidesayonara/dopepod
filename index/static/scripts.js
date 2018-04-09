@@ -95,7 +95,7 @@ function refreshCookie() {
 // refreshes page on login
 function refreshPage() {
   loadResults(["/dopebar/", "#dopebar"]);
-  loadResults(["/last_played/", "#last-played"])
+  loadResults(["/last-played/", "#last-played"])
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -122,7 +122,7 @@ function loadResults(args, no_push) {
   if (!no_push) {
     pushState(url);
   }
-  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last_played/") {
+  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
     drop.children(".results").replaceWith(getLoading());
   }
   xhr = $.ajax({
@@ -320,7 +320,7 @@ function getLoading() {
 };
 function updateLastPlayed() {
   last_played = setInterval(function () {
-    loadResults(["/last_played/", "#last-played"]);
+    loadResults(["/last-played/", "#last-played"]);
   }, 1000 * 60);
 };
 function updateCharts() {

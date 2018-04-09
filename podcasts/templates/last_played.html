@@ -30,7 +30,11 @@
               Released
             </td>
             <td>
-              {{ episode.pubDate|date:"d-m-Y H:i" }}
+              {% if episode.pubDate %}
+                {{ episode.pubDate|date:"d-m-Y H:i" }}
+              {% else %}
+                N/A
+              {% endif %}
             </td>
           </tr>
           <tr>

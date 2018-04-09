@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.html import strip_tags
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -10,11 +9,8 @@ from django.db.models import F, Q, Max
 from lxml import etree, html as lxml_html
 from datetime import time, timedelta, datetime
 from dateutil.parser import parse
-import logging
-import string
 from urllib.parse import quote_plus, unquote_plus, urlencode
 from furl import furl
-import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from fake_useragent import UserAgent
@@ -22,11 +18,15 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
+import logging
+import string
+import requests
 import time
 import re
 import html
 import idna
 import copy
+logger = logging.getLogger(__name__)
 
 ua = UserAgent()
 
@@ -45,8 +45,6 @@ retry = Retry(
 adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 session.mount("http://", adapter)
 session.mount("https://", adapter)
-
-logger = logging.getLogger(__name__)
 
 def format_bytes(bytes):
     #2**10 = 1024
@@ -672,7 +670,7 @@ class EpisodeManager(models.Manager):
 class Episode(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name="episode")
     user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE, related_name="episode")
-    pubDate = models.DateTimeField()
+    pubDate = models.DateTimeField(default=None, null=True)
     title = models.CharField(max_length=1000)
     description = models.TextField(max_length=5000, null=True, blank=True)
     length = models.DurationField(null=True, blank=True)
@@ -721,7 +719,7 @@ class Episode(models.Model):
             }
 
             try:
-                response = session.get(podcast.feedUrl, headers=headers, timeout=5, allow_redirects=True)
+                response = session.get("http://emirmahmudoglu.org/feed/podcast", headers=headers, timeout=5, allow_redirects=True)
                 response.raise_for_status()
                 try:
                     root = etree.XML(response.content)
@@ -753,7 +751,7 @@ class Episode(models.Model):
                 if selected_page > num_pages:
                     Episode.get_episodes(url, podcast.podid, num_pages)
                     
-                # TODO sort by pubDate
+                # TODO sort by pubDate (but how ?!?!?)
                 for item in items:
                     episode = {}
 
@@ -765,15 +763,13 @@ class Episode(models.Model):
                         try:
                             pubdate = item.find("pubdate").text
                         except AttributeError:
-                            logger.error("can\'t get pubDate", podcast.feedUrl)
-                            continue
+                            pubdate = None
                     try:
                         pubdate = parse(pubdate, default=parse("00:00Z"))
                         # date as a string (used to create signature)
                         episode["date_string"] = datetime.strftime(pubdate,"%b %d %Y %X %z")
-                    except ValueError:
-                        logger.error("can\'t parse pubDate", podcast.feedUrl)
-                        continue
+                    except (ValueError, TypeError):
+                        episode["date_string"] = None
 
                     # try to get title & description
                     try:
@@ -957,7 +953,7 @@ class Episode(models.Model):
                 })
                 cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
             else:
-                print(podcast.podid)
+                print(podcast.feedUrl)
             if flag:
                 return
             else:
@@ -970,11 +966,12 @@ class Episode(models.Model):
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
-                    if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
-                        i += 1
-                        episode["is_new"] = True
-                    else:
-                        break
+                    if episode["pubDate"]:
+                        if not subscription.last_updated or subscription.last_updated < episode["pubDate"]:
+                            i += 1
+                            episode["is_new"] = True
+                        else:
+                            break
 
                 subscription.last_updated = timezone.now()
                 subscription.new_episodes = i
@@ -1061,7 +1058,6 @@ class Episode(models.Model):
     def add(signature, user):
         # max 20 episodes for now
         if user.is_authenticated:
-            # TODO if playlist full, delete episode
             # get position of last episode
             position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
             if position:
@@ -1083,10 +1079,14 @@ class Episode(models.Model):
             url = data["url"]
             kind = data["type"]
             title = data["title"]
-            pubDate = datetime.strptime(data["date_string"],"%b %d %Y %X %z")
             description = data["description"]
         except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
             return
+        
+        try:
+            pubDate = datetime.strptime(data["date_string"],"%b %d %Y %X %z")
+        except:
+            pubDate = None
 
         try:
             length = data["length"]
@@ -1099,6 +1099,7 @@ class Episode(models.Model):
             size = data["size"]
         except KeyError:
             size = None
+            
         return Episode.objects.create(
             user=user,
             url=url,

@@ -1,17 +1,14 @@
-from django.shortcuts import render, redirect, Http404, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect, Http404, HttpResponse
 from django.contrib.auth.models import User
-from django.http import JsonResponse
 from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast, Episode
 from django.views.decorators.vary import vary_on_headers
-from urllib.parse import urlencode
 from django.db.models import F
-import json
-import logging
-from django.core.cache import cache
 from django.utils import timezone
 from datetime import datetime
 from allauth.account import views as allauth
+import json
+import logging
 logger = logging.getLogger(__name__)
 
 def get_last_seen(session):
@@ -840,7 +837,11 @@ def confirm_email(request, key):
 def noshow(request):
     podid = request.POST.get("podid", None)
     if podid:
-        print(podid)
+        try:
+            podcast = Podcast.objects.get(podid=podid)
+            print(podcast.feedUrl)
+        except Podcast.DoesNotExist:
+            pass
     return HttpResponse("")
 
 def solong(request):
