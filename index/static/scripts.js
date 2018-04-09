@@ -153,7 +153,6 @@ function loadResults(args, no_push) {
 };
 // NOSHOW
 function noshow(podid) {
-  console.log(podid)
   $.ajax({
       data: {
         "podid": podid,
