@@ -719,7 +719,7 @@ class Episode(models.Model):
             }
 
             try:
-                response = session.get("http://emirmahmudoglu.org/feed/podcast", headers=headers, timeout=5, allow_redirects=True)
+                response = session.get(podcast.feedUrl, headers=headers, timeout=5, allow_redirects=True)
                 response.raise_for_status()
                 try:
                     root = etree.XML(response.content)
