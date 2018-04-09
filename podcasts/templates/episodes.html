@@ -150,7 +150,7 @@
         </tbody>
       </table>
     </div>
-  {% elif not results.episodes %}
+  {% elif not results.episodes and results.view == "playlist" %}
     <div class="col-12 dope-wrapper">
       <p>
         No episodes.
