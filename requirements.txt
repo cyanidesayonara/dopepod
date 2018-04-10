@@ -45,13 +45,11 @@ pycparser==2.18
 PyDispatcher==2.0.5
 pylint==1.8.4
 pyOpenSSL==17.5.0
-pypiwin32==223
 python-dateutil==2.7.2
 python-http-client==3.0.0
 python-memcached==1.59
 python3-openid==3.1.0
 pytz==2018.3
-pywin32==223
 queuelib==1.5.0
 requests==2.18.4
 requests-oauthlib==0.8.0

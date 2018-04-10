@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
-    'debug_toolbar',
+    #'debug_toolbar',
 
     'haystack',
 
@@ -75,7 +75,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -85,10 +85,10 @@ MIDDLEWARE = [
 ]
 
 # for debug toolbar
-INTERNAL_IPS = [
-    '127.0.0.1'
-]
-JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'
+#INTERNAL_IPS = [
+#    '127.0.0.1'
+#]
+#JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
