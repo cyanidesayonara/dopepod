@@ -401,10 +401,10 @@ def showpod(request, podid):
             page = 1
 
         url = request.get_full_path()
-        episodes = Episode.get_episodes(url, podcast, page)
+        episodes = Episode.get_episodes(url, podcast.podid, podcast.feedUrl, page)
         for page in episodes:
             results.update(page)
-        Episode.set_new(user, podcast, results["episodes"])
+        Episode.set_new(user, podcast.podid, results["episodes"])
 
         charts = Podcast.search(url=url, provider="dopepod")
         last_seen, cookie = get_last_seen(request.session)

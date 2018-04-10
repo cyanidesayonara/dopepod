@@ -30,13 +30,13 @@ def episodes(request, podid):
                 page = 1
             
             url = request.get_full_path()
-            episodes = Episode.get_episodes(url, podcast, page)
+            episodes = Episode.get_episodes(url, podcast.podid, podcast.feedUrl, page)
             
             results = {}
 
             for page in episodes:
                 results.update(page)
-            Episode.set_new(user, podcast, results["episodes"])
+            Episode.set_new(user, podcast.podid, results["episodes"])
 
             context = {
                 "results": results,

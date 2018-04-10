@@ -467,39 +467,52 @@ class Podcast(models.Model):
             except IndexError:
                 copyrighttext = "© All rights reserved"
 
-            # make sure feedUrl works before creating podcast
-            response = requests.get(feedUrl, headers=headers, timeout=10)
-            response.raise_for_status()
+            try:
+                # make sure feedUrl works before creating podcast
+                response = requests.get(feedUrl, headers=headers, timeout=10)
+                response.raise_for_status()
 
-            genre, created = Genre.objects.get_or_create(
-                name=genre
-            )
-            language, created = Language.objects.get_or_create(
-                name=language,
-            )
-            with transaction.atomic():
-                podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
-                    podid=podid,
-                    defaults={
-                        "feedUrl": feedUrl,
-                        "title": title,
-                        "artist": artist,
-                        "genre": genre,
-                        "explicit": explicit,
-                        "language": language,
-                        "copyrighttext": copyrighttext,
-                        "description": description,
-                        "reviewsUrl": reviewsUrl,
-                        "artworkUrl": artworkUrl,
-                        "podcastUrl": podcastUrl,
-                    }
+                genre, created = Genre.objects.get_or_create(
+                    name=genre
                 )
-                if created:
-                    logger.error("created podcast", title, feedUrl)
-                else:
-                    logger.error("updated podcast", title, feedUrl)
-                podcast.set_discriminated()
-                return podcast
+                language, created = Language.objects.get_or_create(
+                    name=language,
+                )
+
+                # TODO try to get episodes before creating podcast 
+
+                with transaction.atomic():
+                    podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
+                        podid=podid,
+                        defaults={
+                            "feedUrl": feedUrl,
+                            "title": title,
+                            "artist": artist,
+                            "genre": genre,
+                            "explicit": explicit,
+                            "language": language,
+                            "copyrighttext": copyrighttext,
+                            "description": description,
+                            "reviewsUrl": reviewsUrl,
+                            "artworkUrl": artworkUrl,
+                            "podcastUrl": podcastUrl,
+                        }
+                    )
+                    if created:
+                        logger.error("created podcast", title, feedUrl)
+                    else:
+                        logger.error("updated podcast", title, feedUrl)
+                    podcast.set_discriminated()
+                    return podcast
+
+            except requests.exceptions.HTTPError:
+                logger.error("http error", feedUrl)
+            except requests.exceptions.ReadTimeout:
+                logger.error("timed out", feedUrl)
+            except requests.exceptions.ConnectTimeout:
+                logger.error("timed out", feedUrl)
+            except requests.exceptions.RetryError:
+                logger.error("too many retries:", feedUrl)
 
         except requests.exceptions.HTTPError:
             logger.error("no response from url:", feedUrl)
@@ -611,7 +624,7 @@ class Podcast(models.Model):
                     except Podcast.DoesNotExist:
                         pass
 
-        except requests.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError:
             logger.error("http error", url)
         except requests.exceptions.ReadTimeout:
             logger.error("timed out", url)
@@ -684,7 +697,7 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
-    def get_episodes(url, podcast, selected_page):
+    def get_episodes(url, podid, feedUrl, selected_page=None):
         """
         returns a list of episodes using requests and lxml etree
         """
@@ -718,12 +731,12 @@ class Episode(models.Model):
             }
 
             try:
-                response = session.get(podcast.feedUrl, headers=headers, timeout=5, allow_redirects=True)
+                response = session.get(feedUrl, headers=headers, timeout=5, allow_redirects=True)
                 response.raise_for_status()
                 try:
                     root = etree.XML(response.content)
                 except etree.XMLSyntaxError:
-                    logger.error("trouble with xml", podcast.feedUrl)
+                    logger.error("trouble with xml", feedUrl)
                     try:
                         root = lxml_html.fromstring(response.content) #etree.XML(response.content)
                         root = root.xpath("//rss")[0]
@@ -737,7 +750,7 @@ class Episode(models.Model):
                     items = tree.findall("item")
                 except AttributeError:
                     items = []
-                    logger.error("no can do", podcast.feedUrl)
+                    logger.error("no can do", feedUrl)
 
                 count = len(items)
                 page = 1
@@ -748,7 +761,7 @@ class Episode(models.Model):
                 spread = 3
 
                 if selected_page > num_pages:
-                    Episode.get_episodes(url, podcast.podid, num_pages)
+                    Episode.get_episodes(url, podid, feedUrl, num_pages)
                     
                 # TODO sort by pubDate (but how ?!?!?)
                 for item in items:
@@ -777,7 +790,7 @@ class Episode(models.Model):
                         try:
                             episode["title"] = item.find("itunes:subtitle").text
                         except AttributeError as e:
-                            logger.error("can\'t get title", podcast.feedUrl)
+                            logger.error("can\'t get title", feedUrl)
                             continue
                     try:
                         description = item.find("description").text
@@ -788,7 +801,7 @@ class Episode(models.Model):
                         # if episode data not found, skip episode
                         except AttributeError as e:
                             description = ""
-                            logger.error("can\'t get description", podcast.feedUrl)
+                            logger.error("can\'t get description", feedUrl)
 
                     if not description:
                         description = ""
@@ -806,7 +819,7 @@ class Episode(models.Model):
                             length = item.find("duration").text
                         except AttributeError as e:
                             length = None
-                            logger.error("can\'t get length", podcast.feedUrl)
+                            logger.error("can\'t get length", feedUrl)
 
                     if length:
                         # convert length to timedelta
@@ -833,9 +846,9 @@ class Episode(models.Model):
                                         delta = timedelta(minutes=minutes, seconds=seconds)
                                         episode["length"] = str(delta)
                                     except (ValueError, IndexError):
-                                        logger.error("can\'t parse length", podcast.feedUrl)
+                                        logger.error("can\'t parse length", feedUrl)
 
-                    episode["podid"] = podcast.podid
+                    episode["podid"] = podid
 
                     # link to episode
                     # enclosure might be missing, have alternatives
@@ -845,7 +858,7 @@ class Episode(models.Model):
                         if size and int(size) > 100:
                             episode["size"] = format_bytes(int(size))
                     except (AttributeError, ValueError):
-                        logger.error("can\'t get episode size", podcast.feedUrl)
+                        logger.error("can\'t get episode size", feedUrl)
 
                     try:
                         episode["url"] = enclosure.get("url").replace("http:", "")
@@ -906,10 +919,10 @@ class Episode(models.Model):
                             page += 1
                         i += 1
                     except AttributeError as e:
-                        logger.error("can\'t get episode url/type/size", podcast.feedUrl)
+                        logger.error("can\'t get episode url/type/size", feedUrl)
 
             except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError, requests.exceptions.InvalidSchema, requests.exceptions.MissingSchema):
-                logger.error("connection error", podcast.feedUrl)
+                logger.error("connection error", feedUrl)
 
             if episodes:
                 # paginate
@@ -952,16 +965,16 @@ class Episode(models.Model):
                 })
                 cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
             else:
-                print(podcast.feedUrl)
+                print(feedUrl)
             if flag:
                 return
             else:
                 yield results
                 
-    def set_new(user, podcast, episodes):
+    def set_new(user, podid, episodes):
         if user.is_authenticated:
             try:
-                subscription = Subscription.objects.get(user=user, podcast__podid=podcast.podid)
+                subscription = Subscription.objects.get(user=user, podcast__podid=podid)
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
