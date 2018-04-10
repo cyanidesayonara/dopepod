@@ -182,14 +182,13 @@ a:hover {
   box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
 }
 .dope-wrapper {
-  margin: auto;
   text-align: center;
   padding: 10px;
-  max-width: 320px;
 }
 
 /* OPTIONS BUTTONS */
 .options-buttons {
+  border-top: 2px solid rgb(0, 191, 165);
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .provider-button {
@@ -254,7 +253,7 @@ a:hover {
   color: #fff;
 }
 .dopebar-link  {
-  padding: 5px 6px;
+  padding: 0 6px;
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
@@ -323,7 +322,7 @@ a:hover {
 
 /* SPLASH */
 .splash h1 {
-  font-size: 18px;
+  font-size: 22px;
   margin: 10px 0;
 }
 .splash p {
@@ -331,7 +330,9 @@ a:hover {
   margin-bottom: 10px;
 }
 .login-content {
+  margin: auto;
   margin-top: 10px;
+  max-width: 300px;
   height: 130px;
 }
 .btn-dope-social {

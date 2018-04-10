@@ -1,7 +1,7 @@
 function pushState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last_played", "unsubscribe"];
+  var urls = ["dopebar", "charts", "last-played", "unsubscribe"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -19,7 +19,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last_played"];
+  var urls = ["dopebar", "charts", "last-played"];
   for (i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -100,7 +100,7 @@ function refreshPage() {
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "last_played"];
+    var urls = ["dopebar", "charts", "episodes", "last-played"];
     for (i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -123,7 +123,12 @@ function loadResults(args, no_push) {
     pushState(url);
   }
   if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
-    drop.children(".results").replaceWith(getLoading());
+    if (drop.children(".results").length) {
+      drop.children(".results").addClass("loading").html(getCircleLoading());
+    }
+    else {
+      drop.find(".episodes-content").html(getCircleLoading());
+    }
   }
   xhr = $.ajax({
     type: "GET",
@@ -315,8 +320,8 @@ function cookieBannerClose() {
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 };
-function getLoading() {
-  return $(".loading").first().clone();
+function getCircleLoading() {
+  return $(".circle-loading").first().clone();
 };
 function updateLastPlayed() {
   last_played = setInterval(function () {

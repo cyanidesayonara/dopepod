@@ -1,5 +1,5 @@
 <div class="col results-buttons">
-  {% if results.view == "showpod" or results.view == "episodes" %}
+  {% if results.view == "showpod" %}
     {% if user.is_authenticated %}
       <form class="d-inline subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
         {% csrf_token %}
@@ -16,11 +16,7 @@
       </form>
     {% endif %}
     <a class="btn-dope episodes-button toggle" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
-      {% if request.is_ajax and results.view == "showpod" %}
-        {% include "button_loading.min.html" %}
-      {% else %}
-        Episodes
-      {% endif %}
+      Episodes
     </a>
     <a class="btn-dope reviews-button toggle" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
       Reviews

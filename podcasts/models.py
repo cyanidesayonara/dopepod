@@ -714,8 +714,7 @@ class Episode(models.Model):
 
             results = {
                 "episodes": episodes,
-                "view": "episodes",
-                "podcast": podcast,
+                "view": "showpod",
             }
 
             try:

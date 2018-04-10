@@ -415,7 +415,6 @@ def showpod(request, podid):
         context.update({
             "cookie_banner": cookie,
             "charts": charts,
-            "results": results,
             "last_played": last_played,
         })
         return render(request, "results_base.min.html", context)
