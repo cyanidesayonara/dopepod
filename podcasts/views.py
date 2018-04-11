@@ -32,7 +32,10 @@ def episodes(request, podid):
             url = request.get_full_path()
             episodes = Episode.get_episodes(url, podcast.podid, podcast.feedUrl, page)
             
-            results = {}
+            results = {
+                "view": "showpod",
+                "podcast": podcast,
+            }
 
             for page in episodes:
                 results.update(page)

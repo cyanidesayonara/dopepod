@@ -191,6 +191,7 @@ a:hover {
 .options-buttons {
   border-top: 2px solid rgb(0, 191, 165);
   border-bottom: 2px solid rgb(0, 191, 165);
+  margin-bottom: 10px;
 }
 .provider-button {
   width: 110px;
@@ -254,7 +255,7 @@ a:hover {
   color: #fff;
 }
 .dopebar-link  {
-  padding: 0 6px;
+  padding: 5px 6px;
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
@@ -497,14 +498,14 @@ a:hover {
 }
 .episode-buttons {
   justify-content: flex-end;
-  padding: 5px 10px 10px 5px;
+  padding: 10px 10px 5px 5px;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 .episode-buttons > * {
   margin-left: 5px;
-  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* RESULTS BASE */
@@ -837,8 +838,8 @@ a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 
-/* PLAYLIST */
-.playlist-form {
+.playlist-form,
+.subscriptions-form {
   display: inherit;
 }
 

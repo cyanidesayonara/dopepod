@@ -9,6 +9,7 @@ from datetime import datetime
 from allauth.account import views as allauth
 import json
 import logging
+
 logger = logging.getLogger(__name__)
 
 def get_last_seen(session):
@@ -240,6 +241,7 @@ def subscriptions(request):
         if user.is_authenticated:
             try:
                 podids = request.POST.getlist("podids[]")
+                print(podids)
                 for podid in podids:
                     podcast = Podcast.objects.get(podid=int(podid))
                     podcast.subscribe_or_unsubscribe(user)
@@ -254,8 +256,11 @@ def subscriptions(request):
                 return render(request, "results_base.min.html", context)
             return redirect("/subscriptions/")
         else:
+            results = {
+                "view": "splash",
+            }
             if request.is_ajax():
-                return render(request, "splash.min.html", context)
+                return render(request, "results_base.min.html", context)
             return redirect("/")
 
 @vary_on_headers("Accept")

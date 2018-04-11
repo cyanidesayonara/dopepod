@@ -18,6 +18,8 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
+from plotly.graph_objs import Pie
+import plotly
 import logging
 import string
 import requests
@@ -45,6 +47,35 @@ retry = Retry(
 adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 session.mount("http://", adapter)
 session.mount("https://", adapter)
+
+def donuts():
+    names = list(Genre.get_primary_genres().values_list("name", flat=True))
+    numbers = list(Genre.get_primary_genres().values_list("n_podcasts", flat=True))
+    plotly.offline.plot({
+        "data": [
+            {
+                "labels": names,
+                "values": numbers,
+                "name": "",
+                "hoverinfo":"label+percent+name",
+                "hole": .4,
+                "type": "pie",
+            }
+        ],
+        "layout": {
+            "annotations": [
+                {
+                    "font": {
+                        "size": 20
+                    },
+                    "showarrow": False,
+                    "text": "Genres",
+                    "x": 0.5,
+                    "y": 0.5
+                },
+            ]
+        }
+    }, filename='donut.html')
 
 def format_bytes(bytes):
     #2**10 = 1024
@@ -111,6 +142,9 @@ class Podcast(models.Model):
 
     objects = PodcastManager()
 
+    def __str__(self):
+        return self.title
+
     def get_primary_genre(self):
         return self.genre if self.genre.supergenre == None else self.genre.supergenre
 
@@ -119,9 +153,6 @@ class Podcast(models.Model):
             return str(self.n_subscribers) if self.n_subscribers > 100 else "<1k"
         else:
             return "<1k"
-
-    def __str__(self):
-        return self.title
 
     def set_discriminated(self):
         bad_url = "is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/"
@@ -667,7 +698,6 @@ class Subscription(models.Model):
 
     def get_subscriptions(user):
         subscriptions = Subscription.objects.filter(user=user)
-
         results = {}
         results["podcasts"] = subscriptions
         results["header"] = "Subscriptions"
@@ -727,7 +757,6 @@ class Episode(models.Model):
 
             results = {
                 "episodes": episodes,
-                "view": "showpod",
             }
 
             try:
@@ -942,14 +971,14 @@ class Episode(models.Model):
                     results["pages"] = list(
                         zip(pages, pages_urls))
 
-                    if page != num_pages:
+                    if page < num_pages - spread:
                         f = furl(url)
                         f.args["page"] = num_pages
                         results["end_url"] = f.url
                     else:
                         results["end_url"] = None
 
-                    if page != 1:
+                    if page > 1 + spread:
                         f = furl(url)
                         del f.args["page"]
                         results["start_url"] = f.url
