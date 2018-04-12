@@ -127,7 +127,7 @@ function loadResults(args, no_push) {
       drop.children(".results").addClass("loading").html(getCircleLoading());
     }
     else {
-      drop.find(".episodes-content").html(getCircleLoading());
+      drop.html(getCircleLoading());
     }
   }
   xhr = $.ajax({
@@ -225,6 +225,34 @@ function changeTheme(theme) {
     $("body").removeClass("darken");
   }
 };
+function postSettings(data, theme, button) {
+  button.html(getButtonLoading());
+  var url = "/settings/";
+  $.ajax({
+      data: data,
+      method: "POST",
+      url: url,
+    })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+      $("#center-stage").html(xhr.responseText);
+      scrollToTop();
+    })
+    .done(function (response) {
+      if (theme) {
+        if (theme === "dark") {
+          theme = true;
+          $(".lights-toggle").removeClass("lit");
+        } else if (theme === "light") {
+          theme = false;
+          $(".lights-toggle").addClass("lit");
+        }
+      }
+      changeTheme(theme);
+      $("#center-stage").html(response);
+      scrollToTop();
+      replaceState(url);
+    });
+}
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -257,7 +285,12 @@ function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
   var text = button[0].innerHTML;
   var url = "/playlist/";
-  button.html(getButtonLoading());
+  if (button.is("#player-wrapper")) {
+    button.html(getCircleLoading());
+  }
+  else {
+    button.html(getButtonLoading());
+  }
   $.ajax({
     method: "POST",
     url: url,
@@ -385,7 +418,7 @@ $(document)
       }
       var drop = button.parents(".results").parent();
       loadResults([url, drop]);
-      scrollTo(drop);
+      scrollToTop();
     }, 250);
   })
   // search when user clicks buttons
@@ -396,10 +429,11 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function () {
-      button.html(getButtonLoading());
       var drop = button.parents(".results-content");
       loadResults([url, drop]);
-      scrollTo(drop);
+      if ($(window).width() < 992) {
+        scrollTo(drop);
+      }
     }, 250);
   })
   // NAVIGATION
@@ -585,29 +619,9 @@ $(document)
     var url = this.action;
     var form = $(this)
     var data = form.serialize();
-    var theme = form.find("input[name=dark_theme]").is(":checked");
-    form.find("button[type=submit]").html(getButtonLoading());
-    $.ajax({
-        data: data,
-        method: method,
-        url: url,
-      })
-      .fail(function (xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText);
-        scrollToTop();
-      })
-      .done(function (response) {
-        pushState(url);
-        if (theme) {
-          $(".lights-toggle").removeClass("lit");
-        } else {
-          $(".lights-toggle").addClass("lit");
-        }
-        changeTheme(theme);
-        $("#center-stage").html(response);
-        scrollToTop();
-        replaceState("/");
-      });
+    var theme = form.children("input[name=theme]").val();
+    var button = form.find("button[type=submit]");
+    postSettings(data, theme, button);
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
@@ -666,7 +680,9 @@ $(document)
     $(".more-collapse.show").collapse("hide");
     var obj = $(this).parents("tr").prev();
     timeout = setTimeout(function () {
-      scrollTo(obj);
+      if ($(window).width() < 992) {
+        scrollTo(obj);
+      }
     }, 250);
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {

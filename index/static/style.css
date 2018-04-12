@@ -165,11 +165,12 @@ a:hover {
 }
 
 .dope-field {
+  display: block;
   width: 100%;
   padding: 4px 8px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   transition: all .15s ease-in-out;
   -moz-transition: all .15s ease-in-out;
   -webkit-transition: all .15s ease-in-out;
@@ -181,10 +182,19 @@ a:hover {
   -moz-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
   box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
 }
+.dope-form-group {
+  text-align: left;
+}
+.dope-form-group label {
+  margin-bottom: 0;
+  display: block;
+}
 .dope-wrapper {
+  font-size: 14px;
   margin: auto;
   text-align: center;
-  padding: 10px;
+  padding: 15px;
+  max-width: 360px;
 }
 
 /* OPTIONS BUTTONS */
@@ -332,10 +342,8 @@ a:hover {
   margin-bottom: 10px;
 }
 .login-content {
-  margin: auto;
   margin-top: 10px;
-  max-width: 300px;
-  height: 130px;
+  height: 180px;
 }
 .btn-dope-social {
   display: inline-flex;
@@ -378,7 +386,6 @@ a:hover {
 
 /* SETTINGS */
 .settings-save {
-  float: right;
 }
 
 /* SHOWPOD */
@@ -1136,7 +1143,4 @@ a:hover {
 }
 /* large desktops and up ----------- */
 @media screen and (min-width: 1200px) {
-}
-/* XXL */
-@media screen and (min-width: 1400px) {
 }

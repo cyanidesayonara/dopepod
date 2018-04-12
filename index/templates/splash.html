@@ -27,14 +27,16 @@
         <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="login-login">Email</label>
-              <input class="dope-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="login-password">Password</label>
-                <input class="dope-field" type="password" name="password" placeholder="Password" required id="login-password">
+              <div class="col-12 dope-form-group">
+                <label for="login-login">Email</label>
+                <input class="dope-field" type="text" name="login" autofocus="autofocus" required id="login-login" value="{{ email }}">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="login-password">Password</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password" required id="login-password">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Login</button>
@@ -48,8 +50,7 @@
               </div>
               <div class="col form-check">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                  Remember me
+                  <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
                 </label>
               </div>
             </div>
@@ -58,18 +59,20 @@
         <div class="collapse fade login-collapse show" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-email">Email</label>
-              <input class="dope-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
-            </div>
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-password1">Password</label>
-              <input class="dope-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="signup-password2">Password (again)</label>
-                <input class="dope-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+              <div class="col-12 dope-form-group">
+                <label for="signup-email">Email</label>
+                <input class="dope-field" type="email" name="email" size="30" required id="signup-email">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password1">Password</label>
+                <input class="dope-field" type="password" name="password1" required id="signup-password1">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password2">Password (again)</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password2" required="" id="signup-password2">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Signup</button>
@@ -84,9 +87,11 @@
           <form class="password-form" method="POST" action="{% url 'password_reset' %}">
             {% csrf_token %}
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="forgot-email">Email</label>
-                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+              <div class="col-12 dope-form-group">
+                <label for="forgot-email">Email</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" required>
               </div>
               <div class="col-auto">
                 <button class="btn-dope active" type="submit">
@@ -109,14 +114,16 @@
         <div class="collapse fade login-collapse show" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="login-login">Email</label>
-              <input class="dope-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="login-password">Password</label>
-                <input class="dope-field" type="password" name="password" placeholder="Password" required id="login-password">
+              <div class="col-12 dope-form-group">
+                <label for="login-login">Email</label>
+                <input class="dope-field" type="text" name="login" autofocus="autofocus" required id="login-login" value="{{ email }}">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="login-password">Password</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password" required id="login-password">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Login</button>
@@ -130,8 +137,7 @@
               </div>
               <div class="col form-check">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                  Remember me
+                  <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
                 </label>
               </div>
             </div>
@@ -140,18 +146,20 @@
         <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-email">Email</label>
-              <input class="dope-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
-            </div>
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-password1">Password</label>
-              <input class="dope-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="signup-password2">Password (again)</label>
-                <input class="dope-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+              <div class="col-12 dope-form-group">
+                <label for="signup-email">Email</label>
+                <input class="dope-field" type="email" name="email" size="30" required id="signup-email">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password1">Password</label>
+                <input class="dope-field" type="password" name="password1" required id="signup-password1">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password2">Password (again)</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password2" required="" id="signup-password2">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Signup</button>
@@ -166,9 +174,11 @@
           <form class="password-form" method="POST" action="{% url 'password_reset' %}">
             {% csrf_token %}
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="forgot-email">Email</label>
-                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+              <div class="col-12 dope-form-group">
+                <label for="forgot-email">Email</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" required>
               </div>
               <div class="col-auto">
                 <button class="btn-dope active" type="submit">
@@ -191,14 +201,16 @@
         <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="login-login">Email</label>
-              <input class="dope-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="login-password">Password</label>
-                <input class="dope-field" type="password" name="password" placeholder="Password" required id="login-password">
+              <div class="col-12 dope-form-group">
+                <label for="login-login">Email</label>
+                <input class="dope-field" type="text" name="login" autofocus="autofocus" required id="login-login" value="{{ email }}">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="login-password">Password</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password" required id="login-password">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Login</button>
@@ -212,8 +224,7 @@
               </div>
               <div class="col form-check">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                  Remember me
+                  <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
                 </label>
               </div>
             </div>
@@ -222,18 +233,20 @@
         <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-email">Email</label>
-              <input class="dope-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
-            </div>
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-password1">Password</label>
-              <input class="dope-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="signup-password2">Password (again)</label>
-                <input class="dope-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+              <div class="col-12 dope-form-group">
+                <label for="signup-email">Email</label>
+                <input class="dope-field" type="email" name="email" size="30" required id="signup-email">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password1">Password</label>
+                <input class="dope-field" type="password" name="password1" required id="signup-password1">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password2">Password (again)</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password2" required="" id="signup-password2">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Signup</button>
@@ -248,9 +261,11 @@
           <form class="password-form" method="POST" action="{% url 'password_reset' %}">
             {% csrf_token %}
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="forgot-email">Email</label>
-                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+              <div class="col-12 dope-form-group">
+                <label for="forgot-email">Email</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" required>
               </div>
               <div class="col-auto">
                 <button class="btn-dope active" type="submit">
@@ -273,14 +288,16 @@
         <div class="collapse fade login-collapse" id="login-collapse">
           <form class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="login-login">Email</label>
-              <input class="dope-field" type="text" name="login" placeholder="Email" autofocus="autofocus" required id="login-login" value="{{ email }}">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="login-password">Password</label>
-                <input class="dope-field" type="password" name="password" placeholder="Password" required id="login-password">
+              <div class="col-12 dope-form-group">
+                <label for="login-login">Email</label>
+                <input class="dope-field" type="text" name="login" autofocus="autofocus" required id="login-login" value="{{ email }}">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="login-password">Password</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password" required id="login-password">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Login</button>
@@ -304,18 +321,20 @@
         <div class="collapse fade login-collapse" id="signup-collapse">
           <form class="signup-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-email">Email</label>
-              <input class="dope-field" type="email" name="email" size="30" placeholder="Email" required id="signup-email">
-            </div>
-            <div class="login-form-group">
-              <label class="sr-only" for="signup-password1">Password</label>
-              <input class="dope-field" type="password" name="password1" placeholder="Password" required id="signup-password1">
-            </div>
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="signup-password2">Password (again)</label>
-                <input class="dope-field" type="password" name="password2" placeholder="Password (again)" required="" id="signup-password2">
+              <div class="col-12 dope-form-group">
+                <label for="signup-email">Email</label>
+                <input class="dope-field" type="email" name="email" size="30" required id="signup-email">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password1">Password</label>
+                <input class="dope-field" type="password" name="password1" required id="signup-password1">
+              </div>
+              <div class="col-12 dope-form-group">
+                <label for="signup-password2">Password (again)</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" type="password" name="password2" required="" id="signup-password2">
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn-dope active">Signup</button>
@@ -330,9 +349,11 @@
           <form class="password-form" method="POST" action="{% url 'password_reset' %}">
             {% csrf_token %}
             <div class="form-row">
-              <div class="col login-form-group">
-                <label class="sr-only" for="forgot-email">Email</label>
-                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" placeholder="Email" required>
+              <div class="col-12 dope-form-group">
+                <label for="forgot-email">Email</label>
+              </div>
+              <div class="col dope-form-group">
+                <input class="dope-field" id="forgot-email" type="email" name="email" size="30" required>
               </div>
               <div class="col-auto">
                 <button class="btn-dope active" type="submit">

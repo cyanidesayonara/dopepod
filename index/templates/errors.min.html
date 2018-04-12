@@ -1,1 +1,1 @@
-{% for k, v in errors.items %}<p class="color-1-trans">{{ v }}</p>{% endfor %} {% if message %}<p class="color-1-trans">{{ message }}</p>{% endif %}
+{% for k, v in errors.items %}<p class="color-1-trans"><i class="fas fa-times" title="Error"></i> {{ v }}</p>{% endfor %} {% if message %}<p class="color-1-trans"><i class="fas fa-check" title="Done"></i> {{ message }}</p>{% endif %}

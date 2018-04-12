@@ -309,11 +309,11 @@ def playlist(request):
                     episode = Episode.add(signature, user)
                 except KeyError:
                     try:
-                        position = int(request.POST["pos"])
+                        position = int(request.POST["pos"]) + 1
                         episode = Episode.objects.get(user=user, position=position)
                     except (KeyError, Episode.DoesNotExist):
                         raise Http404()
-
+                
                 episode.play()
 
                 context = {
@@ -465,8 +465,14 @@ def settings(request):
             return render(request, "results_base.min.html", context)
 
         if request.method == "POST":
-            user_form = UserForm(instance=request.user, data=request.POST)
-            profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+            data = request.POST.copy()
+            try:
+                data["dark_theme"] = True if request.POST["theme"] == "dark" else False
+            except KeyError:
+                pass
+
+            user_form = UserForm(instance=request.user, data=data)
+            profile_form = ProfileForm(instance=request.user.profile, data=data)
 
             context = {
                 "results": results,
@@ -653,6 +659,10 @@ def logout(request):
     if request.method == "POST":
         response = allauth.logout(request)
         return response
+
+def change_password(request):
+    # TODO do dis
+    return HttpResponse("Nah")
 
 def password_reset(request):
     if request.method == "POST":
@@ -849,4 +859,7 @@ def noshow(request):
     return HttpResponse("")
 
 def solong(request):
-    pass
+    user = request.user
+    if user.is_authenticated:
+        print(user)
+    return HttpResponse("")
