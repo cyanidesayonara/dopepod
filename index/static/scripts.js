@@ -238,6 +238,7 @@ function postSettings(data, theme, button) {
       scrollToTop();
     })
     .done(function (response) {
+      console.log(theme)
       if (theme) {
         if (theme === "dark") {
           theme = true;
@@ -328,7 +329,7 @@ function postPlaylist(data, mode, button) {
 };
 function playNext() {
   var data = {
-    "pos": "0",
+    "pos": "1",
     "mode": "play",
   };
   var mode = "play";
@@ -617,9 +618,9 @@ $(document)
     e.preventDefault();
     var method = this.method;
     var url = this.action;
-    var form = $(this)
+    var form = $(this);
     var data = form.serialize();
-    var theme = form.children("input[name=theme]").val();
+    var theme = form.find("input[name=theme]").val();
     var button = form.find("button[type=submit]");
     postSettings(data, theme, button);
   })

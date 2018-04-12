@@ -309,7 +309,7 @@ def playlist(request):
                     episode = Episode.add(signature, user)
                 except KeyError:
                     try:
-                        position = int(request.POST["pos"]) + 1
+                        position = int(request.POST["pos"])
                         episode = Episode.objects.get(user=user, position=position)
                     except (KeyError, Episode.DoesNotExist):
                         raise Http404()
@@ -713,6 +713,7 @@ def password_reset(request):
     else:
         return redirect("/?view=password")
 
+@vary_on_headers("Accept")
 def password_reset_from_key(request, uidb36, key):
     if request.method == "GET":
         ajax = request.is_ajax()
@@ -817,6 +818,7 @@ def password_reset_from_key(request, uidb36, key):
                 })
                 return render(request, "results_base.min.html", context, status=400)
 
+@vary_on_headers("Accept")
 def confirm_email(request, key):
     response = allauth.confirm_email(request, key=key)
     
