@@ -1,4 +1,4 @@
-<div class="row showpod-buttons">
+<div class="row">
   {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
   {% include "results_buttons.min.html" %}
 </div>
@@ -43,7 +43,7 @@
           </thead>
           <tbody>
             {% for episode in results.episodes %}
-              <tr class="episode-header toggle" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
+              <tr class="episode-header toggle {% if not results.pages and forloop.last %}noborder{% endif %}" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
                 <th scope="row">
                   {{ episode.position }}
                 </th>
@@ -84,7 +84,7 @@
               </tr>
               <tr>
                 <td colspan="5" class="episode-hidden color-3-trans">
-                  <div class="collapse fade more-collapse" id="more-collapse{{ episode.position }}">
+                  <div class="collapse fade more-collapse {% if not results.pages and forloop.last %}noborder{% endif %}" id="more-collapse{{ episode.position }}">
                     <p>
                       {% if episode.description %}
                         {{ episode.description }}

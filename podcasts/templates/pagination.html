@@ -1,4 +1,4 @@
-<div class="col-12 col-md-6 pages-buttons">
+<div class="col-12 order-3 col-md-6 order-md-1 pages-buttons">
   {% if results.start_url %}
     <a class="btn-dope options-button" href="{{ results.start_url }}">
       <i class="fas fa-angle-double-left" title="First Page"></i>
@@ -10,7 +10,7 @@
         {{ page.0 }}
       </a>
     {% else %}
-      <button class="btn-dope options-button active">
+      <button class="btn-dope active">
         {{ page.0 }}
       </button>
     {% endif %}

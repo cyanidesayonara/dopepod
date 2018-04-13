@@ -124,10 +124,10 @@ function loadResults(args, no_push) {
   }
   if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
     if (drop.children(".results").length) {
-      drop.children(".results").addClass("loading").html(getCircleLoading());
+      drop.find(".results-content").addClass("loading").html(getCircleLoading());
     }
     else {
-      drop.html(getCircleLoading());
+      drop.find(".episodes-content").html(getCircleLoading());
     }
   }
   xhr = $.ajax({
@@ -403,7 +403,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".options-button", function(e) {
+  .on("click", ".options-button", function (e) {
     e.preventDefault();
     var url = this.href;
     var button = $(this);
@@ -418,12 +418,13 @@ $(document)
         }
       }
       var drop = button.parents(".results").parent();
+      console.log(drop)
       loadResults([url, drop]);
-      scrollToTop();
+      scrollTo(drop);
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".showpod-buttons .options-button", function(e) {
+  .on("click", ".showpod .pages-buttons .options-button", function(e) {
     e.preventDefault();
     // redirect to episodes
     var url = this.href.replace("showpod", "episodes");
@@ -537,24 +538,6 @@ $(document)
   .on("click", ".last-played-link", function(e) {
     e.preventDefault();
     scrollTo($("#last-played"));
-  })
-  .on("click", ".update-playlist", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      var drop = $("#center-stage");
-      loadResults([url, drop]);
-    }, 250);
-  })
-  .on("click", ".update-last-played", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      var drop = $("#last-played");
-      loadResults([url, drop]);
-    }, 250);
   })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {

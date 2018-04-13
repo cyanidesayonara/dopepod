@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import Podcast, Subscription, Episode
-from datetime import datetime, timedelta
+from .models import Podcast, Episode
 import logging
 logger = logging.getLogger(__name__)
 
