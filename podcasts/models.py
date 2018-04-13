@@ -536,6 +536,8 @@ class Podcast(models.Model):
                     podcast.set_discriminated()
                     return podcast
 
+            except requests.exceptions.TooManyRedirects:
+                logger.error("too many redirects", feedUrl)
             except requests.exceptions.HTTPError:
                 logger.error("http error", feedUrl)
             except requests.exceptions.ReadTimeout:
