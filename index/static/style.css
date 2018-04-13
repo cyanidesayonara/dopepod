@@ -189,13 +189,6 @@ a:hover {
   margin-bottom: 0;
   display: block;
 }
-.dope-wrapper {
-  font-size: 14px;
-  margin: auto;
-  text-align: center;
-  padding: 15px;
-  max-width: 360px;
-}
 
 /* OPTIONS BUTTONS */
 .options-buttons {
@@ -333,6 +326,11 @@ a:hover {
 }
 
 /* SPLASH */
+.splash-wrapper {
+  font-size: 14px;
+  padding: 10px 25px;
+  text-align: center;
+}
 .splash h1 {
   font-size: 22px;
   margin: 10px 0;
@@ -385,7 +383,11 @@ a:hover {
 }
 
 /* SETTINGS */
-.settings-save {
+.settings-wrapper {
+  font-size: 14px;
+  padding: 10px 30px;
+  margin: auto;
+  text-align: center;
 }
 
 /* SHOWPOD */
@@ -611,6 +613,7 @@ a:hover {
   border-bottom: none;
 }
 .subscriptions-result {
+  margin: 10px;
   border-radius: .25rem;
 }
 .last-played-result {
