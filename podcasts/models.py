@@ -163,7 +163,7 @@ class Podcast(models.Model):
             self.save()
 
     def get_absolute_url(self):
-        return reverse("podinfo", args="self.podid")
+        return reverse("showpod", args=[self.podid])
 
     def search(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None, force_cache=False):
         """
@@ -436,6 +436,7 @@ class Podcast(models.Model):
             subscription.delete()
             self.n_subscribers = F("n_subscribers") - 1
         self.save()
+        return created
 
     def is_subscribed(self, user):
         """

@@ -5,9 +5,9 @@
   {% include "results_buttons.min.html" %}
 </div>
 {% if results.podcasts1 %}
-  <div class="row collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
+  <div class="row collapse fade view-collapse grid-results {% if results.view == 'grid' %}show{% endif %}">
     {% for podcast in results.podcasts1 %}
-    <div class="col-lg-2 col-md-3 col-4 search-result">
+    <div class="col-lg-2 col-md-3 col-4 grid-result">
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='http://{{ podcast.object.artworkUrl }}200x200bb.jpg'"
           alt="{{ podcast.object.title }}" />
@@ -26,7 +26,7 @@
     </div>
     {% endfor %}
     {% for podcast in results.podcasts2 %}
-    <div class="col-lg-2 col-md-3 col-4 search-result">
+    <div class="col-lg-2 col-md-3 col-4 grid-result">
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='http://{{ podcast.object.artworkUrl }}200x200bb.jpg'"
           alt="{{ podcast.object.title }}" />
@@ -45,7 +45,7 @@
     </div>
     {% endfor %}
     {% for podcast in results.podcasts3 %}
-    <div class="col-lg-2 col-md-3 col-4 search-result">
+    <div class="col-lg-2 col-md-3 col-4 grid-result">
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='http://{{ podcast.object.artworkUrl }}200x200bb.jpg'"
           alt="{{ podcast.object.title }}" />
@@ -64,7 +64,7 @@
     </div>
     {% endfor %}
     {% for podcast in results.podcasts4 %}
-    <div class="col-lg-2 col-md-3 col-4 search-result">
+    <div class="col-lg-2 col-md-3 col-4 grid-result">
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
         <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='http://{{ podcast.object.artworkUrl }}200x200bb.jpg'"
           alt="{{ podcast.object.title }}" />
@@ -83,8 +83,8 @@
     </div>
     {% endfor %}
   </div>
-  <div class="row collapse fade view-collapse {% if results.view == 'list' %}show{% endif %}">
-    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+  <div class="row collapse fade view-collapse list-results {% if results.view == 'list' %}show{% endif %}">
+    <div class="col-lg-3 col-md-6 col-sm-12 list-result">
       <ul>
         {% for podcast in results.podcasts1 %}
         <li>
@@ -95,7 +95,7 @@
         {% endfor %}
       </ul>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+    <div class="col-lg-3 col-md-6 col-sm-12 list-result">
       <ul>
         {% for podcast in results.podcasts2 %}
         <li>
@@ -106,7 +106,7 @@
         {% endfor %}
       </ul>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+    <div class="col-lg-3 col-md-6 col-sm-12 list-result">
       <ul>
         {% for podcast in results.podcasts3 %}
         <li>
@@ -117,7 +117,7 @@
         {% endfor %}
       </ul>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 browse-results">
+    <div class="col-lg-3 col-md-6 col-sm-12 list-result">
       <ul>
         {% for podcast in results.podcasts4 %}
         <li>
@@ -128,6 +128,12 @@
         {% endfor %}
       </ul>
     </div>
+  </div>
+{% else %}
+  <div class="col-12 dope-wrapper">
+    <p>
+      No results.
+    </p>
   </div>
 {% endif %}
 {% if results.pages %}

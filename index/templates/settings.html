@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12 col-lg-4 settings-wrapper">
+  <div class="col-12 order-2 col-lg-4 order-lg-1 dope-wrapper">
     <form class="change-password-form" action="{% url 'change_password' %}" method="POST">
       {% csrf_token %}
       <button class="btn-dope active" type="submit">
@@ -7,7 +7,7 @@
       </button>
     </form>
   </div>
-  <div class="col-12 col-lg-4 settings-wrapper">
+  <div class="col-12 order-1 col-lg-4 order-lg-2 dope-wrapper">
     {% if errors or message %}
       <div class="errors">
         {% include "errors.min.html" %}
@@ -35,7 +35,7 @@
       </div>
     </form>
   </div>
-  <div class="col-12 col-lg-4 settings-wrapper">
+  <div class="col-12 order-3 col-lg-4 dope-wrapper">
     <p>Delete account? Your playlist and subscriptions will be lost forever.</p>
     <form class="solong-form" action="{% url 'solong' %}" method="POST">
       {% csrf_token %}

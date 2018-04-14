@@ -233,7 +233,10 @@ def subscriptions(request):
             return render(request, "results_base.min.html", context)
         else:
             if request.is_ajax():
-                return render(request, "splash.min.html", context)
+                results = {
+                    "view": "splash",
+                }
+                return render(request, "results_base.min.html", context)
             return redirect("/")
 
     if request.method == "POST":
@@ -241,25 +244,40 @@ def subscriptions(request):
         if user.is_authenticated:
             try:
                 podids = request.POST.getlist("podids[]")
-                print(podids)
-                for podid in podids:
+                if podids:
+                    for podid in podids:
+                        podcast = Podcast.objects.get(podid=int(podid))
+                        podcast.subscribe_or_unsubscribe(user)
+                    results = Subscription.get_subscriptions(user)
+                else:
+                    podid = request.POST.get("podids")
                     podcast = Podcast.objects.get(podid=int(podid))
                     podcast.subscribe_or_unsubscribe(user)
-            except (ValueError, KeyError, Podcast.DoesNotExist):
-                raise Http404()
+                    podcast.is_subscribed(user)
+                    results = {
+                        "view": "showpod",
+                        "extra_options": True,
+                        "header": podcast.title,
+                        "podcast": podcast,
+                    }
 
-            results = Subscription.get_subscriptions(user)
+            except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
+                raise Http404()
+            
             context = {
                 "results": results,
             }
+            
             if request.is_ajax():
                 return render(request, "results_base.min.html", context)
+            if results.view == "showpod":
+                return redirect(podcast.get_absolute_url())
             return redirect("/subscriptions/")
         else:
-            results = {
-                "view": "splash",
-            }
             if request.is_ajax():
+                results = {
+                    "view": "splash",
+                }
                 return render(request, "results_base.min.html", context)
             return redirect("/")
 
@@ -292,7 +310,10 @@ def playlist(request):
             return render(request, "results_base.min.html", context)
         else:
             if request.is_ajax():
-                return render(request, "splash.min.html", context)
+                results = {
+                    "view": "splash",
+                }
+                return render(request, "results_base.min.html", context)
             return redirect("/")
 
     if request.method == "POST":

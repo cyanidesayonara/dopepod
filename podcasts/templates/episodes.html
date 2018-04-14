@@ -1,5 +1,7 @@
 <div class="row">
-  {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
+  {% if results.pages %}
+    {% include "pagination.min.html" %}
+  {% endif %}
   {% include "results_buttons.min.html" %}
 </div>
 {% if not results.view == "playlist" %}
@@ -166,6 +168,8 @@
     </div>
   {% endif %}
 </div>
-<div class="row showpod-buttons">
-  {% if results.pages %} {% include "pagination.min.html" %} {% endif %}
-</div>
+{% if results.pages %}
+  <div class="row">
+    {% include "pagination.min.html" %}
+  </div>
+{% endif %}

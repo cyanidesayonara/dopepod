@@ -124,7 +124,7 @@ function loadResults(args, no_push) {
   }
   if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
     if (drop.children(".results").length) {
-      drop.find(".results-content").addClass("loading").html(getCircleLoading());
+      drop.children(".results").addClass("loading").html(getCircleLoading());
     }
     else {
       drop.find(".episodes-content").html(getCircleLoading());
@@ -150,7 +150,7 @@ function loadResults(args, no_push) {
         callback(args);
       }
       // if page refresh, apply theme
-      if (drop.is("#dopebar")) {
+      else if (drop.is("#dopebar")) {
         changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
       }
       replaceState(url);
@@ -270,14 +270,11 @@ function postSubscriptions(podids, button) {
       replaceState("/");
     })
     .done(function(response) {
+      $("#center-stage").html(response);
       if (button.hasClass("sub-button")) {
-        var url = "/showpod/" + podids[0] + "/";
-        var drop = "#center-stage";
-        var args = ["/episodes/" + podids[0] + "/", ".showpod .results-content"];
-        loadResults([url, drop, loadResults, args]);
-      }
-      else {
-        $("#center-stage").html(response);
+        var url = "/episodes/" + podids + "/";
+        var drop = ".showpod .results-content";
+        loadResults([url, drop]);
       }
     });
   }, 250);
@@ -542,21 +539,26 @@ $(document)
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
-    var podids = [];
     var form = $(this);
-    podids[0] = form.children("input[name^=podids]").val();
     var button = form.children("button[type=submit]");
-    postSubscriptions(podids, button);
+    var podids = form.children("input[name=podid]").val();
+    if (!podids) {
+      podids = [];
+      podids[0] = form.children("input[name^=podids]").val();
+    }
+    if (podids) {
+      postSubscriptions(podids, button);
+    }
   })
   // unsubscribe one or more podcasts
   // POST ajax request, data is array of podids
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var podids = [];
-    // array of all selected podids
-    var buttons = button.parent().parent().siblings().find(".subscriptions-result.selected");
+    var buttons = button.parents(".results-content").find(".subscriptions-result.selected");
     if (buttons.length) {
+      // array of all selected podids
+      var podids = [];
       buttons.each(function (i, button) {
         podids[i] = $(button).data("podid");
       })
@@ -565,7 +567,9 @@ $(document)
     else {
       return;
     }
-    postSubscriptions(podids, button);
+    if (podids) {
+      postSubscriptions(podids, button);
+    }
   })
   // playlist - play, add, move, or delete episode
   .on("submit", ".playlist-form", function(e) {

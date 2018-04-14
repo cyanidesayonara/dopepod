@@ -190,23 +190,16 @@ a:hover {
   display: block;
 }
 
-/* OPTIONS BUTTONS */
-.options-buttons {
-  border-top: 2px solid rgb(0, 191, 165);
-  border-bottom: 2px solid rgb(0, 191, 165);
-  margin-bottom: 10px;
-}
-.provider-button {
-  width: 110px;
-}
-.nix-button {
-  margin-right: auto;
-}
-
 /* DOPEBAR */
+#dopebar {
+  z-index: 9001;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+}
 #dopebar,
 #footer {
-  z-index: 9000;
   padding: 5px 0;
   min-height: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
@@ -215,9 +208,6 @@ a:hover {
 }
 #dopebar-c {
   text-align: center;
-}
-#dopebar-wrapper {
-  padding: 0;
 }
 #dopebar ul,
 #footer ul {
@@ -325,12 +315,14 @@ a:hover {
   -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 
-/* SPLASH */
-.splash-wrapper {
+.dope-wrapper {
+  margin: auto;
   font-size: 14px;
   padding: 10px 25px;
   text-align: center;
 }
+
+/* SPLASH */
 .splash h1 {
   font-size: 22px;
   margin: 10px 0;
@@ -382,19 +374,11 @@ a:hover {
   margin-bottom: 10px;
 }
 
-/* SETTINGS */
-.settings-wrapper {
-  font-size: 14px;
-  padding: 10px 30px;
-  margin: auto;
-  text-align: center;
-}
-
 /* SHOWPOD */
 #dopebar-l,
 #dopebar-c,
 #dopebar-r,
-.browse-results,
+.list-result,
 .results-header {
   padding: 0 10px;
 }
@@ -486,7 +470,7 @@ a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .noborder {
-  border: none;
+  border-bottom: none;
 }
 .episodes-table .number {
   width: 45px;
@@ -561,6 +545,23 @@ a:hover {
   margin-left: 5px;
   margin-bottom: 5px;
 }
+.results-options {
+  padding: 0;
+  min-height: 0;
+}
+.options-buttons {
+  border-top: 2px solid rgb(0, 191, 165);
+  border-bottom: 2px solid rgb(0, 191, 165);
+}
+.charts .options-buttons {
+  border-bottom: none;
+}
+.provider-button {
+  width: 110px;
+}
+.nix-button {
+  margin-right: auto;
+}
 .results-back {
   margin-right: 42px;
   float: left;
@@ -588,45 +589,32 @@ a:hover {
 
 /* CHARTS */
 .charts-result a,
-.search-result a {
+.grid-result a {
   color: unset;
   font-weight: unset;
 }
 .charts-result,
 .last-played-result {
   border-top: 2px solid rgb(0, 191, 165);
-  border-bottom: 2px solid rgb(0, 191, 165);
 }
 .charts-result,
 .subscriptions-result,
 .last-played-result {
-  margin-bottom: 10px;
   overflow: hidden;
   padding: 10px;
   transition: all .15s ease-in-out;
   -moz-transition: all .15s ease-in-out;
   -webkit-transition: all .15s ease-in-out;
 }
-.charts-result:last-of-type,
-.last-played-result:last-of-type {
-  margin: 0;
-  border-bottom: none;
-}
 .subscriptions-result {
-  margin: 10px;
   border-radius: .25rem;
-}
-.last-played-result {
-  outline: none;
 }
 .charts-result:hover,
 .last-played-result:hover {
-  box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  -moz-box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  -webkit-box-shadow: rgba(0,0,0,.5) 0 0 5px;
+  background: rgba(0, 191, 165, .2);
 }
 .charts-result:hover .charts-rank {
-  background: rgb(0, 191,165);
+  background: rgb(0, 191, 165);
   color: #fff;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
@@ -764,24 +752,27 @@ a:hover {
 }
 
 /* SEARCH RESULTS */
-.search-result {
-  padding: 5px;
+.grid-results {
+  padding: 10px 0 0 10px;
 }
-.search-result img {
+.grid-result {
+  padding: 0 10px 10px 0;
+}
+.grid-result img {
   border-radius: .25rem;
   margin-bottom: 10px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-.search-result img:hover {
+.grid-result img:hover {
   -moz-transform: scale(1.02);
   -webkit-transform: scale(1.02);
   -o-transform: scale(1.02);
   -ms-transform: scale(1.02);
   transform: scale(1.02);
 }
-.search-result h1, .search-result h2 {
+.grid-result h1, .grid-result h2 {
   word-wrap: break-word;
   font-size: 14px;
   margin-bottom: 5px;
@@ -833,24 +824,23 @@ a:hover {
 }
 
 /* BROWSE RESULTS */
-.browse-results ul {
+.list-result ul {
   font-size: 14px;
   margin-bottom: 0;
   padding-left: 0;
   list-style: none;
 }
-.browse-results ul li {
+.list-result ul li {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 8px 0;
+  padding: 10px 0;
 }
-.browse-results ul li a {
+.list-result ul li a {
   color: unset;
-  display: inline-block;
   border-bottom: 2px solid rgba(0, 191, 165, 0);
 }
-.browse-results ul li a:hover {
+.list-result ul li a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 
@@ -860,6 +850,9 @@ a:hover {
 }
 
 /* PLAYER */
+#player {
+  padding: 0;
+}
 #player-wrapper {
   z-index: 1000;
   color: rgb(46, 46, 46);
