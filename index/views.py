@@ -51,6 +51,14 @@ def index(request):
                 "view": "splash",
             }
 
+        languages = Language.get_languages()
+        genres = Genre.get_primary_genres()
+
+        results.update({
+            "languages": languages,
+            "genres": genres,
+        })
+
         context = {
             "results": results,
             "view": view,
@@ -120,9 +128,29 @@ def charts(request):
         }
 
         if user.is_authenticated:
-            return render(request, "dashboard.min.html", context)
+            results = {
+                "view": "dashboard",
+            }
         else:
-            return render(request, "splash.min.html", context)
+            results = {
+                "view": "splash",
+            }
+
+        languages = Language.get_languages()
+        genres = Genre.get_primary_genres()
+
+        results.update({
+            "languages": languages,
+            "genres": genres,
+        })
+
+        results["extend"] = True
+
+        context.update({
+            "results": results,
+        })
+
+        return render(request, "results_base.min.html", context)
 
 @vary_on_headers("Accept")
 def search(request):
@@ -236,6 +264,15 @@ def subscriptions(request):
                 results = {
                     "view": "splash",
                 }
+
+                languages = Language.get_languages()
+                genres = Genre.get_primary_genres()
+
+                results.update({
+                    "languages": languages,
+                    "genres": genres,
+                })
+
                 return render(request, "results_base.min.html", context)
             return redirect("/")
 
@@ -278,6 +315,15 @@ def subscriptions(request):
                 results = {
                     "view": "splash",
                 }
+
+                languages = Language.get_languages()
+                genres = Genre.get_primary_genres()
+
+                results.update({
+                    "languages": languages,
+                    "genres": genres,
+                })
+
                 return render(request, "results_base.min.html", context)
             return redirect("/")
 
@@ -313,6 +359,15 @@ def playlist(request):
                 results = {
                     "view": "splash",
                 }
+
+                languages = Language.get_languages()
+                genres = Genre.get_primary_genres()
+
+                results.update({
+                    "languages": languages,
+                    "genres": genres,
+                })
+
                 return render(request, "results_base.min.html", context)
             return redirect("/")
 
@@ -598,12 +653,18 @@ def login(request):
             "view": "login",
         }
 
+        languages = Language.get_languages()
+        genres = Genre.get_primary_genres()
+
+        results.update({
+            "languages": languages,
+            "genres": genres,
+        })
+
         if response.status_code == 200:
             if ajax:
                 results.update({
                     "view": "dashboard",
-                    "header": "Dashboard",
-                    "extra_options": True,
                 })
                 return render(request, "results_base.min.html", context)
             return redirect("/")
@@ -643,12 +704,18 @@ def signup(request):
             "view": "signup",
         }
 
+        languages = Language.get_languages()
+        genres = Genre.get_primary_genres()
+
+        results.update({
+            "languages": languages,
+            "genres": genres,
+        })
+
         if response.status_code == 200:
             if ajax:
                 results.update({
                     "view": "dashboard",
-                    "header": "Dashboard",
-                    "extra_options": True,
                 })
                 return render(request, "results_base.min.html", context)
             else:
@@ -695,6 +762,14 @@ def password_reset(request):
         results = {
             "view": "splash",
         }
+
+        languages = Language.get_languages()
+        genres = Genre.get_primary_genres()
+
+        results.update({
+            "languages": languages,
+            "genres": genres,
+        })
         
         if response.status_code == 200:
             context = {
@@ -885,4 +960,4 @@ def solong(request):
     user = request.user
     if user.is_authenticated:
         print(user)
-    return HttpResponse("")
+    return HttpResponse("Psych!")

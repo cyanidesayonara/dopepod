@@ -1,3 +1,8 @@
+xhr = null;
+timeout = 0;
+last_played = 0;
+charts = 0;
+
 function pushState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
@@ -145,6 +150,7 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
+      response = $(response)
       // loads episodes (cuz drop dun exist yet)
       if (callback) {
         callback(args);
@@ -271,7 +277,7 @@ function postSubscriptions(podids, button) {
     })
     .done(function(response) {
       $("#center-stage").html(response);
-      if (button.hasClass("sub-button")) {
+      if ($(response).hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
         var drop = ".showpod .results-content";
         loadResults([url, drop]);
@@ -367,10 +373,6 @@ function updateCharts() {
 
 $(document)
   .ready(function() {
-    xhr = null;
-    timeout = 0;
-    last_played = 0;
-    charts = 0;
     refreshCookie();
     scrollUp();
     footer();
@@ -400,7 +402,7 @@ $(document)
     }, 250);
   })
   // search when user clicks buttons
-  .on("click", ".options-button", function (e) {
+  .on("click", ".options-button", function(e) {
     e.preventDefault();
     var url = this.href;
     var button = $(this);
@@ -427,7 +429,7 @@ $(document)
     var url = this.href.replace("showpod", "episodes");
     var button = $(this);
     clearTimeout(timeout);
-    timeout = setTimeout(function () {
+    timeout = setTimeout(function() {
       var drop = button.parents(".results-content");
       loadResults([url, drop]);
       if ($(window).width() < 992) {

@@ -273,7 +273,6 @@ class Podcast(models.Model):
                     genres_urls.append(f.url)
             if genre:
                 results["selected_genre"] = genre
-
                 f = furl(url)
                 del f.args["genre"]
                 results["genre_nix_url"] = f.url

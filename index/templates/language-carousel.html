@@ -1,0 +1,25 @@
+{% if results.languages %}
+  {% with results.languages as languages %}
+    <p>{{ languages.count }} languages</p>
+    <div id="language-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2500">
+      <div class="carousel-inner">
+        {% for language in languages %}
+          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+            <a class="browse-link" href="/search/?language={{ language.url_format }}">
+              {{ language }}
+            </a>
+            <p>
+              {{ language.n_podcasts }} podcasts
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="btn-dope" href="#language-carousel" role="button" data-slide="prev">
+        <i class="fas fa-angle-left" title="Previous"></i>
+      </a>
+      <a class="btn-dope" href="#language-carousel" role="button" data-slide="next">
+        <i class="fas fa-angle-right" title="Next"></i>
+      </a>
+    </div>
+  {% endwith %}
+{% endif %}

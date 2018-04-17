@@ -322,6 +322,11 @@ a:hover {
   text-align: center;
 }
 
+.genres > *,
+.languages > * {
+  display: none;
+}
+
 /* SPLASH */
 .splash h1 {
   font-size: 22px;
@@ -482,10 +487,10 @@ a:hover {
   width: 140px;
 }
 .episodes-table .size {
-  width: 65px;
+  width: 70px;
 }
 .episodes-table .length {
-  width: 65px;
+  width: 70px;
 }
 .episodes-table .new {
   padding: 0 2px;
@@ -1111,14 +1116,14 @@ a:hover {
     font-size: 12px;
   }
   .episodes-table .number {
-    width: 35px;
+    width: 40px;
   }
   .episodes-table .date {
     width: 60px;
   }
   .episodes-table .size,
   .episodes-table .length {
-    width: 50px;
+    width: 55px;
   }
   #player-wrapper {
     border-radius: 0;
@@ -1130,14 +1135,14 @@ a:hover {
     font-size: 13px;
   }
   .episodes-table .number {
-    width: 40px;
+    width: 45px;
   }
   .episodes-table .date {
-    width: 65px;
+    width: 70px;
   }
   .episodes-table .size,
   .episodes-table .length {
-    width: 55px;
+    width: 60px;
   }
 }
 /* tablets/desktops and up ----------- */
