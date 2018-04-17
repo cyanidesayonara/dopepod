@@ -881,12 +881,16 @@ class Episode(models.Model):
 
                     episode["podid"] = podid
 
+                    # some sizes are not in bytes as they should be and are hence too low
+                    # so let's establish a min_size to weed those suckas out
+                    min_size = 50000
+
                     # link to episode
                     # enclosure might be missing, have alternatives
                     enclosure = item.find("enclosure")
                     try:
                         size = enclosure.get("length")
-                        if size and int(size) > 100:
+                        if size and int(size) > min_size:
                             episode["size"] = format_bytes(int(size))
                     except (AttributeError, ValueError):
                         logger.error("can\'t get episode size", feedUrl)

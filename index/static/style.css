@@ -328,11 +328,13 @@ a:hover {
 }
 
 /* SPLASH */
-.splash h1 {
+.splash h1,
+.dashboard h1 {
   font-size: 22px;
   margin: 10px 0;
 }
-.splash p {
+.splash p,
+.dashboard p {
   font-size: 14px;
   margin-bottom: 10px;
 }
@@ -366,17 +368,13 @@ a:hover {
   cursor: default;
 }
 
-/* DASHBOARD */
-.dashboard {
-  text-align: center;
-}
-.dashboard h1 {
+/* CAROUSEL */
+.carousel h1 {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
-.dashboard p {
-  font-size: 14px;
-  margin-bottom: 10px;
+.carousel-inner {
+  margin: 20px 0;
 }
 
 /* SHOWPOD */
