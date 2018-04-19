@@ -6,9 +6,8 @@ var last_played = 0;
 var charts = 0;
 
 function pushState(url) {
-  url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played", "unsubscribe"];
+  var urls = ["episodes", "dopebar", "charts", "last-played", "unsubscribe"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;

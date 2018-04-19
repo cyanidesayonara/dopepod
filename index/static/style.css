@@ -369,9 +369,12 @@ a:hover {
 }
 
 /* CAROUSEL */
+.carousel {
+  padding: 20px;
+}
 .carousel h1 {
   font-size: 20px;
-  margin: 10px 0;
+  margin: 0 0 10px;
 }
 .carousel-inner {
   margin: 20px 0;
