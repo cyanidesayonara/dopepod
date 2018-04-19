@@ -1,13 +1,15 @@
-xhr = null;
-timeout = 0;
-last_played = 0;
-charts = 0;
+"use strict";
+
+var xhr = null;
+var timeout = 0;
+var last_played = 0;
+var charts = 0;
 
 function pushState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
   var urls = ["dopebar", "charts", "last-played", "unsubscribe"];
-  for (i = 0; i < urls.length; i++) {
+  for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
@@ -25,7 +27,7 @@ function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
   var urls = ["dopebar", "charts", "last-played"];
-  for (i = 0; i < urls.length; i++) {
+  for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
@@ -106,7 +108,7 @@ function refreshPage() {
 function checkForXHR(url) {
   if(xhr != null) {
     var urls = ["dopebar", "charts", "episodes", "last-played"];
-    for (i = 0; i < urls.length; i++) {
+    for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
       }
@@ -244,7 +246,6 @@ function postSettings(data, theme, button) {
       scrollToTop();
     })
     .done(function (response) {
-      console.log(theme)
       if (theme) {
         if (theme === "dark") {
           theme = true;
@@ -344,6 +345,12 @@ function playNext() {
     postPlaylist(data, mode, wrapper);
   }, 500);
 };
+function closePlayer() {
+  var player = $("#player");
+  player.find("audio")[0].preload = "none";
+  player.empty();
+  updateTitle();
+};
 // replaces spaces/&s with +, removes unwanted chars
 function cleanString(q) {
   q = q.replace(/&+/g, "+");
@@ -417,7 +424,6 @@ $(document)
         }
       }
       var drop = button.parents(".results").parent();
-      console.log(drop)
       loadResults([url, drop]);
       scrollTo(drop);
     }, 250);
@@ -590,9 +596,7 @@ $(document)
   // close player
   .on("click", ".player-close", function(e) {
     e.preventDefault();
-    $(this).parents().siblings("audio")[0].preload="none";
-    $("#player").empty();
-    updateTitle();
+    closePlayer();
   })
   // minimize player
   .on("click", ".player-minimize", function(e) {
@@ -752,7 +756,7 @@ $(window)
       // if url in urls, reload results (and don't push)
       var url = state.url;
       var urls = ["settings", "playlist", "subscriptions"];
-      for (i = 0; i < urls.length; i++) {
+      for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
           loadResults([url, drop], true);
