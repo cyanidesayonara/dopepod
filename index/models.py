@@ -14,7 +14,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    dark_theme = models.BooleanField(default=False)
+    theme = models.CharField(default="light", max_length=30)
     joined_at = models.DateTimeField(default=timezone.now)
 
     objects = ProfileManager()

@@ -172,14 +172,14 @@ function noshow(podid) {
       method: "POST",
       url: "/noshow/",
     });
-}
+};
 // SCROLLERS
 function scrollSpy() {
   $(window).scroll(function() {
     scrollUp();
     footer();
   });
-}
+};
 function footer() {
   var x = $("#footer").offset().top;
   var y = $(window).scrollTop() + $(window).height();
@@ -189,7 +189,7 @@ function footer() {
   else {
     $("#player").removeClass("fixed-bottom");
   }
-}
+};
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
@@ -198,7 +198,7 @@ function scrollUp() {
   else {
     $(".scroll-up").addClass("d-none");
   }
-}
+};
 function scrollToTop() {
   $("html, body").animate({
     scrollTop: $("body").offset().top
@@ -232,12 +232,17 @@ function changeTheme(theme) {
     $("body").removeClass("darken");
   }
 };
-function postSettings(data, theme, button) {
-  button.html(getButtonLoading());
-  var url = "/settings/";
+function postSettings(form) {
+  var method = form.method;
+  var url = form.action;
+  var form = $(form);
+  var data = form.serialize();
+  var theme = form.find("input[name=theme]").val();
+  var drop = $("#center-stage");
+  drop.children(".results").addClass("loading").html(getCircleLoading());
   $.ajax({
       data: data,
-      method: "POST",
+      method: method,
       url: url,
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
@@ -253,13 +258,13 @@ function postSettings(data, theme, button) {
           theme = false;
           $(".lights-toggle").addClass("lit");
         }
+        changeTheme(theme);
       }
-      changeTheme(theme);
-      $("#center-stage").html(response);
+      drop.html(response);
       scrollToTop();
       replaceState(url);
     });
-}
+};
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -608,13 +613,7 @@ $(document)
   // save settings, apply theme
   .on("submit", ".settings-form", function(e) {
     e.preventDefault();
-    var method = this.method;
-    var url = this.action;
-    var form = $(this);
-    var data = form.serialize();
-    var theme = form.find("input[name=theme]").val();
-    var button = form.find("button[type=submit]");
-    postSettings(data, theme, button);
+    postSettings(this);
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {

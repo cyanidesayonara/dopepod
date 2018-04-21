@@ -48,35 +48,6 @@ adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 session.mount("http://", adapter)
 session.mount("https://", adapter)
 
-def donuts():
-    names = list(Genre.get_primary_genres().values_list("name", flat=True))
-    numbers = list(Genre.get_primary_genres().values_list("n_podcasts", flat=True))
-    plotly.offline.plot({
-        "data": [
-            {
-                "labels": names,
-                "values": numbers,
-                "name": "",
-                "hoverinfo":"label+percent+name",
-                "hole": .4,
-                "type": "pie",
-            }
-        ],
-        "layout": {
-            "annotations": [
-                {
-                    "font": {
-                        "size": 20
-                    },
-                    "showarrow": False,
-                    "text": "Genres",
-                    "x": 0.5,
-                    "y": 0.5
-                },
-            ]
-        }
-    }, filename='donut.html')
-
 def format_bytes(bytes):
     #2**10 = 1024
     power = 2**10
@@ -139,6 +110,7 @@ class Podcast(models.Model):
     language_rank = models.IntegerField(default=None, null=True)
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
+    noshow = models.BooleanField(default=False)
 
     objects = PodcastManager()
 

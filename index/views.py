@@ -541,14 +541,8 @@ def settings(request):
             return render(request, "results_base.min.html", context)
 
         if request.method == "POST":
-            data = request.POST.copy()
-            try:
-                data["dark_theme"] = True if request.POST["theme"] == "dark" else False
-            except KeyError:
-                pass
-
-            user_form = UserForm(instance=request.user, data=data)
-            profile_form = ProfileForm(instance=request.user.profile, data=data)
+            user_form = UserForm(instance=request.user, data=request.POST)
+            profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
 
             context = {
                 "results": results,
@@ -566,7 +560,19 @@ def settings(request):
 
                 if request.is_ajax():
                     return render(request, "results_base.min.html", context)
-                return redirect("/")
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider="dopepod")
+                last_seen, cookie = get_last_seen(request.session)
+                last_played = Episode.get_last_played()
+
+                results["extend"] = True
+
+                context.update({
+                    "cookie_banner": cookie,
+                    "charts": charts,
+                    "last_played": last_played,
+                })
+                return render(request, "results_base.min.html", context)
             else:
                 errors = {}
 
@@ -749,8 +755,66 @@ def logout(request):
         return response
 
 def change_password(request):
-    # TODO do dis
-    return HttpResponse("Nah")
+    if request.method == "POST":
+        user = request.user
+        if user.is_authenticated:
+            results = {
+                "header": "Settings",
+                "view": "settings",
+                "extra_options": True,
+            }
+
+            context = {
+                "results": results,
+                "user_form": UserForm(instance=request.user),
+                "profile_form": ProfileForm(instance=request.user.profile),
+            }
+
+            ajax = request.is_ajax()
+            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+            response = allauth.password_change(request)
+            if response.status_code == 200:
+                if request.is_ajax():
+                    return render(request, "results_base.min.html", context)
+                url = request.get_full_path()
+                charts = Podcast.search(url=url, provider="dopepod")
+                last_seen, cookie = get_last_seen(request.session)
+                last_played = Episode.get_last_played()
+
+                results["extend"] = True
+
+                context.update({
+                    "cookie_banner": cookie,
+                    "charts": charts,
+                    "last_played": last_played,
+                })
+                return render(request, "results_base.min.html", context)
+            else:
+                languages = Language.get_languages()
+                genres = Genre.get_primary_genres()
+
+                results.update({
+                    "languages": languages,
+                    "genres": genres,
+                })
+                data = json.loads(response.content)
+                email, errors = get_form_errors(data)
+                context.update({
+                    "errors": errors,
+                })
+                if ajax:
+                    return render(request, "results_base.min.html", context, status=400)
+                else:
+                    url = request.get_full_path()
+                    charts = Podcast.search(url=url, provider="dopepod")
+                    last_seen, cookie = get_last_seen(request.session)
+                    last_played = Episode.get_last_played()
+                    context.update({
+                        "cookie_banner": cookie,
+                        "charts": charts,
+                        "last_played": last_played,
+                    })
+                    return render(request, "results_base.min.html", context)
 
 def password_reset(request):
     if request.method == "POST":
@@ -917,7 +981,6 @@ def password_reset_from_key(request, uidb36, key):
 @vary_on_headers("Accept")
 def confirm_email(request, key):
     response = allauth.confirm_email(request, key=key)
-    
     if response.status_code == 200:
         results = {
             "header": "Email Confirmed",
@@ -951,13 +1014,16 @@ def noshow(request):
     if podid:
         try:
             podcast = Podcast.objects.get(podid=podid)
-            print(podcast.feedUrl)
+            podcast.noshow = True
+            podcast.save()
         except Podcast.DoesNotExist:
             pass
     return HttpResponse("")
 
 def solong(request):
-    user = request.user
-    if user.is_authenticated:
-        print(user)
-    return HttpResponse("Psych!")
+    if request.method == "POST":
+        user = request.user
+        if user.is_authenticated:
+            allauth.logout(request)
+            user.delete()
+    return redirect("/")

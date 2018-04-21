@@ -165,6 +165,7 @@ a:hover {
 }
 
 .dope-field {
+  font-size: 15px;
   display: block;
   width: 100%;
   padding: 4px 8px;
@@ -367,6 +368,11 @@ a:hover {
 .login-buttons button {
   cursor: default;
 }
+.count {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+}
 
 /* CAROUSEL */
 .carousel {
@@ -374,10 +380,18 @@ a:hover {
 }
 .carousel h1 {
   font-size: 20px;
-  margin: 0 0 10px;
 }
 .carousel-inner {
   margin: 20px 0;
+}
+.carousel-item {
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: .25rem;
+}
+
+/* SETTINGS */
+.solong-collapse {
+  padding: 10px 0;
 }
 
 /* SHOWPOD */
@@ -431,13 +445,6 @@ a:hover {
 }
 #showpod-c p {
   margin-bottom: 4px;
-}
-
-/* NOSHOW */
-.noshow {
-  display: none;
-  text-align: center;
-  padding: 10px;
 }
 
 /* EPISODES */

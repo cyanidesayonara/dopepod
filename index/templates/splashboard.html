@@ -20,10 +20,10 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
-              scours the internet for fresh podcasts so you don't have to.
+              scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts.
+              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -107,10 +107,10 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
-              scours the internet for fresh podcasts so you don't have to.
+              scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts.
+              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse show" id="login-collapse">
@@ -194,10 +194,10 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
-              scours the internet for fresh podcasts so you don't have to.
+              scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts.
+              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -281,10 +281,10 @@
           <div class="collapse fade login-collapse show" id="splash-collapse">
             <p>
               is a free, mobile-friendly podcast web app that
-              scours the internet for fresh podcasts so you don't have to.
+              scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts.
+              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -403,17 +403,22 @@
       </div>
     {% elif results.view == "dashboard" %}
       <p>
-        {% with user.subscription.count as count %} You have {{ count }}
-        <a class="subscriptions-link" href="{% url 'subscriptions' %}">
-          subscription{{ count|pluralize }}
-        </a>
+        {% with user.subscription.count as count %}
+          You have
+          <span class="count">{{ count }}</span>
+          <a class="subscriptions-link" href="{% url 'subscriptions' %}">
+            subscription{{ count|pluralize }}
+          </a>
         {% endwith %}
       </p>
       <p>
-        {% with user.episode.count as count %} You have {{ count }} episode{{ count|pluralize }} on your
-        <a class="playlist-link" href="{% url 'playlist' %}">
-          playlist
-        </a>
+        {% with user.episode.count as count %}
+          You have
+          <span class="count">{{ count }}</span>
+          episode{{ count|pluralize }} on your
+          <a class="playlist-link" href="{% url 'playlist' %}">
+            playlist
+          </a>
         {% endwith %}
       </p>
     {% endif %}
