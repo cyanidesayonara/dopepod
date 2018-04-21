@@ -22,14 +22,190 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
+def get_carousel(results):
+    languages = Language.get_languages()
+    genres = Genre.get_primary_genres()
+    results.update({
+        "languages": languages,
+        "genres": genres,
+    })
+    return results
+
+def render_splash(request, template, context, response=False):
+    results = {}
+    results["view"] = "splash"
+    results = get_carousel(results)
+    context.update({
+        "results": results,
+    })
+    if response:
+        context = get_form_errors(context, response)
+        if request.is_ajax():
+            return render(request, template, context, status=400)
+        render_non_ajax(request, template, context)
+    if request.is_ajax():
+        return render(request, template, context)
+    return redirect("/")
+
+def render_dashboard(request, template, context, ajax=False):
+    if ajax:
+        results = {}
+        results["view"] = "dashboard"
+        results = get_carousel(results)
+        context.update({
+            "results": results,
+        })
+        return render(request, template, context)
+    return redirect("/")
+
+def render_non_ajax(request, template, context):
+    last_seen, cookie = get_last_seen(request.session)
+    last_played = Episode.get_last_played()
+    url = request.get_full_path()
+    charts = Podcast.search(url=url, provider="dopepod")
+    context["results"]["extend"] = True
+    context.update({
+        "cookie_banner": cookie,
+        "charts": charts,
+        "last_played": last_played,
+    })
+    return render(request, template, context)
+
+def get_settings_errors(context, user_form, profile_form):
+    errors = {}
+    data = json.loads(user_form.errors.as_json())
+    keys = data.keys()
+    for key in keys:
+        message = data[key][0]["message"]
+        if message:
+            errors[key] = message
+    data = json.loads(profile_form.errors.as_json())
+    keys = data.keys()
+    for key in keys:
+        message = data[key][0]["message"]
+        if message:
+            errors[key] = message
+    context.update({
+        "errors": errors,
+    })
+    return context
+
+def get_form_errors(context, response):
+    errors = {}
+    data = json.loads(response.content)
+    # non-field errors
+    for error in data["form"]["errors"]:
+        errors["general"] = error
+    # field-specific errors
+    for field in data["form"]["fields"]:
+        for error in data["form"]["fields"][field]["errors"]:
+            if field == "login":
+                field = "email"
+            errors[field] = error
+    try:
+        email = data["form"]["fields"]["login"]["value"]
+    except KeyError:
+        try:
+            email = data["form"]["fields"]["email"]["value"]
+        except KeyError:
+            email = ""
+    context.update({
+        "errors": errors,
+        "email": email,
+    })
+    return context
+
+def get_showpod_results(podid, user, count=False, subscribe=False):
+    try:
+        podcast = Podcast.objects.get(podid=podid)
+    except Podcast.DoesNotExist:
+        raise Http404
+    results = {
+        "view": "showpod",
+        "podcast": podcast,
+    }
+    # subscriptions
+    if subscribe:
+        podcast.subscribe_or_unsubscribe(user)
+    # showpod
+    elif count:
+        podcast.views = F("views") + 1
+        podcast.save()
+    # episodes
+    else:
+        results.update({
+            "extra_options": True,
+            "header": podcast.title,
+        })
+    podcast.is_subscribed(user)
+    return results
+
+def get_settings_results():
+    results = {
+        "header": "Settings",
+        "view": "settings",
+        "extra_options": True,
+    }
+    return results
+
+def get_settings_forms(context, request):
+    if request.method == "POST":
+        user_form = UserForm(instance=request.user, data=request.POST)
+        profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+        context = {
+            "user_form": user_form,
+            "profile_form": profile_form,
+        }
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            context.update({
+                "message": "Saved!",
+            })
+            return context, True
+        else:
+            context = get_settings_errors(context, user_form, profile_form)
+            return context, False
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        context.update({
+            "user_form": user_form,
+            "profile_form": profile_form,
+        })
+        return context
+
+def get_reset_password_results():
+    results = {
+        "view": "reset_password",
+        "extra_options": True,
+        "header": "Reset Password",
+    }
+    return results
+
+def get_password_reset_results():
+    results = {
+        "view": "password_reset",
+        "extra_options": True,
+        "header": "Password Reset",
+    }
+    return results
+
+def get_confirm_email_results():
+    results = {
+        "view": "confirm_email",
+        "extra_options": True,
+        "header": "Email Confirmed",
+    }
+    return results
+
 def dopebar(request):
     """
     returns navbar (for refreshing)
     """
 
-    if request.method == "GET":
-        if request.is_ajax():
-            return render(request, "dopebar.min.html", {})
+    if request.method == "GET" and request.is_ajax():
+        return render(request, "dopebar.min.html", {})
 
 @vary_on_headers("Accept")
 def index(request):
@@ -39,47 +215,22 @@ def index(request):
     """
 
     if request.method == "GET":
+        template = "results_base.min.html"
         user = request.user
         view = request.GET.get("view" , None)
-
+        results = {}
         if user.is_authenticated:
-            results = {
-                "view": "dashboard",
-            }
+            results["view"] = "dashboard"
         else:
-            results = {
-                "view": "splash",
-            }
-
-        languages = Language.get_languages()
-        genres = Genre.get_primary_genres()
-
-        results.update({
-            "languages": languages,
-            "genres": genres,
-        })
-
+            results["view"] = "splash"
+        results = get_carousel(results)
         context = {
             "results": results,
             "view": view,
         }
-
         if request.is_ajax():
-            return render(request, "results_base.min.html", context)
-
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-        url = request.get_full_path()
-        charts = Podcast.search(url=url, provider="dopepod")
-
-        results["extend"] = True
-
-        context.update({
-            "cookie_banner": cookie,
-            "charts": charts,
-            "last_played": last_played,
-        })
-        return render(request, "results_base.min.html", context)
+            return render(request, template, context)
+        render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def charts(request):
@@ -89,6 +240,7 @@ def charts(request):
     """
 
     if request.method == "GET":
+        template = "results_base.min.html"
         user = request.user
         genre = request.GET.get("genre", None)
         try:
@@ -116,41 +268,13 @@ def charts(request):
         }
 
         if request.is_ajax():
-            return render(request, "results_base.min.html", context)
-
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-
-        context = {
-            "cookie_banner": cookie,
-            "charts": results,
-            "last_played": last_played,
-        }
-
+            return render(request, template, context)
+        results = get_carousel(results)
         if user.is_authenticated:
-            results = {
-                "view": "dashboard",
-            }
+            results["view"] = "dashboard"
         else:
-            results = {
-                "view": "splash",
-            }
-
-        languages = Language.get_languages()
-        genres = Genre.get_primary_genres()
-
-        results.update({
-            "languages": languages,
-            "genres": genres,
-        })
-
-        results["extend"] = True
-
-        context.update({
-            "results": results,
-        })
-
-        return render(request, "results_base.min.html", context)
+            results["view"] = "splash"
+        render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def search(request):
@@ -162,7 +286,7 @@ def search(request):
     """
 
     if request.method == "GET":
-        
+        template = "results_base.min.html"
         # get q
         q = request.GET.get("q", None)
         if q:
@@ -211,20 +335,8 @@ def search(request):
         }
 
         if request.is_ajax():
-            return render(request, "results_base.min.html", context)
-
-        charts = Podcast.search(url=url, provider="dopepod")
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-
-        results["extend"] = True
-
-        context.update({
-            "cookie_banner": cookie,
-            "charts": charts,
-            "last_played": last_played,
-        })
-        return render(request, "results_base.min.html", context)
+            return render(request, template, context)
+        render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def subscriptions(request):
@@ -234,49 +346,20 @@ def subscriptions(request):
     """
 
     if request.method == "GET":
+        template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
             results = Subscription.get_subscriptions(user)
-
             context = {
                 "results": results,
             }
-
             if request.is_ajax():
-                return render(request, "results_base.min.html", context)
-
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-
-            return render(request, "results_base.min.html", context)
-        else:
-            if request.is_ajax():
-                results = {
-                    "view": "splash",
-                }
-
-                languages = Language.get_languages()
-                genres = Genre.get_primary_genres()
-
-                results.update({
-                    "languages": languages,
-                    "genres": genres,
-                })
-
-                return render(request, "results_base.min.html", context)
-            return redirect("/")
+                return render(request, template, context)
+            render_non_ajax(request, template, context)
+        render_splash(request, template, context)
 
     if request.method == "POST":
+        template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
             try:
@@ -285,97 +368,41 @@ def subscriptions(request):
                     for podid in podids:
                         podcast = Podcast.objects.get(podid=int(podid))
                         podcast.subscribe_or_unsubscribe(user)
-                    results = Subscription.get_subscriptions(user)
+                    context = Subscription.get_subscriptions(user)
                 else:
-                    podid = request.POST.get("podids")
-                    podcast = Podcast.objects.get(podid=int(podid))
-                    podcast.subscribe_or_unsubscribe(user)
-                    podcast.is_subscribed(user)
-                    results = {
-                        "view": "showpod",
-                        "extra_options": True,
-                        "header": podcast.title,
-                        "podcast": podcast,
-                    }
-
+                    podid = int(request.POST.get("podids"))
+                    context = get_showpod_results(podid, user, subscribe=True)
             except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
                 raise Http404()
             
-            context = {
-                "results": results,
-            }
-            
             if request.is_ajax():
-                return render(request, "results_base.min.html", context)
-            if results.view == "showpod":
+                return render(request, template, context)
+            if not podids:
                 return redirect(podcast.get_absolute_url())
             return redirect("/subscriptions/")
-        else:
-            if request.is_ajax():
-                results = {
-                    "view": "splash",
-                }
-
-                languages = Language.get_languages()
-                genres = Genre.get_primary_genres()
-
-                results.update({
-                    "languages": languages,
-                    "genres": genres,
-                })
-
-                return render(request, "results_base.min.html", context)
-            return redirect("/")
+        render_splash(request, template, context)
 
 @vary_on_headers("Accept")
 def playlist(request):
     if request.method == "GET":
+        template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
             results = Episode.get_playlist(user)
-
             context = {
                 "results": results,
             }
-
             if request.is_ajax():
-                return render(request, "results_base.min.html", context)
-
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-            return render(request, "results_base.min.html", context)
-        else:
-            if request.is_ajax():
-                results = {
-                    "view": "splash",
-                }
-
-                languages = Language.get_languages()
-                genres = Genre.get_primary_genres()
-
-                results.update({
-                    "languages": languages,
-                    "genres": genres,
-                })
-
-                return render(request, "results_base.min.html", context)
-            return redirect("/")
+                return render(request, template, context)
+            render_non_ajax(request, template, context)
+        render_splash(request, template, context)
 
     if request.method == "POST":
         user = request.user
         try:
             mode = request.POST["mode"]
             if mode == "play":
+                template = "player.min.html"
                 # returns html5 audio element
                 # POST request in a popup
                 # POST ajax request
@@ -397,9 +424,10 @@ def playlist(request):
                 }
 
                 if request.is_ajax():
-                    return render(request, "player.min.html", context)
-                return render(request, "player.min.html", context)
+                    return render(request, template, context)
+                render_non_ajax(request, template, context)
             if user.is_authenticated:
+                template = "results_base.min.html"
                 if mode == "add":
                     signature = request.POST["signature"]
                     Episode.add(signature, user)
@@ -414,33 +442,17 @@ def playlist(request):
                     Episode.down(pos, user)
                 else:
                     raise Http404()
-            else:
-                raise Http404()
+
+                results = Episode.get_playlist(user)
+                context = {
+                    "results": results,
+                }
+                if request.is_ajax():
+                    return render(request, template, context)
+                render_non_ajax(request, template, context)
+            render_splash(request, template, context)
         except (KeyError, TypeError):
             raise Http404()
-
-        results = Episode.get_playlist(user)
-
-        context = {
-            "results": results,
-        }
-
-        if request.is_ajax():
-            return render(request, "results_base.min.html", context)
-
-        url = request.get_full_path()
-        charts = Podcast.search(url=url, provider="dopepod")
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-
-        results["extend"] = True
-
-        context.update({
-            "cookie_banner": cookie,
-            "charts": charts,
-            "last_played": last_played,
-        })
-        return render(request, "results_base.min.html", context)
 
 @vary_on_headers("Accept")
 def showpod(request, podid):
@@ -452,27 +464,14 @@ def showpod(request, podid):
     """
 
     if request.method == "GET":
+        template = "results_base.min.html"
         user = request.user
-        try:
-            podcast = Podcast.objects.get(podid=podid)
-            podcast.views = F("views") + 1
-            podcast.save()
-            podcast.is_subscribed(user)
-        except Podcast.DoesNotExist:
-            raise Http404
-
-        results = {
-            "view": "showpod",
-            "extra_options": True,
-            "header": podcast.title,
-            "podcast": podcast,
-        }
-
+        results = get_showpod_results(podid, user, count=True)
         context = {
             "results": results,
         }
         if request.is_ajax():
-            return render(request, "results_base.min.html", context)
+            return render(request, template, context)
 
         # page
         page = request.GET.get("page", None)
@@ -481,24 +480,13 @@ def showpod(request, podid):
         except (TypeError, ValueError):
             page = 1
 
+        podcast = results["podcast"]
         url = request.get_full_path()
-        episodes = Episode.get_episodes(url, podcast.podid, podcast.feedUrl, page)
+        episodes = Episode.get_episodes(url, podcast, page)
         for page in episodes:
             results.update(page)
-        Episode.set_new(user, podcast.podid, results["episodes"])
-
-        charts = Podcast.search(url=url, provider="dopepod")
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-
-        results["extend"] = True
-
-        context.update({
-            "cookie_banner": cookie,
-            "charts": charts,
-            "last_played": last_played,
-        })
-        return render(request, "results_base.min.html", context)
+        Episode.set_new(user, podcast, episodes)
+        render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def settings(request):
@@ -508,246 +496,118 @@ def settings(request):
     with chart & search bar for non-ajax
     """
 
+    template = "results_base.min.html"
     user = request.user
     if user.is_authenticated:
-        results = {
-            "header": "Settings",
-            "view": "settings",
-            "extra_options": True,
+        results = get_settings_results()
+        context = {
+            "results": results,
         }
         if request.method == "GET":
-            context = {
-                "results": results,
-                "user_form": UserForm(instance=request.user),
-                "profile_form": ProfileForm(instance=request.user.profile),
-            }
-
+            context = get_settings_forms(context, request)
             if request.is_ajax():
-                return render(request, "results_base.min.html", context)
-            
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-
-            return render(request, "results_base.min.html", context)
+                return render(request, template, context)
+            render_non_ajax(request, template, context)
 
         if request.method == "POST":
-            user_form = UserForm(instance=request.user, data=request.POST)
-            profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+            context, valid = get_settings_forms(context, request)
+            if valid:
+                if request.is_ajax():
+                    return render(request, template, context)
+                render_non_ajax(request, template, context)
+            else:
+                if request.is_ajax:
+                    return render(request, template, context, status=400)
+                render_non_ajax(request, template, context)
+    render_splash(request, template, context)
 
+def episodes(request, podid):
+    """
+    returns html for episodes
+    GET ajax request sent by showpod
+    required argument: podid
+    """
+
+    # ajax using POST
+    if request.method == "GET":
+        if request.is_ajax():
+            user = request.user
+            results = get_showpod_results(podid, user)
             context = {
                 "results": results,
-                "user_form": user_form,
-                "profile_form": profile_form,
             }
 
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
+            # page
+            page = request.GET.get("page", None)
+            try:
+                page = int(page)
+            except (TypeError, ValueError):
+                page = 1
 
-                context.update({
-                    "message": "Saved!",
-                })
+            podcast = results["podcast"]
+            url = request.get_full_path()
+            episodes = Episode.get_episodes(url, podcast, page)
+            for page in episodes:
+                results.update(page)
+            Episode.set_new(user, podcast, episodes)
+            return render(request, "episodes.min.html", context)
+        else:
+            return redirect("/showpod/" + podid + "/")
 
-                if request.is_ajax():
-                    return render(request, "results_base.min.html", context)
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
+def last_played(request):
+    """
+    returns n number of last played
+    """
 
-                results["extend"] = True
-
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context)
-            else:
-                errors = {}
-
-                data = json.loads(user_form.errors.as_json())
-                keys = data.keys()
-                for key in keys:
-                    message = data[key][0]["message"]
-                    if message:
-                        errors[key] = message
-
-                data = json.loads(profile_form.errors.as_json())
-                keys = data.keys()
-                for key in keys:
-                    message = data[key][0]["message"]
-                    if message:
-                        errors[key] = message
-
-                context.update({
-                    "errors": errors,
-                })
-
-                if request.is_ajax:
-                    return render(request, "results_base.min.html", context, status=400)
-
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-
-                results["extend"] = True
-
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context)
-    else:
+    if request.method == "GET":
         if request.is_ajax():
-            return render(request, "splash.min.html", context)
-        return redirect("/?next=/settings/")
+            template = "results_base.min.html"
+            results = Episode.get_last_played()
+            context = {
+                "results": results,
+            }
+            return render(request, template, context)
+        else:
+            return redirect("/")
 
 # allauth stuff
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
 
-def get_form_errors(data):
-    errors = {}
-    # non-field errors
-    for error in data["form"]["errors"]:
-        errors["general"] = error
-    # field-specific errors
-    for field in data["form"]["fields"]:
-        for error in data["form"]["fields"][field]["errors"]:
-            if field == "login":
-                field = "email"
-            errors[field] = error
-    try:
-        email = data["form"]["fields"]["login"]["value"]
-    except KeyError:
-        try:
-            email = data["form"]["fields"]["email"]["value"]
-        except KeyError:
-            email = ""
-    return (email, errors)
-
 def login(request):
     """
     relays stuff to and from allauth
-    kind of dumb but it works
+    kinda dumb but it works ¯\_(ツ)_/¯
     """
 
     if request.method == "POST":
+        template = "results_base.min.html"
         # request sent to allauth is always ajax so the output is json
-        ajax = request.is_ajax()
+        ajax = request.META["HTTP_X_REQUESTED_WITH"]
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.login(request)
-        # parse json response
-        data = json.loads(response.content)
-
-        results = {}
-
+        request.META["HTTP_X_REQUESTED_WITH"] = ajax
         context = {
-            "results": results,
             "view": "login",
         }
-
-        languages = Language.get_languages()
-        genres = Genre.get_primary_genres()
-
-        results.update({
-            "languages": languages,
-            "genres": genres,
-        })
-
         if response.status_code == 200:
-            if ajax:
-                results.update({
-                    "view": "dashboard",
-                })
-                return render(request, "results_base.min.html", context)
-            return redirect("/")
-        else:
-            results["view"] = "splash"
-            email, errors = get_form_errors(data)
-            context.update({
-                "errors": errors,
-                "email": email,
-            })
-            if ajax:
-                return render(request, "results_base.min.html", context, status=400)
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-            return render(request, "results_base.min.html", context)
-    else:
-        return redirect("/?view=login")
+            render_dashboard(request, template, context)
+        render_splash(request, template, context, response=response)
+    return redirect("/?view=login")
 
 def signup(request):
     if request.method == "POST":
-        ajax = request.is_ajax()
+        template = "results_base.min.html"
+        ajax = request.META["HTTP_X_REQUESTED_WITH"]
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.signup(request)
-        data = json.loads(response.content)
-
-        results = {}
-
+        request.META["HTTP_X_REQUESTED_WITH"] = ajax
         context = {
-            "results": results,
-            "view": "signup",
+            "view": "login",
         }
-
-        languages = Language.get_languages()
-        genres = Genre.get_primary_genres()
-
-        results.update({
-            "languages": languages,
-            "genres": genres,
-        })
-
         if response.status_code == 200:
-            if ajax:
-                results.update({
-                    "view": "dashboard",
-                })
-                return render(request, "results_base.min.html", context)
-            else:
-                return redirect("/")
-        else:
-            results["view"] = "splash"
-            email, errors = get_form_errors(data)
-            context.update({
-                "errors": errors,
-                "email": email,
-            })
-            if ajax:
-                return render(request, "results_base.min.html", context, status=400)
-            else:
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context)
-    else:
-        return redirect("/?view=signup")
+            render_dashboard(request, template, context)
+        render_splash(request, template, context, response=response)
+    return redirect("/?view=signup")
 
 def logout(request):
     if request.method == "POST":
@@ -756,258 +616,120 @@ def logout(request):
 
 def change_password(request):
     if request.method == "POST":
+        template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
-            results = {
-                "header": "Settings",
-                "view": "settings",
-                "extra_options": True,
-            }
-
+            results = get_settings_results()
             context = {
                 "results": results,
-                "user_form": UserForm(instance=request.user),
-                "profile_form": ProfileForm(instance=request.user.profile),
             }
-
-            ajax = request.is_ajax()
+            context, valid = get_settings_forms(context, request)
+            ajax = request.META["HTTP_X_REQUESTED_WITH"]
             request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
             response = allauth.password_change(request)
+            request.META["HTTP_X_REQUESTED_WITH"] = ajax
             if response.status_code == 200:
-                if request.is_ajax():
-                    return render(request, "results_base.min.html", context)
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-
-                results["extend"] = True
-
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context)
-            else:
-                languages = Language.get_languages()
-                genres = Genre.get_primary_genres()
-
-                results.update({
-                    "languages": languages,
-                    "genres": genres,
-                })
-                data = json.loads(response.content)
-                email, errors = get_form_errors(data)
-                context.update({
-                    "errors": errors,
-                })
-                if ajax:
-                    return render(request, "results_base.min.html", context, status=400)
-                else:
-                    url = request.get_full_path()
-                    charts = Podcast.search(url=url, provider="dopepod")
-                    last_seen, cookie = get_last_seen(request.session)
-                    last_played = Episode.get_last_played()
-                    context.update({
-                        "cookie_banner": cookie,
-                        "charts": charts,
-                        "last_played": last_played,
-                    })
-                    return render(request, "results_base.min.html", context)
+                render_dashboard(request, template, context)
+            render_splash(request, template, context, response=response)
+        render_splash(request, template, context)
+    return redirect("/settings/")
 
 def password_reset(request):
     if request.method == "POST":
-        ajax = request.is_ajax()
+        template = "results_base.min.html"
+        ajax = request.META["HTTP_X_REQUESTED_WITH"]
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.password_reset(request)
-        data = json.loads(response.content)
+        request.META["HTTP_X_REQUESTED_WITH"] = ajax
 
         results = {
             "view": "splash",
         }
-
-        languages = Language.get_languages()
-        genres = Genre.get_primary_genres()
-
-        results.update({
-            "languages": languages,
-            "genres": genres,
-        })
+        context = {
+            "results": results,
+        }
         
         if response.status_code == 200:
-            context = {
-                "results": results,
+            context.update({
                 "view": "login",
                 "message": "We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.",
-            }
-            
-            if ajax:
-                return render(request, "results_base.min.html", context)
-            else:
-                return redirect("/")
+            })
+            render_splash(request, template, context)
         else:
-            email, errors = get_form_errors(data)
-            context = {
-                "results": results,
+            context, valid = get_settings_forms(context, request)
+            context.update({
                 "view": "password",
-                "errors": errors,
-                "email": email,
-            }
-            if ajax:
-                return render(request, "results_base.min.html", context, status=400)
-            else:
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-
-                results["extend"] = True
-
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context)
-    else:
-        return redirect("/?view=password")
+            })
+            render_splash(request, template, context, response=response)
+    return redirect("/?view=password")
 
 @vary_on_headers("Accept")
 def password_reset_from_key(request, uidb36, key):
+    template = "results_base.min.html"
     if request.method == "GET":
-        ajax = request.is_ajax()
         response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
         if response.status_code == 200:
+            ajax = request.META["HTTP_X_REQUESTED_WITH"]
             request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
             response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
-            data = json.loads(response.content)
-            email, errors = get_form_errors(data)
+            request.META["HTTP_X_REQUESTED_WITH"] = ajax
 
-            results = {
-                "view": "reset_password",
-                "extra_options": True,
-                "header": "Reset Password",
-            }
-
+            results = get_reset_password_results()
             context = {
-                "errors": errors,
                 "results": results,
                 "uidb36": uidb36,
                 "key": key,
             }
-
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-            return render(request, "results_base.min.html", context)
+            render_non_ajax(request, template, context)
         else:
             return response
 
     if request.method == "POST":
-        ajax = request.is_ajax()
+        ajax = request.META["HTTP_X_REQUESTED_WITH"]
+        request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
-        if response.status_code == 200:
-            results = {
-                "view": "password_reset",
-                "extra_options": True,
-                "header": "Password Reset",
-            }
+        request.META["HTTP_X_REQUESTED_WITH"] = ajax
 
-            context = {
-                "results": results,
-            }
-
-            if ajax:
-                return render(request, "results_base.min.html", context, status=200)
-            url = request.get_full_path()
-            charts = Podcast.search(url=url, provider="dopepod")
-            last_seen, cookie = get_last_seen(request.session)
-            last_played = Episode.get_last_played()
-
-            results["extend"] = True
-
-            context.update({
-                "cookie_banner": cookie,
-                "charts": charts,
-                "last_played": last_played,
-            })
-            return render(request, "results_base.min.html", context, status=200)
-        else:
-            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
-            response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
-            data = json.loads(response.content)
-            email, errors = get_form_errors(data)
-
-            results = {
-                "view": "reset_password",
-                "extra_options": True,
-                "header": "Reset Password",
-            }
-
-            context = {
-                "errors": errors,
-                "results": results,
-                "uidb36": uidb36,
-                "key": key,
-            }
-
-            if ajax:
-                return render(request, "results_base.min.html", context, status=400)
-            else:
-                url = request.get_full_path()
-                charts = Podcast.search(url=url, provider="dopepod")
-                last_seen, cookie = get_last_seen(request.session)
-                last_played = Episode.get_last_played()
-
-                results["extend"] = True
-
-                context.update({
-                    "cookie_banner": cookie,
-                    "charts": charts,
-                    "last_played": last_played,
-                })
-                return render(request, "results_base.min.html", context, status=400)
-
-@vary_on_headers("Accept")
-def confirm_email(request, key):
-    response = allauth.confirm_email(request, key=key)
-    if response.status_code == 200:
-        results = {
-            "header": "Email Confirmed",
-            "view": "confirm_email",
-            "extra_options": True,
-        }
-
+        results = get_password_reset_results()
         context = {
             "results": results,
         }
 
-        if request.is_ajax():
-            return render(request, "results_base.min.html", context)
+        if response.status_code == 200:
+            if request.is_ajax():
+                return render(request, template, context)
+            render_non_ajax(request, template, context)
+        else:
+            context = get_form_errors(context, response)
+            if request.is_ajax():
+                return render(request, template, context, status=400)
+            render_non_ajax(request, template, context)
+    return redirect("/")
 
-        last_seen, cookie = get_last_seen(request.session)
-        last_played = Episode.get_last_played()
-        url = request.get_full_path()
-        charts = Podcast.search(url=url, provider="dopepod")
+@vary_on_headers("Accept")
+def confirm_email(request, key):
+    if request.method == "POST":
+        template = "results_base.min.html"
+        ajax = request.META["HTTP_X_REQUESTED_WITH"]
+        request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+        response = allauth.confirm_email(request, key=key)
+        request.META["HTTP_X_REQUESTED_WITH"] = ajax
 
-        results["extend"] = True
+        results = get_confirm_email_results()
+        context = {
+            "results": results,
+        }
 
-        context.update({
-            "cookie_banner": cookie,
-            "charts": charts,
-            "last_played": last_played,
-        })
-        return render(request, "results_base.min.html", context)
+        if response.status_code == 200:
+            if request.is_ajax():
+                return render(request, template, context)
+            render_non_ajax(request, template, context)
+        else:
+            context = get_form_errors(context, response)
+            if request.is_ajax():
+                return render(request, template, context, status=400)
+            render_non_ajax(request, template, context)
+    return redirect("/")
 
 def noshow(request):
     podid = request.POST.get("podid", None)

@@ -701,7 +701,7 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
-    def get_episodes(url, podid, feedUrl, selected_page=None):
+    def get_episodes(url, podcast, selected_page=None):
         """
         returns a list of episodes using requests and lxml etree
         """
@@ -716,6 +716,8 @@ class Episode(models.Model):
             yield results
             return
         else:
+            podid = podcast.podid
+            feedUrl = podcast.feedUrl
             ns = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
                 "atom": "http://www.w3.org/2005/Atom",
                 "im": "http://itunes.apple.com/rss",
@@ -764,7 +766,7 @@ class Episode(models.Model):
                 spread = 3
 
                 if selected_page > num_pages:
-                    Episode.get_episodes(url, podid, feedUrl, num_pages)
+                    Episode.get_episodes(url, podcast, num_pages)
                     
                 # TODO sort by pubDate (but how ?!?!?)
                 for item in items:
@@ -972,16 +974,16 @@ class Episode(models.Model):
                 })
                 cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
             else:
-                print(feedUrl)
+                pass
             if flag:
                 return
             else:
                 yield results
                 
-    def set_new(user, podid, episodes):
+    def set_new(user, podcast, episodes):
         if user.is_authenticated:
             try:
-                subscription = Subscription.objects.get(user=user, podcast__podid=podid)
+                subscription = Subscription.objects.get(user=user, podcast__podid=podcast.podid)
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
