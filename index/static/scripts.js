@@ -179,16 +179,6 @@ function scrollSpy() {
     footer();
   });
 };
-function footer() {
-  var x = $("#footer").offset().top;
-  var y = $(window).scrollTop() + $(window).height();
-  if (x > y) {
-    $("#player").addClass("fixed-bottom");
-  }
-  else {
-    $("#player").removeClass("fixed-bottom");
-  }
-};
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
@@ -221,6 +211,15 @@ function scrollText(box, text) {
           scrollText(box, text);
         }, 1000);
       })
+  }
+};
+function footer() {
+  var x = $("#footer").offset().top;
+  var y = $(window).scrollTop() + $(window).height();
+  if (x > y) {
+    $("#player").addClass("fixed-bottom");
+  } else {
+    $("#player").removeClass("fixed-bottom");
   }
 };
 function changeTheme(theme) {
@@ -547,6 +546,17 @@ $(document)
     e.preventDefault();
     scrollTo($("#last-played"));
   })
+  .on("click", ".about-link", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    if (!drop.children(".about").length) {
+      loadResults([url, drop]);
+    } else {
+      drop.find(".results-collapse").collapse("show");
+    }
+    scrollToTop();
+  })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
@@ -566,12 +576,12 @@ $(document)
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var buttons = button.parents(".results-content").find(".subscriptions-result.selected");
-    if (buttons.length) {
+    var selected = button.parents(".results-content").find(".subscriptions-result.selected");
+    if (selected.length) {
       // array of all selected podids
       var podids = [];
-      buttons.each(function (i, button) {
-        podids[i] = $(button).data("podid");
+      selected.each(function (i, sub) {
+        podids[i] = $(sub).data("podid");
       })
     }
     // if nothing selected, do nothing

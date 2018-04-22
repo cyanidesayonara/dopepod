@@ -150,6 +150,8 @@ def get_showpod_results(podid, user, count=False, subscribe=False):
     results = {
         "view": "showpod",
         "podcast": podcast,
+        "extra_options": True,
+        "header": podcast.title,
     }
     # subscriptions
     if subscribe:
@@ -158,12 +160,6 @@ def get_showpod_results(podid, user, count=False, subscribe=False):
     elif count:
         podcast.views = F("views") + 1
         podcast.save()
-    # episodes
-    else:
-        results.update({
-            "extra_options": True,
-            "header": podcast.title,
-        })
     podcast.is_subscribed(user)
     return results
 
@@ -196,6 +192,14 @@ def get_confirm_email_results():
         "view": "confirm_email",
         "extra_options": True,
         "header": "Email Confirmed",
+    }
+    return results
+
+def get_about_results():
+    results = {
+        "view": "about",
+        "extra_options": True,
+        "header": "About",
     }
     return results
 
@@ -368,21 +372,34 @@ def subscriptions(request):
                     for podid in podids:
                         podcast = Podcast.objects.get(podid=int(podid))
                         podcast.subscribe_or_unsubscribe(user)
-                    context = Subscription.get_subscriptions(user)
+                    results = Subscription.get_subscriptions(user)
                 else:
                     podid = int(request.POST.get("podids"))
                     results = get_showpod_results(podid, user, subscribe=True)
             except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
                 raise Http404()
-            context = {
-                "results": results,
-            }
             if request.is_ajax():
+                context = {
+                    "results": results,
+                }
                 return render(request, template, context)
             if not podids:
                 return redirect(podcast.get_absolute_url())
             return redirect("/subscriptions/")
     return redirect("/")
+
+@vary_on_headers("Accept")
+def about(request):
+    if request.method == "GET":
+        template = "results_base.min.html"
+        results = get_about_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+    return redirect("/about/")
 
 @vary_on_headers("Accept")
 def playlist(request):
@@ -678,7 +695,6 @@ def password_reset(request):
             return render_splash(request, template, context, response=response)
     return redirect("/?view=password")
 
-@vary_on_headers("Accept")
 def password_reset_from_key(request, uidb36, key):
     template = "results_base.min.html"
     if request.method == "GET":
@@ -724,7 +740,6 @@ def password_reset_from_key(request, uidb36, key):
             return render_non_ajax(request, template, context)
     return redirect("/")
 
-@vary_on_headers("Accept")
 def confirm_email(request, key):
     if request.method == "GET":
         template = "results_base.min.html"

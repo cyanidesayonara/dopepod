@@ -33,6 +33,8 @@
         {% include "last_played.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
+      {% elif results.view == "about" %}
+       {% include "about.min.html" %}
       {% elif results.view == "reset_password" or results.view == "password_reset" or results.view == "confirm_email" %}
         {% include "password_reset.min.html" %}
       {% endif %}

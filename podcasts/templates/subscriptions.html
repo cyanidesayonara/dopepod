@@ -1,30 +1,33 @@
 <div class="row">
   {% include "results_buttons.min.html" %}
 </div>
-<div class="row">
+<div class="row subscriptions-results">
   {% for subscription in results.podcasts %}
     {% with subscription.podcast as podcast %}
-      <div class="col-12 col-md-4 subscriptions-result clearfix" data-podid="{{ podcast.podid }}">
-        <a class="showpod-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/" title="{{ podcast.title }}">
-          <img class="img-fluid" src="https://dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg"
-          onerror="this.src='http://{{ podcast.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.title }}" />
-        </a>
-        <a class="showpod-link" data-podid="{{ podcast.podid }}" href="/showpod/{{ podcast.podid }}/" title="{{ podcast.title }}">
+      <div class="col-lg-2 col-md-3 col-4 subscriptions-result" data-podid="{{ podcast.podid }}">
+        <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+          <img class="img-fluid" src="http://{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='https://dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
+            alt="{{ podcast.title }}" />
           <h1>
             <strong>
               {{ podcast.title }}
             </strong>
           </h1>
+          <h2>
+            by
+            <strong>
+              {{ podcast.artist }}
+            </strong>
+          </h2>
         </a>
         <p>
           Last updated:
-          {% if subscription.last_updated %}
-            {{ subscription.last_updated|date:"d-m-Y H:i" }}
-          {% else %}
-            Never
-          {% endif %}
+          {% if subscription.last_updated %} {{ subscription.last_updated|date:"d-m-Y H:i" }} {% else %} Never {% endif %}
         </p>
         <div class="subscriptions-buttons">
+<!--           <button class="btn-dope">
+            <i class="fas fa-sync" title="Update"></i>
+          </button> -->
           <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="podids[]" value="{{ podcast.podid }}">

@@ -78,11 +78,14 @@
     <span>On itunes</span>
   </a>
   {% endif %} {% if results.view == "subscriptions" %}
-  <a class="btn-dope select-all-button" href="#">
-    Select All
-  </a>
+<!--   <button class="btn-dope">
+    Update
+  </button> -->
   <a class="btn-dope unsubscribe-button" href="{% url 'subscriptions' %}">
     Unsubscribe
+  </a>
+  <a class="btn-dope select-all-button" href="#">
+    Select All
   </a>
   {% endif %} {% if results.view == "playlist" %}
   <a class="btn-dope options-button" href="{% url 'playlist' %}">
