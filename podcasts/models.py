@@ -439,6 +439,8 @@ class Podcast(models.Model):
             title = data["collectionName"]
             artist = data["artistName"]
             artworkUrl = data["artworkUrl600"].replace("600x600bb.jpg", "")[7:]
+            if "ssl" not in artworkUrl:
+                artworkUrl = artworkUrl.replace(".mzstatic", "-ssl.mzstatic")
             genre = data["primaryGenreName"]
             explicit = True if data["collectionExplicitness"] == "explicit" else False
             reviewsUrl = "https://itunes.apple.com/us/rss/customerreviews/id=" + str(podid) + "/json"
