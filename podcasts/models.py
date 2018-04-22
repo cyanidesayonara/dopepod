@@ -518,6 +518,8 @@ class Podcast(models.Model):
                 logger.error("timed out", feedUrl)
             except requests.exceptions.RetryError:
                 logger.error("too many retries:", feedUrl)
+            except requests.exceptions.ConnectionError:
+                logger.error("connection reset:", feedUrl)
 
         except requests.exceptions.HTTPError:
             logger.error("no response from url:", feedUrl)
