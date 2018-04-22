@@ -42,21 +42,19 @@ def render_splash(request, template, context, response=False):
         context = get_form_errors(context, response)
         if request.is_ajax():
             return render(request, template, context, status=400)
-        render_non_ajax(request, template, context)
+        return render_non_ajax(request, template, context)
     if request.is_ajax():
         return render(request, template, context)
     return redirect("/")
 
-def render_dashboard(request, template, context, ajax=False):
-    if ajax:
-        results = {}
-        results["view"] = "dashboard"
-        results = get_carousel(results)
-        context.update({
-            "results": results,
-        })
-        return render(request, template, context)
-    return redirect("/")
+def render_dashboard(request, template, context):
+    results = {}
+    results["view"] = "dashboard"
+    results = get_carousel(results)
+    context.update({
+        "results": results,
+    })
+    return render(request, template, context)
 
 def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
@@ -64,6 +62,7 @@ def render_non_ajax(request, template, context):
     url = request.get_full_path()
     charts = Podcast.search(url=url, provider="dopepod")
     context["results"]["extend"] = True
+
     context.update({
         "cookie_banner": cookie,
         "charts": charts,
@@ -115,6 +114,34 @@ def get_form_errors(context, response):
     })
     return context
 
+def get_settings_forms(context, request):
+    if request.user.is_authenticated:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        context.update({
+            "user_form": user_form,
+            "profile_form": profile_form,
+        })
+    return context
+
+def post_settings_forms(context, request):
+    user_form = UserForm(instance=request.user, data=request.POST)
+    profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
+    context.update({
+        "user_form": user_form,
+        "profile_form": profile_form,
+    })
+    if user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        context.update({
+            "message": "Saved!",
+        })
+        return context, True
+    else:
+        context = get_settings_errors(context, user_form, profile_form)
+        return context, False
+
 def get_showpod_results(podid, user, count=False, subscribe=False):
     try:
         podcast = Podcast.objects.get(podid=podid)
@@ -147,33 +174,6 @@ def get_settings_results():
         "extra_options": True,
     }
     return results
-
-def get_settings_forms(context, request):
-    if request.method == "POST":
-        user_form = UserForm(instance=request.user, data=request.POST)
-        profile_form = ProfileForm(instance=request.user.profile, data=request.POST)
-        context = {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        }
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            context.update({
-                "message": "Saved!",
-            })
-            return context, True
-        else:
-            context = get_settings_errors(context, user_form, profile_form)
-            return context, False
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-        context.update({
-            "user_form": user_form,
-            "profile_form": profile_form,
-        })
-        return context
 
 def get_reset_password_results():
     results = {
@@ -230,7 +230,7 @@ def index(request):
         }
         if request.is_ajax():
             return render(request, template, context)
-        render_non_ajax(request, template, context)
+        return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def charts(request):
@@ -274,7 +274,7 @@ def charts(request):
             results["view"] = "dashboard"
         else:
             results["view"] = "splash"
-        render_non_ajax(request, template, context)
+        return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def search(request):
@@ -336,7 +336,7 @@ def search(request):
 
         if request.is_ajax():
             return render(request, template, context)
-        render_non_ajax(request, template, context)
+        return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def subscriptions(request):
@@ -355,8 +355,8 @@ def subscriptions(request):
             }
             if request.is_ajax():
                 return render(request, template, context)
-            render_non_ajax(request, template, context)
-        render_splash(request, template, context)
+            return render_non_ajax(request, template, context)
+        return redirect("/")
 
     if request.method == "POST":
         template = "results_base.min.html"
@@ -371,16 +371,18 @@ def subscriptions(request):
                     context = Subscription.get_subscriptions(user)
                 else:
                     podid = int(request.POST.get("podids"))
-                    context = get_showpod_results(podid, user, subscribe=True)
+                    results = get_showpod_results(podid, user, subscribe=True)
             except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
                 raise Http404()
-            
+            context = {
+                "results": results,
+            }
             if request.is_ajax():
                 return render(request, template, context)
             if not podids:
                 return redirect(podcast.get_absolute_url())
             return redirect("/subscriptions/")
-        render_splash(request, template, context)
+    return redirect("/")
 
 @vary_on_headers("Accept")
 def playlist(request):
@@ -394,8 +396,8 @@ def playlist(request):
             }
             if request.is_ajax():
                 return render(request, template, context)
-            render_non_ajax(request, template, context)
-        render_splash(request, template, context)
+            return render_non_ajax(request, template, context)
+        return redirect("/")
 
     if request.method == "POST":
         user = request.user
@@ -425,7 +427,7 @@ def playlist(request):
 
                 if request.is_ajax():
                     return render(request, template, context)
-                render_non_ajax(request, template, context)
+                return render_non_ajax(request, template, context)
             if user.is_authenticated:
                 template = "results_base.min.html"
                 if mode == "add":
@@ -449,10 +451,10 @@ def playlist(request):
                 }
                 if request.is_ajax():
                     return render(request, template, context)
-                render_non_ajax(request, template, context)
-            render_splash(request, template, context)
+                return render_non_ajax(request, template, context)
         except (KeyError, TypeError):
             raise Http404()
+    return redirect("/")
 
 @vary_on_headers("Accept")
 def showpod(request, podid):
@@ -486,7 +488,7 @@ def showpod(request, podid):
         for page in episodes:
             results.update(page)
         Episode.set_new(user, podcast, episodes)
-        render_non_ajax(request, template, context)
+        return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
 def settings(request):
@@ -507,19 +509,18 @@ def settings(request):
             context = get_settings_forms(context, request)
             if request.is_ajax():
                 return render(request, template, context)
-            render_non_ajax(request, template, context)
-
+            return render_non_ajax(request, template, context)
         if request.method == "POST":
-            context, valid = get_settings_forms(context, request)
+            context, valid = post_settings_forms(context, request)
             if valid:
                 if request.is_ajax():
                     return render(request, template, context)
-                render_non_ajax(request, template, context)
+                return render_non_ajax(request, template, context)
             else:
                 if request.is_ajax:
                     return render(request, template, context, status=400)
-                render_non_ajax(request, template, context)
-    render_splash(request, template, context)
+                return render_non_ajax(request, template, context)
+    return redirect("/")
 
 def episodes(request, podid):
     """
@@ -551,8 +552,7 @@ def episodes(request, podid):
                 results.update(page)
             Episode.set_new(user, podcast, episodes)
             return render(request, "episodes.min.html", context)
-        else:
-            return redirect("/showpod/" + podid + "/")
+        return redirect("/showpod/" + podid + "/")
 
 def last_played(request):
     """
@@ -589,9 +589,15 @@ def login(request):
         context = {
             "view": "login",
         }
+        user = request.user
         if response.status_code == 200:
-            render_dashboard(request, template, context)
-        render_splash(request, template, context, response=response)
+            if user.is_authenticated:
+                return render_dashboard(request, template, context)
+            context.update({
+                "message": "You must confirm your email before logging in."
+            })
+        context = get_form_errors(context, response)
+        return render_splash(request, template, context, response=response)
     return redirect("/?view=login")
 
 def signup(request):
@@ -601,12 +607,17 @@ def signup(request):
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.signup(request)
         request.META["HTTP_X_REQUESTED_WITH"] = ajax
-        context = {
-            "view": "login",
-        }
+        context = {}
         if response.status_code == 200:
-            render_dashboard(request, template, context)
-        render_splash(request, template, context, response=response)
+            context.update({
+                "view": "login",
+                "message": "We have sent a confirmation link to your email address. Please contact us if you do not receive it within a few minutes."
+            })
+            return render_splash(request, template, context)
+        context.update({
+            "view": "signup",
+        })
+        return render_splash(request, template, context, response=response)
     return redirect("/?view=signup")
 
 def logout(request):
@@ -623,15 +634,19 @@ def change_password(request):
             context = {
                 "results": results,
             }
-            context, valid = get_settings_forms(context, request)
+            context = get_settings_forms(context, request)
             ajax = request.META["HTTP_X_REQUESTED_WITH"]
             request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
             response = allauth.password_change(request)
             request.META["HTTP_X_REQUESTED_WITH"] = ajax
             if response.status_code == 200:
-                render_dashboard(request, template, context)
-            render_splash(request, template, context, response=response)
-        render_splash(request, template, context)
+                context.update({
+                    "message": "Password Changed!"
+                })
+                return render(request, template, context)
+            context = get_form_errors(context, response)
+            return render(request, template, context)
+        return render_splash(request, template, context)
     return redirect("/settings/")
 
 def password_reset(request):
@@ -652,15 +667,15 @@ def password_reset(request):
         if response.status_code == 200:
             context.update({
                 "view": "login",
-                "message": "We have sent you an e-mail. Please contact us if you do not receive it within a few minutes.",
+                "message": "We have sent you an email. Please contact us if you do not receive it within a few minutes.",
             })
-            render_splash(request, template, context)
+            return render_splash(request, template, context)
         else:
-            context, valid = get_settings_forms(context, request)
+            context = get_settings_forms(context, request)
             context.update({
                 "view": "password",
             })
-            render_splash(request, template, context, response=response)
+            return render_splash(request, template, context, response=response)
     return redirect("/?view=password")
 
 @vary_on_headers("Accept")
@@ -669,10 +684,9 @@ def password_reset_from_key(request, uidb36, key):
     if request.method == "GET":
         response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
         if response.status_code == 200:
-            ajax = request.META["HTTP_X_REQUESTED_WITH"]
             request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
             response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
-            request.META["HTTP_X_REQUESTED_WITH"] = ajax
+            del request.META["HTTP_X_REQUESTED_WITH"]
 
             results = get_reset_password_results()
             context = {
@@ -680,7 +694,8 @@ def password_reset_from_key(request, uidb36, key):
                 "uidb36": uidb36,
                 "key": key,
             }
-            render_non_ajax(request, template, context)
+            context = get_form_errors(context, response)
+            return render_non_ajax(request, template, context)
         else:
             return response
 
@@ -690,45 +705,38 @@ def password_reset_from_key(request, uidb36, key):
         response = allauth.password_reset_from_key(request, uidb36=uidb36, key=key)
         request.META["HTTP_X_REQUESTED_WITH"] = ajax
 
-        results = get_password_reset_results()
-        context = {
-            "results": results,
-        }
-
         if response.status_code == 200:
+            results = get_password_reset_results()
+            context = {
+                "results": results,
+            }
             if request.is_ajax():
                 return render(request, template, context)
-            render_non_ajax(request, template, context)
+            return render_non_ajax(request, template, context)
         else:
+            results = get_reset_password_results()
+            context = {
+                "results": results,
+            }
             context = get_form_errors(context, response)
             if request.is_ajax():
                 return render(request, template, context, status=400)
-            render_non_ajax(request, template, context)
+            return render_non_ajax(request, template, context)
     return redirect("/")
 
 @vary_on_headers("Accept")
 def confirm_email(request, key):
-    if request.method == "POST":
+    if request.method == "GET":
         template = "results_base.min.html"
-        ajax = request.META["HTTP_X_REQUESTED_WITH"]
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.confirm_email(request, key=key)
-        request.META["HTTP_X_REQUESTED_WITH"] = ajax
-
+        del request.META["HTTP_X_REQUESTED_WITH"]
         results = get_confirm_email_results()
         context = {
             "results": results,
         }
-
-        if response.status_code == 200:
-            if request.is_ajax():
-                return render(request, template, context)
-            render_non_ajax(request, template, context)
-        else:
-            context = get_form_errors(context, response)
-            if request.is_ajax():
-                return render(request, template, context, status=400)
-            render_non_ajax(request, template, context)
+        if response.status_code == 302:
+            return render_non_ajax(request, template, context)
     return redirect("/")
 
 def noshow(request):

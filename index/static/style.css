@@ -384,10 +384,6 @@ a:hover {
 .carousel-inner {
   margin: 20px 0;
 }
-.carousel-item {
-  border: 2px solid rgb(0, 191, 165);
-  border-radius: .25rem;
-}
 
 /* SETTINGS */
 .solong-collapse {

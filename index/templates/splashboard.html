@@ -402,6 +402,11 @@
         </a>
       </div>
     {% elif results.view == "dashboard" %}
+      {% if errors or message %}
+        <div class="errors">
+          {% include "errors.min.html" %}
+        </div>
+      {% endif %}
       <p>
         {% with user.subscription.count as count %}
           You have

@@ -7,7 +7,7 @@ var charts = 0;
 
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "last-played", "unsubscribe"];
+  var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -25,7 +25,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played"];
+  var urls = ["dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -151,8 +151,7 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
-      response = $(response)
-      // loads episodes (cuz drop dun exist yet)
+      // loads episodes
       if (callback) {
         callback(args);
       }
