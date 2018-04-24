@@ -51,13 +51,13 @@
         <div class="col-12 dope-form-group">
           <label for="theme">Theme</label>
           {% if profile_form.theme.value == "dark" %}
-            <input class="theme" type="hidden" name="theme" value="light" />
-            <button class="btn-dope">Light</button>
-            <button type="button" class="btn-dope active">Dark</button>
-          {% elif profile_form.theme.value == "light" %}
             <input class="theme" type="hidden" name="theme" value="dark" />
-            <button type="button" class="btn-dope active">Light</button>
-            <button class="btn-dope">Dark</button>
+            <button type="button" class="btn-dope theme-button">Light</button>
+            <button type="button" class="btn-dope theme-button active">Dark</button>
+          {% elif profile_form.theme.value == "light" %}
+            <input class="theme" type="hidden" name="theme" value="light" />
+            <button type="button" class="btn-dope theme-button active">Light</button>
+            <button type="button" class="btn-dope theme-button">Dark</button>
           {% endif %}
         </div>
       </div>

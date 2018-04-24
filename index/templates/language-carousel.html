@@ -9,7 +9,9 @@
         {% for language in languages %}
           <a class="carousel-item{% if forloop.first %} active{% endif %} browse-link" href="/search/?language={{ language.url_format }}">
             <h1>
-              {{ language }}
+              <strong>
+                {{ language }}
+              </strong>
             </h1>
             <p>
               {{ language.n_podcasts }} podcasts

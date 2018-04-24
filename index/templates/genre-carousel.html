@@ -9,7 +9,9 @@
         {% for genre in genres %}
           <a class="carousel-item{% if forloop.first %} active{% endif %} browse-link" href="/search/?genre={{ genre.url_format }}">
             <h1>
-              {{ genre }}
+              <strong>
+                {{ genre }}
+              </strong>
             </h1>
             <p>
               {{ genre.n_podcasts }} podcasts

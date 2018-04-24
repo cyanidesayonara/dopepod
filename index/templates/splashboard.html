@@ -23,7 +23,7 @@
               scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
+              Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -110,7 +110,7 @@
               scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
+              Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse show" id="login-collapse">
@@ -197,7 +197,7 @@
               scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
+              Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -284,7 +284,7 @@
               scours the internet for fresh episodes so you don't have to.
             </p>
             <p>
-              Sign up now to subscribe to all your favorite podcasts and to create a playlist.
+              Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
             </p>
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
@@ -407,25 +407,22 @@
           {% include "errors.min.html" %}
         </div>
       {% endif %}
-      <p>
-        {% with user.subscription.count as count %}
-          You have
-          <span class="count">{{ count }}</span>
-          <a class="subscriptions-link" href="{% url 'subscriptions' %}">
-            subscription{{ count|pluralize }}
-          </a>
-        {% endwith %}
-      </p>
-      <p>
-        {% with user.episode.count as count %}
-          You have
-          <span class="count">{{ count }}</span>
-          episode{{ count|pluralize }} on your
-          <a class="playlist-link" href="{% url 'playlist' %}">
-            playlist
-          </a>
-        {% endwith %}
-      </p>
+      <a class="donut-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
+        <p>
+          Subscriptions
+        </p>
+        <h1>
+          {{ results.subscriptions_count }}/50
+        </h1>
+      </a>
+      <a class="donut-wrapper playlist-link" href="{% url 'playlist' %}">
+        <p>
+          Playlist
+        </p>
+        <h1>
+          {{ results.playlist_count }}/20
+        </h1>
+      </a>
     {% endif %}
   </div>
   <div class="col-12 order-3 col-lg-4 dope-wrapper">

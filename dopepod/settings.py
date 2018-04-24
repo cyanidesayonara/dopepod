@@ -61,6 +61,8 @@ INSTALLED_APPS = [
 
     "sendgrid",
 
+    #'defender',
+
     # django-allauth
     "allauth",
     "allauth.account",
@@ -80,6 +82,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    #'defender.middleware.FailedLoginMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]

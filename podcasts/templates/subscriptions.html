@@ -1,6 +1,8 @@
-<div class="row">
-  {% include "results_buttons.min.html" %}
-</div>
+{% if results.podcast %}
+  <div class="row">
+    {% include "results_buttons.min.html" %}
+  </div>
+{% endif %}
 <div class="row subscriptions-results">
   {% for subscription in results.podcasts %}
     {% with subscription.podcast as podcast %}
@@ -45,6 +47,11 @@
     <div class="col-12 dope-wrapper">
       <p>
         No subscriptions.
+      </p>
+      <p>
+        <a class="browse-link" href="{% url 'search' %}?view=grid">
+          Find podcasts!
+        </a>
       </p>
     </div>
   {% endfor %}

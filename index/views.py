@@ -31,6 +31,19 @@ def get_carousel(results):
     })
     return results
 
+def get_donuts(results, user):
+    subscriptions_count = Subscription.objects.filter(user=user).count()
+    playlist_count = Episode.objects.filter(user=user).count()
+    subscriptions_share = int(440 - (subscriptions_count / 50 * 440))
+    playlist_share = int(440 - (playlist_count / 20 * 440))
+    results.update({
+        "subscriptions_count": subscriptions_count,
+        "playlist_count": playlist_count,
+        "subscriptions_share": subscriptions_share,
+        "playlist_share": playlist_share,
+    })
+    return results
+
 def render_splash(request, template, context, response=False):
     results = {}
     results["view"] = "splash"
@@ -51,6 +64,7 @@ def render_dashboard(request, template, context):
     results = {}
     results["view"] = "dashboard"
     results = get_carousel(results)
+    results = get_donuts(results, request.user)
     context.update({
         "results": results,
     })
@@ -142,7 +156,7 @@ def post_settings_forms(context, request):
         context = get_settings_errors(context, user_form, profile_form)
         return context, False
 
-def get_showpod_results(podid, user, count=False, subscribe=False):
+def get_showpod_results(podid, user, count=False):
     try:
         podcast = Podcast.objects.get(podid=podid)
     except Podcast.DoesNotExist:
@@ -153,11 +167,8 @@ def get_showpod_results(podid, user, count=False, subscribe=False):
         "extra_options": True,
         "header": podcast.title,
     }
-    # subscriptions
-    if subscribe:
-        podcast.subscribe_or_unsubscribe(user)
     # showpod
-    elif count:
+    if count:
         podcast.views = F("views") + 1
         podcast.save()
     podcast.is_subscribed(user)
@@ -222,18 +233,24 @@ def index(request):
         template = "results_base.min.html"
         user = request.user
         view = request.GET.get("view" , None)
+        context = {
+            "view": view,
+        }
+        if request.is_ajax():
+            if user.is_authenticated:
+                return render_dashboard(request, template, context)
+            else:
+                return render_splash(request, template, context)
         results = {}
         if user.is_authenticated:
+            results = get_donuts(results, user)
             results["view"] = "dashboard"
         else:
             results["view"] = "splash"
         results = get_carousel(results)
-        context = {
+        context.update({
             "results": results,
-            "view": view,
-        }
-        if request.is_ajax():
-            return render(request, template, context)
+        })
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -375,7 +392,8 @@ def subscriptions(request):
                     results = Subscription.get_subscriptions(user)
                 else:
                     podid = int(request.POST.get("podids"))
-                    results = get_showpod_results(podid, user, subscribe=True)
+                    results = get_showpod_results(podid, user)
+                    results["podcast"].subscribe_or_unsubscribe(user)
             except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
                 raise Http404()
             if request.is_ajax():

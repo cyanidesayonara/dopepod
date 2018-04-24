@@ -18,8 +18,6 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
-from plotly.graph_objs import Pie
-import plotly
 import logging
 import string
 import requests
@@ -397,17 +395,21 @@ class Podcast(models.Model):
         """
 
         # if subscription exists, delete it
-        subscription, created = Subscription.objects.get_or_create(
-            podcast=self,
-            user=user,
-        )
-        if created:
-            self.n_subscribers = F("n_subscribers") + 1
-        else:
+        subscriptions = Subscription.objects.all()
+        try:
+            subscription = subscriptions.get(podcast=self, user=user)
             subscription.delete()
             self.n_subscribers = F("n_subscribers") - 1
+            self.is_subscribed = False
+        except Subscription.DoesNotExist:
+            if subscriptions.filter(user=user).count() <= 50:
+                subscription = Subscription.objects.create(
+                    podcast=self,
+                    user=user,
+                )
+                self.n_subscribers = F("n_subscribers") + 1
+                self.is_subscribed = True
         self.save()
-        return created
 
     def is_subscribed(self, user):
         """
@@ -1175,7 +1177,6 @@ class Episode(models.Model):
 
     def get_playlist(user):
         episodes = Episode.objects.filter(user=user).order_by("position")
-
         results = {}
         results["episodes"] = episodes
         results["header"] = "Playlist"

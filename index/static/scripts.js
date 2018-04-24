@@ -624,6 +624,11 @@ $(document)
     e.preventDefault();
     postSettings(this);
   })
+  .on("click", ".theme-button", function(e) {
+    $(this).toggleClass("active").siblings(".theme-button").toggleClass("active");
+    var theme = $(this).siblings("input[name=theme]").val() == "dark" ? "light" : "dark";
+    $(this).siblings("input[name=theme]").val(theme);
+  })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
     e.preventDefault();

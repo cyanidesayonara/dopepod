@@ -103,7 +103,7 @@ a:hover {
 }
 .scroll-up {
   transform: rotate(180deg);
-  z-index: 9001;
+  z-index: 9000;
   position: fixed;
   top: 55px;
   right: 12px;
@@ -368,17 +368,70 @@ a:hover {
 .login-buttons button {
   cursor: default;
 }
-.count {
-  display: block;
+.donut-wrapper {
+  display: inline-block;
+  position: relative;
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: 50%;
+  width: 40%;
+  height: 0;
+  padding: 10% 5% 30%;
+  margin: 10px 5%;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+}
+.donut-wrapper h1 {
   font-size: 28px;
   font-weight: 600;
+}
+.donut-wrapper:hover {
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+  background: rgb(0, 191, 165);
+  color: #fff;
+}
+.donut-wrapper:hover svg circle {
+  stroke: #000;
+}
+a.donut-wrapper {
+  color: unset;
+}
+.donut-chart {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.donut {
+  stroke-dasharray: 440;
+  -webkit-animation: donut 1s ease-out forwards;
+  animation: donut 1s ease-out forwards;
+}
+@-webkit-keyframes donut {
+  from {
+    stroke-dashoffset: 440;
+  }
+}
+@keyframes donut {
+  from {
+    stroke-dashoffset: 440;
+  }
 }
 
 /* CAROUSEL */
 .carousel {
   border-top: 2px solid rgb(0, 191, 165);
+  border-bottom: 2px solid rgb(0, 191, 165);
   padding: 20px;
-  margin-top: 20px;
+  margin: 15px 0;
 }
 .carousel a {
   color: unset;
@@ -866,6 +919,11 @@ a:hover {
 .playlist-form,
 .subscriptions-form {
   display: inherit;
+}
+
+.subscriptions .dope-wrapper {
+  padding-left: 15;
+  padding-top: 0;
 }
 
 /* PLAYER */
