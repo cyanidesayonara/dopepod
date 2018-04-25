@@ -77,10 +77,8 @@
     <span class="d-none">On dopepod</span>
     <span>On itunes</span>
   </a>
-  {% endif %} {% if results.view == "subscriptions" %}
-<!--   <button class="btn-dope">
-    Update
-  </button> -->
+  {% endif %}
+  {% if results.view == "subscriptions" %}
   <a class="btn-dope unsubscribe-button" href="{% url 'subscriptions' %}">
     Unsubscribe
   </a>
