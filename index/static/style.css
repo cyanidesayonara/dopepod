@@ -24,6 +24,53 @@ a:hover {
   background: #000;
   color: #fff;
 }
+input[type=checkbox] {
+  visibility: hidden;
+}
+.checkbox {
+  width: 25px;
+  margin: 10px;
+  position: relative;
+}
+.dope-check-label .dope-check {
+  visibility: hidden;
+  /* <-- hide the default checkbox, the rest is to hide and alllow tabbing, which display:none prevents */
+  display: block;
+  height: 0;
+  width: 0;
+  position: absolute;
+  overflow: hidden;
+}
+.dope-check-label span {
+  /* <-- style the artificial checkbox */
+  height: 20px;
+  width: 20px;
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: .25rem;
+  display: inline-block;
+  margin-right: 10px;
+}
+.dope-check-label p {
+  display: inline-block;
+  vertical-align: middle;
+}
+[type=checkbox]:checked+span:after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 7px;
+  background: 0 0;
+  top: 5px;
+  left: 23px;
+  border: 3px solid #00bfa5;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+[type=checkbox]:checked+span:after {
+  opacity: 1;
+}
 
 /* COOKIE BANNER */
 #cookie-banner {

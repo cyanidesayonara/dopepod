@@ -45,8 +45,9 @@ def get_donuts(results, user):
     return results
 
 def render_splash(request, template, context, response=False):
-    results = {}
-    results["view"] = "splash"
+    results = {
+        "view": "splash",
+    }
     results = get_carousel(results)
     context.update({
         "results": results,
@@ -61,8 +62,9 @@ def render_splash(request, template, context, response=False):
     return redirect("/")
 
 def render_dashboard(request, template, context):
-    results = {}
-    results["view"] = "dashboard"
+    results = {
+        "view": "dashboard",
+    }
     results = get_carousel(results)
     results = get_donuts(results, request.user)
     context.update({
