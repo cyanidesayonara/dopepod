@@ -524,7 +524,7 @@ def showpod(request, podid):
         episodes = Episode.get_episodes(url, podcast, page)
         for page in episodes:
             results.update(page)
-        Episode.set_new(user, podcast, episodes)
+        Episode.set_new(user, podcast, results["episodes"])
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -587,7 +587,7 @@ def episodes(request, podid):
             episodes = Episode.get_episodes(url, podcast, page)
             for page in episodes:
                 results.update(page)
-            Episode.set_new(user, podcast, episodes)
+            Episode.set_new(user, podcast, results["episodes"])
             return render(request, "episodes.min.html", context)
         return redirect("/showpod/" + podid + "/")
 
