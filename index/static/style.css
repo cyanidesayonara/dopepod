@@ -103,7 +103,7 @@ a:hover {
 }
 .scroll-up {
   transform: rotate(180deg);
-  z-index: 9000;
+  z-index: 9001;
   position: fixed;
   top: 55px;
   right: 12px;
@@ -193,7 +193,7 @@ a:hover {
 
 /* DOPEBAR */
 #dopebar {
-  z-index: 9001;
+  z-index: 5000;
   position: fixed;
   right: 0;
   left: 0;
@@ -465,8 +465,9 @@ a.donut-wrapper {
 }
 
 /* SETTINGS */
+.change-collapse,
 .solong-collapse {
-  padding: 10px 0;
+  padding: 20px 0;
 }
 
 /* SHOWPOD */

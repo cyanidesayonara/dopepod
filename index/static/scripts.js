@@ -624,7 +624,7 @@ $(document)
     e.preventDefault();
     postSettings(this);
   })
-  .on("click", ".theme-button", function(e) {
+  .on("click", ".theme-button[type=submit]", function (e) {
     $(this).toggleClass("active").siblings(".theme-button").toggleClass("active");
     var theme = $(this).siblings("input[name=theme]").val() == "dark" ? "light" : "dark";
     $(this).siblings("input[name=theme]").val(theme);

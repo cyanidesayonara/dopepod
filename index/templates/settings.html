@@ -52,12 +52,12 @@
           <label for="theme">Theme</label>
           {% if profile_form.theme.value == "dark" %}
             <input class="theme" type="hidden" name="theme" value="dark" />
-            <button type="button" class="btn-dope theme-button">Light</button>
+            <button type="submit" class="btn-dope theme-button">Light</button>
             <button type="button" class="btn-dope theme-button active">Dark</button>
           {% elif profile_form.theme.value == "light" %}
             <input class="theme" type="hidden" name="theme" value="light" />
             <button type="button" class="btn-dope theme-button active">Light</button>
-            <button type="button" class="btn-dope theme-button">Dark</button>
+            <button type="submit" class="btn-dope theme-button">Dark</button>
           {% endif %}
         </div>
       </div>
