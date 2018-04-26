@@ -38,7 +38,6 @@ nbformat==4.4.0
 oauthlib==2.0.7
 orderedmultidict==0.7.11
 parsel==1.4.0
-plotly==2.5.1
 psycopg2==2.7.4
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
