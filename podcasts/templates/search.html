@@ -134,9 +134,13 @@
     <p>
       No results.
     </p>
+    {% if results.pages %}
+      <p>
+        (It's a bug ¯\_(ツ)_/¯)
+      </p>
+    {% endif %}
   </div>
 {% endif %}
-{% if results.pages %}
 <div class="row">
   {% include "pagination.min.html" %}
 </div>
