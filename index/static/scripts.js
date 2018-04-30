@@ -1,13 +1,14 @@
-xhr = null;
-timeout = 0;
-last_played = 0;
-charts = 0;
+"use strict";
+
+var xhr = null;
+var timeout = 0;
+var last_played = 0;
+var charts = 0;
 
 function pushState(url) {
-  url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played", "unsubscribe"];
-  for (i = 0; i < urls.length; i++) {
+  var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
+  for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
@@ -24,8 +25,8 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played"];
-  for (i = 0; i < urls.length; i++) {
+  var urls = ["dopebar", "charts", "last-played", "change-password"];
+  for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
     }
@@ -106,7 +107,7 @@ function refreshPage() {
 function checkForXHR(url) {
   if(xhr != null) {
     var urls = ["dopebar", "charts", "episodes", "last-played"];
-    for (i = 0; i < urls.length; i++) {
+    for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
       }
@@ -150,8 +151,7 @@ function loadResults(args, no_push) {
   })
     .done(function(response) {
       drop.html(response);
-      response = $(response)
-      // loads episodes (cuz drop dun exist yet)
+      // loads episodes
       if (callback) {
         callback(args);
       }
@@ -171,24 +171,14 @@ function noshow(podid) {
       method: "POST",
       url: "/noshow/",
     });
-}
+};
 // SCROLLERS
 function scrollSpy() {
   $(window).scroll(function() {
     scrollUp();
     footer();
   });
-}
-function footer() {
-  var x = $("#footer").offset().top;
-  var y = $(window).scrollTop() + $(window).height();
-  if (x > y) {
-    $("#player").addClass("fixed-bottom");
-  }
-  else {
-    $("#player").removeClass("fixed-bottom");
-  }
-}
+};
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
@@ -197,7 +187,7 @@ function scrollUp() {
   else {
     $(".scroll-up").addClass("d-none");
   }
-}
+};
 function scrollToTop() {
   $("html, body").animate({
     scrollTop: $("body").offset().top
@@ -223,6 +213,15 @@ function scrollText(box, text) {
       })
   }
 };
+function footer() {
+  var x = $("#footer").offset().top;
+  var y = $(window).scrollTop() + $(window).height();
+  if (x > y) {
+    $("#player").addClass("fixed-bottom");
+  } else {
+    $("#player").removeClass("fixed-bottom");
+  }
+};
 function changeTheme(theme) {
   if (theme) {
     $("body").addClass("darken");
@@ -231,12 +230,17 @@ function changeTheme(theme) {
     $("body").removeClass("darken");
   }
 };
-function postSettings(data, theme, button) {
-  button.html(getButtonLoading());
-  var url = "/settings/";
+function postSettings(form) {
+  var method = form.method;
+  var url = form.action;
+  var form = $(form);
+  var data = form.serialize();
+  var theme = form.find("input[name=theme]").val();
+  var drop = $("#center-stage");
+  drop.children(".results").addClass("loading").html(getCircleLoading());
   $.ajax({
       data: data,
-      method: "POST",
+      method: method,
       url: url,
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
@@ -244,7 +248,6 @@ function postSettings(data, theme, button) {
       scrollToTop();
     })
     .done(function (response) {
-      console.log(theme)
       if (theme) {
         if (theme === "dark") {
           theme = true;
@@ -253,13 +256,13 @@ function postSettings(data, theme, button) {
           theme = false;
           $(".lights-toggle").addClass("lit");
         }
+        changeTheme(theme);
       }
-      changeTheme(theme);
-      $("#center-stage").html(response);
+      drop.html(response);
       scrollToTop();
       replaceState(url);
     });
-}
+};
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -344,6 +347,12 @@ function playNext() {
     postPlaylist(data, mode, wrapper);
   }, 500);
 };
+function closePlayer() {
+  var player = $("#player");
+  player.find("audio")[0].preload = "none";
+  player.empty();
+  updateTitle();
+};
 // replaces spaces/&s with +, removes unwanted chars
 function cleanString(q) {
   q = q.replace(/&+/g, "+");
@@ -417,7 +426,6 @@ $(document)
         }
       }
       var drop = button.parents(".results").parent();
-      console.log(drop)
       loadResults([url, drop]);
       scrollTo(drop);
     }, 250);
@@ -538,6 +546,17 @@ $(document)
     e.preventDefault();
     scrollTo($("#last-played"));
   })
+  .on("click", ".about-link", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    if (!drop.children(".about").length) {
+      loadResults([url, drop]);
+    } else {
+      drop.find(".results-collapse").collapse("show");
+    }
+    scrollToTop();
+  })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
@@ -557,12 +576,12 @@ $(document)
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var buttons = button.parents(".results-content").find(".subscriptions-result.selected");
-    if (buttons.length) {
+    var selected = button.parents(".results-content").find(".subscriptions-result.selected");
+    if (selected.length) {
       // array of all selected podids
       var podids = [];
-      buttons.each(function (i, button) {
-        podids[i] = $(button).data("podid");
+      selected.each(function (i, sub) {
+        podids[i] = $(sub).data("podid");
       })
     }
     // if nothing selected, do nothing
@@ -590,9 +609,7 @@ $(document)
   // close player
   .on("click", ".player-close", function(e) {
     e.preventDefault();
-    $(this).parents().siblings("audio")[0].preload="none";
-    $("#player").empty();
-    updateTitle();
+    closePlayer();
   })
   // minimize player
   .on("click", ".player-minimize", function(e) {
@@ -605,13 +622,12 @@ $(document)
   // save settings, apply theme
   .on("submit", ".settings-form", function(e) {
     e.preventDefault();
-    var method = this.method;
-    var url = this.action;
-    var form = $(this);
-    var data = form.serialize();
-    var theme = form.find("input[name=theme]").val();
-    var button = form.find("button[type=submit]");
-    postSettings(data, theme, button);
+    postSettings(this);
+  })
+  .on("click", ".theme-button[type=submit]", function (e) {
+    $(this).toggleClass("active").siblings(".theme-button").toggleClass("active");
+    var theme = $(this).siblings("input[name=theme]").val() == "dark" ? "light" : "dark";
+    $(this).siblings("input[name=theme]").val(theme);
   })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
@@ -752,7 +768,7 @@ $(window)
       // if url in urls, reload results (and don't push)
       var url = state.url;
       var urls = ["settings", "playlist", "subscriptions"];
-      for (i = 0; i < urls.length; i++) {
+      for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
           loadResults([url, drop], true);

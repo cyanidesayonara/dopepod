@@ -18,8 +18,6 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
-from plotly.graph_objs import Pie
-import plotly
 import logging
 import string
 import requests
@@ -47,35 +45,6 @@ retry = Retry(
 adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 session.mount("http://", adapter)
 session.mount("https://", adapter)
-
-def donuts():
-    names = list(Genre.get_primary_genres().values_list("name", flat=True))
-    numbers = list(Genre.get_primary_genres().values_list("n_podcasts", flat=True))
-    plotly.offline.plot({
-        "data": [
-            {
-                "labels": names,
-                "values": numbers,
-                "name": "",
-                "hoverinfo":"label+percent+name",
-                "hole": .4,
-                "type": "pie",
-            }
-        ],
-        "layout": {
-            "annotations": [
-                {
-                    "font": {
-                        "size": 20
-                    },
-                    "showarrow": False,
-                    "text": "Genres",
-                    "x": 0.5,
-                    "y": 0.5
-                },
-            ]
-        }
-    }, filename='donut.html')
 
 def format_bytes(bytes):
     #2**10 = 1024
@@ -139,6 +108,7 @@ class Podcast(models.Model):
     language_rank = models.IntegerField(default=None, null=True)
     itunes_rank = models.IntegerField(default=None, null=True)
     itunes_genre_rank = models.IntegerField(default=None, null=True)
+    noshow = models.BooleanField(default=False)
 
     objects = PodcastManager()
 
@@ -425,17 +395,21 @@ class Podcast(models.Model):
         """
 
         # if subscription exists, delete it
-        subscription, created = Subscription.objects.get_or_create(
-            podcast=self,
-            user=user,
-        )
-        if created:
-            self.n_subscribers = F("n_subscribers") + 1
-        else:
+        subscriptions = Subscription.objects.all()
+        try:
+            subscription = subscriptions.get(podcast=self, user=user)
             subscription.delete()
             self.n_subscribers = F("n_subscribers") - 1
+            self.is_subscribed = False
+        except Subscription.DoesNotExist:
+            if subscriptions.filter(user=user).count() <= 50:
+                subscription = Subscription.objects.create(
+                    podcast=self,
+                    user=user,
+                )
+                self.n_subscribers = F("n_subscribers") + 1
+                self.is_subscribed = True
         self.save()
-        return created
 
     def is_subscribed(self, user):
         """
@@ -467,6 +441,8 @@ class Podcast(models.Model):
             title = data["collectionName"]
             artist = data["artistName"]
             artworkUrl = data["artworkUrl600"].replace("600x600bb.jpg", "")[7:]
+            if "ssl" not in artworkUrl:
+                artworkUrl = artworkUrl.replace(".mzstatic", "-ssl.mzstatic")
             genre = data["primaryGenreName"]
             explicit = True if data["collectionExplicitness"] == "explicit" else False
             reviewsUrl = "https://itunes.apple.com/us/rss/customerreviews/id=" + str(podid) + "/json"
@@ -546,6 +522,8 @@ class Podcast(models.Model):
                 logger.error("timed out", feedUrl)
             except requests.exceptions.RetryError:
                 logger.error("too many retries:", feedUrl)
+            except requests.exceptions.ConnectionError:
+                logger.error("connection reset:", feedUrl)
 
         except requests.exceptions.HTTPError:
             logger.error("no response from url:", feedUrl)
@@ -729,7 +707,7 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
-    def get_episodes(url, podid, feedUrl, selected_page=None):
+    def get_episodes(url, podcast, selected_page=None):
         """
         returns a list of episodes using requests and lxml etree
         """
@@ -744,6 +722,8 @@ class Episode(models.Model):
             yield results
             return
         else:
+            podid = podcast.podid
+            feedUrl = podcast.feedUrl
             ns = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
                 "atom": "http://www.w3.org/2005/Atom",
                 "im": "http://itunes.apple.com/rss",
@@ -792,7 +772,7 @@ class Episode(models.Model):
                 spread = 3
 
                 if selected_page > num_pages:
-                    Episode.get_episodes(url, podid, feedUrl, num_pages)
+                    Episode.get_episodes(url, podcast, num_pages)
                     
                 # TODO sort by pubDate (but how ?!?!?)
                 for item in items:
@@ -1000,16 +980,16 @@ class Episode(models.Model):
                 })
                 cache.set(url, copy.deepcopy(results), 60 * 60 * 24)
             else:
-                print(feedUrl)
+                pass
             if flag:
                 return
             else:
                 yield results
                 
-    def set_new(user, podid, episodes):
+    def set_new(user, podcast, episodes):
         if user.is_authenticated:
             try:
-                subscription = Subscription.objects.get(user=user, podcast__podid=podid)
+                subscription = Subscription.objects.get(user=user, podcast__podid=podcast.podid)
                 i = 0
                 # iterate thru episodes till episode pubDate is older than last_updated
                 for episode in episodes:
@@ -1197,7 +1177,6 @@ class Episode(models.Model):
 
     def get_playlist(user):
         episodes = Episode.objects.filter(user=user).order_by("position")
-
         results = {}
         results["episodes"] = episodes
         results["header"] = "Playlist"

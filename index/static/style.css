@@ -24,6 +24,53 @@ a:hover {
   background: #000;
   color: #fff;
 }
+input[type=checkbox] {
+  visibility: hidden;
+}
+.checkbox {
+  width: 25px;
+  margin: 10px;
+  position: relative;
+}
+.dope-check-label .dope-check {
+  visibility: hidden;
+  /* <-- hide the default checkbox, the rest is to hide and alllow tabbing, which display:none prevents */
+  display: block;
+  height: 0;
+  width: 0;
+  position: absolute;
+  overflow: hidden;
+}
+.dope-check-label span {
+  /* <-- style the artificial checkbox */
+  height: 20px;
+  width: 20px;
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: .25rem;
+  display: inline-block;
+  margin-right: 10px;
+}
+.dope-check-label p {
+  display: inline-block;
+  vertical-align: middle;
+}
+[type=checkbox]:checked+span:after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 7px;
+  background: 0 0;
+  top: 5px;
+  left: 23px;
+  border: 3px solid #00bfa5;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+[type=checkbox]:checked+span:after {
+  opacity: 1;
+}
 
 /* COOKIE BANNER */
 #cookie-banner {
@@ -165,6 +212,7 @@ a:hover {
 }
 
 .dope-field {
+  font-size: 15px;
   display: block;
   width: 100%;
   padding: 4px 8px;
@@ -192,7 +240,7 @@ a:hover {
 
 /* DOPEBAR */
 #dopebar {
-  z-index: 9001;
+  z-index: 5000;
   position: fixed;
   right: 0;
   left: 0;
@@ -368,14 +416,106 @@ a:hover {
 .login-buttons button {
   cursor: default;
 }
+.donut-wrapper {
+  display: inline-block;
+  position: relative;
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: 50%;
+  width: 40%;
+  height: 0;
+  padding: 10% 5% 30%;
+  margin: 10px 5%;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+}
+.donut-wrapper h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+.donut-wrapper:hover {
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+  background: rgb(0, 191, 165);
+  color: #fff;
+}
+.donut-wrapper:hover svg circle {
+  stroke: #000;
+}
+a.donut-wrapper {
+  color: unset;
+}
+.donut-chart {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.donut {
+  stroke-dasharray: 440;
+  -webkit-animation: donut 1s ease-out forwards;
+  animation: donut 1s ease-out forwards;
+}
+@-webkit-keyframes donut {
+  from {
+    stroke-dashoffset: 440;
+  }
+}
+@keyframes donut {
+  from {
+    stroke-dashoffset: 440;
+  }
+}
 
 /* CAROUSEL */
+.carousel {
+  border-top: 2px solid rgb(0, 191, 165);
+  border-bottom: 2px solid rgb(0, 191, 165);
+  padding: 20px;
+  margin: 15px 0;
+}
+.carousel a {
+  color: unset;
+}
 .carousel h1 {
   font-size: 20px;
-  margin: 10px 0;
 }
 .carousel-inner {
   margin: 20px 0;
+}
+.carousel-item {
+  border: 2px solid rgb(0, 191, 165);
+  border-radius: 50%;
+  width: 80%;
+  height: 0;
+  padding: 25% 10% 55%;
+  margin: 0 10%;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+}
+.carousel-item:hover {
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -webkit-transition: all .25s ease-in-out;
+  color: #fff;
+  background: rgb(0, 191, 165);
+}
+
+/* SETTINGS */
+.change-collapse,
+.solong-collapse {
+  padding: 20px 0;
 }
 
 /* SHOWPOD */
@@ -429,13 +569,6 @@ a:hover {
 }
 #showpod-c p {
   margin-bottom: 4px;
-}
-
-/* NOSHOW */
-.noshow {
-  display: none;
-  text-align: center;
-  padding: 10px;
 }
 
 /* EPISODES */
@@ -593,7 +726,8 @@ a:hover {
 
 /* CHARTS */
 .charts-result a,
-.grid-result a {
+.grid-result a,
+.subscriptions-result a {
   color: unset;
   font-weight: unset;
 }
@@ -756,27 +890,34 @@ a:hover {
 }
 
 /* SEARCH RESULTS */
-.grid-results {
+.grid-results,
+.subscriptions-results {
   padding: 10px 0 0 10px;
 }
-.grid-result {
+.grid-result,
+.subscriptions-result {
   padding: 0 10px 10px 0;
 }
-.grid-result img {
+.grid-result img,
+.subscriptions-result img {
   border-radius: .25rem;
   margin-bottom: 10px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-.grid-result img:hover {
+.grid-result img:hover,
+.subscriptions-result img:hover {
   -moz-transform: scale(1.02);
   -webkit-transform: scale(1.02);
   -o-transform: scale(1.02);
   -ms-transform: scale(1.02);
   transform: scale(1.02);
 }
-.grid-result h1, .grid-result h2 {
+.grid-result h1,
+.grid-result h2,
+.subscriptions-result h1,
+.subscriptions-result h2 {
   word-wrap: break-word;
   font-size: 14px;
   margin-bottom: 5px;
@@ -785,35 +926,11 @@ a:hover {
 }
 
 /* SUBSCRIPTIONS */
-.subscriptions-result img {
-  float: left;
-  margin-right: 5px;
-  border-radius: .25rem;
-  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-}
-.subscriptions-result h1 {
-  font-size: 16px;
-  height: 38px;
-  margin-bottom: 3px;
-  overflow: hidden;
-}
 .subscriptions-result p {
-  margin-bottom: 3px;
-  font-weight: 400;
-  overflow: hidden;
+  font-size: 12px;
 }
-.subscriptions-result {
-  border: 2px solid rgb(0, 191, 165);
-}
-.subscriptions-result.selected {
+.subscriptions-result.selected .select-subscription {
   background: rgb(0, 191, 165);
-}
-.subscriptions-result.selected h1 {
-  color: #000;
-}
-.subscriptions-result.selected h1:hover {
   color: #fff;
 }
 .subscriptions-buttons {
@@ -851,6 +968,11 @@ a:hover {
 .playlist-form,
 .subscriptions-form {
   display: inherit;
+}
+
+.subscriptions .dope-wrapper {
+  padding-left: 15;
+  padding-top: 0;
 }
 
 /* PLAYER */

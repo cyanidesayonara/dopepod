@@ -1,13 +1,13 @@
 {% extends results.extend|yesno:"base.min.html,ajax.min.html" %}
 
 {% block title %}
-{% if results.view == "showpod" %}
-  Listen to episodes of {{ results.header }} | dopepod
-{% elif results.header %}
-  {{ results.header }} | dopepod
-{% else %}
-  dopepod
-{% endif %}
+  {% if results.view == "showpod" %}
+    Listen to episodes of {{ results.header }} | dopepod
+  {% elif results.header %}
+    {{ results.header }} | dopepod
+  {% else %}
+    dopepod
+  {% endif %}
 {% endblock %}
 
 {% block center-stage %}
@@ -19,10 +19,8 @@
     {% endif %}
 
     <div class="col-12 results-content">
-      {% if results.view == "splash" %}
-        {% include "splash.min.html" %}
-      {% elif results.view == "dashboard" %}
-        {% include "dashboard.min.html" %}
+      {% if results.view == "splash" or results.view == "dashboard" %}
+        {% include "splashboard.min.html" %}
       {% elif results.view == "grid" or results.view == "list" %}
         {% include "search.min.html" %}
       {% elif results.view == "charts" %}
@@ -35,6 +33,8 @@
         {% include "last_played.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
+      {% elif results.view == "about" %}
+       {% include "about.min.html" %}
       {% elif results.view == "reset_password" or results.view == "password_reset" or results.view == "confirm_email" %}
         {% include "password_reset.min.html" %}
       {% endif %}

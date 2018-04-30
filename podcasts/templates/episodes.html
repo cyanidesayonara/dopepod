@@ -1,9 +1,12 @@
-<div class="row">
-  {% if results.pages %}
-    {% include "pagination.min.html" %}
-  {% endif %}
-  {% include "results_buttons.min.html" %}
-</div>
+{% if not results.episodes and results.view == "playlist" %}
+{% else %}
+  <div class="row">
+    {% if results.pages %}
+      {% include "pagination.min.html" %}
+    {% endif %}
+    {% include "results_buttons.min.html" %}
+  </div>
+{% endif %}
 {% if not results.view == "playlist" %}
   <div class="row fade collapse showpod-collapse" id="reviews-collapse">
     <div class="col-12 dope-wrapper">
@@ -18,6 +21,11 @@
     <div class="col-12 dope-wrapper">
       <p>
         No episodes.
+      </p>
+      <p>
+        <a class="browse-link" href="{% url 'search' %}?view=grid">
+          Find podcasts!
+        </a>
       </p>
     </div>
   {% else %}

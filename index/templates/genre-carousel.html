@@ -1,22 +1,22 @@
 {% if results.genres %}
   {% with results.genres as genres %}
-    <div id="genre-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2500">
+    <div id="genre-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
       <h1>{{ genres.count }} genres</h1>
       <a class="btn-dope" href="#genre-carousel" role="button" data-slide="prev">
         <i class="fas fa-angle-up" title="Previous"></i>
       </a>
       <div class="carousel-inner">
         {% for genre in genres %}
-          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+          <a class="carousel-item{% if forloop.first %} active{% endif %} browse-link" href="/search/?genre={{ genre.url_format }}&view=grid">
             <h1>
-              <a class="browse-link" href="/search/?genre={{ genre.url_format }}">
+              <strong>
                 {{ genre }}
-              </a>
+              </strong>
             </h1>
             <p>
               {{ genre.n_podcasts }} podcasts
             </p>
-          </div>
+          </a>
         {% endfor %}
       </div>
       <a class="btn-dope" href="#genre-carousel" role="button" data-slide="next">
