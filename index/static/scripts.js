@@ -738,9 +738,9 @@ $(document)
   .on("click", ".scroll-up", function() {
     scrollToTop();
   })
-  .on("click", ".select-subscription", function() {
-    var box = $(this).parents(".subscriptions-result").toggleClass("selected");
-    var buttons = box.parents(".results").find(".subscriptions-result");
+  .on("click", ".select-subscription", function() {subscriptions-re
+    var box = $(this).parents(".grid-result").toggleClass("selected");
+    var buttons = box.parents(".results").find(".grid-result");
     var selected = box.parents(".results").find(".selected");
     if (buttons.length == selected.length) {
       $(".select-all-button").addClass("active");
@@ -753,10 +753,10 @@ $(document)
   .on("click", ".select-all-button", function() {
     var button = $(this);
     if (button.hasClass("active")) {
-      button.parent().parent().siblings().find(".subscriptions-result").removeClass("selected");
+      button.parent().parent().siblings().find(".grid-result").removeClass("selected");
     }
     else {
-      button.parent().parent().siblings().find(".subscriptions-result").addClass("selected");
+      button.parent().parent().siblings().find(".grid-result").addClass("selected");
     }
     button.toggleClass("active");
   });

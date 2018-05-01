@@ -3,7 +3,7 @@
     {% include "results_buttons.min.html" %}
   </div>
 {% endif %}
-<div class="row subscriptions-results">
+<div class="row grid-results">
   {% for subscription in results.podcasts %}
     {% with subscription.podcast as podcast %}
       <div class="col-lg-2 col-md-3 col-4 grid-result" data-podid="{{ podcast.podid }}">
