@@ -919,7 +919,7 @@ a.donut-wrapper {
 .grid-result p {
   font-size: 12px;
 }
-.grid-results.selected .select-subscription {
+.grid-result.selected .select-subscription {
   background: rgb(0, 191, 165);
   color: #fff;
 }
