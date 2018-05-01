@@ -886,6 +886,9 @@ a.donut-wrapper {
 }
 
 /* SEARCH RESULTS */
+.grid-results {
+  padding: 10px 0 0 10px;
+}
 .grid-result {
   padding: 0 10px 10px 0;
 }
