@@ -576,7 +576,7 @@ $(document)
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var selected = button.parents(".results-content").find(".subscriptions-result.selected");
+    var selected = button.parents(".results-content").find(".grid-result.selected");
     if (selected.length) {
       // array of all selected podids
       var podids = [];
@@ -738,7 +738,7 @@ $(document)
   .on("click", ".scroll-up", function() {
     scrollToTop();
   })
-  .on("click", ".select-subscription", function() {subscriptions-re
+  .on("click", ".select-subscription", function() {
     var box = $(this).parents(".grid-result").toggleClass("selected");
     var buttons = box.parents(".results").find(".grid-result");
     var selected = box.parents(".results").find(".selected");
