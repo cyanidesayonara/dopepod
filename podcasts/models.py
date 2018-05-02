@@ -700,8 +700,8 @@ class Episode(models.Model):
     url = models.CharField(max_length=1000)
     kind = models.CharField(max_length=16)
     size = models.CharField(null=True, blank=True, max_length=16)
-    signature = models.CharField(max_length=7000)
-    added_at = models.DateTimeField(default=timezone.now)
+    signature = models.CharField(max_length=10000)
+    added_at = models.DateTimeField(default=timezone.now, null=True)
     played_at = models.DateTimeField(default=None, null=True)
     position = models.IntegerField(default=None, null=True)
 
@@ -1058,6 +1058,7 @@ class Episode(models.Model):
         self.podcast.plays = F("plays") + 1
         self.podcast.save()
         self.played_at = timezone.now()
+        self.added_at = None
         self.position = None
         self.user = None
         self.save()
@@ -1067,8 +1068,10 @@ class Episode(models.Model):
         with transaction.atomic():
             last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if last_played.count() > 1:
-                if last_played[0].signature == last_played[1].signature:
-                    last_played[1].delete()
+                for episode in last_played[1:5]:
+                    if episode.signature == last_played[0].signature:
+                        episode.delete()
+                        break
                 if last_played.count() > 50:
                     excess = last_played[49:last_played.count() - 1]
                     for episode in excess:
