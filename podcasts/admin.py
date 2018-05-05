@@ -14,8 +14,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('podcast', 'position', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'added_at', 'user',)
-    fields = ('podcast', 'position', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'added_at', 'user',)
+    list_display = ('podcast', 'position', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'added_at', 'user', 'size', 'signature')
+    fields = ('podcast', 'position', 'pubDate', 'title', 'description', 'length', 'url', 'kind', 'played_at', 'added_at', 'user', 'size', 'signature')
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
