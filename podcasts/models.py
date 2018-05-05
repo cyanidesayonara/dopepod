@@ -487,7 +487,6 @@ class Podcast(models.Model):
                 )
 
                 # TODO try to get episodes before creating podcast 
-
                 with transaction.atomic():
                     podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
                         podid=podid,
@@ -678,12 +677,12 @@ class Subscription(models.Model):
 
     def get_subscriptions(user):
         subscriptions = Subscription.objects.filter(user=user)
-        results = {}
-        results["podcasts"] = subscriptions
-        results["header"] = "Subscriptions"
-        results["view"] = "subscriptions"
-        results["subscriptions"] = True
-        results["extra_options"] = True
+        results = {
+            "podcasts": subscriptions,
+            "header": "Subscriptions",
+            "view": "subscriptions",
+            "extra_options": True,
+        }
         return results
 
 class EpisodeManager(models.Manager):
@@ -942,8 +941,7 @@ class Episode(models.Model):
             if episodes:
                 # paginate
                 if num_pages > 1:
-                    pages = range((page - spread if page - spread > 1 else 1),
-                                    (page + spread if page + spread <= num_pages else num_pages) + 1)
+                    pages = range((page - spread if page - spread > 1 else 1), (page + spread if page + spread <= num_pages else num_pages) + 1)
                     pages_urls = []
 
                     for p in pages:
@@ -954,8 +952,7 @@ class Episode(models.Model):
                             f.args["page"] = p
                             pages_urls.append(f.url)
                     #  zip pages & use list to make it reusable
-                    results["pages"] = list(
-                        zip(pages, pages_urls))
+                    results["pages"] = list(zip(pages, pages_urls))
 
                     if page < num_pages - spread:
                         f = furl(url)
@@ -1039,10 +1036,11 @@ class Episode(models.Model):
             return results
         else:
             last_played = Episode.objects.filter(position=None).order_by("-played_at",)
-            results = {}
-            results["episodes"] = last_played
-            results["header"] = "Last played"
-            results["view"] = "last_played"
+            results = {
+                "episodes": last_played,
+                "header": "Last played",
+                "view": "last_played",
+            }
             cache.set("last_played", results, 60 * 60 * 24)
             return results
 
@@ -1063,19 +1061,22 @@ class Episode(models.Model):
         self.user = None
         self.save()
 
-        # if played is same as previous, delete previous
         # if list is longer than 50, delete excess
+        # if just_played in last_played, delete first occurrence then break
         with transaction.atomic():
             last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if last_played.count() > 1:
-                for episode in last_played[1:5]:
-                    if episode.signature == last_played[0].signature:
-                        episode.delete()
-                        break
                 if last_played.count() > 50:
-                    excess = last_played[49:last_played.count() - 1]
+                    excess = last_played[49:]
                     for episode in excess:
                         episode.delete()
+                for episode in last_played[1:]:
+                    # split off last part of signature
+                    # (it's different for otherwise identical episodes)
+                    just_played = last_played[0].signature.split(":")[0]
+                    if episode.signature.split(":")[0] == just_played:
+                        episode.delete()
+                        break
 
         # let's cache those bad boys
         last_played = Episode.objects.filter(position=None).order_by("-played_at")
@@ -1084,7 +1085,7 @@ class Episode(models.Model):
         results["header"] = "Last played"
         results["view"] = "last_played"
         cache.set("last_played", results, 60 * 60 * 24)
-
+    
     def add(signature, user):
         # max 20 episodes for now
         if user.is_authenticated:
@@ -1180,11 +1181,12 @@ class Episode(models.Model):
 
     def get_playlist(user):
         episodes = Episode.objects.filter(user=user).order_by("position")
-        results = {}
-        results["episodes"] = episodes
-        results["header"] = "Playlist"
-        results["view"] = "playlist"
-        results["extra_options"] = True
+        results = {
+            "episodes": episodes,
+            "header": "Playlist",
+            "view": "playlist",
+            "extra_options": True,
+        }
         return results
 
 class Filterable(models.Model):
