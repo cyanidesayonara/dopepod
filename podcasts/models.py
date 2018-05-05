@@ -511,19 +511,14 @@ class Podcast(models.Model):
                     podcast.set_discriminated()
                     return podcast
 
-            except requests.exceptions.TooManyRedirects:
-                logger.error("too many redirects", feedUrl)
-            except requests.exceptions.HTTPError:
-                logger.error("http error", feedUrl)
-            except requests.exceptions.ReadTimeout:
-                logger.error("timed out", feedUrl)
-            except requests.exceptions.ConnectTimeout:
-                logger.error("timed out", feedUrl)
-            except requests.exceptions.RetryError:
-                logger.error("too many retries:", feedUrl)
-            except requests.exceptions.ConnectionError:
-                logger.error("connection reset:", feedUrl)
-
+        except requests.exceptions.TooManyRedirects:
+            logger.error("too many redirects", feedUrl)
+        except requests.exceptions.ConnectTimeout:
+            logger.error("timed out", feedUrl)
+        except requests.exceptions.RetryError:
+            logger.error("too many retries:", feedUrl)
+        except requests.exceptions.ConnectionError:
+            logger.error("connection reset:", feedUrl)
         except requests.exceptions.HTTPError:
             logger.error("no response from url:", feedUrl)
         except requests.exceptions.ReadTimeout:
