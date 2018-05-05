@@ -474,42 +474,41 @@ class Podcast(models.Model):
             except IndexError:
                 copyrighttext = "© All rights reserved"
 
-            try:
-                # make sure feedUrl works before creating podcast
-                response = requests.get(feedUrl, headers=headers, timeout=10)
-                response.raise_for_status()
+            # make sure feedUrl works before creating podcast
+            response = requests.get(feedUrl, headers=headers, timeout=10)
+            response.raise_for_status()
 
-                genre, created = Genre.objects.get_or_create(
-                    name=genre
-                )
-                language, created = Language.objects.get_or_create(
-                    name=language,
-                )
+            genre, created = Genre.objects.get_or_create(
+                name=genre
+            )
+            language, created = Language.objects.get_or_create(
+                name=language,
+            )
 
-                # TODO try to get episodes before creating podcast 
-                with transaction.atomic():
-                    podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
-                        podid=podid,
-                        defaults={
-                            "feedUrl": feedUrl,
-                            "title": title,
-                            "artist": artist,
-                            "genre": genre,
-                            "explicit": explicit,
-                            "language": language,
-                            "copyrighttext": copyrighttext,
-                            "description": description,
-                            "reviewsUrl": reviewsUrl,
-                            "artworkUrl": artworkUrl,
-                            "podcastUrl": podcastUrl,
-                        }
-                    )
-                    if created:
-                        logger.error("created podcast", title, feedUrl)
-                    else:
-                        logger.error("updated podcast", title, feedUrl)
-                    podcast.set_discriminated()
-                    return podcast
+            # TODO try to get episodes before creating podcast 
+            with transaction.atomic():
+                podcast, created = Podcast.objects.select_related(None).select_for_update().update_or_create(
+                    podid=podid,
+                    defaults={
+                        "feedUrl": feedUrl,
+                        "title": title,
+                        "artist": artist,
+                        "genre": genre,
+                        "explicit": explicit,
+                        "language": language,
+                        "copyrighttext": copyrighttext,
+                        "description": description,
+                        "reviewsUrl": reviewsUrl,
+                        "artworkUrl": artworkUrl,
+                        "podcastUrl": podcastUrl,
+                    }
+                )
+                if created:
+                    logger.error("created podcast", title, feedUrl)
+                else:
+                    logger.error("updated podcast", title, feedUrl)
+                podcast.set_discriminated()
+                return podcast
 
         except requests.exceptions.TooManyRedirects:
             logger.error("too many redirects", feedUrl)
