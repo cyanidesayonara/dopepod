@@ -148,6 +148,10 @@ function loadResults(args, no_push) {
           noshow(podid);
         }
       }
+      else if (url.includes("last-played")) {
+          window.clearInterval(charts);
+          window.clearInterval(last_played);
+      }
   })
     .done(function(response) {
       drop.html(response);
