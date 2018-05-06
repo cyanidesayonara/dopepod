@@ -8,7 +8,7 @@
     {% with subscription.podcast as podcast %}
       <div class="col-lg-2 col-md-3 col-4 grid-result" data-podid="{{ podcast.podid }}">
         <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <img class="img-fluid" src="http://{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='https://dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
+          <img class="img-fluid" src="https://{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='https://dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
             alt="{{ podcast.title }}" />
           <h1>
             <strong>
