@@ -506,7 +506,7 @@ class Podcast(models.Model):
                 if created:
                     logger.error("created podcast", title, feedUrl)
                 else:
-                    logger.error("updated podcast", title, artworkUrl)
+                    logger.error("updated podcast", title, feedUrl)
                 podcast.set_discriminated()
                 return podcast
 
