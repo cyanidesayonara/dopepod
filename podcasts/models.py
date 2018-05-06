@@ -440,7 +440,7 @@ class Podcast(models.Model):
             feedUrl = data["feedUrl"]
             title = data["collectionName"]
             artist = data["artistName"]
-            artworkUrl = data["artworkUrl600"].replace("600x600bb.jpg", "")[7:]
+            artworkUrl = data["artworkUrl600"].split("://")[1].replace("600x600bb.jpg", "")
             if "ssl" not in artworkUrl:
                 artworkUrl = artworkUrl.replace(".mzstatic", "-ssl.mzstatic")
             genre = data["primaryGenreName"]
@@ -506,7 +506,7 @@ class Podcast(models.Model):
                 if created:
                     logger.error("created podcast", title, feedUrl)
                 else:
-                    logger.error("updated podcast", title, feedUrl)
+                    logger.error("updated podcast", title, artworkUrl)
                 podcast.set_discriminated()
                 return podcast
 
@@ -526,7 +526,7 @@ class Podcast(models.Model):
             logger.error("invalid schema:", feedUrl)
         except idna.IDNAError:
             logger.error("goddam idna error", feedUrl)
-        except KeyError:
+        except (KeyError, IndexError):
             logger.error("Missing data: ", feedUrl)
 
     def set_charts():
