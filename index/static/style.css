@@ -2,12 +2,12 @@ body {
   color: rgb(46, 46, 46);
   font-size: 14px;
   background: rgb(255, 250, 240);
-  transition: all .25s ease;
-  -moz-transition: all .25s ease;
-  -webkit-transition: all .25s ease;
   font-family: "Exo", sans-serif;
   letter-spacing: .025rem;
   vertical-align: text-top;
+  transition: all .25s ease;
+  -moz-transition: all .25s ease;
+  -webkit-transition: all .25s ease;
 }
 a {
   font-weight: 600;
@@ -17,13 +17,25 @@ a:hover {
   color: rgb(0, 105, 92);
   text-decoration: none;
 }
-.darken {
+
+/* THEMES */
+.dark {
   transition: all .25s ease;
   -moz-transition: all .25s ease;
   -webkit-transition: all .25s ease;
   background: #000;
   color: #fff;
 }
+.christmas {
+  transition: all .25s ease;
+  -moz-transition: all .25s ease;
+  -webkit-transition: all .25s ease;
+  background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .2), rgba(213, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 20px);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* CHECKBOX */
 input[type=checkbox] {
   visibility: hidden;
 }
@@ -286,15 +298,6 @@ input[type=checkbox] {
 #dopebar-collapse ul,
 #dopebar-collapse ul li {
   margin: 10px 0 0;
-}
-.lights-toggle {
-  margin: 0 5px;
-}
-#dopebar .lights-toggle:hover {
-  color: unset;
-}
-.lights-toggle.lit {
-  color: #fff;
 }
 .dopebar-link  {
   padding: 5px 6px;

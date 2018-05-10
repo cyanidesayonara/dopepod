@@ -100,8 +100,8 @@ function refreshCookie() {
 };
 // refreshes page on login
 function refreshPage() {
-  loadResults(["/dopebar/", "#dopebar"]);
-  loadResults(["/last-played/", "#last-played"])
+  getResults(["/dopebar/", "#dopebar"]);
+  getResults(["/last-played/", "#last-played"])
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -117,7 +117,7 @@ function checkForXHR(url) {
   }
 };
 // RESULTS
-function loadResults(args, no_push) {
+function getResults(args, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
   var drop = $(args[1]);
@@ -161,7 +161,11 @@ function loadResults(args, no_push) {
       }
       // if page refresh, apply theme
       else if (drop.is("#dopebar")) {
-        changeTheme(!drop.find(".lights-toggle").hasClass("lit"));
+        var response = drop.children();
+        var theme = response.data("theme")
+        response.removeData("theme");
+        response.removeAttr("data-theme");
+        changeTheme(theme);
       }
       replaceState(url);
     });
@@ -227,11 +231,11 @@ function footer() {
   }
 };
 function changeTheme(theme) {
-  if (theme) {
-    $("body").addClass("darken");
-  }
-  else {
-    $("body").removeClass("darken");
+  var themes = ["light", "dark", "christmas"];
+  for (var i = 0; i < themes.length; i++) {
+    if (theme.includes(themes[i])) {
+      $("body").removeClass().addClass(theme);
+    }
   }
 };
 function postSettings(form) {
@@ -247,19 +251,12 @@ function postSettings(form) {
       method: method,
       url: url,
     })
-    .fail(function (xhr, ajaxOptions, thrownError) {
+    .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
       scrollToTop();
     })
-    .done(function (response) {
+    .done(function(response) {
       if (theme) {
-        if (theme === "dark") {
-          theme = true;
-          $(".lights-toggle").removeClass("lit");
-        } else if (theme === "light") {
-          theme = false;
-          $(".lights-toggle").addClass("lit");
-        }
         changeTheme(theme);
       }
       drop.html(response);
@@ -267,6 +264,35 @@ function postSettings(form) {
       replaceState(url);
     });
 };
+function postLogin(form) {
+  var method = form.method;
+  var url = form.action;
+  var form = $(form);
+  var data = form.serialize();
+  var button = form.find("button[type=submit]");
+  var text = button[0].innerText;
+  button.html(getButtonLoading());
+  $.ajax({
+      data: data,
+      method: method,
+      url: url,
+    })
+    // returns errors
+    .fail(function (xhr, ajaxOptions, thrownError) {
+      $("#center-stage").html(xhr.responseText);
+      scrollToTop();
+    })
+    // returns splashboard
+    .done(function (response) {
+      $("#center-stage").html(response);
+      // if not password reset, refresh page
+      if (text === "Login") {
+        refreshCookie();
+        refreshPage();
+      }
+      scrollToTop();
+    });
+}
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -287,7 +313,7 @@ function postSubscriptions(podids, button) {
       if ($(response).hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
         var drop = ".showpod .results-content";
-        loadResults([url, drop]);
+        getResults([url, drop]);
       }
     });
   }, 250);
@@ -324,7 +350,7 @@ function postPlaylist(data, mode, button) {
         scrollText(box, text);
       }, 1000);
       if (drop.children(".playlist").length) {
-        loadResults([url, drop]);
+        getResults([url, drop]);
       }
     }
     else {
@@ -375,12 +401,12 @@ function getCircleLoading() {
 };
 function updateLastPlayed() {
   last_played = setInterval(function () {
-    loadResults(["/last-played/", "#last-played"]);
+    getResults(["/last-played/", "#last-played"]);
   }, 1000 * 60);
 };
 function updateCharts() {
   charts = setInterval(function () {
-    loadResults(["/charts/", "#charts"]);
+    getResults(["/charts/", "#charts"]);
   }, 1000 * 60 * 60 * 24);
 };
 
@@ -408,7 +434,7 @@ $(document)
         var drop = $("#center-stage");
         url = url + "?q=" + q;
         if (!(drop.children(".results").data("q") == q)) {
-          loadResults([url, drop]);
+          getResults([url, drop]);
         }
         scrollToTop();
       }
@@ -430,7 +456,7 @@ $(document)
         }
       }
       var drop = button.parents(".results").parent();
-      loadResults([url, drop]);
+      getResults([url, drop]);
       scrollTo(drop);
     }, 250);
   })
@@ -443,7 +469,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".results-content");
-      loadResults([url, drop]);
+      getResults([url, drop]);
       if ($(window).width() < 992) {
         scrollTo(drop);
       }
@@ -458,7 +484,7 @@ $(document)
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
       var args = ["/episodes/" + podid + "/", ".showpod .results-content"];
-      loadResults([url, drop, loadResults, args]);
+      getResults([url, drop, getResults, args]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
@@ -473,7 +499,7 @@ $(document)
     var drop = $("#center-stage");
     var link = $(this);
     if (!drop.children(".splash").length && !drop.children(".dashboard").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     }
     else {
       if (link.hasClass("login-link")) {
@@ -499,7 +525,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".list").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
@@ -511,7 +537,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".subscriptions").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
@@ -523,7 +549,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".settings").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
@@ -535,7 +561,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".playlist").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
@@ -555,7 +581,7 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".about").length) {
-      loadResults([url, drop]);
+      getResults([url, drop]);
     } else {
       drop.find(".results-collapse").collapse("show");
     }
@@ -623,46 +649,19 @@ $(document)
     $(this).toggleClass("active")
     .parents("#player-wrapper").toggleClass("minimize")
   })
+  .on("click", ".theme-button[type=submit]", function (e) {
+    var theme = this.innerText.toLowerCase();
+    $(this).siblings("input[name=theme]").val(theme);
+  })
   // save settings, apply theme
   .on("submit", ".settings-form", function(e) {
     e.preventDefault();
     postSettings(this);
   })
-  .on("click", ".theme-button[type=submit]", function (e) {
-    $(this).toggleClass("active").siblings(".theme-button").toggleClass("active");
-    var theme = $(this).siblings("input[name=theme]").val() == "dark" ? "light" : "dark";
-    $(this).siblings("input[name=theme]").val(theme);
-  })
   // login or signup and refresh page/send password link
   .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
     e.preventDefault();
-    var method = this.method;
-    var url = this.action;
-    var form = $(this);
-    var data = form.serialize();
-    var button = form.find("button[type=submit]");
-    var text = button[0].innerText;
-    button.html(getButtonLoading());
-    $.ajax({
-      data: data,
-      method: method,
-      url: url,
-    })
-      // returns errors
-      .fail(function(xhr, ajaxOptions, thrownError) {
-        $("#center-stage").html(xhr.responseText);
-        scrollToTop();
-      })
-      // returns splashboard
-      .done(function(response) {
-        $("#center-stage").html(response);
-        // if not password reset, refresh page
-        if (text != "Send" || text != "Reset") {
-          refreshCookie();
-          refreshPage();
-        }
-        scrollToTop();
-        });
+    postLogin(this);
   })
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
@@ -711,14 +710,20 @@ $(document)
     e.stopPropagation();
     $(".showpod-collapse").collapse("toggle");
   })
-  // toggles background theme
   .on("click", ".lights-toggle", function(e) {
     e.preventDefault();
-    $(".lights-toggle").toggleClass("lit");
-    changeTheme(!$(".lights-toggle").hasClass("lit"));
+    var theme = $("body").attr("class");
+    if (theme == "light") {
+      theme  = "dark";
+    } else if (theme == "dark") {
+      theme = "christmas";
+    } else if (theme == "christmas") {
+      theme = "light";
+    }
+    changeTheme(theme);
   })
   // removes focus from buttons when clicked
-  .on("click", ".btn-dope, .dopebar-link, .last-played-toggle, .episode-header", function() {
+  .on("click", ".btn-dope, .dopebar-link, .dope-toggle, .episode-header, .search-button", function() {
     $(this).blur();
   })
   // empties search field when link or button is clicked
@@ -775,7 +780,7 @@ $(window)
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
-          loadResults([url, drop], true);
+          getResults([url, drop], true);
           return;
         }
       }

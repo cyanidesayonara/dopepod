@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" {% if request.is_ajax %}data-theme="{{ user.profile.theme }}"{% endif %}>
   <div class="row">
     <div class="col-3 col-lg-5" id="dopebar-l">
       <a class="dopebar-link d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false" aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
@@ -53,19 +53,11 @@
         </a>
       {% endif %}
       <ul class="d-none d-xl-inline-block">
-        {% if user.profile.dark_theme %}
-          <li>
-            <a class="dopebar-link lights-toggle" href="#">
-              <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
-            </a>
-          </li>
-        {% else %}
-          <li>
-            <a class="dopebar-link lights-toggle lit" href="#">
-              <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
-            </a>
-          </li>
-        {% endif %}
+        <li>
+          <a class="dopebar-link lights-toggle" href="#">
+            <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
+          </a>
+        </li>
         {% if user.is_authenticated %}
           <li>
             <a class="dopebar-link settings-link" href="{% url 'settings' %}">
@@ -113,15 +105,9 @@
           <i class="fa fa-search icon"></i>
         </button>
       </form>
-      {% if user.profile.dark_theme %}
-        <a class="dopebar-link lights-toggle" href="#">
-          <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
-        </a>
-      {% else %}
-        <a class="dopebar-link lights-toggle lit" href="#">
-          <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
-        </a>
-      {% endif %}
+      <a class="dopebar-link lights-toggle" href="#">
+        <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
+      </a>
       <ul>
         <li>
           <a class="dopebar-link browse-link" href="{% url 'search' %}">

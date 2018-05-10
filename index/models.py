@@ -14,8 +14,16 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    theme = models.CharField(default="light", max_length=30)
     joined_at = models.DateTimeField(default=timezone.now)
+    LIGHT = "light"
+    DARK = "dark"
+    CHRISTMAS = "christmas"
+    THEME_CHOICES = (
+        (LIGHT, "Light"),
+        (DARK, "Dark"),
+        (CHRISTMAS, "Christmas"),
+    )
+    theme = models.CharField(choices=THEME_CHOICES, default=LIGHT, max_length=10)
 
     objects = ProfileManager()
 

@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Exo"> 
   <link rel="stylesheet" href="{% static 'style.min.css' %}">
 </head>
-<body class="{% if user.profile.theme == 'dark' %}darken{% endif %}">
+<body class="{% if user.profile.theme %}{{ user.profile.theme }}{% else %}light{% endif %}">
   <div class="container-fluid px-0">
     <!-- DOPEBAR -->
     <nav class="color-1-trans" id="dopebar">
