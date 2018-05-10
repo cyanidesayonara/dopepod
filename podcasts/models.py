@@ -428,6 +428,7 @@ class Podcast(models.Model):
             "User-Agent": str(ua.random)
         }
         logger.error("scraping", podid)
+        feedUrl = "nada"
         try:
             # get data from itunes lookup
             lookupUrl = "https://itunes.apple.com/lookup?id=" + podid
@@ -1235,7 +1236,7 @@ class Genre(Filterable):
 
     def get_primary_genres():
         """
-        returns primary genres
+        returns primary genres (cached)
         """
         results = cache.get("genres")
         if results:
@@ -1252,7 +1253,7 @@ class Language(Filterable):
 
     def get_languages():
         """
-        returns languages
+        returns languages (cached)
         """
         results = cache.get("languages")
         if results:
