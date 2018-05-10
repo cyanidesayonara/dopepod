@@ -706,6 +706,10 @@ $(document)
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
+  .on("show.bs.collapse", ".settings-collapse", function (e) {
+    e.stopPropagation();
+    $(".settings-collapse.show").collapse("hide");
+  })
   .on("click", ".episodes-button, .reviews-button", function(e) {
     e.stopPropagation();
     $(".showpod-collapse").collapse("toggle");
