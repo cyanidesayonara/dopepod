@@ -210,7 +210,7 @@ function scrollTo(obj) {
 function scrollText(box, text) {
   var boxWidth = box.innerWidth();
   var textWidth = text.width();
-  if (textWidth > boxWidth + 5) {
+  if (textWidth > boxWidth) {
     var animSpeed = textWidth * 30;
     $(box)
       .animate({scrollLeft: (textWidth - boxWidth)}, animSpeed)

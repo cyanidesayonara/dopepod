@@ -13,6 +13,10 @@
         <img class="img-fluid" src="https://{{ episode.podcast.artworkUrl }}100x100bb.jpg"
         onerror="this.src='https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
+      <button class="dope-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
+        aria-expanded="false">
+        <i class="fas fa-angle-down" title="Expand"></i>
+      </button>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
         <h1>
           <strong>
@@ -49,6 +53,30 @@
       </table>
       <div class="collapse fade last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
         <table>
+          <tr>
+            <td>
+              Length
+            </td>
+            <td>
+              {% if episode.length %}
+                {{ episode.length }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Size
+            </td>
+            <td>
+              {% if episode.size %}
+                {{ episode.size }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
           <tr>
             <td>
               Genre
@@ -105,9 +133,6 @@
           </a>
         </div>
       </div>
-      <button class="dope-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
-        <i class="fas fa-angle-down" title="Expand"></i>
-      </button>
     </div>
   {% endfor %}
 </div>  
