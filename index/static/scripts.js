@@ -190,10 +190,10 @@ function scrollSpy() {
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
-    $(".scroll-up").removeClass("d-none");
+    $(".scroll-up").addClass("d-sm-block");
   }
   else {
-    $(".scroll-up").addClass("d-none");
+    $(".scroll-up").removeClass("d-sm-block");
   }
 };
 function scrollToTop() {

@@ -874,7 +874,7 @@ a.donut-wrapper {
 }
 .dope-toggle {
   float: right;
-  margin-right: 5px;
+  margin-left: 5px;
   cursor: pointer;
   line-height: 32px;
   height: 34px;
