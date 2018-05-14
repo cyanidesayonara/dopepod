@@ -170,10 +170,10 @@ function getResults(args, no_push) {
     else {
       drop.find(".episodes-content").html(getCircleLoading());
     }
+    if (scroll) {
+      scrollTo(drop);
+    }    
   }
-  if (scroll) {
-    scrollTo(drop);
-  }    
 };
 // NOSHOW
 function noshow(podid) {
