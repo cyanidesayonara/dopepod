@@ -442,8 +442,8 @@ $(document)
       var q = form.children(".q").val();
       if (q) {
         q = cleanString(q);
+        var drop = $("#center-stage");
         if (!(drop.children(".results").data("q") == q)) {
-          var drop = $("#center-stage");
           url = url + "?q=" + q;
           var scroll = true;          
           getResults([url, drop, scroll]);
@@ -536,13 +536,18 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
-    if (!drop.children(".list").length) {
-      var scroll = true;
+    var scroll = true;
+    if (!drop.children(".list").length && !drop.children(".grid").length) {
       getResults([url, drop, scroll]);
     }
     else {
-      drop.find(".results-collapse").collapse("show");
-      scrollTo(drop);
+      if (window.location.href.includes("?")) {
+        getResults([url, drop, scroll]);
+      }
+      else {
+        drop.find(".results-collapse").collapse("show");
+        scrollTo(drop);
+      }
     }
   })
   .on("click", ".subscriptions-link", function(e) {
