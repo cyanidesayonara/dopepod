@@ -946,6 +946,10 @@ a.donut-wrapper {
   margin-left: 5px;
 }
 
+.settings-collapse {
+  padding: 25px;
+}
+
 /* BROWSE RESULTS */
 .list-result ul {
   font-size: 14px;

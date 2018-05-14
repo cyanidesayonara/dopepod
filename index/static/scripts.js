@@ -100,8 +100,9 @@ function refreshCookie() {
 };
 // refreshes page on login
 function refreshPage() {
-  getResults(["/dopebar/", "#dopebar"]);
-  getResults(["/last-played/", "#last-played"])
+  var scroll = false;
+  getResults(["/dopebar/", "#dopebar", scroll]);
+  getResults(["/last-played/", "#last-played", scroll])
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
@@ -121,20 +122,13 @@ function getResults(args, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
   var drop = $(args[1]);
-  var callback = args[2];
-  var args = args[3];
+  var scroll = args[2];
+  var callback = args[3];
+  var args = args[4];
   checkForXHR(url);
   // don't push when loading results via popstate
   if (!no_push) {
     pushState(url);
-  }
-  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
-    if (drop.children(".results").length) {
-      drop.children(".results").addClass("loading").html(getCircleLoading());
-    }
-    else {
-      drop.find(".episodes-content").html(getCircleLoading());
-    }
   }
   xhr = $.ajax({
     type: "GET",
@@ -148,11 +142,11 @@ function getResults(args, no_push) {
           noshow(podid);
         }
       }
-      else if (url.includes("last-played")) {
-          window.clearInterval(charts);
-          window.clearInterval(last_played);
+      else if (url.includes("last-played") || url.includes("charts")) {
+        window.clearInterval(charts);
+        window.clearInterval(last_played);
       }
-  })
+    })
     .done(function(response) {
       drop.html(response);
       // loads episodes
@@ -169,6 +163,17 @@ function getResults(args, no_push) {
       }
       replaceState(url);
     });
+  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
+    if (drop.children(".results").length) {
+      drop.children(".results").addClass("loading").html(getCircleLoading());
+    }
+    else {
+      drop.find(".episodes-content").html(getCircleLoading());
+    }
+  }
+  if (scroll) {
+    scrollTo(drop);
+  }    
 };
 // NOSHOW
 function noshow(podid) {
@@ -245,12 +250,11 @@ function postSettings(form) {
   var data = form.serialize();
   var theme = form.find("input[name=theme]").val();
   var drop = $("#center-stage");
-  drop.children(".results").addClass("loading").html(getCircleLoading());
   $.ajax({
-      data: data,
-      method: method,
-      url: url,
-    })
+    data: data,
+    method: method,
+    url: url,
+  })
     .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
       scrollToTop();
@@ -263,6 +267,7 @@ function postSettings(form) {
       scrollToTop();
       replaceState(url);
     });
+  drop.children(".results").addClass("loading").html(getCircleLoading());
 };
 function postLogin(form) {
   var method = form.method;
@@ -296,7 +301,6 @@ function postLogin(form) {
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
-    button.html(getButtonLoading());
     $.ajax({
       method: "POST",
       url: "/subscriptions/",
@@ -313,55 +317,58 @@ function postSubscriptions(podids, button) {
       if ($(response).hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
         var drop = ".showpod .results-content";
-        getResults([url, drop]);
+        var scroll = false;
+        getResults([url, drop, scroll]);
       }
     });
+    button.html(getButtonLoading());    
   }, 250);
 };
 function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
   var text = button[0].innerHTML;
   var url = "/playlist/";
+  $.ajax({
+    method: "POST",
+    url: url,
+    data: data,
+  })
+    // nothing to continue
+    .fail(function (xhr, ajaxOptions, thrownError) {
+      button.html(text);
+      $("#player").empty();
+    })
+    .done(function (response) {
+      if (mode == "play") {
+        $("#player").html(response);
+        updateTitle();
+        button.html(text);
+        // gotta wait a sec here
+        setTimeout(function () {
+          var box = $("#player-wrapper h1");
+          var text = $("#player-wrapper h1 span");
+          scrollText(box, text);
+        }, 1000);
+        if (drop.children(".playlist").length) {
+          var scroll = false;
+          getResults([url, drop, scroll]);
+        }
+      }
+      else {
+        if (mode == "add") {
+          button.text(text);
+        }
+        if (drop.children(".playlist").length) {
+          drop.html(response);
+        }
+      }
+    });
   if (button.is("#player-wrapper")) {
     button.html(getCircleLoading());
   }
   else {
     button.html(getButtonLoading());
   }
-  $.ajax({
-    method: "POST",
-    url: url,
-    data: data,
-  })
-  // nothing to continue
-  .fail(function (xhr, ajaxOptions, thrownError) {
-    button.html(text);
-    $("#player").empty();
-  })
-  .done(function (response) {
-    if (mode == "play") {
-      $("#player").html(response);
-      updateTitle();
-      button.html(text);
-      // gotta wait a sec here
-      setTimeout(function () {
-        var box = $("#player-wrapper h1");
-        var text = $("#player-wrapper h1 span");
-        scrollText(box, text);
-      }, 1000);
-      if (drop.children(".playlist").length) {
-        getResults([url, drop]);
-      }
-    }
-    else {
-      if (mode == "add") {
-        button.text(text);
-      }
-      if (drop.children(".playlist").length) {
-        drop.html(response);
-      }
-    }
-  });
 };
 function playNext() {
   var data = {
@@ -401,12 +408,14 @@ function getCircleLoading() {
 };
 function updateLastPlayed() {
   last_played = setInterval(function () {
-    getResults(["/last-played/", "#last-played"]);
+    var scroll = false;    
+    getResults(["/last-played/", "#last-played", scroll]);
   }, 1000 * 60);
 };
 function updateCharts() {
   charts = setInterval(function () {
-    getResults(["/charts/", "#charts"]);
+    var scroll = false;    
+    getResults(["/charts/", "#charts", scroll]);
   }, 1000 * 60 * 60 * 24);
 };
 
@@ -431,12 +440,12 @@ $(document)
       var q = form.children(".q").val();
       if (q) {
         q = cleanString(q);
-        var drop = $("#center-stage");
-        url = url + "?q=" + q;
         if (!(drop.children(".results").data("q") == q)) {
-          getResults([url, drop]);
+          var drop = $("#center-stage");
+          url = url + "?q=" + q;
+          var scroll = true;          
+          getResults([url, drop, scroll]);
         }
-        scrollToTop();
       }
     }, 250);
   })
@@ -456,8 +465,8 @@ $(document)
         }
       }
       var drop = button.parents(".results").parent();
-      getResults([url, drop]);
-      scrollTo(drop);
+      var scroll = true;      
+      getResults([url, drop, scroll]);
     }, 250);
   })
   // search when user clicks buttons
@@ -469,10 +478,8 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".results-content");
-      getResults([url, drop]);
-      if ($(window).width() < 992) {
-        scrollTo(drop);
-      }
+      var scroll = true;      
+      getResults([url, drop, scroll]);
     }, 250);
   })
   // NAVIGATION
@@ -483,13 +490,15 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .results-content"];
-      getResults([url, drop, getResults, args]);
+      var scroll = false;
+      var args = ["/episodes/" + podid + "/", ".showpod .results-content", scroll];
+      scroll = true;
+      getResults([url, drop, scroll, getResults, args]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);
     }
-    scrollToTop();
   })  
   // LOGIN & SIGNUP
   // show splash / dashboard / login / register / password reset
@@ -499,7 +508,8 @@ $(document)
     var drop = $("#center-stage");
     var link = $(this);
     if (!drop.children(".splash").length && !drop.children(".dashboard").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     }
     else {
       if (link.hasClass("login-link")) {
@@ -517,56 +527,60 @@ $(document)
       if (link.hasClass("collapsed")) {
         drop.find("#splash-collapse").collapse("show");
       }
+      scrollTo(drop);
     }
-    scrollToTop();
   })
   .on("click", ".browse-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".list").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);
     }
-    scrollToTop();
   })
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".subscriptions").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);
     }
-    scrollToTop();
   })
   .on("click", ".settings-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".settings").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);      
     }
-    scrollToTop();
   })
   .on("click", ".playlist-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".playlist").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     }
     else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);
     }
-    scrollToTop();
   })
   .on("click", ".charts-link", function(e) {
     e.preventDefault();
@@ -581,11 +595,12 @@ $(document)
     var url = this.href;
     var drop = $("#center-stage");
     if (!drop.children(".about").length) {
-      getResults([url, drop]);
+      var scroll = true;
+      getResults([url, drop, scroll]);
     } else {
       drop.find(".results-collapse").collapse("show");
+      scrollTo(drop);
     }
-    scrollToTop();
   })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
@@ -784,7 +799,8 @@ $(window)
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
-          getResults([url, drop], true);
+          var scroll = true;
+          getResults([url, drop, scroll]);
           return;
         }
       }
