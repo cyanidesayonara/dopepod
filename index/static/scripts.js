@@ -163,16 +163,18 @@ function getResults(args, no_push) {
       }
       replaceState(url);
     });
-  if (!drop.children(".loading").length && url != "/dopebar/" && url != "/last-played/") {
+  if (!drop.children(".loading").length && !url.includes("/dopebar/")) {
     if (drop.children(".results").length) {
       drop.children(".results").addClass("loading").html(getCircleLoading());
     }
     else {
       drop.find(".episodes-content").html(getCircleLoading());
     }
-    if (scroll) {
-      scrollTo(drop);
-    }    
+    if (!url.includes("/charts/") && !url.includes("/last-played/")) {
+      if (scroll) {
+        scrollTo(drop);
+      }    
+    }
   }
 };
 // NOSHOW
@@ -424,10 +426,10 @@ $(document)
     refreshCookie();
     scrollUp();
     footer();
-    scrollToTop();
     scrollSpy();
     updateLastPlayed();
     updateCharts();
+    scrollToTop();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -799,7 +801,7 @@ $(window)
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
-          var scroll = true;
+          var scroll = false;
           getResults([url, drop, scroll]);
           return;
         }
