@@ -14,8 +14,8 @@
         onerror="this.src='https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
       <button class="dope-toggle" tabindex="{{ forloop.counter }}" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
-        aria-expanded="false">
-        <i class="fas fa-angle-down" title="Expand"></i>
+      aria-expanded="false">
+        <i class="fas fa-angle-up" title="Expand"></i>
       </button>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
         <h1>

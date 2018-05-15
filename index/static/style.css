@@ -135,22 +135,21 @@ input[type=checkbox] {
   -moz-transition: all .25s ease;
   -webkit-transition: all .25s ease;
 }
-.btn-dope.active,
-.reverse-toggle[aria-expanded="false"] {
+.btn-dope.active {
   color: #fff;
   background: rgb(0, 191, 165);
 }
-.darken .reverse-toggle[aria-expanded="false"] {
-  color: rgb(46, 46, 46);
-}
 .btn-dope:focus,
 .btn-dope:hover,
+.btn-dope[aria-expanded="true"]:not(.reverse-toggle):not(.player-close-toggle),
 .episode-header:hover,
 .episode-header:focus,
+.episode-header[aria-expanded="true"],
 .dope-toggle:hover,
 .dope-toggle:focus,
 .dope-toggle[aria-expanded="true"],
-.toggle[aria-expanded="true"] {
+.last-played-result[aria-expanded="true"] .dope-toggle,
+.charts-result:hover .charts-rank {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
@@ -160,6 +159,41 @@ input[type=checkbox] {
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
+}
+.btn-dope svg,
+.dope-toggle svg {
+  transition: transform .25s ease-in-out;
+  -moz-transition: transform .25s ease-in-out;
+  -webkit-transition: transform .25s ease-in-out;
+}
+.btn-dope[aria-expanded="true"] svg,
+.dope-toggle[aria-expanded="true"] svg,
+.last-played-result[aria-expanded="true"] .dope-toggle svg {
+  transition: transform .25s ease-in-out;
+  -moz-transition: transform .25s ease-in-out;
+  -webkit-transition: transform .25s ease-in-out;
+  transform: rotate(180deg);
+}
+#player-wrapper.minimize .player-minimize svg {
+  transition: transform .25s ease-in-out;
+  -moz-transition: transform .25s ease-in-out;
+  -webkit-transition: transform .25s ease-in-out;
+  transform: rotate(-180deg);
+}
+.dope-toggle {
+  float: right;
+  margin-left: 5px;
+  cursor: pointer;
+  height: 34px;
+  width: 34px;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 2px solid rgb(0, 191, 165);
+  color: unset;
+  background: rgba(0, 0, 0, 0);
+  transition: transform .25s ease-in-out;
+  -moz-transition: transform .25s ease-in-out;
+  -webkit-transition: transform .25s ease-in-out;
 }
 .scroll-up {
   transform: rotate(180deg);
@@ -370,7 +404,7 @@ input[type=checkbox] {
 .dope-wrapper {
   margin: auto;
   font-size: 14px;
-  padding: 10px 20px;
+  padding: 10px;
   max-width: 375px;
   text-align: center;
 }
@@ -394,6 +428,7 @@ input[type=checkbox] {
 .login-content {
   margin-top: 10px;
   height: 180px;
+  padding: 0 25px;
 }
 .btn-dope-social {
   display: inline-flex;
@@ -736,6 +771,7 @@ a.donut-wrapper {
 }
 .charts-result,
 .last-played-result {
+  outline: none;
   border-top: 2px solid rgb(0, 191, 165);
 }
 .charts-result,
@@ -747,18 +783,9 @@ a.donut-wrapper {
   -webkit-transition: all .15s ease-in-out;
 }
 .charts-result:hover,
-.last-played-result:hover {
+.last-played-result:hover,
+.last-played-result[aria-expanded="true"] {
   background: rgba(0, 191, 165, .2);
-}
-.charts-result:hover .charts-rank {
-  background: rgb(0, 191, 165);
-  color: #fff;
-  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  -moz-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  transition: all .15s ease-in-out;
-  -moz-transition: all .15s ease-in-out;
-  -webkit-transition: all .15s ease-in-out;
 }
 .charts-result img {
   margin-left: 5px;
@@ -872,25 +899,6 @@ a.donut-wrapper {
 .last-played-collapse table {
   margin-top: 10px;
 }
-.dope-toggle {
-  float: right;
-  margin-left: 5px;
-  cursor: pointer;
-  line-height: 32px;
-  height: 34px;
-  width: 34px;
-  font-size: 20px;
-  border-radius: 50%;
-  border: 2px solid rgb(0, 191, 165);
-  color: unset;
-  background: rgba(0, 0, 0, 0);
-  transition: all .25s ease-in-out;
-  -moz-transition: all .25s ease-in-out;
-  -webkit-transition: all .25s ease-in-out;
-}
-.dope-toggle[aria-expanded="true"] {
-  transform: rotate(-180deg);
-}
 #player .dope-toggle {
   position: absolute;
   bottom: 10px;
@@ -947,7 +955,7 @@ a.donut-wrapper {
 }
 
 .settings-collapse {
-  padding: 25px;
+  padding: 10px;
 }
 
 /* BROWSE RESULTS */
@@ -1038,8 +1046,7 @@ a.donut-wrapper {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#player-wrapper h1:hover,
-.player-buttons button[aria-expanded="true"] {
+#player-wrapper h1:hover {
   color: #fff;
 }
 .player-episode {
