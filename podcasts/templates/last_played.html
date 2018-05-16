@@ -17,13 +17,13 @@
       aria-expanded="false">
         <i class="fas fa-angle-up" title="Expand"></i>
       </button>
-      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
-        <h1>
+      <h1>
+        <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
           <strong>
             {{ episode.podcast.title }}
           </strong>
-        </h1>
-      </a>
+        </a>
+      </h1>
       <h2>
         <strong>
           {{ episode.title }}

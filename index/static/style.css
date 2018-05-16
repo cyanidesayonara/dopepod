@@ -182,7 +182,7 @@ input[type=checkbox] {
 }
 .dope-toggle {
   float: right;
-  margin-left: 5px;
+  margin-left: 10px;
   cursor: pointer;
   height: 34px;
   width: 34px;
@@ -196,14 +196,12 @@ input[type=checkbox] {
   -webkit-transition: transform .25s ease-in-out;
 }
 .scroll-up {
-  transform: rotate(180deg);
   z-index: 9001;
   position: fixed;
   top: 55px;
   right: 12px;
   background: rgb(0, 191, 165);
   cursor: pointer;
-  line-height: 32px;
   height: 34px;
   width: 34px;
   font-size: 20px;
@@ -262,7 +260,7 @@ input[type=checkbox] {
   font-size: 15px;
   display: block;
   width: 100%;
-  padding: 4px 8px;
+  padding: 5px 8px 3px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
   margin-bottom: 5px;
@@ -364,13 +362,12 @@ input[type=checkbox] {
 .search-button {
   cursor: pointer;
   position: absolute;
-  font-size: 16px;
   right: 8px;
-  top: 2px;
+  top: 3px;
   z-index: 150;
   background-color: inherit;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 2px solid rgba(0, 191, 165, 0);
   transition: all .1s ease-in-out;
@@ -386,7 +383,7 @@ input[type=checkbox] {
   width: unset;
   font-size: 16px;
   margin: 0 5px;
-  padding: 5px 30px 3px 8px;
+  padding-right: 30px;
   border: 1px solid rgb(46, 46, 46);
 }
 
@@ -517,8 +514,7 @@ a.donut-wrapper {
 .carousel {
   border-top: 2px solid rgb(0, 191, 165);
   border-bottom: 2px solid rgb(0, 191, 165);
-  padding: 20px;
-  margin: 15px 0;
+  padding: 10px;
 }
 .carousel a {
   color: unset;
@@ -527,15 +523,16 @@ a.donut-wrapper {
   font-size: 20px;
 }
 .carousel-inner {
-  margin: 20px 0;
+  margin: 10px 0;
+  overflow: visible;
 }
 .carousel-item {
   border: 2px solid rgb(0, 191, 165);
   border-radius: 50%;
-  width: 80%;
+  width: 70%;
   height: 0;
-  padding: 25% 10% 55%;
-  margin: 0 10%;
+  padding: 20% 10% 50%;
+  margin: 0 15%;
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
