@@ -141,7 +141,7 @@ input[type=checkbox] {
 }
 .btn-dope:focus,
 .btn-dope:hover,
-.btn-dope[aria-expanded="true"]:not(.reverse-toggle):not(.player-close-toggle),
+.btn-dope[aria-expanded="true"]:not(.reverse-toggle):not(.player-close-toggle):not(.player-collapse-toggle),
 .episode-header:hover,
 .episode-header:focus,
 .episode-header[aria-expanded="true"],
@@ -167,26 +167,26 @@ input[type=checkbox] {
   -webkit-transition: transform .25s ease-in-out;
 }
 .btn-dope[aria-expanded="true"] svg,
-.dope-toggle[aria-expanded="true"] svg,
-.last-played-result[aria-expanded="true"] .dope-toggle svg {
+.dope-toggle[aria-expanded="true"] svg {
   transition: transform .25s ease-in-out;
   -moz-transition: transform .25s ease-in-out;
   -webkit-transition: transform .25s ease-in-out;
   transform: rotate(180deg);
 }
-#player-wrapper.minimize .player-minimize svg {
-  transition: transform .25s ease-in-out;
-  -moz-transition: transform .25s ease-in-out;
-  -webkit-transition: transform .25s ease-in-out;
+.minimize .player-minimize svg {
   transform: rotate(-180deg);
 }
+.expanded {
+  background: rgba(0, 191, 165, .2);
+}
 .dope-toggle {
+  padding: 0;
   float: right;
   margin-left: 10px;
   cursor: pointer;
   height: 34px;
   width: 34px;
-  font-size: 20px;
+  font-size: 16px;
   border-radius: 50%;
   border: 2px solid rgb(0, 191, 165);
   color: unset;
@@ -194,6 +194,9 @@ input[type=checkbox] {
   transition: transform .25s ease-in-out;
   -moz-transition: transform .25s ease-in-out;
   -webkit-transition: transform .25s ease-in-out;
+}
+button.dope-toggle svg {
+  width: 100%;
 }
 .scroll-up {
   z-index: 9001;
@@ -204,7 +207,7 @@ input[type=checkbox] {
   cursor: pointer;
   height: 34px;
   width: 34px;
-  font-size: 20px;
+  font-size: 16px;
   border-radius: 50%;
   border: 2px solid rgb(0, 191, 165);
   color: unset;
@@ -260,7 +263,7 @@ input[type=checkbox] {
   font-size: 15px;
   display: block;
   width: 100%;
-  padding: 5px 8px 3px;
+  padding: 3px 8px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
   margin-bottom: 5px;
@@ -415,7 +418,7 @@ input[type=checkbox] {
 .splash h1,
 .dashboard h1 {
   font-size: 22px;
-  margin: 10px 0;
+  margin-bottom: 10px;
 }
 .splash p,
 .dashboard p {
@@ -531,7 +534,7 @@ a.donut-wrapper {
   border-radius: 50%;
   width: 70%;
   height: 0;
-  padding: 20% 10% 50%;
+  padding: 25% 10% 45%;
   margin: 0 15%;
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
@@ -769,7 +772,6 @@ a.donut-wrapper {
 .charts-result,
 .last-played-result {
   outline: none;
-  border-top: 2px solid rgb(0, 191, 165);
 }
 .charts-result,
 .last-played-result {
@@ -896,11 +898,6 @@ a.donut-wrapper {
 .last-played-collapse table {
   margin-top: 10px;
 }
-#player .dope-toggle {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
 
 /* SEARCH RESULTS */
 .grid-results {
@@ -1022,13 +1019,16 @@ a.donut-wrapper {
 #player-wrapper h1 {
   overflow: hidden;
   margin: 10px 0;
-  color: rgb(46, 46, 46);
   font-size: 16px;
   white-space: nowrap;
   font-weight: 600;
 }
 #player-wrapper h1 span {
+  color: rgb(46, 46, 46);
   display: inline;
+}
+#player-wrapper h1 span:hover {
+  color: #fff;
 }
 #player-close-collapse {
   text-align: center;
@@ -1042,9 +1042,6 @@ a.donut-wrapper {
 .player-buttons > * {
   margin-bottom: 5px;
   margin-left: 5px;
-}
-#player-wrapper h1:hover {
-  color: #fff;
 }
 .player-episode {
   font-size: 14px;
@@ -1063,12 +1060,17 @@ a.donut-wrapper {
 #player-wrapper.minimize {
   height: 50px;
 }
-#player-wrapper.minimize .dope-toggle {
+#player-wrapper.minimize .player-collapse-toggle {
   position: static;
 }
 #player-wrapper audio {
   display: block;
   margin-top: 10px;
+}
+.player-collapse-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 /* FOOTER */

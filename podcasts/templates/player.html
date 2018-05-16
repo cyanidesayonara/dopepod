@@ -25,13 +25,13 @@
           <i class="fas fa-times" title="Close"></i>
         </button>
       </div>
-      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
-        <h1>
+      <h1>
+        <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
           <span>
             {{ episode.podcast.title }}
           </span>
-        </h1>
-      </a>
+        </a>
+      </h1>
       <p class="player-episode">
         {{ episode.title }}
       </p>
@@ -43,7 +43,7 @@
           N/A
         {% endif %}
       </p>
-      <button class="dope-toggle" data-toggle="collapse" data-target="#player-collapse"
+      <button class="btn-dope player-collapse-toggle" data-toggle="collapse" data-target="#player-collapse"
         aria-expanded="false">
         <i class="fas fa-angle-up" title="Expand"></i>
       </button>
@@ -65,7 +65,7 @@
 <div class="col-12">
   <div class="color-1-trans" id="cookie-banner">
     <h1>This site uses cookies</h1>
-    <button class="btn-dope" onclick="cookieBannerClose()">
+    <button class="btn-dope cookie-banner-close">
       <i class="fas fa-times"></i>
     </button>
   </div>

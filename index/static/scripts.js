@@ -399,9 +399,6 @@ function cleanString(q) {
   q = q.replace(/([^a-zA-Z0-9\u0080-\uFFFF +']+)/gi, "");
   return q.toLowerCase();
 };
-function cookieBannerClose() {
-  $("#player").empty();
-};
 function getButtonLoading() {
   return $(".button-loading").first().clone();
 };
@@ -706,7 +703,7 @@ $(document)
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
     e.stopPropagation();
     $(".last-played-collapse.show").collapse("hide");
-    var obj = $(this).parents();
+    var obj = $(this).parent();
     timeout = setTimeout(function () {
       scrollTo(obj);
     }, 250);
@@ -735,6 +732,13 @@ $(document)
     }
     changeTheme(theme);
   })
+  .on("click", ".dope-toggle", function () {
+    $(".last-played-result.expanded").removeClass("expanded");
+    var button = $(this);
+    if (button.attr("aria-expanded") === "true") {
+      button.parent().addClass("expanded");
+    }
+  })  
   // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dopebar-link, .dope-toggle, .episode-header, .search-button", function() {
     $(this).blur();
@@ -781,6 +785,9 @@ $(document)
       button.parent().parent().siblings().find(".grid-result").addClass("selected");
     }
     button.toggleClass("active");
+  })
+  .on("click", ".cookie-banner-close", function() {
+    $("#player").empty();
   });
 
 $(window)
