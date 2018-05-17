@@ -161,14 +161,15 @@ function getResults(args, no_loader) {
     });
   if (!no_loader) {
     if (!drop.children(".loading").length) {
-      if (drop.children(".results").length) {
-        drop.children(".results").addClass("loading").html(getCircleLoading());
+      var results = drop.children(".results");
+      if (results.length) {
+        results.addClass("loading").children(".results-collapse").html(getCircleLoading());
       }
       else {
         drop.find(".episodes-content").html(getCircleLoading());
       }
-      if (!url.includes("/charts/") && !url.includes("/last-played/")) {
-        if (scroll) {
+      if (scroll) {
+        if (!url.includes("/charts/") && !url.includes("/last-played/")) {
           scrollTo(drop);
         }
       }
@@ -473,7 +474,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".results-content");
-      getResults([url, drop, true]);
+      getResults([url, drop, false]);
     }, 250);
   })
   // NAVIGATION

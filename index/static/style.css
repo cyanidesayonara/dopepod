@@ -355,18 +355,15 @@ button.dope-toggle svg {
 }
 
 /* SEARCH */
-#search {
-  padding: 15px 0;
-}
 .search-form {
   position: relative;
-  font-size: 14px;
 }
 .search-button {
+  font-size: 14px;
   cursor: pointer;
   position: absolute;
   right: 8px;
-  top: 3px;
+  top: 2px;
   z-index: 150;
   background-color: inherit;
   width: 28px;
@@ -442,17 +439,19 @@ button.dope-toggle svg {
   background: rgb(0, 191, 165);
   color: #fff;
 }
-.login-buttons {
+.login-buttons,
+.logo {
   justify-content: center;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
-.login-buttons > * {
+.login-buttons > *,
+.logo > * {
   margin: 5px 2.5px;
 }
-.login-buttons button {
+.logo > * {
   cursor: default;
 }
 .donut-wrapper {
@@ -728,9 +727,6 @@ a.donut-wrapper {
 .options-buttons {
   border-top: 2px solid rgb(0, 191, 165);
   border-bottom: 2px solid rgb(0, 191, 165);
-}
-.charts .options-buttons {
-  border-bottom: none;
 }
 .provider-button {
   width: 110px;
