@@ -180,7 +180,6 @@ input[type=checkbox] {
   background: rgba(0, 191, 165, .2);
 }
 .dope-toggle {
-  padding: 0;
   float: right;
   margin-left: 10px;
   cursor: pointer;

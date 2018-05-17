@@ -3,7 +3,7 @@
 </div>
 <div class="row">
   {% for podcast in results.podcasts %}
-    <div class="col-12 charts-result clearfix">
+    <div class="col-12 charts-result">
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
         <span class="charts-rank">
           {{ forloop.counter }}

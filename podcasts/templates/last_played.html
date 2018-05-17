@@ -3,7 +3,7 @@
 </div>
 <div class="row">
   {% for episode in results.episodes %}
-    <div class="col-12 last-played-result clearfix">
+    <div class="col-12 last-played-result">
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
         {% if episode.length %}
         <span class="result-length">
