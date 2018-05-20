@@ -26,10 +26,7 @@
           Last updated:
           {% if subscription.last_updated %} {{ subscription.last_updated|date:"d-m-Y H:i" }} {% else %} Never {% endif %}
         </p>
-        <div class="subscriptions-buttons">
-<!--           <button class="btn-dope">
-            <i class="fas fa-sync" title="Update"></i>
-          </button> -->
+        <div class="dope-buttons">
           <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="podids[]" value="{{ podcast.podid }}">

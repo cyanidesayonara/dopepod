@@ -44,34 +44,34 @@
   <a class="btn-dope active" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="alphabet-collapse">
     {{ results.selected_q|capfirst }}
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
   <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
     A-Z
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% endif %} {% endif %} {% if results.genres %} {% if results.selected_genre %}
   <a class="btn-dope active" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="genre-collapse">
     {{ results.selected_genre }}
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
   <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
     All Genres
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% endif %} {% endif %} {% if results.languages %} {% if results.selected_language %}
   <a class="btn-dope active" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="language-collapse">
     {{ results.selected_language }}
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
   <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
     All Languages
-    <i class="fas fa-angle-up" title="Expand"></i>
+    <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% endif %} {% endif %} {% if results.selected_provider == "dopepod" %}
   <a class="btn-dope options-button active provider-button" href="{{ results.provider_url }}">

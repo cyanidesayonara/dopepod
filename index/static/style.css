@@ -112,11 +112,11 @@ input[type=checkbox] {
 /* BUTTONS */
 .btn-dope {
   position: relative;
-  font-size: 16px!important;
+  font-size: 14px;
   color: inherit;
   border: 2px solid rgb(0, 191, 165);
-  min-width: 34px;
-  min-height: 34px;
+  min-width: 32px;
+  min-height: 32px;
   padding: 3px 6px;
   cursor: pointer;
   font-weight: 600;
@@ -141,7 +141,7 @@ input[type=checkbox] {
 }
 .btn-dope:focus,
 .btn-dope:hover,
-.btn-dope[aria-expanded="true"]:not(.reverse-toggle):not(.player-close-toggle):not(.player-collapse-toggle),
+.results-buttons .btn-dope[aria-expanded="true"],
 .episode-header:hover,
 .episode-header:focus,
 .episode-header[aria-expanded="true"],
@@ -185,7 +185,6 @@ input[type=checkbox] {
   cursor: pointer;
   height: 34px;
   width: 34px;
-  font-size: 16px;
   border-radius: 50%;
   border: 2px solid rgb(0, 191, 165);
   color: unset;
@@ -193,9 +192,6 @@ input[type=checkbox] {
   transition: transform .25s ease-in-out;
   -moz-transition: transform .25s ease-in-out;
   -webkit-transition: transform .25s ease-in-out;
-}
-button.dope-toggle svg {
-  width: 100%;
 }
 .scroll-up {
   z-index: 9001;
@@ -206,7 +202,6 @@ button.dope-toggle svg {
   cursor: pointer;
   height: 34px;
   width: 34px;
-  font-size: 16px;
   border-radius: 50%;
   border: 2px solid rgb(0, 191, 165);
   color: unset;
@@ -224,6 +219,50 @@ button.dope-toggle svg {
   transition: all .25s ease-in-out;
   -moz-transition: all .25s ease-in-out;
   -webkit-transition: all .25s ease-in-out;
+}
+.dope-field {
+  margin-bottom: 5px;
+  width: 100%;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 3px 6px;
+  border-radius: .25rem;
+  border: 2px solid rgb(0, 191, 165);
+  transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -webkit-transition: all .15s ease-in-out;
+}
+.dope-field:hover,
+.dope-field:focus {
+  outline: none;
+  -webkit-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+  -moz-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+  box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+}
+.dope-form-group {
+  text-align: left;
+}
+.dope-form-group label {
+  margin-bottom: 0;
+}
+.dope-buttons {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.dope-buttons>* {
+  margin-right: 5px;
+}
+.dope-wrapper {
+  margin: auto;
+  padding: 10px;
+  max-width: 375px;
+  text-align: center;
+}
+.dope-wrapper p {
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 /* BOOTSTRAP COLLAPSE */
@@ -256,33 +295,6 @@ button.dope-toggle svg {
 #right {
   min-height: unset;
   padding: 0 20px;
-}
-
-.dope-field {
-  font-size: 15px;
-  display: block;
-  width: 100%;
-  padding: 3px 8px;
-  border-radius: .25rem;
-  border: 2px solid rgb(0, 191, 165);
-  margin-bottom: 5px;
-  transition: all .15s ease-in-out;
-  -moz-transition: all .15s ease-in-out;
-  -webkit-transition: all .15s ease-in-out;
-}
-.dope-field:hover,
-.dope-field:focus {
-  outline: none;
-  -webkit-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
-  -moz-box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
-  box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
-}
-.dope-form-group {
-  text-align: left;
-}
-.dope-form-group label {
-  margin-bottom: 0;
-  display: block;
 }
 
 /* DOPEBAR */
@@ -326,12 +338,10 @@ button.dope-toggle svg {
   text-align: center;
 }
 #dopebar-collapse {
-  padding: 15px 10px 0;
-  width: 100%;
+  padding: 10px 10px 0;
 }
-#dopebar-collapse ul,
-#dopebar-collapse ul li {
-  margin: 10px 0 0;
+#dopebar-collapse ul {
+  margin-top: 10px;
 }
 .dopebar-link  {
   padding: 5px 6px;
@@ -397,14 +407,6 @@ button.dope-toggle svg {
   -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 
-.dope-wrapper {
-  margin: auto;
-  font-size: 14px;
-  padding: 10px;
-  max-width: 375px;
-  text-align: center;
-}
-
 .genres > *,
 .languages > * {
   display: none;
@@ -414,11 +416,6 @@ button.dope-toggle svg {
 .splash h1,
 .dashboard h1 {
   font-size: 22px;
-  margin-bottom: 10px;
-}
-.splash p,
-.dashboard p {
-  font-size: 14px;
   margin-bottom: 10px;
 }
 .login-content {
@@ -578,7 +575,6 @@ a.donut-wrapper {
   -webkit-box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 #showpod-r ul {
-  margin-top: 10px;
   list-style: none;
   padding: 0;
   margin: 10px 0;
@@ -592,9 +588,6 @@ a.donut-wrapper {
 }
 #showpod-r ul li a:hover {
   color: rgb(0, 105, 92);
-}
-.showpod-back {
-  margin-right: auto;
 }
 #showpod-c h1 {
   margin: 10px 0;
@@ -728,7 +721,7 @@ a.donut-wrapper {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .provider-button {
-  width: 110px;
+  width: 100px;
 }
 .nix-button {
   margin-right: auto;
@@ -807,11 +800,10 @@ a.donut-wrapper {
   float: left;
   margin-right: 5px;
   text-align: center;
-  line-height: 32px;
-  height: 34px;
-  width: 34px;
-  font-size: 16px!important;
-  font-weight: 600;
+  line-height: 30px;
+  height: 32px;
+  width: 32px;
+  font-size: 14px;
   border-radius: 50%;
   border: 2px solid rgb(0, 191, 165);
 }
@@ -837,7 +829,7 @@ a.donut-wrapper {
   position: relative;
 }
 .last-played-buttons {
-  padding: 5px 35px 0 0;
+  padding-top: 5px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
@@ -880,12 +872,6 @@ a.donut-wrapper {
   height: 32px;
   font-size: 14px;
 }
-.last-played-result ul {
-  font-size: 12px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
 .last-played-result p {
   word-wrap: break-word;
   margin: 10px 0 0;
@@ -927,20 +913,11 @@ a.donut-wrapper {
 /* SUBSCRIPTIONS */
 .grid-result p {
   font-size: 12px;
+  margin-bottom: 10px;
 }
 .grid-result.selected .select-subscription {
   background: rgb(0, 191, 165);
   color: #fff;
-}
-.subscriptions-buttons {
-  justify-content: flex-end;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-.subscriptions-buttons > * {
-  margin-left: 5px;
 }
 
 .settings-collapse {
@@ -1029,10 +1006,10 @@ a.donut-wrapper {
   text-align: center;
 }
 #player-close-collapse p {
-  font-size: 16px;
+  font-size: 14px;
   display: inline-block;
   color: #fff;
-  margin: 5px 10px 18px 0;
+  margin: 5px 10px 15px 0;
 }
 .player-buttons > * {
   margin-bottom: 5px;
