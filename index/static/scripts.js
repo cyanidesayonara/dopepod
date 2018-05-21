@@ -5,6 +5,9 @@ var timeout = 0;
 var last_played = 0;
 var charts = 0;
 
+function trackMe(url) {
+  _paq.push(['trackPageView', url]);
+};
 function pushState(url) {
   // return if url in urls
   var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
@@ -43,6 +46,7 @@ function replaceState(url) {
     "url": url,
   };
   history.replaceState(state, "", url);
+  trackMe(url);
 };
 // updates page title
 function updateTitle() {
@@ -268,7 +272,7 @@ function postSettings(form) {
       scrollToTop();
       replaceState(url);
     });
-  drop.children(".results").addClass("loading").html(getCircleLoading());
+  drop.children(".results").addClass("loading").children(".results-collapse").html(getCircleLoading());
 };
 function postLogin(form) {
   var method = form.method;
@@ -277,7 +281,6 @@ function postLogin(form) {
   var data = form.serialize();
   var button = form.find("button[type=submit]");
   var text = button[0].innerText;
-  button.html(getButtonLoading());
   $.ajax({
       data: data,
       method: method,
@@ -298,6 +301,7 @@ function postLogin(form) {
       }
       scrollToTop();
     });
+    button.html(getButtonLoading());
 }
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);

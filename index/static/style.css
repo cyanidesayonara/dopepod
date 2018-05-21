@@ -993,11 +993,9 @@ a.donut-wrapper {
   margin: 10px 0;
   font-size: 16px;
   white-space: nowrap;
-  font-weight: 600;
 }
 #player-wrapper h1 span {
   color: rgb(46, 46, 46);
-  display: inline;
 }
 #player-wrapper h1 span:hover {
   color: #fff;
