@@ -59,8 +59,6 @@ INSTALLED_APPS = [
 
     "sendgrid",
 
-    "analytical",
-
     # django-allauth
     "allauth",
     "allauth.account",
@@ -109,9 +107,6 @@ CACHES = {
 
 # django.contrib.sites
 SITE_ID = local_settings.SITE_ID
-
-PIWIK_DOMAIN_PATH = 'em.dopepod.me'
-PIWIK_SITE_ID = '1'
 
 # django-allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
