@@ -24,6 +24,7 @@ function pushState(url) {
     "url": url,
   };
   history.pushState(state, "", url);
+  trackMe(url);  
 };
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
@@ -46,7 +47,6 @@ function replaceState(url) {
     "url": url,
   };
   history.replaceState(state, "", url);
-  trackMe(url);
 };
 // updates page title
 function updateTitle() {
