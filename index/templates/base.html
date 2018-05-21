@@ -1,6 +1,7 @@
 {% load static %}
 {% load account %}
 {% load account socialaccount %}
+{% load piwik %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,6 +64,7 @@
       {% include "circle_loading.min.html" %} {% include "button_loading.min.html" %}
     </div>
   </div>
+  {% piwik %}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
   <script src="{% static 'scripts.min.js' %}"></script>
