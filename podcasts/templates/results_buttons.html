@@ -15,10 +15,10 @@
         {% endif %}
       </form>
     {% endif %}
-    <a class="btn-dope episodes-button" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+    <a class="btn-dope exp episodes-button" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
       Episodes
     </a>
-    <a class="btn-dope reviews-button" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
+    <a class="btn-dope exp reviews-button" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
       Reviews
     </a>
   {% endif %}
@@ -41,35 +41,35 @@
     </span>
   </a>
   {% endif %} {% endif %} {% if results.alphabet %} {% if results.alphabet_nix_url %}
-  <a class="btn-dope active" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false"
+  <a class="btn-dope exp active" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="alphabet-collapse">
     {{ results.selected_q|capfirst }}
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
-  <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
+  <a class="btn-dope exp" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
     A-Z
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% endif %} {% endif %} {% if results.genres %} {% if results.selected_genre %}
-  <a class="btn-dope active" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false"
+  <a class="btn-dope exp active" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="genre-collapse">
     {{ results.selected_genre }}
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
-  <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
+  <a class="btn-dope exp" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
     All Genres
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% endif %} {% endif %} {% if results.languages %} {% if results.selected_language %}
-  <a class="btn-dope active" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false"
+  <a class="btn-dope exp active" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false"
     aria-controls="language-collapse">
     {{ results.selected_language }}
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
   {% else %}
-  <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
+  <a class="btn-dope exp" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
     All Languages
     <i class="fas fa-angle-up fa-lg" title="Expand"></i>
   </a>
