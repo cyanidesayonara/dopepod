@@ -1062,7 +1062,7 @@ class Episode(models.Model):
             last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if last_played.count() > 1:
                 if last_played.count() > 50:
-                    excess = last_played[49:]
+                    excess = last_played[50:]
                     for episode in excess:
                         episode.delete()
                 for episode in last_played[1:]:
