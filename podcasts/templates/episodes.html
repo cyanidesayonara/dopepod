@@ -53,7 +53,7 @@
           </thead>
           <tbody>
             {% for episode in results.episodes %}
-              <tr class="episode-header {% if not results.pages and forloop.last %}noborder{% endif %}" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
+              <tr class="episode-header{% if not results.pages and forloop.last %} noborder{% endif %}" tabindex="0" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
                 <th scope="row">
                   {{ episode.position }}
                 </th>
