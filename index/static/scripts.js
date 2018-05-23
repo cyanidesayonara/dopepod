@@ -142,9 +142,11 @@ function getResults(args, no_loader) {
           noshow(podid);
         }
       }
-      else if (url.includes("last-played") || url.includes("charts")) {
-        window.clearInterval(charts);
+      else if (url.includes("last-played")) {
         window.clearInterval(last_played);
+      }
+      else if (url.includes("charts")) {
+        window.clearInterval(charts);
       }
     })
     .done(function(response) {
@@ -160,6 +162,11 @@ function getResults(args, no_loader) {
         response.removeData("theme");
         response.removeAttr("data-theme");
         changeTheme(theme);
+      }
+      if (scroll) {
+        if ((url.includes("/charts/") || url.includes("/last-played/")) && $(window).width() < 992) {
+          scrollTo(drop);
+        }
       }
       replaceState(url);
     });
@@ -488,13 +495,13 @@ $(document)
     var button = $(this);
     var podid = button.data("podid");
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!(drop.children(".results").data("podid") == podid)) {
       var scroll = false;
       var args = ["/episodes/" + podid + "/", ".showpod .results-content", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {
-      drop.find(".results-collapse").collapse("show");
       scrollTo(drop);
     }
   })  
@@ -531,6 +538,7 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".list").length && !drop.children(".grid").length) {
       getResults([url, drop, true]);
     }
@@ -539,7 +547,6 @@ $(document)
         getResults([url, drop, true]);
       }
       else {
-        drop.find(".results-collapse").collapse("show");
         scrollTo(drop);
       }
     }
@@ -548,11 +555,11 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".subscriptions").length) {
       getResults([url, drop, true]);
     }
     else {
-      drop.find(".results-collapse").collapse("show");
       scrollTo(drop);
     }
   })
@@ -560,11 +567,11 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".settings").length) {
       getResults([url, drop, true]);
     }
     else {
-      drop.find(".results-collapse").collapse("show");
       scrollTo(drop);      
     }
   })
@@ -572,11 +579,11 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".playlist").length) {
       getResults([url, drop, true]);
     }
     else {
-      drop.find(".results-collapse").collapse("show");
       scrollTo(drop);
     }
   })
@@ -592,10 +599,10 @@ $(document)
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".about").length) {
       getResults([url, drop, true]);
     } else {
-      drop.find(".results-collapse").collapse("show");
       scrollTo(drop);
     }
   })
