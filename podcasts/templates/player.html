@@ -34,7 +34,7 @@
         </h1>
         <p class="player-episode">
           {{ episode.title }}
-        </p>
+        </p>      
         <p class="player-date">
           Released
           {% if episode.pubDate %}
@@ -55,9 +55,9 @@
           aria-expanded="false">
           <i class="fas fa-angle-up fa-lg" title="Expand"></i>
         </button>        
-        <audio {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
+        <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
           <source src="{{ episode.url }}"/>
-        </audio>
+        </audio>        
       </div>
     </div>
   </div>

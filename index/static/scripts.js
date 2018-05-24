@@ -29,7 +29,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played", "change-password"];
+  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -121,7 +121,7 @@ function checkForXHR(url) {
   }
 };
 // RESULTS
-function getResults(args, no_loader) {
+function getResults(args, no_loader, no_push) {
   var url = args[0];
   // sometimes object, sometimes just a string
   var drop = $(args[1]);
@@ -129,7 +129,9 @@ function getResults(args, no_loader) {
   var callback = args[3];
   var args = args[4];
   checkForXHR(url);
-  pushState(url);
+  if (!no_push) {
+    pushState(url);
+  }
   xhr = $.ajax({
     type: "GET",
     url: url,
@@ -430,13 +432,14 @@ function updateCharts() {
 
 $(document)
   .ready(function() {
+    scrollToTop();
     refreshCookie();
     scrollUp();
     footer();
     scrollSpy();
     updateLastPlayed();
     updateCharts();
-    scrollToTop();
+    replaceState(window.location.href);
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -812,7 +815,7 @@ $(window)
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
-          getResults([url, drop, false]);
+          getResults([url, drop, false], false, true);
           return;
         }
       }
