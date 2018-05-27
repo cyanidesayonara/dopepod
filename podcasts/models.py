@@ -1061,17 +1061,17 @@ class Episode(models.Model):
         with transaction.atomic():
             last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if last_played.count() > 1:
+                # split off last part of signature
+                # (it's different for otherwise identical episodes)
+                just_played = last_played[0].signature.split(":")[0]
+                for episode in last_played[1:]:
+                    if episode.signature.split(":")[0] == just_played:
+                        episode.delete()
+                        break
                 if last_played.count() > 50:
                     excess = last_played[50:]
                     for episode in excess:
                         episode.delete()
-                for episode in last_played[1:]:
-                    # split off last part of signature
-                    # (it's different for otherwise identical episodes)
-                    just_played = last_played[0].signature.split(":")[0]
-                    if episode.signature.split(":")[0] == just_played:
-                        episode.delete()
-                        break
 
         # let's cache those bad boys
         last_played = Episode.objects.filter(position=None).order_by("-played_at")
