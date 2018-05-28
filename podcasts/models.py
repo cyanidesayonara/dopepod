@@ -124,6 +124,9 @@ class Podcast(models.Model):
         else:
             return "<1k"
 
+    def url_format(self):
+        return quote_plus(self.title)
+
     def set_discriminated(self):
         bad_url = "is4.mzstatic.com/image/thumb/Music6/v4/00/83/44/008344f6-7d9f-2031-39c1-107020839411/source/"
         bad_genre = Genre.objects.get(genreid=1314)
