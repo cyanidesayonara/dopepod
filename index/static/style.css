@@ -531,10 +531,10 @@ a.donut-wrapper {
   border-bottom: 2px solid rgb(0, 191, 165);
   margin-bottom: 10px;
 }
-#showpod-r ul li a {
+#showpod-r ul li:not(:last-child) a {
   color: rgb(0, 191, 165);
 }
-#showpod-r ul li a:hover {
+#showpod-r ul li:not(:last-child) a:hover {
   color: rgb(0, 105, 92);
 }
 #showpod-c h1 {
@@ -547,6 +547,12 @@ a.donut-wrapper {
 }
 #showpod-c p {
   margin-bottom: 4px;
+}
+#showpod-r ul li:last-child {
+  border: none;
+}
+#showpod-r ul li:last-child > * {
+  margin-right: 10px;
 }
 
 /* EPISODES */

@@ -170,6 +170,10 @@ function getResults(args, no_loader, no_push) {
           scrollTo(drop);
         }
       }
+      if (url.includes("showpod")) {
+        twttr.widgets.load();
+        FB.XFBML.parse();
+      }
       replaceState(url);
     });
   if (!no_loader) {
@@ -256,6 +260,28 @@ function changeTheme(theme) {
       $("body").removeClass().addClass(theme);
     }
   }
+};
+function postContact(form) {
+  var method = form.method;
+  var url = form.action;
+  var form = $(form);
+  var data = form.serialize();
+  var drop = $("#center-stage");
+  $.ajax({
+    data: data,
+    method: method,
+    url: url,
+  })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+      $("#center-stage").html(xhr.responseText);
+      scrollToTop();
+    })
+    .done(function (response) {
+      drop.html(response);
+      scrollToTop();
+      replaceState(url);
+    });
+  drop.children(".results").addClass("loading").children(".results-collapse").html(getCircleLoading());
 };
 function postSettings(form) {
   var method = form.method;
@@ -609,6 +635,39 @@ $(document)
       scrollTo(drop);
     }
   })
+  .on("click", ".privacy-link", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
+    if (!drop.children(".privacy").length) {
+      getResults([url, drop, true]);
+    } else {
+      scrollTo(drop);
+    }
+  })
+  .on("click", ".terms-link", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
+    if (!drop.children(".terms").length) {
+      getResults([url, drop, true]);
+    } else {
+      scrollTo(drop);
+    }
+  })
+  .on("click", ".contact-link", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
+    if (!drop.children(".contact").length) {
+      getResults([url, drop, true]);
+    } else {
+      scrollTo(drop);
+    }
+  })
   // sub or unsub
   .on("submit", ".subscriptions-form", function(e) {
     e.preventDefault();
@@ -674,6 +733,10 @@ $(document)
     var theme = this.innerText.toLowerCase();
     $(this).siblings("input[name=theme]").val(theme);
   })
+  .on("submit", ".contact-form", function (e) {
+    e.preventDefault();
+    postContact(this);
+  })  
   // save settings, apply theme
   .on("submit", ".settings-form", function(e) {
     e.preventDefault();

@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     # ... include the providers you want to enable:
-    # "allauth.socialaccount.providers.facebook",
+    "allauth.socialaccount.providers.facebook",
     # "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
     # "allauth.socialaccount.providers.reddit",
@@ -152,41 +152,36 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 # }
 
 SOCIALACCOUNT_PROVIDERS = {
-    # "facebook": {
-    #     "METHOD": "oauth2",
-    #     "SCOPE": ["email", "public_profile", "user_friends"],
-    #     "AUTH_PARAMS": {"auth_type": "reauthenticate"},
-    #     "INIT_PARAMS": {"cookie": True},
-    #     "FIELDS": [
-    #         "id",
-    #         "email",
-    #         "name",
-    #         "first_name",
-    #         "last_name",
-    #         "verified",
-    #         "locale",
-    #         "timezone",
-    #         "link",
-    #         "gender",
-    #         "updated_time",
-    #     ],
-    #     "EXCHANGE_TOKEN": True,
-    #     "LOCALE_FUNC": lambda request: "en_US",
-    #     "VERIFIED_EMAIL": True,
-    #     "VERSION": "v2.5",
-    # }
+     "facebook": {
+         "METHOD": "oauth2",
+         "SCOPE": ["email", "public_profile", "user_friends",],
+         "AUTH_PARAMS": {"auth_type": "reauthenticate"},
+         "INIT_PARAMS": {"cookie": True},
+         "FIELDS": [
+             "id",
+             "email",
+             "name",
+             "first_name",
+             "last_name",
+             "verified",
+             "locale",
+             "timezone",
+             "link",
+             "gender",
+             "updated_time",
+             "friends",
+         ],
+         "EXCHANGE_TOKEN": True,
+         "LOCALE_FUNC": lambda request: "en_US",
+         "VERIFIED_EMAIL": True,
+         "VERSION": "v2.12",
+    },
     "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
+        "SCOPE": ["profile", "email",],
+        "AUTH_PARAMS": {"access_type": "online",},
         "VERIFIED_EMAIL": True
-    }
+    },
 }
-
 
 TEMPLATES = [
     {

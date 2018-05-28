@@ -7,6 +7,9 @@ from django.db.models import F
 from django.utils import timezone
 from datetime import datetime
 from allauth.account import views as allauth
+from django.core.mail import send_mail
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import json
 import logging
 
@@ -158,6 +161,26 @@ def post_settings_forms(context, request):
         context = get_settings_errors(context, user_form, profile_form)
         return context, False
 
+def post_contact_form(context, request):
+    title = request.POST.get("title", "No title")
+    message = request.POST.get("message", "No message")
+    email = request.POST.get("email", "no@email.com")
+    try:
+        validate_email(email)
+        send_mail(title, message, email, ['cyanidesayonara@gmail.com'])
+        context.update({
+            "message": "Sent!",
+        })
+        return context, True
+    except ValidationError:
+        errors = {
+            "general": "Invalid email",
+        }
+        context.update({
+            "errors": errors,
+        })
+        return context, False
+
 def get_showpod_results(podid, user, count=False):
     try:
         podcast = Podcast.objects.get(podid=podid)
@@ -213,6 +236,30 @@ def get_about_results():
         "view": "about",
         "extra_options": True,
         "header": "About",
+    }
+    return results
+
+def get_privacy_results():
+    results = {
+        "view": "privacy",
+        "extra_options": True,
+        "header": "Privacy",
+    }
+    return results
+
+def get_terms_results():
+    results = {
+        "view": "terms",
+        "extra_options": True,
+        "header": "Terms of Service",
+    }
+    return results
+
+def get_contact_results():
+    results = {
+        "view": "contact",
+        "extra_options": True,
+        "header": "Contact",
     }
     return results
 
@@ -422,6 +469,56 @@ def about(request):
     return redirect("/about/")
 
 @vary_on_headers("Accept")
+def privacy(request):
+    if request.method == "GET":
+        template = "results_base.min.html"
+        results = get_privacy_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+    return redirect("/privacy/")
+
+@vary_on_headers("Accept")
+def terms(request):
+    if request.method == "GET":
+        template = "results_base.min.html"
+        results = get_terms_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+    return redirect("/terms/")
+
+@vary_on_headers("Accept")
+def contact(request):
+    template = "results_base.min.html"
+    results = get_contact_results()
+    context = {
+        "results": results,
+    }
+    if request.method == "GET":
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+    if request.method == "POST":
+        context, valid = post_contact_form(context, request)
+        if valid:
+            if request.is_ajax():
+                return render(request, template, context)
+            return render_non_ajax(request, template, context)
+        else:
+            print(context)
+            if request.is_ajax:
+                return render(request, template, context, status=400)
+            return render_non_ajax(request, template, context)
+    return redirect("/contact/")
+
+@vary_on_headers("Accept")
 def playlist(request):
     if request.method == "GET":
         template = "results_base.min.html"
@@ -535,9 +632,9 @@ def settings(request):
     with chart & search bar for non-ajax
     """
 
-    template = "results_base.min.html"
     user = request.user
     if user.is_authenticated:
+        template = "results_base.min.html"
         results = get_settings_results()
         context = {
             "results": results,

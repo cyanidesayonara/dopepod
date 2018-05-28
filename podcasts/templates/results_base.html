@@ -35,6 +35,12 @@
         {% include "settings.min.html" %}
       {% elif results.view == "about" %}
        {% include "about.min.html" %}
+      {% elif results.view == "privacy" %}
+        {% include "privacy.min.html" %}    
+      {% elif results.view == "terms" %}
+        {% include "terms.min.html" %}
+      {% elif results.view == "contact" %}
+        {% include "contact.min.html" %}                    
       {% elif results.view == "reset_password" or results.view == "password_reset" or results.view == "confirm_email" %}
         {% include "password_reset.min.html" %}
       {% endif %}
