@@ -11,9 +11,9 @@
     shrink-to-fit=no" />
   <meta property="og:title" content="dopepod" />
   {% if results.view == 'showpod' %}
-    <meta property="og:image" content="{{ results.podcast.artworkUrl }}" />
-    <link rel="canonical" href="https://dopepod.me{{ results.podcast.get_absolute_url }}">
-    <meta property="og:url" content="https://dopepod.me{{ results.podcast.get_absolute_url }}" />
+    <meta property="og:image" content="https://{{ results.podcast.artworkUrl }}600x600bb.jpg" />
+    <link rel="canonical" href="{{ results.podcast.get_absolute_url }}">
+    <meta property="og:url" content="{{ results.podcast.get_absolute_url }}" />
     <meta property="og:type" content="podcast" />
     <meta property="og:description" content="Listen to episodes of {{ results.podcast.title }} on dopepod" />
     <meta name="description" content="{{ results.podcast.description }}" />
