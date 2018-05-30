@@ -444,6 +444,7 @@ input[type=checkbox] {
 }
 .slick h1 {
   font-size: 20px;
+  margin: 0 0 10px;
 }
 .slick p {
   margin: 0;
