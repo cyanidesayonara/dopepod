@@ -73,7 +73,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    #"debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,7 +84,6 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
@@ -154,7 +152,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SOCIALACCOUNT_PROVIDERS = {
      "facebook": {
          "METHOD": "oauth2",
-         "SCOPE": ["email", "public_profile", "user_friends",],
+         "SCOPE": ["email", "public_profile",],
          "AUTH_PARAMS": {"auth_type": "reauthenticate"},
          "INIT_PARAMS": {"cookie": True},
          "FIELDS": [
@@ -179,7 +177,7 @@ SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email",],
         "AUTH_PARAMS": {"access_type": "online",},
-        "VERIFIED_EMAIL": True
+        "VERIFIED_EMAIL": True,
     },
 }
 

@@ -15,10 +15,10 @@ https://stackoverflow.com/questions/24357907/django-allauth-facebook-redirects-t
 """
 
 class MyLoginAccountAdapter(DefaultAccountAdapter):
-    '''
+    """
     Overrides allauth.account.adapter.DefaultAccountAdapter.ajax_response to avoid changing
     the HTTP status_code to 400
-    '''
+    """
 
     def get_login_redirect_url(self, request):
         """
@@ -29,25 +29,24 @@ class MyLoginAccountAdapter(DefaultAccountAdapter):
             return "/"
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
-    '''
+    """
     Overrides allauth.socialaccount.adapter.DefaultSocialAccountAdapter.pre_social_login to
     perform some actions right after successful login
-    '''
+    """
     def pre_social_login(self, request, sociallogin):
         pass    # TODOFuture: To perform some actions right after successful login
 
 @receiver(pre_social_login)
 def link_to_local_user(sender, request, sociallogin, **kwargs):
-    ''' Login and redirect
+    """ Login and redirect
     This is done in order to tackle the situation where user's email retrieved
     from one provider is different from already existing email in the database
     (e.g facebook and google both use same email-id). Specifically, this is done to
     tackle following issues:
     * https://github.com/pennersr/django-allauth/issues/215
 
-    '''
-
-    email = sociallogin.account.extra_data['email']
+    """
+    email = sociallogin.account.extra_data["email"]
     User = get_user_model()
     users = User.objects.filter(email=email)
     if users:
@@ -55,6 +54,6 @@ def link_to_local_user(sender, request, sociallogin, **kwargs):
         for account in user.socialaccount_set.all():
             if not account.uid in sociallogin.account.extra_data.values():
                 # allauth.account.app_settings.EmailVerificationMethod
-                perform_login(request, user, email_verification='optional')
+                perform_login(request, user, email_verification="mandatory")
                 sociallogin.connect(request, user)
                 raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))

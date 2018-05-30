@@ -410,7 +410,7 @@
           </button>
         {% endif %}
       </div>
-      <!--<div class="login-buttons">
+      <div class="login-buttons">
         <a class="btn-dope btn-dope-social" href="/account/google/login/?process=login">
           <span class="social-icon">
             <i class="fab fa-google" title="Google Login"></i>
@@ -427,7 +427,7 @@
             Sign in with Facebook
           </span>
         </a>
-    </div>-->
+      </div>
     {% elif results.view == "dashboard" %}
       {% if errors or message %}
         <div class="errors">
@@ -435,12 +435,16 @@
         </div>
       {% endif %}
       <a class="donut-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
-        <p>
-          Subscriptions
-        </p>
-        <h1>
-          {{ results.subscriptions_count }}/50
-        </h1>
+        <div class="donut-chart">
+          <div class="donut">
+            <p>
+              Subscriptions
+            </p>
+            <h1>
+              {{ results.subscriptions_count }}/50
+            </h1>
+          </div>
+        </div>
       </a>
       <a class="donut-wrapper playlist-link" href="{% url 'playlist' %}">
         <p>
@@ -458,6 +462,11 @@
 </div>
 {% if request.is_ajax %}
   <script>
-    $('.carousel').carousel();
+    $(".slick").slick({
+      autoplay: true,
+      adaptiveHeight: true,
+      prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Previous'></i></button>",
+    });
   </script>
 {% endif %}

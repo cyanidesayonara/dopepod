@@ -20,6 +20,5 @@ urlpatterns = [
     url(r'^', include('index.urls')),
     url(r'^account/', include('allauth.urls')),
     url(r'^intergalac/', admin.site.urls),
-    #url(r'^intergalac/defender/', include('defender.urls')),  # defender admin
     # url(r'^blog/', include('blog.urls')),
 ]

@@ -376,12 +376,14 @@ input[type=checkbox] {
 .splash h1,
 .dashboard h1 {
   font-size: 22px;
-  margin-bottom: 10px;
+  margin: 20px 0;
 }
 .login-content {
-  margin-top: 10px;
+  margin: 20px 25px 0;
   height: 180px;
-  padding: 0 25px;
+}
+.login-content p {
+  margin-bottom: 20px;
 }
 .btn-dope-social {
   display: inline-flex;
@@ -431,69 +433,51 @@ input[type=checkbox] {
   background: rgb(0, 191, 165);
   color: #fff;
 }
-.donut-wrapper:hover svg circle {
-  stroke: #000;
-}
-a.donut-wrapper {
-  color: unset;
-}
-.donut-chart {
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
-.donut {
-  stroke-dasharray: 440;
-  -webkit-animation: donut 1s ease-out forwards;
-  animation: donut 1s ease-out forwards;
-}
-@-webkit-keyframes donut {
-  from {
-    stroke-dashoffset: 440;
-  }
-}
-@keyframes donut {
-  from {
-    stroke-dashoffset: 440;
-  }
-}
 
-/* CAROUSEL */
-.carousel {
-  border-top: 2px solid rgb(0, 191, 165);
-  border-bottom: 2px solid rgb(0, 191, 165);
-  padding: 10px;
-}
-.carousel a {
+/* SLICK */
+.slick a {
   color: unset;
 }
-.carousel h1 {
+.slick a:hover,
+.slick a:focus {
+  outline: none;
+}
+.slick h1 {
   font-size: 20px;
 }
-.carousel-inner {
-  margin: 10px 0;
-  overflow: visible;
+.slick p {
+  margin: 0;
 }
-.carousel-item {
+.slick-slide {
+  outline: none;
+}
+.slick-item {
+  display: block;
+  margin: 10px 50px;
+  padding: 50px 10px;
   border: 2px solid rgb(0, 191, 165);
-  border-radius: 50%;
-  width: 70%;
-  height: 0;
-  padding: 25% 10% 45%;
-  margin: 0 15%;
-  transition: all .25s ease-in-out;
+  border-radius: .25rem;
 }
-.carousel-item:hover {
+.slick-item:hover {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease-in-out;
-  color: #fff;
   background: rgb(0, 191, 165);
+  color: #fff;
+}
+.slick-prev,
+.slick-next {
+  position: absolute;
+  top: 50%;
+  z-index: 2000;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+}
+.slick-prev {
+  left: 0;
+}
+.slick-next {
+  right: 0;
 }
 
 /* SETTINGS */
