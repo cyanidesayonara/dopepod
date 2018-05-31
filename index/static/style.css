@@ -58,11 +58,11 @@ input[type=checkbox] {
   border: 2px solid rgb(0, 191, 165);
   border-radius: .25rem;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 5px;
 }
-.dope-check-label p {
+.dope-check-label strong {
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
 }
 [type=checkbox]:checked+span:after {
   content: '';
@@ -267,7 +267,6 @@ input[type=checkbox] {
 
 /* DOPEBAR */
 #dopebar {
-  z-index: 5000;
   position: fixed;
   right: 0;
   left: 0;
@@ -275,6 +274,7 @@ input[type=checkbox] {
 }
 #dopebar,
 #footer {
+  z-index: 5000;
   padding: 5px 0;
   min-height: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
@@ -292,6 +292,9 @@ input[type=checkbox] {
 #footer ul li {
   display: inline-block;
   vertical-align: middle;
+}
+#footer ul {
+  text-align: center;
 }
 #dopebar-r > * {
   float: right;
@@ -336,7 +339,7 @@ input[type=checkbox] {
   cursor: pointer;
   position: absolute;
   right: 8px;
-  top: 2px;
+  top: 3px;
   z-index: 150;
   background-color: inherit;
   width: 28px;
@@ -355,7 +358,7 @@ input[type=checkbox] {
   font-size: 16px;
   margin: 0 5px;
   padding-right: 30px;
-  border: 1px solid rgb(46, 46, 46);
+  border: 2px solid rgb(0, 191, 165)
 }
 
 /* ERRORS */
@@ -380,10 +383,10 @@ input[type=checkbox] {
 }
 .login-content {
   margin: 20px 25px 0;
-  height: 180px;
+  height: 200px;
 }
 .login-content p {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 .btn-dope-social {
   display: inline-flex;
@@ -960,11 +963,6 @@ input[type=checkbox] {
 .player-collapse-toggle {
   float: right;
   margin-top: 10px;
-}
-
-/* FOOTER */
-#footer ul {
-  text-align: center;
 }
 
 /* LOADERS */

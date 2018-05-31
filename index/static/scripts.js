@@ -170,10 +170,6 @@ function getResults(args, no_loader, no_push) {
           scrollTo(drop);
         }
       }
-      if (url.includes("showpod")) {
-        twttr.widgets.load();
-        FB.XFBML.parse();
-      }
       replaceState(url);
     });
   if (!no_loader) {
@@ -458,6 +454,12 @@ function updateCharts() {
 
 $(document)
   .ready(function() {
+    $(".slick").slick({
+      autoplay: true,
+      adaptiveHeight: true,
+      prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Previous'></i></button>",
+    });
     scrollToTop();
     refreshCookie();
     scrollUp();
@@ -469,7 +471,7 @@ $(document)
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
-  .on("keyup submit", ".search-form", function(e) {
+  .on("submit", ".search-form", function(e) {
     e.preventDefault();
     var url = this.action;
     var form = $(this);
@@ -822,7 +824,7 @@ $(document)
     $(this).blur();
   })
   // empties search field when link or button is clicked
-  .on("click", "a, button", function() {
+  .on("click", "a, button:not(.search-button)", function() {
     $(".q").val("");
   })
   // deletes error text (after delay) when clicking anywhere
