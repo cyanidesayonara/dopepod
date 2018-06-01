@@ -456,19 +456,6 @@ def subscriptions(request):
     return redirect("/")
 
 @vary_on_headers("Accept")
-def about(request):
-    if request.method == "GET":
-        template = "results_base.min.html"
-        results = get_about_results()
-        context = {
-            "results": results,
-        }
-        if request.is_ajax():
-            return render(request, template, context)
-        return render_non_ajax(request, template, context)
-    return redirect("/about/")
-
-@vary_on_headers("Accept")
 def privacy(request):
     if request.method == "GET":
         template = "results_base.min.html"

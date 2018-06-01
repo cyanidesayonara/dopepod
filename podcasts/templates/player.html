@@ -19,7 +19,6 @@
         </a>
         <div class="player-buttons">
           <button class="btn-dope player-minimize">
-            <i class="fas fa-angle-down fa-lg" title="Minimize"></i>
           </button>
           <button class="btn-dope player-close-toggle" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
             <i class="fas fa-times" title="Close"></i>
@@ -51,9 +50,8 @@
             <i class="fas fa-download"></i>
           </a>
         </div>
-        <button class="btn-dope player-collapse-toggle" data-toggle="collapse" data-target="#player-collapse"
+        <button class="btn-dope exp exp-icon player-collapse-toggle" data-toggle="collapse" data-target="#player-collapse"
           aria-expanded="false">
-          <i class="fas fa-angle-up fa-lg" title="Expand"></i>
         </button>        
         <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
           <source src="{{ episode.url }}"/>

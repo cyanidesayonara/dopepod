@@ -84,31 +84,25 @@ a:hover {
 .dope-toggle:hover,
 .dope-toggle:focus,
 .exp[aria-expanded="true"],
-.charts-result:hover .charts-rank {
+.charts-result:hover .charts-rank,
+.minimize .player-minimize::after {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
-  box-shadow: rgba(0,0,0,.5) 0 0 5px;
-  transition: all .25s ease-in-out;
-}
-.btn-dope svg,
-.dope-toggle svg {
-  transition: all .25s ease-in-out;
-}
-.btn-dope[aria-expanded="true"] svg,
-.dope-toggle[aria-expanded="true"] svg {
-  transition: all .25s ease-in-out;
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-.minimize .player-minimize svg {
-  -webkit-transform: rotate(-180deg);
-  -ms-transform: rotate(-180deg);
-  transform: rotate(-180deg);
+  transition: all .25s ease;
 }
 .expanded {
   background: rgba(0, 191, 165, .2);
+}
+.exp-icon::after,
+.player-minimize::after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f067";
+}
+.exp-icon[aria-expanded="true"]::after,
+.minimize .player-minimize::after {
+  content: "\f068";
 }
 .dope-toggle {
   float: right;
@@ -215,6 +209,9 @@ a:hover {
 
 /* DOPEBAR */
 #dopebar {
+  z-index: 5000;
+  padding: 5px 0;
+  min-height: 44px;
   position: fixed;
   right: 0;
   left: 0;
@@ -222,9 +219,6 @@ a:hover {
 }
 #dopebar,
 #footer {
-  z-index: 5000;
-  padding: 5px 0;
-  min-height: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 #dopebar-c {
@@ -344,6 +338,7 @@ a:hover {
   padding: 3px 6px;   /* same as btn-dope */
 }
 .social-icon {
+  font-weight: 400;
   padding: 3px 10px;   /* just a lil bit wider */
   background: rgb(0, 191, 165);
   color: #fff;
@@ -362,6 +357,9 @@ a:hover {
 }
 .logo > * {
   cursor: default;
+}
+a.donut-wrapper {
+  color: rgb(46, 46, 46);
 }
 .donut-wrapper {
   display: inline-block;
@@ -956,7 +954,7 @@ input[type=checkbox] {
 #player-wrapper .player-description {
   padding: 10px 0;
   max-height: 250px;
-  max-height: calc(100vh - 350px);
+  max-height: calc(100vh - 440px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {

@@ -458,7 +458,7 @@ $(document)
       autoplay: true,
       adaptiveHeight: true,
       prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Previous'></i></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
     });
     scrollToTop();
     refreshCookie();
@@ -541,11 +541,12 @@ $(document)
   })  
   // LOGIN & SIGNUP
   // show splash / dashboard / login / register / password reset
-  .on("click", ".login-link, .signup-link, .password-link, .index-link, .results-close", function(e) {
+  .on("click", ".login-link, .signup-link, .password-link, .index-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
     var link = $(this);
+    drop.find(".results-collapse").collapse("show");
     if (!drop.children(".splash").length && !drop.children(".dashboard").length) {
       getResults([url, drop, true]);
     }
@@ -628,17 +629,6 @@ $(document)
   .on("click", ".last-played-link", function(e) {
     e.preventDefault();
     scrollTo($("#last-played"));
-  })
-  .on("click", ".about-link", function(e) {
-    e.preventDefault();
-    var url = this.href;
-    var drop = $("#center-stage");
-    drop.find(".results-collapse").collapse("show");
-    if (!drop.children(".about").length) {
-      getResults([url, drop, true]);
-    } else {
-      scrollTo(drop);
-    }
   })
   .on("click", ".privacy-link", function (e) {
     e.preventDefault();

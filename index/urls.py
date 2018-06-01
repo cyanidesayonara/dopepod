@@ -12,7 +12,6 @@ urlpatterns = [
     url(r"^episodes/(?P<podid>\d+)/$", index.episodes, name="episodes"),
     url(r"^settings/$", index.settings, name="settings"),
     url(r"^playlist/$", index.playlist, name="playlist"),
-    url(r"^about/$", index.about, name="about"),
     url(r"^privacy/$", index.privacy, name="privacy"),
     url(r"^terms/$", index.terms, name="terms"),
     url(r"^contact/$", index.contact, name="contact"),
