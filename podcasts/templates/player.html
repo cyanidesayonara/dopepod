@@ -9,7 +9,7 @@
           <button class="btn-dope player-close">
             Yes
           </button>
-          <button class="btn-dope player-close-toggle" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
+          <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
             No
           </button>
         </div>
@@ -18,9 +18,9 @@
           onerror="this.src='https://dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
         </a>
         <div class="player-buttons">
-          <button class="btn-dope player-minimize">
+          <button class="btn-dope exp exp-icon player-minimize" aria-expanded="true">
           </button>
-          <button class="btn-dope player-close-toggle" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
+          <button class="btn-dope exp" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
             <i class="fas fa-times" title="Close"></i>
           </button>
         </div>

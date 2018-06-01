@@ -84,24 +84,26 @@ a:hover {
 .dope-toggle:hover,
 .dope-toggle:focus,
 .exp[aria-expanded="true"],
-.charts-result:hover .charts-rank,
-.minimize .player-minimize::after {
+.charts-result:hover .charts-rank {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
+}
+#player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
+.results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
+  box-shadow: none;
 }
 .expanded {
   background: rgba(0, 191, 165, .2);
 }
-.exp-icon::after,
-.player-minimize::after {
+.exp-icon::after {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: "\f067";
 }
-.exp-icon[aria-expanded="true"]::after,
-.minimize .player-minimize::after {
+.exp-icon[aria-expanded="true"]::after {
   content: "\f068";
 }
 .dope-toggle {
@@ -684,6 +686,7 @@ input[type=checkbox] {
 }
 .extra-options > * {
   margin-left: 5px;
+  box-shadow: none;
 }
 .results-content {
   min-height: 0;

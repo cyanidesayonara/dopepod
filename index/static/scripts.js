@@ -722,7 +722,10 @@ $(document)
     e.preventDefault();
     $("#player-collapse").collapse("hide");
     $("#player-close-collapse").collapse("hide");
-    $(this).parents("#player-wrapper").toggleClass("minimize")
+    $(this).attr('aria-expanded', function (i, attr) {
+      return attr == 'true' ? 'false' : 'true'
+    })
+    .parents("#player-wrapper").toggleClass("minimize");
   })
   .on("click", ".theme-button[type=submit]", function (e) {
     var theme = this.innerText.toLowerCase();
