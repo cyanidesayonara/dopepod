@@ -485,6 +485,9 @@ $(document)
           url = url + "?q=" + q;
           getResults([url, drop, true]);
         }
+        else {
+          scrollTo(drop);
+        }
       }
     }, 250);
   })
