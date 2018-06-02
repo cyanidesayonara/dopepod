@@ -151,8 +151,7 @@ a:hover {
 }
 .dope-field:hover,
 .dope-field:focus {
-  outline: none;
-  box-shadow: inset rgba(0, 0, 0, .2) -1px -1px 5px, inset rgba(0, 0, 0, .2) 1px 1px 5px;
+  box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
 }
 .dope-form-group {
   text-align: left;
@@ -896,12 +895,13 @@ input[type=checkbox] {
 /* PLAYER */
 #player {
   padding: 0;
+  z-index: 3000;
 }
 #player > div > div {
   min-height: 0;
 }
 #player-wrapper {
-  z-index: 1000;
+  z-index: 4000;
   color: rgb(46, 46, 46);
   position: absolute;
   overflow: hidden;

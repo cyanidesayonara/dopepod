@@ -393,11 +393,14 @@ def search(request):
         # get show
         show = None
 
+        # get order
+        order = None
+
         # get url
         url = request.get_full_path()
 
         results = Podcast.search(
-            url=url, q=q, genre=genre, language=language, show=show, page=page, view=view
+            url=url, q=q, genre=genre, language=language, show=show, order=order, page=page, view=view
         )
 
         context = {

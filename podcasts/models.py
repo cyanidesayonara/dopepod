@@ -61,7 +61,7 @@ def format_bytes(bytes):
             bytes /=  power**n
         return "{0:4.1f}{1}".format(bytes, suffixes[n])
 
-def make_url(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None):
+def make_url(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None):
     f = furl(url)
     f.args.clear()
 
@@ -76,6 +76,8 @@ def make_url(url, provider=None, q=None, genre=None, language=None, show=None, p
         f.args["language"] = language
     if show:
         f.args["show"] = show
+    if order:
+        f.args["order"] = order
     if page:
         f.args["page"] = page
     if view:
@@ -120,7 +122,8 @@ class Podcast(models.Model):
 
     def get_n_subscribers(self):
         if type(self.n_subscribers) == int:
-            return str(self.n_subscribers) if self.n_subscribers > 100 else "<1k"
+            # TODO round to nearest k etc
+            return str(self.n_subscribers) if self.n_subscribers > 1000 else "<1k"
         else:
             return "<1k"
 
@@ -138,7 +141,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return "https://dopepod.me" + reverse("showpod", args=[self.podid])
 
-    def search(url, provider=None, q=None, genre=None, language=None, show=None, page=None, view=None, force_cache=False):
+    def search(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, force_cache=False):
         """
         returns podcasts matching search terms
         """
