@@ -151,6 +151,7 @@ a:hover {
 }
 .dope-field:hover,
 .dope-field:focus {
+  outline: none;
   box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
 }
 .dope-form-group {
