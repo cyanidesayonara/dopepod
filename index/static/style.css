@@ -279,16 +279,17 @@ a:hover {
   position: relative;
 }
 .search-button {
+  padding: 0 4px;
   font-size: 14px;
   cursor: pointer;
   position: absolute;
-  right: 8px;
-  top: 3px;
+  right: 9px;
+  top: 4px;
   z-index: 150;
   background-color: inherit;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  border-radius: .25rem;
   border: 2px solid rgba(0, 191, 165, 0);
   transition: all .1s ease-in-out;
 }
