@@ -4,11 +4,9 @@ from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.signals import pre_social_login
 from allauth.account.utils import perform_login
 from allauth.utils import get_user_model
-from django.http import HttpResponse
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.conf import settings
-import json
 
 """
 https://stackoverflow.com/questions/24357907/django-allauth-facebook-redirects-to-signup-when-retrieved-email-matches-an-exis?rq=1
@@ -51,9 +49,10 @@ def link_to_local_user(sender, request, sociallogin, **kwargs):
     users = User.objects.filter(email=email)
     if users:
         user = users[0]
-        for account in user.socialaccount_set.all():
-            if not account.uid in sociallogin.account.extra_data.values():
-                # allauth.account.app_settings.EmailVerificationMethod
-                perform_login(request, user, email_verification="mandatory")
-                sociallogin.connect(request, user)
-                raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
+        uids = set(user.socialaccount_set.all().values_list("uid", flat=True))
+        social_data = set(sociallogin.account.extra_data.values())
+        if not uids & social_data:
+            # allauth.account.app_settings.EmailVerificationMethod
+            perform_login(request, user, email_verification="mandatory")
+            sociallogin.connect(request, user)
+            raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))

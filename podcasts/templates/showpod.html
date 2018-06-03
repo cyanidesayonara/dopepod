@@ -1,7 +1,7 @@
 {% with results.podcast as podcast %}
   <div class="col-12 col-lg-4" id="showpod-l">
-    <img class="img-fluid" src="https://{{ podcast.artworkUrl }}380x380bb.jpg"
-    onerror="this.src='https://dopepod.me/img/{{ podcast.artworkUrl }}380x380bb.jpg'" alt="{{ podcast.title }}" />
+    <img class="img-fluid" src="//{{ podcast.artworkUrl }}380x380bb.jpg"
+    onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}380x380bb.jpg'" alt="{{ podcast.title }}" />
   </div>
   <div class="col-12 col-lg-5" id="showpod-c">
     <h1>
@@ -72,7 +72,7 @@
         </em>
       </li>
       <li>
-        <a class="btn-dope btn-dope-social" href="https://twitter.com/intent/tweet?text={{ podcast.url_format_description }}&url={{ podcast.get_absolute_url }}">
+        <a class="btn-dope btn-dope-social" href="//twitter.com/intent/tweet?text={{ podcast.url_format_description }}&url={{ podcast.get_absolute_url }}">
           <span class="social-icon">
             <i class="fab fa-twitter" title="Tweet"></i>
           </span>
@@ -80,7 +80,7 @@
             Tweet
           </span>
         </a>
-        <a class="btn-dope btn-dope-social" href="https://www.facebook.com/sharer/sharer.php?u={{ podcast.get_absolute_url }}">
+        <a class="btn-dope btn-dope-social" href="//www.facebook.com/sharer/sharer.php?u={{ podcast.get_absolute_url }}">
           <span class="social-icon">
             <i class="fab fa-facebook-f" title="Share"></i>
           </span>
