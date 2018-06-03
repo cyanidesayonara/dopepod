@@ -27,21 +27,21 @@ a:hover {
 .christmas {
   color: rgb(46, 46, 46);
   transition: all .25s ease;
-  background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .2), rgba(213, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 20px);
+  background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .5), rgba(213, 0, 0, .5) 10px, rgba(0, 0, 0, .5) 10px, rgba(0, 0, 0, .5) 20px);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
 /* COOKIE BANNER */
 #cookie-banner {
-  z-index: 1000;
+  z-index: 4000;
   color: rgb(46, 46, 46);
   position: absolute;
   overflow: hidden;
   bottom: 0;
   right: 0;
   width: 100%;
-  box-shadow: rgba(0, 0, 0, .3) 0 -1px 3px;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   text-align: center;
   padding: 5px 0;
 }
@@ -911,7 +911,7 @@ input[type=checkbox] {
   width: 100%;
   padding: 10px;
   border-radius: .25rem .25rem 0 0;
-  box-shadow: rgba(0,0,0,.5) 0 -1px 5px;
+  box-shadow: rgba(0,0,0,.5) 0 0 5px;
 }
 #player-wrapper img {
   float: left;

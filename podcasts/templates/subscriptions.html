@@ -29,7 +29,7 @@
         <div class="dope-buttons">
           <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="podids[]" value="{{ podcast.podid }}">
+            <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
             <button type="submit" class="btn-dope">
               <i class="fas fa-times" title="Unsubscribe"></i>
             </button>

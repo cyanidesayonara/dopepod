@@ -9,6 +9,7 @@
   <meta name="google-site-verification" content="C_pKaDqcaoXRjIhDwecTsDw_eqBTcbuJkkWyxuOvINI" />
   <meta name="viewport" content="width=device-width, initial-scale=1,
     shrink-to-fit=no" />
+  <meta name="theme-color" content="#00bfa5">
   <meta property="og:title" content="dopepod" />
   {% if results.view == 'showpod' %}
     <meta property="og:image" content="https://{{ results.podcast.artworkUrl }}600x600bb.jpg" />
@@ -34,10 +35,10 @@
   </title>
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
   <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Orbitron" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Exo" />
-  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" />
   <link rel="stylesheet" href="{% static 'style.min.css' %}" />
 </head>
 <body class="{% if user.profile.theme %}{{ user.profile.theme }}{% else %}light{% endif %}">
@@ -86,9 +87,9 @@
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script src="{% static 'scripts.min.js' %}"></script>
-  <script type="text/javascript">
+  <script >
     var _paq = _paq || [];
     _paq.push(["trackPageView"]);
     _paq.push(["enableLinkTracking"]);
