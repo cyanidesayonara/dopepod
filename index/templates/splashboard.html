@@ -469,22 +469,22 @@
       <a class="donut-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
         <div class="donut-chart">
           <div class="donut">
-            <p>
-              Subscriptions
-            </p>
             <h1>
-              {{ results.subscriptions_count }}/50
+              Subscriptions
             </h1>
+            <p>
+              {{ results.subscriptions_count }}/50
+            </p>
           </div>
         </div>
       </a>
       <a class="donut-wrapper playlist-link" href="{% url 'playlist' %}">
-        <p>
-          Playlist
-        </p>
         <h1>
-          {{ results.playlist_count }}/20
+          Playlist
         </h1>
+        <p>
+          {{ results.playlist_count }}/20
+        </p>
       </a>
     {% endif %}
   </div>

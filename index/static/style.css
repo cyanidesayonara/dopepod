@@ -84,7 +84,8 @@ a:hover {
 .dope-toggle:hover,
 .dope-toggle:focus,
 .exp[aria-expanded="true"],
-.charts-result:hover .charts-rank {
+.charts-result:hover .charts-rank,
+.donut-wrapper:hover {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
@@ -219,6 +220,9 @@ a:hover {
   left: 0;
   top: 0;
 }
+#footer {
+  color: rgb(46, 46, 46);
+}
 #dopebar,
 #footer {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
@@ -236,9 +240,6 @@ a:hover {
 #footer ul li {
   display: inline-block;
   vertical-align: middle;
-}
-#footer ul {
-  text-align: center;
 }
 #dopebar-r > * {
   float: right;
@@ -362,7 +363,7 @@ a:hover {
   cursor: default;
 }
 a.donut-wrapper {
-  color: rgb(46, 46, 46);
+  color: unset;
 }
 .donut-wrapper {
   display: inline-block;
@@ -376,14 +377,13 @@ a.donut-wrapper {
   transition: all .25s ease-in-out;
 }
 .donut-wrapper h1 {
-  font-size: 28px;
+  font-size: 14px;
+  margin: 10px 0;
   font-weight: 600;
 }
-.donut-wrapper:hover {
-  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  transition: all .25s ease-in-out;
-  background: rgb(0, 191, 165);
-  color: #fff;
+.donut-wrapper p {
+  font-size: 28px;
+  font-weight: 600;
 }
 
 /* CHECKBOX */
