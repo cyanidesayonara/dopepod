@@ -13,6 +13,10 @@ a:hover {
   text-decoration: none;
 }
 
+.fab {
+  font-weight: 400;
+}
+
 /* THEMES */
 .light {
   background: rgb(255, 250, 240);
@@ -34,7 +38,6 @@ a:hover {
 
 /* COOKIE BANNER */
 #cookie-banner {
-  z-index: 4000;
   color: rgb(46, 46, 46);
   position: absolute;
   overflow: hidden;
@@ -42,16 +45,11 @@ a:hover {
   right: 0;
   width: 100%;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  text-align: center;
-  padding: 5px 0;
 }
 #cookie-banner h1 {
   display: inline-block;
-  margin: 0;
+  margin: 0 10px 10px 0;
   font-size: 16px;
-}
-#cookie-banner button {
-  margin-left: 10px;
 }
 
 /* BUTTONS */
@@ -342,7 +340,6 @@ a:hover {
   padding: 3px 6px;   /* same as btn-dope */
 }
 .social-icon {
-  font-weight: 400;
   padding: 3px 10px;   /* just a lil bit wider */
   background: rgb(0, 191, 165);
   color: #fff;
@@ -448,7 +445,6 @@ input[type=checkbox] {
   outline: none;
 }
 .slick h1 {
-  display: inline-block;
   font-size: 18px;
   margin: 0 0 10px;
 }
@@ -898,11 +894,13 @@ input[type=checkbox] {
   padding: 0;
   z-index: 3000;
 }
+#player:not(.fixed-bottom) {
+  position: relative;
+}
 #player > div > div {
   min-height: 0;
 }
 #player-wrapper {
-  z-index: 4000;
   color: rgb(46, 46, 46);
   position: absolute;
   overflow: hidden;

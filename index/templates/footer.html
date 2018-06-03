@@ -1,6 +1,16 @@
 <div class="container px-0">
-  <div class="col-12 col-lg-4 dope-wrapper">
+  <div class="col-12 dope-wrapper">
     <ul>
+      <li>
+        <a class="dopebar-link" href="//www.facebook.com/Dopepod-183565408908728">
+          <i class="fab fa-facebook-f" title="Facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="dopebar-link" href="#">
+          <i class="fab fa-twitter" title="Twitter"></i>
+        </a>
+      </li>
       <li>
         <a class="dopebar-link contact-link" href="{% url 'contact' %}">
           Contact
@@ -17,15 +27,19 @@
         </a>
       </li>
       <li>
-        <a class="dopebar-link" href="//www.facebook.com/Dopepod-183565408908728">
-          <i class="fab fa-facebook-f" title="Facebook"></i>
-        </a>
+        <form action="//www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="cmd" value="_donations">
+          <input type="hidden" name="business" value="cyanidesayonara@gmail.com">
+          <input type="hidden" name="lc" value="US">
+          <input type="hidden" name="item_name" value="dopepod">
+          <input type="hidden" name="no_note" value="0">
+          <input type="hidden" name="currency_code" value="USD">
+          <button class="dopebar-link" type="submit">
+            Donate
+            <i class="fab fa-paypal"></i>
+          </button>
+        </form>
       </li>
-      <li>
-        <a class="dopebar-link" href="#">
-          <i class="fab fa-twitter" title="Twitter"></i>
-        </a>
-      </li>      
     </ul>
     <p>
       dopepod does not store any copyrighted files on its server. We only index and link to content provided by other sites.
