@@ -276,6 +276,7 @@ a:hover {
 /* SEARCH */
 .search-form {
   position: relative;
+  display: inline-block;
 }
 .search-button {
   padding: 0 4px;
