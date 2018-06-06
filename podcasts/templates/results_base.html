@@ -41,8 +41,12 @@
         {% include "terms.min.html" %}
       {% elif results.view == "contact" %}
         {% include "contact.min.html" %}                    
-      {% elif results.view == "reset_password" or results.view == "password_reset" or results.view == "confirm_email" %}
-        {% include "password_reset.min.html" %}
+      {% elif results.view == "password_reset" %}
+        {% include "password-reset.min.html" %}
+      {% elif results.view == "reset_password" %}
+        {% include "reset-password.min.html" %}
+      {% elif results.view == "confirm_email" %}
+        {% include "confirm-email.min.html" %}
       {% endif %}
     </div>
     

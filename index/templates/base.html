@@ -36,8 +36,8 @@
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Orbitron" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Exo" />
-  <link rel="stylesheet" href="{% static 'fa/fontawesome-all.min.css' %}" />
   <link rel="stylesheet" href="{% static 'bs/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'fa/fontawesome-all.min.css' %}" />
   <link rel="stylesheet" href="{% static 'slick/slick.min.css' %}" />
   <link rel="stylesheet" href="{% static 'style.min.css' %}" />
 </head>
@@ -81,8 +81,8 @@
     <footer class="footer color-1-trans" id="footer">
       {% include "footer.min.html" %}
     </footer>
-    <div class="loaders d-none">
-      {% include "circle_loading.min.html" %} {% include "button_loading.min.html" %}
+    <div class="loaders">
+      {% include "circle-loading.min.html" %} {% include "button-loading.min.html" %}
     </div>
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -113,3 +113,4 @@
     </p>
   </noscript>
 </body>
+</html>

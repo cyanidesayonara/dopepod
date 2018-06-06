@@ -974,6 +974,9 @@ input[type=checkbox] {
 }
 
 /* LOADERS */
+.loaders {
+  display: none;
+}
 .circle-loading {
   position: relative;
   border-radius: 50%;

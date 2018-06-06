@@ -840,6 +840,8 @@ def password_reset_from_key(request, uidb36, key):
             results = get_reset_password_results()
             context = {
                 "results": results,
+                "uidb36": uidb36,
+                "key": key,
             }
             context = get_form_errors(context, response)
             if request.is_ajax():

@@ -222,14 +222,7 @@
               is a free, mobile-friendly podcast web app that
               scours the internet for fresh episodes so you don't have to.
             </p>
-            <form class="form-inline search-form d-inline-block" method="GET" action="{% url 'search' %}">
-              <label for="q" class="sr-only">Search for podcasts</label>
-              <input class="dope-field q" type="text" name="q" type="search" placeholder="Search for podcasts"
-              aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8" />
-              <button class="search-button" type="submit">
-                <i class="fa fa-search icon" title="Search"></i>
-              </button>
-            </form>            
+              {% include "search-form.min.html" %}
             <p>
               Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
             </p>
@@ -322,12 +315,12 @@
               is a free, mobile-friendly podcast web app that
               scours the internet for fresh episodes so you don't have to.
             </p>
-            <form class="form-inline search-form d-inline-block" method="GET" action="{% url 'search' %}">
+            <form class="search-form" method="GET" action="{% url 'search' %}">
               <label for="q" class="sr-only">Search for podcasts</label>
               <input class="dope-field q" type="text" name="q" type="search" placeholder="Search for podcasts"
               aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8" />
               <button class="search-button" type="submit">
-                <i class="fa fa-search icon" title="Search"></i>
+                <i class="fas fa-search" title="Search"></i>
               </button>
             </form>            
             <p>
@@ -420,45 +413,30 @@
       </div>
       <div class="login-buttons">
         {% if view == "signup" %}
-          <button class="btn-dope login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
             Login
           </button>
-          <button class="btn-dope signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="signup-collapse">
+          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="signup-collapse">
             Signup
           </button>
         {% elif view == "login" %}
-          <button class="btn-dope login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="login-collapse">
+          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="login-collapse">
             Login
           </button>
-          <button class="btn-dope signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
             Signup
           </button>
         {% else %}
-          <button class="btn-dope login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
             Login
           </button>
-          <button class="btn-dope signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
             Signup
           </button>
         {% endif %}
       </div>
       <div class="login-buttons">
-        <a class="btn-dope btn-dope-social" href="/account/google/login/?process=login">
-          <span class="social-icon">
-            <i class="fab fa-google" title="Google Login"></i>
-          </span>
-          <span class="social-button">
-            Sign in with Google
-          </span>
-        </a>
-        <a class="btn-dope btn-dope-social" href="/account/facebook/login/?process=login">
-          <span class="social-icon">
-            <i class="fab fa-facebook-f" title="Facebook Login"></i>
-          </span>
-          <span class="social-button">
-            Sign in with Facebook
-          </span>
-        </a>
+        {% include "social-login.min.html" %}
       </div>
     {% elif results.view == "dashboard" %}
       {% if errors or message %}

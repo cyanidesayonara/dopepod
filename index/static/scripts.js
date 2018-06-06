@@ -796,7 +796,7 @@ $(document)
     e.stopPropagation();
     $(".showpod-collapse").collapse("toggle");
   })
-  .on("click", ".lights-toggle", function(e) {
+  .on("click", ".select-theme", function(e) {
     e.preventDefault();
     var theme = $("body").attr("class");
     if (theme == "light") {

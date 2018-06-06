@@ -54,8 +54,8 @@
       {% endif %}
       <ul class="d-none d-xl-inline-block">
         <li>
-          <a class="dopebar-link lights-toggle" href="#">
-            <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
+          <a class="dopebar-link select-theme" href="#">
+            <i class="fas fa-sun fa-lg" title="Select Theme"></i>
           </a>
         </li>
         {% if user.is_authenticated %}
@@ -85,32 +85,18 @@
           </li>
         {% endif %}
         <li>
-          <form class="search-form" method="GET" action="{% url 'search' %}">
-            <label for="q" class="sr-only">Search for podcasts</label>
-            <input class="dope-field q" type="text" name="q" type="search" placeholder="Search for podcasts"
-            aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8" />
-            <button class="search-button" type="submit">
-              <i class="fa fa-search icon" title="Search"></i>
-            </button>
-          </form>
+          {% include "search-form.min.html" %}
         </li>
       </ul>
     </div>
     <div class="col-12 collapse d-xl-none" id="dopebar-collapse">
       <ul>
         <li>
-          <form class="search-form" method="GET" action="{% url 'search' %}">
-            <label for="q" class="sr-only">Search for podcasts</label>
-            <input class="dope-field q" type="text" name="q" type="search" placeholder="Search for podcasts"
-            aria-label="Search for podcasts" maxlength="30" autocomplete="off" accept-charset="utf-8" />
-            <button class="search-button" type="submit">
-              <i class="fa fa-search icon" title="Search"></i>
-            </button>
-          </form>   
+          {% include "search-form.min.html" %}
         </li>
         <li>
-          <a class="dopebar-link lights-toggle" href="#">
-            <i class="far fa-lightbulb fa-lg" title="Toggle Lights"></i>
+          <a class="dopebar-link select-theme" href="#">
+            <i class="fas fa-sun fa-lg" title="Select Theme"></i>
           </a>
         </li>
       </ul>
