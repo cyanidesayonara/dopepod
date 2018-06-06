@@ -36,9 +36,9 @@
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Orbitron" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Exo" />
-  <link rel="stylesheet" href="{% static 'fontawesome-all.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'slick.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'fa/fontawesome-all.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'bs/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'slick/slick.min.css' %}" />
   <link rel="stylesheet" href="{% static 'style.min.css' %}" />
 </head>
 <body class="{% if user.profile.theme %}{{ user.profile.theme }}{% else %}light{% endif %}">
@@ -86,8 +86,8 @@
     </div>
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="{% static 'bootstrap.min.js' %}"></script>
-  <script src="{% static 'slick.min.js' %}"></script>
+  <script src="{% static 'bs/bootstrap.min.js' %}"></script>
+  <script src="{% static 'slick/slick.min.js' %}"></script>
   <script src="{% static 'scripts.min.js' %}"></script>
   <script >
     var _paq = _paq || [];
