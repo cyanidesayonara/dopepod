@@ -413,11 +413,13 @@ input[type=checkbox] {
   margin-right: 5px;
 }
 .dope-check-label p {
+  font-size: 12px;
+  line-height: 20px;
   margin: 0;
   display: inline-block;
   vertical-align: top;
 }
-[type=checkbox]:checked+span:after {
+[type=checkbox]:checked+span::after {
   content: '';
   position: absolute;
   width: 10px;
@@ -433,7 +435,7 @@ input[type=checkbox] {
   transform: rotate(-45deg);
   opacity: 0;
 }
-[type=checkbox]:checked+span:after {
+[type=checkbox]:checked+span::after {
   opacity: 1;
 }
 
@@ -721,21 +723,23 @@ input[type=checkbox] {
   margin-left: 5px;
   float: right;
   border-radius: .25rem;
-  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  box-shadow: #00000080 0 0 5px;
 }
-.charts-result table,
-.last-played-result table {
-  font-size: 12px;
+.dope-list {
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+  font-size: .80em;
 }
-.charts-result table tr td,
-.last-played-result table tr td {
-  padding: 2px 10px 0 0 ;
+.last-played-collapse .dope-list {
+  width: 100%;
 }
-.charts-result table tr td:first-child:before,
-.last-played-result table tr td:first-child:before {
-  content: "\25CF";
-  color: rgb(0, 191,165);
-  margin-right: 5px; 
+.dope-list li {
+  height: 20px;
+  padding-top: 4px;
+}
+.dope-list li span:last-child {
+  float: right;
 }
 .charts-rank {
   float: left;
@@ -757,7 +761,7 @@ input[type=checkbox] {
 .charts-result h1 {
   font-size: 16px;
   height: 20px;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .charts-result h2 {
   margin-bottom: 0;
@@ -814,9 +818,6 @@ input[type=checkbox] {
 .last-played-result p {
   word-wrap: break-word;
   margin: 10px 0 0;
-}
-.last-played-collapse table {
-  margin-top: 10px;
 }
 
 /* SEARCH RESULTS */

@@ -23,31 +23,31 @@
             {{ podcast.object.artist }}
           </strong>
         </h2>
-        <table>
-          <tr>
-            <td>
+        <ul class="dope-list">
+          <li>
+            <span>
               Genre
-            </td>
-            <td>
+            </span>
+            <span>
               {{ podcast.object.get_primary_genre }}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Language
-            </td>
-            <td>
+            </span>
+            <span>
               {{ podcast.object.language }}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Subscribers
-            </td>
-            <td>
+            </span>
+            <span>
               {{ podcast.object.get_n_subscribers }}
-            </td>
-          </tr>
+            </span>
+          </li>
         </table>
       </a>
     </div>

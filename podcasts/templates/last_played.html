@@ -28,79 +28,75 @@
           {{ episode.title }}
         </strong>
       </h2>
-      <table>
-        <tr>
-          <td>
+      <ul class="dope-list">
+        <li>
+          <span>
             Released
-          </td>
-          <td>
-            {% if episode.pubDate %}
-              {{ episode.pubDate|date:"d-m-Y H:i" }}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
-        </tr>
-        <tr>
-          <td>
+          </span>
+          <span>
+            {% if episode.pubDate %}{{ episode.pubDate|date:"d-m-Y H:i" }}{% else %}N/A{% endif %}
+          </span>
+        </li>
+        <li>
+          <span>
             Played
-          </td>
-          <td>
+          </span>
+          <span>
             {{ episode.played_ago }}
-          </td>
-        </tr>
-      </table>
+          </span>
+        </li>
+      </ul>
       <div class="collapse fade last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
-        <table>
-          <tr>
-            <td>
+        <ul class="dope-list">
+          <li>
+            <span>
               Length
-            </td>
-            <td>
+            </span>
+            <span>
               {% if episode.length %}
                 {{ episode.length }}
               {% else %}
                 N/A
               {% endif %}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Size
-            </td>
-            <td>
+            </span>
+            <span>
               {% if episode.size %}
                 {{ episode.size }}
               {% else %}
                 N/A
               {% endif %}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Genre
-            </td>
-            <td>
+            </span>
+            <span>
               {{ episode.podcast.get_primary_genre }}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Language
-            </td>
-            <td>
+            </span>
+            <span>
               {{ episode.podcast.language }}
-            </td>
-          </tr>
-          <tr>
-            <td>
+            </span>
+          </li>
+          <li>
+            <span>
               Subscribers
-            </td>
-            <td>
+            </span>
+            <span>
               {{ episode.podcast.get_n_subscribers }}
-            </td>
-          </tr>
-        </table>
+            </span>
+          </li>
+        </ul>
         <p>
           {% if episode.description %}
             {{ episode.description }}
