@@ -67,7 +67,6 @@ a:hover {
   border-radius: .25rem;
   text-align: center;
   white-space: nowrap;
-  user-select: none;
   display: inline-block;
   transition: all .25s ease;
 }
@@ -93,6 +92,7 @@ a:hover {
 #player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
 .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
   box-shadow: none;
+  color: unset;
 }
 .expanded {
   background: rgba(0, 191, 165, .2);
