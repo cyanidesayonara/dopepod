@@ -336,7 +336,17 @@ class Podcast(models.Model):
             # charts header
             if provider:
                 results["podcasts"] = podcasts
-                results["header"] = "Top " + str(count) + " podcasts"
+                results_header = provider
+                results_header += " Top " + str(count) + " "
+                if language:
+                    results_header += str(language)
+                if count == 1:
+                    results_header += " podcast "
+                else:
+                    results_header += " podcasts "
+                if genre:
+                    results_header += " on " + str(genre)
+                results["header"] = results_header
                 results["providers"] = ["dopepod", "itunes"]
                 results["selected_provider"] = provider
             # search header & pages
@@ -368,12 +378,26 @@ class Podcast(models.Model):
                         del f.args["page"]
                         results["start_url"] = f.url
                 
-                if not q:
-                    results_header = "Browsing " + str(count) + " podcasts"
-                elif count == 1:
-                    results_header = str(count) + " result for \"" + q + "\""
+                results_header = ""
+                if num_pages > 1:
+                    results_header += " Page " + str(page) + " of "
+                if count == 1:
+                    results_header += str(count) + " result for "
                 else:
-                    results_header = str(count) + " results for \"" + q + "\""
+                    results_header += str(count) + " results for "
+                if language:
+                    results_header += str(language)
+                results_header += " podcasts"
+                if genre:
+                    results_header += " on " + str(genre)
+                if q:
+                    if len(q) == 1:
+                        results_header += ' starting with "'
+                    else:
+                        results_header += ' with "'
+
+                    results_header +=  q + '"'
+                
                 results["header"] = results_header
 
                 # show selected page
@@ -1039,7 +1063,7 @@ class Episode(models.Model):
             last_played = Episode.objects.filter(position=None).order_by("-played_at",)
             results = {
                 "episodes": last_played,
-                "header": "Last played",
+                "header": "Last played episodes",
                 "view": "last_played",
             }
             cache.set("last_played", results, 60 * 60 * 24)

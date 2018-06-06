@@ -631,8 +631,8 @@ input[type=checkbox] {
 }
 .results-header h1 {
   text-align: center;
-  font-size: 20px;
-  margin: 4px 0;
+  font-size: 1.3em;
+  margin: 5px 0;
 }
 .options-collapse {
   width: 100%;
@@ -665,7 +665,7 @@ input[type=checkbox] {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .provider-button {
-  width: 100px;
+  width: 75px;
 }
 .nix-button {
   margin-right: auto;
