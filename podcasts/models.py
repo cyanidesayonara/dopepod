@@ -1067,9 +1067,9 @@ class Episode(models.Model):
         if results:
             return results
         else:
-            last_played = Episode.objects.filter(position=None).order_by("-played_at",)
+            episodes = Episode.objects.filter(position=None).order_by("-played_at",)
             results = {
-                "episodes": last_played,
+                "episodes": episodes,
                 "header": "Last played episodes",
                 "view": "last_played",
             }
@@ -1111,11 +1111,12 @@ class Episode(models.Model):
                         episode.delete()
 
         # let's cache those bad boys
-        last_played = Episode.objects.filter(position=None).order_by("-played_at")
-        results = {}
-        results["episodes"] = last_played
-        results["header"] = "Last played"
-        results["view"] = "last_played"
+        episodes = Episode.objects.filter(position=None).order_by("-played_at")
+        results = {
+            "episodes": episodes,
+            "header": "Last played episodes",
+            "view": "last_played",
+        }
         cache.set("last_played", results, 60 * 60 * 24)
     
     def add(signature, user):
