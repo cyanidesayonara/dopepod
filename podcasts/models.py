@@ -472,9 +472,16 @@ class Podcast(models.Model):
             title = data["collectionName"]
             artist = data["artistName"]
             artworkUrl = data["artworkUrl600"].split("://")[1].replace("600x600bb.jpg", "")
+            # make sure image links use ssl
             if "ssl" not in artworkUrl:
                 artworkUrl = artworkUrl.replace(".mzstatic", "-ssl.mzstatic")
             genre = data["primaryGenreName"]
+            # don't allow genre "Podcasts"
+            if genre == "Podcasts":
+                for g in data["genres"]:
+                    if not g == genre:
+                        genre = g
+                        break
             explicit = True if data["collectionExplicitness"] == "explicit" else False
             reviewsUrl = "https://itunes.apple.com/us/rss/customerreviews/id=" + str(podid) + "/json"
 
@@ -510,7 +517,7 @@ class Podcast(models.Model):
             response.raise_for_status()
 
             genre, created = Genre.objects.get_or_create(
-                name=genre
+                name=genre,
             )
             language, created = Language.objects.get_or_create(
                 name=language,
