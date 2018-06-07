@@ -94,9 +94,6 @@ a:hover {
   box-shadow: none;
   color: unset;
 }
-.expanded {
-  background: rgba(0, 191, 165, .2);
-}
 .exp-icon::after {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
@@ -712,18 +709,17 @@ input[type=checkbox] {
 .last-played-result {
   overflow: hidden;
   padding: 10px;
-  transition: all .15s ease-in-out;
 }
 .charts-result:hover,
 .last-played-result:hover,
-.last-played-result[aria-expanded="true"] {
+.last-played-result.expanded {
   background: rgba(0, 191, 165, .2);
 }
 .charts-result img {
   margin-left: 5px;
   float: right;
   border-radius: .25rem;
-  box-shadow: #00000080 0 0 5px;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 .dope-list {
   margin-bottom: 0;
@@ -731,12 +727,15 @@ input[type=checkbox] {
   list-style: none;
   font-size: .80em;
 }
-.last-played-collapse .dope-list {
-  width: 100%;
-}
 .dope-list li {
   height: 20px;
   padding-top: 4px;
+  border-bottom: 2px solid rgba(0, 191, 165, 0);
+}
+.expanded .dope-list li,
+.charts-result:hover .dope-list li,
+.last-played-result:hover .dope-list li {
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 .dope-list li span:last-child {
   float: right;
