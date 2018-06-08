@@ -91,8 +91,9 @@ a:hover {
 }
 #player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
 .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
-  box-shadow: none;
+  box-shadow: unset;
   color: unset;
+  background: unset;
 }
 .exp-icon::after {
   font-family: "Font Awesome 5 Free";
