@@ -5,7 +5,8 @@ from .models import Podcast
 class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)
     title = indexes.CharField(model_attr='title')
-    title_rank = indexes.CharField(model_attr='title', indexed=False)
+    # for ordering by name
+    name = indexes.CharField(model_attr='title', indexed=False)
     artist = indexes.CharField(model_attr='artist')
     initial = indexes.CharField()
     genre = indexes.CharField(model_attr='get_primary_genre')
@@ -25,7 +26,7 @@ class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
                 pass
         return obj.title[0].lower() * 2
 
-    def prepare_title_rank(self, obj):
+    def prepare_name(self, obj):
         words = obj.title.split(" ")
         if words[0].lower() == "the" or words[0].lower() == "a" or words[0].lower() == "an":
             try:

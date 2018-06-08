@@ -146,10 +146,17 @@ class Podcast(models.Model):
         returns podcasts matching search terms
         """
         
+        providers = ["dopepod", "itunes"]
+        if provider and not provider in providers:
+            provider = None
+
+        orders = ["rank", "name"]
+        if not order in orders:
+            order = "rank"
+
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                       show=show, page=page)
-
+                       show=show, order=order, page=page)
         # if cached, return results
         results = cache.get(url)
 
@@ -170,8 +177,10 @@ class Podcast(models.Model):
             # filter by title
             if q:
                 if len(q) > 1:
-                    podcasts = podcasts.filter(content__contains=q).order_by("rank")
+                    podcasts = podcasts.filter(content__contains=q).order_by(order)
                 else:
+                    if not order:
+                        order = "name"
                     # exclude pods not starting w/ an alphabet
                     if q == "#":
                         query = Q()
@@ -181,7 +190,7 @@ class Podcast(models.Model):
                     # filter pods starting w/ an alphabet
                     else:
                         podcasts = podcasts.filter(initial__exact=q * 2)
-                    podcasts = podcasts.order_by("title_rank")
+                    podcasts = podcasts.order_by(order)
 
             # CHARTS
             elif provider == "dopepod":
@@ -195,10 +204,9 @@ class Podcast(models.Model):
                 if genre:
                     podcasts = podcasts.exclude(_missing_="itunes_genre_rank").order_by("itunes_genre_rank")
                 else:
-
                     podcasts = podcasts.exclude(_missing_="itunes_rank").order_by("itunes_rank")
             else:
-                podcasts = podcasts.order_by("rank")
+                podcasts = podcasts.order_by(order)
 
             results = {}
 
@@ -222,7 +230,7 @@ class Podcast(models.Model):
                 # create urls for buttons
                 # starting with alphabet
                 url = make_url(url=url, q="x", genre=genre, language=language,
-                            show=show, view=view)
+                               show=show, order=order, view=view)
                 for alpha in alphabet:
                     if alpha.lower() == q:
                         alphabet_urls.append(None)
@@ -237,9 +245,20 @@ class Podcast(models.Model):
                         del f.args["q"]
                         results["alphabet_nix_url"] = f.url
 
+                url = make_url(url=url, q=q, genre=genre, language=language,
+                               show=show, order="x", view=view)
+                if order:
+                    f = furl(url)
+                    if order == "rank":
+                        f.args["order"] = "name"
+                    else:
+                        f.args["order"] = "rank"
+                    results["order_url"] = f.url
+                    results["order"] = order
+
             # genre buttons
             url = make_url(url=url, provider=provider, q=q, genre="x", language=language,
-                        show=show, view=view)
+                        show=show, order=order, view=view)
             for gen in genres:
                 if gen == genre:
                     genres_urls.append(None)
@@ -255,7 +274,7 @@ class Podcast(models.Model):
 
             # language buttons
             url = make_url(url=url, provider=provider, q=q, genre=genre, language="x",
-                        show=show, view=view)
+                        show=show, order=order, view=view)
             for lang in languages:
                 if lang == language:
                     languages_urls.append(None)
@@ -271,7 +290,7 @@ class Podcast(models.Model):
 
             # provider button
             url = make_url(url=url, provider=provider, q=q, genre=genre, 
-                        show=show, page=page, view=view)
+                           show=show, page=page, order=order, view=view)
             if provider:
                 view = "charts"
                 f = furl(url)
@@ -280,11 +299,11 @@ class Podcast(models.Model):
                 else:
                     f.args["provider"] = "dopepod"
                 results["provider_url"] = f.url
+                results["provider"] = provider
 
-            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                show=show, page=page, view=view)
-            
             # view button
+            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
+                           show=show, page=page, order=order, view=view)
             if not view:
                 if q and len(q) > 1:
                     view = "grid"
@@ -308,7 +327,7 @@ class Podcast(models.Model):
                 results["languages"] = zip(languages, languages_urls)
 
             url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                            show=show, page=page, view=view)
+                           show=show, page=page, order=order, view=view)
 
             # finally, the real url
             results["full_url"] = url
@@ -347,8 +366,6 @@ class Podcast(models.Model):
                 if genre:
                     results_header += " on " + str(genre)
                 results["header"] = results_header
-                results["providers"] = ["dopepod", "itunes"]
-                results["selected_provider"] = provider
             # search header & pages
             else:
                 num_pages = int(count / show) + (count % show > 0)
