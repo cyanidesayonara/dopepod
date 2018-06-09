@@ -19,16 +19,15 @@ class WillyTheSpider(scrapy.Spider):
         for genre in response.xpath('//div[@id="genre-nav"]/div[@class="grid3-column"]/ul/li'):
             supergenre = genre.xpath('a/text()').extract_first()
             genreid = genre.xpath('a/@href').re_first(r'/id(\d+)')
-            supergenre = Genre.objects.update_or_create(
+            supergenre, created = Genre.objects.select_related(None).select_for_update().update_or_create(
                 name=supergenre,
                 genreid=genreid,
                 supergenre=None,
             )
-
             for subgenre in genre.xpath('ul/li'):
                 name = subgenre.xpath('a/text()').extract_first()
                 genreid = subgenre.xpath('a/@href').re_first(r'/id(\d+)')
-                Genre.objects.update_or_create(
+                Genre.objects.select_related(None).select_for_update().update_or_create(
                     name=name,
                     genreid=genreid,
                     supergenre=supergenre,
