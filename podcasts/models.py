@@ -149,9 +149,8 @@ class Podcast(models.Model):
         providers = ["dopepod", "itunes"]
         if provider and not provider in providers:
             provider = None
-
         orders = ["rank", "name"]
-        if not order in orders:
+        if not provider and not order in orders:
             order = "rank"
 
         # make url for cache string
@@ -177,7 +176,7 @@ class Podcast(models.Model):
             # filter by title
             if q:
                 if len(q) > 1:
-                    podcasts = podcasts.filter(content__contains=q).order_by(order)
+                    podcasts = podcasts.filter(content__contains=q)
                 else:
                     # exclude pods not starting w/ an alphabet
                     if q == "#":
@@ -188,7 +187,7 @@ class Podcast(models.Model):
                     # filter pods starting w/ an alphabet
                     else:
                         podcasts = podcasts.filter(initial__exact=q * 2)
-                    podcasts = podcasts.order_by(order)
+                podcasts = podcasts.order_by(order)
 
             # CHARTS
             elif provider == "dopepod":
@@ -243,17 +242,6 @@ class Podcast(models.Model):
                         del f.args["q"]
                         results["alphabet_nix_url"] = f.url
 
-                url = make_url(url=url, q=q, genre=genre, language=language,
-                               show=show, order="x", view=view)
-                if order:
-                    f = furl(url)
-                    if order == "rank":
-                        f.args["order"] = "name"
-                    else:
-                        f.args["order"] = "rank"
-                    results["order_url"] = f.url
-                    results["order"] = order
-
             # genre buttons
             url = make_url(url=url, provider=provider, q=q, genre="x", language=language,
                         show=show, order=order, view=view)
@@ -286,10 +274,10 @@ class Podcast(models.Model):
                 del f.args["language"]
                 results["language_nix_url"] = f.url
 
-            # provider button
-            url = make_url(url=url, provider=provider, q=q, genre=genre, 
-                           show=show, page=page, order=order, view=view)
             if provider:
+                # provider button
+                url = make_url(url=url, provider=provider, q=q, genre=genre, 
+                            show=show, page=page, order=order, view=view)
                 view = "charts"
                 f = furl(url)
                 if provider == "dopepod":
@@ -299,22 +287,33 @@ class Podcast(models.Model):
                 results["provider_url"] = f.url
                 results["provider"] = provider
 
-            # view button
-            url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                           show=show, page=page, order=order, view=view)
-            if not view:
-                if q and len(q) > 1:
-                    view = "grid"
-                else:
-                    view = "list" 
-
+            else:
+                url = make_url(url=url, q=q, genre=genre, language=language,
+                                show=show, order=order, view=view)
                 f = furl(url)
-                if view == "grid":
-                    f.args["view"] = "list"
+                if order == "rank":
+                    f.args["order"] = "name"
                 else:
-                    f.args["view"] = "grid"
-                results["view_url"] = f.url
-            
+                    f.args["order"] = "rank"
+                results["order_url"] = f.url
+                results["order"] = order
+
+                # view button
+                url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
+                            show=show, page=page, order=order, view=view)
+                if not view:
+                    if q and len(q) > 1:
+                        view = "grid"
+                    else:
+                        view = "list" 
+
+                    f = furl(url)
+                    if view == "grid":
+                        f.args["view"] = "list"
+                    else:
+                        f.args["view"] = "grid"
+                    results["view_url"] = f.url
+                
             results["view"] = view
 
             # zip button text w/ url
