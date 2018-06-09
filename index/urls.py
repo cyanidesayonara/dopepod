@@ -3,6 +3,7 @@ from index import views as index
 
 urlpatterns = [
     url(r"^$", index.index, name="index"),
+    url(r"^api/$", index.api, name="api"),
     url(r"^dopebar/$", index.dopebar, name="dopebar"),
     url(r"^charts/$", index.charts, name="charts"),
     url(r"^last-played/$", index.last_played, name="last_played"),

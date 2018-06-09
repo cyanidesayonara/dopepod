@@ -18,6 +18,8 @@ from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from haystack.query import SearchQuerySet
+from django.core import serializers
+import json
 import logging
 import string
 import requests
@@ -61,7 +63,7 @@ def format_bytes(bytes):
             bytes /=  power**n
         return "{0:4.1f}{1}".format(bytes, suffixes[n])
 
-def make_url(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None):
+def make_url(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, api=None):
     f = furl(url)
     f.args.clear()
 
@@ -82,6 +84,8 @@ def make_url(url, provider=None, q=None, genre=None, language=None, show=None, o
         f.args["page"] = page
     if view:
         f.args["view"] = view
+    if api:
+        f.args["api"] = api
     return f.url
 
 class PodcastManager(models.Manager):
@@ -141,7 +145,7 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return "//dopepod.me" + reverse("showpod", args=[self.podid])
 
-    def search(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, force_cache=False):
+    def search(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, api=None, force_cache=False):
         """
         returns podcasts matching search terms
         """
@@ -155,7 +159,7 @@ class Podcast(models.Model):
 
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                       show=show, order=order, page=page)
+                       show=show, order=order, page=page, api=api)
         # if cached, return results
         results = cache.get(url)
 
@@ -204,6 +208,30 @@ class Podcast(models.Model):
                     podcasts = podcasts.exclude(_missing_="itunes_rank").order_by("itunes_rank")
             else:
                 podcasts = podcasts.order_by(order)
+
+            # cache and return api results at this point
+            if api:
+                podcasts = podcasts[:show]
+
+                podcasts = list([podcast.object for podcast in podcasts])
+                podcasts = serializers.serialize("json", podcasts, fields=(
+                    "podid", "feedUrl", "title", "artist", "genre", "explicit", "language", "ccopyrighttext", "description", "reviewsUrl", "podcastUrl", "artworkUrl"
+                    )
+                )
+
+                podcasts = json.loads(podcasts)
+                count = len(podcasts)
+
+                results = {
+                    "count": count,
+                    "results": [],
+                }
+
+                for podcast in podcasts:
+                    results["results"].append(podcast['fields'])
+
+                cache.set(url, results, 60 * 60 * 24)
+                return results
 
             results = {}
 
@@ -426,7 +454,6 @@ class Podcast(models.Model):
                 results["podcasts2"] = podcasts[one:two]
                 results["podcasts3"] = podcasts[two:three]
                 results["podcasts4"] = podcasts[three:]
-
                 results["extra_options"] = True
 
             # finally (finally!) cache results so we don"t have to go thru this every time

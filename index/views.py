@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from .forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast, Episode
@@ -181,6 +182,69 @@ def post_contact_form(context, request):
         })
         return context, False
 
+def get_search_results(request, api=False):
+    # get q
+    q = request.GET.get("q", None)
+    if q:
+        q = q.strip().lower()
+        if len(q) > 30:
+            q = q[:30]
+
+    # get genre
+    genre = request.GET.get("genre", None)
+    if genre:
+        try:
+            genre = Genre.objects.get(name=genre)
+        except Genre.DoesNotExist:
+            genre = None
+
+    # get lang
+    language = request.GET.get("language", None)
+    if language:
+        try:
+            language = Language.objects.get(name=language)
+        except Language.DoesNotExist:
+            language = None
+
+    # get order
+    order = request.GET.get("order", None)
+
+    if api:
+        view = None
+        page = None
+        show = request.GET.get("show", None)
+        try:
+            show = int(show)
+            if show > 200:
+                show = 200
+            elif show < 1:
+                raise ValueError()
+        except (TypeError, ValueError):
+            show = 50
+    else:
+        # get view
+        view = request.GET.get("view", None)
+
+        # page
+        page = request.GET.get("page", None)
+        try:
+            page = int(page)
+            if page < 1:
+                raise ValueError()
+        except (TypeError, ValueError):
+            page = 1
+
+        # get show
+        show = None
+
+    # get url
+    url = request.get_full_path()
+
+    results = Podcast.search(
+        url=url, q=q, genre=genre, language=language, show=show, page=page, order=order, view=view, api=api,
+    )
+    return results
+
 def get_showpod_results(podid, user, count=False):
     try:
         podcast = Podcast.objects.get(podid=podid)
@@ -271,6 +335,16 @@ def dopebar(request):
     if request.method == "GET" and request.is_ajax():
         return render(request, "dopebar.min.html", {})
 
+def api(request):
+    if request.method == "GET":
+        #podid = request.GET.get("podid", None)
+        #if podid:
+        #    user = request.user
+        #    results = get_showpod_results(podid, user, count=False, api=True)
+        #else:
+        results = get_search_results(request, api=True)
+        return JsonResponse(results)
+
 @vary_on_headers("Accept")
 def index(request):
     """
@@ -357,51 +431,8 @@ def search(request):
 
     if request.method == "GET":
         template = "results_base.min.html"
-        # get q
-        q = request.GET.get("q", None)
-        if q:
-            q = q.strip().lower()
-            if len(q) > 30:
-                q = q[:30]
 
-        # get genre
-        genre = request.GET.get("genre", None)
-        if genre:
-            try:
-                genre = Genre.objects.get(name=genre)
-            except Genre.DoesNotExist:
-                genre = None
-
-        # get lang
-        language = request.GET.get("language", None)
-        if language:
-            try:
-                language = Language.objects.get(name=language)
-            except Language.DoesNotExist:
-                language = None
-
-        # get view
-        view = request.GET.get("view", None)
-     
-        # page
-        page = request.GET.get("page", None)
-        try:
-            page = int(page)
-        except (TypeError, ValueError):
-            page = 1
-
-        # get show
-        show = None
-
-        # get order
-        order = request.GET.get("order", None)
-
-        # get url
-        url = request.get_full_path()
-
-        results = Podcast.search(
-            url=url, q=q, genre=genre, language=language, show=show, page=page, order=order, view=view
-        )
+        results = get_search_results(request)
 
         context = {
             "results": results,
