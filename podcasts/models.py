@@ -179,8 +179,6 @@ class Podcast(models.Model):
                 if len(q) > 1:
                     podcasts = podcasts.filter(content__contains=q).order_by(order)
                 else:
-                    if not order:
-                        order = "name"
                     # exclude pods not starting w/ an alphabet
                     if q == "#":
                         query = Q()
