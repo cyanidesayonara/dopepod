@@ -373,12 +373,12 @@ a.donut-wrapper {
   transition: all .25s ease-in-out;
 }
 .donut-wrapper h1 {
-  font-size: 14px;
+  font-size: 1em;
   margin: 10px 0;
   font-weight: 600;
 }
 .donut-wrapper p {
-  font-size: 28px;
+  font-size: 1.6em;
   font-weight: 600;
 }
 
