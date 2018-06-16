@@ -63,7 +63,7 @@ a:hover {
   padding: 3px 6px;
   cursor: pointer;
   font-weight: 600;
-  background: inherit;
+  background: rgba(0, 0, 0, 0);
   border-radius: .25rem;
   text-align: center;
   white-space: nowrap;
@@ -253,8 +253,8 @@ a:hover {
 #dopebar-collapse ul {
   margin-top: 10px;
 }
-.dopebar-link  {
-  padding: 5px 6px;
+.dope-link  {
+  padding: 5px;
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
@@ -264,9 +264,9 @@ a:hover {
   font-size: 16px;
   transition: all .25s ease-in-out;
 }
-.dopebar-link:hover,
-.dopebar-link:focus,
-.dopebar-link[aria-expanded="true"] {
+.dope-link:hover,
+.dope-link:focus,
+.dope-link[aria-expanded="true"] {
   color: #fff;
   outline: none;
 }
@@ -968,6 +968,7 @@ input[type=checkbox] {
 #player-wrapper audio {
   display: block;
   margin-top: 10px;
+  width: calc(100% - 40px);
 }
 .player-collapse-toggle {
   float: right;

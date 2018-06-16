@@ -827,7 +827,7 @@ $(document)
     }
   })  
   // removes focus from buttons when clicked
-  .on("click", ".btn-dope, .dopebar-link, .dope-toggle, .episode-header, .search-button", function() {
+  .on("click", ".btn-dope, .dope-link, .dope-toggle, .episode-header, .search-button", function() {
     $(this).blur();
   })
   // empties search field when link or button is clicked
@@ -841,7 +841,7 @@ $(document)
     });
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dopebar-link, .search-button", function() {
+  .on("click", "body, .dope-link, .search-button", function() {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
