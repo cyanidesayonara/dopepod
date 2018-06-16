@@ -143,7 +143,7 @@ class Podcast(models.Model):
             self.save()
 
     def get_absolute_url(self):
-        return "//dopepod.me" + reverse("showpod", args=[self.podid])
+        return "https://dopepod.me" + reverse("showpod", args=[self.podid])
 
     def search(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, api=None, force_cache=False):
         """

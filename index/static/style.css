@@ -493,13 +493,14 @@ input[type=checkbox] {
   padding: 20px 0;
 }
 
-/* SHOWPOD */
 #dopebar-l,
-#dopebar-c,
 #dopebar-r,
 .list-result,
 .results-header {
   padding: 0 10px;
+}
+#dopebar-c {
+  padding: 0;
 }
 #showpod-l,
 #showpod-c,

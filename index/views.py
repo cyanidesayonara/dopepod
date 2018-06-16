@@ -295,14 +295,6 @@ def get_confirm_email_results():
     }
     return results
 
-def get_about_results():
-    results = {
-        "view": "about",
-        "extra_options": True,
-        "header": "About",
-    }
-    return results
-
 def get_privacy_results():
     results = {
         "view": "privacy",
@@ -327,6 +319,14 @@ def get_contact_results():
     }
     return results
 
+def get_api_results():
+    results = {
+        "view": "api",
+        "extra_options": True,
+        "header": "API",
+    }
+    return results
+
 def dopebar(request):
     """
     returns navbar (for refreshing)
@@ -337,13 +337,24 @@ def dopebar(request):
 
 def api(request):
     if request.method == "GET":
-        #podid = request.GET.get("podid", None)
-        #if podid:
-        #    user = request.user
-        #    results = get_showpod_results(podid, user, count=False, api=True)
-        #else:
-        results = get_search_results(request, api=True)
-        return JsonResponse(results)
+        if "json" in request.path:
+            #podid = request.GET.get("podid", None)
+            #if podid:
+            #    user = request.user
+            #    results = get_showpod_results(podid, user, count=False, api=True)
+            #else:
+            results = get_search_results(request, api=True)
+            return JsonResponse(results)
+        else:
+            template = "results_base.min.html"
+            results = get_api_results()
+            context = {
+                "results": results,
+            }
+            if request.is_ajax():
+                return render(request, template, context)
+            return render_non_ajax(request, template, context)
+    return redirect("/api/")
 
 @vary_on_headers("Accept")
 def index(request):

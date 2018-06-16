@@ -652,6 +652,17 @@ $(document)
       scrollTo(drop);
     }
   })
+  .on("click", ".api-link", function (e) {
+    e.preventDefault();
+    var url = this.href;
+    var drop = $("#center-stage");
+    drop.find(".results-collapse").collapse("show");
+    if (!drop.children(".api").length) {
+      getResults([url, drop, true]);
+    } else {
+      scrollTo(drop);
+    }
+  })
   .on("click", ".contact-link", function (e) {
     e.preventDefault();
     var url = this.href;
