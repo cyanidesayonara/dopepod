@@ -24,7 +24,11 @@
         </a>
         <p>
           Last updated:
-          {% if subscription.last_updated %} {{ subscription.last_updated|date:"d-m-Y H:i" }} {% else %} Never {% endif %}
+          {% if subscription.last_updated %}
+            <span>{{ subscription.last_updated|date:"d-m-Y H:i" }}</span>
+          {% else %}
+            <span>Never</span>
+          {% endif %}
         </p>
         <div class="dope-buttons">
           <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">

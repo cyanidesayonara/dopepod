@@ -585,13 +585,13 @@ input[type=checkbox] {
 .noborder {
   border-bottom: none;
 }
-.episodes-table .number {
+.episodes-table .order {
   width: 45px;
 }
 .episodes-table .title {
   word-wrap: break-word;
 }
-.episodes-table .date {
+.episodes-table .released {
   width: 145px;
 }
 .episodes-table .size {
@@ -1159,10 +1159,10 @@ input[type=checkbox] {
   .slick h1 {
     font-size: 16px;
   }
-  .episodes-table .number {
+  .episodes-table .order {
     width: 40px;
   }
-  .episodes-table .date {
+  .episodes-table .released {
     width: 60px;
   }
   .episodes-table .size,
@@ -1178,10 +1178,10 @@ input[type=checkbox] {
   body {
     font-size: 13px;
   }
-  .episodes-table .number {
+  .episodes-table .order {
     width: 45px;
   }
-  .episodes-table .date {
+  .episodes-table .released {
     width: 70px;
   }
   .episodes-table .size,

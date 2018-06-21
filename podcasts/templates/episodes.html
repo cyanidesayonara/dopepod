@@ -34,20 +34,20 @@
         <table class="table episodes-table">
           <thead>
             <tr>
-              <th class="number">
-                #
+              <th class="order">
+                <span>#</span>
               </th>
               <th>
-                Title
+                <span>Title</span>
               </th>
-              <th class="date">
-                Released
+              <th class="released">
+                <span>Released</span>
               </th>
               <th class="size">
-                Size
+                <span>Size</span>
               </th>
               <th class="length">
-                Length
+                <span>Length</span>
               </th>
             </tr>
           </thead>
@@ -55,41 +55,29 @@
             {% for episode in results.episodes %}
               <tr class="episode-header exp{% if not results.pages and forloop.last %} noborder{% endif %}" tabindex="0" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
                 <th scope="row">
-                  {{ episode.position }}
+                  <span>{{ episode.position }}</span>
                 </th>
                 <td class="title">
                   {% if results.view == "playlist" %}
-                    <strong>
-                      {{ episode.podcast.title }} -
-                    </strong>
+                    <strong>{{ episode.podcast.title }} - </strong>
                   {% endif %}
-                  {{ episode.title }}
+                    <span>{{ episode.title }}</span>
                   {% if episode.is_new %}
-                    <span class="new">
-                      NEW
-                    </span>
+                    <span class="new">NEW</span>
                   {% endif %}
                 </td>
                 <td>
                   {% if episode.pubDate %}
-                    {{ episode.pubDate|date:"d-m-Y H:i" }}
+                    <span>{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
                   {% else %}
-                    N/A
+                    <span>N/A</span>
                   {% endif %}
                 </td>
                 <td>
-                  {% if episode.size %}
-                    {{ episode.size }}
-                  {% else %}
-                    N/A
-                  {% endif %}
+                  <span>{% if episode.size %}{{ episode.size }}{% else %}N/A{% endif %}</span>
                 </td>
                 <td>
-                  {% if episode.length %}
-                    {{ episode.length }}
-                  {% else %}
-                    N/A
-                    {% endif %}
+                  <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
                 </td>
               </tr>
               <tr>
