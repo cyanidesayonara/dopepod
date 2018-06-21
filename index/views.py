@@ -916,6 +916,12 @@ def noshow(request):
             pass
     return HttpResponse("")
 
+def tz(request):
+    tz = request.POST.get('tz', None)
+    if tz:
+        request.session['django_timezone'] = tz
+    return HttpResponse("")
+
 def solong(request):
     if request.method == "POST":
         user = request.user

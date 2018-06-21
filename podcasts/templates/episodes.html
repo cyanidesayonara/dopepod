@@ -68,7 +68,7 @@
                 </td>
                 <td>
                   {% if episode.pubDate %}
-                    <span>{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+                    <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
                   {% else %}
                     <span>N/A</span>
                   {% endif %}

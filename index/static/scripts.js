@@ -5,6 +5,32 @@ var timeout = 0;
 var last_played = 0;
 var charts = 0;
 
+function localizeDate() {
+  var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  $.ajax({
+    data: {
+      "tz": tz,
+    },
+    method: "POST",
+    url: "/tz/",
+  });
+
+  // local time offset in seconds
+  var date = new Date();
+  tz = -date.getTimezoneOffset() * 60;
+
+  $(".date").each(function() {
+    var d = $(this).data("utc") + tz;
+    var d = new Date(d * 1000)
+    var dateString =
+      ("0" + d.getUTCDate()).slice(-2) + "-" +
+      ("0" + (d.getUTCMonth() + 1)).slice(-2) + "-" +
+      d.getUTCFullYear() + " " +
+      ("0" + d.getUTCHours()).slice(-2) + ":" +
+      ("0" + d.getUTCMinutes()).slice(-2);
+    $(this).text(dateString);
+  });
+};
 function trackMe(url) {
   _paq.push(['trackPageView', url]);
 };
@@ -467,6 +493,7 @@ $(document)
     scrollSpy();
     updateLastPlayed();
     updateCharts();
+    localizeDate();
     replaceState(window.location.href);
   })
   // SEARCH

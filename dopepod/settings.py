@@ -79,6 +79,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "dopepod.middleware.local_date_middleware.LocalDateMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -242,7 +244,6 @@ USE_I18N = False
 USE_L10N = False
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
