@@ -93,6 +93,18 @@
                   <button type="submit" class="btn-dope active">Signup</button>
                 </div>
               </div>
+              <div class="form-row">
+                <div class="col-6 px-0">
+                  <a class="privacy-link" href="{% url 'privacy' %}">
+                    Privacy
+                  </a>
+                </div>
+                <div class="col-6 px-0">
+                  <a class="terms-link" href="{% url 'terms' %}">
+                    Terms
+                  </a>
+                </div>
+              </div>
             </form>
           </div>
           <div class="collapse fade login-collapse" id="password-collapse">
@@ -193,6 +205,18 @@
                   <button type="submit" class="btn-dope active">Signup</button>
                 </div>
               </div>
+              <div class="form-row">
+                <div class="col-6 px-0">
+                  <a class="privacy-link" href="{% url 'privacy' %}">
+                    Privacy
+                  </a>
+                </div>
+                <div class="col-6 px-0">
+                  <a class="terms-link" href="{% url 'terms' %}">
+                    Terms
+                  </a>
+                </div>
+              </div>
             </form>
           </div>
           <div class="collapse fade login-collapse" id="password-collapse">
@@ -285,6 +309,18 @@
                 <div class="col-auto">
                   <button type="submit" class="btn-dope active">Signup</button>
                 </div>
+              </div>
+              <div class="form-row">
+                <div class="col-6 px-0">
+                  <a class="privacy-link" href="{% url 'privacy' %}">
+                    Privacy
+                  </a>
+                </div>
+                <div class="col-6 px-0">
+                  <a class="terms-link" href="{% url 'terms' %}">
+                    Terms
+                  </a>
+                </div>                
               </div>
             </form>
           </div>
@@ -386,6 +422,18 @@
                   <button type="submit" class="btn-dope active">Signup</button>
                 </div>
               </div>
+              <div class="form-row">
+                <div class="col-6 px-0">
+                  <a class="privacy-link" href="{% url 'privacy' %}">
+                    Privacy
+                  </a>
+                </div>
+                <div class="col-6 px-0">
+                  <a class="terms-link" href="{% url 'terms' %}">
+                    Terms
+                  </a>
+                </div>                
+              </div>
             </form>
           </div>
           <div class="collapse fade login-collapse" id="password-collapse">
@@ -413,26 +461,32 @@
       </div>
       <div class="login-buttons">
         {% if view == "signup" %}
-          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
+            aria-controls="login-collapse">
             Login
-          </button>
-          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="signup-collapse">
+          </a>
+          <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true"
+            aria-controls="signup-collapse">
             Signup
-          </button>
+          </a>
         {% elif view == "login" %}
-          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="login-collapse">
+          <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true"
+            aria-controls="login-collapse">
             Login
-          </button>
-          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          </a>
+          <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
+            aria-controls="signup-collapse">
             Signup
-          </button>
+          </a>
         {% else %}
-          <button class="btn-dope exp login-link" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="login-collapse">
+          <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
+            aria-controls="login-collapse">
             Login
-          </button>
-          <button class="btn-dope exp signup-link" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false" aria-controls="signup-collapse">
+          </a>
+          <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
+            aria-controls="signup-collapse">
             Signup
-          </button>
+          </a>
         {% endif %}
       </div>
       <div class="login-buttons">

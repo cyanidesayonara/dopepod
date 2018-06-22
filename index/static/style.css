@@ -173,7 +173,7 @@ a:hover {
   text-align: center;
 }
 .dope-wrapper p {
-  font-size: 14px;
+  font-size: 1em;
   margin-bottom: 10px;
 }
 
@@ -411,11 +411,13 @@ input[type=checkbox] {
   margin-right: 5px;
 }
 .dope-check-label p {
+  font-size: 1em;
   line-height: 20px;
   margin: 0;
   display: inline-block;
   vertical-align: top;
 }
+[type=checkbox]+span:hover::after,
 [type=checkbox]:checked+span::after {
   content: '';
   position: absolute;
@@ -424,16 +426,22 @@ input[type=checkbox] {
   background: 0 0;
   top: 3px;
   left: 3px;
-  border: 3px solid rgb(0, 191, 165);
   border-top: none;
   border-right: none;
   -webkit-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  opacity: 0;
+}
+[type=checkbox]+span:hover::after {
+  border-left: 3px solid rgb(0, 191, 165);
+  border-bottom: 3px solid rgb(0, 191, 165);
 }
 [type=checkbox]:checked+span::after {
-  opacity: 1;
+  border-left: 3px solid rgb(255, 255, 255);
+  border-bottom: 3px solid rgb(255, 255, 255);
+}
+[type=checkbox]:checked+span {
+  background: rgb(0, 191, 165);
 }
 
 /* SLICK */
@@ -792,7 +800,7 @@ input[type=checkbox] {
 }
 .last-played-result .result-length {
   position: absolute;
-  font-size: 14px;
+  font-size: 1em;
   font-weight: 400;
   top: 15px;
   left: 15px;
