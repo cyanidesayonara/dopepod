@@ -105,7 +105,8 @@
   </a>
   {% endif %} {% if results.view == "last_played" %}
   <a class="btn-dope options-button" href="{% url 'last_played' %}">
-    Updated {% now "d-m-Y H:i" %}
+    <span>Updated </span>
+    <span class="date" data-utc="{% now 'U' %}">{% now "d-m-Y H:i" %}</span>
     <i class="fas fa-sync" title="Update"></i>
   </a>
   {% endif %}
