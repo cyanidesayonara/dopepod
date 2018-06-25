@@ -337,7 +337,8 @@ def dopebar(request):
 
 def api(request):
     if request.method == "GET":
-        if "json" in request.path:
+        if request.path == "/api/json/":
+            print(request.path)
             #podid = request.GET.get("podid", None)
             #if podid:
             #    user = request.user
