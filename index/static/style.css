@@ -12,6 +12,9 @@ a:hover {
   color: rgb(0, 105, 92);
   text-decoration: none;
 }
+h3 {
+  margin: 10px 0;
+}
 
 .fab {
   font-weight: 400;
