@@ -5,6 +5,7 @@ urlpatterns = [
     url(r"^$", index.index, name="index"),
     url(r"^api/$", index.api, name="api"),
     url(r"^api/json/$", index.api),
+    url(r"^api/xml/$", index.api),
     url(r"^dopebar/$", index.dopebar, name="dopebar"),
     url(r"^charts/$", index.charts, name="charts"),
     url(r"^last-played/$", index.last_played, name="last_played"),

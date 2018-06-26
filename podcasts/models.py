@@ -214,22 +214,24 @@ class Podcast(models.Model):
                 podcasts = podcasts[:show]
 
                 podcasts = list([podcast.object for podcast in podcasts])
-                podcasts = serializers.serialize("json", podcasts, fields=(
+                podcasts = serializers.serialize(api, podcasts, fields=(
                     "podid", "feedUrl", "title", "artist", "genre", "explicit", "language", "ccopyrighttext", "description", "reviewsUrl", "podcastUrl", "artworkUrl"
                     )
                 )
+                if api == "json":
+                    podcasts = json.loads(podcasts)
+                    count = len(podcasts)
 
-                podcasts = json.loads(podcasts)
-                count = len(podcasts)
+                    results = {
+                        "count": count,
+                        "results": [],
+                    }
 
-                results = {
-                    "count": count,
-                    "results": [],
-                }
-
-                for podcast in podcasts:
-                    results["results"].append(podcast['fields'])
-
+                    for podcast in podcasts:
+                        results["results"].append(podcast['fields'])
+                    results = json.dumps(results)
+                elif api == "xml":
+                    results = podcasts
                 cache.set(url, results, 60 * 60 * 24)
                 return results
 

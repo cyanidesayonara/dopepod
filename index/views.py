@@ -11,6 +11,7 @@ from allauth.account import views as allauth
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core import serializers
 import json
 import logging
 
@@ -245,22 +246,42 @@ def get_search_results(request, api=False):
     )
     return results
 
-def get_showpod_results(podid, user, count=False):
+def get_showpod_results(podid, user=None, count=None, api=None):
     try:
         podcast = Podcast.objects.get(podid=podid)
     except Podcast.DoesNotExist:
         raise Http404
-    results = {
-        "view": "showpod",
-        "podcast": podcast,
-        "extra_options": True,
-        "header": podcast.title,
-    }
-    # showpod
-    if count:
-        podcast.views = F("views") + 1
-        podcast.save()
-    podcast.is_subscribed(user)
+    if api:
+        podcasts = serializers.serialize(api, [podcast], fields=(
+            "podid", "feedUrl", "title", "artist", "genre", "explicit", "language", "ccopyrighttext", "description", "reviewsUrl", "podcastUrl", "artworkUrl"
+            )
+        )
+        if api == "json":
+            podcasts = json.loads(podcasts)
+            count = len(podcasts)
+
+            results = {
+                "count": count,
+                "results": [],
+            }
+
+            for podcast in podcasts:
+                results["results"].append(podcast['fields'])
+            results = json.dumps(results)
+        elif api == "xml":
+            results = podcasts
+    else:
+        results = {
+            "view": "showpod",
+            "podcast": podcast,
+            "extra_options": True,
+            "header": podcast.title,
+        }
+        podcast.is_subscribed(user)
+        # showpod
+        if count:
+            podcast.views = F("views") + 1
+            podcast.save()
     return results
 
 def get_settings_results():
@@ -338,15 +359,14 @@ def dopebar(request):
 @vary_on_headers("Accept")
 def api(request):
     if request.method == "GET":
-        if request.path == "/api/json/":
-            print(request.path)
-            #podid = request.GET.get("podid", None)
-            #if podid:
-            #    user = request.user
-            #    results = get_showpod_results(podid, user, count=False, api=True)
-            #else:
-            results = get_search_results(request, api=True)
-            return JsonResponse(results)
+        if request.path == "/api/json/" or request.path == "/api/xml/":
+            api = request.path.split("/")[2]
+            podid = request.GET.get("podid", None)
+            if podid:
+                results = get_showpod_results(podid, api=api)
+            else:
+                results = get_search_results(request, api=api)
+            return HttpResponse(results, content_type="text/" + api)
         else:
             template = "results_base.min.html"
             results = get_api_results()
