@@ -354,7 +354,7 @@ def dopebar(request):
     """
 
     if request.method == "GET" and request.is_ajax():
-        return render(request, "dopebar.min.html", {})
+        return render(request, "dopemenu.min.html", {})
 
 @vary_on_headers("Accept")
 def api(request):

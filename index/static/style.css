@@ -211,14 +211,17 @@ h3 {
 }
 
 /* DOPEBAR */
+#dopemenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4000;
+  height: 44px;
+}
 #dopebar {
   z-index: 5000;
   padding: 5px 0;
-  min-height: 44px;
-  position: fixed;
-  right: 0;
-  left: 0;
-  top: 0;
 }
 #footer {
   color: rgb(46, 46, 46);
@@ -231,6 +234,7 @@ h3 {
   text-align: center;
 }
 #dopebar ul,
+#dopebar-collapse ul,
 #footer ul {
   list-style: none;
   padding: 0;
@@ -239,7 +243,9 @@ h3 {
 #dopebar ul li,
 #footer ul li {
   display: inline-block;
-  vertical-align: middle;
+}
+#footer p {
+  font-size: 14px;
 }
 #dopebar-r > * {
   float: right;
@@ -252,10 +258,17 @@ h3 {
   text-align: center;
 }
 #dopebar-collapse {
-  padding: 10px 10px 0;
+  position: absolute;
+  z-index: -1;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  border-bottom-right-radius: .25rem;
 }
-#dopebar-collapse ul {
-  margin-top: 10px;
+#dopebar-collapse ul li {
+  margin: 5px 0;
+}
+#dopebar-collapse ul li:first-of-type {
+  margin: 10px 0;
 }
 .dope-link  {
   padding: 5px;
@@ -971,7 +984,7 @@ input[type=checkbox] {
 #player-wrapper .player-description {
   padding: 10px 0;
   max-height: 250px;
-  max-height: calc(100vh - 440px);
+  max-height: calc(100vh - 455px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
@@ -988,7 +1001,7 @@ input[type=checkbox] {
 }
 
 /* LOADERS */
-.loaders {
+#loaders {
   display: none;
 }
 .circle-loading {
