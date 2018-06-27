@@ -184,8 +184,8 @@ function getResults(args, no_loader, no_push) {
         callback(args);
       }
       // if page refresh, apply theme
-      else if (drop.is("#dopebar")) {
-        var response = drop.children();
+      else if (drop.is("#dopemenu")) {
+        var response = drop.children("#dopebar");
         var theme = response.data("theme")
         response.removeData("theme");
         response.removeAttr("data-theme");
