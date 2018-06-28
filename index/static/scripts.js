@@ -5,7 +5,7 @@ var timeout = 0;
 var last_played = 0;
 var charts = 0;
 
-function localizeDate() {
+function dateLocalizer() {
   var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   $.ajax({
     data: {
@@ -42,7 +42,7 @@ function pushState(url) {
       return;
     }
   }
-  updateTitle();
+  titleUpdater();
   var main = $("#main");
   var context = main[0].innerHTML;
   var state = {
@@ -66,7 +66,7 @@ function replaceState(url) {
   if (!url || url.includes("unsubscribe")) {
     url = main[0].baseURI;
   }
-  updateTitle();
+  titleUpdater();
   var context = main[0].innerHTML;
   var state = {
     "context": context,
@@ -75,7 +75,7 @@ function replaceState(url) {
   history.replaceState(state, "", url);
 };
 // updates page title
-function updateTitle() {
+function titleUpdater() {
   // default title
   var title = "dopepod";
   var player = $("#player-wrapper");
@@ -189,7 +189,7 @@ function getResults(args, no_loader, no_push) {
         var theme = response.data("theme")
         response.removeData("theme");
         response.removeAttr("data-theme");
-        changeTheme(theme);
+        themeChanger(theme);
       }
       if (scroll) {
         if ((url.includes("/charts/") || url.includes("/last-played/")) && $(window).width() < 992) {
@@ -229,7 +229,7 @@ function noshow(podid) {
 function scrollSpy() {
   $(window).scroll(function() {
     scrollUp();
-    footer();
+    playerUnfixer();
   });
 };
 function scrollUp() {
@@ -266,7 +266,7 @@ function scrollText(box, text) {
       })
   }
 };
-function footer() {
+function playerUnfixer() {
   var x = $("#footer").offset().top;
   var y = $(window).scrollTop() + $(window).height();
   if (x > y) {
@@ -275,7 +275,7 @@ function footer() {
     $("#player").removeClass("fixed-bottom");
   }
 };
-function changeTheme(theme) {
+function themeChanger(theme) {
   var themes = ["light", "dark", "christmas"];
   for (var i = 0; i < themes.length; i++) {
     if (theme.includes(themes[i])) {
@@ -323,7 +323,7 @@ function postSettings(form) {
     })
     .done(function(response) {
       if (theme) {
-        changeTheme(theme);
+        themeChanger(theme);
       }
       drop.html(response);
       scrollToTop();
@@ -406,7 +406,7 @@ function postPlaylist(data, mode, button) {
     .done(function (response) {
       if (mode == "play") {
         $("#player").html(response);
-        updateTitle();
+        titleUpdater();
         button.html(text);
         // gotta wait a sec here
         setTimeout(function() {
@@ -452,7 +452,7 @@ function closePlayer() {
   var player = $("#player");
   player.find("audio")[0].preload = "none";
   player.empty();
-  updateTitle();
+  titleUpdater();
 };
 // replaces spaces/&s with +, removes unwanted chars
 function cleanString(q) {
@@ -467,27 +467,26 @@ function getButtonLoading() {
 function getCircleLoading() {
   return $(".circle-loading").first().clone();
 };
-function updateLastPlayed() {
+function lastPlayedUpdater() {
   last_played = setInterval(function() {
     getResults(["/last-played/", "#last-played", false], true);
   }, 1000 * 60);
 };
-function updateCharts() {
+function chartsUpdater() {
   charts = setInterval(function() {
     getResults(["/charts/", "#charts", false], true);
   }, 1000 * 60 * 60 * 24);
 };
+function hasTouch() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
+};
 function hoverDisabler() {
-  console.log("sdfsdf")
   if (hasTouch()) {
     $("html").removeClass("no-touch");
   } else {
     $("html").addClass("no-touch");
   }
 }
-function hasTouch() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
-};
 
 $(document)
   .ready(function() {
@@ -500,11 +499,11 @@ $(document)
     scrollToTop();
     refreshCookie();
     scrollUp();
-    footer();
+    playerUnfixer();
     scrollSpy();
-    updateLastPlayed();
-    updateCharts();
-    localizeDate();
+    lastPlayedUpdater();
+    chartsUpdater();
+    dateLocalizer();
     hoverDisabler();
     replaceState(window.location.href);
   })
@@ -853,7 +852,7 @@ $(document)
     } else if (theme == "christmas") {
       theme = "light";
     }
-    changeTheme(theme);
+    themeChanger(theme);
   })
   .on("click", ".dope-toggle", function () {
     $(".last-played-result.expanded").removeClass("expanded");
@@ -928,7 +927,7 @@ $(window)
         }
       }
       $("#main").html(state.context);
-      updateTitle();
+      titleUpdater();
     }
   })
   .on("blur", function() {
@@ -936,8 +935,8 @@ $(window)
     window.clearInterval(last_played);
   })
   .on("focus", function() {
-    updateLastPlayed();
-    updateCharts();
+    lastPlayedUpdater();
+    chartsUpdater();
   })
   .on('resize', function () {
     hoverDisabler();
