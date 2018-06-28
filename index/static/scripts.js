@@ -478,7 +478,7 @@ function chartsUpdater() {
   }, 1000 * 60 * 60 * 24);
 };
 function hasTouch() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
+  return navigator.maxTouchPoints || navigator.msMaxTouchPoints;
 };
 function hoverDisabler() {
   if (hasTouch()) {
