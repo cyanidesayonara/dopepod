@@ -90,69 +90,69 @@
           </li>
         </ul>
       </div>
+      <div class="collapse d-xl-none color-1-trans" id="dopebar-collapse">
+        <ul>
+          <li>
+            {% include "search-form.min.html" %}
+          </li>
+          <li>
+            <a class="dope-link select-theme" href="#">
+              <i class="fas fa-sun fa-lg" title="Select Theme"></i>
+            </a>
+          </li>
+          <li>
+            <a class="dope-link browse-link" href="{% url 'search' %}">
+              Browse
+            </a>
+          </li>
+          <li>
+            <a class="dope-link charts-link" href="#">
+              Charts
+            </a>
+          </li>
+          <li>
+            <a class="dope-link last-played-link" href="#">
+              Last played
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+          <li>
+            <a class="dope-link subscriptions-link" href="{% url 'subscriptions' %}">
+              Subscriptions
+            </a>
+          </li>
+          <li>
+            <a class="dope-link playlist-link" href="{% url 'playlist' %}">
+              Playlist
+            </a>
+          </li>
+          <li>
+            <a class="dope-link settings-link" href="{% url 'settings' %}">
+              Settings
+            </a>
+          </li>
+          <li>
+            <form class="logout-form" method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button class="dope-link logout-link" type="submit">
+                Logout
+              </button>
+            </form>
+          </li>
+          {% else %}
+          <li>
+            <a class="dope-link login-link" href="/?view=login">
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="dope-link signup-link" href="/?view=signup">
+              Signup
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-<div class="collapse d-xl-none color-1-trans" id="dopebar-collapse">
-  <ul>
-    <li>
-      {% include "search-form.min.html" %}
-    </li>
-    <li>
-      <a class="dope-link select-theme" href="#">
-        <i class="fas fa-sun fa-lg" title="Select Theme"></i>
-      </a>
-    </li>
-    <li>
-      <a class="dope-link browse-link" href="{% url 'search' %}">
-        Browse
-      </a>
-    </li>
-    <li>
-      <a class="dope-link charts-link" href="#">
-        Charts
-      </a>
-    </li>
-    <li>
-      <a class="dope-link last-played-link" href="#">
-        Last played
-      </a>
-    </li>
-    {% if user.is_authenticated %}
-    <li>
-      <a class="dope-link subscriptions-link" href="{% url 'subscriptions' %}">
-        Subscriptions
-      </a>
-    </li>
-    <li>
-      <a class="dope-link playlist-link" href="{% url 'playlist' %}">
-        Playlist
-      </a>
-    </li>
-    <li>
-      <a class="dope-link settings-link" href="{% url 'settings' %}">
-        Settings
-      </a>
-    </li>
-    <li>
-      <form class="logout-form" method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button class="dope-link logout-link" type="submit">
-          Logout
-        </button>
-      </form>
-    </li>
-    {% else %}
-    <li>
-      <a class="dope-link login-link" href="/?view=login">
-        Login
-      </a>
-    </li>
-    <li>
-      <a class="dope-link signup-link" href="/?view=signup">
-        Signup
-      </a>
-    </li>
-    {% endif %}
-  </ul>
 </div>

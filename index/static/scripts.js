@@ -477,6 +477,17 @@ function updateCharts() {
     getResults(["/charts/", "#charts", false], true);
   }, 1000 * 60 * 60 * 24);
 };
+function hoverDisabler() {
+  console.log("sdfsdf")
+  if (hasTouch()) {
+    $("html").removeClass("no-touch");
+  } else {
+    $("html").addClass("no-touch");
+  }
+}
+function hasTouch() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
+};
 
 $(document)
   .ready(function() {
@@ -494,6 +505,7 @@ $(document)
     updateLastPlayed();
     updateCharts();
     localizeDate();
+    hoverDisabler();
     replaceState(window.location.href);
   })
   // SEARCH
@@ -502,21 +514,18 @@ $(document)
     e.preventDefault();
     var url = this.action;
     var form = $(this);
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      var q = form.children(".q").val();
-      if (q) {
-        q = cleanString(q);
-        var drop = $("#center-stage");
-        if (!(drop.children(".results").data("q") == q)) {
-          url = url + "?q=" + q;
-          getResults([url, drop, true]);
-        }
-        else {
-          scrollTo(drop);
-        }
+    var q = form.children(".q").val();
+    if (q) {
+      q = cleanString(q);
+      var drop = $("#center-stage");
+      if (!(drop.children(".results").data("q") == q)) {
+        url = url + "?q=" + q;
+        getResults([url, drop, true]);
       }
-    }, 250);
+      else {
+        scrollTo(drop);
+      }
+    }
   })
   // search when user clicks buttons
   .on("click", ".options-button", function(e) {
@@ -796,7 +805,7 @@ $(document)
       });
   })
   // toggle button icon on hover
-  .on("mouseenter mouseleave", ".order-button, .view-button, .provider-button", function () {
+  .on("mouseenter mouseleave", ".no-touch .order-button, .no-touch .view-button, .no-touch .provider-button", function () {
     $(this).children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
@@ -929,4 +938,7 @@ $(window)
   .on("focus", function() {
     updateLastPlayed();
     updateCharts();
+  })
+  .on('resize', function () {
+    hoverDisabler();
   });

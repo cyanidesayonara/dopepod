@@ -9,8 +9,11 @@ a {
   color: rgb(0, 191, 165);
 }
 a:hover {
-  color: rgb(0, 105, 92);
+  color: inherit;
   text-decoration: none;
+}
+.no-touch a:hover {
+  color: rgb(0, 105, 92);
 }
 h3 {
   text-align: center;
@@ -79,22 +82,24 @@ h3 {
   background: rgb(0, 191, 165);
 }
 .btn-dope:focus,
-.btn-dope:hover,
-.episode-header:hover,
+.no-touch .btn-dope:hover,
+.no-touch .episode-header:hover,
 .episode-header:focus,
-.dope-toggle:hover,
+.no-touch .dope-toggle:hover,
 .dope-toggle:focus,
 .exp[aria-expanded="true"],
-.charts-result:hover .charts-rank,
-.donut-wrapper:hover {
+.no-touch .charts-result:hover .charts-rank,
+.no-touch .donut-wrapper:hover {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
 }
-#player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
-.results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
+.no-touch #player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
+#player-wrapper .exp[aria-expanded="true"],
+.no-touch .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus),
+.results-bar .exp[aria-expanded="true"] {
   box-shadow: unset;
   color: unset;
   background: unset;
@@ -150,7 +155,7 @@ h3 {
   border: 2px solid rgb(0, 191, 165);
   transition: all .15s ease-in-out;
 }
-.dope-field:hover,
+.no-touch .dope-field:hover,
 .dope-field:focus {
   outline: none;
   box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
@@ -173,8 +178,8 @@ h3 {
 .dope-wrapper {
   margin: auto;
   padding: 10px;
-  max-width: 375px;
   text-align: center;
+  max-width: 375px;
 }
 .dope-wrapper p {
   font-size: 1em;
@@ -260,11 +265,12 @@ h3 {
 #dopebar-collapse {
   position: absolute;
   z-index: -1;
-  padding: 10px;
+  padding: 50px 10px 10px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border-bottom-right-radius: .25rem;
 }
 #dopebar-collapse ul li {
+  display: list-item;
   margin: 5px 0;
 }
 #dopebar-collapse ul li:first-of-type {
@@ -281,7 +287,7 @@ h3 {
   font-size: 16px;
   transition: all .25s ease-in-out;
 }
-.dope-link:hover,
+.no-touch .dope-link:hover,
 .dope-link:focus,
 .dope-link[aria-expanded="true"] {
   color: #fff;
@@ -308,7 +314,7 @@ h3 {
   border: 2px solid rgba(0, 191, 165, 0);
   transition: all .1s ease-in-out;
 }
-.search-button:hover,
+.no-touch .search-button:hover,
 .search-button:focus {
   border: 2px solid rgb(0, 191, 165);
   outline: none;
@@ -434,7 +440,7 @@ input[type=checkbox] {
   display: inline-block;
   vertical-align: top;
 }
-[type=checkbox]+span:hover::after,
+.no-touch [type=checkbox]+span:hover::after,
 [type=checkbox]:checked+span::after {
   content: '';
   position: absolute;
@@ -449,7 +455,7 @@ input[type=checkbox] {
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
-[type=checkbox]+span:hover::after {
+.no-touch [type=checkbox]+span:hover::after {
   border-left: 3px solid rgb(0, 191, 165);
   border-bottom: 3px solid rgb(0, 191, 165);
 }
@@ -470,7 +476,7 @@ input[type=checkbox] {
   outline: none;
 }
 .slick h1 {
-  font-size: 18px;
+  font-size: 1.25em;
   margin: 0 0 10px;
 }
 .slick p {
@@ -490,7 +496,7 @@ input[type=checkbox] {
   border: 2px solid rgb(0, 191, 165);
   border-radius: .25rem;
 }
-.slick-item:hover {
+.no-touch .slick-item:hover {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease-in-out;
   background: rgb(0, 191, 165);
@@ -551,7 +557,7 @@ input[type=checkbox] {
 #showpod-r ul li:not(:last-child) a {
   color: rgb(0, 191, 165);
 }
-#showpod-r ul li:not(:last-child) a:hover {
+.no-touch #showpod-r ul li:not(:last-child) a:hover {
   color: rgb(0, 105, 92);
 }
 #showpod-c h1 {
@@ -736,8 +742,8 @@ input[type=checkbox] {
   overflow: hidden;
   padding: 10px;
 }
-.charts-result:hover,
-.last-played-result:hover,
+.no-touch .charts-result:hover,
+.no-touch .last-played-result:hover,
 .last-played-result.expanded {
   background: rgba(0, 191, 165, .2);
 }
@@ -759,8 +765,8 @@ input[type=checkbox] {
   border-bottom: 2px solid rgba(0, 191, 165, 0);
 }
 .expanded .dope-list li,
-.charts-result:hover .dope-list li,
-.last-played-result:hover .dope-list li {
+.no-touch .charts-result:hover .dope-list li,
+.no-touch .last-played-result:hover .dope-list li {
   border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 .dope-list li span:last-child {
@@ -857,7 +863,7 @@ input[type=checkbox] {
   margin-bottom: 10px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-.grid-result img:hover {
+.no-touch .grid-result img:hover {
   -webkit-transform: scale(1.02);
   -ms-transform: scale(1.02);
   transform: scale(1.02);
@@ -902,7 +908,7 @@ input[type=checkbox] {
   color: unset;
   border-bottom: 2px solid rgba(0, 191, 165, 0);
 }
-.list-result ul li a:hover {
+.no-touch .list-result ul li a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 
@@ -957,7 +963,7 @@ input[type=checkbox] {
 #player-wrapper h1 span {
   color: rgb(46, 46, 46);
 }
-#player-wrapper h1 span:hover {
+.no-touch #player-wrapper h1 span:hover {
   color: #fff;
 }
 #player-close-collapse {
@@ -1180,9 +1186,6 @@ input[type=checkbox] {
 @media screen and (max-width: 767px) {
   body {
     font-size: 12px;
-  }
-  .slick h1 {
-    font-size: 16px;
   }
   .episodes-table .order {
     width: 40px;
