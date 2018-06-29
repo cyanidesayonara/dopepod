@@ -566,7 +566,7 @@ input[type=checkbox] {
   border: none;
 }
 #showpod-r ul li:last-child > * {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 /* EPISODES */
