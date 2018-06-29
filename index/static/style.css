@@ -12,9 +12,6 @@ a:hover {
   color: inherit;
   text-decoration: none;
 }
-.no-touch a:hover {
-  color: rgb(0, 105, 92);
-}
 h3 {
   text-align: center;
   margin: 10px 0;
@@ -96,10 +93,10 @@ h3 {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
 }
+#player-wrapper .exp[aria-expanded="true"]:not(:focus),
+.results-bar .exp[aria-expanded="true"]:not(:focus),
 .no-touch #player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
-#player-wrapper .exp[aria-expanded="true"],
-.no-touch .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus),
-.results-bar .exp[aria-expanded="true"] {
+.no-touch .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
   box-shadow: unset;
   color: unset;
   background: unset;
@@ -216,16 +213,13 @@ h3 {
 }
 
 /* DOPEBAR */
-#dopemenu {
+#dopebar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 4000;
   height: 44px;
-}
-#dopebar {
-  z-index: 5000;
   padding: 5px 0;
 }
 #footer {
@@ -257,15 +251,18 @@ h3 {
 }
 #dopebar-c h1 {
   font-family: Orbitron;
-  line-height: 24px;
+  line-height: 20px;
   font-size: 28px!important;
   margin: 0;
   text-align: center;
 }
 #dopebar-collapse {
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: -1;
-  padding: 50px 10px 10px;
+  padding: 10px;
+  margin-top: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border-bottom-right-radius: .25rem;
 }
@@ -359,10 +356,10 @@ h3 {
   padding: 0;
 }
 .social-button {
-  padding: 3px 6px;   /* same as btn-dope */
+  padding: 3px 8px;
 }
 .social-icon {
-  padding: 3px 10px;   /* just a lil bit wider */
+  padding: 3px 10px;
   background: rgb(0, 191, 165);
   color: #fff;
 }
@@ -553,12 +550,6 @@ input[type=checkbox] {
 #showpod-r ul li {
   border-bottom: 2px solid rgb(0, 191, 165);
   margin-bottom: 10px;
-}
-#showpod-r ul li:not(:last-child) a {
-  color: rgb(0, 191, 165);
-}
-.no-touch #showpod-r ul li:not(:last-child) a:hover {
-  color: rgb(0, 105, 92);
 }
 #showpod-c h1 {
   margin: 10px 0;
@@ -988,9 +979,8 @@ input[type=checkbox] {
   font-size: 12px;
 }
 #player-wrapper .player-description {
-  padding: 10px 0;
-  max-height: 250px;
-  max-height: calc(100vh - 455px);
+  margin: 10px 0;
+  max-height: calc(100vh - 470px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {

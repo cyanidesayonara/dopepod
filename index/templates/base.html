@@ -42,15 +42,16 @@
   <link rel="stylesheet" href="{% static 'style.min.css' %}" />
 </head>
 <body class="{% if user.profile.theme %}{{ user.profile.theme }}{% else %}light{% endif %}">
+  <!-- SCROLL UP -->
+  <button class="scroll-up d-none">
+    <i class="fas fa-angle-up fa-lg" title="Up"></i>
+  </button>
   <!-- DOPEBAR -->
-  <nav id="dopemenu">
-    {% include "dopemenu.min.html" %}
+  <nav class="color-1-trans" id="dopebar">
+    {% include "dopebar.min.html" %}
   </nav>
   <!-- MAIN CONTENT -->
   <div class="container" id="main-wrapper">
-    <button class="scroll-up d-none">
-      <i class="fas fa-angle-up fa-lg" title="Up"></i>
-    </button>
     <div class="row">
       <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
         <!-- CHARTS -->
@@ -77,7 +78,7 @@
     {% include "player.min.html" %}
   </div>
   <!-- FOOTER -->
-  <footer class="footer color-1-trans" id="footer">
+  <footer class="color-1-trans" id="footer">
     {% include "footer.min.html" %}
   </footer>
   <div id="loaders">

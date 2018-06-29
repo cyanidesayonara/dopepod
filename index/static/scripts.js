@@ -184,8 +184,8 @@ function getResults(args, no_loader, no_push) {
         callback(args);
       }
       // if page refresh, apply theme
-      else if (drop.is("#dopemenu")) {
-        var response = drop.children("#dopebar");
+      else if (drop.is("#dopebar")) {
+        var response = drop.children();
         var theme = response.data("theme")
         response.removeData("theme");
         response.removeAttr("data-theme");
@@ -880,7 +880,7 @@ $(document)
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
-  .on("click", "#dopemenu", function(e) {
+  .on("click", "#dopebar", function(e) {
     e.stopPropagation();
   })
   .on("click", ".scroll-up", function() {
