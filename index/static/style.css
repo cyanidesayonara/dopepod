@@ -93,10 +93,10 @@ h3 {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
 }
-#player-wrapper .exp[aria-expanded="true"]:not(:focus),
-.results-bar .exp[aria-expanded="true"]:not(:focus),
-.no-touch #player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
-.no-touch .results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus) {
+#player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
+.results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus),
+html:not(.no-touch) #player-wrapper .exp[aria-expanded="true"]:not(:focus),
+html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   box-shadow: unset;
   color: unset;
   background: unset;
