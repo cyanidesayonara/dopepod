@@ -804,7 +804,7 @@ $(document)
       });
   })
   // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .order-button, .no-touch .view-button, .no-touch .provider-button", function () {
+  .on("mouseenter mouseleave", ".no-touch .order-button, .no-touch .view-button", function () {
     $(this).children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES

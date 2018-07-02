@@ -53,16 +53,16 @@
   <!-- MAIN CONTENT -->
   <div class="container" id="main-wrapper">
     <div class="row">
-      <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
-        <!-- CHARTS -->
-        <div class="row" id="charts">
-          {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
-        </div>
-      </div>
       <div class="col-12 order-1" id="main">
         <!-- CENTER STAGE -->
         <div class="row" id="center-stage">
           {% block center-stage %} {% endblock %}
+        </div>
+      </div>
+      <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
+        <!-- CHARTS -->
+        <div class="row" id="charts">
+          {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
       </div>
       <div class="col-12 order-2 col-lg-6 order-lg-3" id="right">

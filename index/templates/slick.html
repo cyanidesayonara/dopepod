@@ -1,0 +1,39 @@
+{% with results.genres as genres %}
+  <h1>{{ genres.count }} genres</h1>
+  <div class="slick">
+    {% for genre in genres %}
+      <div class="slick-slide">
+        <a class="slick-item browse-link" href="/search/?genre={{ genre.url_format }}&view=grid">
+          <h2>
+            <strong>
+              {{ genre }}
+            </strong>
+          </h2>
+          <p>
+            {{ genre.n_podcasts }} podcasts
+          </p>
+        </a>
+      </div>
+    {% endfor %}      
+  </div>
+{% endwith%}
+
+{% with results.languages as languages %}
+  <h1>{{ languages.count }} languages</h1>
+  <div class="slick">
+    {% for language in languages %}
+    <div class="slick-slide">
+      <a class="slick-item browse-link" href="/search/?language={{ language.url_format }}&view=grid">
+        <h2>
+          <strong>
+            {{ language }}
+          </strong>
+        </h2>
+        <p>
+          {{ language.n_podcasts }} podcasts
+        </p>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+{% endwith%}

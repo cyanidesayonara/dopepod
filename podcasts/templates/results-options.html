@@ -56,4 +56,25 @@
       </div>
     </div>
   {% endif %}
+  {% if results.provider %}
+    <div class="collapse fade options-collapse" id="provider-collapse-{{ results.view }}">
+      <div class="options-buttons">
+        {% if results.provider == "dopepod" %}
+          <button class="btn-dope active">
+            dopepod
+          </button>
+          <a class="btn-dope options-button" href="{{ results.provider_url }}">
+            itunes
+          </a>
+        {% else %}
+          <a class="btn-dope options-button" href="{{ results.provider_url }}">
+            dopepod
+          </a>
+          <button class="btn-dope active">
+            itunes
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
 </div>
