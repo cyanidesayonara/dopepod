@@ -5,14 +5,14 @@
         <a class="slick-header browse-link" href="/search/?genre={{ genre.url_format }}&view=grid">
           <h1>
             <strong>
-              {{ genre.selected_genre }}
+              {{ genre }}
             </strong>
           </h1>
           <p>
-            {{ genre.selected_genre.n_podcasts }} podcast{{ genre.selected_genre.n_podcasts|pluralize }}
+            {{ genre.n_podcasts }} podcast{{ genre.n_podcasts|pluralize }}
           </p>
         </a>
-        <ul>
+        <!--<ul>
           {% for podcast in genre.podcasts %}
             <li>
               <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
@@ -21,7 +21,7 @@
               </a>
             </li>
           {% endfor %}
-        </ul>
+        </ul>-->
       </div>
     {% endfor %}      
   </div>
@@ -34,14 +34,14 @@
         <a class="slick-header browse-link" href="/search/?language={{ language.url_format }}&view=grid">
           <h1>
             <strong>
-              {{ language.selected_language }}
+              {{ language }}
             </strong>
           </h1>
           <p>
-            {{ language.selected_language.n_podcasts }} podcast{{ language.selected_language.n_podcasts|pluralize }}
+            {{ language.n_podcasts }} podcast{{ language.n_podcasts|pluralize }}
           </p>
         </a>
-        <ul>
+        <!--<ul>
           {% for podcast in language.podcasts %}
             <li>
               <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
@@ -50,7 +50,7 @@
               </a>
             </li>
           {% endfor %}
-        </ul>
+        </ul>-->
       </div>
     {% endfor %}
   </div>
