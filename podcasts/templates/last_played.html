@@ -66,29 +66,33 @@
             No description
           {% endif %}
         </p>
-        <div class="last-played-buttons">
-          <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
-            {% csrf_token %}
-            <input type="hidden" name="mode" value="play" />
-            <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope active" type="submit">
-              <i class="fas fa-play" title="Play"></i>
-            </button>
-          </form>
-          {% if user.is_authenticated %}
-            <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
-              {% csrf_token %}
-              <input type="hidden" name="mode" value="add" />
-              <input type="hidden" name="signature" value="{{ episode.signature }}" />
-              <button class="btn-dope active" type="submit">
-                Add to Playlist
-              </button>
-            </form>
-          {% endif %}
-          <a class="btn-dope active" href="{{ episode.url }}" download>
-            <i class="fas fa-download" title="Download"></i>
-          </a>
-        </div>
+      </div>
+      <div class="last-played-buttons">
+        <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
+          {% csrf_token %}
+          <input type="hidden" name="mode" value="play" />
+          <input type="hidden" name="signature" value="{{ episode.signature }}" />
+          <button class="btn-dope active" type="submit">
+            <i class="fas fa-play" title="Play"></i>
+          </button>
+        </form>
+        {% if user.is_authenticated %}
+        <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="mode" value="add" />
+          <input type="hidden" name="signature" value="{{ episode.signature }}" />
+          <button class="btn-dope active" type="submit">
+            Add to Playlist
+          </button>
+        </form>
+        {% endif %}
+        <a class="btn-dope active" href="{{ episode.url }}" download>
+          <i class="fas fa-download" title="Download"></i>
+        </a>
+        <button class="btn-dope exp exp-icon active" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
+          aria-expanded="false">
+          <span>Show more </span>
+        </button>
       </div>
     </div>
   {% endfor %}

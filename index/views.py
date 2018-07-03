@@ -27,9 +27,13 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
-def get_carousel(results):
-    languages = Language.get_languages()
-    genres = Genre.get_primary_genres()
+def get_slick(results):
+    languages = []
+    genres = []
+    for language in Language.get_languages():
+        languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=5,))
+    for genre in Genre.get_primary_genres():
+        genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=5,))
     results.update({
         "languages": languages,
         "genres": genres,
@@ -53,7 +57,7 @@ def render_splash(request, template, context, response=False):
     results = {
         "view": "splash",
     }
-    results = get_carousel(results)
+    results = get_slick(results)
     context.update({
         "results": results,
     })
@@ -70,7 +74,7 @@ def render_dashboard(request, template, context):
     results = {
         "view": "dashboard",
     }
-    results = get_carousel(results)
+    results = get_slick(results)
     results = get_donuts(results, request.user)
     context.update({
         "results": results,
@@ -403,7 +407,7 @@ def index(request):
             results["view"] = "dashboard"
         else:
             results["view"] = "splash"
-        results = get_carousel(results)
+        results = get_slick(results)
         context.update({
             "results": results,
         })
@@ -436,6 +440,7 @@ def charts(request):
             provider = providers[0]
 
         url = request.get_full_path()
+
         results = Podcast.search(
             url=url, provider=provider, genre=genre, language=language
         )
@@ -446,7 +451,7 @@ def charts(request):
 
         if request.is_ajax():
             return render(request, template, context)
-        results = get_carousel(results)
+        results = get_slick(results)
         if user.is_authenticated:
             results["view"] = "dashboard"
         else:

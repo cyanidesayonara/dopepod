@@ -11,10 +11,11 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <h1>
               <strong>
-                Listen to thousands of free podcasts in {{ results.languages.count }} languages and {{ results.genres.count }} genres
+                Listen to thousands of free podcasts in {{ results.languages|length }} languages and {{ results.genres|length }} genres
               </strong>
             </h1>
-            {% include "logo.min.html" %} {% include "search-form.min.html" %}
+            {% include "logo.min.html" %}
+            {% include "search-form.min.html" %}
           </div>
           <div class="collapse fade login-collapse" id="login-collapse">
             <h1>
@@ -117,7 +118,7 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <h1>
               <strong>
-                Listen to thousands of free podcasts in {{ results.languages.count }} languages and {{ results.genres.count }} genres
+                Listen to thousands of free podcasts in {{ results.languages|length }} languages and {{ results.genres|length }} genres
               </strong>
             </h1>
             {% include "logo.min.html" %} {% include "search-form.min.html" %}
@@ -223,7 +224,7 @@
           <div class="collapse fade login-collapse" id="splash-collapse">
             <h1>
               <strong>
-                Listen to thousands of free podcasts in {{ results.languages.count }} languages and {{ results.genres.count }} genres
+                Listen to thousands of free podcasts in {{ results.languages|length }} languages and {{ results.genres|length }} genres
               </strong>
             </h1>
             {% include "logo.min.html" %} {% include "search-form.min.html" %}
@@ -329,7 +330,7 @@
           <div class="collapse fade login-collapse show" id="splash-collapse">
             <h1>
               <strong>
-                Listen to thousands of free podcasts in {{ results.languages.count }} languages and {{ results.genres.count }} genres
+                Listen to thousands of free podcasts in {{ results.languages|length }} languages and {{ results.genres|length }} genres
               </strong>
             </h1>
             {% include "logo.min.html" %} {% include "search-form.min.html" %}
@@ -545,13 +546,3 @@
     {% include "slick.min.html" %}
   </div>
 </div>
-{% if request.is_ajax %}
-  <script>
-    $(".slick").slick({
-      autoplay: true,
-      adaptiveHeight: true,
-      prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Previous'></i></button>",
-    });
-  </script>
-{% endif %}
