@@ -469,8 +469,12 @@ input[type=checkbox] {
   display: inline-block;
   margin: 5px;
 }
+.slick-slide {
+  outline: 0;
+  margin: 10px 0;
+}
 .slick-header {
-  margin: 5px;
+  margin: 10px;
   padding: 30px 10px;
   display: block;
   border-radius: .25rem;
@@ -486,17 +490,17 @@ input[type=checkbox] {
 .slick-prev,
 .slick-next {
   position: absolute;
-  top: 25px;
+  top: 45px;
   z-index: 2000;
   -webkit-transform: translate(0, -50%);
   -ms-transform: translate(0, -50%);
   transform: translate(0, -50%);
 }
 .slick-prev {
-  left: 10px;
+  left: 20px;
 }
 .slick-next {
-  right: 10px;
+  right: 20px;
 }
 
 /* SETTINGS */
