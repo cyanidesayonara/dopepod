@@ -1,4 +1,4 @@
-<div class="col order-1 order-lg-2 results-buttons">
+<div class="col-12 results-buttons">
   {% if results.view == "showpod" %}
     {% if user.is_authenticated %}
       <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
@@ -15,10 +15,10 @@
         {% endif %}
       </form>
     {% endif %}
-    <a class="btn-dope exp episodes-button" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+    <a class="btn-dope exp exp-icon showpod-button" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
       Episodes
     </a>
-    <a class="btn-dope exp reviews-button" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
+    <a class="btn-dope exp exp-icon showpod-button" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
       Reviews
     </a>
   {% endif %}

@@ -25,7 +25,6 @@ def get_last_seen(session):
         last_seen = timezone.now()
         cookie = True
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
-    print(session["last_seen"])
     return (last_seen, cookie) 
 
 def get_slick(results):
@@ -44,13 +43,9 @@ def get_slick(results):
 def get_donuts(results, user):
     subscriptions_count = Subscription.objects.filter(user=user).count()
     playlist_count = Episode.objects.filter(user=user).count()
-    subscriptions_share = int(440 - (subscriptions_count / 50 * 440))
-    playlist_share = int(440 - (playlist_count / 20 * 440))
     results.update({
         "subscriptions_count": subscriptions_count,
         "playlist_count": playlist_count,
-        "subscriptions_share": subscriptions_share,
-        "playlist_share": playlist_share,
     })
     return results
 
@@ -350,6 +345,8 @@ def get_api_results():
         "view": "api",
         "extra_options": True,
         "header": "API",
+        "languages": Language.get_languages(),
+        "genres": Genre.get_primary_genres(),
     }
     return results
 
@@ -394,7 +391,6 @@ def index(request):
         template = "results_base.min.html"
         user = request.user
         view = request.GET.get("view" , None)
-        print(request.COOKIES)
         context = {
             "view": view,
         }
@@ -573,7 +569,6 @@ def contact(request):
                 return render(request, template, context)
             return render_non_ajax(request, template, context)
         else:
-            print(context)
             if request.is_ajax:
                 return render(request, template, context, status=400)
             return render_non_ajax(request, template, context)

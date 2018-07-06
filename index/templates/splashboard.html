@@ -514,25 +514,24 @@
       </div>
     </div>
   {% elif results.view == "dashboard" %}
-    <div class="col-12 order-1" id="dash">
-      {% if errors or message %}
-        <div class="errors">
-          {% include "errors.min.html" %}
-        </div>
-      {% endif %}
-      <a class="donut-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
-        <div class="donut-chart">
-          <div class="donut">
-            <h1>
-              Subscriptions
-            </h1>
-            <p>
-              {{ results.subscriptions_count }}/50
-            </p>
-          </div>
-        </div>
+    <div class="col-12 order-1"></div>
+        {% if errors or message %}
+      <div class="errors">
+        {% include "errors.min.html" %}
+      </div>
+    {% endif %}
+    <div class="col-12 col-lg-6">
+      <a class="dash-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
+        <h1>
+          Subscriptions
+        </h1>
+        <p>
+          {{ results.subscriptions_count }}/50
+        </p>
       </a>
-      <a class="donut-wrapper playlist-link" href="{% url 'playlist' %}">
+    </div>
+    <div class="col-12 col-lg-6">
+      <a class="dash-wrapper playlist-link" href="{% url 'playlist' %}">
         <h1>
           Playlist
         </h1>

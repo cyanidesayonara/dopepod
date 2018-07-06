@@ -838,7 +838,7 @@ $(document)
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
   })
-  .on("click", ".episodes-button, .reviews-button", function(e) {
+  .on("click", ".showpod-button", function(e) {
     e.stopPropagation();
     $(".showpod-collapse").collapse("toggle");
   })

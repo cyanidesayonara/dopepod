@@ -87,7 +87,7 @@ h3 {
 .dope-toggle:focus,
 .exp[aria-expanded="true"],
 .no-touch .charts-result:hover .charts-rank,
-.no-touch .donut-wrapper:hover {
+.no-touch .dash-wrapper:hover {
   color: #fff;
   outline: none;
   background: rgb(0, 191, 165);
@@ -202,26 +202,22 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .logo {
   margin: 20px 0;
 }
-a.donut-wrapper {
+a.dash-wrapper {
   color: unset;
 }
-.donut-wrapper {
-  display: inline-block;
-  position: relative;
+.dash-wrapper {
+  display: block;
+  text-align: center;
   border: 2px solid rgb(0, 191, 165);
-  border-radius: 50%;
-  width: 40%;
-  height: 0;
-  padding: 10% 5% 30%;
-  margin: 10px 5%;
-  transition: all .25s ease-in-out;
+  border-radius: .25rem;
+  margin: 10px;
 }
-.donut-wrapper h1 {
+.dash-wrapper h1 {
   font-size: 1em;
   margin: 10px 0;
   font-weight: 600;
 }
-.donut-wrapper p {
+.dash-wrapper p {
   font-size: 1.6em;
   font-weight: 600;
 }
@@ -608,7 +604,10 @@ input[type=checkbox] {
   width: 70px;
 }
 .episodes-table .length {
-  width: 70px;
+  width: 60px;
+}
+.episodes-table .expand {
+  width: 25px;
 }
 .episodes-table .new {
   padding: 0 2px;
@@ -644,9 +643,6 @@ input[type=checkbox] {
   font-size: 1.3em;
   margin: 5px 0;
 }
-.options-collapse {
-  width: 100%;
-}
 .results-buttons,
 .options-buttons {
   justify-content: flex-end;
@@ -672,6 +668,8 @@ input[type=checkbox] {
 }
 .options-buttons {
   border-top: 2px solid rgb(0, 191, 165);
+}
+#center-stage .options-buttons {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 .nix-button {
@@ -706,6 +704,7 @@ input[type=checkbox] {
 /* CHARTS */
 .charts-result,
 .last-played-result {
+  border-top: 2px solid rgb(0, 191, 165);
   outline: none;
 }
 .charts-result,
@@ -1181,15 +1180,11 @@ input[type=checkbox] {
   body {
     font-size: 12px;
   }
-  .episodes-table .order {
-    width: 40px;
-  }
   .episodes-table .released {
     width: 60px;
   }
-  .episodes-table .size,
-  .episodes-table .length {
-    width: 55px;
+  .episodes-table .size {
+    width: 60px;
   }
   #player-wrapper {
     border-radius: 0;
@@ -1200,14 +1195,10 @@ input[type=checkbox] {
   body {
     font-size: 13px;
   }
-  .episodes-table .order {
-    width: 45px;
-  }
   .episodes-table .released {
     width: 70px;
   }
-  .episodes-table .size,
-  .episodes-table .length {
+  .episodes-table .size {
     width: 60px;
   }
 }

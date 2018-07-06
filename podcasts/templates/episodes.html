@@ -1,9 +1,6 @@
 {% if not results.episodes and results.view == "playlist" %}
 {% else %}
   <div class="row">
-    {% if results.pages %}
-      {% include "pagination.min.html" %}
-    {% endif %}
     {% include "results_buttons.min.html" %}
   </div>
 {% endif %}
@@ -29,6 +26,9 @@
       </p>
     </div>
   {% else %}
+    {% if results.pages %}
+      {% include "pagination.min.html" %}
+    {% endif %}
     <div class="col-12 episodes-content">
       {% if results.episodes %}
         <table class="table episodes-table">
@@ -49,13 +49,15 @@
               <th class="length">
                 <span>Length</span>
               </th>
+              <th class="expand">
+              </th>
             </tr>
           </thead>
           <tbody>
             {% for episode in results.episodes %}
               <tr class="episode-header exp{% if not results.pages and forloop.last %} noborder{% endif %}" tabindex="0" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
                 <th scope="row">
-                  <span>{{ episode.position }}</span>
+                  <span >{{ episode.position }}</span>
                 </th>
                 <td class="title">
                   {% if results.view == "playlist" %}
@@ -79,9 +81,12 @@
                 <td>
                   <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
                 </td>
+                <td>
+                  <span class="exp-icon" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false"></span>
+                </td>
               </tr>
               <tr>
-                <td colspan="5" class="episode-hidden color-3-trans">
+                <td colspan="6" class="episode-hidden color-3-trans">
                   <div class="collapse fade more-collapse {% if not results.pages and forloop.last %}noborder{% endif %}" id="more-collapse{{ episode.position }}">
                     <p>
                       {% if episode.description %}
@@ -162,10 +167,8 @@
         </table>
       {% endif %}
     </div>
+    {% if results.pages %}
+      {% include "pagination.min.html" %}
+    {% endif %}
   {% endif %}
 </div>
-{% if results.pages %}
-  <div class="row">
-    {% include "pagination.min.html" %}
-  </div>
-{% endif %}
