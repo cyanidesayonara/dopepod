@@ -25,6 +25,7 @@ def get_last_seen(session):
         last_seen = timezone.now()
         cookie = True
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
+    print(session["last_seen"])
     return (last_seen, cookie) 
 
 def get_slick(results):
@@ -393,6 +394,7 @@ def index(request):
         template = "results_base.min.html"
         user = request.user
         view = request.GET.get("view" , None)
+        print(request.COOKIES)
         context = {
             "view": view,
         }
