@@ -614,17 +614,6 @@ input[type=checkbox] {
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
 }
-.episode-buttons {
-  justify-content: flex-end;
-  padding: 10px 10px 5px 5px;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-.episode-buttons > * {
-  margin-left: 5px;
-  margin-bottom: 5px;
-}
 
 /* RESULTS BASE */
 .results {
@@ -644,12 +633,14 @@ input[type=checkbox] {
   margin: 5px 0;
 }
 .results-buttons,
-.options-buttons {
+.options-buttons,
+.episode-buttons {
   justify-content: flex-end;
 }
 .results-buttons,
 .pages-buttons,
-.options-buttons {
+.options-buttons,
+.episode-buttons {
   padding: 10px 10px 5px 5px;
   display: -ms-flexbox;
   display: flex;
@@ -658,7 +649,8 @@ input[type=checkbox] {
 }
 .results-buttons > *,
 .pages-buttons > *,
-.options-buttons > * {
+.options-buttons > *,
+.episode-buttons > * {
   margin-left: 5px;
   margin-bottom: 5px;
 }
@@ -868,6 +860,16 @@ input[type=checkbox] {
 .grid-result.selected .select-subscription {
   background: rgb(0, 191, 165);
   color: #fff;
+}
+.sub-buttons {
+  justify-content: flex-end;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.sub-buttons > * {
+  margin-left: 5px;
 }
 
 .settings-collapse {

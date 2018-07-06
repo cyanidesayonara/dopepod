@@ -30,7 +30,7 @@
             <span>Never</span>
           {% endif %}
         </p>
-        <div class="dope-buttons">
+        <div class="sub-buttons">
           <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
