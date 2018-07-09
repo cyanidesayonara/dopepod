@@ -816,7 +816,6 @@ input[type=checkbox] {
 .last-played-result h2 {
   height: 32px;
   font-size: 14px;
-  line-height: 16px;
 }
 .last-played-result p {
   word-wrap: break-word;
