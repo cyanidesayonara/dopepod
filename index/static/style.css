@@ -809,13 +809,14 @@ input[type=checkbox] {
 }
 .last-played-result h1 {
   font-size: 16px;
-  height: 22px;
+  height: 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .last-played-result h2 {
-  height: 30px;
+  height: 32px;
   font-size: 14px;
+  line-height: 16px;
 }
 .last-played-result p {
   word-wrap: break-word;
