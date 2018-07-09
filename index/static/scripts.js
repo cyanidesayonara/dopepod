@@ -855,7 +855,11 @@ $(document)
     themeChanger(theme);
   })
   .on("click", ".last-played-result .exp", function () {
-    $(this).parents(".last-played-result").toggleClass("expanded");
+    $(".last-played-result.expanded").removeClass("expanded");
+    var button = $(this);
+    if (button.attr("aria-expanded") === "true") {
+      button.parents(".last-played-result").addClass("expanded");
+    }
   })  
   // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dope-link, .dope-toggle, .episode-header, .search-button", function() {
