@@ -809,12 +809,12 @@ input[type=checkbox] {
 }
 .last-played-result h1 {
   font-size: 16px;
-  height: 20px;
+  height: 22px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .last-played-result h2 {
-  height: 32px;
+  height: 30px;
   font-size: 14px;
 }
 .last-played-result p {
