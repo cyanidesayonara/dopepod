@@ -200,7 +200,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   color: #fff;
 }
 .logo {
-  margin: 20px 0;
+  margin: 40px 0;
 }
 a.dash-wrapper {
   color: unset;
