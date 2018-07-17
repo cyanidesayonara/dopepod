@@ -24,7 +24,7 @@ h3 {
 
 /* THEMES */
 .light {
-  background: rgb(255, 250, 240);
+  background: #fff;
   color: rgb(46, 46, 46);
   transition: all .25s ease;
 }
@@ -180,7 +180,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   max-width: 375px;
 }
 .dope-wrapper h1 {
-  font-size: 2em;
+  font-size: 3em;
   margin: 20px 0;
 }
 .dope-wrapper p {
@@ -250,7 +250,7 @@ a.dash-wrapper {
   padding: 0 20px;
 }
 #splash {
-  height: 280px;
+  min-height: 285px;
 }
 
 /* DOPEBAR */
@@ -731,6 +731,8 @@ input[type=checkbox] {
   padding-left: 0;
   list-style: none;
   font-size: .80em;
+  color: rgba(204, 204, 204, .5);
+  text-shadow: rgba(0, 0, 0, 1) 0 0 0;
 }
 .dope-list li {
   height: 20px;

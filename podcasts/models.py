@@ -729,6 +729,17 @@ class Podcast(models.Model):
                 for genre in genres:
                     Podcast.search(url="/charts/", provider=provider, genre=genre, language=language, force_cache=True)
 
+""" class ViewManager(models.Manager):
+    def get_queryset(self):
+        return super(ViewManager, self).get_queryset().select_related("podcast__genre", "podcast__genre__supergenre", "podcast__language")
+
+class View(models.Manager):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT, related_name="view")
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name="view")
+    viewed_at = models.DateTimeField(default=timezone.now)
+
+    objects = ViewManager() """
+
 class SubscriptionManager(models.Manager):
     def get_queryset(self):
         return super(SubscriptionManager, self).get_queryset().select_related("podcast__genre", "podcast__genre__supergenre", "podcast__language")

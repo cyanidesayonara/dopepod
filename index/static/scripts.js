@@ -838,9 +838,9 @@ $(document)
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
   })
-  .on("click", ".showpod-button", function(e) {
+  .on("show.bs.collapse", ".showpod-collapse", function (e) {
     e.stopPropagation();
-    $(".showpod-collapse").collapse("toggle");
+    $(".showpod-collapse.show").collapse("hide");
   })
   .on("click", ".select-theme", function(e) {
     e.preventDefault();

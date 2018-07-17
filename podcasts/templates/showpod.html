@@ -20,6 +20,12 @@
     </p>
   </div>
   <div class="col-12 col-lg-3" id="showpod-r">
+    {% if results.podcast.is_subscribed %}
+      <p>
+        Subscribed
+        <i class="fas fa-check" title="Subscribed"></i>
+      </p>
+    {% endif %}
     <ul class="showpod-side-list">
       {% if podcast.rank %}
         <li>
