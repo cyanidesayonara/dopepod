@@ -748,6 +748,7 @@ input[type=checkbox] {
   float: right;
 }
 .charts-rank {
+  color: rgb(46, 46, 46);
   float: left;
   margin-right: 5px;
   text-align: center;
