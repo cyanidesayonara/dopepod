@@ -503,6 +503,17 @@ function initSlick() {
 function initSlickListen() {
   timeout = setTimeout(function() {
     $(".logo").toggleClass("d-none");
+    // shuffle all except first (logo)
+    var slides = $(".slick-listen .slick-slide").toArray();
+    var first = slides.shift();
+    for (var i = slides.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = slides[i];
+      slides[i] = slides[j];
+      slides[j] = temp;
+    }
+    slides.unshift(first);
+    $(".slick-listen").html(slides);
     $(".slick-listen").slick({
       autoplay: true,
       fade: true,
