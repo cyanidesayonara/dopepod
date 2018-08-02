@@ -763,22 +763,6 @@ def last_played(request):
         else:
             return redirect("/")
 
-def splash_play(request):
-    """
-    returns last played
-    """
-
-    if request.method == "GET":
-        if request.is_ajax():
-            template = "listen.min.html"
-            results = Episode.get_last_played()
-            context = {
-                "results": results,
-            }
-            return render(request, template, context)
-        else:
-            return redirect("/")            
-
 # allauth stuff
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
 

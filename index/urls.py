@@ -9,7 +9,6 @@ urlpatterns = [
     url(r"^dopebar/$", views.dopebar, name="dopebar"),
     url(r"^charts/$", views.charts, name="charts"),
     url(r"^last-played/$", views.last_played, name="last_played"),
-    url(r"^splash-play/$", views.splash_play, name="splash_play"),
     url(r"^search/$", views.search, name="search"),
     url(r"^subscriptions/$", views.subscriptions, name="subscriptions"),
     url(r"^showpod/(?P<podid>\d+)/$", views.showpod, name="showpod"),

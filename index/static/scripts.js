@@ -3,7 +3,6 @@
 var xhr = null;
 var timeout = 0;
 var last_played = 0;
-var splash_play = 0;
 var charts = 0;
 
 function dateLocalizer() {
@@ -37,7 +36,7 @@ function trackMe(url) {
 };
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "last-played", "splash-play", "change-password"];
+  var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -56,7 +55,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "splash-play", "change-password"];
+  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -479,13 +478,6 @@ function lastPlayedUpdater() {
     }
   }, 1000 * 60);
 };
-function splashPlayUpdater() {
-  splash_play = setInterval(function () {
-    if ($("#splash-play-result").length && !$("#splash-play-result.expanded").length) {
-      getResults(["/splash-play/", "#splash-play-result", false], true);
-    }
-  }, 1000 * 60);
-};
 function chartsUpdater() {
   charts = setInterval(function() {
     getResults(["/charts/", "#charts", false], true);
@@ -510,10 +502,11 @@ function initSlick() {
 }
 function initSlickListen() {
   timeout = setTimeout(function() {
-    $(".logo").hide();
+    $(".logo").toggleClass("d-none");
     $(".slick-listen").slick({
       autoplay: true,
       fade: true,
+      initialSlide: 1,
       prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
       nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
     });
@@ -530,7 +523,6 @@ $(document)
     playerUnfixer();
     scrollSpy();
     lastPlayedUpdater();
-    splashPlayUpdater();
     chartsUpdater();
     dateLocalizer();
     hoverDisabler();
@@ -797,12 +789,12 @@ $(document)
     e.preventDefault();
     $("#player-collapse").collapse("hide");
     $("#player-close-collapse").collapse("hide");
-    $(this).attr('aria-expanded', function (i, attr) {
+    $(this).attr('aria-expanded', function (attr) {
       return attr == 'true' ? 'false' : 'true'
     })
     .parents("#player-wrapper").toggleClass("minimize");
   })
-  .on("click", ".theme-button[type=submit]", function (e) {
+  .on("click", ".theme-button[type=submit]", function () {
     var theme = this.innerText.toLowerCase();
     $(this).siblings("input[name=theme]").val(theme);
   })
@@ -867,15 +859,19 @@ $(document)
     e.stopPropagation();
     $(".slick-listen").slick("slickPlay");
   })  
-  .on("show.bs.collapse", "#splash-collapse", function (e) {
-    console.log("ssdsdsad")
-    $(".slick-listen").slick("slickPlay");
+  .on("show.bs.collapse", "#splash-collapse", function () {
+    if ($(".slick-listen.slick-initialized").length) {
+      $(".slick-listen").slick("slickPlay");
+      $(".slick-listen").slick("slickGoTo", 0);
+    }
   })
-  .on("hide.bs.collapse", "#splash-collapse", function (e) {
-    $(".slick-listen").slick("slickPause");
+  .on("hide.bs.collapse", "#splash-collapse", function () {
     $(".splash-play-collapse.show").collapse("hide");
+    if ($(".slick-listen.slick-initialized").length) {
+      $(".slick-listen").slick("slickPause");
+    }
   })
-  .on("beforeChange", ".slick-listen", function (e) {
+  .on("beforeChange", ".slick-listen", function () {
     $("#splash-play-result.expanded").removeClass("expanded");
     $(".splash-play-collapse.show").collapse("hide");
   })

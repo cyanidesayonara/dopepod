@@ -1,10 +1,10 @@
 <div class="row">
   {% if results.view == "splash" %}
-    <div class="col-12 errors order-first color-3-trans">
-      {% if errors or message %}
+    {% if errors or message %}
+      <div class="col-12 errors order-first color-3-trans">
         {% include "errors.min.html" %}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
     <div class="col-12 order-1" id="splash">
       <div class="collapse fade login-collapse{% if not view %} show{% endif %}" id="splash-collapse">
         <div class="dope-wrapper">
@@ -234,7 +234,7 @@
       </a>
     </div>
   {% endif %}
-  <div class="col-12 order-last color-3-trans" id="slick">
+  <div class="col-12 order-last color-3-trans">
     {% include "slick.min.html" %}
   </div>
 </div>

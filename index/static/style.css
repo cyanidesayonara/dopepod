@@ -253,6 +253,7 @@ a.dash-wrapper {
 #splash-play-result {
   max-width: 500px;
   margin: auto;
+  padding: 10px 0;
 }
 #splash-play-result h1,
 #splash-play-result h2 {
@@ -472,28 +473,25 @@ input[type=checkbox] {
 }
 
 /* SLICK */
-#slick {
+.slick {
   padding: 0 10px;
   text-align: center;
 }
-#slick h1 {
+.slick h1 {
   font-size: 1.5em;
   margin: 20px 0;
 }
-#slick p {
+.slick p {
   font-weight: 400;
 }
-#slick ul {
+.slick ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-#slick ul li {
+.slick ul li {
   display: inline-block;
   margin: 5px;
-}
-.slick-list {
-  margin: 10px 0;
 }
 .slick-slide {
   outline: 0;

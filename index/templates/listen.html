@@ -1,5 +1,52 @@
-{% include "logo.min.html" %}
+<ul class="dope-buttons logo">
+  <li>
+    <a class="btn-dope index-link active" href="/">d</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">o</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">p</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">e</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">p</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">o</a>
+  </li>
+  <li>
+    <a class="btn-dope index-link active" href="/">d</a>
+  </li>
+</ul>
 <div class="slick-listen">
+  <div class="slick-slide">
+    <ul class="dope-buttons logo d-none">
+      <li>
+        <a class="btn-dope index-link active" href="/">d</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">o</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">p</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">e</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">p</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">o</a>
+      </li>
+      <li>
+        <a class="btn-dope index-link active" href="/">d</a>
+      </li>
+    </ul>
+  </div>
   {% for episode in results.episodes %}
     <div class="slick-slide">
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
@@ -19,9 +66,9 @@
         <li>
           <span>Released</span>
           {% if episode.pubDate %}
-          <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+            <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
           {% else %}
-          <span>N/A</span>
+            <span>N/A</span>
           {% endif %}
         </li>
         <li>
