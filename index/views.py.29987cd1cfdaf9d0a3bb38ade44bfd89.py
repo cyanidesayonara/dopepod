@@ -749,7 +749,7 @@ def episodes(request, podid):
 
 def last_played(request):
     """
-    returns last played
+    returns n number of last played
     """
 
     if request.method == "GET":
@@ -763,14 +763,14 @@ def last_played(request):
         else:
             return redirect("/")
 
-def splash_play(request):
+def last_played(request):
     """
-    returns last played
+    returns n number of last played
     """
 
     if request.method == "GET":
         if request.is_ajax():
-            template = "listen.min.html"
+            template = "results_base.min.html"
             results = Episode.get_last_played()
             context = {
                 "results": results,

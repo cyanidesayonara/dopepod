@@ -76,12 +76,12 @@ def make_url(url, provider=None, q=None, genre=None, language=None, show=None, o
         f.args["genre"] = genre
     if language:
         f.args["language"] = language
+    if page:
+        f.args["page"] = page
     if show:
         f.args["show"] = show
     if order:
         f.args["order"] = order
-    if page:
-        f.args["page"] = page
     if view:
         f.args["view"] = view
     if api:

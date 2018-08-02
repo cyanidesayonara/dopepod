@@ -1,21 +1,14 @@
-<div class="row">
-  {% include "results_buttons.min.html" %}
-</div>
-<div class="row">
+{% include "logo.min.html" %}
+<div class="slick-listen">
   {% for episode in results.episodes %}
-    <div class="col-12 last-played-result">
-      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
-        {% if episode.length %}
-          <span class="result-length">{{ episode.length }}</span>
-        {% endif %}
-        <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
-      </a>
-      <button class="dope-toggle exp exp-icon" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
-      aria-expanded="false">
-      </button>
+    <div class="slick-slide">
+      <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+        title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
+        <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg" onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
+      </a>      
       <h1>
-        <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
+        <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}"
+          title="{{ episode.podcast.title }}">
           <strong>{{ episode.podcast.title }}</strong>
         </a>
       </h1>
@@ -26,9 +19,9 @@
         <li>
           <span>Released</span>
           {% if episode.pubDate %}
-            <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+          <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
           {% else %}
-            <span>N/A</span>
+          <span>N/A</span>
           {% endif %}
         </li>
         <li>
@@ -36,7 +29,7 @@
           <span>{{ episode.played_ago }}</span>
         </li>
       </ul>
-      <div class="collapse fade last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
+      <div class="collapse fade splash-play-collapse" id="splash-play-collapse{{ forloop.counter }}">
         <ul class="dope-list">
           <li>
             <span>Length</span>
@@ -60,14 +53,10 @@
           </li>
         </ul>
         <p>
-          {% if episode.description %}
-            {{ episode.description }}
-          {% else %}
-            No description
-          {% endif %}
+          {% if episode.description %} {{ episode.description }} {% else %} No description {% endif %}
         </p>
       </div>
-      <div class="last-played-buttons">
+      <div class="splash-play-buttons">
         <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
           {% csrf_token %}
           <input type="hidden" name="mode" value="play" />
@@ -93,11 +82,17 @@
             </button>
           </form>
         {% endif %}
-        <button class="btn-dope exp exp-icon active" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
+        <button class="btn-dope exp exp-icon active" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}"
           aria-expanded="false">
           <span>More</span>
         </button>
       </div>
     </div>
   {% endfor %}
-</div>  
+</div>
+
+{% if request.is_ajax %}
+  <script>
+    initSlickListen();
+  </script>
+{% endif %}

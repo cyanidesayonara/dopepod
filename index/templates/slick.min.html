@@ -16,4 +16,4 @@
               </a>
             </li>
           {% endfor %}
-        </ul>--></div>{% endfor %}</div>{% endwith%} {% if request.is_ajax %}<script>$(".slick").slick({autoplay:!0,adaptiveHeight:!0,prevArrow:"<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",nextArrow:"<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>"})</script>{% endif %}
+        </ul>--></div>{% endfor %}</div>{% endwith%} {% if request.is_ajax %}<script>initSlick()</script>{% endif %}

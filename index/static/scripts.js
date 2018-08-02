@@ -3,6 +3,7 @@
 var xhr = null;
 var timeout = 0;
 var last_played = 0;
+var splash_play = 0;
 var charts = 0;
 
 function dateLocalizer() {
@@ -36,7 +37,7 @@ function trackMe(url) {
 };
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
+  var urls = ["episodes", "dopebar", "charts", "last-played", "splash-play", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -55,7 +56,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "change-password"];
+  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "splash-play", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -131,12 +132,12 @@ function refreshCookie() {
 // refreshes page on login
 function refreshPage() {
   getResults(["/dopebar/", "#dopebar", false], true);
-  getResults(["/last-played/", "#last-played", false], true)
+  getResults(["/last-played/", "#last-played", false], true);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "last-played"];
+    var urls = ["dopebar", "charts", "episodes", "last-played", "splash-play"];
     for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -173,6 +174,9 @@ function getResults(args, no_loader, no_push) {
       else if (url.includes("last-played")) {
         window.clearInterval(last_played);
       }
+      else if (url.includes("splash-play")) {
+        window.clearInterval(splash_play);
+      }
       else if (url.includes("charts")) {
         window.clearInterval(charts);
       }
@@ -208,7 +212,7 @@ function getResults(args, no_loader, no_push) {
         drop.find(".episodes-content").html(getCircleLoading());
       }
       if (scroll) {
-        if (!url.includes("/charts/") && !url.includes("/last-played/")) {
+        if (!url.includes("/charts/") && !url.includes("/last-played/") && !url.includes("/splash-play/")) {
           scrollTo(drop);
         }
       }
@@ -402,6 +406,7 @@ function postPlaylist(data, mode, button) {
     .fail(function(xhr, ajaxOptions, thrownError) {
       button.html(text);
       $("#player").empty();
+      // TODO if playlist fails
     })
     .done(function (response) {
       if (mode == "play") {
@@ -469,7 +474,16 @@ function getCircleLoading() {
 };
 function lastPlayedUpdater() {
   last_played = setInterval(function() {
-    getResults(["/last-played/", "#last-played", false], true);
+    if (!$(".last-played-result.expanded").length) {
+      getResults(["/last-played/", "#last-played", false], true);
+    }
+  }, 1000 * 60);
+};
+function splashPlayUpdater() {
+  splash_play = setInterval(function () {
+    if ($("#splash-play-result").length && !$("#splash-play-result.expanded").length) {
+      getResults(["/splash-play/", "#splash-play-result", false], true);
+    }
   }, 1000 * 60);
 };
 function chartsUpdater() {
@@ -486,22 +500,37 @@ function hoverDisabler() {
   } else {
     $("html").addClass("no-touch");
   }
+};
+function initSlick() {
+  $(".slick").slick({
+    autoplay: true,
+    prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
+    nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
+  });
 }
-
-$(document)
-  .ready(function() {
-    $(".slick").slick({
+function initSlickListen() {
+  timeout = setTimeout(function() {
+    $(".logo").hide();
+    $(".slick-listen").slick({
       autoplay: true,
-      adaptiveHeight: true,
+      fade: true,
       prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
       nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
     });
+  }, 3000);
+};
+
+$(document)
+  .ready(function() {
+    initSlick();
+    initSlickListen();
     scrollToTop();
     refreshCookie();
     scrollUp();
     playerUnfixer();
     scrollSpy();
     lastPlayedUpdater();
+    splashPlayUpdater();
     chartsUpdater();
     dateLocalizer();
     hoverDisabler();
@@ -830,6 +859,26 @@ $(document)
       scrollTo(obj);
     }, 250);
   })
+  .on("show.bs.collapse", ".splash-play-collapse", function (e) {
+    e.stopPropagation();
+    $(".slick-listen").slick("slickPause");
+  })
+  .on("hide.bs.collapse", ".splash-play-collapse", function (e) {
+    e.stopPropagation();
+    $(".slick-listen").slick("slickPlay");
+  })  
+  .on("show.bs.collapse", "#splash-collapse", function (e) {
+    console.log("ssdsdsad")
+    $(".slick-listen").slick("slickPlay");
+  })
+  .on("hide.bs.collapse", "#splash-collapse", function (e) {
+    $(".slick-listen").slick("slickPause");
+    $(".splash-play-collapse.show").collapse("hide");
+  })
+  .on("beforeChange", ".slick-listen", function (e) {
+    $("#splash-play-result.expanded").removeClass("expanded");
+    $(".splash-play-collapse.show").collapse("hide");
+  })
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
@@ -860,7 +909,14 @@ $(document)
     if (button.attr("aria-expanded") === "true") {
       button.parents(".last-played-result").addClass("expanded");
     }
-  })  
+  })
+  .on("click", "#splash-play-result .exp", function () {
+    $("#splash-play-result.expanded").removeClass("expanded");
+    var button = $(this);
+    if (button.attr("aria-expanded") === "true") {
+      button.parents("#splash-play-result").addClass("expanded");
+    }
+  })
   // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dope-link, .dope-toggle, .episode-header, .search-button", function() {
     $(this).blur();

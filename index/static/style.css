@@ -175,13 +175,9 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 .dope-wrapper{
   margin: auto;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
   max-width: 375px;
-}
-.dope-wrapper h1 {
-  font-size: 3em;
-  margin: 20px 0;
 }
 .dope-wrapper p {
   font-size: 1em;
@@ -200,6 +196,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   color: #fff;
 }
 .logo {
+  text-align: center;
   margin: 40px 0;
 }
 a.dash-wrapper {
@@ -250,7 +247,34 @@ a.dash-wrapper {
   padding: 0 20px;
 }
 #splash {
-  min-height: 285px;
+  min-height: 270px;
+  overflow: hidden;
+}
+#splash-play-result {
+  max-width: 500px;
+  margin: auto;
+}
+#splash-play-result h1,
+#splash-play-result h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#splash-play-result img {
+  float: right;
+  margin-left: 5px;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+}
+#splash-play-result h1 {
+  font-size: 1.5em;
+  margin-bottom: 3px;
+  height: 29px;
+}
+#splash-play-result h2 {
+  font-size: 1.25em;
+  margin-bottom: 3px;
+  height: 25px;
 }
 
 /* DOPEBAR */
@@ -292,7 +316,7 @@ a.dash-wrapper {
 }
 #dopebar-c h1 {
   font-family: Orbitron;
-  line-height: 20px;
+  line-height: 22px;
   font-size: 28px!important;
   margin: 0;
   text-align: center;
@@ -368,6 +392,9 @@ a.dash-wrapper {
 }
 
 /* ERRORS */
+.errors {
+  min-height: 0;
+}
 .errors p {
   display: block;
   border-radius: .25rem;
@@ -465,9 +492,11 @@ input[type=checkbox] {
   display: inline-block;
   margin: 5px;
 }
+.slick-list {
+  margin: 10px 0;
+}
 .slick-slide {
   outline: 0;
-  margin: 10px 0;
 }
 .slick-header {
   margin: 10px;
@@ -498,6 +527,10 @@ input[type=checkbox] {
 .slick-next {
   right: 20px;
 }
+.slick-listen .slick-prev,
+.slick-listen .slick-next {
+  top: -45px;
+}
 
 /* SETTINGS */
 .change-collapse,
@@ -517,7 +550,7 @@ input[type=checkbox] {
 #showpod-l,
 #showpod-c,
 #showpod-r {
-  padding: 10px 10px 0;
+  padding: 10px;
 }
 #showpod-l {
   text-align: center;
@@ -709,14 +742,16 @@ input[type=checkbox] {
 .last-played-result.expanded {
   background: rgba(0, 191, 165, .2);
 }
-.charts-buttons {
+.charts-buttons,
+.splash-play-buttons {
   padding-top: 5px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
-.charts-buttons > * {
+.charts-buttons > *,
+.splash-play-buttons > * {
   margin-right: 5px;
   margin-top: 5px;
 }
@@ -731,7 +766,7 @@ input[type=checkbox] {
   padding-left: 0;
   list-style: none;
   font-size: .80em;
-  color: rgba(204, 204, 204, .5);
+  color: rgba(204, 204, 204, .75);
   text-shadow: rgba(0, 0, 0, 1) 0 0 0;
 }
 .dope-list li {
@@ -741,14 +776,15 @@ input[type=checkbox] {
 }
 .expanded .dope-list li,
 .no-touch .charts-result:hover .dope-list li,
-.no-touch .last-played-result:hover .dope-list li {
+.no-touch .last-played-result:hover .dope-list li,
+.no-touch #splash-play-result:hover .dope-list li {
   border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 .dope-list li span:last-child {
   float: right;
 }
 .charts-rank {
-  color: rgb(46, 46, 46);
+  color: inherit;
   float: left;
   margin-right: 5px;
   text-align: center;
@@ -820,7 +856,8 @@ input[type=checkbox] {
   height: 32px;
   font-size: 14px;
 }
-.last-played-result p {
+.last-played-result p,
+#splash-play-result p {
   word-wrap: break-word;
   margin: 10px 0 0;
 }

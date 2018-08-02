@@ -58,11 +58,6 @@
 
 {% if request.is_ajax %}
   <script>
-    $(".slick").slick({
-      autoplay: true,
-      adaptiveHeight: true,
-      prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
-    });
+    initSlick();
   </script>
 {% endif %}
