@@ -1213,6 +1213,9 @@ input[type=checkbox] {
     border: none;
     border-radius: unset;
   }
+  .dope-wrapper {
+    padding: 10px;
+  }
 }
 /* Extra small devices (phones, up to 480px) */
 @media screen and (max-width: 767px) {
