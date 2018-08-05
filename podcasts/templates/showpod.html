@@ -10,7 +10,9 @@
       </strong>
     </h1>
     <h2>
-      By
+      <span>
+        By
+      </span>
       <strong>
         {{ podcast.artist }}
       </strong>
@@ -26,7 +28,7 @@
         <i class="fas fa-check" title="Subscribed"></i>
       </p>
     {% endif %}
-    <ul class="showpod-side-list">
+    <ul>
       {% if podcast.rank %}
         <li>
           #{{ podcast.rank }} in

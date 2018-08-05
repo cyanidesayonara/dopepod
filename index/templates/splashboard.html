@@ -1,7 +1,7 @@
 <div class="row">
   {% if results.view == "splash" %}
     {% if errors or message %}
-      <div class="col-12 errors order-first color-3-trans">
+      <div class="col-12 errors order-first color-3">
         {% include "errors.min.html" %}
       </div>
     {% endif %}
@@ -124,13 +124,13 @@
         </div>
       </div>
     </div>
-    <div class="col-12 order-3 col-lg-4 order-lg-2 color-3-trans">
+    <div class="col-12 order-3 col-lg-4 order-lg-2 color-3">
       <div class="dope-wrapper">
         <p>Sign in with your social media account</p>
         {% include "social-login.min.html" %}
       </div>
     </div>
-    <div class="col-12 order-2 col-lg-4 order-lg-3 color-3-trans">
+    <div class="col-12 order-2 col-lg-4 order-lg-3 color-3">
       <div class="dope-wrapper">
         <p>
           Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
@@ -194,7 +194,7 @@
         </ul>
       </div>
     </div>
-    <div class="col-12 order-4 col-lg-4 color-3-trans">
+    <div class="col-12 order-4 col-lg-4 color-3">
       <div class="dope-wrapper">
         <p>This will enable session-based user account</p>
         <button class="btn-dope">
@@ -208,7 +208,7 @@
       </div>
     </div>
   {% elif results.view == "dashboard" %}
-    <div class="col-12 errors order-first color-3-trans">
+    <div class="col-12 errors order-first color-3">
       {% if errors or message %}
         {% include "errors.min.html" %}
       {% endif %}
@@ -234,7 +234,7 @@
       </a>
     </div>
   {% endif %}
-  <div class="col-12 order-last color-3-trans">
+  <div class="col-12 order-last color-3">
     {% include "slick.min.html" %}
   </div>
 </div>

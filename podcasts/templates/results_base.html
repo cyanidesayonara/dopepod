@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block center-stage %}
-<div class="col-12 results color-2-trans {{ results.view }}" {% if results.selected_q %}data-q="{{ results.selected_q }}"{% endif %} {% if results.podcast.podid %}data-podid="{{ results.podcast.podid }}"{% endif %}>
+<div class="col-12 results color-2 {{ results.view }}" {% if results.selected_q %}data-q="{{ results.selected_q }}"{% endif %} {% if results.podcast.podid %}data-podid="{{ results.podcast.podid }}"{% endif %}>
   {% include "results_bar.html" %}
   <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
     {% if results.podcast %}

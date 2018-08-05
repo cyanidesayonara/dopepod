@@ -44,16 +44,11 @@ h3 {
 /* COOKIE BANNER */
 #cookie-banner {
   color: rgb(46, 46, 46);
-  position: absolute;
-  overflow: hidden;
-  bottom: 0;
-  right: 0;
-  width: 100%;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 #cookie-banner h1 {
   display: inline-block;
-  margin: 0 10px 10px 0;
+  margin: 10px;
   font-size: 16px;
 }
 
@@ -174,7 +169,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 .dope-wrapper{
   margin: auto;
-  padding: 20px;
+  padding: 20px 10px;
   text-align: center;
   max-width: 375px;
 }
@@ -198,10 +193,8 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   text-align: center;
   margin: 40px 0;
 }
-a.dash-wrapper {
-  color: unset;
-}
 .dash-wrapper {
+  color: unset;
   display: block;
   text-align: center;
   border: 2px solid rgb(0, 191, 165);
@@ -224,13 +217,13 @@ a.dash-wrapper {
 }
 
 /* COLORS */
-.color-1-trans {
+.color-1 {
   background: rgba(0, 191, 165, .95);
 }
-.color-2-trans {
+.color-2 {
   background: rgba(255, 255, 255, .2);
 }
-.color-3-trans {
+.color-3 {
   background: rgba(204, 204, 204, .5);
 }
 
@@ -248,6 +241,9 @@ a.dash-wrapper {
 #splash {
   min-height: 270px;
   overflow: hidden;
+}
+#splash .slick-list {
+  overflow: visible;
 }
 #splash-play-result {
   max-width: 500px;
@@ -283,7 +279,7 @@ a.dash-wrapper {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 4000;
+  z-index: 5000;
   height: 44px;
   padding: 5px 0;
 }
@@ -322,20 +318,16 @@ a.dash-wrapper {
   text-align: center;
 }
 #dopebar-collapse {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
-  padding: 10px;
-  margin-top: 44px;
+  z-index: 4000;
+  padding: 54px 10px 10px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border-bottom-right-radius: .25rem;
 }
 #dopebar-collapse ul li {
   display: list-item;
-  margin: 5px 0;
-}
-#dopebar-collapse ul li:first-of-type {
   margin: 10px 0;
 }
 .dope-link  {
@@ -403,23 +395,10 @@ a.dash-wrapper {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 
-.genres > *,
-.languages > * {
-  display: none;
-}
-
 /* CHECKBOX */
-input[type=checkbox] {
+[type=checkbox] {
   visibility: hidden;
-}
-.checkbox {
-  width: 25px;
-  margin: 10px;
-  position: relative;
-}
-.dope-check-label .dope-check {
-  visibility: hidden;
-  /* <-- hide the default checkbox, the rest is to hide and alllow tabbing, which display:none prevents */
+  /* <-- hide the default checkbox, the rest is to hide and allow tabbing, which display:none prevents */
   display: block;
   height: 0;
   width: 0;
@@ -529,12 +508,6 @@ input[type=checkbox] {
   top: -45px;
 }
 
-/* SETTINGS */
-.change-collapse,
-.solong-collapse {
-  padding: 20px 0;
-}
-
 #dopebar-l,
 #dopebar-r,
 .list-result,
@@ -556,28 +529,23 @@ input[type=checkbox] {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
+#showpod-r p {
+  margin: 10px 0;
+}
 #showpod-r ul {
   list-style: none;
   padding: 0;
   margin: 10px 0;
 }
-#showpod-r ul li {
+#showpod-r ul li:not(:last-child) {
   border-bottom: 2px solid rgb(0, 191, 165);
   margin-bottom: 10px;
 }
 #showpod-c h1 {
-  margin: 10px 0;
   font-size: 20px;
 }
 #showpod-c h2 {
-  margin-bottom: 4px;
   font-size: 16px;
-}
-#showpod-c p {
-  margin-bottom: 4px;
-}
-#showpod-r ul li:last-child {
-  border: none;
 }
 #showpod-r ul li:last-child > * {
   margin-right: 5px;
@@ -596,11 +564,6 @@ input[type=checkbox] {
 .episode-hidden p {
   margin: 10px 10px 0;
   word-wrap: break-word;
-}
-.episode-hidden h1 {
-  display: inline-block;
-  margin: 10px 10px 0;
-  font-size: 16px;
 }
 .episodes-table {
   table-layout: fixed;
@@ -713,9 +676,6 @@ input[type=checkbox] {
   margin-left: 5px;
   box-shadow: none;
 }
-.results-content {
-  min-height: 0;
-}
 .results-collapse.show, .view-collapse.show {
   display: -ms-flexbox;
   display: flex;
@@ -728,9 +688,6 @@ input[type=checkbox] {
 .last-played-result {
   border-top: 2px solid rgb(0, 191, 165);
   outline: none;
-}
-.charts-result,
-.last-played-result {
   overflow: hidden;
   padding: 10px;
 }
@@ -762,9 +719,7 @@ input[type=checkbox] {
   margin-bottom: 0;
   padding-left: 0;
   list-style: none;
-  font-size: .80em;
-  color: rgba(204, 204, 204, .75);
-  text-shadow: rgba(0, 0, 0, 1) 0 0 0;
+  font-size: .8em;
 }
 .dope-list li {
   height: 20px;
@@ -908,7 +863,12 @@ input[type=checkbox] {
 .sub-buttons > * {
   margin-left: 5px;
 }
+.playlist-form,
+.subscriptions-form {
+  display: inherit;
+}
 
+/* SETTINGS */
 .settings-collapse {
   padding: 10px;
 }
@@ -932,16 +892,6 @@ input[type=checkbox] {
 }
 .no-touch .list-result ul li a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
-}
-
-.playlist-form,
-.subscriptions-form {
-  display: inherit;
-}
-
-.subscriptions .dope-wrapper {
-  padding-left: 15;
-  padding-top: 0;
 }
 
 /* PLAYER */
@@ -1011,7 +961,7 @@ input[type=checkbox] {
 }
 #player-wrapper .player-description {
   margin: 10px 0;
-  max-height: calc(100vh - 470px);
+  max-height: calc(100vh - 475px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
@@ -1212,9 +1162,6 @@ input[type=checkbox] {
   .results {
     border: none;
     border-radius: unset;
-  }
-  .dope-wrapper {
-    padding: 10px;
   }
 }
 /* Extra small devices (phones, up to 480px) */

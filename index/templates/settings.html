@@ -1,4 +1,9 @@
 <div class="row">
+  {% if errors or message %}
+    <div class="col-12 errors order-first color-3">
+      {% include "errors.min.html" %}
+    </div>
+  {% endif %}
   <div class="col-12 order-2 col-lg-4 order-lg-1 dope-wrapper">
     <a class="btn-dope exp" data-toggle="collapse" href="#change-collapse" aria-expanded="false" aria-controls="change-collapse">
       Change Password
@@ -31,11 +36,6 @@
     </div>
   </div>
   <div class="col-12 order-1 col-lg-4 order-lg-2 dope-wrapper">
-    {% if errors or message %}
-      <div class="errors">
-        {% include "errors.min.html" %}
-      </div>
-    {% endif %}
     <a class="btn-dope exp" data-toggle="collapse" href="#general-collapse" aria-expanded="false" aria-controls="general-collapse">
       General Settings
     </a>
