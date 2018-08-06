@@ -1,13 +1,13 @@
 <div class="dope-wrapper">
   {% for k, v in errors.items %}
-  <p class="color-1-trans">
+  <p class="color-1">
     <i class="fas fa-times" title="Error"></i>
     {{ v }}
   </p>
   {% endfor %}
   
   {% if message %}
-    <p class="color-1-trans">
+    <p class="color-1">
       <i class="fas fa-check" title="Done"></i>
       {{ message }}
     </p>
