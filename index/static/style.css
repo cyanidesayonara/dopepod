@@ -527,12 +527,12 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
 #showpod-r p {
-  margin: 10px 0;
+  margin-bottom: 10px;
 }
 #showpod-r ul {
   list-style: none;
   padding: 0;
-  margin: 10px 0;
+  margin: 0;
 }
 #showpod-r ul li:not(:last-child) {
   border-bottom: 2px solid rgb(0, 191, 165);
