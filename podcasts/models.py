@@ -423,8 +423,6 @@ class Podcast(models.Model):
                         results["start_url"] = f.url
                 
                 results_header = ""
-                if num_pages > 1:
-                    results_header += "Page " + str(page) + " of "
                 if count == 1:
                     results_header += str(count) + " result for"
                 else:
@@ -439,6 +437,8 @@ class Podcast(models.Model):
                         results_header += ' starting with "' + q + '"'
                     else:
                         results_header += ' with "' + q + '"'
+                if num_pages > 1:
+                    results_header += " (page " + str(page) + " of " + str(num_pages) + ")"
                 
                 results["header"] = results_header
 
