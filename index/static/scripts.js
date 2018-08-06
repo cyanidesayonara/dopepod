@@ -847,20 +847,10 @@ $(document)
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
     $(".more-collapse.show").collapse("hide");
-    var obj = $(this).parents("tr").prev();
-    timeout = setTimeout(function () {
-      if ($(window).width() < 992) {
-        scrollTo(obj);
-      }
-    }, 250);
   })
   .on("show.bs.collapse", ".last-played-collapse", function(e) {
     e.stopPropagation();
     $(".last-played-collapse.show").collapse("hide");
-    var obj = $(this).parent();
-    timeout = setTimeout(function () {
-      scrollTo(obj);
-    }, 250);
   })
   .on("show.bs.collapse", ".splash-play-collapse", function (e) {
     e.stopPropagation();
