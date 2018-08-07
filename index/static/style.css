@@ -449,7 +449,6 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 
 /* SLICK */
 .slick {
-  padding: 0 10px;
   text-align: center;
 }
 .slick h1 {
@@ -488,7 +487,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .slick-prev,
 .slick-next {
   position: absolute;
-  top: 45px;
+  top: 35px;
   z-index: 2000;
   -webkit-transform: translate(0, -50%);
   -ms-transform: translate(0, -50%);
