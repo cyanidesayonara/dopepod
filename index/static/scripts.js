@@ -55,7 +55,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["settings", "playlist", "subscriptions", "dopebar", "charts", "last-played", "change-password"];
+  var urls = ["dopebar", "charts", "last-played", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -79,7 +79,7 @@ function titleUpdater() {
   // default title
   var title = "dopepod";
   var player = $("#player-wrapper");
-  var header = $("#center-stage .results-header h1");
+  var header = $("#center-stage .results-bar h1");
   // if episode is playing
   if (player.length) {
     title = player.find("h1")[0].innerText;
@@ -208,7 +208,7 @@ function getResults(args, no_loader, no_push) {
         results.addClass("loading").children(".results-collapse").html(getCircleLoading());
       }
       else {
-        drop.find(".episodes-content").html(getCircleLoading());
+        drop.find("#episodes-collapse").html(getCircleLoading());
       }
       if (scroll) {
         if (!url.includes("/charts/") && !url.includes("/last-played/") && !url.includes("/splash-play/")) {
@@ -473,7 +473,7 @@ function getCircleLoading() {
 };
 function lastPlayedUpdater() {
   last_played = setInterval(function() {
-    if (!$(".last-played-result.expanded").length) {
+    if (!$(".last-played .expandable.expanded").length) {
       getResults(["/last-played/", "#last-played", false], true);
     }
   }, 1000 * 60);
@@ -598,7 +598,6 @@ $(document)
     var drop = $("#center-stage");
     drop.find(".results-collapse").collapse("show");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var scroll = false;
       var args = ["/episodes/" + podid + "/", ".showpod .results-content", false];
       getResults([url, drop, true, getResults, args]);
     }
@@ -830,10 +829,7 @@ $(document)
     var view = button.children(".d-none").data("view");
     button.children().toggleClass("d-none");
     button.parents(".results").attr("data-view", view)
-    button.parent().parent().siblings(".view-collapse")
-      .each(function() {
-        $(this).collapse("toggle");
-      });
+    $(".view-collapse").collapse("toggle");
   })
   // toggle button icon on hover
   .on("mouseenter mouseleave", ".no-touch .order-button, .no-touch .view-button", function () {
@@ -900,11 +896,11 @@ $(document)
     }
     themeChanger(theme);
   })
-  .on("click", ".last-played-result .exp", function () {
-    $(".last-played-result.expanded").removeClass("expanded");
+  .on("click", ".expandable .exp", function () {
+    $(".expandable.expanded").removeClass("expanded");
     var button = $(this);
     if (button.attr("aria-expanded") === "true") {
-      button.parents(".last-played-result").addClass("expanded");
+      button.parents(".expandable").addClass("expanded");
     }
   })
   .on("click", "#splash-play-result .exp", function () {
@@ -939,25 +935,25 @@ $(document)
   .on("click", ".scroll-up", function() {
     scrollToTop();
   })
-  .on("click", ".select-subscription", function() {
-    var box = $(this).parents(".grid-result").toggleClass("selected");
-    var buttons = box.parents(".results").find(".grid-result");
-    var selected = box.parents(".results").find(".selected");
+  .on("click", ".select", function() {
+    $(this).parents(".selectable").toggleClass("selected");
+    var buttons = $(".selectable");
+    var selected = $(".selectable.selected");
     if (buttons.length == selected.length) {
-      $(".select-all-button").addClass("active");
+      $(".select-all").addClass("active");
     }
     else {
-      $(".select-all-button").removeClass("active");
+      $(".select-all").removeClass("active");
     }
   })
   // selects all subscriptions (and maybe all playlist episodes as well TODO?)
-  .on("click", ".select-all-button", function() {
+  .on("click", ".select-all", function() {
     var button = $(this);
     if (button.hasClass("active")) {
-      button.parent().parent().siblings().find(".grid-result").removeClass("selected");
+      $(".selectable").removeClass("selected");
     }
     else {
-      button.parent().parent().siblings().find(".grid-result").addClass("selected");
+      $(".selectable").addClass("selected");
     }
     button.toggleClass("active");
   })

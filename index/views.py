@@ -322,7 +322,7 @@ def get_privacy_results():
     results = {
         "view": "privacy",
         "extra_options": True,
-        "header": "Privacy",
+        "header": "Privacy Policy",
     }
     return results
 

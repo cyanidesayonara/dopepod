@@ -1,11 +1,13 @@
 {% if results.header %}
 <div class="row results-bar">
-  <div class="col-12 results-header">
+  <div class="col-12 px-0">
     {% if results.extra_options %}
-      <button class="btn-dope results-back" onclick="window.history.back()">
-        <i class="fas fa-arrow-left" title="Back"></i>
-      </button>
-      <div class="extra-options">
+      <div class="dope-buttons-l">
+        <button class="btn-dope results-back" onclick="window.history.back()">
+          <i class="fas fa-arrow-left" title="Back"></i>
+        </button>
+      </div>
+      <div class="dope-buttons-l">
         <a class="btn-dope exp exp-icon" data-toggle="collapse" href="#results-collapse-{{ results.view }}" aria-expanded="true"
           aria-controls="results-collapse">
         </a>

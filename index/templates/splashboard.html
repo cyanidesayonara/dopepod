@@ -14,11 +14,9 @@
             </strong>
           </h1>
         </div>
-        <div id="splash-play-result">
-          {% with last_played as results %}
-            {% include "listen.min.html" %}
-          {% endwith %}
-        </div>
+        {% with last_played as results %}
+          {% include "listen.min.html" %}
+        {% endwith %}
       </div>
       <div class="collapse fade login-collapse{% if view == 'login' %} show{% endif %}" id="login-collapse">
         <div class="dope-wrapper">
@@ -135,71 +133,55 @@
         <p>
           Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
         </p>
-        <ul class="dope-buttons">
+        <div class="dope-buttons-c">
           {% if view == "signup" %}
-            <li>
-              <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
-                aria-controls="login-collapse">
-                Login
-              </a>
-            </li>
-            <li>
-              <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true"
-                aria-controls="signup-collapse">
-                Signup
-              </a>
-            </li>
-          {% elif view == "login" %}
-            <li>
-              <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true"
-                aria-controls="login-collapse">
-                Login
-              </a>
-            </li>
-            <li>
-              <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
-                aria-controls="signup-collapse">
-                Signup
-              </a>
-            </li>
-          {% else %}
-          <li>
             <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
               aria-controls="login-collapse">
               Login
             </a>
-          </li>
-          <li>
+            <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true"
+              aria-controls="signup-collapse">
+              Signup
+            </a>
+          {% elif view == "login" %}
+            <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true"
+              aria-controls="login-collapse">
+              Login
+            </a>
             <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
               aria-controls="signup-collapse">
               Signup
             </a>
-          </li>
+          {% else %}
+            <a class="btn-dope exp login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
+              aria-controls="login-collapse">
+              Login
+            </a>
+            <a class="btn-dope exp signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
+              aria-controls="signup-collapse">
+              Signup
+            </a>
           {% endif %}
-        </ul>
-        <ul class="dope-buttons">
-          <li>
-            <a class="privacy-link" href="{% url 'privacy' %}">
-              Privacy
-            </a>
-          </li>
-          <li>
-            ●
-          </li>
-          <li>
-            <a class="terms-link" href="{% url 'terms' %}">
-              Terms
-            </a>
-          </li>
-        </ul>
+          </div>
+        <div class="dope-buttons-c">
+          <a class="privacy-link" href="{% url 'privacy' %}">
+            Privacy
+          </a>
+          ●
+          <a class="terms-link" href="{% url 'terms' %}">
+            Terms
+          </a>
+        </div>
       </div>
     </div>
     <div class="col-12 order-4 col-lg-4 color-3">
       <div class="dope-wrapper">
         <p>This will enable session-based user account</p>
-        <button class="btn-dope">
-          Coming soon!
-        </button>
+        <div class="dope-buttons-c">
+          <button class="btn-dope">
+            Coming soon!
+          </button>
+        </div>
       </div>
     </div>
     <div class="col-12 order-5">

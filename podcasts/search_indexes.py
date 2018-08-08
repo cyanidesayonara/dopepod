@@ -18,23 +18,25 @@ class PodcastIndex(indexes.SearchIndex, indexes.Indexable):
     itunes_genre_rank = indexes.IntegerField(model_attr='itunes_genre_rank', indexed=False, null=True)
 
     def prepare_initial(self, obj):
-        words = obj.title.split(" ")
-        if words[0].lower() == "the" or words[0].lower() == "a" or words[0].lower() == "an":
+        words = obj.title.split(" ").lower()
+        first = words[0]
+        if first == "the" or first == "a" or first == "an":
             try:
-                return words[1][0].lower() * 2
+                return words[1][0] * 2
             except IndexError:
                 pass
-        return obj.title[0].lower() * 2
+        return obj.title[0] * 2
 
     def prepare_name(self, obj):
-        words = obj.title.split(" ")
-        if words[0].lower() == "the" or words[0].lower() == "a" or words[0].lower() == "an":
+        words = obj.title.split(" ").lower()
+        first = words[0]
+        if first == "the" or first == "a" or first == "an":
             try:
                 words = words[1:]
-                return " ".join(words).lower()
+                return " ".join(words)
             except IndexError:
                 pass
-        return obj.title.lower()
+        return obj.title
 
     def get_model(self):
         return Podcast
