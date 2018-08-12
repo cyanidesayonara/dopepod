@@ -636,7 +636,13 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   float: right;
 }
 .dope-buttons > * {
-  margin-right: 5px;
+  margin: 0 5px 0 0;
+}
+#player-wrapper .dope-buttons {
+  float: right;
+}
+#player-wrapper .dope-buttons > * {
+  margin: 0 0 0 5px;
 }
 .dope-buttons-l > *,
 .dope-buttons-r > * {
@@ -878,7 +884,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #player-wrapper .player-description {
   margin: 10px 0;
-  max-height: calc(100vh - 475px);
+  max-height: calc(100vh - 490px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
