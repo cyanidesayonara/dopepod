@@ -37,7 +37,7 @@
           </span>
           {% if subscription.last_updated %}
             <span class="date" data-utc="{{ subscription.last_updated|date:'U' }}">
-              {{ subscription.last_updated|date:"d-m-Y H:i" }}
+              {{ subscription.last_updated|date:"d M Y H:i" }}
             </span>
           {% else %}
             <span>

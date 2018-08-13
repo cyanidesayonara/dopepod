@@ -39,7 +39,7 @@
           <li>
             <span>Released</span>
             {% if episode.pubDate %}
-              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d M Y H:i" }}</span>
             {% else %}
               <span>N/A</span>
             {% endif %}

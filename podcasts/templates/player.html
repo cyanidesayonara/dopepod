@@ -36,7 +36,7 @@
       <p class="player-date">
         Released
         {% if episode.pubDate %}
-          {{ episode.pubDate|date:"d-m-Y H:i" }}
+          {{ episode.pubDate|date:"d M Y H:i" }}
         {% else %}
           N/A
         {% endif %}

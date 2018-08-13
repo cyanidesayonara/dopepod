@@ -545,7 +545,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 .episodes-table th,
 .episodes-table td {
-  padding: 5px;
+  padding: .3em;
   border: none;
 }
 .episodes-table thead th {
@@ -561,16 +561,14 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .episodes-table .order {
   width: 45px;
 }
-.episodes-table .title {
-}
 .episodes-table .released {
   width: 145px;
 }
 .episodes-table .size {
-  width: 70px;
+  width: 65px;
 }
 .episodes-table .length {
-  width: 60px;
+  width: 65px;
 }
 .episodes-table .expand {
   width: 25px;
@@ -676,7 +674,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #splash .dope-result img,
 #charts .dope-result img {
-  margin-left: 10px;
+  margin-left: 5px;
   float: right;
 }
 .dope-list {
@@ -729,7 +727,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 /* LAST PLAYED */
 #last-played .dope-result img {
   float: left;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 #last-played .dope-result .result-length {
   position: absolute;
@@ -1092,12 +1090,21 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   body {
     font-size: 12px;
   }
+  .episodes-table .order {
+    width: 40px;
+  }
   .episodes-table .released {
     width: 60px;
   }
   .episodes-table .size {
-    width: 60px;
+    width: 55px;
   }
+  .episodes-table .length {
+    width: 55px;
+  }
+  .episodes-table .expand {
+    width: 20px;
+  }    
   #player-wrapper {
     border-radius: 0;
   }
@@ -1107,10 +1114,19 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   body {
     font-size: 13px;
   }
+  .episodes-table .order {
+    width: 40px;
+  }  
   .episodes-table .released {
     width: 70px;
   }
   .episodes-table .size {
     width: 60px;
   }
+  .episodes-table .length {
+    width: 60px;
+  }
+  .episodes-table .expand {
+    width: 20px;
+  }  
 }

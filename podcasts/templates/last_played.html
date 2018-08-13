@@ -4,7 +4,7 @@
       {% if results.view == "last_played" %}
         <a class="btn-dope options-button" href="{% url 'last_played' %}">
           <span>Updated </span>
-          <span class="date" data-utc="{% now 'U' %}">{% now "d-m-Y H:i" %}</span>
+          <span class="date" data-utc="{% now 'U' %}">{% now "d M Y H:i" %}</span>
           <i class="fas fa-sync" title="Update"></i>
         </a>
       {% endif %}
@@ -37,7 +37,7 @@
           <li>
             <span>Released</span>
             {% if episode.pubDate %}
-              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d M Y H:i" }}</span>
             {% else %}
               <span>N/A</span>
             {% endif %}

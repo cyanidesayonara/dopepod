@@ -20,11 +20,12 @@ function dateLocalizer() {
   tz = -date.getTimezoneOffset() * 60;
 
   $(".date").each(function() {
-    var d = $(this).data("utc") + tz;
+    var utc = $(this).data("utc");
+    var d = utc + tz;
     var d = new Date(d * 1000)
     var dateString =
-      ("0" + d.getUTCDate()).slice(-2) + "-" +
-      ("0" + (d.getUTCMonth() + 1)).slice(-2) + "-" +
+      ("0" + d.getUTCDate()).slice(-2) + " " +
+      ((d.toLocaleString("en-us", {month: "short" }))) + " " +
       d.getUTCFullYear() + " " +
       ("0" + d.getUTCHours()).slice(-2) + ":" +
       ("0" + d.getUTCMinutes()).slice(-2);
