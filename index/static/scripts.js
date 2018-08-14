@@ -558,7 +558,6 @@ $(document)
       }
     }
   })
-  // search when user clicks buttons
   .on("click", ".options-button", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -577,8 +576,7 @@ $(document)
       getResults([url, drop, true]);
     }, 250);
   })
-  // search when user clicks buttons
-  .on("click", ".showpod .pages-buttons .options-button", function(e) {
+  .on("click", ".showpod .options-button", function(e) {
     e.preventDefault();
     // redirect to episodes
     var url = this.href.replace("showpod", "episodes");
