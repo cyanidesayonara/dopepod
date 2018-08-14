@@ -12,9 +12,6 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    joined_at = models.DateTimeField(default=timezone.now)
     LIGHT = "light"
     DARK = "dark"
     CHRISTMAS = "christmas"

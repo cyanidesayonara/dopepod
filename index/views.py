@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .forms import ProfileForm, UserForm
+from index.forms import ProfileForm, UserForm
 from podcasts.models import Genre, Language, Subscription, Podcast, Episode
 from django.views.decorators.vary import vary_on_headers
 from django.db.models import F
@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core import serializers
+from lazysignup.decorators import allow_lazy_user
 import json
 import logging
 
@@ -956,3 +957,8 @@ def solong(request):
             allauth.logout(request)
             user.delete()
     return redirect("/")
+
+@allow_lazy_user
+def temp(request):
+    if request.method == "GET":
+        return HttpResponse(request.user.username)

@@ -2,7 +2,7 @@
 {% else %}
   <div class="row">
     <div class="col-12 color-3 px-0">
-      <div class="dope-buttons-r">
+      <div class="dope-buttons dope-buttons-r">
         {% if results.view == "showpod" %}
           {% if user.is_authenticated %}
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">

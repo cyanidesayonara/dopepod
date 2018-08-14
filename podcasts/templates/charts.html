@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12 color-3 px-0">
-    <div class="dope-buttons-r">
+    <div class="dope-buttons dope-buttons-r">
       {% if results.genres %}
         {% if results.selected_genre %}
           <a class="btn-dope exp exp-icon active" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false"
@@ -87,11 +87,11 @@
             </span>
           </li>
         </ul>
-      </div>
-      <div class="dope-buttons-l">
-        <a class="btn-dope active showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-          Episodes
-        </a>
+        <div class="dope-buttons px-0">
+          <a class="btn-dope active showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+            Episodes
+          </a>
+        </div>
       </div>
     </div>
   {% endfor %}

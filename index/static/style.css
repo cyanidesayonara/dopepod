@@ -239,6 +239,9 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   max-width: 500px;
   margin: auto;
 }
+.slick-listen .slick-slide {
+  box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
+}
 #splash .dope-result h1,
 #splash .dope-result h2 {
   white-space: nowrap;
@@ -561,8 +564,6 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .episodes-table .order {
   width: 45px;
 }
-.episodes-table .title {
-}
 .episodes-table .released {
   width: 145px;
 }
@@ -570,7 +571,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   width: 70px;
 }
 .episodes-table .length {
-  width: 60px;
+  width: 70px;
 }
 .episodes-table .expand {
   width: 25px;
@@ -609,25 +610,27 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .dope-result p {
   margin: 10px 0 0;
 }
-.dope-buttons,
-.dope-buttons-c,
-.dope-buttons-l,
-.dope-buttons-r {
+.dope-buttons {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  padding: 10px 10px 5px;
 }
-.dope-buttons-c,
-.dope-buttons-l,
-.dope-buttons-r {
-  padding: 10px 10px 5px 5px;
+.dope-buttons-c {
+  justify-content: center;
 }
 .dope-buttons-r {
   justify-content: flex-end;
 }
-.dope-buttons-c {
-  justify-content: center;
+.dope-buttons > * {
+  margin: 0 5px 5px 0;
+}
+.dope-buttons-c > * {
+  margin: 0 2.5px 5px;
+}
+.dope-buttons-r > * {
+  margin: 0 0 5px 5px;
 }
 .results-bar .dope-buttons-l:first-of-type {
   float: left;
@@ -635,22 +638,8 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .results-bar .dope-buttons-l:last-of-type {
   float: right;
 }
-.dope-buttons > * {
-  margin: 0 5px 0 0;
-}
 #player-wrapper .dope-buttons {
   float: right;
-}
-#player-wrapper .dope-buttons > * {
-  margin: 0 0 0 5px;
-}
-.dope-buttons-l > *,
-.dope-buttons-r > * {
-  margin-left: 5px;
-  margin-bottom: 5px;
-}
-.dope-buttons-c > * {
-  margin: 0 2.5px 5px;
 }
 .nix-button {
   margin-right: auto;
@@ -1093,10 +1082,16 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
     font-size: 12px;
   }
   .episodes-table .released {
-    width: 60px;
+    width: 65px;
   }
   .episodes-table .size {
     width: 60px;
+  }
+  .episodes-table .length {
+    width: 60px;
+  }
+  .episodes-table .expand {
+    width: 20px;
   }
   #player-wrapper {
     border-radius: 0;
@@ -1112,5 +1107,11 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   }
   .episodes-table .size {
     width: 60px;
+  }
+  .episodes-table .length {
+    width: 60px;
+  }
+  .episodes-table .expand {
+    width: 20px;
   }
 }

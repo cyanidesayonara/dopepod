@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     # "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
     # "allauth.socialaccount.providers.reddit",
+
+    "lazysignup",
 ]
 
 MIDDLEWARE = [
@@ -79,7 +81,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     "dopepod.middleware.local_date_middleware.LocalDateMiddleware",
 ]
 
@@ -88,7 +89,7 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
-    #"lazysignup.backends.LazySignupBackend",
+    "lazysignup.backends.LazySignupBackend",
 )
 
 HAYSTACK_CONNECTIONS = {

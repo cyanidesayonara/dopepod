@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12 color-3 px-0">
-    <div class="dope-buttons-r">
+    <div class="dope-buttons dope-buttons-r">
       {% if results.view == "last_played" %}
         <a class="btn-dope options-button" href="{% url 'last_played' %}">
           <span>Updated </span>
@@ -78,37 +78,37 @@
             {% endif %}
           </p>
         </div>
-      </div>
-      <div class="dope-buttons-r">
-        <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
-          {% csrf_token %}
-          <input type="hidden" name="mode" value="play" />
-          <input type="hidden" name="signature" value="{{ episode.signature }}" />
-          <button class="btn-dope active" type="submit">
-            Play
-          </button>
-        </form>
-        <a class="btn-dope active" href="{{ episode.url }}" download>
-          Download
-        </a>
-        <a class="btn-dope active showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-          title="{{ episode.podcast.title }}">
-          Episodes
-        </a>
-        {% if user.is_authenticated %}
-          <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+        <div class="dope-buttons dope-buttons-r px-0">
+          <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
             {% csrf_token %}
-            <input type="hidden" name="mode" value="add" />
+            <input type="hidden" name="mode" value="play" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
             <button class="btn-dope active" type="submit">
-              Add to Playlist
+              Play
             </button>
           </form>
-        {% endif %}
-        <button class="btn-dope exp exp-icon active" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
-          aria-expanded="false">
-          <span>More</span>
-        </button>
+          <a class="btn-dope active" href="{{ episode.url }}" download>
+            Download
+          </a>
+          <a class="btn-dope active showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+            title="{{ episode.podcast.title }}">
+            Episodes
+          </a>
+          {% if user.is_authenticated %}
+            <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="mode" value="add" />
+              <input type="hidden" name="signature" value="{{ episode.signature }}" />
+              <button class="btn-dope active" type="submit">
+                Add to Playlist
+              </button>
+            </form>
+          {% endif %}
+          <button class="btn-dope exp exp-icon active" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
+            aria-expanded="false">
+            <span>More</span>
+          </button>
+        </div>
       </div>
     </div>
   {% endfor %}
