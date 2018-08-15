@@ -47,14 +47,16 @@ form {
 }
 
 /* COOKIE BANNER */
-#cookie-banner {
+.cookie-banner {
   color: rgb(46, 46, 46);
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-#cookie-banner h1 {
-  display: inline-block;
-  margin: 10px;
+.cookie-banner h1 {
+  margin-bottom: 10px;
   font-size: 16px;
+}
+.cookie-banner p {
+  margin: 0;
 }
 
 /* BUTTONS */
@@ -169,10 +171,6 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   text-align: center;
   max-width: 375px;
 }
-.dope-wrapper p {
-  font-size: 1em;
-  margin-bottom: 10px;
-}
 .btn-dope-social {
   display: inline-flex;
   padding: 0;
@@ -235,11 +233,8 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #splash {
   padding: 0;
-  min-height: 270px;
+  min-height: 280px;
   overflow: hidden;
-}
-.splash .slick-list {
-  overflow: visible;
 }
 .slick-listen {
   max-width: 500px;
@@ -636,6 +631,9 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 .dope-result {
   outline: none;
   padding: 10px 10px 0;
+}
+#splash .dope-result {
+  padding-bottom: 20px;
 }
 .dope-result img {
   border-radius: .25rem;

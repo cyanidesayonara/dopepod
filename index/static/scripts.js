@@ -351,6 +351,7 @@ function postLogin(form) {
     // returns errors
     .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
+      fadeErrors();
       scrollToTop();
     })
     // returns splashboard
@@ -501,7 +502,7 @@ function initSlick() {
     prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
   });
-}
+};
 function initSlickListen() {
   timeout = setTimeout(function() {
     $(".logo").toggleClass("d-none");
@@ -524,6 +525,11 @@ function initSlickListen() {
       nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
     });
   }, 3000);
+};
+function fadeErrors() {
+  $(".errors").delay(3000).fadeOut("slow", function() {
+    $(this).remove();
+  });
 };
 
 $(document)
@@ -838,6 +844,7 @@ $(document)
   .on("show.bs.collapse", ".login-collapse", function(e) {
     e.stopPropagation();
     $(".login-collapse.show").collapse("hide");
+    $(".errors").remove();
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
@@ -916,12 +923,6 @@ $(document)
   // empties search field when link or button is clicked
   .on("click", "a, button:not(.search-button)", function() {
     $(".q").val("");
-  })
-  // deletes error text (after delay) when clicking anywhere
-  .on("click", "body", function() {
-    $(".errors").delay(2000).fadeOut("slow", function() {
-      $(this).remove();
-    });
   })
   // hides dopebar-collapse...
   .on("click", "body, .dope-link, .search-button", function() {

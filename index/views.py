@@ -960,5 +960,5 @@ def solong(request):
 
 @allow_lazy_user
 def temp(request):
-    if request.method == "GET":
+    if request.method == "POST":
         return HttpResponse(request.user.username)
