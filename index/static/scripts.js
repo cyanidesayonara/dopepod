@@ -830,15 +830,15 @@ $(document)
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var button = $(this);
+    var button = $(this).children(".btn-dope-toggle");
     var view = button.children(".d-none").data("view");
-    button.children().toggleClass("d-none");
     button.parents(".results").attr("data-view", view)
+    button.children().toggleClass("d-none");
     $(".view-collapse").collapse("toggle");
   })
   // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .order-button, .no-touch .view-button", function () {
-    $(this).children().toggleClass("d-none");
+  .on("mouseenter mouseleave", ".no-touch .btn-dope-split", function () {
+    $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function(e) {

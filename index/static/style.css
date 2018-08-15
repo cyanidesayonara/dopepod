@@ -87,7 +87,6 @@ form {
 .episode-header:focus,
 .no-touch .dope-toggle:hover,
 .dope-toggle:focus,
-.exp[aria-expanded="true"],
 .no-touch .expandable:hover .charts-rank,
 .no-touch .dash-wrapper:hover {
   color: #fff;
@@ -96,20 +95,13 @@ form {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
 }
-#player-wrapper .exp[aria-expanded="true"]:not(:hover):not(:focus),
-.results-bar .exp[aria-expanded="true"]:not(:hover):not(:focus),
-html:not(.no-touch) #player-wrapper .exp[aria-expanded="true"]:not(:focus),
-html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
-  box-shadow: unset;
-  color: unset;
-  background: unset;
-}
 .exp-icon::after {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: " \f067";
 }
-.exp-icon[aria-expanded="true"]::after {
+.exp-icon[aria-expanded="true"]::after,
+.btn-dope-split[aria-expanded="true"] .exp-icon::after {
   content: " \f068";
 }
 .dope-toggle {
@@ -171,15 +163,16 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   text-align: center;
   max-width: 375px;
 }
-.btn-dope-social {
+.btn-dope-split {
   display: inline-flex;
   padding: 0;
 }
-.social-button {
-  padding: 3px 8px;
+.btn-dope-split > * {
+  height: 28px;
+  min-width: inherit;
+  padding: 3px 6px;
 }
-.social-icon {
-  padding: 3px 10px;
+.btn-dope-split > *:first-child {
   background: rgb(0, 191, 165);
   color: #fff;
 }
@@ -691,7 +684,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   color: inherit;
   float: left;
   font-weight: 600;
-  margin-right: 5px;
+  margin-right: 10px;
   text-align: center;
   line-height: 30px;
   height: 32px;
@@ -817,6 +810,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   min-height: 0;
 }
 #player-wrapper {
+  font-weight: 600;
   color: rgb(46, 46, 46);
   position: absolute;
   overflow: hidden;
@@ -833,10 +827,6 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-#player-wrapper p {
-  margin: 3px 0 0;
-  font-weight: 600;
-}
 #player-wrapper h1 {
   overflow: hidden;
   margin: 10px 0;
@@ -851,24 +841,26 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #player-close-collapse {
   text-align: center;
+  padding-bottom: 15px;
 }
-#player-close-collapse p {
+#player-close-collapse span {
   font-size: 14px;
-  display: inline-block;
   color: #fff;
-  margin: 5px 10px 15px 0;
+  margin: 5px;
 }
 .player-episode {
   font-size: 14px;
   height: 40px;
   overflow: hidden;
+  margin: 0 0 5px;
 }
 .player-date {
+  margin: 0 0 10px;
   font-size: 12px;
 }
 #player-wrapper .player-description {
-  margin: 10px 0;
-  max-height: calc(100vh - 490px);
+  margin: 0;
+  max-height: calc(100vh - 470px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
@@ -876,12 +868,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #player-wrapper audio {
   display: block;
-  margin-top: 10px;
   width: calc(100% - 40px);
-}
-.player-collapse-toggle {
-  float: right;
-  margin-top: 10px;
 }
 
 /* OVERRIDER */

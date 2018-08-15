@@ -2,33 +2,45 @@
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
       {% if results.genres %}
-        {% if results.selected_genre %}
-          <a class="btn-dope exp exp-icon active" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false"
-            aria-controls="genre-collapse">
-            {{ results.selected_genre }}
-          </a>
-        {% else %}
-          <a class="btn-dope exp exp-icon" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
-            All Genres
-          </a>
-        {% endif %}
+        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
+          <span>
+            Genre
+          </span>
+          <span class="exp-icon">
+            {% if results.selected_genre %}
+              {{ results.selected_genre }}
+            {% else %}
+              All
+            {% endif %}
+          </span>           
+        </a>
       {% endif %}
       {% if results.languages %}
-        {% if results.selected_language %}
-          <a class="btn-dope exp exp-icon active" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false"
-            aria-controls="language-collapse">
-            {{ results.selected_language }}
-          </a>
-        {% else %}
-          <a class="btn-dope exp exp-icon" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
-            All Languages
-          </a>
-        {% endif %}
+        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
+          <span>
+            Language
+          </span>
+          <span class="exp-icon">
+            {% if results.selected_language %}
+              {{ results.selected_language }}
+            {% else %}
+              All
+            {% endif %}
+          </span>        
+        </a>
       {% endif %}
       {% if results.provider %}
-        <a class="btn-dope exp exp-icon active" data-toggle="collapse" href="#provider-collapse-{{ results.view }}" aria-expanded="false"
-          aria-controls="provider-collapse">
-          {% if results.provider == "dopepod" %} dopepod {% elif results.provider == "itunes" %} itunes {% endif %}
+        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#provider-collapse-{{ results.view }}" aria-expanded="false" aria-controls="provider-collapse">
+          <span>
+            Source
+          </span>
+          <span class="exp-icon">
+            {% if results.provider == "dopepod" %}
+              dopepod
+            {% elif results.provider == "itunes" %}
+              itunes
+            {% endif %}
+          </span>
         </a>
       {% endif %}
     </div>
@@ -83,8 +95,13 @@
         </li>
       </ul>
       <div class="dope-buttons px-0">
-        <a class="btn-dope active showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-          Episodes
+        <a class="btn-dope btn-dope-split showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+          <span>
+            Episodes
+          </span>
+          <span>
+            <i class="fas fa-bars"></i>
+          </span>
         </a>
       </div>
     </div>

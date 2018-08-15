@@ -2,11 +2,21 @@
   <div class="row">
     <div class="col-12 color-3 dope-options">
       <div class="dope-buttons dope-buttons-r">
-        <a class="btn-dope unsubscribe-button" href="{% url 'subscriptions' %}">
-          Unsubscribe
+        <a class="btn-dope btn-dope-split unsubscribe-button" href="{% url 'subscriptions' %}">
+          <span>
+            Unsubscribe
+          </span>
+          <span>
+            <i class="fas fa-times" title="Unsubscribe"></i>
+          </span>
         </a>
-        <a class="btn-dope select-all" href="#">
-          Select All
+        <a class="btn-dope btn-dope-split select-all" href="#">
+          <span>
+            Select All
+          </span>
+          <span>
+            <i class="fas fa-check" title="Select"></i>
+          </span>
         </a>
       </div>
     </div>
@@ -44,7 +54,7 @@
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
-              <button type="submit" class="btn-dope">
+              <button class="btn-dope" type="submit">
                 <i class="fas fa-times" title="Unsubscribe"></i>
               </button>
             </form>
