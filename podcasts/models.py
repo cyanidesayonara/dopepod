@@ -1167,7 +1167,7 @@ class Episode(models.Model):
         results = {
             "episodes": episodes,
             "header": "Last played episodes",
-            "view": "last_played",
+            "view": "last-played",
         }
         cache.set("last_played", results, 60 * 60 * 24)
     

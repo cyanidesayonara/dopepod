@@ -21,8 +21,8 @@ h2 {
 p {
   margin: 10px 0;
 }
-h2 span,
-.fab {
+i,
+.by {
   font-weight: 400;
 }
 form {
@@ -295,6 +295,7 @@ html:not(.no-touch) .results-bar .exp[aria-expanded="true"]:not(:focus) {
 }
 #footer p {
   font-size: 14px;
+  margin: 0;
 }
 #dopebar-r > * {
   float: right;
