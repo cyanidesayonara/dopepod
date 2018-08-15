@@ -1,7 +1,7 @@
 {% if results.podcasts %}
   <div class="row">
-    <div class="col-12 color-3 px-0">
-      <div class="dope-buttons-r">
+    <div class="col-12 color-3 dope-options">
+      <div class="dope-buttons dope-buttons-r">
         <a class="btn-dope unsubscribe-button" href="{% url 'subscriptions' %}">
           Unsubscribe
         </a>
@@ -11,55 +11,53 @@
       </div>
     </div>
   </div>
-{% endif %}
-<div class="row grid-results">
-  {% for subscription in results.podcasts %}
-    {% with subscription.podcast as podcast %}
-      <div class="col-lg-2 col-md-3 col-4 selectable px-0">
-        <a class="dope-result showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-          <img class="img-fluid" src="//{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
-            alt="{{ podcast.title }}" />
-          <h1>
-            <strong>
+  <div class="row collapse fade view-collapse show">
+    {% for subscription in results.podcasts %}
+      {% with subscription.podcast as podcast %}
+        <div class="col-lg-2 col-md-3 col-4 dope-result selectable" data-podid="{{ podcast.podid }}">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
+            <img class="img-fluid" src="//{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
+              alt="{{ podcast.title }}" />
+            <h1>
               {{ podcast.title }}
-            </strong>
-          </h1>
-          <h2>
-            <span>
-              by
-            </span>
-            <strong>
+            </h1>
+            <h2>
+              <span>
+                by
+              </span>
               {{ podcast.artist }}
-            </strong>
-          </h2>
-          <span>
-            Last updated:
-          </span>
-          {% if subscription.last_updated %}
-            <span class="date" data-utc="{{ subscription.last_updated|date:'U' }}">
-              {{ subscription.last_updated|date:"d-m-Y H:i" }}
-            </span>
-          {% else %}
+            </h2>
             <span>
-              N/A
+              Last updated:
             </span>
-          {% endif %}
-        </a>
-        <div class="dope-buttons-r">
-          <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
-            <button type="submit" class="btn-dope">
-              <i class="fas fa-times" title="Unsubscribe"></i>
+            {% if subscription.last_updated %}
+              <span class="date" data-utc="{{ subscription.last_updated|date:'U' }}">
+                {{ subscription.last_updated|date:"d M Y H:i" }}
+              </span>
+            {% else %}
+              <span>
+                N/A
+              </span>
+            {% endif %}
+          </a>
+          <div class="dope-buttons dope-buttons-r px-0">
+            <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
+              <button type="submit" class="btn-dope">
+                <i class="fas fa-times" title="Unsubscribe"></i>
+              </button>
+            </form>
+            <button class="btn-dope select">
+              <i class="fas fa-check" title="Select"></i>
             </button>
-          </form>
-          <button class="btn-dope select">
-            <i class="fas fa-check" title="Select"></i>
-          </button>
+          </div>
         </div>
-      </div>
-    {% endwith %}
-  {% empty %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="row">
     <div class="col-12 dope-wrapper">
       <p>
         No subscriptions.
@@ -70,6 +68,5 @@
         </a>
       </p>
     </div>
-  {% endfor %}
-</div>
-
+  </div>
+{% endif %}

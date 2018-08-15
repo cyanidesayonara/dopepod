@@ -1,25 +1,27 @@
 {% if results.pages %}
-  <div class="dope-buttons dope-buttons-l">
-    {% if results.start_url %}
-      <a class="btn-dope options-button" href="{{ results.start_url }}">
-        <i class="fas fa-angle-double-left" title="First Page"></i>
-      </a>
-    {% endif %}
-    {% for page in results.pages %}
-      {% if page.1 %}
-        <a class="btn-dope options-button" href="{{ page.1 }}">
-          {{ page.0 }}
+  <div class="col-12 px-0">
+    <div class="dope-buttons">
+      {% if results.start_url %}
+        <a class="btn-dope options-button" href="{{ results.start_url }}">
+          <i class="fas fa-angle-double-left" title="First Page"></i>
         </a>
-      {% else %}
-        <button class="btn-dope active">
-          {{ page.0 }}
-        </button>
       {% endif %}
-    {% endfor %}
-    {% if results.end_url %}
-      <a class="btn-dope options-button" href="{{ results.end_url }}">
-        <i class="fas fa-angle-double-right" title="Last Page"></i>
-      </a>
-    {% endif %}
+      {% for page in results.pages %}
+        {% if page.1 %}
+          <a class="btn-dope options-button" href="{{ page.1 }}">
+            {{ page.0 }}
+          </a>
+        {% else %}
+          <button class="btn-dope active">
+            {{ page.0 }}
+          </button>
+        {% endif %}
+      {% endfor %}
+      {% if results.end_url %}
+        <a class="btn-dope options-button" href="{{ results.end_url }}">
+          <i class="fas fa-angle-double-right" title="Last Page"></i>
+        </a>
+      {% endif %}
+    </div>
   </div>
 {% endif %}

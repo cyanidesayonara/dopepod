@@ -20,11 +20,12 @@ function dateLocalizer() {
   tz = -date.getTimezoneOffset() * 60;
 
   $(".date").each(function() {
-    var d = $(this).data("utc") + tz;
+    var utc = $(this).data("utc");
+    var d = utc + tz;
     var d = new Date(d * 1000)
     var dateString =
-      ("0" + d.getUTCDate()).slice(-2) + "-" +
-      ("0" + (d.getUTCMonth() + 1)).slice(-2) + "-" +
+      ("0" + d.getUTCDate()).slice(-2) + " " +
+      ((d.toLocaleString("en-us", {month: "short" }))) + " " +
       d.getUTCFullYear() + " " +
       ("0" + d.getUTCHours()).slice(-2) + ":" +
       ("0" + d.getUTCMinutes()).slice(-2);
@@ -203,9 +204,10 @@ function getResults(args, no_loader, no_push) {
     });
   if (!no_loader) {
     if (!drop.children(".loading").length) {
+      drop.find(".results-collapse").collapse("show");    
       var results = drop.children(".results");
       if (results.length) {
-        results.addClass("loading").children(".results-collapse").html(getCircleLoading());
+        results.addClass("loading").html(getCircleLoading());
       }
       else {
         drop.find("#episodes-collapse").html(getCircleLoading());
@@ -228,7 +230,7 @@ function noshow(podid) {
     url: "/noshow/",
   });
 };
-// SCROLLERS
+// SCROLLIES
 function scrollSpy() {
   $(window).scroll(function() {
     scrollUp();
@@ -382,7 +384,7 @@ function postSubscriptions(podids, button) {
       drop.html(response);
       if ($(response).hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
-        drop = ".showpod .results-content";
+        drop = ".showpod .results-collapse";
         getResults([url, drop, false]);
       }
       else {
@@ -583,7 +585,7 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = button.parents(".results-content");
+      var drop = button.parents(".results-collapse");
       getResults([url, drop, false]);
     }, 250);
   })
@@ -594,9 +596,8 @@ $(document)
     var button = $(this);
     var podid = button.data("podid");
     var drop = $("#center-stage");
-    drop.find(".results-collapse").collapse("show");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .results-content", false];
+      var args = ["/episodes/" + podid + "/", ".showpod .results-collapse", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {
@@ -757,12 +758,12 @@ $(document)
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
     var button = $(this);
-    var selected = button.parents(".results-content").find(".grid-result.selected");
+    var selected = button.parents(".results-collapse").find(".selectable.selected");
     if (selected.length) {
       // array of all selected podids
       var podids = [];
-      selected.each(function (i, sub) {
-        podids[i] = $(sub).data("podid");
+      selected.each(function (i, subscription) {
+        podids[i] = $(subscription).data("podid");
       })
     }
     // if nothing selected, do nothing

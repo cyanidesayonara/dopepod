@@ -50,11 +50,11 @@
             <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}" />
           </div>
           <div class="col-auto">
-            <button class="btn-dope" type="submit">Save</button>
+            <button class="btn-dope active" type="submit">Save</button>
           </div>
           <div class="col-12 dope-form-group">
             <label for="theme">Theme</label>
-            <div class="dope-buttons">
+            <div class="dope-buttons p-0">
               {% if user.profile.theme == "dark" %}
               <input class="theme" type="hidden" name="theme" value="dark" />
               <button type="submit" class="btn-dope theme-button">Light</button>
@@ -85,15 +85,17 @@
       <p>
         Delete account? Your playlist and subscriptions will be lost forever.
       </p>
-      <form class="solong-form" action="{% url 'solong' %}" method="POST">
-        {% csrf_token %}
-        <button class="btn-dope" type="submit">
-          Yes
-        </button>
+      <div class="dope-buttons dope-buttons-c">
+        <form class="solong-form" action="{% url 'solong' %}" method="POST">
+          {% csrf_token %}
+          <button class="btn-dope" type="submit">
+            Yes
+          </button>
+        </form>
         <a class="btn-dope" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
           No
         </a>
-      </form>
+      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-{% with results.genres as genres %}<div class="slick">{% for genre in genres %}<div class="slick-slide"><a class="slick-header browse-link" href="/search/?genre={{ genre.url_format }}&view=grid"><h1><strong>{{ genre }}</strong></h1><p>{{ genre.n_podcasts }} podcast{{ genre.n_podcasts|pluralize }}</p></a><!--<ul>
+{% with results.genres as genres %}<div class="slick">{% for genre in genres %}<div class="slick-slide"><a class="slick-header browse-link" href="/search/?genre={{ genre.url_format }}&view=grid"><h1>{{ genre }}</h1><p>{{ genre.n_podcasts }} podcast{{ genre.n_podcasts|pluralize }}</p></a><!--<ul>
           {% for podcast in genre.podcasts %}
             <li>
               <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
@@ -7,7 +7,7 @@
               </a>
             </li>
           {% endfor %}
-        </ul>--></div>{% endfor %}</div>{% endwith%} {% with results.languages as languages %}<div class="slick">{% for language in languages %}<div class="slick-slide"><a class="slick-header browse-link" href="/search/?language={{ language.url_format }}&view=grid"><h1><strong>{{ language }}</strong></h1><p>{{ language.n_podcasts }} podcast{{ language.n_podcasts|pluralize }}</p></a><!--<ul>
+        </ul>--></div>{% endfor %}</div>{% endwith%} {% with results.languages as languages %}<div class="slick">{% for language in languages %}<div class="slick-slide"><a class="slick-header browse-link" href="/search/?language={{ language.url_format }}&view=grid"><h1>{{ language }}</h1><p>{{ language.n_podcasts }} podcast{{ language.n_podcasts|pluralize }}</p></a><!--<ul>
           {% for podcast in language.podcasts %}
             <li>
               <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">

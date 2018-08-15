@@ -1,4 +1,4 @@
-<div class="dope-buttons-c logo">
+<div class="dope-buttons dope-buttons-c logo">
   <a class="btn-dope index-link active" href="/">d</a>
   <a class="btn-dope index-link active" href="/">o</a>
   <a class="btn-dope index-link active" href="/">p</a>
@@ -9,7 +9,7 @@
 </div>
 <div class="slick-listen">
   <div class="slick-slide">
-    <ul class="dope-buttons-c logo d-none">
+    <ul class="dope-buttons dope-buttons-c logo d-none">
       <a class="btn-dope index-link active" href="/">d</a>
       <a class="btn-dope index-link active" href="/">o</a>
       <a class="btn-dope index-link active" href="/">p</a>
@@ -29,17 +29,17 @@
         <h1>
           <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}"
             title="{{ episode.podcast.title }}">
-            <strong>{{ episode.podcast.title }}</strong>
+            {{ episode.podcast.title }}
           </a>
         </h1>
         <h2>
-          <strong>{{ episode.title }}</strong>
+          {{ episode.title }}
         </h2>
         <ul class="dope-list">
           <li>
             <span>Released</span>
             {% if episode.pubDate %}
-              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d-m-Y H:i" }}</span>
+              <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d M Y H:i" }}</span>
             {% else %}
               <span>N/A</span>
             {% endif %}
@@ -76,7 +76,7 @@
             {% if episode.description %} {{ episode.description }} {% else %} No description {% endif %}
           </p>
         </div>
-        <div class="dope-btns px-0">
+        <div class="dope-buttons px-0">
           <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
             {% csrf_token %}
             <input type="hidden" name="mode" value="play" />

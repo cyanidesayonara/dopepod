@@ -13,12 +13,11 @@
 {% block center-stage %}
 <div class="col-12 results color-2 {{ results.view }}" {% if results.selected_q %}data-q="{{ results.selected_q }}"{% endif %} {% if results.podcast.podid %}data-podid="{{ results.podcast.podid }}"{% endif %}>
   {% include "results_bar.html" %}
-  <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
-    {% if results.podcast %}
-      {% include "showpod.min.html" %}
-    {% endif %}
-
-    <div class="col-12 results-content">
+  {% if results.podcast %}
+    {% include "showpod.min.html" %}
+  {% endif %}
+  <div class="row">
+    <div class="col-12 collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
       {% if results.view == "splash" or results.view == "dashboard" %}
         {% include "splashboard.min.html" %}
       {% elif results.view == "grid" or results.view == "list" %}
@@ -29,7 +28,7 @@
         {% include "subscriptions.min.html" %}
       {% elif results.view == "showpod" or results.view == "playlist" %}
         {% include "episodes.min.html" %}
-      {% elif results.view == "last_played"%}
+      {% elif results.view == "last-played"%}
         {% include "last_played.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}

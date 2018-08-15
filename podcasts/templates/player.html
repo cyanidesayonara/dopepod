@@ -16,7 +16,7 @@
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
       </a>
-      <div class="dope-buttons">
+      <div class="dope-buttons float-left">
         <button class="btn-dope exp exp-icon player-minimize" aria-expanded="true">
         </button>
         <button class="btn-dope exp" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
@@ -36,7 +36,7 @@
       <p class="player-date">
         Released
         {% if episode.pubDate %}
-          {{ episode.pubDate|date:"d-m-Y H:i" }}
+          {{ episode.pubDate|date:"d M Y H:i" }}
         {% else %}
           N/A
         {% endif %}
