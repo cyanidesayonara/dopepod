@@ -176,6 +176,9 @@ form {
   background: rgb(0, 191, 165);
   color: #fff;
 }
+.btn-dope-split .button-loading {
+  padding: 3px 6px;
+}
 .logo {
   text-align: center;
   margin: 40px 0;
@@ -946,7 +949,6 @@ form {
 .button-loading {
   position: relative;
   background: inherit;
-  height: 22px;
   width: 57px;
 }
 .loading-a-1 {

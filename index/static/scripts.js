@@ -210,6 +210,7 @@ function getResults(args, no_loader, no_push) {
         results.addClass("loading").html(getCircleLoading());
       }
       else {
+        console.log(drop.find("#episodes-collapse"))
         drop.find("#episodes-collapse").html(getCircleLoading());
       }
       if (scroll) {

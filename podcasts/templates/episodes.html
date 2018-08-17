@@ -61,8 +61,8 @@
     </div>
   </div>
 {% else %}
-  {% if results.episodes %}
-    <div class="row fade collapse showpod-collapse show" id="episodes-collapse">
+  <div class="row fade collapse showpod-collapse show" id="episodes-collapse">
+    {% if results.episodes %}
       {% include "pagination.min.html" %}
       <div class="col-12 px-0">
         <table class="table episodes-table">
@@ -216,6 +216,6 @@
         </table>
       </div>
       {% include "pagination.min.html" %}
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 {% endif %}
