@@ -12,7 +12,7 @@
 </div>
 <div class="row">
   {% for episode in results.episodes %}
-    <div class="col-12 expandable dope-result">
+    <div class="col-12 expandable dope-result{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
         {% if episode.length %}
           <span class="result-length">{{ episode.length }}</span>
