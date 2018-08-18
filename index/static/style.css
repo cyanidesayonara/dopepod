@@ -87,6 +87,7 @@ form {
 .episode-header:focus,
 .no-touch .dope-toggle:hover,
 .dope-toggle:focus,
+.exp[aria-expanded="true"],
 .no-touch .expandable:hover .charts-rank,
 .no-touch .dash-wrapper:hover {
   color: #fff;
@@ -544,9 +545,6 @@ form {
   padding: .3em;
   border: none;
 }
-.episodes-table tr > *:first-child {
-  text-align: center;
-}
 .episodes-table thead th {
   border: none;
 }
@@ -555,6 +553,7 @@ form {
   border-top: 2px solid rgb(0, 191, 165);
 }
 .episodes-table .order {
+  text-align: center;
   width: 45px;
 }
 .episodes-table .released {
