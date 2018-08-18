@@ -362,7 +362,7 @@ function postLogin(form) {
       }
       scrollToTop();
     });
-    button.html(getButtonLoading());
+  button.html(getButtonLoading());
 }
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);

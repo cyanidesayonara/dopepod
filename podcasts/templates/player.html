@@ -17,7 +17,7 @@
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
       </a>
       <div class="dope-buttons dope-buttons-r p-0 float-right">
-        <button class="btn-dope exp-icon player-minimize" aria-expanded="true">
+        <button class="btn-dope exp-icon exp-nix player-minimize" aria-expanded="true">
         </button>
         <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
           <i class="fas fa-times" title="Close"></i>
@@ -51,7 +51,7 @@
           </a>
         </div>
       </div>
-      <button class="btn-dope exp-icon float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
+      <button class="btn-dope exp-icon exp-nix float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
       </button>        
       <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>

@@ -65,9 +65,9 @@ form {
   font-size: 14px;
   color: inherit;
   border: 2px solid rgb(0, 191, 165);
-  min-width: 32px;
-  height: 32px;
-  padding: 3px 6px;
+  min-width: 30px;
+  height: 30px;
+  padding: 3px 4px;
   cursor: pointer;
   font-weight: 600;
   background: rgba(0, 0, 0, 0);
@@ -101,7 +101,7 @@ form {
   font-weight: 900;
   content: " \f067";
 }
-div:not(.results) .exp-icon[aria-expanded="true"],
+.exp-icon[aria-expanded="true"]:not(.exp-nix),
 .btn-dope-split[aria-expanded="true"] .exp-icon {
   color: #fff;
   background: rgb(0, 191, 165);
@@ -145,8 +145,8 @@ div:not(.results) .exp-icon[aria-expanded="true"],
 .dope-field {
   margin-bottom: 5px;
   width: 100%;
-  min-width: 32px;
-  min-height: 32px;
+  min-width: 30px;
+  min-height: 30px;
   padding: 3px 6px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
@@ -174,16 +174,16 @@ div:not(.results) .exp-icon[aria-expanded="true"],
   padding: 0;
 }
 .btn-dope-split > * {
-  height: 28px;
+  height: 26px;
   min-width: inherit;
-  padding: 3px 6px;
+  padding: 3px 4px;
 }
 .btn-dope-split > *:first-child {
   background: rgb(0, 191, 165);
   color: #fff;
 }
 .btn-dope-split .button-loading {
-  padding: 3px 6px;
+  padding: 4px;
 }
 .logo {
   text-align: center;
