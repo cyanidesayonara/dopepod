@@ -56,10 +56,10 @@ def render_splash(request, template, context, response=False):
         "listen": "podcast name"
     }
     results = get_slick(results)
-    last_played = Episode.get_last_played()
+    previous = Episode.get_previous()
     context.update({
         "results": results,
-        "last_played": last_played,
+        "previous": previous,
     })
     if response:
         context = get_form_errors(context, response)
@@ -83,14 +83,14 @@ def render_dashboard(request, template, context):
 
 def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
-    last_played = Episode.get_last_played()
+    previous = Episode.get_previous()
     url = request.get_full_path()
     charts = Podcast.search(url=url, provider="dopepod")
     context["results"]["extend"] = True
     context.update({
         "cookie_banner": cookie,
         "charts": charts,
-        "last_played": last_played,
+        "previous": previous,
     })
     return render(request, template, context)
 
@@ -748,15 +748,15 @@ def episodes(request, podid):
             return render(request, "episodes.min.html", context)
         return redirect("/showpod/" + podid + "/")
 
-def last_played(request):
+def previous(request):
     """
-    returns last played
+    returns previously played
     """
 
     if request.method == "GET":
         if request.is_ajax():
             template = "results_base.min.html"
-            results = Episode.get_last_played()
+            results = Episode.get_previous()
             context = {
                 "results": results,
             }

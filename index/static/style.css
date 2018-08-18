@@ -101,6 +101,11 @@ form {
   font-weight: 900;
   content: " \f067";
 }
+div:not(.results) .exp-icon[aria-expanded="true"],
+.btn-dope-split[aria-expanded="true"] .exp-icon {
+  color: #fff;
+  background: rgb(0, 191, 165);
+}
 .exp-icon[aria-expanded="true"]::after,
 .btn-dope-split[aria-expanded="true"] .exp-icon::after {
   content: " \f068";
@@ -674,7 +679,7 @@ form {
 
 /* CHARTS */
 .charts .dope-result:not(:first-of-type),
-.last-played .dope-result:not(:first-of-type) {
+.previous .dope-result:not(:first-of-type) {
   border-top: 2px solid rgb(0, 191, 165);
 }
 #splash img,
@@ -713,11 +718,11 @@ form {
 }
 
 /* LAST PLAYED */
-.last-played img {
+.previous img {
   float: left;
   margin-right: 5px;
 }
-.last-played .result-length {
+.previous .result-length {
   position: absolute;
   font-size: 1em;
   font-weight: 400;
@@ -727,18 +732,18 @@ form {
   padding: 0 4px;
   background: rgba(0, 0, 0, .5);
 }
-.last-played h1,
-.last-played h2 {
+.previous h1,
+.previous h2 {
   margin-bottom: 4px;
   overflow: hidden;
 }
-.last-played h1 {
+.previous h1 {
   font-size: 16px;
   height: 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.last-played h2 {
+.previous h2 {
   height: 32px;
   font-size: 14px;
 }

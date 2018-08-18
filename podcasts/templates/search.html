@@ -7,11 +7,19 @@
         </span>
         <span class="btn-dope-toggle">
           {% if results.order == "rank" %}
-            <span>123</span>
-            <span class="d-none">ABC</span>
+            <span>
+              <i class="fas fa-sort-numeric-down fa-lg"></i>
+            </span>
+            <span class="d-none">
+              <i class="fas fa-sort-alpha-down fa-lg"></i>
+            </span>
           {% elif results.order == "name" %}
-            <span class="d-none">123</span>
-            <span>ABC</span>
+            <span class="d-none">
+              <i class="fas fa-sort-numeric-down fa-lg"></i>
+            </span>
+            <span>
+              <i class="fas fa-sort-alpha-down fa-lg"></i>
+            </span>
           {% endif %}
         </span>
       </a>

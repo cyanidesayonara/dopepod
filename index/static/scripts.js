@@ -2,7 +2,7 @@
 
 var xhr = null;
 var timeout = 0;
-var last_played = 0;
+var previous = 0;
 var charts = 0;
 
 function dateLocalizer() {
@@ -37,7 +37,7 @@ function trackMe(url) {
 };
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "last-played", "change-password"];
+  var urls = ["episodes", "dopebar", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -56,7 +56,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "last-played", "change-password"];
+  var urls = ["dopebar", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -132,12 +132,12 @@ function refreshCookie() {
 // refreshes page on login
 function refreshPage() {
   getResults(["/dopebar/", "#dopebar", false], true);
-  getResults(["/last-played/", "#last-played", false], true);
+  getResults(["/previous/", "#previous", false], true);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "last-played", "splash-play"];
+    var urls = ["dopebar", "charts", "episodes", "previous", "splash-play"];
     for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -171,11 +171,8 @@ function getResults(args, no_loader, no_push) {
           noshow(podid);
         }
       }
-      else if (url.includes("last-played")) {
-        window.clearInterval(last_played);
-      }
-      else if (url.includes("splash-play")) {
-        window.clearInterval(splash_play);
+      else if (url.includes("previous")) {
+        window.clearInterval(previous);
       }
       else if (url.includes("charts")) {
         window.clearInterval(charts);
@@ -196,7 +193,7 @@ function getResults(args, no_loader, no_push) {
         themeChanger(theme);
       }
       if (scroll) {
-        if ((url.includes("/charts/") || url.includes("/last-played/")) && $(window).width() < 992) {
+        if ((url.includes("/charts/") || url.includes("/previous/")) && $(window).width() < 992) {
           scrollTo(drop);
         }
       }
@@ -214,7 +211,7 @@ function getResults(args, no_loader, no_push) {
         drop.find("#episodes-collapse").html(getCircleLoading());
       }
       if (scroll) {
-        if (!url.includes("/charts/") && !url.includes("/last-played/") && !url.includes("/splash-play/")) {
+        if (!url.includes("/charts/") && !url.includes("/previous/")) {
           scrollTo(drop);
         }
       }
@@ -475,10 +472,10 @@ function getButtonLoading() {
 function getCircleLoading() {
   return $(".circle-loading").first().clone();
 };
-function lastPlayedUpdater() {
-  last_played = setInterval(function() {
-    if (!$(".last-played .expandable.expanded").length) {
-      getResults(["/last-played/", "#last-played", false], true);
+function previousUpdater() {
+  previous = setInterval(function() {
+    if (!$(".previous .expandable.expanded").length) {
+      getResults(["/previous/", "#previous", false], true);
     }
   }, 1000 * 60);
 };
@@ -542,7 +539,7 @@ $(document)
     scrollUp();
     playerUnfixer();
     scrollSpy();
-    lastPlayedUpdater();
+    previousUpdater();
     chartsUpdater();
     dateLocalizer();
     hoverDisabler();
@@ -698,9 +695,9 @@ $(document)
     e.preventDefault();
     scrollTo($("#charts"));
   })
-  .on("click", ".last-played-link", function(e) {
+  .on("click", ".previous-link", function(e) {
     e.preventDefault();
-    scrollTo($("#last-played"));
+    scrollTo($("#previous"));
   })
   .on("click", ".privacy-link", function (e) {
     e.preventDefault();
@@ -851,9 +848,9 @@ $(document)
     e.stopPropagation();
     $(".more-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".last-played-collapse", function(e) {
+  .on("show.bs.collapse", ".previous-collapse", function(e) {
     e.stopPropagation();
-    $(".last-played-collapse.show").collapse("hide");
+    $(".previous-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".splash-play-collapse", function (e) {
     e.stopPropagation();
@@ -906,15 +903,9 @@ $(document)
   .on("click", ".expandable .exp", function () {
     $(".expandable.expanded").removeClass("expanded");
     var button = $(this);
+    console.log(button.attr("aria-expanded"))
     if (button.attr("aria-expanded") === "true") {
       button.parents(".expandable").addClass("expanded");
-    }
-  })
-  .on("click", "#splash-play-result .exp", function () {
-    $("#splash-play-result.expanded").removeClass("expanded");
-    var button = $(this);
-    if (button.attr("aria-expanded") === "true") {
-      button.parents("#splash-play-result").addClass("expanded");
     }
   })
   // removes focus from buttons when clicked
@@ -982,10 +973,10 @@ $(window)
   })
   .on("blur", function() {
     window.clearInterval(charts);
-    window.clearInterval(last_played);
+    window.clearInterval(previous);
   })
   .on("focus", function() {
-    lastPlayedUpdater();
+    previousUpdater();
     chartsUpdater();
   })
   .on('resize', function () {

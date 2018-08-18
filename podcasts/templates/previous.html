@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope btn-dope-split options-button" href="{% url 'last_played' %}">
+      <a class="btn-dope btn-dope-split options-button" href="{% url 'previous' %}">
         <span>Updated</span>
         <span class="date" data-utc="{% now 'U' %}">
           {% now "d M Y H:i" %}
@@ -20,7 +20,7 @@
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
-      <button class="dope-toggle exp-icon" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}"
+      <button class="dope-toggle exp exp-icon" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
       aria-expanded="false">
       </button>
       <h1>
@@ -45,7 +45,7 @@
           <span>{{ episode.played_ago }}</span>
         </li>
       </ul>
-      <div class="collapse fade last-played-collapse" id="last-played-collapse{{ forloop.counter }}">
+      <div class="collapse fade previous-collapse" id="previous-collapse{{ forloop.counter }}">
         <ul class="dope-list">
           <li>
             <span>Length</span>
@@ -117,7 +117,7 @@
             </button>
           </form>
         {% endif %}
-        <button class="btn-dope btn-dope-split" data-toggle="collapse" data-target="#last-played-collapse{{ forloop.counter }}" aria-expanded="false">
+        <button class="btn-dope exp btn-dope-split" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false">
           <span>More</span>
           <span class="exp-icon"></span>
         </button>

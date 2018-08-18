@@ -28,8 +28,8 @@
         {% include "subscriptions.min.html" %}
       {% elif results.view == "showpod" or results.view == "playlist" %}
         {% include "episodes.min.html" %}
-      {% elif results.view == "last-played"%}
-        {% include "last_played.min.html" %}
+      {% elif results.view == "previous"%}
+        {% include "previous.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
       {% elif results.view == "api" %}

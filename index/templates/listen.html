@@ -20,8 +20,8 @@
     </ul>
   </div>
   {% for episode in results.episodes %}
-    <div class="slick-slide expandable">
-      <div class="dope-result">
+    <div class="slick-slide">
+      <div class="dope-result expandable">
         <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
           title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
           <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg" onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
@@ -90,7 +90,7 @@
             </button>
           </form>
           {% endif %}
-          <a class="btn-dope btn-dope-split" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false">
+          <a class="btn-dope exp btn-dope-split" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false">
             <span>More</span>
             <span class="exp-icon"></span>
           </a>

@@ -65,8 +65,8 @@
       </div>
       <div class="col-12 order-2 col-lg-6 order-lg-3" id="right">
         <!-- LAST PLAYED -->
-        <div class="row" id="last-played">
-          {% if last_played %} {% with last_played as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+        <div class="row" id="previous">
+          {% if previous %} {% with previous as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
       </div>
     </div>

@@ -1110,22 +1110,22 @@ class Episode(models.Model):
                 ago = "0s ago"
             return ago
 
-    def get_last_played():
+    def get_previous():
         """ 
-        returns all last played episodes
+        returns all previouslylast played episodes
         """
 
-        results = cache.get("last_played")
+        results = cache.get("previous")
         if results:
             return results
         else:
             episodes = Episode.objects.filter(position=None).order_by("-played_at",)
             results = {
                 "episodes": episodes,
-                "header": "Last played episodes",
-                "view": "last-played",
+                "header": "Previously played episodes",
+                "view": "previous",
             }
-            cache.set("last_played", results, 60 * 60 * 24)
+            cache.set("previous", results, 60 * 60 * 24)
             return results
 
     def play(self):
@@ -1146,19 +1146,19 @@ class Episode(models.Model):
         self.save()
 
         # if list is longer than 50, delete excess
-        # if just_played in last_played, delete first occurrence then break
+        # if played in previous, delete first occurrence then break
         with transaction.atomic():
-            last_played = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
-            if last_played.count() > 1:
+            previous = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
+            if previous.count() > 1:
                 # split off last part of signature
                 # (it's different for otherwise identical episodes)
-                just_played = last_played[0].signature.split(":")[0]
-                for episode in last_played[1:]:
-                    if episode.signature.split(":")[0] == just_played:
+                played = previous[0].signature.split(":")[0]
+                for episode in previous[1:]:
+                    if episode.signature.split(":")[0] == played:
                         episode.delete()
                         break
-                if last_played.count() > 50:
-                    excess = last_played[50:]
+                if previous.count() > 50:
+                    excess = previous[50:]
                     for episode in excess:
                         episode.delete()
 
@@ -1166,10 +1166,10 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         results = {
             "episodes": episodes,
-            "header": "Last played episodes",
-            "view": "last-played",
+            "header": "Previously played episodes",
+            "view": "previous",
         }
-        cache.set("last_played", results, 60 * 60 * 24)
+        cache.set("previous", results, 60 * 60 * 24)
     
     def add(signature, user):
         # max 20 episodes for now
