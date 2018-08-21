@@ -202,7 +202,7 @@ function getResults(args, no_loader, no_push) {
   if (!no_loader) {
     if (!drop.children(".loading").length) {
       drop.find(".results-collapse").collapse("show");    
-      var results = drop.children(".results");
+      var results = drop.find(".results-collapse");
       if (results.length) {
         results.addClass("loading").html(getCircleLoading());
       }
@@ -349,7 +349,6 @@ function postLogin(form) {
     // returns errors
     .fail(function(xhr, ajaxOptions, thrownError) {
       $("#center-stage").html(xhr.responseText);
-      fadeErrors();
       scrollToTop();
     })
     // returns splashboard
@@ -497,8 +496,8 @@ function hoverDisabler() {
 function initSlick() {
   $(".slick").slick({
     autoplay: true,
-    prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
+    prevArrow: "<button type='button' class='btn-dope slick-prev'><span><i class='fas fa-angle-left' title='Previous'></i></span></button>",
+    nextArrow: "<button type='button' class='btn-dope slick-next'><span><i class='fas fa-angle-right' title='Next'></i></span></button>",
   });
 };
 function initSlickListen() {
@@ -519,15 +518,13 @@ function initSlickListen() {
       autoplay: true,
       fade: true,
       initialSlide: 1,
-      prevArrow: "<button type='button' class='btn-dope slick-prev'><i class='fas fa-angle-left' title='Previous'></i></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next'><i class='fas fa-angle-right' title='Next'></i></button>",
+      prevArrow: "<button type='button' class='btn-dope slick-prev'><span><i class='fas fa-angle-left' title='Previous'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next'><span><i class='fas fa-angle-right' title='Next'></i></span></button>",
     });
   }, 3000);
 };
-function fadeErrors() {
-  $(".errors").delay(3000).fadeOut("slow", function() {
-    $(this).remove();
-  });
+function removeErrors() {
+  $(".errors").remove();
 };
 
 $(document)
@@ -802,8 +799,8 @@ $(document)
     e.preventDefault();
     $("#player-collapse").collapse("hide");
     $("#player-close-collapse").collapse("hide");
-    $(this).attr('aria-expanded', function (attr) {
-      return attr == 'true' ? 'false' : 'true'
+    $(this).attr("aria-expanded", function (attr) {
+      return attr == "true" ? "false" : "true"
     })
     .parents("#player-wrapper").toggleClass("minimize");
   })
@@ -835,14 +832,14 @@ $(document)
     $(".view-collapse").collapse("toggle");
   })
   // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .btn-dope-split", function () {
+  .on("mouseenter mouseleave", ".no-touch .btn-dope", function () {
     $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function(e) {
     e.stopPropagation();
     $(".login-collapse.show").collapse("hide");
-    $(".errors").remove();
+    removeErrors();
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
@@ -951,6 +948,9 @@ $(document)
   })
   .on("click", ".cookie-banner-close", function() {
     $("#player").empty();
+  })
+  .on("click", ".errors .btn-dope", function() {
+    removeErrors();
   });
 
 $(window)
@@ -979,6 +979,6 @@ $(window)
     previousUpdater();
     chartsUpdater();
   })
-  .on('resize', function () {
+  .on("resize", function () {
     hoverDisabler();
   });

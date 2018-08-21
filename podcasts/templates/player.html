@@ -2,14 +2,18 @@
   <div class="col-12 col-lg-4 ml-auto">
     <div class="color-1" id="player-wrapper">
       <div class="collapse fade" id="player-close-collapse">
-        <span>
+        <p>
           Close player?
-        </span>
+        </p>
         <button class="btn-dope player-close">
-          Yes
+          <span>
+            Yes
+          </span>
         </button>
         <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
-          No
+          <span>
+            No
+          </span>
         </button>
       </div>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
@@ -17,10 +21,13 @@
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
       </a>
       <div class="dope-buttons dope-buttons-r p-0 float-right">
-        <button class="btn-dope exp-icon exp-nix player-minimize" aria-expanded="true">
+        <button class="btn-dope player-minimize" aria-expanded="true">
+          <span class="exp-icon exp-nix"></span>
         </button>
         <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
-          <i class="fas fa-times" title="Close"></i>
+          <span>
+            <i class="fas fa-times" title="Close"></i>
+          </span>
         </button>
       </div>
       <h1>
@@ -47,11 +54,14 @@
         </p>
         <div class="dope-buttons px-0">
           <a class="btn-dope" href="{{ episode.url }}" title="Download" download>
-            <i class="fas fa-download"></i>
+            <span>
+              <i class="fas fa-download"></i>
+            </span>
           </a>
         </div>
       </div>
-      <button class="btn-dope exp-icon exp-nix float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
+      <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
+        <span class="exp-icon exp-nix"></span>
       </button>        
       <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>

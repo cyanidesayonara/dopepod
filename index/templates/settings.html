@@ -5,8 +5,12 @@
     </div>
   {% endif %}
   <div class="col-12 order-2 col-lg-4 order-lg-1 dope-wrapper">
-    <a class="btn-dope exp" data-toggle="collapse" href="#change-collapse" aria-expanded="false" aria-controls="change-collapse">
-      Change Password
+    <a class="btn-dope" data-toggle="collapse" href="#change-collapse" aria-expanded="false" aria-controls="change-collapse">
+      <span class="active">
+        Change Password
+      </span>
+      <span class="exp-icon">
+      </span>
     </a>
     <div class="collapse fade settings-collapse" id="change-collapse">
       <form class="settings-form" action="{% url 'change_password' %}" method="POST">
@@ -27,8 +31,10 @@
             <input class="dope-field" type="password" name="password2" required id="settings-password2" />
           </div>
           <div class="col-auto">
-            <button class="btn-dope active" type="submit">
-              Save
+            <button class="btn-dope" type="submit">
+              <span class="active">
+                Save
+              </span>
             </button>
           </div>
         </div>
@@ -36,8 +42,12 @@
     </div>
   </div>
   <div class="col-12 order-1 col-lg-4 order-lg-2 dope-wrapper">
-    <a class="btn-dope exp" data-toggle="collapse" href="#general-collapse" aria-expanded="false" aria-controls="general-collapse">
-      General Settings
+    <a class="btn-dope" data-toggle="collapse" href="#general-collapse" aria-expanded="false" aria-controls="general-collapse">
+      <span class="active">
+        General Settings
+      </span>
+      <span class="exp-icon">
+      </span>
     </a>
     <div class="collapse fade settings-collapse" id="general-collapse">
       <form class="settings-form" action="{% url 'settings' %}" method="POST">
@@ -50,26 +60,30 @@
             <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}" />
           </div>
           <div class="col-auto">
-            <button class="btn-dope active" type="submit">Save</button>
+            <button class="btn-dope" type="submit">
+              <span class="active">
+                Save
+              </span>
+            </button>
           </div>
           <div class="col-12 dope-form-group">
             <label for="theme">Theme</label>
             <div class="dope-buttons p-0">
               {% if user.profile.theme == "dark" %}
-              <input class="theme" type="hidden" name="theme" value="dark" />
-              <button type="submit" class="btn-dope theme-button">Light</button>
-              <button type="button" class="btn-dope theme-button active">Dark</button>
-              <button type="submit" class="btn-dope theme-button">Christmas</button>
+                <input class="theme" type="hidden" name="theme" value="dark" />
+                <button type="submit" class="btn-dope theme-button">Light</button>
+                <button type="button" class="btn-dope theme-button active">Dark</button>
+                <button type="submit" class="btn-dope theme-button">Christmas</button>
               {% elif user.profile.theme == "light" %}
-              <input class="theme" type="hidden" name="theme" value="light" />
-              <button type="button" class="btn-dope theme-button active">Light</button>
-              <button type="submit" class="btn-dope theme-button">Dark</button>
-              <button type="submit" class="btn-dope theme-button">Christmas</button>
+                <input class="theme" type="hidden" name="theme" value="light" />
+                <button type="button" class="btn-dope theme-button active">Light</button>
+                <button type="submit" class="btn-dope theme-button">Dark</button>
+                <button type="submit" class="btn-dope theme-button">Christmas</button>
               {% elif user.profile.theme == "christmas" %}
-              <input class="theme" type="hidden" name="theme" value="christmas" />
-              <button type="submit" class="btn-dope theme-button">Light</button>
-              <button type="submit" class="btn-dope theme-button">Dark</button>
-              <button type="button" class="btn-dope theme-button active">Christmas</button>
+                <input class="theme" type="hidden" name="theme" value="christmas" />
+                <button type="submit" class="btn-dope theme-button">Light</button>
+                <button type="submit" class="btn-dope theme-button">Dark</button>
+                <button type="button" class="btn-dope theme-button active">Christmas</button>
               {% endif %}
             </div>
           </div>
@@ -78,8 +92,12 @@
     </div>
   </div>
   <div class="col-12 order-3 col-lg-4 dope-wrapper">
-    <a class="btn-dope exp" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
-      Delete Account
+    <a class="btn-dope" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
+      <span class="active">
+        Delete Account
+      </span>
+      <span class="exp-icon">
+      </span>      
     </a>
     <div class="collapse fade settings-collapse" id="solong-collapse">
       <p>
@@ -89,11 +107,15 @@
         <form class="solong-form" action="{% url 'solong' %}" method="POST">
           {% csrf_token %}
           <button class="btn-dope" type="submit">
-            Yes
+            <span class="active">
+              Yes
+            </span>
           </button>
         </form>
         <a class="btn-dope" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
-          No
+          <span class="active">
+            No
+          </span>
         </a>
       </div>
     </div>

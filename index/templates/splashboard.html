@@ -35,7 +35,11 @@
                 <input class="dope-field" type="password" name="password" required id="login-password" />
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Login</button>
+                <button class="btn-dope" type="submit">
+                  <span class="active">
+                    Login
+                  </span>
+                </button>
               </div>
             </div>
             <div class="form-row">
@@ -81,7 +85,11 @@
                 <input class="dope-field" type="password" name="password2" required id="signup-password2" />
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn-dope active">Signup</button>
+                <button class="btn-dope" type="submit">
+                  <span class="active">
+                    Signup
+                  </span>                  
+                </button>
               </div>
             </div>
           </form>
@@ -105,8 +113,10 @@
                 <input class="dope-field" id="forgot-email" type="email" name="email" size="30" required />
               </div>
               <div class="col-auto">
-                <button class="btn-dope active" type="submit">
-                  Send
+                <button class="btn-dope" type="submit">
+                  <span class="active">
+                    Send
+                  </span>
                 </button>
               </div>
             </div>
@@ -126,58 +136,22 @@
           Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
         </p>
         <div class="dope-buttons dope-buttons-c">
-          {% if view == "signup" %}
-            <a class="btn-dope btn-dope-split login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
+            <a class="btn-dope login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="{% if view == 'login' %}true{% else %}false{% endif %}"
               aria-controls="login-collapse">
-              <span>
+              <span class="active">
                 Login
               </span>
               <span class="exp-icon">
               </span>
             </a>
-            <a class="btn-dope btn-dope-split signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="true"
+            <a class="btn-dope signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="{% if view == 'signup' %}true{% else %}false{% endif %}"
               aria-controls="signup-collapse">
-              <span>
+              <span class="active">
                 Signup
               </span>
               <span class="exp-icon">
               </span>
             </a>
-          {% elif view == "login" %}
-            <a class="btn-dope btn-dope-split login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="true"
-              aria-controls="login-collapse">
-              <span>
-                Login
-              </span>
-              <span class="exp-icon">
-              </span>
-            </a>
-            <a class="btn-dope btn-dope-split signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
-              aria-controls="signup-collapse">
-              <span>
-                Signup
-              </span>
-              <span class="exp-icon">
-              </span>
-            </a>
-          {% else %}
-            <a class="btn-dope btn-dope-split login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="false"
-              aria-controls="login-collapse">
-              <span>
-                Login
-              </span>
-              <span class="exp-icon">
-              </span>
-            </a>
-            <a class="btn-dope btn-dope-split signup-link" href="/?view=signup" data-target="#signup-collapse" data-toggle="collapse" aria-expanded="false"
-              aria-controls="signup-collapse">
-              <span>
-                Signup
-              </span>
-              <span class="exp-icon">
-              </span>
-            </a>
-          {% endif %}
           </div>
         <div class="dope-buttons dope-buttons-c">
           <a class="privacy-link" href="{% url 'privacy' %}">
@@ -197,7 +171,9 @@
         </p>
         <div class="dope-buttons dope-buttons-c">
           <button class="btn-dope">
-            Coming soon!
+            <span>
+              Coming soon!
+            </span>
           </button>
         </div>
       </div>

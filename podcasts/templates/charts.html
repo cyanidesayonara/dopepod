@@ -2,8 +2,8 @@
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
       {% if results.genres %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
+          <span class="active">
             Genre
           </span>
           <span class="exp-icon">
@@ -16,8 +16,8 @@
         </a>
       {% endif %}
       {% if results.languages %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
+          <span class="active">
             Language
           </span>
           <span class="exp-icon">
@@ -30,8 +30,8 @@
         </a>
       {% endif %}
       {% if results.provider %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#provider-collapse-{{ results.view }}" aria-expanded="false" aria-controls="provider-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#provider-collapse-{{ results.view }}" aria-expanded="false" aria-controls="provider-collapse">
+          <span class="active">
             Source
           </span>
           <span class="exp-icon">
@@ -95,8 +95,8 @@
         </li>
       </ul>
       <div class="dope-buttons px-0">
-        <a class="btn-dope btn-dope-split showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-          <span>
+        <a class="btn-dope showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+          <span class="active">
             Episodes
           </span>
           <span>

@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope btn-dope-split options-button" href="{{ results.order_url }}">
-        <span>
+      <a class="btn-dope options-button" href="{{ results.order_url }}">
+        <span class="active">
           Order
         </span>
         <span class="btn-dope-toggle">
@@ -24,8 +24,8 @@
         </span>
       </a>
       {% if results.view == "grid" %}
-        <a class="btn-dope btn-dope-split view-button" href="{{ results.view_url }}">
-          <span>
+        <a class="btn-dope view-button" href="{{ results.view_url }}">
+          <span class="active">
             Display
           </span>
           <span class="btn-dope-toggle">
@@ -38,8 +38,8 @@
           </span>
         </a>
       {% elif results.view == "list" %}
-        <a class="btn-dope btn-dope-split view-button" href="{{ results.view_url }}">
-          <span>
+        <a class="btn-dope view-button" href="{{ results.view_url }}">
+          <span class="active">
             Display
           </span>
           <span class="btn-dope-toggle">
@@ -53,8 +53,8 @@
         </a>
       {% endif %}
       {% if results.alphabet %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
+          <span class="active">
             Initial
           </span>
           <span class="exp exp-icon">
@@ -67,8 +67,8 @@
         </a>
       {% endif %} 
       {% if results.genres %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
+          <span class="active">
             Genre
           </span>
           <span class="exp exp-icon">
@@ -81,8 +81,8 @@
         </a>
       {% endif %}
       {% if results.languages %}
-        <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
-          <span>
+        <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
+          <span class="active">
             Language
           </span>
           <span class="exp exp-icon">

@@ -3,17 +3,23 @@
     <div class="dope-buttons dope-buttons-r">
       {% if results.alphabet_nix_url %}
         <a class="btn-dope options-button nix-button" href="{{ results.alphabet_nix_url }}">
-          <i class="fas fa-times" title="Undo Selection"></i>
+          <span>
+            <i class="fas fa-times" title="Undo Selection"></i>
+          </span>
         </a>
       {% endif %}
       {% for alphabet in results.alphabet %}
         {% if alphabet.1 %}
           <a class="btn-dope options-button" href="{{ alphabet.1 }}">
-            {{ alphabet.0 }}
+            <span>
+              {{ alphabet.0 }}
+            </span>
           </a>
         {% else %}
-          <button class="btn-dope active">
-            {{ alphabet.0 }}
+          <button class="btn-dope">
+            <span class="active">
+              {{ alphabet.0 }}
+            </span>
           </button>
         {% endif %}
       {% endfor %}
@@ -25,17 +31,23 @@
     <div class="dope-buttons dope-buttons-r">
       {% if results.genre_nix_url %}
         <a class="btn-dope options-button nix-button" href="{{ results.genre_nix_url }}">
-          <i class="fas fa-times" title="Undo Selection"></i>
+          <span>
+            <i class="fas fa-times" title="Undo Selection"></i>
+          </span>
         </a>
       {% endif %}
       {% for genre in results.genres %}
         {% if genre.1 %}
           <a class="btn-dope options-button" href="{{ genre.1 }}">
-            {{ genre.0 }}
+            <span>
+              {{ genre.0 }}
+            </span>            
           </a>
         {% else %}
-          <button class="btn-dope active">
-            {{ genre.0 }}
+          <button class="btn-dope">
+            <span class="active">
+              {{ genre.0 }}
+            </span>            
           </button>
         {% endif %}
       {% endfor %}
@@ -47,17 +59,23 @@
     <div class="dope-buttons dope-buttons-r">
       {% if results.language_nix_url %}
         <a class="btn-dope options-button nix-button" href="{{ results.language_nix_url }}">
-          <i class="fas fa-times" title="Undo Selection"></i>
+          <span>
+            <i class="fas fa-times" title="Undo Selection"></i>
+          </span>
         </a>
       {% endif %}
       {% for language in results.languages %}
         {% if language.1 %}
           <a class="btn-dope options-button" href="{{ language.1 }}">
-            {{ language.0 }}
+            <span>
+              {{ language.0 }}
+            </span>
           </a>
         {% else %}
-          <button class="btn-dope active">
-            {{ language.0 }}
+          <button class="btn-dope">
+            <span class="active">
+              {{ language.0 }}
+            </span>
           </button>
         {% endif %}
       {% endfor %}
@@ -68,18 +86,26 @@
   <div class="collapse fade options-collapse" id="provider-collapse-{{ results.view }}">
     <div class="dope-buttons dope-buttons-r">
       {% if results.provider == "dopepod" %}
-        <button class="btn-dope active">
-          dopepod
+        <button class="btn-dope">
+          <span class="active">
+            dopepod
+          </span>
         </button>
         <a class="btn-dope options-button" href="{{ results.provider_url }}">
-          itunes
+          <span>
+            itunes
+          </span>
         </a>
       {% else %}
         <a class="btn-dope options-button" href="{{ results.provider_url }}">
-          dopepod
+          <span>
+            dopepod
+          </span>
         </a>
-        <button class="btn-dope active">
-          itunes
+        <button class="btn-dope">
+          <span class="active">
+            itunes
+          </span>
         </button>
       {% endif %}
     </div>

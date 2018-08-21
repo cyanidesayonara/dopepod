@@ -1,23 +1,79 @@
 <div class="dope-buttons dope-buttons-c logo">
-  <a class="btn-dope index-link active" href="/">d</a>
-  <a class="btn-dope index-link active" href="/">o</a>
-  <a class="btn-dope index-link active" href="/">p</a>
-  <a class="btn-dope index-link active" href="/">e</a>
-  <a class="btn-dope index-link active" href="/">p</a>
-  <a class="btn-dope index-link active" href="/">o</a>
-  <a class="btn-dope index-link active" href="/">d</a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      d
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      o
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      p
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      e
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      p
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      o
+    </span>
+  </a>
+  <a class="btn-dope index-link" href="/">
+    <span class="active">
+      d
+    </span>
+  </a>
 </div>
 <div class="slick-listen">
   <div class="slick-slide">
-    <ul class="dope-buttons dope-buttons-c logo d-none">
-      <a class="btn-dope index-link active" href="/">d</a>
-      <a class="btn-dope index-link active" href="/">o</a>
-      <a class="btn-dope index-link active" href="/">p</a>
-      <a class="btn-dope index-link active" href="/">e</a>
-      <a class="btn-dope index-link active" href="/">p</a>
-      <a class="btn-dope index-link active" href="/">o</a>
-      <a class="btn-dope index-link active" href="/">d</a>
-    </ul>
+    <div class="dope-buttons dope-buttons-c logo d-none">
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          d
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          o
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          p
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          e
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          p
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          o
+        </span>
+      </a>
+      <a class="btn-dope index-link" href="/">
+        <span class="active">
+          d
+        </span>
+      </a>
+    </div>
   </div>
   {% for episode in results.episodes %}
     <div class="slick-slide">
@@ -54,8 +110,8 @@
             {% csrf_token %}
             <input type="hidden" name="mode" value="play" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope btn-dope-split" type="submit">
-              <span>
+            <button class="btn-dope" type="submit">
+              <span class="active">
                 Play
               </span>
               <span>
@@ -63,17 +119,17 @@
               </span>
             </button>
           </form>
-          <a class="btn-dope btn-dope-split" href="{{ episode.url }}" download>
-            <span>
+          <a class="btn-dope" href="{{ episode.url }}" download>
+            <span class="active">
               Download
             </span>
             <span>
               <i class="fas fa-download"></i>
             </span>
           </a>
-          <a class="btn-dope btn-dope-split showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+          <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
             title="{{ episode.podcast.title }}">
-            <span>
+            <span class="active">
               Episodes
             </span>
             <span>
@@ -85,13 +141,17 @@
             {% csrf_token %}
             <input type="hidden" name="mode" value="add" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope active" type="submit">
-              Add to Playlist
+            <button class="btn-dope" type="submit">
+              <span class="active">
+                Add to Playlist
+              </span>
             </button>
           </form>
           {% endif %}
-          <a class="btn-dope exp btn-dope-split" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false">
-            <span>More</span>
+          <a class="btn-dope" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false">
+            <span class="active">
+              More
+            </span>
             <span class="exp-icon"></span>
           </a>
         </div>

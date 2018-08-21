@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope btn-dope-split options-button" href="{% url 'previous' %}">
-        <span>Updated</span>
+      <a class="btn-dope options-button" href="{% url 'previous' %}">
+        <span class="active">Updated</span>
         <span class="date" data-utc="{% now 'U' %}">
           {% now "d M Y H:i" %}
         </span>
@@ -81,8 +81,8 @@
           {% csrf_token %}
           <input type="hidden" name="mode" value="play" />
           <input type="hidden" name="signature" value="{{ episode.signature }}" />
-          <button class="btn-dope btn-dope-split" type="submit">
-            <span>
+          <button class="btn-dope" type="submit">
+            <span class="active">
               Play
             </span>
             <span>
@@ -90,17 +90,17 @@
             </span>
           </button>
         </form>
-        <a class="btn-dope btn-dope-split" href="{{ episode.url }}" download>
-          <span>
+        <a class="btn-dope" href="{{ episode.url }}" download>
+          <span class="active">
             Download
           </span>
           <span>
             <i class="fas fa-download"></i>
           </span>
         </a>
-        <a class="btn-dope btn-dope-split showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+        <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
           title="{{ episode.podcast.title }}">
-          <span>
+          <span class="active">
             Episodes
           </span>
           <span>
@@ -113,12 +113,14 @@
             <input type="hidden" name="mode" value="add" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
             <button class="btn-dope active" type="submit">
-              Add to Playlist
+              <span class="active">
+                Add to Playlist
+              </span>
             </button>
           </form>
         {% endif %}
-        <button class="btn-dope exp btn-dope-split" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false">
-          <span>More</span>
+        <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false">
+          <span class="active">More</span>
           <span class="exp-icon"></span>
         </button>
       </div>

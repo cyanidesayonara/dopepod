@@ -9,25 +9,29 @@
               {% csrf_token %}
               <input type="hidden" name="podid" value="{{ results.podcast.podid }}">
               {% if results.podcast.is_subscribed %}
-                <button type="submit" class="btn-dope sub-button">
-                  Unsubscribe
+                <button class="btn-dope sub-button" type="submit">
+                  <span>
+                    Unsubscribe
+                  </span>
                 </button>
               {% else %}
-                <button type="submit" class="btn-dope active sub-button">
-                  Subscribe
+                <button class="btn-dope sub-button" type="submit">
+                  <span class="active">
+                    Subscribe
+                  </span>
                 </button>
               {% endif %}
             </form>
           {% endif %}
-          <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
-            <span>
+          <a class="btn-dope" data-toggle="collapse" href="#episodes-collapse" aria-expanded="true" aria-controls="episodes-collapse">
+            <span class="active">
               Episodes
             </span>
             <span class="exp-icon">
             </span>
           </a>
-          <a class="btn-dope btn-dope-split" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
-            <span>
+          <a class="btn-dope" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
+            <span class="active">
               Reviews
             </span>
             <span class="exp-icon">
@@ -136,8 +140,10 @@
                             {% csrf_token %}
                             <input type="hidden" name="mode" value="remove" />
                             <input type="hidden" name="pos" value="{{ episode.position }}" />
-                            <button class="btn-dope playlist-remove active" type="submit" title="Remove">
-                              <i class="fas fa-times icon"></i>
+                            <button class="btn-dope playlist-remove" type="submit" title="Remove">
+                              <span class="active">
+                                <i class="fas fa-times icon"></i>
+                              </span>
                             </button>
                           </form>
                           {% if not forloop.first %}
@@ -145,8 +151,10 @@
                               {% csrf_token %}
                               <input type="hidden" name="mode" value="up" />
                               <input type="hidden" name="pos" value="{{ episode.position }}" />
-                              <button class="btn-dope playlist-move-up active" type="submit" title="Move Up">
-                                <i class="fas fa-arrow-up"></i>
+                              <button class="btn-dope playlist-move-up" type="submit" title="Move Up">
+                                <span class="active">
+                                  <i class="fas fa-arrow-up"></i>
+                                </span>
                               </button>
                             </form>
                           {% endif %}
@@ -155,8 +163,10 @@
                               {% csrf_token %}
                               <input type="hidden" name="mode" value="down" />
                               <input type="hidden" name="pos" value="{{ episode.position }}" />
-                              <button class="btn-dope playlist-move-down active" type="submit" title="Move Down">
-                                <i class="fas fa-arrow-down"></i>
+                              <button class="btn-dope playlist-move-down" type="submit" title="Move Down">
+                                <span class="active">
+                                  <i class="fas fa-arrow-down"></i>
+                                </span>
                               </button>
                             </form>
                           {% endif %}
@@ -169,8 +179,8 @@
                           {% else %}
                             <input type="hidden" name="signature" value="{{ episode.signature }}" />
                           {% endif %}
-                          <button class="btn-dope btn-dope-split playlist-play" type="submit" title="Play">
-                            <span>
+                          <button class="btn-dope playlist-play" type="submit" title="Play">
+                            <span class="active">
                               Play
                             </span>
                             <span>
@@ -178,8 +188,8 @@
                             </span>
                           </button>
                         </form>
-                        <a class="btn-dope btn-dope-split" href="{{ episode.url }}" title="Download" download>
-                          <span>
+                        <a class="btn-dope" href="{{ episode.url }}" title="Download" download>
+                          <span class="active">
                             Download
                           </span>
                           <span>
@@ -187,8 +197,8 @@
                           </span>
                         </a>
                         {% if results.view == "playlist" %}
-                          <a class="btn-dope btn-dope-split showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}">
-                            <span>
+                          <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}">
+                            <span class="active">
                               Episodes
                             </span>
                             <span>
@@ -201,8 +211,10 @@
                             {% csrf_token %}
                             <input type="hidden" name="mode" value="add" />
                             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                            <button class="btn-dope active" type="submit" title="Add to Playlist">
-                              Add to Playlist
+                            <button class="btn-dope" type="submit" title="Add to Playlist">
+                              <span class="active">
+                                Add to Playlist
+                              </span>
                             </button>
                           </form>
                         {% endif %}
