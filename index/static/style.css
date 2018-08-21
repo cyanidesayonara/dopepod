@@ -853,7 +853,7 @@ form {
 }
 #player-wrapper .player-description {
   margin: 0;
-  max-height: calc(100vh - 470px);
+  max-height: calc(100vh - 460px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
@@ -1053,7 +1053,8 @@ form {
     padding: 0 15px;
   }
   .results {
-    border: none;
+    border-left: none;
+    border-right: none;
     border-radius: unset;
   }
 }
