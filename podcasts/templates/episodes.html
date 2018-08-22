@@ -27,14 +27,14 @@
             <span class="active">
               Episodes
             </span>
-            <span class="exp-icon">
+            <span class="exp-icon exp-down">
             </span>
           </a>
           <a class="btn-dope" data-toggle="collapse" href="#reviews-collapse" aria-expanded="false" aria-controls="reviews-collapse">
             <span class="active">
               Reviews
             </span>
-            <span class="exp-icon">
+            <span class="exp-icon exp-down">
             </span>
           </a>
         </div>
@@ -120,7 +120,7 @@
                   <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
                 </td>
                 <td>
-                  <span class="exp-icon" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false"></span>
+                  <span class="exp-icon exp-down" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false"></span>
                 </td>
               </tr>
               <tr>

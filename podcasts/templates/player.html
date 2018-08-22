@@ -61,7 +61,7 @@
         </div>
       </div>
       <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
-        <span class="exp-icon exp-nix"></span>
+        <span class="exp-icon exp-up exp-nix"></span>
       </button>        
       <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>

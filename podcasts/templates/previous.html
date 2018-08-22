@@ -20,8 +20,9 @@
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
       </a>
-      <button class="dope-toggle exp exp-icon" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
+      <button class="dope-toggle float-right" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
       aria-expanded="false">
+        <span class="exp-icon"></span>
       </button>
       <h1>
         <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
@@ -121,7 +122,7 @@
         {% endif %}
         <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false">
           <span class="active">More</span>
-          <span class="exp-icon"></span>
+          <span class="exp-icon exp-up"></span>
         </button>
       </div>
     </div>

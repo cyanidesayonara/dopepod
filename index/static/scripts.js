@@ -799,8 +799,8 @@ $(document)
     e.preventDefault();
     $("#player-collapse").collapse("hide");
     $("#player-close-collapse").collapse("hide");
-    $(this).attr("aria-expanded", function (attr) {
-      return attr == "true" ? "false" : "true"
+    $(this).attr("aria-expanded", function (i, attr) {
+      return attr == "true" ? "false" : "true";
     })
     .parents("#player-wrapper").toggleClass("minimize");
   })

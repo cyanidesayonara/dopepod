@@ -104,15 +104,21 @@ form {
   font-weight: 900;
   content: " \f067";
 }
-.btn-dope[aria-expanded="true"] .exp-icon:not(.exp-nix) {
+[aria-expanded="true"] .exp-icon:not(.exp-nix),
+.dope-toggle[aria-expanded="true"] {
   color: #fff;
   background: rgb(0, 191, 165);
 }
-.btn-dope[aria-expanded="true"] .exp-icon::after {
+[aria-expanded="true"] .exp-icon::after {
   content: " \f068";
 }
+[aria-expanded="true"] .exp-icon.exp-up::after {
+  content: " \f062";
+}
+[aria-expanded="true"] .exp-icon.exp-down::after {
+  content: " \f063";
+}
 .dope-toggle {
-  float: right;
   margin-left: 10px;
   cursor: pointer;
   height: 34px;
