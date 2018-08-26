@@ -134,6 +134,9 @@ form {
 [aria-expanded="true"] .exp-icon::before {
   content: " \f00d";
 }
+.dope-options [aria-expanded="true"] .exp-icon::before {
+  content: " \f063";
+}
 [aria-expanded="true"] .exp-minus::before {
   content: " \f068";
 }
@@ -185,7 +188,7 @@ form {
 }
 .dope-wrapper form {
   margin: auto;
-  max-width: 250px;
+  max-width: 275px;
 }
 .logo {
   text-align: center;
@@ -955,78 +958,76 @@ form {
 }
 .button-loading {
   position: relative;
-  background: inherit;
-  width: 57px;
+  width: 63px;
   height: 26px;
-  margin: 0 4px;
 }
 .loading-a-1 {
-  left: 0;
+  left: 3px;
   animation: fade 2s ease-in .45s infinite;
   -webkit-animation: fade 2s ease-in .45s infinite;
 }
 .loading-a-2 {
-  left: 8px;
+  left: 11px;
   animation: fade 2s ease-in .3s infinite;
   -webkit-animation: fade 2s ease-in .3s infinite;
 }
 .loading-a-3 {
-  left: 16px;
+  left: 19px;
   animation: fade 2s ease-in .15s infinite;
   -webkit-animation: fade 2s ease-in .15s infinite;
 }
 .loading-a-4 {
-  left: 24px;
+  left: 27px;
   animation: fade 2s ease-in infinite;
   -webkit-animation: fade 2s ease-in infinite;
 }
 .loading-a-5 {
-  left: 32px;
+  left: 35px;
   animation: fade 2s ease-in .15s infinite;
   -webkit-animation: fade 2s ease-in .15s infinite;
 }
 .loading-a-6 {
-  left: 40px;
+  left: 43px;
   animation: fade 2s ease-in .3s infinite;
   -webkit-animation: fade 2s ease-in .3s infinite;
 }
 .loading-a-7 {
-  left: 48px;
+  left: 51px;
   animation: fade 2s ease-in .45s infinite;
   -webkit-animation: fade 2s ease-in .45s infinite;
 }
 .loading-b-1 {
-  left: 0;
+  left: 3px;
   animation: fade 2s ease-in 1.45s infinite;
   -webkit-animation: fade 2s ease-in 1.45s infinite;
 }
 .loading-b-2 {
-  left: 8px;
+  left: 11px;
   animation: fade 2s ease-in 1.3s infinite;
   -webkit-animation: fade 2s ease-in 1.3s infinite;
 }
 .loading-b-3 {
-  left: 16px;
+  left: 19px;
   animation: fade 2s ease-in 1.15s infinite;
   -webkit-animation: fade 2s ease-in 1.15s infinite;
 }
 .loading-b-4 {
-  left: 24px;
+  left: 27px;
   animation: fade 2s ease-in 1s infinite;
   -webkit-animation: fade 2s ease-in 1s infinite;
 }
 .loading-b-5 {
-  left: 32px;
+  left: 35px;
   animation: fade 2s ease-in 1.15s infinite;
   -webkit-animation: fade 2s ease-in 1.15s infinite;
 }
 .loading-b-6 {
-  left: 40px;
+  left: 43px;
   animation: fade 2s ease-in 1.3s infinite;
   -webkit-animation: fade 2s ease-in 1.3s infinite;
 }
 .loading-b-7 {
-  left: 48px;
+  left: 51px;
   animation: fade 2s ease-in 1.45s infinite;
   -webkit-animation: fade 2s ease-in 1.45s infinite;
 }

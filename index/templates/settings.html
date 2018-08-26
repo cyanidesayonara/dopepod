@@ -1,9 +1,4 @@
 <div class="row">
-  {% if errors or message %}
-    <div class="col-12 errors order-first color-3">
-      {% include "errors.min.html" %}
-    </div>
-  {% endif %}
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
       <a class="btn-dope" data-toggle="collapse" href="#general-collapse" aria-expanded="true" aria-controls="general-collapse">
@@ -34,6 +29,11 @@
   </div>
 </div>
 <div class="row">
+  {% if errors or message %}
+    <div class="col-12 errors color-3">
+      {% include "errors.min.html" %}
+    </div>
+  {% endif %}
   <div class="col-12 dope-wrapper">
     <div class="collapse fade settings-collapse show" id="general-collapse">
       <form class="settings-form" action="{% url 'settings' %}" method="POST">
