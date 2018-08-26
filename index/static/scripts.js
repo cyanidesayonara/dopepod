@@ -880,6 +880,7 @@ $(document)
   .on("show.bs.collapse", ".settings-collapse", function (e) {
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
+    removeErrors();
   })
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
     e.stopPropagation();
