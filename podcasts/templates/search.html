@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope options-button" href="{{ results.order_url }}">
+      <a class="btn-dope options-button" href="{{ results.order_url }}" title="Toggle Order">
         <span class="active">
           Order
         </span>
@@ -30,34 +30,35 @@
           </span>
           <span class="btn-dope-toggle">
             <span data-view="list">
-              <i class="fas fa-th" title="Toggle View"></i>
+              <i class="fas fa-th"></i>
             </span>
             <span class="d-none" data-view="grid">
-              <i class="fas fa-bars" title="Toggle View"></i>
+              <i class="fas fa-bars"></i>
             </span>
           </span>
         </a>
       {% elif results.view == "list" %}
-        <a class="btn-dope view-button" href="{{ results.view_url }}">
+        <a class="btn-dope view-button" href="{{ results.view_url }}" title="Toggle View">
           <span class="active">
             Display
           </span>
           <span class="btn-dope-toggle">
             <span class="d-none" data-view="list">
-              <i class="fas fa-th" title="Toggle View"></i>
+              <i class="fas fa-th"></i>
             </span>
             <span data-view="grid">
-              <i class="fas fa-bars" title="Toggle View"></i>
+              <i class="fas fa-bars"></i>
             </span>
           </span>
         </a>
       {% endif %}
       {% if results.alphabet %}
-        <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse">
+        <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse" title="Select Initial">
           <span class="active">
             Initial
           </span>
-          <span class="exp-icon exp-down">
+          <span class="exp-icon">
+            <i class="fas fa-ellipsis-v"></i>
             {% if results.alphabet_nix_url %}
               {{ results.selected_q|capfirst }}
             {% else %}
@@ -67,11 +68,12 @@
         </a>
       {% endif %} 
       {% if results.genres %}
-        <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse">
+        <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse" title="Select Genre">
           <span class="active">
             Genre
           </span>
-          <span class="exp-icon exp-down">
+          <span class="exp-icon">
+            <i class="fas fa-ellipsis-v"></i>
             {% if results.selected_genre %}
               {{ results.selected_genre }}
             {% else %}
@@ -81,11 +83,12 @@
         </a>
       {% endif %}
       {% if results.languages %}
-        <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse">
+        <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse" title="Select Language">
           <span class="active">
             Language
           </span>
-          <span class="exp-icon exp-down">
+          <span class="exp-icon">
+            <i class="fas fa-ellipsis-v"></i>
             {% if results.selected_language %}
               {{ results.selected_language }}
             {% else %}

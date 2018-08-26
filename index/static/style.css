@@ -82,7 +82,19 @@ form {
 .btn-dope > * {
   min-width: 26px;
   height: 26px;
-  padding: 3px 4px;
+  padding: 3px;
+}
+.dope-toggle {
+  margin-left: 10px;
+  cursor: pointer;
+  height: 34px;
+  width: 34px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 2px solid rgb(0, 191, 165);
+  color: unset;
+  background: rgba(0, 0, 0, 0);
+  transition: all .25s ease-in-out;
 }
 .btn-dope:focus,
 .no-touch .btn-dope:hover,
@@ -99,36 +111,33 @@ form {
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease;
 }
-.exp-icon::after {
+.exp-icon::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  content: " \f067";
+}
+.exp-icon::before,
+.exp-icon i {
+  float: right;
+  line-height: 20px;
+  width: 20px;
+  text-align: center;
+}
+[aria-expanded="true"] .exp-icon i {
+  display: none;
 }
 [aria-expanded="true"] .exp-icon:not(.exp-nix),
 .dope-toggle[aria-expanded="true"] {
+  content: "";
   color: #fff;
   background: rgb(0, 191, 165);
 }
-[aria-expanded="true"] .exp-icon::after {
+[aria-expanded="true"] .exp-icon::before {
+  content: " \f00d";
+}
+[aria-expanded="true"] .exp-minus::before {
   content: " \f068";
 }
-[aria-expanded="true"] .exp-icon.exp-up::after {
-  content: " \f062";
-}
-[aria-expanded="true"] .exp-icon.exp-down::after {
-  content: " \f063";
-}
-.dope-toggle {
-  margin-left: 10px;
-  cursor: pointer;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  border: 2px solid rgb(0, 191, 165);
-  color: unset;
-  background: rgba(0, 0, 0, 0);
-  transition: all .25s ease-in-out;
-}
+
 .scroll-up {
   z-index: 9001;
   position: fixed;
@@ -150,10 +159,8 @@ form {
   transition: all .25s ease-in-out;
 }
 .dope-field {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   width: 100%;
-  min-width: 30px;
-  min-height: 30px;
   padding: 3px 6px;
   border-radius: .25rem;
   border: 2px solid rgb(0, 191, 165);
@@ -175,6 +182,10 @@ form {
   padding: 20px 10px;
   text-align: center;
   max-width: 375px;
+}
+.dope-wrapper form {
+  margin: auto;
+  max-width: 250px;
 }
 .logo {
   text-align: center;
@@ -225,8 +236,8 @@ form {
   padding: 0 20px;
 }
 #splash {
-  padding: 0;
-  min-height: 280px;
+  padding: 0 0 15px 0;
+  min-height: 300px;
   overflow: hidden;
 }
 .slick-listen {
@@ -584,9 +595,10 @@ form {
 }
 .results .results-bar h1 {
   text-align: center;
-  font-size: 1.3em;
+  font-size: 18px;
   font-weight: 600;
-  margin: 13px 0;
+  margin: 15px 0;
+  height: 20px;
 }
 
 /* DOPE-LIST */
@@ -679,16 +691,15 @@ form {
   float: right;
 }
 .charts-rank {
-  color: inherit;
   float: left;
   font-weight: 600;
   margin-right: 10px;
   text-align: center;
-  line-height: 30px;
-  height: 32px;
-  width: 32px;
+  height: 34px;
+  width: 34px;
   font-size: 14px;
   border-radius: 50%;
+  padding: 5px;
   border: 2px solid rgb(0, 191, 165);
 }
 .charts h1,

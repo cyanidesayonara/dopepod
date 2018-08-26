@@ -1,8 +1,8 @@
 <div class="dope-wrapper">
   {% for k, v in errors.items %}
-    <button class="btn-dope">
+    <button class="btn-dope" title="{{ v }}">
       <span class="active">
-        <i class="fas fa-times" title="Error"></i>
+        <i class="fas fa-times"></i>
       </span>
       <span>
         {{ v }}
@@ -11,9 +11,9 @@
   {% endfor %}
   
   {% if message %}
-    <button class="btn-dope">
+    <button class="btn-dope" title="{{ message }}">
       <span class="active">
-        <i class="fas fa-check" title="Done"></i>
+        <i class="fas fa-check"></i>
       </span>
       <span>
         {{ message }}

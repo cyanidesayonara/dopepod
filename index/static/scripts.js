@@ -165,7 +165,7 @@ function getResults(args, no_loader, no_push) {
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
       // if episodes fail, call noshow
-      if (url.includes("/episodes/")) {
+      if (url.includes("/episodes/") && thrownError != "abort") {
         podid = url.split("/")[2];
         if (podid) {
           noshow(podid);
@@ -200,16 +200,16 @@ function getResults(args, no_loader, no_push) {
       replaceState(url);
     });
   if (!no_loader) {
-    if (!drop.children(".loading").length) {
-      drop.find(".results-collapse").collapse("show");    
-      var results = drop.find(".results-collapse");
-      if (results.length) {
-        results.addClass("loading").html(getCircleLoading());
+    var results = drop.children();
+    if (!results.hasClass("loading")) {
+      var results_collapse = results.children(".results-collapse");
+      if (results_collapse.length) {
+        results_collapse.collapse("show").html(getCircleLoading());
       }
       else {
-        console.log(drop.find("#episodes-collapse"))
         drop.find("#episodes-collapse").html(getCircleLoading());
       }
+      drop.children().addClass("loading");
       if (scroll) {
         if (!url.includes("/charts/") && !url.includes("/previous/")) {
           scrollTo(drop);
@@ -382,7 +382,7 @@ function postSubscriptions(podids, button) {
       drop.html(response);
       if ($(response).hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
-        drop = ".showpod .results-collapse";
+        drop = ".showpod .results-content";
         getResults([url, drop, false]);
       }
       else {
@@ -496,8 +496,8 @@ function hoverDisabler() {
 function initSlick() {
   $(".slick").slick({
     autoplay: true,
-    prevArrow: "<button type='button' class='btn-dope slick-prev'><span><i class='fas fa-angle-left' title='Previous'></i></span></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next'><span><i class='fas fa-angle-right' title='Next'></i></span></button>",
+    prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+    nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
   });
 };
 function initSlickListen() {
@@ -518,8 +518,8 @@ function initSlickListen() {
       autoplay: true,
       fade: true,
       initialSlide: 1,
-      prevArrow: "<button type='button' class='btn-dope slick-prev'><span><i class='fas fa-angle-left' title='Previous'></i></span></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next'><span><i class='fas fa-angle-right' title='Next'></i></span></button>",
+      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
     });
   }, 3000);
 };
@@ -586,7 +586,7 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = button.parents(".results-collapse");
+      var drop = button.parents(".results-content");
       getResults([url, drop, false]);
     }, 250);
   })
@@ -598,7 +598,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .results-collapse", false];
+      var args = ["/episodes/" + podid + "/", ".showpod .results-content", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {
@@ -805,7 +805,7 @@ $(document)
     .parents("#player-wrapper").toggleClass("minimize");
   })
   .on("click", ".theme-button[type=submit]", function () {
-    var theme = this.innerText.toLowerCase();
+    var theme = $(this).children().text().toLowerCase();
     $(this).siblings("input[name=theme]").val(theme);
   })
   .on("submit", ".contact-form", function (e) {

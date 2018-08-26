@@ -21,12 +21,14 @@
         onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
       </a>
       <div class="dope-buttons dope-buttons-r p-0 float-right">
-        <button class="btn-dope player-minimize" aria-expanded="true">
-          <span class="exp-icon exp-nix"></span>
+        <button class="btn-dope player-minimize" aria-expanded="true" title="Minimize">
+          <span class="exp-icon exp-minus exp-nix">
+            <i class="fas fa-plus"></i>
+          </span>
         </button>
-        <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
+        <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false" title="Close">
           <span>
-            <i class="fas fa-times" title="Close"></i>
+            <i class="fas fa-times"></i>
           </span>
         </button>
       </div>
@@ -53,15 +55,23 @@
           {{ episode.description }}
         </p>
         <div class="dope-buttons px-0">
-          <a class="btn-dope" href="{{ episode.url }}" title="Download" download>
+          <a class="btn-dope" href="{{ episode.url }}" title="Download Episode" download>
             <span>
               <i class="fas fa-download"></i>
             </span>
           </a>
+          <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+            title="Episodes of {{ episode.podcast.title }}">
+            <span>
+              <i class="fas fa-bars"></i>
+            </span>       
+          </a>
         </div>
       </div>
-      <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false">
-        <span class="exp-icon exp-up exp-nix"></span>
+      <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false" title="Show More">
+        <span class="exp-icon exp-nix">
+          <i class="fas fa-ellipsis-v"></i>
+        </span>
       </button>        
       <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>

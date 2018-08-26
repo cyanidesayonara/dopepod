@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12 color-3 dope-options">
     <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope options-button" href="{% url 'previous' %}">
+      <a class="btn-dope options-button" href="{% url 'previous' %}" title="Update">
         <span class="active">Updated</span>
         <span class="date" data-utc="{% now 'U' %}">
           {% now "d M Y H:i" %}
@@ -18,11 +18,13 @@
           <span class="result-length">{{ episode.length }}</span>
         {% endif %}
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
-        onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
+        onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
       </a>
       <button class="dope-toggle float-right" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
-      aria-expanded="false">
-        <span class="exp-icon exp-down"></span>
+      aria-expanded="false" title="Show More">
+        <span class="exp-icon exp-nix">
+          <i class="fas fa-ellipsis-v"></i>
+        </span>
       </button>
       <h1>
         <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
@@ -82,7 +84,7 @@
           {% csrf_token %}
           <input type="hidden" name="mode" value="play" />
           <input type="hidden" name="signature" value="{{ episode.signature }}" />
-          <button class="btn-dope" type="submit">
+          <button class="btn-dope" type="submit" title="Play Episode">
             <span class="active">
               Play
             </span>
@@ -91,7 +93,7 @@
             </span>
           </button>
         </form>
-        <a class="btn-dope" href="{{ episode.url }}" download>
+        <a class="btn-dope" href="{{ episode.url }}" title="Download Episode" download>
           <span class="active">
             Download
           </span>
@@ -100,7 +102,7 @@
           </span>
         </a>
         <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-          title="{{ episode.podcast.title }}">
+          title="Episodes of {{ episode.podcast.title }}">
           <span class="active">
             Episodes
           </span>
@@ -113,16 +115,23 @@
             {% csrf_token %}
             <input type="hidden" name="mode" value="add" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope active" type="submit">
+            <button class="btn-dope" type="submit" title="Add to Playlist">
               <span class="active">
                 Add to Playlist
+              </span>
+              <span>
+                <i class="fas fa-plus"></i>
               </span>
             </button>
           </form>
         {% endif %}
-        <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false">
-          <span class="active">More</span>
-          <span class="exp-icon exp-up"></span>
+        <button class="btn-dope" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false" title="Show More">
+          <span class="active">
+            More
+          </span>
+          <span class="exp-icon">
+            <i class="fas fa-ellipsis-v"></i>
+          </span>
         </button>
       </div>
     </div>

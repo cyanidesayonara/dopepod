@@ -110,7 +110,7 @@
             {% csrf_token %}
             <input type="hidden" name="mode" value="play" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope" type="submit">
+            <button class="btn-dope" type="submit" title="Play Episode">
               <span class="active">
                 Play
               </span>
@@ -119,7 +119,7 @@
               </span>
             </button>
           </form>
-          <a class="btn-dope" href="{{ episode.url }}" download>
+          <a class="btn-dope" href="{{ episode.url }}" download title="Download Episode">
             <span class="active">
               Download
             </span>
@@ -128,7 +128,7 @@
             </span>
           </a>
           <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-            title="{{ episode.podcast.title }}">
+            title="Episodes of {{ episode.podcast.title }}">
             <span class="active">
               Episodes
             </span>
@@ -141,18 +141,20 @@
             {% csrf_token %}
             <input type="hidden" name="mode" value="add" />
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope" type="submit">
+            <button class="btn-dope" type="submit" title="Add to Playlist">
               <span class="active">
                 Add to Playlist
               </span>
             </button>
           </form>
           {% endif %}
-          <a class="btn-dope" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false">
+          <a class="btn-dope" data-toggle="collapse" data-target="#splash-play-collapse{{ forloop.counter }}" aria-expanded="false" title="Show More">
             <span class="active">
               More
             </span>
-            <span class="exp-icon exp-down"></span>
+            <span class="exp-icon">
+              <i class="fas fa-ellipsis-v"></i>
+            </span>
           </a>
         </div>
         <div class="collapse fade splash-play-collapse" id="splash-play-collapse{{ forloop.counter }}">
