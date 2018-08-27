@@ -899,9 +899,8 @@ $(document)
     themeChanger(theme);
   })
   .on("click", ".expandable .exp", function () {
-    $(".expandable.expanded").removeClass("expanded");
     var button = $(this);
-    console.log(button.attr("aria-expanded"))
+    button.parents(".results").find(".expandable.expanded").removeClass("expanded");
     if (button.attr("aria-expanded") === "true") {
       button.parents(".expandable").addClass("expanded");
     }
