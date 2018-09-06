@@ -1,11 +1,13 @@
-<div class="row">
-  {% if results.view == "splash" %}
-    {% if errors or message %}
-      <div class="col-12 errors order-first color-3">
+{% if results.view == "splash" %}
+  {% if errors or message %}
+    <div class="row color-3">
+      <div class="col-12 errors">
         {% include "errors.min.html" %}
       </div>
-    {% endif %}
-    <div class="col-12 order-1" id="splash">
+    </div>
+  {% endif %}
+  <div class="row">
+    <div class="col-12" id="splash">
       <div class="collapse fade login-collapse{% if not view %} show{% endif %}" id="splash-collapse">
         <div class="dope-wrapper">
           <h1>
@@ -133,13 +135,9 @@
         </div>
       </div>
     </div>
-    <div class="col-12 order-3 col-lg-4 order-lg-2 color-3">
-      <div class="dope-wrapper">
-        <p>Sign in with your social media account.</p>
-        {% include "social-login.min.html" %}
-      </div>
-    </div>
-    <div class="col-12 order-2 col-lg-4 order-lg-3 color-3">
+  </div>
+  <div class="row color-3">
+    <div class="col-12 col-lg-4 order-lg-2">
       <div class="dope-wrapper">
         <p>
           Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
@@ -175,7 +173,13 @@
         </div>
       </div>
     </div>
-    <div class="col-12 order-4 col-lg-4 color-3">
+    <div class="col-12 col-lg-4 order-lg-1">
+      <div class="dope-wrapper">
+        <p>Sign in with your social media account.</p>
+        {% include "social-login.min.html" %}
+      </div>
+    </div>
+    <div class="col-12 col-lg-4 order-lg-3">
       <div class="dope-wrapper">
         <p>
           Create a temporary user account linked to your browser to try out all the features.
@@ -189,17 +193,23 @@
         </div>
       </div>
     </div>
-    <div class="col-12 order-5">
+  </div>
+  <div class="row">
+    <div class="col-12">
       <div class="dope-wrapper">
         {% include "search-form.min.html" %}
       </div>
     </div>
-  {% elif results.view == "dashboard" %}
-    <div class="col-12 errors order-first color-3">
-      {% if errors or message %}
+  </div>
+{% elif results.view == "dashboard" %}
+  {% if errors or message %}
+    <div class="row color-3">
+      <div class="col-12 errors">
         {% include "errors.min.html" %}
-      {% endif %}
+      </div>
     </div>
+  {% endif %}
+  <div class="row">
     <div class="col-12 col-lg-6">
       <a class="dash-wrapper subscriptions-link" href="{% url 'subscriptions' %}">
         <h1>
@@ -220,8 +230,10 @@
         </p>
       </a>
     </div>
-  {% endif %}
-  <div class="col-12 order-last color-3 px-0">
+  </div>
+{% endif %}
+<div class="row color-3">
+  <div class="col-12 px-0">
     {% include "slick.min.html" %}
   </div>
 </div>
