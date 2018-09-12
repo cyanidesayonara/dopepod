@@ -844,15 +844,11 @@ form {
 .no-touch #player-wrapper h1 span:hover {
   color: #fff;
 }
-#player-close-collapse {
-  text-align: center;
-  padding-bottom: 15px;
-}
 #player-close-collapse p {
   display: inline-block;
   font-size: 14px;
   color: #fff;
-  margin: 0 10px 0 0;
+  margin: 5px 20px;
 }
 .player-episode {
   font-size: 14px;
@@ -866,7 +862,7 @@ form {
 }
 #player-wrapper .player-description {
   margin: 0;
-  max-height: calc(100vh - 460px);
+  max-height: calc(100vh - 470px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {

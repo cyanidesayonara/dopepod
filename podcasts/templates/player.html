@@ -2,19 +2,21 @@
   <div class="col-12 col-lg-4 ml-auto">
     <div class="color-1" id="player-wrapper">
       <div class="collapse fade" id="player-close-collapse">
-        <p>
-          Close player?
-        </p>
-        <button class="btn-dope player-close">
-          <span>
-            Yes
-          </span>
-        </button>
-        <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
-          <span>
-            No
-          </span>
-        </button>
+        <div class="dope-buttons dope-buttons-c pt-0">
+          <p>
+            Close player?
+          </p>
+          <button class="btn-dope player-close">
+            <span>
+              Yes
+            </span>
+          </button>
+          <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
+            <span>
+              No
+            </span>
+          </button>
+        </div>
       </div>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
