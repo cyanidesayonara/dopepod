@@ -28,113 +28,113 @@
     </div>
   </div>
 </div>
-<div class="row">
-  {% if errors or message %}
-    <div class="col-12 errors color-3">
-      {% include "errors.min.html" %}
-    </div>
-  {% endif %}
+{% if errors or message %}
+  {% include "errors.min.html" %}
+{% endif %}
+<div class="row collapse fade settings-collapse show" id="general-collapse">
   <div class="col-12 dope-wrapper">
-    <div class="collapse fade settings-collapse show" id="general-collapse">
-      <form class="settings-form" action="{% url 'settings' %}" method="POST">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="col-12 dope-form-group">
-            <label for="email">Email</label>
-          </div>
-          <div class="col dope-form-group">
-            <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}" />
-          </div>
-          <div class="col-auto">
-            <button class="btn-dope" type="submit">
-              <span class="active">
-                Save
-              </span>
-              <span>
-                <i class="fas fa-save"></i>
-              </span>
-            </button>
-          </div>
-          <div class="col-12 dope-form-group">
-            <label for="theme">Theme</label>
-            <div class="dope-buttons p-0">
-              {% if user.profile.theme == "dark" %}
-                <input class="theme" type="hidden" name="theme" value="dark" />
-                <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
-                <button type="button" class="btn-dope theme-button"><span class="active">Dark</span></button>
-                <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
-              {% elif user.profile.theme == "light" %}
-                <input class="theme" type="hidden" name="theme" value="light" />
-                <button type="button" class="btn-dope theme-button"><span class="active">Light</span></button>
-                <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
-                <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
-              {% elif user.profile.theme == "christmas" %}
-                <input class="theme" type="hidden" name="theme" value="christmas" />
-                <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
-                <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
-                <button type="button" class="btn-dope theme-button"><span class="active">Christmas</span></button>
-              {% endif %}
-            </div>
-          </div>
+    <form class="settings-form" action="{% url 'settings' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="col-12 dope-form-group">
+          <label for="email">Email</label>
         </div>
-      </form>
-    </div>
-    <div class="collapse fade settings-collapse" id="change-collapse">
-      <form class="settings-form" action="{% url 'change_password' %}" method="POST">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="col-12 dope-form-group">
-            <label for="settings-oldpassword">Old password</label>
-            <input class="dope-field" type="password" name="oldpassword" required id="settings-oldpassword" />
-          </div>
-          <div class="col-12 dope-form-group">
-            <label for="settings-password1">New password</label>
-            <input class="dope-field" type="password" name="password1" required id="settings-password1" />
-          </div>
-          <div class="col-12 dope-form-group">
-            <label for="settings-password2">New password (again)</label>
-          </div>
-          <div class="col dope-form-group">
-            <input class="dope-field" type="password" name="password2" required id="settings-password2" />
-          </div>
-          <div class="col-auto">
-            <button class="btn-dope" type="submit">
-              <span class="active">
-                Save
-              </span>
-              <span>
-                <i class="fas fa-save"></i>
-              </span>
-            </button>
-          </div>
+        <div class="col dope-form-group">
+          <input class="dope-field" type="email" name="email" id="email" value="{{ user_form.email.value }}" />
         </div>
-      </form>
-    </div>    
-    <div class="collapse fade settings-collapse" id="solong-collapse">
-      <p>
-        Delete account? Your playlist and subscriptions will be lost forever.
-      </p>
-      <form class="solong-form" action="{% url 'solong' %}" method="POST">
-        <div class="dope-buttons dope-buttons-c">
-          {% csrf_token %}
+        <div class="col-auto">
           <button class="btn-dope" type="submit">
             <span class="active">
-              Yes
+              Save
             </span>
             <span>
-              <i class="fas fa-check"></i>
+              <i class="fas fa-save"></i>
             </span>
           </button>
-          <a class="btn-dope" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
+        </div>
+        <div class="col-12 dope-form-group">
+          <label for="theme">Theme</label>
+          <div class="dope-buttons p-0">
+            {% if user.profile.theme == "dark" %}
+              <input class="theme" type="hidden" name="theme" value="dark" />
+              <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
+              <button type="button" class="btn-dope theme-button"><span class="active">Dark</span></button>
+              <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
+            {% elif user.profile.theme == "light" %}
+              <input class="theme" type="hidden" name="theme" value="light" />
+              <button type="button" class="btn-dope theme-button"><span class="active">Light</span></button>
+              <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
+              <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
+            {% elif user.profile.theme == "christmas" %}
+              <input class="theme" type="hidden" name="theme" value="christmas" />
+              <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
+              <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
+              <button type="button" class="btn-dope theme-button"><span class="active">Christmas</span></button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row collapse fade settings-collapse" id="change-collapse">
+  <div class="col-12 dope-wrapper">
+    <form class="settings-form" action="{% url 'change_password' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="col-12 dope-form-group">
+          <label for="settings-oldpassword">Old password</label>
+          <input class="dope-field" type="password" name="oldpassword" required id="settings-oldpassword" />
+        </div>
+        <div class="col-12 dope-form-group">
+          <label for="settings-password1">New password</label>
+          <input class="dope-field" type="password" name="password1" required id="settings-password1" />
+        </div>
+        <div class="col-12 dope-form-group">
+          <label for="settings-password2">New password (again)</label>
+        </div>
+        <div class="col dope-form-group">
+          <input class="dope-field" type="password" name="password2" required id="settings-password2" />
+        </div>
+        <div class="col-auto">
+          <button class="btn-dope" type="submit">
             <span class="active">
-              No
+              Save
             </span>
             <span>
-              <i class="fas fa-times"></i>
+              <i class="fas fa-save"></i>
             </span>
-          </a>
+          </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
+  </div>
+</div>    
+<div class="row collapse fade settings-collapse" id="solong-collapse">
+  <div class="col-12 dope-wrapper">
+    <p>
+      Delete account? Your playlist and subscriptions will be lost forever.
+    </p>
+    <form class="solong-form" action="{% url 'solong' %}" method="POST">
+      <div class="dope-buttons dope-buttons-c">
+        {% csrf_token %}
+        <button class="btn-dope" type="submit">
+          <span class="active">
+            Yes
+          </span>
+          <span>
+            <i class="fas fa-check"></i>
+          </span>
+        </button>
+        <a class="btn-dope" data-toggle="collapse" href="#solong-collapse" aria-expanded="false" aria-controls="solong-collapse">
+          <span class="active">
+            No
+          </span>
+          <span>
+            <i class="fas fa-times"></i>
+          </span>
+        </a>
+      </div>
+    </form>
   </div>
 </div>

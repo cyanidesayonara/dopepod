@@ -355,7 +355,8 @@ function postLogin(form) {
     .done(function(response) {
       $("#center-stage").html(response);
       // if not password reset, refresh page
-      if (text === "Login") {
+      console.log(text)
+      if (text === "Login" || text === "Tryout") {
         refreshCookie();
         refreshPage();
       }
@@ -424,7 +425,7 @@ function postPlaylist(data, mode, button) {
       }
       else {
         if (mode == "add") {
-          button.text(text);
+          button.html(text);
         }
         if (drop.children(".playlist").length) {
           drop.html(response);
@@ -818,7 +819,7 @@ $(document)
     postSettings(this);
   })
   // login or signup and refresh page/send password link
-  .on("submit", ".login-form, .signup-form, .password-form, .password-reset-form", function(e) {
+  .on("submit", ".tryout-form, .login-form, .signup-form, .password-form, .password-reset-form", function(e) {
     e.preventDefault();
     postLogin(this);
   })

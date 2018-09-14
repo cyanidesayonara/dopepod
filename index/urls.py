@@ -28,5 +28,5 @@ urlpatterns = [
     url(r"^noshow/$", views.noshow, name="noshow"),
     url(r"^tz/$", views.tz, name="tz"),
     url(r"^solong/$", views.solong, name="solong"),
-    url(r"^temp/$", views.temp, name="temp"),
+    url(r"^tryout/$", views.tryout, name="tryout"),
 ]

@@ -959,6 +959,11 @@ def solong(request):
     return redirect("/")
 
 @allow_lazy_user
-def temp(request):
+def tryout(request):
     if request.method == "POST":
-        return HttpResponse(request.user.username)
+        template = "results_base.min.html"
+        context = {
+            "view": "login",
+        }
+        return render_dashboard(request, template, context)
+    return redirect("/")

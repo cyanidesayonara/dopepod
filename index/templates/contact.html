@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12 order-3 col-lg-4 dope-wrapper">
+  <div class="col-12 dope-wrapper">
     {% if errors or message %}
       <div class="errors">
         {% include "errors.min.html" %}
@@ -26,6 +26,9 @@
           <button class="btn-dope" type="submit" title="Send">
             <span class="active">
               Send
+            </span>
+            <span>
+              <i class="far fa-envelope"></i>
             </span>
           </button>
         </div>

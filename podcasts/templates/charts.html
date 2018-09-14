@@ -100,9 +100,9 @@
         </li>
       </ul>
       <div class="dope-buttons px-0">
-        <a class="btn-dope showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="Episodes of {{ podcast.object.title }}">
+        <a class="btn-dope showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
           <span class="active">
-            Episodes
+            Show
           </span>
           <span>
             <i class="fas fa-bars"></i>

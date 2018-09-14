@@ -102,9 +102,9 @@
           </span>
         </a>
         <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-          title="Episodes of {{ episode.podcast.title }}">
+          title="{{ episode.podcast.title }}">
           <span class="active">
-            Episodes
+            Show
           </span>
           <span>
             <i class="fas fa-bars"></i>
@@ -117,7 +117,7 @@
             <input type="hidden" name="signature" value="{{ episode.signature }}" />
             <button class="btn-dope" type="submit" title="Add to Playlist">
               <span class="active">
-                Add to Playlist
+                Add
               </span>
               <span>
                 <i class="fas fa-plus"></i>

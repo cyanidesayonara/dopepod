@@ -3,11 +3,6 @@
     <div class="col-12 dope-wrapper">
       <ul>
         <li>
-          <a class="dope-link contact-link" href="{% url 'contact' %}">
-            Contact
-          </a>
-        </li>
-        <li>
           <a class="dope-link privacy-link" href="{% url 'privacy' %}">
             Privacy
           </a>
@@ -18,10 +13,29 @@
           </a>
         </li>
         <li>
+          <a class="dope-link contact-link" href="{% url 'contact' %}">
+            Contact
+          </a>
+        </li>
+        <li>
           <a class="dope-link api-link" href="{% url 'api' %}">
             API
           </a>        
         </li>
+      </ul>
+      <ul>
+        <li>
+          <a class="dope-link" href="//www.facebook.com/dopepod.me" title="Facebook">
+            Like
+            <i class="fab fa-facebook-f fa-lg"></i>
+          </a>
+        </li>
+        <li>
+          <a class="dope-link" href="//twitter.com/_dopepod_" title="Twitter">
+            Tweet
+            <i class="fab fa-twitter fa-lg"></i>
+          </a>
+        </li>        
         <li>
           <form action="//www.paypal.com/cgi-bin/webscr" method="post" target="_top">
             <input type="hidden" name="cmd" value="_donations">
@@ -32,6 +46,7 @@
             <input type="hidden" name="currency_code" value="USD">
             <button class="dope-link" type="submit">
               Donate
+              <i class="fab fa-paypal fa-lg"></i>
             </button>
           </form>
         </li>
@@ -42,20 +57,10 @@
       <ul>
         <li>
           <a class="dope-link index-link" href="/">
-            © 2018 dopepod
+            dopepod © 2018
           </a>
         </li>
-        <li>
-          <a class="dope-link" href="//www.facebook.com/dopepod.me" title="Facebook">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-        </li>
-        <li>
-          <a class="dope-link" href="//twitter.com/_dopepod_" title="Twitter">
-            <i class="fab fa-twitter"></i>
-          </a>
-        </li>
-      </ul>
+      </ul>      
     </div>
   </div>
 </div>
