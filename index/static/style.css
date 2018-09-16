@@ -713,6 +713,9 @@ form {
   padding: 5px;
   border: 2px solid rgb(0, 191, 165);
 }
+.charts-rank a {
+  color: unset;
+}
 .charts .dope-result h1,
 .charts .dope-result h2 {
   white-space: nowrap;
