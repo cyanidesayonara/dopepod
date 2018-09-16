@@ -703,18 +703,18 @@ form {
 }
 .charts-rank {
   float: left;
-  font-weight: 600;
   margin-right: 10px;
   text-align: center;
   height: 34px;
   width: 34px;
   font-size: 14px;
   border-radius: 50%;
-  padding: 5px;
   border: 2px solid rgb(0, 191, 165);
 }
 .charts-rank a {
+  padding: 5px;
   color: unset;
+  display: block;
 }
 .charts .dope-result h1,
 .charts .dope-result h2 {

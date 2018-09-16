@@ -1,13 +1,11 @@
 <div class="row">
   {% for podcast in results.podcasts %}
     <div class="col-12 expandable dope-result{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
-      <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-        <div class="charts-rank">
-          <span>
-            {{ forloop.counter }}
-          </span>
-        </div>
-      </a>
+      <div class="charts-rank">
+        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+          {{ forloop.counter }}
+        </a>
+      </div>
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
         <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}100x100bb.jpg"
         onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.object.title }}" />
