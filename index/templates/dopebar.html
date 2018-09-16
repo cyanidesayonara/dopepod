@@ -1,5 +1,5 @@
-<nav class="color-1" id="dopebar">
-  <div class="container" {% if request.is_ajax %}data-theme="{{ user.profile.theme }}"{% endif %}>
+<div class="color-1" id="dopebar" {% if request.is_ajax %}data-theme="{{ user.profile.theme }}" {% endif %}>
+  <div class="container">
     <div class="row">
       <div class="col-3 col-lg-5" id="dopebar-l">
         <a class="dope-link d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false" aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
@@ -9,16 +9,6 @@
           <li>
             <a class="dope-link browse-link" href="{% url 'search' %}">
               Browse
-            </a>
-          </li>
-          <li>
-            <a class="dope-link charts-link" href="#">
-              Charts
-            </a>
-          </li>
-          <li>
-            <a class="dope-link previous-link" href="#">
-              Previous
             </a>
           </li>
           {% if user.is_authenticated %}
@@ -31,6 +21,15 @@
               <a class="dope-link playlist-link" href="{% url 'playlist' %}">
                 Playlist
               </a>
+            </li>
+          {% else %}
+            <li>
+              <form class="tryout-form" method="POST" action="{% url 'tryout' %}">
+                {% csrf_token %}
+                <button type="submit" class="dope-link">
+                  Tryout
+                </button>
+              </form>
             </li>
           {% endif %}
         </ul>
@@ -92,8 +91,8 @@
       </div>
     </div>
   </div>
-</nav>
-<nav class="collapse d-xl-none color-1" id="dopebar-collapse">
+</div>
+<div class="collapse d-xl-none color-1" id="dopebar-collapse">
   <ul>
     <li>
       {% include "search-form.min.html" %}
@@ -143,16 +142,24 @@
       </form>
     </li>
     {% else %}
-    <li>
-      <a class="dope-link login-link" href="/?view=login">
-        Login
-      </a>
-    </li>
-    <li>
-      <a class="dope-link signup-link" href="/?view=signup">
-        Signup
-      </a>
-    </li>
+      <li>
+        <form class="tryout-form" method="POST" action="{% url 'tryout' %}">
+          {% csrf_token %}
+          <button type="submit" class="dope-link">
+            Tryout
+          </button>
+        </form>
+      </li>
+      <li>
+        <a class="dope-link login-link" href="/?view=login">
+          Login
+        </a>
+      </li>
+      <li>
+        <a class="dope-link signup-link" href="/?view=signup">
+          Signup
+        </a>
+      </li>
     {% endif %}
   </ul>
-</nav>
+</div>

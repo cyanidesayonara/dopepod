@@ -381,7 +381,6 @@ class Podcast(models.Model):
             
             # charts header
             if provider:
-                results["podcasts"] = podcasts
                 results_header = "Top " + str(count)
                 if language:
                     results_header += " " + str(language)
@@ -392,7 +391,9 @@ class Podcast(models.Model):
                 if genre:
                     results_header += " about " + str(genre)
                 results_header += " on " + provider
+                results["podcasts"] = podcasts
                 results["header"] = results_header
+                results["options"] = True
             # search header & pages
             else:
                 num_pages = int(count / show) + (count % show > 0)
@@ -454,6 +455,7 @@ class Podcast(models.Model):
                 results["podcasts2"] = podcasts[one:two]
                 results["podcasts3"] = podcasts[two:three]
                 results["podcasts4"] = podcasts[three:]
+                results["options"] = True
                 results["extra_options"] = True
 
             # finally (finally!) cache results so we don"t have to go thru this every time
@@ -765,6 +767,7 @@ class Subscription(models.Model):
             "podcasts": subscriptions,
             "header": "Subscriptions",
             "view": "subscriptions",
+            "options": True,
             "extra_options": True,
         }
         return results
@@ -1124,6 +1127,7 @@ class Episode(models.Model):
                 "episodes": episodes,
                 "header": "Previously played episodes",
                 "view": "previous",
+                "options": True,
             }
             cache.set("previous", results, 60 * 60 * 24)
             return results

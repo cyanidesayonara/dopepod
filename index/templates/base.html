@@ -47,7 +47,9 @@
     <i class="fas fa-angle-up fa-lg"></i>
   </button>
   <!-- DOPEBAR -->
-  {% include "dopebar.min.html" %}
+  <nav id="dopebar-wrapper">
+    {% include "dopebar.min.html" %}
+  </nav>
   <!-- MAIN CONTENT -->
   <div class="container" id="main-wrapper">
     <div class="row">
@@ -84,7 +86,6 @@
     {% include "footer.min.html" %}
   </footer>
   <div id="loaders">
-    {% include "circle-loading.min.html" %}
     {% include "button-loading.min.html" %}
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

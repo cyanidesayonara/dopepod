@@ -1,249 +1,150 @@
 <div class="row">
-  <div class="col-12 color-3 dope-options">
-    <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope options-button" href="{{ results.order_url }}" title="Toggle Order">
-        <span class="active">
-          Order
-        </span>
-        <span class="btn-dope-toggle">
-          {% if results.order == "rank" %}
-            <span>
-              <i class="fas fa-sort-numeric-down fa-lg"></i>
-            </span>
-            <span class="d-none">
-              <i class="fas fa-sort-alpha-down fa-lg"></i>
-            </span>
-          {% elif results.order == "name" %}
-            <span class="d-none">
-              <i class="fas fa-sort-numeric-down fa-lg"></i>
-            </span>
-            <span>
-              <i class="fas fa-sort-alpha-down fa-lg"></i>
-            </span>
+  {% if results.podcasts1 %}
+    <div class="col-12 px-0">
+      {% include "pagination.min.html" %}
+    </div>
+    <div class="col-12 collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
+      <div class="row dope-results">
+        {% for podcast in results.podcasts1 %}
+          <div class="col-lg-2 col-md-3 col-4 dope-result">
+            <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+              <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
+                alt="{{ podcast.object.title }}" />
+              <h1>
+                {{ podcast.object.title }}
+              </h1>
+              <h2>
+                <span class="by">
+                  by
+                </span>
+                {{ podcast.object.artist }}
+              </h2>
+            </a>
+          </div>
+        {% endfor %}
+        {% for podcast in results.podcasts2 %}
+          <div class="col-lg-2 col-md-3 col-4 dope-result">
+            <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+              <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
+                alt="{{ podcast.object.title }}" />
+              <h1>
+                {{ podcast.object.title }}
+              </h1>
+              <h2>
+                <span class="by">
+                  by
+                </span>
+                {{ podcast.object.artist }}
+              </h2>
+            </a>
+          </div>
+        {% endfor %}
+        {% for podcast in results.podcasts3 %}
+          <div class="col-lg-2 col-md-3 col-4 dope-result">
+            <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+              <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
+                alt="{{ podcast.object.title }}" />
+              <h1>
+                {{ podcast.object.title }}
+              </h1>
+              <h2>
+                <span class="by">
+                  by
+                </span>
+                {{ podcast.object.artist }}
+              </h2>
+            </a>
+          </div>
+        {% endfor %}
+        {% for podcast in results.podcasts4 %}
+          <div class="col-lg-2 col-md-3 col-4 dope-result">
+            <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+              <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
+                alt="{{ podcast.object.title }}" />
+              <h1>
+                {{ podcast.object.title }}
+              </h1>
+              <h2>
+                <span class="by">
+                  by
+                </span>
+                {{ podcast.object.artist }}
+              </h2>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-12 collapse fade view-collapse {% if results.view == 'list' %}show{% endif %}">
+      <div class="row dope-results">
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+          {% if results.podcasts1 %}
+            <ul>
+              {% for podcast in results.podcasts1 %}
+                <li>
+                  <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+                    {{ podcast.object.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
           {% endif %}
-        </span>
-      </a>
-      {% if results.view == "grid" %}
-        <a class="btn-dope view-button" href="{{ results.view_url }}">
-          <span class="active">
-            Display
-          </span>
-          <span class="btn-dope-toggle">
-            <span data-view="list">
-              <i class="fas fa-th"></i>
-            </span>
-            <span class="d-none" data-view="grid">
-              <i class="fas fa-bars"></i>
-            </span>
-          </span>
-        </a>
-      {% elif results.view == "list" %}
-        <a class="btn-dope view-button" href="{{ results.view_url }}" title="Toggle View">
-          <span class="active">
-            Display
-          </span>
-          <span class="btn-dope-toggle">
-            <span class="d-none" data-view="list">
-              <i class="fas fa-th"></i>
-            </span>
-            <span data-view="grid">
-              <i class="fas fa-bars"></i>
-            </span>
-          </span>
-        </a>
-      {% endif %}
-      {% if results.alphabet %}
-        <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false" aria-controls="alphabet-collapse" title="Select Initial">
-          <span class="active">
-            Initial
-          </span>
-          <span class="exp-icon">
-            <i class="fas fa-ellipsis-v"></i>
-            {% if results.alphabet_nix_url %}
-              {{ results.selected_q|capfirst }}
-            {% else %}
-              A-Z
-            {% endif %}
-          </span>
-        </a>
-      {% endif %} 
-      {% if results.genres %}
-        <a class="btn-dope" data-toggle="collapse" href="#genre-collapse-{{ results.view }}" aria-expanded="false" aria-controls="genre-collapse" title="Select Genre">
-          <span class="active">
-            Genre
-          </span>
-          <span class="exp-icon">
-            <i class="fas fa-ellipsis-v"></i>
-            {% if results.selected_genre %}
-              {{ results.selected_genre }}
-            {% else %}
-              All
-            {% endif %}
-          </span>           
-        </a>
-      {% endif %}
-      {% if results.languages %}
-        <a class="btn-dope" data-toggle="collapse" href="#language-collapse-{{ results.view }}" aria-expanded="false" aria-controls="language-collapse" title="Select Language">
-          <span class="active">
-            Language
-          </span>
-          <span class="exp-icon">
-            <i class="fas fa-ellipsis-v"></i>
-            {% if results.selected_language %}
-              {{ results.selected_language }}
-            {% else %}
-              All
-            {% endif %}
-          </span>        
-        </a>
-      {% endif %}
-    </div>
-    {% include "results-options.min.html" %}
-  </div>
-  {% include "pagination.min.html" %}
-</div>
-{% if results.podcasts1 %}
-  <div class="row collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
-    {% for podcast in results.podcasts1 %}
-      <div class="col-lg-2 col-md-3 col-4 dope-result">
-        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-          <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-            alt="{{ podcast.object.title }}" />
-          <h1>
-            {{ podcast.object.title }}
-          </h1>
-          <h2>
-            <span class="by">
-              by
-            </span>
-            {{ podcast.object.artist }}
-          </h2>
-        </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+          {% if results.podcasts2 %}
+            <ul>
+              {% for podcast in results.podcasts2 %}
+                <li>
+                  <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+                    {{ podcast.object.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+          {% if results.podcasts3 %}
+            <ul>
+              {% for podcast in results.podcasts3 %}
+                <li>
+                  <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+                    {{ podcast.object.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}      
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+          {% if results.podcasts4 %}
+            <ul>
+              {% for podcast in results.podcasts4 %}
+                <li>
+                  <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
+                    {{ podcast.object.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
       </div>
-    {% endfor %}
-    {% for podcast in results.podcasts2 %}
-      <div class="col-lg-2 col-md-3 col-4 dope-result">
-        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-          <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-            alt="{{ podcast.object.title }}" />
-          <h1>
-            {{ podcast.object.title }}
-          </h1>
-          <h2>
-            <span class="by">
-              by
-            </span>
-            {{ podcast.object.artist }}
-          </h2>
-        </a>
-      </div>
-    {% endfor %}
-    {% for podcast in results.podcasts3 %}
-      <div class="col-lg-2 col-md-3 col-4 dope-result">
-        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-          <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-            alt="{{ podcast.object.title }}" />
-          <h1>
-            {{ podcast.object.title }}
-          </h1>
-          <h2>
-            <span class="by">
-              by
-            </span>
-            {{ podcast.object.artist }}
-          </h2>
-        </a>
-      </div>
-    {% endfor %}
-    {% for podcast in results.podcasts4 %}
-      <div class="col-lg-2 col-md-3 col-4 dope-result">
-        <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-          <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-            alt="{{ podcast.object.title }}" />
-          <h1>
-            {{ podcast.object.title }}
-          </h1>
-          <h2>
-            <span class="by">
-              by
-            </span>
-            {{ podcast.object.artist }}
-          </h2>
-        </a>
-      </div>
-    {% endfor %}
-  </div>
-  <div class="row collapse fade view-collapse {% if results.view == 'list' %}show{% endif %}">
-    <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
-      {% if results.podcasts1 %}
-        <ul>
-          {% for podcast in results.podcasts1 %}
-            <li>
-              <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-                {{ podcast.object.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
-      {% if results.podcasts2 %}
-        <ul>
-          {% for podcast in results.podcasts2 %}
-            <li>
-              <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-                {{ podcast.object.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+    <div class="col-12 px-0">
+      {% include "pagination.min.html" %}
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
-      {% if results.podcasts3 %}
-        <ul>
-          {% for podcast in results.podcasts3 %}
-            <li>
-              <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-                {{ podcast.object.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}      
-    </div>
-    <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
-      {% if results.podcasts4 %}
-        <ul>
-          {% for podcast in results.podcasts4 %}
-            <li>
-              <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-                {{ podcast.object.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
-{% else %}
-  <div class="col-12 dope-wrapper">
-    <p>
-      No results.
-    </p>
-    {% if results.pages %}
+  {% else %}
+    <div class="col-12 dope-wrapper">
       <p>
-        You found a bug
-        <i class="fas fa-trophy"></i>
+        No results.
       </p>
-    {% endif %}
-  </div>
-{% endif %}
-{% if results.pages %}
-<div class="row">
-  <div class="col-12 px-0">
-    {% include "pagination.min.html" %}
-  </div>
+      {% if results.pages %}
+        <p>
+          You found a bug
+          <i class="fas fa-trophy"></i>
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
 </div>
-{% endif %}

@@ -131,13 +131,13 @@ function refreshCookie() {
 };
 // refreshes page on login
 function refreshPage() {
-  getResults(["/dopebar/", "#dopebar", false], true);
+  getResults(["/dopebar/", "#dopebar-wrapper", false], true);
   getResults(["/previous/", "#previous", false], true);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "previous", "splash-play"];
+    var urls = ["dopebar", "charts", "episodes", "previous"];
     for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -146,6 +146,10 @@ function checkForXHR(url) {
     xhr.abort();
     xhr = null;
   }
+};
+function enableLoader(drop) {
+  drop.children(":first").addClass("loading");
+  drop.children(":last").fadeIn("slow");
 };
 // RESULTS
 function getResults(args, no_loader, no_push) {
@@ -158,6 +162,15 @@ function getResults(args, no_loader, no_push) {
   checkForXHR(url);
   if (!no_push) {
     pushState(url);
+  }
+  if (!no_loader) {
+    drop.find(".results-collapse:not(.show)").collapse("show");
+    enableLoader(drop);
+    if (scroll) {
+      if (!url.includes("/charts/") && !url.includes("/previous/")) {
+        scrollTo(drop);
+      }
+    }
   }
   xhr = $.ajax({
     type: "GET",
@@ -185,7 +198,7 @@ function getResults(args, no_loader, no_push) {
         callback(args);
       }
       // if page refresh, apply theme
-      else if (drop.is("#dopebar")) {
+      else if (drop.is("#dopebar-wrapper")) {
         var response = drop.children();
         var theme = response.data("theme")
         response.removeData("theme");
@@ -199,24 +212,6 @@ function getResults(args, no_loader, no_push) {
       }
       replaceState(url);
     });
-  if (!no_loader) {
-    var results = drop.children();
-    if (!results.hasClass("loading")) {
-      var results_collapse = results.children(".results-collapse");
-      if (results_collapse.length) {
-        results_collapse.collapse("show").html(getCircleLoading());
-      }
-      else {
-        drop.find("#episodes-collapse").html(getCircleLoading());
-      }
-      drop.children().addClass("loading");
-      if (scroll) {
-        if (!url.includes("/charts/") && !url.includes("/previous/")) {
-          scrollTo(drop);
-        }
-      }
-    }
-  }
 };
 // NOSHOW
 function noshow(podid) {
@@ -306,7 +301,7 @@ function postContact(form) {
       scrollToTop();
       replaceState(url);
     });
-  drop.children(".results").addClass("loading").children(".results-collapse").html(getCircleLoading());
+  enableLoader(drop);
 };
 function postSettings(form) {
   var method = form.method;
@@ -332,15 +327,14 @@ function postSettings(form) {
       scrollToTop();
       replaceState(url);
     });
-  drop.children(".results").addClass("loading").children(".results-collapse").html(getCircleLoading());
+  enableLoader(drop);
 };
 function postLogin(form) {
   var method = form.method;
   var url = form.action;
   var form = $(form);
   var data = form.serialize();
-  var button = form.find("button[type=submit]");
-  var text = button[0].innerText;
+  form.find("button[type=submit].btn-dope").html(getButtonLoading());
   $.ajax({
       data: data,
       method: method,
@@ -355,15 +349,13 @@ function postLogin(form) {
     .done(function(response) {
       $("#center-stage").html(response);
       // if not password reset, refresh page
-      console.log(text)
-      if (text === "Login" || text === "Tryout") {
+      if (form.hasClass("login-form") || form.hasClass("tryout-form")) {
         refreshCookie();
         refreshPage();
       }
       scrollToTop();
     });
-  button.html(getButtonLoading());
-}
+};
 function postSubscriptions(podids, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
@@ -381,9 +373,9 @@ function postSubscriptions(podids, button) {
     })
     .done(function(response) {
       drop.html(response);
-      if ($(response).hasClass("showpod")) {
+      if (drop.children().hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
-        drop = ".showpod .results-content";
+        drop = drop.find(".episodes-content");
         getResults([url, drop, false]);
       }
       else {
@@ -397,6 +389,14 @@ function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
   var text = button[0].innerHTML;
   var url = "/playlist/";
+  if (mode == "play") {
+    var wrapper = $("#player-wrapper");
+    if (wrapper.length) {
+      wrapper.removeClass("minimize");
+      wrapper.find("audio")[0].preload = "none";
+      enableLoader($("#player-wrapper"));
+    }
+  }
   $.ajax({
     method: "POST",
     url: url,
@@ -432,12 +432,7 @@ function postPlaylist(data, mode, button) {
         }
       }
     });
-  if (button.is("#player-wrapper")) {
-    button.html(getCircleLoading());
-  }
-  else {
-    button.html(getButtonLoading());
-  }
+  button.html(getButtonLoading());
 };
 function playNext() {
   var data = {
@@ -446,11 +441,14 @@ function playNext() {
   };
   var mode = "play";
   var wrapper = $("#player-wrapper");
-  wrapper.children("audio")[0].preload = "none";
-  wrapper.empty();
+  if (wrapper.length) {
+    wrapper.removeClass("minimize");
+    wrapper.find("audio")[0].preload = "none";
+    enableLoader($("#player-wrapper"));
+  }
   // wait a sec here
   timeout = setTimeout(function() {
-    postPlaylist(data, mode, wrapper);
+    postPlaylist(data, mode);
   }, 500);
 };
 function closePlayer() {
@@ -468,9 +466,6 @@ function cleanString(q) {
 };
 function getButtonLoading() {
   return $(".button-loading").first().clone();
-};
-function getCircleLoading() {
-  return $(".circle-loading").first().clone();
 };
 function previousUpdater() {
   previous = setInterval(function() {
@@ -587,7 +582,7 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = button.parents(".results-content");
+      var drop = button.parents(".episodes-content");
       getResults([url, drop, false]);
     }, 250);
   })
@@ -599,7 +594,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .results-content", false];
+      var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {

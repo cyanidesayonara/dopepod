@@ -247,6 +247,12 @@ form {
 #splash h1 {
   margin-bottom: 20px;
 }
+.no-touch #splash .dope-result:hover,
+#splash .dope-result.expanded {
+  padding-bottom: 10px;
+  border-radius: .25rem;
+  box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
+}
 #splash .dope-result h1,
 #splash .dope-result h2 {
   white-space: nowrap;
@@ -550,19 +556,20 @@ form {
 }
 .episodes-table {
   table-layout: fixed;
-  margin: 10px 0 0;
+  margin: 30px 0 0;
 }
+.episodes-table th,
 .episodes-table th,
 .episodes-table td {
   padding: .3em;
   border: none;
 }
+.episodes-table tr:not(.episode-header),
 .episodes-table thead th {
-  border: none;
+  border-bottom: 2px solid rgb(0, 191, 165);
 }
 .episode-header {
   cursor: pointer;
-  border-top: 2px solid rgb(0, 191, 165);
 }
 .episodes-table .order {
   text-align: center;
@@ -630,6 +637,15 @@ form {
   padding: 0;
   border-bottom: 2px solid rgb(0, 191, 165);
 }
+.showpod .dope-options {
+  border: none;
+}
+.episodes-content {
+  position: relative;
+}
+.showpod-collapse {
+  min-height: 170px;
+}
 
 /* DOPE-RESULT */
 .dope-result {
@@ -673,10 +689,6 @@ form {
 }
 .results-back {
   margin-right: 40px;
-}
-.view-collapse.show {
-  display: -ms-flexbox;
-  display: flex;
 }
 
 /* CHARTS */
@@ -748,48 +760,48 @@ form {
 }
 
 /* SEARCH RESULTS */
-.view-collapse {
+.dope-results {
   padding: 10px 0 0 10px;
 }
-.view-collapse a {
+.dope-results a {
   color: unset;
 }
-.view-collapse .dope-result {
+.dope-results .dope-result {
   padding: 0 10px 0 0;
 }
-.view-collapse img {
+.dope-results img {
   margin-bottom: 10px;
 }
-.view-collapse img:hover {
+.dope-results img:hover {
   -webkit-transform: scale(1.02);
   -ms-transform: scale(1.02);
   transform: scale(1.02);
 }
-.view-collapse h1,
-.view-collapse h2 {
+.dope-results h1,
+.dope-results h2 {
   font-size: 14px;
   margin-bottom: 10px;
   overflow: hidden;
   height: 32px;
 }
-.view-collapse ul {
+.dope-results ul {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 0;
   padding-left: 0;
   list-style: none;
 }
-.view-collapse ul li {
+.dope-results ul li {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   height: 22px;
   margin-bottom: 20px;
 }
-.view-collapse ul li a {
+.dope-results ul li a {
   border-bottom: 2px solid rgba(0, 191, 165, 0);
 }
-.view-collapse ul li a:hover {
+.dope-results ul li a:hover {
   border-bottom: 2px solid rgb(0, 191, 165);
 }
 
@@ -806,9 +818,6 @@ form {
 }
 #player:not(.fixed-bottom) {
   position: relative;
-}
-#player > div > div {
-  min-height: 0;
 }
 #player-wrapper {
   font-weight: 600;
@@ -830,7 +839,8 @@ form {
 }
 #player-wrapper h1 {
   overflow: hidden;
-  margin: 10px 0;
+  margin: 0;
+  padding: 10px 0;
   font-size: 16px;
   white-space: nowrap;
 }
@@ -858,7 +868,7 @@ form {
 }
 #player-wrapper .player-description {
   margin: 0;
-  max-height: calc(100vh - 470px);
+  max-height: calc(100vh - 500px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {
@@ -871,31 +881,38 @@ form {
 
 /* OVERRIDER */
 .noborder {
-  border-bottom: none;
+  border-bottom: none!important;
 }
 
 /* LOADERS */
 #loaders {
   display: none;
 }
-.circle-loading {
-  position: relative;
-  border-radius: 50%;
-  font-size: 40px;
+.loading {
+  pointer-events: none;
+  -webkit-filter: blur(10px);
+  filter: blur(10px);
+  transition: all 2s ease;
+}
+.loader {
+  background: rgba(0, 191, 165, .5);
+  display: none;
+  position: absolute;
+  font-size: 50px;
   font-weight: 600;
-  height: 80px;
-  width: 80px;
-  margin: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  border: 3px dashed black;
+  border-radius: 50%;
+  height: 130px;
+  width: 130px;
+  top: 20px;
+  left: calc(50% - 65px);
   animation: spin 1.5s ease-in-out .25s infinite;
   -webkit-animation: spin 1.5s ease-in-out .25s infinite;
 }
-.circle-loading .char {
-  left: 27px;
-  top: -19px;
+.loader .char {
+  left: 47px;
+  top: -12px;
   position: absolute;
-  width: 24px;
   transform-origin: bottom center;
 }
 .char-2 {
@@ -944,7 +961,7 @@ form {
 .button-loading {
   position: relative;
   width: 65px;
-  height: 26px;
+  height: 27px;
 }
 .loading-a-1 {
   left: 4px;

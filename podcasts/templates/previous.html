@@ -1,16 +1,4 @@
 <div class="row">
-  <div class="col-12 color-3 dope-options">
-    <div class="dope-buttons dope-buttons-r">
-      <a class="btn-dope options-button" href="{% url 'previous' %}" title="Update">
-        <span class="active">Updated</span>
-        <span class="date" data-utc="{% now 'U' %}">
-          {% now "d M Y H:i" %}
-        </span>
-      </a>
-    </div>
-  </div>
-</div>
-<div class="row">
   {% for episode in results.episodes %}
     <div class="col-12 expandable dope-result{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
@@ -72,6 +60,9 @@
           </li>
         </ul>
         <p>
+          Description:
+        </p>
+        <p>
           {% if episode.description %}
             {{ episode.description }}
           {% else %}
@@ -125,7 +116,7 @@
             </button>
           </form>
         {% endif %}
-        <button class="btn-dope" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false" title="Show More">
+        <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false" title="Show More">
           <span class="active">
             More
           </span>
@@ -136,4 +127,4 @@
       </div>
     </div>
   {% endfor %}
-</div>  
+</div>

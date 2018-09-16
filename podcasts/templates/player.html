@@ -1,6 +1,6 @@
-<div class="container px-0">
-  <div class="col-12 col-lg-4 ml-auto">
-    <div class="color-1" id="player-wrapper">
+<div class="container position-relative">
+  <div class="col-12 col-lg-4 color-1" id="player-wrapper">
+    <div>
       <div class="collapse fade" id="player-close-collapse">
         <div class="dope-buttons dope-buttons-c pt-0">
           <p>
@@ -78,6 +78,14 @@
       <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>
       </audio>        
+    </div>
+    <div class="loader">
+      <span class="char char-1">d</span>
+      <span class="char char-2">o</span>
+      <span class="char char-3">p</span>
+      <span class="char char-4">e</span>
+      <span class="char char-5">p</span>
+      <span class="char char-6">o</span>
     </div>
   </div>
 </div>

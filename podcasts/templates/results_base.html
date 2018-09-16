@@ -12,14 +12,11 @@
 
 {% block center-stage %}
 <div class="col-12 results color-2 {{ results.view }}" {% if results.selected_q %}data-q="{{ results.selected_q }}"{% endif %} {% if results.podcast.podid %}data-podid="{{ results.podcast.podid }}"{% endif %}>
-  {% include "results_bar.html" %}
-  <div class="row collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
-    {% if results.podcast %}
-      <div class="col-12">
-        {% include "showpod.min.html" %}
-      </div>
-    {% endif %}
-    <div class="col-12 results-content">
+  {% include "results_bar.min.html" %}
+  <div class="row results-content">
+    <div class="col-12 collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
+      {% include "showpod.min.html" %}
+      {% include "results-options.min.html" %}
       {% if results.view == "splash" or results.view == "dashboard" %}
         {% include "splashboard.min.html" %}
       {% elif results.view == "grid" or results.view == "list" %}
@@ -28,14 +25,21 @@
         {% include "charts.min.html" %}
       {% elif results.view == "subscriptions" %}
         {% include "subscriptions.min.html" %}
-      {% elif results.view == "showpod" or results.view == "playlist" %}
-        {% include "episodes.min.html" %}
+      {% elif results.view == "playlist" %}
+        {% include "playlist.min.html" %}
+      {% elif results.view == "showpod" %}
+        <div class="row reviews-content">
+          {% include "reviews.min.html" %}
+        </div>
+        <div class="row episodes-content">
+          {% include "episodes.min.html" %}
+        </div>
       {% elif results.view == "previous"%}
         {% include "previous.min.html" %}
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
       {% elif results.view == "api" %}
-       {% include "api.min.html" %}
+        {% include "api.min.html" %}
       {% elif results.view == "privacy" %}
         {% include "privacy.min.html" %}    
       {% elif results.view == "terms" %}
@@ -50,7 +54,14 @@
         {% include "confirm-email.min.html" %}
       {% endif %}
     </div>
-    
   </div>
+</div>
+<div class="loader">
+  <span class="char char-1">d</span>
+  <span class="char char-2">o</span>
+  <span class="char char-3">p</span>
+  <span class="char char-4">e</span>
+  <span class="char char-5">p</span>
+  <span class="char char-6">o</span>
 </div>
 {% endblock %}

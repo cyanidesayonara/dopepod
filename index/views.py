@@ -13,6 +13,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core import serializers
 from lazysignup.decorators import allow_lazy_user
+from lazysignup.utils import is_lazy_user
 import json
 import logging
 
@@ -277,6 +278,7 @@ def get_showpod_results(podid, user=None, count=None, api=None):
         results = {
             "view": "showpod",
             "podcast": podcast,
+            "options": True,
             "extra_options": True,
             "header": podcast.title,
         }
@@ -291,6 +293,7 @@ def get_settings_results():
     results = {
         "header": "Settings",
         "view": "settings",
+        "options": True,
         "extra_options": True,
     }
     return results
@@ -816,7 +819,11 @@ def signup(request):
 
 def logout(request):
     if request.method == "POST":
+        user = request.user
         response = allauth.logout(request)
+        # lazy users are deleted on logout
+        if is_lazy_user(user):
+            user.delete()
         return response
 
 def change_password(request):
