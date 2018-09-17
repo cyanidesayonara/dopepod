@@ -1172,6 +1172,7 @@ class Episode(models.Model):
             "episodes": episodes,
             "header": "Previously played episodes",
             "view": "previous",
+            "options": True,
         }
         cache.set("previous", results, 60 * 60 * 24)
     

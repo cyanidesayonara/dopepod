@@ -252,7 +252,6 @@ form {
   padding-bottom: 10px;
   border-radius: .25rem;
   box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
-  border: 2px solid #00bfa5;
 }
 #splash .dope-result h1,
 #splash .dope-result h2 {
@@ -704,7 +703,6 @@ form {
 }
 .charts-rank {
   float: left;
-  font-weight: 600;
   margin-right: 10px;
   text-align: center;
   height: 34px;
@@ -713,6 +711,9 @@ form {
   border-radius: 50%;
   padding: 5px;
   border: 2px solid rgb(0, 191, 165);
+}
+.charts-rank a {
+  color: inherit;
 }
 .charts .dope-result h1,
 .charts .dope-result h2 {
