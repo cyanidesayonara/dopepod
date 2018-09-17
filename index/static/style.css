@@ -252,6 +252,7 @@ form {
   padding-bottom: 10px;
   border-radius: .25rem;
   box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
+  border: 2px solid #00bfa5;
 }
 #splash .dope-result h1,
 #splash .dope-result h2 {

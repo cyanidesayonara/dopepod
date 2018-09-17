@@ -2,8 +2,8 @@
 {% if errors or message %}
   {% include "errors.min.html" %}
 {% endif %}
-<div class="row">
-  <div class="col-12 dope-wrapper collapse fade settings-collapse show" id="general-collapse">
+<div class="row collapse fade settings-collapse show" id="general-collapse">
+  <div class="col-12 dope-wrapper">
     <form class="settings-form" action="{% url 'settings' %}" method="POST">
       {% csrf_token %}
       <div class="form-row">
@@ -49,24 +49,26 @@
       </div>
     </form>
   </div>
-  <div class="col-12 dope-wrapper collapse fade settings-collapse" id="change-collapse">
-    {% if not user|is_lazy_user %}
+</div>
+{% if not user|is_lazy_user %}
+  <div class="row collapse fade settings-collapse" id="change-collapse">
+    <div class="col-12 dope-wrapper">
       <form class="settings-form" action="{% url 'change_password' %}" method="POST">
         {% csrf_token %}
         <div class="form-row">
           <div class="col-12 dope-form-group">
-            <label for="settings-oldpassword">Old password</label>
-            <input class="dope-field" type="password" name="oldpassword" required id="settings-oldpassword" />
+            <label for="oldpassword">Old password</label>
+            <input class="dope-field" type="password" name="oldpassword" required id="oldpassword" />
           </div>
           <div class="col-12 dope-form-group">
-            <label for="settings-password1">New password</label>
-            <input class="dope-field" type="password" name="password1" required id="settings-password1" />
+            <label for="password1">New password</label>
+            <input class="dope-field" type="password" name="password1" required id="password1" />
           </div>
           <div class="col-12 dope-form-group">
-            <label for="settings-password2">New password (again)</label>
+            <label for="password2">New password (again)</label>
           </div>
           <div class="col dope-form-group">
-            <input class="dope-field" type="password" name="password2" required id="settings-password2" />
+            <input class="dope-field" type="password" name="password2" required id="password2" />
           </div>
           <div class="col-auto">
             <button class="btn-dope" type="submit">
@@ -80,18 +82,42 @@
           </div>
         </div>
       </form>
-    {% else %}
-      <p>
-        This will be a convert form.
-      </p>
-      <button class="btn-dope">
-        <span class="active">
-          Convert
-        </span>
-      </button>
-    {% endif %}
+    </div>
   </div>
-  <div class="col-12 dope-wrapper collapse fade settings-collapse" id="solong-collapse">
+{% else %}
+  <div class="row collapse fade settings-collapse" id="convert-collapse">
+    <div class="col-12 dope-wrapper">
+      <form method="POST" action="/convert/">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="col-12 dope-form-group">
+            <label for="email">Email</label>
+            <input class="dope-field" type="text" name="email" required id="email" />
+          </div>
+          <div class="col-12 dope-form-group">
+            <label for="password1">Password</label>
+            <input class="dope-field" type="password" name="password1" required id="password1" />
+          </div>
+          <div class="col-12 dope-form-group">
+            <label for="password">Password (again)</label>
+            <input class="dope-field" type="password" name="passwor2" required id="password2" />
+          </div>
+        </div>
+        <ul>
+          <li>Your password can't be too similar to your other personal information.</li>
+          <li>Your password must contain at least 8 characters.</li>
+          <li>Your password can't be a commonly used password.</li>
+          <li>Your password can't be entirely numeric.</li>
+        </ul>
+        <button class="btn-dope" type="submit">
+          Convert
+        </button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+<div class="row collapse fade settings-collapse" id="solong-collapse">
+  <div class="col-12 dope-wrapper">
     <p>
       Delete account? Your playlist and subscriptions will be lost forever.
     </p>

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 # pip upgrade line for windows: for /F "delims===" %i in ('pip freeze -l') do pip install -U %i
+# pip install git+https://github.com/LaundroMat/django-lazysignup@master
 
 import os
 import local_settings
