@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.core import serializers
 from lazysignup.decorators import allow_lazy_user
 from lazysignup.utils import is_lazy_user
+from lazysignup import views as lazysignup
 import json
 import logging
 
@@ -104,6 +105,7 @@ def get_settings_errors(context, user_form, profile_form):
         if message:
             errors[key] = message
     data = json.loads(profile_form.errors.as_json())
+    print(data)
     keys = data.keys()
     for key in keys:
         message = data[key][0]["message"]
@@ -800,7 +802,10 @@ def login(request):
 def signup(request):
     if request.method == "POST":
         template = "results_base.min.html"
-        ajax = request.META["HTTP_X_REQUESTED_WITH"]
+        try:
+            ajax = request.META["HTTP_X_REQUESTED_WITH"]
+        except KeyError:
+            ajax = None
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.signup(request)
         request.META["HTTP_X_REQUESTED_WITH"] = ajax
@@ -969,8 +974,6 @@ def solong(request):
 def tryout(request):
     if request.method == "POST":
         template = "results_base.min.html"
-        context = {
-            "view": "login",
-        }
+        context = {}
         return render_dashboard(request, template, context)
     return redirect("/")

@@ -914,7 +914,7 @@ $(document)
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
-  .on("click", "#dopebar", function(e) {
+  .on("click", "#dopebar, #dopebar-collapse", function (e) {
     e.stopPropagation();
   })
   .on("click", ".scroll-up", function() {

@@ -19,7 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('index.urls')),
     url(r'^account/', include('allauth.urls')),
-    url(r'^convert/', include('lazysignup.urls')),
+    # url(r'^convert/', include('lazysignup.urls')),
     url(r'^intergalac/', admin.site.urls),
     # url(r'^blog/', include('blog.urls')),
 ]
