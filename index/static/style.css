@@ -749,15 +749,16 @@ form {
 }
 .previous .dope-result h1,
 .previous .dope-result h2 {
-  margin-bottom: 5px;
   overflow: hidden;
 }
 .previous .dope-result h1 {
+  margin-bottom: 5px;
   font-size: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .previous .dope-result h2 {
+  margin-bottom: 4px;
   height: 32px;
   font-size: 14px;
 }
