@@ -142,6 +142,25 @@ form {
   content: " \f068";
 }
 
+.dope-menu {
+  z-index: 9002;
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  font-size: 16px;
+  background: rgb(0, 191, 165);
+  cursor: pointer;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  border: 2px solid rgb(0, 191, 165);
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  transition: all .25s ease-in-out;
+}
+.dope-menu:hover,
+.dope-menu:focus {
+  outline: none;
+}
 .scroll-up {
   z-index: 9001;
   position: fixed;
@@ -231,13 +250,20 @@ form {
 /* MAIN */
 #main-wrapper {
   padding-top: 44px;
-  padding-bottom: 15px;
+  padding-bottom: 40px;
   min-height: 100vh;
 }
 #left,
 #main,
 #right {
-  padding: 0 20px;
+  padding: 0 40px;
+}
+#center-stage,
+#previous,
+#charts,
+#slick {
+  position: relative;
+  margin-top: 40px;
 }
 #splash {
   padding: 0;
@@ -271,12 +297,14 @@ form {
 }
 
 /* DOPEBAR */
-#dopebar {
+#dopebar-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 5000;
+}
+#dopebar {
   height: 44px;
   padding: 5px 0;
 }
@@ -595,7 +623,6 @@ form {
 
 /* RESULTS BASE */
 .results {
-  margin-top: 15px;
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border: 2px solid rgb(0, 191, 165);
@@ -732,7 +759,7 @@ form {
   height: 16px;
 }
 
-/* LAST PLAYED */
+/* PREVIOUS */
 .previous .dope-result img {
   float: left;
   margin-right: 5px;
@@ -1125,5 +1152,34 @@ form {
   }
   .episodes-table .expand {
     width: 20px;
+  }
+}
+@media (min-width: 1550px) {
+  .col-xxl-3 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .col-xxl-6 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .order-xxl-1 {
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 1;
+    order: 1;
+  }
+  .order-xxl-2 {
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 2;
+    order: 2;
+  }
+  .order-xxl-3 {
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 3;
+    order: 3;
   }
 }

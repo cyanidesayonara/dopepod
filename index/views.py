@@ -31,12 +31,12 @@ def get_last_seen(session):
     return (last_seen, cookie) 
 
 def get_slick(results):
-    languages = Language.get_languages()
-    genres = Genre.get_primary_genres()
-    #for language in Language.get_languages():
-    #    languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=5,))
-    #for genre in Genre.get_primary_genres():
-    #    genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=5,))
+    languages = []
+    genres = []
+    for language in Language.get_languages():
+        languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=5,))
+    for genre in Genre.get_primary_genres():
+        genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=5,))
     results.update({
         "languages": languages,
         "genres": genres,

@@ -522,6 +522,47 @@ function initSlickListen() {
 function removeErrors() {
   $(".errors").remove();
 };
+function hideDopebar() {
+  var lastScrollTop = 0;
+  var $navbar = $("#dopebar");
+  var navbarHeight = $navbar.outerHeight() + 20;
+  var movement = 0;
+  var lastDirection = 0;
+
+  $(window).scroll(function (event) {
+    var st = $(this).scrollTop();
+    movement += st - lastScrollTop;
+
+    if (st > lastScrollTop) { // scroll down
+      if (lastDirection != 1) {
+        movement = 0;
+      }
+      var margin = Math.abs(movement);
+      if (margin > navbarHeight) {
+        margin = navbarHeight;
+      }
+      margin = -margin;
+      $navbar.css('margin-top', margin + "px")
+
+      lastDirection = 1;
+    } else { // scroll up
+      if (lastDirection != -1) {
+        movement = 0;
+      }
+      var margin = Math.abs(movement);
+      if (margin > navbarHeight) {
+        margin = navbarHeight;
+      }
+      margin = margin - navbarHeight;
+      $navbar.css('margin-top', margin + "px")
+
+      lastDirection = -1;
+    }
+
+    lastScrollTop = st;
+    console.log(margin);
+  });
+};
 
 $(document)
   .ready(function() {
@@ -536,6 +577,7 @@ $(document)
     chartsUpdater();
     dateLocalizer();
     hoverDisabler();
+    hideDopebar();
     replaceState(window.location.href);
   })
   // SEARCH
@@ -910,11 +952,11 @@ $(document)
     $(".q").val("");
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dope-link, .search-button", function() {
+  .on("click", "body", function() {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
-  .on("click", "#dopebar, #dopebar-collapse", function (e) {
+  .on("click", "#dopebar-collapse", function (e) {
     e.stopPropagation();
   })
   .on("click", ".scroll-up", function() {
@@ -934,13 +976,16 @@ $(document)
   // selects all subscriptions (and maybe all playlist episodes as well TODO?)
   .on("click", ".select-all", function() {
     var button = $(this);
-    if (button.hasClass("active")) {
-      $(".selectable").removeClass("selected");
+    var buttons = $(".selectable");
+    if (buttons.length) {
+      if (button.hasClass("active")) {
+        buttons.removeClass("selected");
+      }
+      else {
+        buttons.addClass("selected");
+      }
+      button.toggleClass("active");
     }
-    else {
-      $(".selectable").addClass("selected");
-    }
-    button.toggleClass("active");
   })
   .on("click", ".cookie-banner-close", function() {
     $("#player").empty();
