@@ -1,7 +1,11 @@
 <div class="color-1" id="dopebar" {% if request.is_ajax %}data-theme="{{ user.profile.theme }}" {% endif %}>
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
       <div class="col-3 col-lg-5" id="dopebar-l">
+        <button class="dope-link d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false"
+          aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
+          <i class="fas fa-bars" title="Expand"></i>
+        </button>
         <ul class="d-none d-xl-inline-block">
           <li>
             <a class="dope-link browse-link" href="{% url 'search' %}">

@@ -85,7 +85,7 @@
   </div>
 {% else %}
   <div class="col-12 dope-wrapper collapse fade settings-collapse" id="convert-collapse">
-    <form class="settings-form" method="POST" action="/convert/">
+    <form class="convert-form" method="POST" action="/convert/">
       {% csrf_token %}
       <div class="form-row">
         <div class="col-12 dope-form-group">
@@ -114,12 +114,6 @@
         </div>
       </div>
     </form>
-    <ul>
-      <li>Your password can't be too similar to your other personal information.</li>
-      <li>Your password must contain at least 8 characters.</li>
-      <li>Your password can't be a commonly used password.</li>
-      <li>Your password can't be entirely numeric.</li>
-    </ul>
   </div>
 {% endif %}
 <div class="col-12 dope-wrapper collapse fade settings-collapse" id="solong-collapse">

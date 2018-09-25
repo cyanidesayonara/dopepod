@@ -30,17 +30,18 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
-def get_slick(results):
+def get_carousel():
     languages = []
     genres = []
     for language in Language.get_languages():
-        languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=5,))
+        languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=6,))
     for genre in Genre.get_primary_genres():
-        genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=5,))
-    results.update({
+        genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=6,))
+    results = {
+        "view": "carousel",
         "languages": languages,
         "genres": genres,
-    })
+    }
     return results
 
 def get_donuts(results, user):
@@ -57,7 +58,6 @@ def render_splash(request, template, context, response=False):
         "view": "splash",
         "listen": "podcast name"
     }
-    results = get_slick(results)
     previous = Episode.get_previous()
     context.update({
         "results": results,
@@ -76,7 +76,6 @@ def render_dashboard(request, template, context):
     results = {
         "view": "dashboard",
     }
-    results = get_slick(results)
     results = get_donuts(results, request.user)
     context.update({
         "results": results,
@@ -85,14 +84,16 @@ def render_dashboard(request, template, context):
 
 def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
-    previous = Episode.get_previous()
     url = request.get_full_path()
+    previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod")
+    carousel = get_carousel()
     context["results"]["extend"] = True
     context.update({
         "cookie_banner": cookie,
         "charts": charts,
         "previous": previous,
+        "carousel": carousel,
     })
     return render(request, template, context)
 
@@ -414,7 +415,6 @@ def index(request):
         else:
             results["view"] = "splash"
             results["listen"] = "podcast name"
-        results = get_slick(results)
         context.update({
             "results": results,
         })
@@ -458,7 +458,6 @@ def charts(request):
 
         if request.is_ajax():
             return render(request, template, context)
-        results = get_slick(results)
         if user.is_authenticated:
             results["view"] = "dashboard"
         else:

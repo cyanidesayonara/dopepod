@@ -46,34 +46,37 @@
   <button class="scroll-up d-none" title="Scroll Up">
     <i class="fas fa-angle-up fa-lg"></i>
   </button>
-  <!--DOPE-MENU-->
-  <button class="dope-menu d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false"
-    aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse">
-    <i class="fas fa-bars" title="Expand"></i>
-  </button>
   <!-- DOPEBAR -->
   <nav id="dopebar-wrapper">
     {% include "dopebar.min.html" %}
   </nav>
   <!-- MAIN CONTENT -->
-  <div class="container-fluid" id="main-wrapper">
+  <div class="container" id="main-wrapper">
     <div class="row">
-      <div class="col-12 order-1 col-xxl-6 order-xxl-2" id="main">
+      <div class="col-12 order-1 order--2" id="main">
         <!-- CENTER STAGE -->
         <div class="row" id="center-stage">
           {% block center-stage %} {% endblock %}
         </div>
+        <div class="row" id="search">
+          <div class="col-12 results color-2 search">
+            <div class="dope-wrapper">
+              <h1>Search</h1>
+              {% include "search-form.min.html" %}
+            </div>
+          </div>
+        </div>
         <div class="row" id="slick">
-          {% include "slick.min.html" %}
+          {% if carousel %} {% with carousel as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
       </div>
-      <div class="col-12 order-3 col-md-6 order-md-2 col-xxl-3 order-xxl-1" id="left">
+      <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
         <!-- CHARTS -->
         <div class="row" id="charts">
           {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
       </div>
-      <div class="col-12 order-2 col-md-6 order-md-3 col-xxl-3 order-xxl-3" id="right">
+      <div class="col-12 order-2 col-lg-6 order-lg-3" id="right">
         <!-- LAST PLAYED -->
         <div class="row" id="previous">
           {% if previous %} {% with previous as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}

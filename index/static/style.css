@@ -34,16 +34,21 @@ form {
   background: rgb(255, 250, 240);
   color: rgb(46, 46, 46);
   transition: all .25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23222' stroke-opacity='0.025' stroke-width='10' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: rgba(255,250,240);
+  background-attachment: fixed;
 }
 .dark {
-  background: #000;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCI+CjxmaWx0ZXIgaWQ9Im4iPgo8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjEwIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIj48L2ZlVHVyYnVsZW5jZT4KPC9maWx0ZXI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSIjMDAwIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuNCI+PC9yZWN0Pgo8L3N2Zz4=");
   color: #fff;
   transition: all .25s ease;
+  background-attachment: fixed;
 }
 .christmas {
   color: rgb(46, 46, 46);
   transition: all .25s ease;
   background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .2), rgba(213, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 20px);
+  background-attachment: fixed;
 }
 
 /* COOKIE BANNER */
@@ -142,25 +147,6 @@ form {
   content: " \f068";
 }
 
-.dope-menu {
-  z-index: 9002;
-  position: fixed;
-  top: 5px;
-  left: 10px;
-  font-size: 16px;
-  background: rgb(0, 191, 165);
-  cursor: pointer;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  border: 2px solid rgb(0, 191, 165);
-  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
-  transition: all .25s ease-in-out;
-}
-.dope-menu:hover,
-.dope-menu:focus {
-  outline: none;
-}
 .scroll-up {
   z-index: 9001;
   position: fixed;
@@ -241,10 +227,10 @@ form {
   background: rgba(0, 191, 165, .95);
 }
 .color-2 {
-  background: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .1);
 }
 .color-3 {
-  background: rgba(150, 150, 150, .3);
+  background: rgba(150, 150, 150, .2);
 }
 
 /* MAIN */
@@ -256,14 +242,15 @@ form {
 #left,
 #main,
 #right {
-  padding: 0 40px;
+  overflow: hidden;
+  padding: 0 25px;
 }
 #center-stage,
 #previous,
 #charts,
-#slick {
-  position: relative;
-  margin-top: 40px;
+#slick,
+#search {
+  padding: 40px 0 0;
 }
 #splash {
   padding: 0;
@@ -297,14 +284,12 @@ form {
 }
 
 /* DOPEBAR */
-#dopebar-wrapper {
+#dopebar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 5000;
-}
-#dopebar {
   height: 44px;
   padding: 5px 0;
 }
@@ -477,31 +462,29 @@ form {
 }
 
 /* SLICK */
-.slick {
+.slick-header {
   text-align: center;
 }
-.slick h1 {
+.slick-header h1 {
   font-size: 1.5em;
   margin: 20px 0;
 }
-.slick p {
+.slick-header p {
   font-weight: 400;
-}
-.slick ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.slick ul li {
-  display: inline-block;
-  margin: 5px;
 }
 .slick-slide {
   outline: 0;
 }
+.slick .dope-results {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
 .slick-header {
   margin: 10px;
-  padding: 30px 10px;
+  padding: 10px;
   display: block;
   border-radius: .25rem;
   background: rgb(0, 191, 165);
@@ -623,6 +606,7 @@ form {
 
 /* RESULTS BASE */
 .results {
+  min-height: 100px;
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border: 2px solid rgb(0, 191, 165);
@@ -940,6 +924,9 @@ form {
   animation: spin 1.5s ease-in-out .25s infinite;
   -webkit-animation: spin 1.5s ease-in-out .25s infinite;
 }
+#main-wrapper .loader {
+  margin-top: 40px;
+}
 .loader .char {
   left: 47px;
   top: -12px;
@@ -1152,34 +1139,5 @@ form {
   }
   .episodes-table .expand {
     width: 20px;
-  }
-}
-@media (min-width: 1550px) {
-  .col-xxl-3 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-  .col-xxl-6 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-  .order-xxl-1 {
-    -webkit-box-ordinal-group: 3;
-    -ms-flex-order: 1;
-    order: 1;
-  }
-  .order-xxl-2 {
-    -webkit-box-ordinal-group: 3;
-    -ms-flex-order: 2;
-    order: 2;
-  }
-  .order-xxl-3 {
-    -webkit-box-ordinal-group: 3;
-    -ms-flex-order: 3;
-    order: 3;
   }
 }

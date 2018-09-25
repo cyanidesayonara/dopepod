@@ -1125,7 +1125,7 @@ class Episode(models.Model):
             episodes = Episode.objects.filter(position=None).order_by("-played_at",)
             results = {
                 "episodes": episodes,
-                "header": "Previously played episodes",
+                "header": "Previously played",
                 "view": "previous",
                 "options": True,
             }
@@ -1170,7 +1170,7 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         results = {
             "episodes": episodes,
-            "header": "Previously played episodes",
+            "header": "Previously played",
             "view": "previous",
             "options": True,
         }
