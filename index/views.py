@@ -72,7 +72,7 @@ def render_non_ajax(request, template, context):
 
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod", view="charts")
-    
+
     if cache.get("listen"):
         listen = {}
         listen["view"] = "listen"
@@ -765,9 +765,9 @@ def previous(request):
     if request.method == "GET":
         if request.is_ajax():
             template = "results_base.min.html"
-            results = Episode.get_previous()
+            previous = Episode.get_previous()
             context = {
-                "results": results,
+                "results": previous,
             }
             return render(request, template, context)
         else:
