@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core import serializers
+from django.core.cache import cache
 from lazysignup.decorators import allow_lazy_user
 from lazysignup.utils import is_lazy_user
 from lazysignup import views as lazysignup
@@ -73,15 +74,23 @@ def render_non_ajax(request, template, context):
     url = request.get_full_path()
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod", view="charts")
-    genre_carousel = Podcast.get_genre_carousel()
-    language_carousel = Podcast.get_language_carousel()
+    if cache.get("genre_carousel"):
+        genre_carousel = {}
+        genre_carousel["view"] = "genre_carousel"
+    else:
+        genre_carousel = Podcast.get_genre_carousel()
+    if cache.get("language_carousel"):
+        language_carousel = {}
+        language_carousel["view"] = "language_carousel"
+    else:
+        language_carousel = Podcast.get_language_carousel()
     context["results"]["extend"] = True
     context.update({
+        "genre_carousel": genre_carousel,
+        "language_carousel": language_carousel,
         "cookie_banner": cookie,
         "charts": charts,
         "previous": previous,
-        "genre_carousel": genre_carousel,
-        "language_carousel": language_carousel,
     })
     return render(request, template, context)
 
