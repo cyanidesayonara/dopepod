@@ -43,13 +43,10 @@ def get_donuts(results, user):
 def render_splash(request, template, context, response=False):
     results = {
         "view": "splash",
-        "listen": "podcast name"
     }
-    previous = Episode.get_previous()
-    context.update({
+    context = {
         "results": results,
-        "previous": previous,
-    })
+    }
     if response:
         context = get_form_errors(context, response)
         if request.is_ajax():
@@ -72,20 +69,31 @@ def render_dashboard(request, template, context):
 def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
     url = request.get_full_path()
+
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod", view="charts")
+    
+    if cache.get("listen"):
+        listen = {}
+        listen["view"] = "listen"
+    else:
+        listen = previous
+
     if cache.get("genre_carousel"):
         genre_carousel = {}
         genre_carousel["view"] = "genre_carousel"
     else:
         genre_carousel = Podcast.get_genre_carousel()
+    
     if cache.get("language_carousel"):
         language_carousel = {}
         language_carousel["view"] = "language_carousel"
     else:
         language_carousel = Podcast.get_language_carousel()
+    
     context["results"]["extend"] = True
     context.update({
+        "listen": listen,
         "genre_carousel": genre_carousel,
         "language_carousel": language_carousel,
         "cookie_banner": cookie,

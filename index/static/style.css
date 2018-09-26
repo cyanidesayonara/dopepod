@@ -198,7 +198,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   max-width: 275px;
 }
 .logo {
-  padding: 40px 0;
+  padding: 50px 0;
 }
 .dash-wrapper {
   color: unset;
@@ -250,18 +250,17 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 #charts,
 #search,
 .carousel {
-  padding: 40px 0 0;
+  padding: 30px 0 0;
 }
 #splash {
   padding: 0;
-  min-height: 320px;
+  min-height: 330px;
 }
 #splash h1 {
   font-size: 2rem;
   margin-bottom: 40px;
 }
-.no-touch #splash .dope-result:hover,
-#splash .dope-result.expanded {
+#splash .dope-result {
   padding-bottom: 10px;
   border-radius: .25rem;
   box-shadow: inset rgba(0, 0, 0, .5) 0 0 5px;
@@ -467,7 +466,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .carousel h1,
 .search h1 {
   font-size: 22px;
-  margin: 20px 0;
+  margin: 20px 50px;
 } 
 .slick-slide {
   outline: 0;
@@ -787,7 +786,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .dope-results h1,
 .dope-results h2 {
   font-size: 14px;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
   overflow: hidden;
   height: 32px;
 }

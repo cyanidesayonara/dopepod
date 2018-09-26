@@ -1,8 +1,8 @@
 {% load cache %}
 {% cache 86400 language_carousel %}
-  <div class="row">
-    <div class="col-12 px-0">
-      {% with results.languages as languages %}
+  {% with results.languages as languages %}
+    <div class="row">
+      <div class="col-12 px-0">
         <h1>
           Most popular by language
         </h1>
@@ -41,7 +41,7 @@
             </div>
           {% endfor %}
         </div>
-      {% endwith%}
+      </div>
     </div>
-  </div>
+  {% endwith%}
 {% endcache %}

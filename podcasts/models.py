@@ -717,24 +717,7 @@ class Podcast(models.Model):
             logger.error("too many retries:", url)
         return podcasts
 
-    def cache_charts():
-        genres = list(Genre.get_primary_genres())
-        genres.append(None)
-
-        for provider in ["dopepod", "itunes"]:
-            if provider == "dopepod":
-                languages = list(Language.get_languages())
-                languages.append(None)
-            else:
-                languages = [None]
-            for language in languages:
-                for genre in genres:
-                    Podcast.search(url="/charts/", provider=provider, genre=genre, language=language, force_cache=True)
-
     def get_genre_carousel():
-        results = cache.get("genre_carousel")
-        if results:
-            return results
         genres = []
         for genre in Genre.get_primary_genres():
             genres.append({
@@ -745,13 +728,9 @@ class Podcast(models.Model):
             "view": "genre_carousel",
             "genres": genres,
         }
-        cache.set("genre_carousel", results, 60 * 60 * 24)
         return results
 
     def get_language_carousel():
-        results = cache.get("language_carousel")
-        if results:
-            return results
         languages = []
         for language in Language.get_languages():
             languages.append({
@@ -762,7 +741,6 @@ class Podcast(models.Model):
             "view": "language_carousel",
             "languages": languages,
         }
-        cache.set("language_carousel", results, 60 * 60 * 24)
         return results
 
 """ class ViewManager(models.Manager):

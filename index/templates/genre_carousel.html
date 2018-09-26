@@ -1,8 +1,8 @@
 {% load cache %}
 {% cache 86400 genre_carousel %}
-  <div class="row">
-    <div class="col-12 px-0">
-      {% with results.genres as genres %}
+  {% with results.genres as genres %}
+    <div class="row">
+      <div class="col-12 px-0">
         <h1>
           Most popular by genre
         </h1>
@@ -41,7 +41,7 @@
             </div>
           {% endfor %}      
         </div>
-      {% endwith%}
+      </div>
     </div>
-  </div>
+  {% endwith%}
 {% endcache %}
