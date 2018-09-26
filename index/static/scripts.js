@@ -193,6 +193,7 @@ function getResults(args, no_loader, no_push) {
     })
     .done(function(response) {
       drop.html(response);
+      lazyload();
       // loads episodes
       if (callback) {
         callback(args);
@@ -526,6 +527,7 @@ function removeErrors() {
 
 $(document)
   .ready(function() {
+    lazyload();
     initSlick();
     initSlickListen();
     scrollToTop();
@@ -972,6 +974,7 @@ $(window)
         }
       }
       $("#center-stage").html(state.context);
+      lazyload();
       titleUpdater();
     }
   })

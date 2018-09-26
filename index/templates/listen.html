@@ -86,7 +86,7 @@
         <div class="dope-result color-3 expandable">
           <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
             title="{{ episode.podcast.title }}" title="{{ episode.podcast.title }}">
-            <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg" onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
+            <img class="img-fluid lazyload" data-src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg" onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" />
           </a>      
           <h1>
             <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}"

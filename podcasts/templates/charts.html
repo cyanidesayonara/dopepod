@@ -7,7 +7,7 @@
         </a>
       </div>
       <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
-        <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}100x100bb.jpg"
+        <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}100x100bb.jpg"
         onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}100x100bb.jpg'" alt="{{ podcast.object.title }}" />
       </a>
       <h1>

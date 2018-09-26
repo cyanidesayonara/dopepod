@@ -6,7 +6,7 @@
           {% if episode.length %}
             <span class="result-length">{{ episode.length }}</span>
           {% endif %}
-          <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
+          <img class="img-fluid lazyload" data-src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
           onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}" />
         </a>
         <button class="dope-toggle exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
