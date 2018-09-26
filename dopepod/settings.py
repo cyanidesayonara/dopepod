@@ -85,6 +85,17 @@ MIDDLEWARE = [
     "dopepod.middleware.local_date_middleware.LocalDateMiddleware",
 ]
 
+if DEBUG:
+    INSTALLED_APPS = [
+        'debug_toolbar',
+    ] + INSTALLED_APPS
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
+    MIDDLEWARE = MIDDLEWARE + [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",

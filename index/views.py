@@ -73,13 +73,13 @@ def render_non_ajax(request, template, context):
     url = request.get_full_path()
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod")
-    carousel = Podcast.get_carousel()
+    # carousel = Podcast.get_carousel()
     context["results"]["extend"] = True
     context.update({
         "cookie_banner": cookie,
         "charts": charts,
         "previous": previous,
-        "carousel": carousel,
+        # "carousel": carousel,
     })
     return render(request, template, context)
 
