@@ -30,20 +30,6 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
-def get_carousel():
-    languages = []
-    genres = []
-    for language in Language.get_languages():
-        languages.append(Podcast.search(url="/", provider="dopepod", language=language, show=6,))
-    for genre in Genre.get_primary_genres():
-        genres.append(Podcast.search(url="/", provider="dopepod", genre=genre, show=6,))
-    results = {
-        "view": "carousel",
-        "languages": languages,
-        "genres": genres,
-    }
-    return results
-
 def get_donuts(results, user):
     subscriptions_count = Subscription.objects.filter(user=user).count()
     playlist_count = Episode.objects.filter(user=user).count()
@@ -87,7 +73,7 @@ def render_non_ajax(request, template, context):
     url = request.get_full_path()
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod")
-    carousel = get_carousel()
+    carousel = Podcast.get_carousel()
     context["results"]["extend"] = True
     context.update({
         "cookie_banner": cookie,

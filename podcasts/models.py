@@ -731,6 +731,28 @@ class Podcast(models.Model):
                 for genre in genres:
                     Podcast.search(url="/charts/", provider=provider, genre=genre, language=language, force_cache=True)
 
+    def get_carousel():
+        results = cache.get("carousel")
+        if results:
+            return results
+
+        languages = []
+        genres = []
+        for language in Language.get_languages():
+            languages.append(Podcast.search(
+                url="/", provider="dopepod", language=language, show=6,))
+        for genre in Genre.get_primary_genres():
+            genres.append(Podcast.search(
+                url="/", provider="dopepod", genre=genre, show=6,))
+        results = {
+            "view": "carousel",
+            "languages": languages,
+            "genres": genres,
+        }
+        # finally (finally!) cache results so we don"t have to go thru this every time
+        cache.set("carousel", results, 60 * 60 * 24)
+        return results
+
 """ class ViewManager(models.Manager):
     def get_queryset(self):
         return super(ViewManager, self).get_queryset().select_related("podcast__genre", "podcast__genre__supergenre", "podcast__language")
