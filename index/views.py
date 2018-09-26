@@ -72,14 +72,16 @@ def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
     url = request.get_full_path()
     previous = Episode.get_previous()
-    charts = Podcast.search(url=url, provider="dopepod")
-    # carousel = Podcast.get_carousel()
+    charts = Podcast.search(url=url, provider="dopepod", view="charts")
+    genre_carousel = Podcast.get_genre_carousel()
+    language_carousel = Podcast.get_language_carousel()
     context["results"]["extend"] = True
     context.update({
         "cookie_banner": cookie,
         "charts": charts,
         "previous": previous,
-        # "carousel": carousel,
+        "genre_carousel": genre_carousel,
+        "language_carousel": language_carousel,
     })
     return render(request, template, context)
 
@@ -217,7 +219,7 @@ def get_search_results(request, api=False):
             show = 50
     else:
         # get view
-        view = request.GET.get("view", None)
+        view = request.GET.get("view", "list")
 
         # page
         page = request.GET.get("page", None)
@@ -435,7 +437,7 @@ def charts(request):
         url = request.get_full_path()
 
         results = Podcast.search(
-            url=url, provider=provider, genre=genre, language=language
+            url=url, provider=provider, genre=genre, language=language, view="charts"
         )
 
         context = {

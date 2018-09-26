@@ -6,7 +6,7 @@
     <div class="col-12 collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
       <div class="row dope-results">
         {% for podcast in results.podcasts1 %}
-          <div class="col-lg-2 col-md-3 col-4 dope-result">
+          <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
                 alt="{{ podcast.object.title }}" />
@@ -23,7 +23,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts2 %}
-          <div class="col-lg-2 col-md-3 col-4 dope-result">
+          <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
                 alt="{{ podcast.object.title }}" />
@@ -40,7 +40,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts3 %}
-          <div class="col-lg-2 col-md-3 col-4 dope-result">
+          <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
                 alt="{{ podcast.object.title }}" />
@@ -57,7 +57,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts4 %}
-          <div class="col-lg-2 col-md-3 col-4 dope-result">
+          <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
                 alt="{{ podcast.object.title }}" />

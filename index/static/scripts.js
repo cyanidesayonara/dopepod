@@ -44,7 +44,7 @@ function pushState(url) {
     }
   }
   titleUpdater();
-  var main = $("#main");
+  var main = $("#center-stage");
   var context = main[0].innerHTML;
   var state = {
     "context": context,
@@ -62,7 +62,7 @@ function replaceState(url) {
       return;
     }
   }
-  var main = $("#main");
+  var main = $("#center-stage");
   // ignore these urls, use current url instead
   if (!url || url.includes("unsubscribe")) {
     url = main[0].baseURI;
@@ -492,6 +492,7 @@ function hoverDisabler() {
 function initSlick() {
   $(".slick").slick({
     autoplay: true,
+    adaptiveHeight: true,
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
   });
@@ -914,7 +915,7 @@ $(document)
     $(".q").val("");
   })
   // hides dopebar-collapse...
-  .on("click", "body", function() {
+  .on("click", "body, .dope-link, .search-button", function () {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
@@ -962,7 +963,7 @@ $(window)
     if (state) {
       // if url in urls, reload results (and don't push)
       var url = state.url;
-      var urls = ["settings", "playlist", "subscriptions"];
+      var urls = ["/", "settings", "playlist", "subscriptions"];
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
@@ -970,7 +971,7 @@ $(window)
           return;
         }
       }
-      $("#main").html(state.context);
+      $("#center-stage").html(state.context);
       titleUpdater();
     }
   })

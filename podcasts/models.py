@@ -159,7 +159,7 @@ class Podcast(models.Model):
 
         # make url for cache string
         url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
-                       show=show, order=order, page=page, api=api)
+                       show=show, view=view, order=order, page=page, api=api)
         # if cached, return results
         results = cache.get(url)
 
@@ -731,26 +731,34 @@ class Podcast(models.Model):
                 for genre in genres:
                     Podcast.search(url="/charts/", provider=provider, genre=genre, language=language, force_cache=True)
 
-    def get_carousel():
-        results = cache.get("carousel")
+    def get_genre_carousel():
+        results = cache.get("genre_carousel")
         if results:
             return results
-
-        languages = []
         genres = []
-        for language in Language.get_languages():
-            languages.append(Podcast.search(
-                url="/", provider="dopepod", language=language, show=6,))
         for genre in Genre.get_primary_genres():
             genres.append(Podcast.search(
                 url="/", provider="dopepod", genre=genre, show=6,))
         results = {
-            "view": "carousel",
-            "languages": languages,
+            "view": "genre_carousel",
             "genres": genres,
         }
-        # finally (finally!) cache results so we don"t have to go thru this every time
-        cache.set("carousel", results, 60 * 60 * 24)
+        cache.set("genre_carousel", results, 60 * 60 * 24)
+        return results
+
+    def get_language_carousel():
+        results = cache.get("language_carousel")
+        if results:
+            return results
+        languages = []
+        for language in Language.get_languages():
+            languages.append(Podcast.search(
+                url="/", provider="dopepod", language=language, show=6,))
+        results = {
+            "view": "language_carousel",
+            "languages": languages,
+        }
+        cache.set("language_carousel", results, 60 * 60 * 24)
         return results
 
 """ class ViewManager(models.Manager):

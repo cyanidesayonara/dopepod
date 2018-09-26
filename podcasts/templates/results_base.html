@@ -36,8 +36,10 @@
         </div>
       {% elif results.view == "previous"%}
         {% include "previous.min.html" %}
-      {% elif results.view == "carousel"%}
-        {% include "carousel.min.html" %}        
+      {% elif results.view == "genre_carousel"%}
+        {% include "genre_carousel.min.html" %}  
+      {% elif results.view == "language_carousel"%}
+        {% include "language_carousel.min.html" %}                
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
       {% elif results.view == "api" %}

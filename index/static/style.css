@@ -31,24 +31,24 @@ form {
 
 /* THEMES */
 .light {
-  background: rgb(255, 250, 240);
   color: rgb(46, 46, 46);
-  transition: all .25s ease;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23222' stroke-opacity='0.025' stroke-width='10' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23464646' stroke-width='10' stroke-opacity='0.025'%3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
   background-color: rgba(255,250,240);
   background-attachment: fixed;
+  transition: all .25s ease;
 }
 .dark {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCI+CjxmaWx0ZXIgaWQ9Im4iPgo8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjEwIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIj48L2ZlVHVyYnVsZW5jZT4KPC9maWx0ZXI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSIjMDAwIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuNCI+PC9yZWN0Pgo8L3N2Zz4=");
   color: #fff;
-  transition: all .25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23fffaf0' stroke-width='10' stroke-opacity='0.025'%3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: rgba(0, 0, 0);
   background-attachment: fixed;
+  transition: all .25s ease;
 }
 .christmas {
   color: rgb(46, 46, 46);
-  transition: all .25s ease;
   background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .2), rgba(213, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 20px);
   background-attachment: fixed;
+  transition: all .25s ease;
 }
 
 /* COOKIE BANNER */
@@ -150,8 +150,8 @@ form {
 .scroll-up {
   z-index: 9001;
   position: fixed;
-  top: 55px;
-  right: 12px;
+  top: 75px;
+  right: 30px;
   background: rgb(0, 191, 165);
   cursor: pointer;
   height: 34px;
@@ -191,14 +191,14 @@ form {
   margin: auto;
   padding: 20px 10px;
   text-align: center;
-  max-width: 500px;
+  max-width: 550px;
 }
 .dope-wrapper > form {
   margin: auto;
   max-width: 275px;
 }
 .logo {
-  margin: 50px 0;
+  padding: 40px 0;
 }
 .dash-wrapper {
   color: unset;
@@ -227,10 +227,10 @@ form {
   background: rgba(0, 191, 165, .95);
 }
 .color-2 {
-  background: rgba(255, 255, 255, .1);
+  background: rgba(255, 255, 255, .2);
 }
 .color-3 {
-  background: rgba(150, 150, 150, .2);
+  background: rgba(150, 150, 150, .3);
 }
 
 /* MAIN */
@@ -248,8 +248,8 @@ form {
 #center-stage,
 #previous,
 #charts,
-#slick,
-#search {
+#search,
+.carousel {
   padding: 40px 0 0;
 }
 #splash {
@@ -257,8 +257,8 @@ form {
   min-height: 320px;
 }
 #splash h1 {
-  padding-bottom: 40px;
-  margin: 0;
+  font-size: 2rem;
+  margin-bottom: 40px;
 }
 .no-touch #splash .dope-result:hover,
 #splash .dope-result.expanded {
@@ -306,6 +306,7 @@ form {
 #dopebar ul,
 #dopebar-collapse ul,
 #footer ul {
+  display: inline-block;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -315,11 +316,7 @@ form {
   display: inline-block;
 }
 #footer p {
-  font-size: 12px;
-}
-#footer .dope-wrapper {
-  padding: 10px;
-  max-width: 320px;
+  font-size: .85em;
 }
 #dopebar-r > * {
   float: right;
@@ -337,7 +334,8 @@ form {
   top: 0;
   left: 0;
   z-index: 4000;
-  padding: 54px 10px 10px;
+  padding: 10px;
+  margin-top: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border-bottom-right-radius: .25rem;
 }
@@ -462,28 +460,27 @@ form {
 }
 
 /* SLICK */
-.slick-header {
+.carousel,
+.search {
   text-align: center;
 }
-.slick-header h1 {
-  font-size: 1.5em;
+.carousel h1,
+.search h1 {
+  font-size: 22px;
   margin: 20px 0;
-}
-.slick-header p {
-  font-weight: 400;
-}
+} 
 .slick-slide {
   outline: 0;
 }
-.slick .dope-results {
+.carousel .dope-results {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
-.slick-header {
-  margin: 10px;
+.slick-link {
+  margin: 0 10px 10px;
   padding: 10px;
   display: block;
   border-radius: .25rem;
@@ -491,7 +488,7 @@ form {
   color: rgb(46, 46, 46);
   transition: all .25s ease-in-out;
 }
-.no-touch .slick-header:hover {
+.no-touch .slick-link:hover {
   color: #fff;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease-in-out;
@@ -499,21 +496,17 @@ form {
 .slick-prev,
 .slick-next {
   position: absolute;
-  top: 35px;
+  top: -40px;
   z-index: 2000;
   -webkit-transform: translate(0, -50%);
   -ms-transform: translate(0, -50%);
   transform: translate(0, -50%);
 }
 .slick-prev {
-  left: 20px;
+  left: 10px;
 }
 .slick-next {
-  right: 20px;
-}
-.slick-listen .slick-prev,
-.slick-listen .slick-next {
-  top: -45px;
+  right: 10px;
 }
 
 #dopebar-l,
@@ -606,7 +599,6 @@ form {
 
 /* RESULTS BASE */
 .results {
-  min-height: 100px;
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border: 2px solid rgb(0, 191, 165);
@@ -883,7 +875,7 @@ form {
 }
 #player-wrapper .player-description {
   margin: 0;
-  max-height: calc(100vh - 500px);
+  max-height: calc(100vh - 490px);
   overflow-y: auto;
 }
 #player-wrapper.minimize {

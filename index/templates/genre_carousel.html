@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-12 px-0">
+    {% with results.genres as genres %}
+      <h1>
+        Most popular by genre
+      </h1>
+      <div class="slick">
+        {% for genre in genres %}
+          <div class="slick-slide">
+            <a class="slick-link browse-link" href="/search/?genre={{ genre.selected_genre.url_format }}&view=grid">
+              <h1>
+                {{ genre.selected_genre }}
+              </h1>
+            </a>
+            <div class="dope-results">
+              {% for podcast in genre.podcasts %}
+                <div class="col-4 col-lg-2 dope-result">
+                  <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
+                    <img class="img-fluid" src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
+                      alt="{{ podcast.object.title }}" />
+                    <h1>
+                      {{ podcast.object.title }}
+                    </h1>
+                    <h2>
+                      <span class="by">
+                        by
+                      </span>
+                      {{ podcast.object.artist }}
+                    </h2>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+            <a class="slick-link browse-link" href="/search/?genre={{ genre.selected_genre.url_format }}&view=grid">
+              <p>
+                See {% if genre.selected_genre.n_podcasts > 1 %} all {% endif %} {{ genre.selected_genre.n_podcasts }} podcast{{ genre.selected_genre.n_podcasts|pluralize }}
+              </p>
+            </a>
+          </div>
+        {% endfor %}      
+      </div>
+    {% endwith%}
+  </div>
+</div>
