@@ -965,7 +965,7 @@ $(window)
     if (state) {
       // if url in urls, reload results (and don't push)
       var url = state.url;
-      var urls = ["/", "settings", "playlist", "subscriptions"];
+      var urls = ["settings", "playlist", "subscriptions"];
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {
           var drop = $("#center-stage");
@@ -975,7 +975,9 @@ $(window)
       }
       $("#center-stage").html(state.context);
       lazyload();
+      initSlickListen();
       titleUpdater();
+      //TODO load episodes on back button
     }
   })
   .on("blur", function() {
