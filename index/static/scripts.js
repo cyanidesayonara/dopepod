@@ -975,9 +975,8 @@ $(window)
       }
       $("#center-stage").html(state.context);
       lazyload();
-      initSlickListen();
       titleUpdater();
-      //TODO load episodes on back button
+      //TODO load episodes (if not loaded) on back button
     }
   })
   .on("blur", function() {

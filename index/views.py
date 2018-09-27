@@ -44,9 +44,19 @@ def render_splash(request, template, context, response=False):
     results = {
         "view": "splash",
     }
+    
+
+    if cache.get("listen"):
+        listen = {}
+        listen["view"] = "listen"
+    else:
+        listen = Episode.get_previous()
+    
     context = {
-        "results": results,
+        "listen": listen,
+        "results": results,   
     }
+    
     if response:
         context = get_form_errors(context, response)
         if request.is_ajax():
