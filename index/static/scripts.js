@@ -527,15 +527,19 @@ function removeErrors() {
 
 $(document)
   .ready(function() {
-    scrollToTop();
+    dateLocalizer();
+    lazyload();
+    replaceState(window.location.href);
     refreshCookie();
+    scrollToTop();
     scrollUp();
-    playerUnfixer();
     scrollSpy();
+    hoverDisabler();
+    initSlick();
+    initSlickListen();
+    playerUnfixer();
     previousUpdater();
     chartsUpdater();
-    dateLocalizer();
-    hoverDisabler();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -956,12 +960,6 @@ $(document)
   });
 
 $(window)
-  .on("load", function() {
-    lazyload();
-    initSlick();
-    initSlickListen();
-    replaceState(window.location.href);
-  })  
   .on("popstate", function(e) {
     var state = e.originalEvent.state;
     if (state) {
