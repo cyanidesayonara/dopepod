@@ -527,10 +527,10 @@ function removeErrors() {
 
 $(document)
   .ready(function() {
+    refreshCookie();
     dateLocalizer();
     lazyload();
     replaceState(window.location.href);
-    refreshCookie();
     scrollToTop();
     scrollUp();
     scrollSpy();
