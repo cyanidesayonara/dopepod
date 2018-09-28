@@ -519,7 +519,7 @@ function initSlickListen() {
       prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
       nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
     });
-  }, 3000);
+  }, 2000);
 };
 function removeErrors() {
   $(".errors").remove();
@@ -527,9 +527,6 @@ function removeErrors() {
 
 $(document)
   .ready(function() {
-    lazyload();
-    initSlick();
-    initSlickListen();
     scrollToTop();
     refreshCookie();
     scrollUp();
@@ -539,7 +536,6 @@ $(document)
     chartsUpdater();
     dateLocalizer();
     hoverDisabler();
-    replaceState(window.location.href);
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -960,6 +956,12 @@ $(document)
   });
 
 $(window)
+  .on("load", function() {
+    lazyload();
+    initSlick();
+    initSlickListen();
+    replaceState(window.location.href);
+  })  
   .on("popstate", function(e) {
     var state = e.originalEvent.state;
     if (state) {

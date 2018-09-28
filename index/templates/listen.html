@@ -197,9 +197,10 @@
       </div>
     {% endfor %}
   </div>
-{% endcache %}
-{% if request.is_ajax %}
   <script>
-    initSlickListen()
+    try {
+      initSlickListen();
+    } catch (e) {
+    }
   </script>
-{% endif %}
+{% endcache %}

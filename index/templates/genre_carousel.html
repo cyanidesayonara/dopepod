@@ -6,7 +6,7 @@
         <h1>
           Most popular by genre
         </h1>
-        <div class="slick">
+        <div class="slick" id="slick-genre">
           {% for genre in genres %}
             <div class="slick-slide">
               <a class="slick-link browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
