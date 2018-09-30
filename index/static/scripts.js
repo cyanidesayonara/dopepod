@@ -388,7 +388,10 @@ function postSubscriptions(podids, button) {
 };
 function postPlaylist(data, mode, button) {
   var drop = $("#center-stage");
-  var text = button[0].innerHTML;
+  try {
+    var text = button[0].innerHTML;
+  } catch (e) {
+  }
   var url = "/playlist/";
   if (mode == "play") {
     var wrapper = $("#player-wrapper");
@@ -413,7 +416,10 @@ function postPlaylist(data, mode, button) {
       if (mode == "play") {
         $("#player").html(response);
         titleUpdater();
-        button.html(text);
+        try {
+          button.html(text);
+        } catch (e) {
+        }
         // gotta wait a sec here
         setTimeout(function() {
           var box = $("#player-wrapper h1");
@@ -974,7 +980,6 @@ $(window)
         }
       }
       $("#center-stage").html(state.context);
-      lazyload();
       titleUpdater();
       //TODO load episodes (if not loaded) on back button
     }
