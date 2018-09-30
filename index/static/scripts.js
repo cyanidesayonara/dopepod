@@ -439,7 +439,11 @@ function postPlaylist(data, mode, button) {
         }
       }
     });
-  button.html(getButtonLoading());
+  try {
+
+  } catch (e) {
+    button.html(getButtonLoading());
+  }
 };
 function playNext() {
   var data = {
