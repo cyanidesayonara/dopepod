@@ -19,7 +19,7 @@
                   <div class="col-4 col-lg-2 dope-result">
                     <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
                       <img class="img-fluid" src="//{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
-                        alt="{{ podcast.title }}" />
+                        alt="{{ podcast.title }}" width="auto" height="auto" />
                       <h1>
                         {{ podcast.title }}
                       </h1>

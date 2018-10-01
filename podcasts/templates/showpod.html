@@ -3,7 +3,8 @@
     {% with results.podcast as podcast %}
       <div class="col-12 col-lg-4" id="showpod-l">
         <img class="img-fluid" src="//{{ podcast.artworkUrl }}380x380bb.jpg"
-        onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}380x380bb.jpg'" alt="{{ podcast.title }}" />
+          onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}380x380bb.jpg'" alt="{{ podcast.title }}" width="auto"
+          height="auto"/>
       </div>
       <div class="col-12 col-lg-5" id="showpod-c">
         <h1>

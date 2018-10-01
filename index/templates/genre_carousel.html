@@ -6,7 +6,7 @@
         <h1>
           Most popular by genre
         </h1>
-        <div class="slick" id="slick-genre">
+        <div class="slick">
           {% for genre in genres %}
             <div class="slick-slide">
               <a class="slick-link browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
@@ -19,7 +19,7 @@
                   <div class="col-4 col-lg-2 dope-result">
                     <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
                       <img class="img-fluid" src="//{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
-                        alt="{{ podcast.title }}" />
+                        alt="{{ podcast.title }}" width="auto" height="auto" />
                       <h1>
                         {{ podcast.title }}
                       </h1>

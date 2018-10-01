@@ -534,6 +534,11 @@ function initSlickListen() {
 function removeErrors() {
   $(".errors").remove();
 };
+function lazyload() {
+  var myLazyLoad = new LazyLoad({
+    elements_selector: ".lazyload"
+  });
+};
 
 $(document)
   .ready(function() {
