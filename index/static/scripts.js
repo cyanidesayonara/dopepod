@@ -440,9 +440,8 @@ function postPlaylist(data, mode, button) {
       }
     });
   try {
-
-  } catch (e) {
     button.html(getButtonLoading());
+  } catch (e) {
   }
 };
 function playNext() {
