@@ -1,2 +1,2 @@
 # dopepod
-A Django podcast web app
+dopepod is a web app capable of playing and searching a wide variety of free podcasts. Registered users can also subscribe to podcasts and create a playlist of episodes. It uses the Python web-framework Django as a backend. The podcasts are scraped from the web using Scrapy and requests. Frontend framework Bootstrap is used for CSS. Javascript libraries JQuery, Slick, and vanilla-lazyload are also used.
