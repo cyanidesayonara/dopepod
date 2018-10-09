@@ -147,9 +147,11 @@ function checkForXHR(url) {
     xhr = null;
   }
 };
-function enableLoader(drop) {
-  drop.children(":first").addClass("loading");
-  drop.children(":last").fadeIn("slow");
+function enableLoader(drop, url) {
+  drop.find(".results").addClass("loading");
+  drop.find(".player-content").addClass("loading");
+  drop.find(".loader").fadeIn("slow");
+  drop.find(".reload").attr("href", url);
 };
 // RESULTS
 function getResults(args, no_loader, no_push) {
@@ -165,7 +167,7 @@ function getResults(args, no_loader, no_push) {
   }
   if (!no_loader) {
     drop.find(".results-collapse:not(.show)").collapse("show");
-    enableLoader(drop);
+    enableLoader(drop, url);
     if (scroll) {
       if (!url.includes("/charts/") && !url.includes("/previous/")) {
         scrollTo(drop);
@@ -302,7 +304,7 @@ function postContact(form) {
       scrollToTop();
       replaceState(url);
     });
-  enableLoader(drop);
+  enableLoader(drop, url);
 };
 function postSettings(form) {
   var method = form.method;
@@ -328,7 +330,7 @@ function postSettings(form) {
       scrollToTop();
       replaceState(url);
     });
-  enableLoader(drop);
+  enableLoader(drop, url);
 };
 function postLogin(form) {
   var method = form.method;

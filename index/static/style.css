@@ -483,7 +483,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   padding: 10px;
   display: block;
   border-radius: .25rem;
-  background: rgb(0, 191, 165);
   color: rgb(46, 46, 46);
   transition: all .25s ease-in-out;
 }
@@ -901,8 +900,19 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   transition: all 2s ease;
 }
 .loader {
-  background: rgba(0, 191, 165, .5);
   display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+#main-wrapper .loader {
+  margin-top: 40px;
+}
+.reload {
+  display: none;
+}
+.spinner {
+  background: rgba(0, 191, 165, .5);
   position: absolute;
   font-size: 50px;
   font-weight: 600;
@@ -915,10 +925,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   animation: spin 1.5s ease-in-out .25s infinite;
   -webkit-animation: spin 1.5s ease-in-out .25s infinite;
 }
-#main-wrapper .loader {
-  margin-top: 40px;
-}
-.loader .char {
+.spinner .char {
   left: 47px;
   top: -12px;
   position: absolute;

@@ -9,7 +9,7 @@
         <div class="slick">
           {% for language in languages %}
             <div class="slick-slide">
-              <a class="slick-link browse-link" href="/search/?language={{ language.language.url_format }}&view=grid">
+              <a class="slick-link color-1 browse-link" href="/search/?language={{ language.language.url_format }}&view=grid">
                 <h1>
                   {{ language.language }}
                 </h1>
@@ -33,7 +33,7 @@
                   </div>
                 {% endfor %}
               </div>
-              <a class="slick-link browse-link" href="/search/?language={{ language.language.url_format }}&view=grid">
+              <a class="slick-link color-1 browse-link" href="/search/?language={{ language.language.url_format }}&view=grid">
                 <p>
                   See {% if language.language.n_podcasts > 1 %} all {% endif %} {{ language.language.n_podcasts }} podcast{{ language.language.n_podcasts|pluralize }}
                 </p>

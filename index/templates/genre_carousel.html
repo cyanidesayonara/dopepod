@@ -9,7 +9,7 @@
         <div class="slick">
           {% for genre in genres %}
             <div class="slick-slide">
-              <a class="slick-link browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
+              <a class="slick-link color-1 browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
                 <h1>
                   {{ genre.genre }}
                 </h1>
@@ -33,7 +33,7 @@
                   </div>
                 {% endfor %}
               </div>
-              <a class="slick-link browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
+              <a class="slick-link color-1 browse-link" href="/search/?genre={{ genre.genre.url_format }}&view=grid">
                 <p>
                   See {% if genre.genre.n_podcasts > 1 %} all {% endif %} {{ genre.genre.n_podcasts }} podcast{{ genre.genre.n_podcasts|pluralize }}
                 </p>
