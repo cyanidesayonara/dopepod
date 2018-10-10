@@ -779,9 +779,12 @@ class Subscription(models.Model):
             "podcasts": subscriptions,
             "header": "Subscriptions",
             "view": "subscriptions",
-            "options": True,
             "extra_options": True,
         }
+        if subscriptions:
+            results.update({
+                "options": True,
+            })
         return results
 
 class EpisodeManager(models.Manager):

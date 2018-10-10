@@ -901,6 +901,12 @@ $(document)
     $(".settings-collapse.show").collapse("hide");
     removeErrors();
   })
+  // if all settings-collapses are hidden, show first one
+  .on("hidden.bs.collapse", ".settings-collapse", function(e) {
+    if (!$(".settings .dope-options .btn-dope[aria-expanded=true]").length) {
+      $(".settings-collapse:first").collapse("show");
+    }
+  })
   .on("show.bs.collapse", ".showpod-collapse", function (e) {
     e.stopPropagation();
     $(".showpod-collapse.show").collapse("hide");
@@ -967,9 +973,6 @@ $(document)
       }
       button.toggleClass("active");
     }
-  })
-  .on("click", ".cookie-banner-close", function() {
-    $("#player").empty();
   })
   .on("click", ".errors .btn-dope", function() {
     removeErrors();
