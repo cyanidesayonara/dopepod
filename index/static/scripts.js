@@ -1004,6 +1004,7 @@ $(window)
         }
       }
       $("#center-stage").html(state.context);
+      lazyload();
       titleUpdater();
       //TODO load episodes (if not loaded) on back button
     }
