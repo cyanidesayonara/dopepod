@@ -44,7 +44,6 @@ def render_splash(request, template, context, response=False):
     results = {
         "view": "splash",
     }
-    
 
     if cache.get("listen"):
         listen = {}
@@ -52,10 +51,10 @@ def render_splash(request, template, context, response=False):
     else:
         listen = Episode.get_previous()
     
-    context = {
+    context.update({
         "listen": listen,
         "results": results,   
-    }
+    })
     
     if response:
         context = get_form_errors(context, response)

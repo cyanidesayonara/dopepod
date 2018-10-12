@@ -60,13 +60,6 @@
                 </label>
               </div>
             </div>
-            <div class="form-row">
-              <div class="col-12 dope-form-group">
-                <p>
-                  
-                </p>
-              </div>
-            </div>
           </form>
         </div>
       </div>
@@ -143,7 +136,11 @@
     <div class="col-12 col-lg-4 order-lg-2">
       <div class="dope-wrapper">
         <p>
-          Sign up now to subscribe to all your favorite podcasts and to create a personal playlist.
+          Login or signup for an account now.
+          <br />
+          Subscribe to all your favorite podcasts.
+          <br />
+          Create a personal playlist.
         </p>
         <div class="dope-buttons dope-buttons-c">
           <a class="btn-dope login-link" href="/?view=login" data-target="#login-collapse" data-toggle="collapse" aria-expanded="{% if view == 'login' %}true{% else %}false{% endif %}"
@@ -178,24 +175,26 @@
     </div>
     <div class="col-12 col-lg-4 order-lg-1">
       <div class="dope-wrapper">
-        <p>Sign in with your social media account.</p>
+        <p>Sign in with a social media account.</p>
         {% include "social-login.min.html" %}
       </div>
     </div>
     <div class="col-12 col-lg-4 order-lg-3">
       <div class="dope-wrapper">
         <p>
-          Create a temporary user account linked to your browser to try out all the features.
+          Activate a temporary user account.
+          <br />
+          Try out all the features.
         </p>
         <form class="tryout-form" method="POST" action="{% url 'tryout' %}">
           {% csrf_token %}
           <div class="dope-buttons dope-buttons-c">
             <button type="submit" class="btn-dope">
               <span class="active">
-                Tryout
+                Activate
               </span>
               <span>
-                <i class="fas fa-exclamation"></i>
+                <i class="fas fa-check"></i>
               </span>
             </button>
           </div>

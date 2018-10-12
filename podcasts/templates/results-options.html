@@ -108,30 +108,6 @@
             </span>
           </a>
         {% endif %}    
-        {% if results.order %}
-          <a class="btn-dope options-button" href="{{ results.order_url }}" title="Toggle Order">
-            <span class="active">
-              Order
-            </span>
-            <span class="btn-dope-toggle">
-              {% if results.order == "rank" %}
-              <span>
-                <i class="fas fa-sort-numeric-down fa-lg"></i>
-              </span>
-              <span class="d-none">
-                <i class="fas fa-sort-alpha-down fa-lg"></i>
-              </span>
-              {% elif results.order == "name" %}
-              <span class="d-none">
-                <i class="fas fa-sort-numeric-down fa-lg"></i>
-              </span>
-              <span>
-                <i class="fas fa-sort-alpha-down fa-lg"></i>
-              </span>
-              {% endif %}
-            </span>
-          </a>
-        {% endif %}
         {% if results.view == "grid" %}
           <a class="btn-dope view-button" href="{{ results.view_url }}">
             <span class="active">
@@ -161,6 +137,30 @@
             </span>
           </a>
         {% endif %}
+        {% if results.order %}
+          <a class="btn-dope options-button" href="{{ results.order_url }}" title="Toggle Order">
+            <span class="active">
+              Order
+            </span>
+            <span class="btn-dope-toggle">
+              {% if results.order == "rank" %}
+              <span>
+                <i class="fas fa-sort-numeric-down fa-lg"></i>
+              </span>
+              <span class="d-none">
+                <i class="fas fa-sort-alpha-down fa-lg"></i>
+              </span>
+              {% elif results.order == "name" %}
+              <span class="d-none">
+                <i class="fas fa-sort-numeric-down fa-lg"></i>
+              </span>
+              <span>
+                <i class="fas fa-sort-alpha-down fa-lg"></i>
+              </span>
+              {% endif %}
+            </span>
+          </a>
+        {% endif %}        
         {% if results.alphabet %}
           <a class="btn-dope" data-toggle="collapse" href="#alphabet-collapse-{{ results.view }}" aria-expanded="false"
             aria-controls="alphabet-collapse" title="Select Initial">
