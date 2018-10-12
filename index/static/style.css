@@ -52,15 +52,18 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 /* COOKIE BANNER */
-.cookie-banner {
-  color: rgb(46, 46, 46);
+.cookie-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
-.cookie-banner h1 {
+.cookie-wrapper h1 {
   margin-bottom: 10px;
   font-size: 16px;
 }
-.cookie-banner p {
+.cookie-wrapper p {
   margin: 0;
 }
 
