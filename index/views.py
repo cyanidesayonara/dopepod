@@ -40,7 +40,7 @@ def get_donuts(results, user):
     })
     return results
 
-def render_splash(request, template, context, response=False):
+def get_splash(context):
     results = {
         "view": "splash",
     }
@@ -55,25 +55,20 @@ def render_splash(request, template, context, response=False):
         "listen": listen,
         "results": results,   
     })
-    
-    if response:
-        context = get_form_errors(context, response)
-        if request.is_ajax():
-            return render(request, template, context, status=400)
-        return render_non_ajax(request, template, context)
-    if request.is_ajax():
-        return render(request, template, context)
-    return redirect("/")
+    return context
 
-def render_dashboard(request, template, context):
+
+def get_dashboard(context, user):
     results = {
         "view": "dashboard",
+        "extra_options": True,
+        "header": "Dashboard",
     }
-    results = get_donuts(results, request.user)
+    results = get_donuts(results, user)
     context.update({
         "results": results,
     })
-    return render(request, template, context)
+    return context
 
 def render_non_ajax(request, template, context):
     last_seen, cookie = get_last_seen(request.session)
@@ -419,19 +414,14 @@ def index(request):
         }
         if request.is_ajax():
             if user.is_authenticated:
-                return render_dashboard(request, template, context)
+                context = get_dashboard(context, user)
             else:
-                return render_splash(request, template, context)
-        results = {}
+                context = get_splash(context)
+            return render(request, template, context)
         if user.is_authenticated:
-            results = get_donuts(results, user)
-            results["view"] = "dashboard"
+            context = get_dashboard(context, user)
         else:
-            results["view"] = "splash"
-            results["listen"] = "podcast name"
-        context.update({
-            "results": results,
-        })
+            context = get_splash(context)
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -801,15 +791,20 @@ def login(request):
         context = {
             "view": "login",
         }
+
         user = request.user
         if response.status_code == 200:
             if user.is_authenticated:
-                return render_dashboard(request, template, context)
+                context = get_dashboard(context, user)
+                return render(request, template, context)
             context.update({
                 "message": "You must confirm your email before logging in."
             })
+        context = get_splash(context)
         context = get_form_errors(context, response)
-        return render_splash(request, template, context, response=response)
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
     return redirect("/?view=login")
 
 def signup(request):
@@ -828,11 +823,16 @@ def signup(request):
                 "view": "login",
                 "message": "We have sent a confirmation link to your email address. Please contact us if you do not receive it within a few minutes."
             })
-            return render_splash(request, template, context)
+            context = get_splash(context)
+            return render(request, template, context)
         context.update({
             "view": "signup",
         })
-        return render_splash(request, template, context, response=response)
+        context = get_splash(context)
+        context = get_form_errors(context, response)
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
     return redirect("/?view=signup")
 
 def logout(request):
@@ -849,23 +849,24 @@ def change_password(request):
         template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
+            ajax = request.META["HTTP_X_REQUESTED_WITH"]
+            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+            response = allauth.password_change(request)
+            request.META["HTTP_X_REQUESTED_WITH"] = ajax
             results = get_settings_results()
             context = {
                 "results": results,
             }
             context = get_settings_forms(context, request)
-            ajax = request.META["HTTP_X_REQUESTED_WITH"]
-            request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
-            response = allauth.password_change(request)
-            request.META["HTTP_X_REQUESTED_WITH"] = ajax
+            context = get_form_errors(context, response)
             if response.status_code == 200:
                 context.update({
                     "message": "Password Changed!"
                 })
                 return render(request, template, context)
-            context = get_form_errors(context, response)
             return render(request, template, context)
-        return render_splash(request, template, context)
+        context = get_splash(context)
+        return render(request, template, context)
     return redirect("/settings/")
 
 def password_reset(request):
@@ -888,13 +889,13 @@ def password_reset(request):
                 "view": "login",
                 "message": "We have sent you an email. Please contact us if you do not receive it within a few minutes.",
             })
-            return render_splash(request, template, context)
         else:
-            context = get_settings_forms(context, request)
+            context = get_form_errors(context, response)
             context.update({
                 "view": "password",
             })
-            return render_splash(request, template, context, response=response)
+        context = get_splash(context)
+        return render(request, template, context)
     return redirect("/?view=password")
 
 def password_reset_from_key(request, uidb36, key):
@@ -987,6 +988,8 @@ def solong(request):
 def tryout(request):
     if request.method == "POST":
         template = "results_base.min.html"
+        user = request.user
         context = {}
-        return render_dashboard(request, template, context)
+        context = get_dashboard(context, user)
+        return render(request, template, context)
     return redirect("/")

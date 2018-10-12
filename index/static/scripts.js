@@ -153,8 +153,12 @@ function checkForXHR(url) {
   }
 };
 function enableLoader(drop, url) {
-  drop.find(".results").addClass("loading");
-  drop.find(".player-content").addClass("loading");
+  console.log(drop)
+  if (drop.children(".results, .showpod-collapse").length) {
+    drop.children(":not(.loader)").addClass("blurred"); 
+  } else if (drop.is("#player")) {
+    drop.find(".player-content").addClass("blurred");
+  }
   drop.find(".loader").fadeIn("slow");
   drop.find(".reload").attr("href", url);
 };
@@ -404,7 +408,7 @@ function postPlaylist(data, mode, button) {
     if (wrapper.length) {
       wrapper.removeClass("minimize");
       wrapper.find("audio")[0].preload = "none";
-      enableLoader($("#player-wrapper"));
+      enableLoader($("#player"));
     }
   }
   $.ajax({
@@ -460,7 +464,7 @@ function playNext() {
   if (wrapper.length) {
     wrapper.removeClass("minimize");
     wrapper.find("audio")[0].preload = "none";
-    enableLoader($("#player-wrapper"));
+    enableLoader($("#player"));
   }
   // wait a sec here
   timeout = setTimeout(function() {

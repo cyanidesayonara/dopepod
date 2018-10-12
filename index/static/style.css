@@ -209,13 +209,14 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   text-align: center;
   border: 2px solid rgb(0, 191, 165);
   border-radius: .25rem;
-  margin: 10px;
+  padding: 30px;
 }
 .dash-wrapper h1 {
+  margin-bottom: 10px;
   font-size: 1em;
-  margin: 10px 0;
 }
 .dash-wrapper p {
+  margin-bottom: 10px;
   font-size: 1.6em;
   font-weight: 600;
 }
@@ -281,7 +282,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 #splash .dope-result h2 {
   font-size: 1.25em;
-  margin-bottom: 0;
+  margin-bottom: 2px;
   height: 26px;
 }
 
@@ -647,9 +648,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .episodes-content {
   position: relative;
 }
-.showpod-collapse {
-  min-height: 200px;
-}
 
 /* DOPE-RESULT */
 .dope-result {
@@ -896,11 +894,13 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 #loaders {
   display: none;
 }
-.loading {
+.blurred {
+  min-height: 200px;
   pointer-events: none;
   -webkit-filter: blur(10px);
   filter: blur(10px);
-  transition: all 2s ease;
+  transition: filter 2s ease;
+  -webkit-transition: -webkit-filter 2s ease;
 }
 .loader {
   display: none;
