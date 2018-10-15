@@ -153,14 +153,13 @@ function checkForXHR(url) {
   }
 };
 function enableLoader(drop, url) {
-  console.log(drop)
   if (drop.children(".results, .showpod-collapse").length) {
     drop.children(":not(.loader)").addClass("blurred"); 
   } else if (drop.is("#player")) {
     drop.find(".player-content").addClass("blurred");
   }
-  drop.find(".loader").fadeIn("slow");
-  drop.find(".reload").attr("href", url);
+  drop.find(".loader:last").fadeIn("slow");
+  drop.find(".loader:last .reload-button").attr("href", url);
 };
 // RESULTS
 function getResults(args, no_loader, no_push) {
@@ -587,6 +586,29 @@ $(document)
       }
     }
   })
+  .on("click", ".reload-button", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var button = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      var drop = button.parents(".loader").parent();
+      console.log(drop)
+      if (drop.hasClass("episodes-content")) {
+        url = url.replace("showpod", "episodes");
+        getResults([url, drop, false]);
+      }
+      else if (drop.length) {
+        var podid = drop.children(".results.showpod").data("podid");
+        if (podid) {
+          var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
+          getResults([url, drop, false, getResults, args]);          
+        } else {
+          getResults([url, drop, false]);
+        }
+      }
+    }, 250);
+  })
   .on("click", ".options-button", function(e) {
     e.preventDefault();
     var url = this.href;
@@ -918,9 +940,9 @@ $(document)
       $(".settings-collapse:first").collapse("show");
     }
   })
-  .on("show.bs.collapse", ".showpod-collapse", function (e) {
-    e.stopPropagation();
-    $(".showpod-collapse.show").collapse("hide");
+  .on("click", ".episodes-button, .reviews-button", function (e) {
+    e.preventDefault();
+    $(".showpod-collapse").collapse("toggle");
   })
   .on("click", ".select-theme", function(e) {
     e.preventDefault();
