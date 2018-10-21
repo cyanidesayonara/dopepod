@@ -1033,11 +1033,9 @@ $(window)
       $("#center-stage").html(state.context);
       titleUpdater();
       if (context.hasClass("showpod")) {
-        if (!context.find(".episodes-table").length) {
-          drop = $(".episodes-content");
-          url = url.replace("showpod", "episodes");
-          getResults([url, drop, false]);
-        }
+        drop = $(".episodes-content");
+        url = url.replace("showpod", "episodes");
+        getResults([url, drop, false]);
       }
     }
   })
