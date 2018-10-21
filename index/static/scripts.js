@@ -211,7 +211,7 @@ function getResults(args, no_loader, no_push) {
       // if page refresh, apply theme
       else if (drop.is("#dopebar-wrapper")) {
         var response = drop.children();
-        var theme = response.data("theme")
+        var theme = response.data("theme");
         response.removeData("theme");
         response.removeAttr("data-theme");
         themeChanger(theme);
@@ -596,12 +596,10 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".loader").parent();
-      console.log(drop)
       if (drop.hasClass("episodes-content")) {
         url = url.replace("showpod", "episodes");
         getResults([url, drop, false]);
-      }
-      else if (drop.length) {
+      } else if (drop.length) {
         var podid = drop.children(".results.showpod").data("podid");
         if (podid) {
           var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
@@ -1022,23 +1020,25 @@ $(window)
       var url = state.url;
       var urls = ["settings", "playlist", "subscriptions"];
       var context = $(state.context);
-      if (context.hasClass("splash") || context.hasClass("dashboard")) {
-        var drop = $("#center-stage");
-        getResults([url, drop, false], false, true);
-        return;
-      } else {
-        for (var i = 0; i < urls.length; i++) {
-          if (url.includes(urls[i])) {
-            var drop = $("#center-stage");
-            getResults([url, drop, false], false, true);
-            return;
-          }
+      for (var i = 0; i < urls.length; i++) {
+        if (url.includes(urls[i])) {
+          var drop = $("#center-stage");
+          return getResults([url, drop, false], false, true);
         }
       }
+      if (context.hasClass("splash") || context.hasClass("dashboard")) {
+        var drop = $("#center-stage");
+        return getResults([url, drop, false], false, true);
+      }
       $("#center-stage").html(state.context);
-      lazyload();
       titleUpdater();
-      //TODO load episodes (if not loaded) on back button
+      if (context.hasClass("showpod")) {
+        if (!context.find(".episodes-table").length) {
+          drop = $(".episodes-content");
+          url = url.replace("showpod", "episodes");
+          getResults([url, drop, false]);
+        }
+      }
     }
   })
   .on("blur", function() {
