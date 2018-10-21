@@ -1021,11 +1021,18 @@ $(window)
       // if url in urls, reload results (and don't push)
       var url = state.url;
       var urls = ["settings", "playlist", "subscriptions"];
-      for (var i = 0; i < urls.length; i++) {
-        if (url.includes(urls[i])) {
-          var drop = $("#center-stage");
-          getResults([url, drop, false], false, true);
-          return;
+      var context = $(state.context);
+      if (context.hasClass("splash") || context.hasClass("dashboard")) {
+        var drop = $("#center-stage");
+        getResults([url, drop, false], false, true);
+        return;
+      } else {
+        for (var i = 0; i < urls.length; i++) {
+          if (url.includes(urls[i])) {
+            var drop = $("#center-stage");
+            getResults([url, drop, false], false, true);
+            return;
+          }
         }
       }
       $("#center-stage").html(state.context);

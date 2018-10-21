@@ -76,7 +76,7 @@
           <i class="fas fa-ellipsis-v"></i>
         </span>
       </button>        
-      <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
+      <audio class="audio" onended="playNext()" controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>
       </audio>        
     </div>
