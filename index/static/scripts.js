@@ -417,7 +417,10 @@ function postPlaylist(data, mode, button) {
   })
     // nothing to continue
     .fail(function(xhr, ajaxOptions, thrownError) {
-      button.html(text);
+      try {
+        button.html(text);
+      } catch (e) {
+      }
       $("#player").empty();
       // TODO if playlist fails
     })
@@ -564,7 +567,7 @@ $(document)
     previousUpdater();
     chartsUpdater();
   })
-  .scroll(function () {
+  .scroll(function() {
     scrollSpy();
   })
   // SEARCH
@@ -591,7 +594,7 @@ $(document)
     var url = this.href;
     var button = $(this);
     clearTimeout(timeout);
-    timeout = setTimeout(function () {
+    timeout = setTimeout(function() {
       var drop = button.parents(".loader").parent();
       console.log(drop)
       if (drop.hasClass("episodes-content")) {
@@ -744,7 +747,7 @@ $(document)
     e.preventDefault();
     scrollTo($("#previous"));
   })
-  .on("click", ".privacy-link", function (e) {
+  .on("click", ".privacy-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -755,7 +758,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".terms-link", function (e) {
+  .on("click", ".terms-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -766,7 +769,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".api-link", function (e) {
+  .on("click", ".api-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -777,7 +780,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".contact-link", function (e) {
+  .on("click", ".contact-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -811,7 +814,7 @@ $(document)
     if (selected.length) {
       // array of all selected podids
       var podids = [];
-      selected.each(function (i, subscription) {
+      selected.each(function(i, subscription) {
         podids[i] = $(subscription).data("podid");
       })
     }
@@ -829,7 +832,7 @@ $(document)
     var form = $(this);
     if (!form.find(".button-loading").length) {
       clearTimeout(timeout);
-      timeout = setTimeout(function () {
+      timeout = setTimeout(function() {
         var data = form.serialize();
         var mode = form.children("input[name=mode]").val();
         var button = form.children("button[type=submit]");
@@ -852,11 +855,11 @@ $(document)
     })
     .parents("#player-wrapper").toggleClass("minimize");
   })
-  .on("click", ".theme-button[type=submit]", function () {
+  .on("click", ".theme-button[type=submit]", function() {
     var theme = $(this).children().text().toLowerCase();
     $(this).siblings("input[name=theme]").val(theme);
   })
-  .on("submit", ".contact-form", function (e) {
+  .on("submit", ".contact-form", function(e) {
     e.preventDefault();
     postContact(this);
   })  
@@ -865,7 +868,7 @@ $(document)
     e.preventDefault();
     postSettings(this);
   })
-  .on("submit", ".convert-form", function (e) {
+  .on("submit", ".convert-form", function(e) {
     e.preventDefault();
     alert("Oops, this doesn't actually work yet. Sorry!");
   })  
@@ -884,7 +887,7 @@ $(document)
     $(".view-collapse").collapse("toggle");
   })
   // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .btn-dope", function () {
+  .on("mouseenter mouseleave", ".no-touch .btn-dope", function() {
     $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
@@ -901,27 +904,27 @@ $(document)
     e.stopPropagation();
     $(".previous-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".splash-play-collapse", function (e) {
+  .on("show.bs.collapse", ".splash-play-collapse", function(e) {
     e.stopPropagation();
     $(".listen-carousel").slick("slickPause");
   })
-  .on("hide.bs.collapse", ".splash-play-collapse", function (e) {
+  .on("hide.bs.collapse", ".splash-play-collapse", function(e) {
     e.stopPropagation();
     $(".listen-carousel").slick("slickPlay");
   })  
-  .on("show.bs.collapse", "#splash-collapse", function () {
+  .on("show.bs.collapse", "#splash-collapse", function() {
     if ($(".listen-carousel.slick-initialized").length) {
       $(".listen-carousel").slick("slickPlay");
       $(".listen-carousel").slick("slickGoTo", 0);
     }
   })
-  .on("hide.bs.collapse", "#splash-collapse", function () {
+  .on("hide.bs.collapse", "#splash-collapse", function() {
     $(".splash-play-collapse.show").collapse("hide");
     if ($(".listen-carousel.slick-initialized").length) {
       $(".listen-carousel").slick("slickPause");
     }
   })
-  .on("beforeChange", ".listen-carousel", function () {
+  .on("beforeChange", ".listen-carousel", function() {
     $("#splash-play-result.expanded").removeClass("expanded");
     $(".splash-play-collapse.show").collapse("hide");
   })
@@ -929,7 +932,7 @@ $(document)
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".settings-collapse", function (e) {
+  .on("show.bs.collapse", ".settings-collapse", function(e) {
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
     removeErrors();
@@ -940,7 +943,7 @@ $(document)
       $(".settings-collapse:first").collapse("show");
     }
   })
-  .on("click", ".episodes-button, .reviews-button", function (e) {
+  .on("click", ".episodes-button, .reviews-button", function(e) {
     e.preventDefault();
     $(".showpod-collapse").collapse("toggle");
   })
@@ -956,7 +959,7 @@ $(document)
     }
     themeChanger(theme);
   })
-  .on("click", ".expandable .exp", function () {
+  .on("click", ".expandable .exp", function() {
     var button = $(this);
     button.parents(".results").find(".expandable.expanded").removeClass("expanded");
     if (button.attr("aria-expanded") === "true") {
@@ -972,11 +975,11 @@ $(document)
     $(".q").val("");
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dope-link, .search-button", function () {
+  .on("click", "body, .dope-link, .search-button", function() {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
-  .on("click", "#dopebar-collapse", function (e) {
+  .on("click", "#dopebar-collapse", function(e) {
     e.stopPropagation();
   })
   .on("click", ".scroll-up", function() {
@@ -1039,6 +1042,6 @@ $(window)
     previousUpdater();
     chartsUpdater();
   })
-  .on("resize", function () {
+  .on("resize", function() {
     hoverDisabler();
   })
