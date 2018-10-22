@@ -511,26 +511,19 @@ function hoverDisabler() {
     $("html").addClass("no-touch");
   }
 };
-function initGenre() {
-  $(".genre-carousel").slick({
-    autoplay: true,
-    adaptiveHeight: true,
+function initPopular() {
+  $(".popular-carousel").slick({
+    lazyload: "ondemand",
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  });
-};
-function initLanguage() {
-  $(".language-carousel").slick({
-    autoplay: true,
-    adaptiveHeight: true,
-    prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  });
+  }).show();
+  $(".popular-collapse.show>*").slick("slickPlay");
+  $(".popular-carousel").slick("refresh");
 };
 function initListen() {
   $(".logo").toggleClass("d-none");
   // shuffle all except first (logo)
-  var slides = $(".listen-carousel .slick-slide").toArray();
+  var slides = $(".listen-carousel>*").toArray();
   var first = slides.shift();
   for (var i = slides.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -544,9 +537,11 @@ function initListen() {
     autoplay: true,
     fade: true,
     initialSlide: 1,
+    lazyLoad: 'ondemand',
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  });
+  }).show();
+  $(".listen-carousel").slick("refresh");
 };
 function removeErrors() {
   $(".errors").remove();
@@ -560,10 +555,9 @@ function lazyload() {
 $(document)
   .ready(function() {
     replaceState(window.location.href);
-    initListen();
-    initGenre();
-    initLanguage();
     scrollSpy();
+    initListen();
+    initPopular();
     previousUpdater();
     chartsUpdater();
   })
@@ -875,6 +869,13 @@ $(document)
     e.preventDefault();
     postLogin(this);
   })
+  .on("click", ".popular-button", function(e) {
+    e.preventDefault();
+    $(".popular-collapse").collapse("toggle");
+    $(".popular-carousel").slick("refresh");
+    $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
+    $(".popular .results-bar span").toggleClass("d-none");
+  })
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
@@ -916,10 +917,21 @@ $(document)
       $(".listen-carousel").slick("slickGoTo", 0);
     }
   })
+  .on("show.bs.collapse", ".popular-collapse", function () {
+    if ($(".popular-carousel.slick-initialized").length) {
+      $(".popular-carousel").slick("slickPlay");
+      $(".popular-carousel").slick("slickGoTo", 0);
+    }
+  })  
   .on("hide.bs.collapse", "#splash-collapse", function() {
     $(".splash-play-collapse.show").collapse("hide");
     if ($(".listen-carousel.slick-initialized").length) {
       $(".listen-carousel").slick("slickPause");
+    }
+  })
+  .on("hide.bs.collapse", "#popular-collapse", function () {
+    if ($(".popular-carousel.slick-initialized").length) {
+      $(".popular-carousel").slick("slickPause");
     }
   })
   .on("beforeChange", ".listen-carousel", function() {

@@ -109,7 +109,7 @@
           </a>
         {% endif %}    
         {% if results.view == "grid" %}
-          <a class="btn-dope view-button" href="{{ results.view_url }}">
+          <button class="btn-dope view-button">
             <span class="active">
               Display
             </span>
@@ -121,9 +121,9 @@
                 <i class="fas fa-bars"></i>
               </span>
             </span>
-          </a>
+          </button>
         {% elif results.view == "list" %}
-          <a class="btn-dope view-button" href="{{ results.view_url }}" title="Toggle View">
+          <button class="btn-dope view-button">
             <span class="active">
               Display
             </span>
@@ -135,7 +135,7 @@
                 <i class="fas fa-bars"></i>
               </span>
             </span>
-          </a>
+          </button>
         {% endif %}
         {% if results.order %}
           <a class="btn-dope options-button" href="{{ results.order_url }}" title="Toggle Order">

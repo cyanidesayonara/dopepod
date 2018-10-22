@@ -717,28 +717,25 @@ class Podcast(models.Model):
             logger.error("too many retries:", url)
         return podcasts
 
-    def get_genre_carousel():
+    def get_popular():
         genres = []
+        languages = []
+
         for genre in Genre.get_primary_genres():
             genres.append({
                 "genre": genre,
                 "podcasts": Podcast.objects.filter(genre=genre).order_by("genre_rank")[:6]
             })
-        results = {
-            "view": "genre_carousel",
-            "genres": genres,
-        }
-        return results
 
-    def get_language_carousel():
-        languages = []
         for language in Language.get_languages():
             languages.append({
                 "language": language,
                 "podcasts": Podcast.objects.filter(language=language).order_by("language_rank")[:6]
             })
+
         results = {
-            "view": "language_carousel",
+            "view": "popular",
+            "genres": genres,
             "languages": languages,
         }
         return results

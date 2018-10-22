@@ -61,18 +61,19 @@
         </div>
         <div class="row" id="search">
           <div class="col-12 results color-2 search">
-            <h1>Search</h1>
+            <div class="row results-bar color-4">
+              <div class="col-12 px-0">
+                <h1>Search</h1>
+              </div>
+            </div>
             <div class="dope-wrapper">
               {% include "search-form.min.html" %}
             </div>
           </div>
         </div>
-        <div class="row carousel">
-          {% if genre_carousel %} {% with genre_carousel as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+        <div class="row" id="popular">
+          {% if popular %} {% with popular as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
-        <div class="row carousel">
-          {% if language_carousel %} {% with language_carousel as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
-        </div>        
       </div>
       <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
         <!-- CHARTS -->

@@ -15,8 +15,8 @@
   {% include "results_bar.min.html" %}
   <div class="row results-content">
     <div class="col-12 collapse results-collapse fade show" id="results-collapse-{{ results.view }}">
-      {% include "showpod.min.html" %}
       {% include "results-options.min.html" %}
+      {% include "showpod.min.html" %}
       {% if results.view == "splash" or results.view == "dashboard" %}
         {% include "splashboard.min.html" %}
       {% elif results.view == "grid" or results.view == "list" %}
@@ -36,10 +36,8 @@
         </div>
       {% elif results.view == "previous"%}
         {% include "previous.min.html" %}
-      {% elif results.view == "genre_carousel"%}
-        {% include "genre_carousel.min.html" %}  
-      {% elif results.view == "language_carousel"%}
-        {% include "language_carousel.min.html" %}                
+      {% elif results.view == "popular"%}
+        {% include "popular.min.html" %}               
       {% elif results.view == "settings" %}
         {% include "settings.min.html" %}
       {% elif results.view == "api" %}

@@ -83,26 +83,19 @@ def render_non_ajax(request, template, context):
     else:
         listen = previous
 
-    if cache.get("genre_carousel"):
-        genre_carousel = {}
-        genre_carousel["view"] = "genre_carousel"
+    if cache.get("popular"):
+        popular = {}
+        popular["view"] = "popular"
     else:
-        genre_carousel = Podcast.get_genre_carousel()
-    
-    if cache.get("language_carousel"):
-        language_carousel = {}
-        language_carousel["view"] = "language_carousel"
-    else:
-        language_carousel = Podcast.get_language_carousel()
+        popular = Podcast.get_popular()
     
     context["results"]["extend"] = True
     context.update({
         "listen": listen,
-        "genre_carousel": genre_carousel,
-        "language_carousel": language_carousel,
-        "cookie_banner": cookie,
+        "popular": popular,
         "charts": charts,
         "previous": previous,
+        "cookie_banner": cookie,
     })
     return render(request, template, context)
 
