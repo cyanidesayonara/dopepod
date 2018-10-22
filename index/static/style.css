@@ -287,12 +287,14 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 /* DOPEBAR */
-#dopebar {
+#dopebar-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 5000;
+}
+#dopebar {
   height: 44px;
   padding: 5px 0;
 }
@@ -333,12 +335,8 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   font-weight: 400;
 }
 #dopebar-collapse {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 4000;
+  position: absolute;
   padding: 10px;
-  margin-top: 44px;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border-bottom-right-radius: .25rem;
 }
