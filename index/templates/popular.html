@@ -17,25 +17,28 @@
   <div class="row">
     <div class="col-12 color-3 dope-options">
       <div class="dope-buttons dope-buttons-r">
-        <button class="btn-dope popular-button">
+        <a class="btn-dope popular-button" data-toggle="collapse" href="#genre-collapse-popular" aria-expanded="true" aria-controls="genre-collapse-popular">
           <span class="active">
-            Show
+            Genre
           </span>
-          <span class="btn-dope-toggle">
-            <span>
-              Genre
-            </span>
-            <span class="d-none">
-              Language
-            </span>
+          <span class="exp-icon">
+            <i class="fas fa-theater-masks"></i>
           </span>
-        </button>
+        </a>
+        <a class="btn-dope popular-button" data-toggle="collapse" href="#language-collapse-popular" aria-expanded="false" aria-controls="language-collapse-popular">
+          <span class="active">
+            Language
+          </span>
+          <span class="exp-icon">
+            <i class="fas fa-globe"></i>
+          </span>
+        </a>
       </div>
     </div>
   </div>
   <div class="row">
     {% with results.genres as genres %}
-      <div class="col-12 px-0 collapse popular-collapse fade show" id="genre-collapse-{{ results.view }}">
+      <div class="col-12 px-0 collapse popular-collapse fade show" id="genre-collapse-popular">
         <div class="popular-carousel">
           {% for genre in genres %}
             <div>
@@ -73,7 +76,7 @@
       </div>
     {% endwith%}
     {% with results.languages as languages %}
-      <div class="col-12 px-0 collapse popular-collapse fade" id="language-collapse-{{ results.view }}">
+      <div class="col-12 px-0 collapse popular-collapse fade" id="language-collapse-popular">
         <div class="popular-carousel">
           {% for language in languages %}
           <div>

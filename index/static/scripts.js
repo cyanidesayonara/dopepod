@@ -511,14 +511,14 @@ function hoverDisabler() {
     $("html").addClass("no-touch");
   }
 };
+// TODO make slick change genre/language when end is reached
 function initPopular() {
   $(".popular-carousel").slick({
     lazyload: "ondemand",
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
   }).show();
-  $(".popular-collapse.show>*").slick("slickPlay");
-  $(".popular-carousel").slick("refresh");
+  $(".show .popular-carousel").slick("refresh").slick("slickPlay");
 };
 function initListen() {
   $(".logo").toggleClass("d-none");
@@ -869,11 +869,14 @@ $(document)
     e.preventDefault();
     postLogin(this);
   })
+  .on("click", ".showpod-button", function (e) {
+    e.preventDefault();
+    $(".showpod-collapse").collapse("toggle");
+  })
   .on("click", ".popular-button", function(e) {
     e.preventDefault();
     $(".popular-collapse").collapse("toggle");
     $(".popular-carousel").slick("refresh");
-    $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
     $(".popular .results-bar span").toggleClass("d-none");
   })
   // toggle view icon & view collapse on click
@@ -917,26 +920,26 @@ $(document)
       $(".listen-carousel").slick("slickGoTo", 0);
     }
   })
-  .on("show.bs.collapse", ".popular-collapse", function () {
-    if ($(".popular-carousel.slick-initialized").length) {
-      $(".popular-carousel").slick("slickPlay");
-      $(".popular-carousel").slick("slickGoTo", 0);
-    }
-  })  
   .on("hide.bs.collapse", "#splash-collapse", function() {
     $(".splash-play-collapse.show").collapse("hide");
     if ($(".listen-carousel.slick-initialized").length) {
       $(".listen-carousel").slick("slickPause");
     }
   })
+  .on("beforeChange", ".listen-carousel", function() {
+    $("#splash-play-result.expanded").removeClass("expanded");
+    $(".splash-play-collapse.show").collapse("hide");
+  })
+  .on("show.bs.collapse", ".popular-collapse", function () {
+    if ($(".popular-carousel.slick-initialized").length) {
+      $(".popular-carousel").slick("slickPlay");
+      $(".popular-carousel").slick("slickGoTo", 0);
+    }
+  })
   .on("hide.bs.collapse", "#popular-collapse", function () {
     if ($(".popular-carousel.slick-initialized").length) {
       $(".popular-carousel").slick("slickPause");
     }
-  })
-  .on("beforeChange", ".listen-carousel", function() {
-    $("#splash-play-result.expanded").removeClass("expanded");
-    $(".splash-play-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
@@ -952,10 +955,6 @@ $(document)
     if (!$(".settings .dope-options .btn-dope[aria-expanded=true]").length) {
       $(".settings-collapse:first").collapse("show");
     }
-  })
-  .on("click", ".episodes-button, .reviews-button", function(e) {
-    e.preventDefault();
-    $(".showpod-collapse").collapse("toggle");
   })
   .on("click", ".select-theme", function(e) {
     e.preventDefault();
