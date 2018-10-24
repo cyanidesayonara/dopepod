@@ -521,6 +521,7 @@ function initPopular() {
     autoplay: true,
     fade: true,
     lazyload: "ondemand",
+    adaptiveHeight: true,
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
   }).show().slick("refresh");
@@ -543,6 +544,7 @@ function initListen() {
     fade: true,
     initialSlide: 1,
     lazyLoad: 'ondemand',
+    adaptiveHeight: true,
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
   }).show().slick("refresh");
