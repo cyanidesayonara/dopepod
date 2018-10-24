@@ -519,7 +519,7 @@ function hoverDisabler() {
 function initPopular() {
   $(".popular-carousel").slick({
     autoplay: true,
-    fade: true,
+    infinite: true,
     lazyload: "ondemand",
     adaptiveHeight: true,
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
@@ -902,7 +902,6 @@ $(document)
     // if button not pressed
     if ($(this).children(".d-none.active").length) {
       togglePopular();
-      togglePopularButtons();
     }
   })
   // toggle view icon & view collapse on click
@@ -953,15 +952,22 @@ $(document)
     $(".splash-play-collapse.show").collapse("hide");
   })
   .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
-    var first = 0;
-    // 16 genres
-    var cut = 16;
-    var last = $(this).find(".slick-slide").length - 1;
-    if (currentSlide == cut && nextSlide == cut - 1 ||
-        nextSlide == cut && currentSlide == cut - 1 ||
-        currentSlide == first && nextSlide == last || 
-        nextSlide == first && currentSlide == last) {
-      togglePopularButtons();
+    // halfway point
+    var half = $(this).find(".slick-slide").length - 1;
+    if (currentSlide < half) {
+      // cut-off point after 16 genres
+      var cut = 16;
+      if (currentSlide < cut && nextSlide >= cut ||
+          currentSlide >= cut && nextSlide < cut) {
+        togglePopularButtons();
+      }
+    } else {
+      // cut-off point + halfway point
+      cut = cut + half;
+      if (currentSlide < cut && nextSlide >= cut ||
+        currentSlide >= cut && nextSlide < cut) {
+        togglePopularButtons();
+      }
     }
   })  
   .on("show.bs.collapse", ".options-collapse", function(e) {
