@@ -517,14 +517,16 @@ function hoverDisabler() {
 };
 // TODO make slick change genre/language when end is reached
 function initPopular() {
-  $(".popular-carousel").slick({
-    autoplay: true,
-    infinite: true,
-    lazyload: "ondemand",
-    adaptiveHeight: true,
-    prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  }).show().slick("refresh");
+  $(".popular-carousel")
+    .slick({
+      autoplay: true,
+      infinite: true,
+      adaptiveHeight: true,
+      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+    })
+    .show()
+    .slick("refresh");
 };
 function initListen() {
   $(".logo").toggleClass("d-none");
@@ -538,15 +540,18 @@ function initListen() {
     slides[j] = temp;
   }
   slides.unshift(first);
-  $(".listen-carousel").html(slides);
-  $(".listen-carousel").slick({
-    autoplay: true,
-    fade: true,
-    initialSlide: 1,
-    lazyLoad: 'ondemand',
-    prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  }).show().slick("refresh");
+  $(".listen-carousel")
+    .html(slides)
+    .slick({
+      autoplay: true,
+      fade: true,
+      initialSlide: 1,
+      lazyLoad: "ondemand",
+      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+    })
+    .show()
+    .slick("refresh");
 };
 function removeErrors() {
   $(".errors").remove();
