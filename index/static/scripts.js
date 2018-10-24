@@ -953,20 +953,16 @@ $(document)
     $(".splash-play-collapse.show").collapse("hide");
   })
   .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
+    var first = 0;
+    // 16 genres
+    var cut = 16;
     var last = $(this).find(".slick-slide").length - 1;
-
-    if (currentSlide < last / 2) {
-      var first = 0;
-      // 16 genres
-      var cut = 16;
-      if (currentSlide == cut && nextSlide == cut - 1 ||
-          nextSlide == cut && currentSlide == cut - 1 ||
-          currentSlide == first && nextSlide == last || 
-          nextSlide == first && currentSlide == last) {
-        togglePopularButtons();
-      }
+    if (currentSlide == cut && nextSlide == cut - 1 ||
+        nextSlide == cut && currentSlide == cut - 1 ||
+        currentSlide == first && nextSlide == last || 
+        nextSlide == first && currentSlide == last) {
+      togglePopularButtons();
     }
-
   })  
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
