@@ -515,7 +515,6 @@ function hoverDisabler() {
     $("html").addClass("no-touch");
   }
 };
-// TODO make slick change genre/language when end is reached
 function initPopular() {
   $(".popular-carousel")
     .slick({

@@ -132,17 +132,6 @@
           </button>
         {% endif %}
         {% if results.view == "charts" or results.view == "list" or results.view == "grid" %}
-          <button class="btn-dope view-button">
-            <span class="active">
-              Display
-            </span>
-            <span data-view="grid">
-              <i class="fas fa-th"></i>
-            </span>
-            <span class="d-none" data-view="list">
-              <i class="fas fa-bars"></i>
-            </span>
-          </button>
           {% if results.view == "charts" %}
             <a class="btn-dope" data-toggle="collapse" href="#provider-collapse-{{ results.view }}" aria-expanded="false"
               aria-controls="provider-collapse" title="Select Source">
