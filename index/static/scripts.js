@@ -161,6 +161,10 @@ function enableLoader(drop, url) {
   drop.find(".loader:last").fadeIn("slow");
   drop.find(".loader:last .reload-button").attr("href", url);
 };
+function disableLoader(drop) {
+  drop.children(":not(.loader)").removeClass("blurred");
+  drop.find(".loader:last").fadeOut("slow");
+};
 // RESULTS
 function getResults(args, no_loader, no_push) {
   var url = args[0];
@@ -514,11 +518,12 @@ function hoverDisabler() {
 // TODO make slick change genre/language when end is reached
 function initPopular() {
   $(".popular-carousel").slick({
+    autoplay: true,
+    fade: true,
     lazyload: "ondemand",
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  }).show();
-  $(".show .popular-carousel").slick("refresh").slick("slickPlay");
+  }).show().slick("refresh");
 };
 function initListen() {
   $(".logo").toggleClass("d-none");
@@ -540,8 +545,7 @@ function initListen() {
     lazyLoad: 'ondemand',
     prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
     nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  }).show();
-  $(".listen-carousel").slick("refresh");
+  }).show().slick("refresh");
 };
 function removeErrors() {
   $(".errors").remove();
@@ -551,6 +555,24 @@ function lazyload() {
     elements_selector: ".lazyload"
   });
 };
+function togglePopularButtons() {
+  // change icons on both buttons
+  $(".popular-button").each(function() {
+    $(this).children().slice(-2).toggleClass("d-none");
+  });
+  // change results-bar title
+  $(".popular .results-bar span").toggleClass("d-none");
+};
+function togglePopular() {
+  var carousel = $(".popular-carousel");
+  var index = carousel.slick("slickCurrentSlide");
+  var cut = 16;
+  if (index >= cut) {
+    carousel.slick("slickGoTo", 0);
+  } else if (index < cut) {
+    carousel.slick("slickGoTo", cut);
+  }
+}
 
 $(document)
   .ready(function() {
@@ -875,22 +897,21 @@ $(document)
   })
   .on("click", ".popular-button", function(e) {
     e.preventDefault();
-    $(".popular-collapse").collapse("toggle");
-    $(".popular-carousel").slick("refresh");
-    $(".popular .results-bar span").toggleClass("d-none");
+
+    // if button not pressed
+    if ($(this).children(".d-none.active").length) {
+      togglePopular();
+      togglePopularButtons();
+    }
   })
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var button = $(this).children(".btn-dope-toggle");
-    var view = button.children(".d-none").data("view");
-    button.parents(".results").attr("data-view", view)
-    button.children().toggleClass("d-none");
+    var icons = $(this).children().slice(-2);
+    var view = icons.filter(".d-none").data("view");
+    icons.parents(".results").attr("data-view", view)
+    icons.toggleClass("d-none");
     $(".view-collapse").collapse("toggle");
-  })
-  // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .btn-dope", function() {
-    $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function(e) {
@@ -930,17 +951,22 @@ $(document)
     $("#splash-play-result.expanded").removeClass("expanded");
     $(".splash-play-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".popular-collapse", function () {
-    if ($(".popular-carousel.slick-initialized").length) {
-      $(".popular-carousel").slick("slickPlay");
-      $(".popular-carousel").slick("slickGoTo", 0);
+  .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
+    var last = $(this).find(".slick-slide").length - 1;
+
+    if (currentSlide < last / 2) {
+      var first = 0;
+      // 16 genres
+      var cut = 16;
+      if (currentSlide == cut && nextSlide == cut - 1 ||
+          nextSlide == cut && currentSlide == cut - 1 ||
+          currentSlide == first && nextSlide == last || 
+          nextSlide == first && currentSlide == last) {
+        togglePopularButtons();
+      }
     }
-  })
-  .on("hide.bs.collapse", "#popular-collapse", function () {
-    if ($(".popular-carousel.slick-initialized").length) {
-      $(".popular-carousel").slick("slickPause");
-    }
-  })
+
+  })  
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");

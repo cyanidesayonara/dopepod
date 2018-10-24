@@ -734,9 +734,11 @@ class Podcast(models.Model):
             })
 
         results = {
+            "header": "Most popular by ",
             "view": "popular",
             "genres": genres,
             "languages": languages,
+            "options": True,
         }
         return results
 

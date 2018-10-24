@@ -258,6 +258,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 #search,
 #popular {
   padding: 30px 0 0;
+  position: relative;
 }
 #splash {
   padding: 0;
@@ -1120,6 +1121,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   }
   .reload-button {
     left: calc(50% - 42px);
+  }
+  .spinner {
+    left: calc(50% - 65px);
   }
 }
 /* Extra small devices (phones, up to 480px) */
