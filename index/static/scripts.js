@@ -153,13 +153,14 @@ function checkForXHR(url) {
   }
 };
 function enableLoader(drop, url) {
-  if (drop.children(".results, .showpod-collapse").length) {
-    drop.children(":not(.loader)").addClass("blurred"); 
-  } else if (drop.is("#player")) {
+  if (drop.is("#player")) {
     drop.find(".player-content").addClass("blurred");
+  } else {
+    drop.children(":not(.loader)").addClass("blurred");
   }
-  drop.find(".loader:last").fadeIn("slow");
-  drop.find(".loader:last .reload-button").attr("href", url);
+  var loader = drop.find(".loader:last");
+  loader.fadeIn("slow");
+  loader.filter(".reload-button").attr("href", url);
 };
 function disableLoader(drop) {
   drop.children(":not(.loader)").removeClass("blurred");
@@ -389,7 +390,7 @@ function postSubscriptions(podids, button) {
       drop.html(response);
       if (drop.children().hasClass("showpod")) {
         var url = "/episodes/" + podids + "/";
-        drop = drop.find(".episodes-content");
+        drop = drop.find("#episodes-content");
         getResults([url, drop, false]);
       }
       else {
@@ -560,13 +561,11 @@ function lazyload() {
     elements_selector: ".lazyload"
   });
 };
-function togglePopularButtons() {
+function toggleButtons(buttons) {
   // change icons on both buttons
-  $(".popular-button").each(function() {
+  buttons.each(function() {
     $(this).children().slice(-2).toggleClass("d-none");
   });
-  // change results-bar title
-  $(".popular .results-bar span").toggleClass("d-none");
 };
 function togglePopular() {
   var carousel = $(".popular-carousel");
@@ -617,13 +616,13 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function() {
       var drop = button.parents(".loader").parent();
-      if (drop.hasClass("episodes-content")) {
+      if (drop.is("episodes-content")) {
         url = url.replace("showpod", "episodes");
         getResults([url, drop, false]);
       } else if (drop.length) {
         var podid = drop.children(".results.showpod").data("podid");
         if (podid) {
-          var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
+          var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
           getResults([url, drop, false, getResults, args]);          
         } else {
           getResults([url, drop, false]);
@@ -656,7 +655,7 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = button.parents(".episodes-content");
+      var drop = button.parents("#episodes-content");
       getResults([url, drop, false]);
     }, 250);
   })
@@ -668,7 +667,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
+      var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {
@@ -898,7 +897,13 @@ $(document)
   })
   .on("click", ".showpod-button", function (e) {
     e.preventDefault();
-    $(".showpod-collapse").collapse("toggle");
+
+    // if button not pressed
+    if ($(this).children(".d-none.active").length) {
+      $(".showpod-content").toggleClass("d-none");
+      toggleButtons($(".showpod-button"));
+    }
+    scrollTo($(".showpod-content:not(.d-none)"));
   })
   .on("click", ".popular-button", function(e) {
     e.preventDefault();
@@ -963,16 +968,19 @@ $(document)
       var cut = 16;
       if (currentSlide < cut && nextSlide >= cut ||
           currentSlide >= cut && nextSlide < cut) {
-        togglePopularButtons();
+        toggleButtons($(".popular-button"));
+        $(".popular .results-bar span").toggleClass("d-none");
       }
     } else {
       // cut-off point + halfway point
       cut = cut + half;
       if (currentSlide < cut && nextSlide >= cut ||
         currentSlide >= cut && nextSlide < cut) {
-        togglePopularButtons();
+        toggleButtons($(".popular-button"));
+        $(".popular .results-bar span").toggleClass("d-none");
       }
     }
+    
   })  
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
@@ -1077,7 +1085,7 @@ $(window)
       $("#center-stage").html(state.context);
       titleUpdater();
       if (context.hasClass("showpod")) {
-        drop = $(".episodes-content");
+        drop = $("#episodes-content");
         url = url.replace("showpod", "episodes");
         getResults([url, drop, false]);
       }

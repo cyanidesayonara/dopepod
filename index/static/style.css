@@ -552,6 +552,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 /* EPISODES */
+#episodes-content {
+  position: relative;
+}
 .episode-hidden {
   padding: 0 !important;
 }
@@ -640,9 +643,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .dope-options {
   padding: 0;
   border-bottom: 2px solid rgba(0, 191, 165, .3);
-}
-.episodes-content {
-  position: relative;
 }
 
 /* DOPE-RESULT */
@@ -917,6 +917,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   position: absolute;
   top: 160px;
   width: 84px;
+  left: calc(50% - 42px);
   left: calc(50% - 52px);
   animation: fadeIn .5s ease 15s forwards;
   -webkit-animation: fadeIn .5s ease 15s forwards;
@@ -947,7 +948,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   height: 130px;
   width: 130px;
   top: 20px;
-  left: calc(50% - 75px);
+  left: calc(50% - 65px);
   animation: spin 1.5s ease-in-out .25s infinite;
   -webkit-animation: spin 1.5s ease-in-out .25s infinite;
 }
@@ -1118,12 +1119,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     border-left: none;
     border-right: none;
     border-radius: unset;
-  }
-  .reload-button {
-    left: calc(50% - 42px);
-  }
-  .spinner {
-    left: calc(50% - 65px);
   }
 }
 /* Extra small devices (phones, up to 480px) */

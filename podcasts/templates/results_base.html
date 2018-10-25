@@ -28,11 +28,11 @@
       {% elif results.view == "playlist" %}
         {% include "playlist.min.html" %}
       {% elif results.view == "showpod" %}
-        <div class="row reviews-content">
-          {% include "reviews.min.html" %}
-        </div>
-        <div class="row episodes-content">
+        <div class="row showpod-content" id="episodes-content">
           {% include "episodes.min.html" %}
+        </div>
+        <div class="row showpod-content d-none" id="reviews-content">
+          {% include "reviews.min.html" %}
         </div>
       {% elif results.view == "previous"%}
         {% include "previous.min.html" %}

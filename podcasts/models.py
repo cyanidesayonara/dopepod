@@ -623,9 +623,9 @@ class Podcast(models.Model):
 
 
         for genre in genres:
-            # list of episodes parsed from itunes charts
+            # list of podcasts parsed from itunes charts
             podcasts = Podcast.parse_itunes_charts(genre)
-
+            
             # set ranks to None
             if podcasts:
                 if genre:
@@ -637,6 +637,7 @@ class Podcast(models.Model):
                         podcast.itunes_rank = None
                         podcast.save()
 
+            # rank podcasts
             for i, podcast in enumerate(podcasts, start=1):
                 if genre:
                     podcast.itunes_genre_rank = i
