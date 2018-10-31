@@ -231,7 +231,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   position: relative;
 }
 /* sticky-kit creates this sibling div which blocks pointer-events */
-.drop+div {
+.drop+div:not(.drop) {
   z-index: -1;
 }
 #splash {
