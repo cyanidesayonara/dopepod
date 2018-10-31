@@ -57,6 +57,31 @@
             <i class="fas fa-bars"></i>
           </span>
         </a>
+        {% if user.is_authenticated %}
+          <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="podid[]" value="{{ podcast.object.podid }}" />
+            {% if podcast.object.is_subscribed %}
+              <button class="btn-dope sub-button" type="submit" title="Unsubscribe">
+                <span class="active">
+                  Unsubscribe
+                </span>
+                <span>
+                  <i class="fas fa-times"></i>
+                </span>
+              </button>
+            {% else %}
+          <button class="btn-dope sub-button" type="submit" title="Subscribe">
+            <span class="active">
+              Subscribe
+            </span>
+            <span>
+              <i class="fas fa-check"></i>
+            </span>
+          </button>
+            {% endif %}
+          </form>
+        {% endif %}
       </div>
     </div>
   {% endfor %}

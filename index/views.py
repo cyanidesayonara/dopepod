@@ -61,7 +61,7 @@ def get_splash(context):
 def get_dashboard(context, user):
     results = {
         "view": "dashboard",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Dashboard",
     }
     results = get_donuts(results, user)
@@ -71,11 +71,16 @@ def get_dashboard(context, user):
     return context
 
 def render_non_ajax(request, template, context):
+    user = request.user
     last_seen, cookie = get_last_seen(request.session)
     url = request.get_full_path()
 
     previous = Episode.get_previous()
     charts = Podcast.search(url=url, provider="dopepod", view="charts")
+
+    if user.is_authenticated:
+        for podcast in charts["podcasts"]:
+            podcast.object.is_subscribed(user)
 
     if cache.get("listen"):
         listen = {}
@@ -89,14 +94,22 @@ def render_non_ajax(request, template, context):
     else:
         popular = Podcast.get_popular()
     
-    context["results"]["extend"] = True
+    if not context["results"]:
+        context = get_splash(context)
+
     context.update({
-        "listen": listen,
         "popular": popular,
         "charts": charts,
         "previous": previous,
         "cookie_banner": cookie,
     })
+
+    if user.is_authenticated:
+        context["subscriptions"] = Subscription.get_subscriptions(user)
+        context["playlist"] = Episode.get_playlist(user)
+    
+    context["results"]["extend"] = True
+    
     return render(request, template, context)
 
 def get_settings_errors(context, user_form, profile_form):
@@ -233,7 +246,7 @@ def get_search_results(request, api=False):
             show = 50
     else:
         # get view
-        view = request.GET.get("view", "list")
+        view = request.GET.get("view", "grid")
 
         # page
         page = request.GET.get("page", None)
@@ -284,7 +297,7 @@ def get_showpod_results(podid, user=None, count=None, api=None):
             "view": "showpod",
             "podcast": podcast,
             "options": True,
-            "extra_options": True,
+            "extra_options": "all",
             "header": podcast.title,
         }
         podcast.is_subscribed(user)
@@ -299,14 +312,14 @@ def get_settings_results():
         "header": "Settings",
         "view": "settings",
         "options": True,
-        "extra_options": True,
+        "extra_options": "all",
     }
     return results
 
 def get_reset_password_results():
     results = {
         "view": "reset_password",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Reset Password",
     }
     return results
@@ -314,7 +327,7 @@ def get_reset_password_results():
 def get_password_reset_results():
     results = {
         "view": "password_reset",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Password Reset",
     }
     return results
@@ -322,7 +335,7 @@ def get_password_reset_results():
 def get_confirm_email_results():
     results = {
         "view": "confirm_email",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Email Confirmed",
     }
     return results
@@ -330,7 +343,7 @@ def get_confirm_email_results():
 def get_privacy_results():
     results = {
         "view": "privacy",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Privacy Policy",
     }
     return results
@@ -338,7 +351,7 @@ def get_privacy_results():
 def get_terms_results():
     results = {
         "view": "terms",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Terms of Service",
     }
     return results
@@ -346,7 +359,7 @@ def get_terms_results():
 def get_contact_results():
     results = {
         "view": "contact",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "Contact",
     }
     return results
@@ -354,7 +367,7 @@ def get_contact_results():
 def get_api_results():
     results = {
         "view": "api",
-        "extra_options": True,
+        "extra_options": "all",
         "header": "API",
         "languages": Language.get_languages(),
         "genres": Genre.get_primary_genres(),
@@ -405,16 +418,9 @@ def index(request):
         context = {
             "view": view,
         }
+        context = get_splash(context)
         if request.is_ajax():
-            if user.is_authenticated:
-                context = get_dashboard(context, user)
-            else:
-                context = get_splash(context)
             return render(request, template, context)
-        if user.is_authenticated:
-            context = get_dashboard(context, user)
-        else:
-            context = get_splash(context)
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -445,21 +451,22 @@ def charts(request):
 
         url = request.get_full_path()
 
-        results = Podcast.search(
-            url=url, provider=provider, genre=genre, language=language, view="charts"
-        )
-
-        context = {
-            "results": results,
-        }
+        context = {}
 
         if request.is_ajax():
+            results = Podcast.search(
+                url=url, provider=provider, genre=genre, language=language, view="charts"
+            )
+
+            if user.is_authenticated:
+                for podcast in results["podcasts"]:
+                    podcast.object.is_subscribed(user)
+
+            context.update({
+                "results": results,
+            })
             return render(request, template, context)
-        if user.is_authenticated:
-            results["view"] = "dashboard"
-        else:
-            results["view"] = "splash"
-        return render_non_ajax(request, template, context)
+        return redirect("/")
 
 @vary_on_headers("Accept")
 def search(request):
@@ -494,40 +501,43 @@ def subscriptions(request):
         template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
-            results = Subscription.get_subscriptions(user)
-            context = {
-                "results": results,
-            }
             if request.is_ajax():
+                results = Subscription.get_subscriptions(user)
+                context = {
+                    "results": results,
+                }
                 return render(request, template, context)
-            return render_non_ajax(request, template, context)
         return redirect("/")
 
     if request.method == "POST":
         template = "results_base.min.html"
         user = request.user
         if user.is_authenticated:
+            
             try:
-                podids = request.POST.getlist("podids[]")
-                if podids:
-                    for podid in podids:
-                        podcast = Podcast.objects.get(podid=int(podid))
-                        podcast.subscribe_or_unsubscribe(user)
-                    results = Subscription.get_subscriptions(user)
-                else:
-                    podid = int(request.POST.get("podids"))
-                    results = get_showpod_results(podid, user)
-                    results["podcast"].subscribe_or_unsubscribe(user)
-            except (ValueError, KeyError, TypeError, Podcast.DoesNotExist):
+                podids = [request.POST["podid"]]
+            except KeyError:
+                try:
+                    podids = request.POST.getlist("podid[]")
+                except KeyError:
+                    raise Http404()
+
+            try:
+                for podid in podids:
+                    podcast = Podcast.objects.get(podid=int(podid))
+                    podcast.subscribe_or_unsubscribe(user)
+            except (ValueError, TypeError, Podcast.DoesNotExist):
                 raise Http404()
+
             if request.is_ajax():
+                results = Subscription.get_subscriptions(user)
                 context = {
                     "results": results,
                 }
                 return render(request, template, context)
-            if not podids:
+            
+            if "showpod" in request.path:
                 return redirect(podcast.get_absolute_url())
-            return redirect("/subscriptions/")
     return redirect("/")
 
 @vary_on_headers("Accept")
@@ -584,14 +594,14 @@ def playlist(request):
     if request.method == "GET":
         template = "results_base.min.html"
         user = request.user
+        
         if user.is_authenticated:
-            results = Episode.get_playlist(user)
-            context = {
-                "results": results,
-            }
             if request.is_ajax():
+                results = Episode.get_playlist(user)
+                context = {
+                    "results": results,
+                }
                 return render(request, template, context)
-            return render_non_ajax(request, template, context)
         return redirect("/")
 
     if request.method == "POST":
@@ -705,6 +715,7 @@ def settings(request):
             if request.is_ajax():
                 return render(request, template, context)
             return render_non_ajax(request, template, context)
+
         if request.method == "POST":
             context, valid = post_settings_forms(context, request)
             if valid:
@@ -788,7 +799,7 @@ def login(request):
         user = request.user
         if response.status_code == 200:
             if user.is_authenticated:
-                context = get_dashboard(context, user)
+                context = get_splash(context)
                 return render(request, template, context)
             context.update({
                 "message": "You must confirm your email before logging in."
@@ -983,6 +994,6 @@ def tryout(request):
         template = "results_base.min.html"
         user = request.user
         context = {}
-        context = get_dashboard(context, user)
+        context = get_splash(context)
         return render(request, template, context)
     return redirect("/")

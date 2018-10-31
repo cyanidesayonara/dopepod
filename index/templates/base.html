@@ -42,23 +42,26 @@
   <link rel="stylesheet" href="{% static 'style.min.css' %}" />
 </head>
 <body class="{% if user.profile.theme %}{{ user.profile.theme }}{% else %}light{% endif %}">
-  <!-- SCROLL UP -->
-  <button class="scroll-up d-none" title="Scroll Up">
-    <i class="fas fa-angle-up fa-lg"></i>
-  </button>
   <!-- DOPEBAR -->
   <nav id="dopebar-wrapper">
     {% include "dopebar.min.html" %}
   </nav>
   <!-- MAIN CONTENT -->
-  <div class="container" id="main-wrapper">
-    <div class="row">
-      <div class="col-12 order-1 order--2" id="main">
+  <div class="container-fluid">
+    <div class="row" id="main-wrapper">
+      <div class="col-12 order-1 col-lg-3 order-lg-1">
+        <div class="row drop sticky" id="subscriptions">
+          {% if user.is_authenticated %}
+            {% if subscriptions %} {% with subscriptions as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-12 order-3 col-lg-6 order-lg-2">
         <!-- CENTER STAGE -->
-        <div class="row" id="center-stage">
+        <div class="row drop" id="center-stage">
           {% block center-stage %} {% endblock %}
         </div>
-        <div class="row" id="search">
+        <div class="row drop" id="search">
           <div class="col-12 results color-2 search">
             <div class="row results-bar color-4">
               <div class="col-12 px-0">
@@ -70,20 +73,29 @@
             </div>
           </div>
         </div>
-        <div class="row" id="popular">
+        <div class="row drop" id="popular">
           {% if popular %} {% with popular as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
         </div>
-      </div>
-      <div class="col-12 order-3 col-lg-6 order-lg-2" id="left">
-        <!-- CHARTS -->
-        <div class="row" id="charts">
-          {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <!-- CHARTS -->
+            <div class="row drop" id="charts">
+              {% if charts %} {% with charts as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <!-- LAST PLAYED -->
+            <div class="row drop" id="previous">
+              {% if previous %} {% with previous as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-12 order-2 col-lg-6 order-lg-3" id="right">
-        <!-- LAST PLAYED -->
-        <div class="row" id="previous">
-          {% if previous %} {% with previous as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+      <div class="col-12 order-2 col-lg-3 order-lg-3">
+        <div class="row drop sticky" id="playlist">
+          {% if user.is_authenticated %}
+            {% if playlist %} {% with playlist as results %} {% include "results_base.min.html" %} {% endwith %} {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>

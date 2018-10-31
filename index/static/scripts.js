@@ -42,7 +42,7 @@ function trackMe(url) {
 };
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "previous", "change-password"];
+  var urls = ["episodes", "dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -61,7 +61,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "previous", "change-password"];
+  var urls = ["dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -138,11 +138,14 @@ function refreshCookie() {
 function refreshPage() {
   getResults(["/dopebar/", "#dopebar-wrapper", false], true);
   getResults(["/previous/", "#previous", false], true);
+  getResults(["/charts/", "#charts", false], true);
+  getResults(["/subscriptions/", "#subscriptions", false], true);
+  getResults(["/playlist/", "#playlist", false], true);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "previous"];
+    var urls = ["dopebar", "charts", "episodes", "previous", "subscriptions", "playlist"];
     for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -247,10 +250,10 @@ function scrollSpy() {
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
-    $(".scroll-up").addClass("d-sm-block");
+    $("#scroll-up").addClass("d-inline-block");
   }
   else {
-    $(".scroll-up").removeClass("d-sm-block");
+    $("#scroll-up").removeClass("d-inline-block");
   }
 };
 function scrollToTop() {
@@ -371,37 +374,33 @@ function postLogin(form) {
       }
     });
 };
-function postSubscriptions(podids, button) {
+function postSubscriptions(podid, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
-    var drop = $("#center-stage");
+    var drop = $("#subscriptions");
     $.ajax({
       method: "POST",
       url: "/subscriptions/",
       data: {
-        "podids": podids,
+        "podid": podid,
       },
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      drop.html(xhr.responseText);
-      replaceState("/");
     })
     .done(function(response) {
       drop.html(response);
-      if (drop.children().hasClass("showpod")) {
-        var url = "/episodes/" + podids + "/";
-        drop = drop.find("#episodes-content");
-        getResults([url, drop, false]);
+      var podid = $(".results.showpod").data("podid");
+      if (podid) {
+        var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
+        getResults(["/showpod/" + podid, "#center-stage", false, getResults, args]); 
       }
-      else {
-        scrollTo(drop);
-      }
+      getResults(["/charts/", "#charts", false]);
     });
     button.html(getButtonLoading());    
   }, 250);
 };
 function postPlaylist(data, mode, button) {
-  var drop = $("#center-stage");
+  var drop = $("#playlist");
   try {
     var text = button[0].innerHTML;
   } catch (e) {
@@ -443,17 +442,13 @@ function postPlaylist(data, mode, button) {
           var text = $("#player-wrapper h1 span");
           scrollText(box, text);
         }, 1000);
-        if (drop.children(".playlist").length) {
-          getResults([url, drop, false]);
-        }
+        getResults([url, drop, false]);
       }
       else {
         if (mode == "add") {
           button.html(text);
         }
-        if (drop.children(".playlist").length) {
-          drop.html(response);
-        }
+        drop.html(response);
       }
     });
   try {
@@ -724,7 +719,7 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");
+    var drop = $("#subscriptions");
     drop.find(".results-collapse").collapse("show");
     if (!drop.children(".subscriptions").length) {
       getResults([url, drop, true]);
@@ -748,7 +743,7 @@ $(document)
   .on("click", ".playlist-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");
+    var drop = $("#playlist");
     drop.find(".results-collapse").collapse("show");
     if (!drop.children(".playlist").length) {
       getResults([url, drop, true]);
@@ -814,13 +809,9 @@ $(document)
     e.preventDefault();
     var form = $(this);
     var button = form.children("button[type=submit]");
-    var podids = form.children("input[name=podid]").val();
-    if (!podids) {
-      podids = [];
-      podids[0] = form.children("input[name^=podids]").val();
-    }
-    if (podids) {
-      postSubscriptions(podids, button);
+    var podid = form.children("input[name^=podid]").val();
+    if (podid) {
+      postSubscriptions(podid, button);
     }
   })
   // unsubscribe one or more podcasts
@@ -830,18 +821,18 @@ $(document)
     var button = $(this);
     var selected = button.parents(".results-collapse").find(".selectable.selected");
     if (selected.length) {
-      // array of all selected podids
-      var podids = [];
+      // array of all selected podid
+      var podid = [];
       selected.each(function(i, subscription) {
-        podids[i] = $(subscription).data("podid");
+        podid[i] = $(subscription).data("podid");
       })
     }
     // if nothing selected, do nothing
     else {
       return;
     }
-    if (podids) {
-      postSubscriptions(podids, button);
+    if (podid) {
+      postSubscriptions(podid, button);
     }
   })
   // playlist - play, add, move, or delete episode
@@ -930,7 +921,7 @@ $(document)
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
-    $(".more-collapse.show").collapse("hide");
+    $(this).parents(".results").find(".more-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".previous-collapse", function(e) {
     e.stopPropagation();
@@ -1032,7 +1023,7 @@ $(document)
   .on("click", "#dopebar-collapse", function(e) {
     e.stopPropagation();
   })
-  .on("click", ".scroll-up", function() {
+  .on("click", "#scroll-up", function() {
     scrollToTop();
   })
   .on("click", ".select", function() {
@@ -1070,7 +1061,7 @@ $(window)
     if (state) {
       // if url in urls, reload results (and don't push)
       var url = state.url;
-      var urls = ["settings", "playlist", "subscriptions"];
+      var urls = ["settings"];
       var context = $(state.context);
       for (var i = 0; i < urls.length; i++) {
         if (url.includes(urls[i])) {

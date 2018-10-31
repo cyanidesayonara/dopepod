@@ -331,11 +331,9 @@ class Podcast(models.Model):
                 # view button
                 url = make_url(url=url, provider=provider, q=q, genre=genre, language=language,
                             show=show, page=page, order=order, view=view)
+
                 if not view:
-                    if q and len(q) > 1:
-                        view = "grid"
-                    else:
-                        view = "list" 
+                    view = "grid"
 
                     f = furl(url)
                     if view == "grid":
@@ -398,7 +396,7 @@ class Podcast(models.Model):
             else:
                 num_pages = int(count / show) + (count % show > 0)
 
-                spread = 3
+                spread = 2
                 if num_pages > 1:
                     pages = range((page - spread if page - spread > 1 else 1), (page + spread if page + spread <= num_pages else num_pages) + 1)
                     pages_urls = []
@@ -456,10 +454,11 @@ class Podcast(models.Model):
                 results["podcasts3"] = podcasts[two:three]
                 results["podcasts4"] = podcasts[three:]
                 results["options"] = True
-                results["extra_options"] = True
+                results["extra_options"] = "all"
 
             # finally (finally!) cache results so we don"t have to go thru this every time
             cache.set(url, results, 60 * 60 * 24)
+
             return results
 
     def subscribe_or_unsubscribe(self, user):
@@ -779,7 +778,7 @@ class Subscription(models.Model):
             "podcasts": subscriptions,
             "header": "Subscriptions",
             "view": "subscriptions",
-            "extra_options": True,
+            "extra_options": "min",
         }
         if subscriptions:
             results.update({
@@ -1290,8 +1289,12 @@ class Episode(models.Model):
             "episodes": episodes,
             "header": "Playlist",
             "view": "playlist",
-            "extra_options": True,
+            "extra_options": "min",
         }
+        if episodes:
+            results.update({
+                "options": True,
+            })
         return results
 
 class Filterable(models.Model):

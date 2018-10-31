@@ -1,69 +1,78 @@
 <div class="row">
   {% if results.podcasts %}
-    <div class="col-12">
-      <div class="row dope-results">
-        {% for subscription in results.podcasts %}
-          {% with subscription.podcast as podcast %}
-            <div class="col-4 col-md-3 col-lg-2 dope-result selectable" data-podid="{{ podcast.podid }}">
-              <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-                <img class="img-fluid lazyload" data-src="//{{ podcast.artworkUrl }}200x200bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}200x200bb.jpg'"
-                  title="{{ podcast.title }}" width="auto" height="auto" alt="Podcast artwork" />
-                <h1>
-                  {{ podcast.title }}
-                </h1>
-                <h2>
-                  <span class="by">
-                    by
-                  </span>
-                  {{ podcast.artist }}
-                </h2>
-                <span>
-                  Last updated:
+    {% for subscription in results.podcasts %}
+      {% with subscription.podcast as podcast %}
+        <div class="col-12 dope-result selectable expandable{% if forloop.counter|divisibleby:2 %} color-3{% endif %}" data-podid="{{ podcast.podid }}">
+          <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+            <img class="img-fluid lazyload" data-src="//{{ podcast.artworkUrl }}100x100bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}100x100bb.jpg'" title="{{ podcast.title }}" width="auto" height="auto" alt="Podcast artwork" />
+          </a>
+          <h1>
+            <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}" title="{{ podcast.title }}">
+              {{ podcast.title }}
+            </a>
+          </h1>
+          <h2>
+            <span class="by">
+              by
+            </span>
+            {{ podcast.artist }}
+          </h2>
+          <ul class="dope-list">
+            <li>
+              <span>
+                Last updated:
+              </span>
+              {% if subscription.last_updated %}
+                <span class="date" data-utc="{{ subscription.last_updated|date:'U' }}">
+                  {{ subscription.last_updated|date:"d M Y H:i" }}
                 </span>
-                {% if subscription.last_updated %}
-                  <span class="date" data-utc="{{ subscription.last_updated|date:'U' }}">
-                    {{ subscription.last_updated|date:"d M Y H:i" }}
-                  </span>
-                {% else %}
-                  <span>
-                    N/A
-                  </span>
-                {% endif %}
-              </a>
-              <div class="dope-buttons dope-buttons-r px-0">
-                <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
-                  {% csrf_token %}
-                  <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
-                  <button class="btn-dope" type="submit" title="Unsubscribe">
-                    <span class="active">
-                      Unsubscribe
-                    </span>
-                    <span>
-                      <i class="fas fa-times"></i>
-                    </span>
-                  </button>
-                </form>
-                <button class="btn-dope select" title="Select">
-                  <span class="active">
-                    Select
-                  </span>
-                  <span>
-                    <i class="fas fa-check"></i>
-                  </span>
-                </button>
-              </div>
-            </div>
-          {% endwith %}
-        {% endfor %}
-      </div>
-    </div>
+              {% else %}
+                <span>
+                  Never
+                </span>
+              {% endif %}
+            </li>
+            <li>
+              <span>
+                New episodes
+              </span>
+              <span>
+                {{ subscription.new_episodes }}
+              </span>
+            </li>
+          </ul>
+          <div class="dope-buttons dope-buttons-r px-0">
+            <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />
+              <button class="btn-dope" type="submit" title="Unsubscribe">
+                <span class="active">
+                  Unsubscribe
+                </span>
+                <span>
+                  <i class="fas fa-times"></i>
+                </span>
+              </button>
+            </form>
+            <button class="btn-dope select" title="Select">
+              <span class="active">
+                Select
+              </span>
+              <span>
+                <i class="fas fa-check"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      {% endwith %}
+    {% endfor %}
   {% else %}
     <div class="col-12 dope-wrapper">
       <p>
         No subscriptions.
       </p>
       <p>
-        <a class="browse-link" href="{% url 'search' %}?view=grid">
+        <a class="browse-link" href="{% url 'search' %}">
           Find podcasts!
         </a>
       </p>

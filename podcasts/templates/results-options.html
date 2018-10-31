@@ -7,7 +7,7 @@
           {% if user.is_authenticated %}
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
               {% csrf_token %}
-              <input type="hidden" name="podid" value="{{ results.podcast.podid }}">
+              <input type="hidden" name="podid[]" value="{{ results.podcast.podid }}" />
               {% if results.podcast.is_subscribed %}
               <button class="btn-dope sub-button" type="submit" title="Unsubscribe">
                 <span class="active">
@@ -68,6 +68,15 @@
               <i class="fas fa-check"></i>
             </span>
           </a>
+        {% elif results.view == "playlist" %}
+          <button class="btn-dope" onclick="playNext()">
+            <span class="active">
+              Play next
+            </span>
+            <span>
+              <i class="fas fa-play"></i>
+            </span>
+          </button>
         {% elif results.view == "settings" %}
           <a class="btn-dope" data-toggle="collapse" href="#general-collapse" aria-expanded="true" aria-controls="general-collapse">
             <span class="active">
