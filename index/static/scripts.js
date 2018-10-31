@@ -167,7 +167,9 @@ function enableLoader(drop, url) {
 };
 function disableLoader(drop) {
   drop.children(":not(.loader)").removeClass("blurred");
-  drop.find(".loader:last").fadeOut("slow");
+  var loader = drop.find(".loader:last");
+  loader.fadeOut("slow");
+  loader.filter(".reload-button").attr("href", url);
 };
 // RESULTS
 function getResults(args, no_loader, no_push) {
@@ -246,6 +248,7 @@ function noshow(podid) {
 function scrollSpy() {
   scrollUp();
   playerUnfixer();
+  columnFixer();
 };
 function scrollUp() {
   var scroll = $(window).scrollTop();
@@ -289,6 +292,11 @@ function playerUnfixer() {
   } else {
     $("#player").removeClass("fixed-bottom");
   }
+};
+function columnFixer() {
+  $("#subscriptions, #playlist").stick_in_parent({
+    offset_top: 44
+  });
 };
 function themeChanger(theme) {
   var themes = ["light", "dark", "christmas"];
