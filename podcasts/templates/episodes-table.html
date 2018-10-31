@@ -55,7 +55,7 @@
           </span>
         </td>
       </tr>
-      <tr class="{% if results.view == 'playlist' and forloop.last %}noborder{% endif%}">
+      <tr class="{% if results.view == 'playlist' and forloop.last or results.view == 'showpod' and not results.pages and forloop.last %}noborder{% endif%}">
         <td colspan="6" class="episode-hidden{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
           <div class="collapse fade more-collapse" id="more-collapse-{{ results.view }}-{{ episode.position }}">
             <div class="dope-result">
