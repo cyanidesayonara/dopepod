@@ -401,6 +401,7 @@ function postSubscriptions(podid, button) {
       } else {
         drop.html(response);
       }
+      drop.trigger("sticky_kit:recalc");
       var podid = $(".results.showpod").data("podid");
       if (podid) {
         var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
@@ -464,6 +465,7 @@ function postPlaylist(data, mode, button) {
           button.html(text);
         }
         drop.find(".results-collapse").html($(response).find(".results-collapse").children());
+        drop.trigger("sticky_kit:recalc");
       }
     });
   try {
