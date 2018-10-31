@@ -538,7 +538,7 @@ def subscriptions(request):
             
             if "showpod" in request.path:
                 return redirect(podcast.get_absolute_url())
-    return redirect("/")
+    raise Http404()
 
 @vary_on_headers("Accept")
 def privacy(request):
@@ -602,7 +602,7 @@ def playlist(request):
                     "results": results,
                 }
                 return render(request, template, context)
-        return redirect("/")
+        raise Http404()
 
     if request.method == "POST":
         user = request.user
@@ -659,7 +659,6 @@ def playlist(request):
                 return render_non_ajax(request, template, context)
         except (KeyError, TypeError):
             raise Http404()
-    return redirect("/")
 
 @vary_on_headers("Accept")
 def showpod(request, podid):

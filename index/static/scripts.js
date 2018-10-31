@@ -430,7 +430,8 @@ function postPlaylist(data, mode, button) {
     })
     .done(function (response) {
       if (mode == "play") {
-        $("#player").html(response);
+        var player = $("#player");
+        player.html(response);
         titleUpdater();
         try {
           button.html(text);
@@ -438,11 +439,13 @@ function postPlaylist(data, mode, button) {
         }
         // gotta wait a sec here
         setTimeout(function() {
-          var box = $("#player-wrapper h1");
-          var text = $("#player-wrapper h1 span");
+          var box = player.find("h1");
+          var text = player.find("h1 span");
           scrollText(box, text);
         }, 1000);
-        getResults([url, drop, false]);
+        if (drop.children().length) {
+          getResults([url, drop, false]);
+        }
       }
       else {
         if (mode == "add") {

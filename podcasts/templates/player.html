@@ -1,5 +1,5 @@
 <div class="container position-relative">
-  <div class="col-12 col-lg-4 color-1" id="player-wrapper">
+  <div class="col-12 col-lg-4 color-1" id="player-wrapper"{% if user.is_authenticated %} data-auth="true"{% endif %}>
     <div class="player-content">
       <div class="collapse fade" id="player-close-collapse">
         <div class="dope-buttons dope-buttons-c pt-0">
