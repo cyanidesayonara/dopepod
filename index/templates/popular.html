@@ -16,7 +16,7 @@
               {% for podcast in genre.podcasts %}
                 <div class="col-4 col-lg-2 dope-result">
                   <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-                    <img class="img-fluid" src="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'" width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
+                    <img class="img-fluid" data-lazy="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'" width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
                     <h1>
                       {{ podcast.title }}
                     </h1>
@@ -50,7 +50,7 @@
               {% for podcast in language.podcasts %}
               <div class="col-4 col-lg-2 dope-result">
                 <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
-                  <img class="img-fluid" src="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'" width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
+                  <img class="img-fluid" data-lazy="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'" width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
                   <h1>
                     {{ podcast.title }}
                   </h1>

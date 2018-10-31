@@ -1,14 +1,14 @@
 <div class="color-1" id="dopebar" {% if request.is_ajax %}data-theme="{{ user.profile.theme }}" {% endif %}>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12 col-lg-6 offset-lg-3 ">
+      <div class="col-12 col-xl-6 offset-xl-3">
         <div class="row">
-          <div class="col-3 col-lg-5" id="dopebar-l">
-            <button class="dope-link d-inline-block d-xl-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false"
+          <div class="col-3 col-md-5" id="dopebar-l">
+            <button class="dope-link d-inline-block d-lg-none" data-toggle="collapse" href="#dopebar-collapse" aria-expanded="false"
               aria-controls="results-collapse-{{ results.drop }}" aria-label="dopebar-collapse" title="Expand">
               <i class="fas fa-bars"></i>
             </button>
-            <ul class="d-none d-xl-inline-block">
+            <ul class="d-none d-lg-inline-block">
               <li>
                 <a class="dope-link browse-link" href="{% url 'search' %}">
                   Browse
@@ -40,28 +40,28 @@
               <i class="fas fa-angle-up fa-lg"></i>
             </button>
           </div>
-          <div class="col-6 col-lg-2" id="dopebar-c">
+          <div class="col-6 col-md-2" id="dopebar-c">
             <a class="dope-link index-link" href="/">
               <h1>dopepod</h1>
             </a>
           </div>
-          <div class="col-3 col-lg-5" id="dopebar-r">
+          <div class="col-3 col-md-5" id="dopebar-r">
             {% if user.is_authenticated %}
-              <form class="logout-form d-inline-block d-xl-none" method="POST" action="{% url 'logout' %}">
+              <form class="logout-form d-inline-block d-lg-none" method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button class="dope-link logout-link" type="submit" title="Logout">
                   <i class="fas fa-sign-out-alt"></i>
                 </button>
               </form>
             {% else %}
-              <a class="dope-link login-link d-xl-none" href="/?view=login" title="Login">
+              <a class="dope-link login-link d-lg-none" href="/?view=login" title="Login">
                 <i class="fas fa-sign-in-alt"></i>
               </a>
             {% endif %}
-            <button class="dope-link select-theme d-xl-none" title="Select Theme">
+            <button class="dope-link select-theme d-lg-none" title="Select Theme">
               <i class="fas fa-sun fa-lg"></i>
             </button>
-            <ul class="d-none d-xl-inline-block">
+            <ul class="d-none d-lg-inline-block">
               {% if user.is_authenticated %}
                 <li>
                   <form class="logout-form" method="POST" action="{% url 'logout' %}">
@@ -93,7 +93,7 @@
     </div>
   </div>
 </div>
-<div class="collapse d-xl-none color-1" id="dopebar-collapse">
+<div class="collapse d-lg-none color-1" id="dopebar-collapse">
   <ul>
     <li>
       {% include "search-form.min.html" %}
