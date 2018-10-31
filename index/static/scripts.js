@@ -412,7 +412,7 @@ function postSubscriptions(podid, button) {
     button.html(getButtonLoading());    
   }, 250);
 };
-function postPlaylist(data, mode, button) {
+function postPlaylist(data, mode, button, pos) {
   var drop = $("#playlist");
   try {
     var text = button[0].innerHTML;
@@ -427,6 +427,7 @@ function postPlaylist(data, mode, button) {
       enableLoader($("#player"));
     }
   }
+  console.log(pos)
   $.ajax({
     method: "POST",
     url: url,
@@ -456,7 +457,7 @@ function postPlaylist(data, mode, button) {
           var text = player.find("h1 span");
           scrollText(box, text);
         }, 1000);
-        if (drop.children().length) {
+        if (pos && drop.children().length) {
           getResults([url, drop, false]);
         }
       }
@@ -861,8 +862,9 @@ $(document)
       timeout = setTimeout(function() {
         var data = form.serialize();
         var mode = form.children("input[name=mode]").val();
+        var pos = form.children("input[name=pos]").val();
         var button = form.children("button[type=submit]");
-        postPlaylist(data, mode, button);
+        postPlaylist(data, mode, button, pos);
       }, 250);
     }
   })
@@ -1084,14 +1086,12 @@ $(window)
       var urls = ["settings"];
       var context = $(state.context);
       for (var i = 0; i < urls.length; i++) {
-        if (url.includes(urls[i])) {
+        if (url.includes(urls[i]) ||
+            context.hasClass("splash") ||
+            context.hasClass("dashboard")) {
           var drop = $("#center-stage");
           return getResults([url, drop, false], false, true);
         }
-      }
-      if (context.hasClass("splash") || context.hasClass("dashboard")) {
-        var drop = $("#center-stage");
-        return getResults([url, drop, false], false, true);
       }
       $("#center-stage").html(state.context);
       titleUpdater();
