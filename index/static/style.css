@@ -230,10 +230,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   padding: 0 10px;
   position: relative;
 }
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 44px;
+/* sticky-kit creates this sibling div which blocks pointer-events */
+.drop+div {
+  z-index: -1;
 }
 #splash {
   padding: 0;

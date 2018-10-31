@@ -396,11 +396,15 @@ function postSubscriptions(podid, button) {
     .fail(function(xhr, ajaxOptions, thrownError) {
     })
     .done(function(response) {
-      drop.html(response);
+      if (drop.children().length) {
+        drop.find(".results-collapse").html($(response).find(".results-collapse").children());
+      } else {
+        drop.html(response);
+      }
       var podid = $(".results.showpod").data("podid");
       if (podid) {
         var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
-        getResults(["/showpod/" + podid, "#center-stage", false, getResults, args]); 
+        getResults(["/showpod/" + podid, "#center-stage", false, getResults, args], false, true); 
       }
       getResults(["/charts/", "#charts", false]);
     });
@@ -459,7 +463,7 @@ function postPlaylist(data, mode, button) {
         if (mode == "add") {
           button.html(text);
         }
-        drop.html(response);
+        drop.find(".results-collapse").html($(response).find(".results-collapse").children());
       }
     });
   try {
@@ -988,6 +992,9 @@ $(document)
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
+  .on("shown.bs.collapse hidden.bs.collapse", "#subscriptions .results-collapse, #playlist .results-collapse", function (e) {
+    $(this).parents(".drop").trigger("sticky_kit:recalc");
+  })  
   .on("show.bs.collapse", ".settings-collapse", function(e) {
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
