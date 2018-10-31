@@ -402,8 +402,8 @@ function postSubscriptions(podid, button) {
         drop.html(response);
       }
       drop.trigger("sticky_kit:recalc");
-      var podid = $(".results.showpod").data("podid");
-      if (podid) {
+      var current_podid = $(".results.showpod").data("podid");
+      if (podid == current_podid) {
         var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
         getResults(["/showpod/" + podid, "#center-stage", false, getResults, args], false, true); 
       }
@@ -533,7 +533,6 @@ function initPopular() {
     .slick({
       autoplay: true,
       infinite: true,
-      adaptiveHeight: true,
       lazyload: "ondemand",
       prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
       nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
