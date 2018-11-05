@@ -1,8 +1,6 @@
 <div class="row">
   {% if results.podcasts1 %}
-    <div class="col-12 px-0">
-      {% include "pagination.min.html" %}
-    </div>
+    {% include "pagination.min.html" %}
     <div class="col-12 collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
       <div class="row dope-results">
         {% for podcast in results.podcasts1 %}
@@ -131,10 +129,9 @@
         </div>
       </div>
     </div>
-    <div class="col-12 px-0">
-      {% include "pagination.min.html" %}
-    </div>
+    {% include "pagination.min.html" %}
   {% else %}
+    {% include "pagination.min.html" %}
     <div class="col-12 dope-wrapper">
       <p>
         No results.
@@ -146,5 +143,6 @@
         </p>
       {% endif %}
     </div>
+    {% include "pagination.min.html" %}
   {% endif %}
 </div>
