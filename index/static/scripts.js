@@ -427,7 +427,6 @@ function postPlaylist(data, mode, button, pos) {
       enableLoader($("#player"));
     }
   }
-  console.log(pos)
   $.ajax({
     method: "POST",
     url: url,
