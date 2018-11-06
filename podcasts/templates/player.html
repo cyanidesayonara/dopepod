@@ -1,6 +1,6 @@
 <div class="container position-relative">
-  <div class="col-12 col-lg-4 color-1" id="player-wrapper">
-    <div>
+  <div class="col-12 col-lg-4 color-1" id="player-wrapper"{% if user.is_authenticated %} data-auth="true"{% endif %}>
+    <div class="player-content">
       <div class="collapse fade" id="player-close-collapse">
         <div class="dope-buttons dope-buttons-c pt-0">
           <p>
@@ -20,8 +20,8 @@
       </div>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
         <img class="img-fluid" src="//{{ episode.podcast.artworkUrl }}100x100bb.jpg"
-          onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" alt="{{ episode.podcast.title }}"
-          width="auto" height="auto" />
+          onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" title="{{ episode.podcast.title }}"
+          width="auto" height="auto" alt="Podcast artwork" />
       </a>
       <div class="dope-buttons dope-buttons-r p-0 float-right">
         <button class="btn-dope player-minimize" aria-expanded="true" title="Minimize">
@@ -76,17 +76,10 @@
           <i class="fas fa-ellipsis-v"></i>
         </span>
       </button>        
-      <audio class="audio" {% if user.is_authenticated %}onended="playNext()"{% else %}onended="closePlayer()"{% endif %} controls preload="metadata" autoplay>
+      <audio class="audio" onended="playNext()" controls preload="metadata" autoplay>
         <source src="{{ episode.url }}"/>
       </audio>        
     </div>
-    <div class="loader">
-      <span class="char char-1">d</span>
-      <span class="char char-2">o</span>
-      <span class="char char-3">p</span>
-      <span class="char char-4">e</span>
-      <span class="char char-5">p</span>
-      <span class="char char-6">o</span>
-    </div>
+    {% include "loader.min.html" %}
   </div>
 </div>

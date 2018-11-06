@@ -5,6 +5,11 @@ var timeout = 0;
 var previous = 0;
 var charts = 0;
 
+refreshCookie();
+dateLocalizer();
+lazyload();
+hoverDisabler();
+
 function dateLocalizer() {
   var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   $.ajax({
@@ -37,7 +42,7 @@ function trackMe(url) {
 };
 function pushState(url) {
   // return if url in urls
-  var urls = ["episodes", "dopebar", "charts", "previous", "change-password"];
+  var urls = ["episodes", "dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -56,7 +61,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  var urls = ["dopebar", "charts", "previous", "change-password"];
+  var urls = ["dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
   for (var i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -133,11 +138,14 @@ function refreshCookie() {
 function refreshPage() {
   getResults(["/dopebar/", "#dopebar-wrapper", false], true);
   getResults(["/previous/", "#previous", false], true);
+  getResults(["/charts/", "#charts", false], true);
+  getResults(["/subscriptions/", "#subscriptions", false], true);
+  getResults(["/playlist/", "#playlist", false], true);
 };
 // abort previous ajax request if url not in urls
 function checkForXHR(url) {
   if(xhr != null) {
-    var urls = ["dopebar", "charts", "episodes", "previous"];
+    var urls = ["dopebar", "charts", "episodes", "previous", "subscriptions", "playlist"];
     for (var i = 0; i < urls.length; i++) {
       if (url.includes(urls[i])) {
         return;
@@ -147,9 +155,21 @@ function checkForXHR(url) {
     xhr = null;
   }
 };
-function enableLoader(drop) {
-  drop.children(":first").addClass("loading");
-  drop.children(":last").fadeIn("slow");
+function enableLoader(drop, url) {
+  if (drop.is("#player")) {
+    drop.find(".player-content").addClass("blurred");
+  } else {
+    drop.children(":not(.loader)").addClass("blurred");
+  }
+  var loader = drop.find(".loader:last");
+  loader.fadeIn("slow");
+  loader.filter(".reload-button").attr("href", url);
+};
+function disableLoader(drop) {
+  drop.children(":not(.loader)").removeClass("blurred");
+  var loader = drop.find(".loader:last");
+  loader.fadeOut("slow");
+  loader.filter(".reload-button").attr("href", url);
 };
 // RESULTS
 function getResults(args, no_loader, no_push) {
@@ -165,7 +185,7 @@ function getResults(args, no_loader, no_push) {
   }
   if (!no_loader) {
     drop.find(".results-collapse:not(.show)").collapse("show");
-    enableLoader(drop);
+    enableLoader(drop, url);
     if (scroll) {
       if (!url.includes("/charts/") && !url.includes("/previous/")) {
         scrollTo(drop);
@@ -201,7 +221,7 @@ function getResults(args, no_loader, no_push) {
       // if page refresh, apply theme
       else if (drop.is("#dopebar-wrapper")) {
         var response = drop.children();
-        var theme = response.data("theme")
+        var theme = response.data("theme");
         response.removeData("theme");
         response.removeAttr("data-theme");
         themeChanger(theme);
@@ -226,18 +246,17 @@ function noshow(podid) {
 };
 // SCROLLIES
 function scrollSpy() {
-  $(window).scroll(function() {
-    scrollUp();
-    playerUnfixer();
-  });
+  scrollUp();
+  playerUnfixer();
+  columnFixer();
 };
 function scrollUp() {
   var scroll = $(window).scrollTop();
   if (scroll > 300) {
-    $(".scroll-up").addClass("d-sm-block");
+    $("#scroll-up").addClass("d-inline-block");
   }
   else {
-    $(".scroll-up").removeClass("d-sm-block");
+    $("#scroll-up").removeClass("d-inline-block");
   }
 };
 function scrollToTop() {
@@ -274,6 +293,11 @@ function playerUnfixer() {
     $("#player").removeClass("fixed-bottom");
   }
 };
+function columnFixer() {
+  $("#subscriptions, #playlist").stick_in_parent({
+    offset_top: 44
+  });
+};
 function themeChanger(theme) {
   var themes = ["light", "dark", "christmas"];
   for (var i = 0; i < themes.length; i++) {
@@ -294,7 +318,7 @@ function postContact(form) {
     url: url,
   })
     .fail(function (xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
+      drop.html(xhr.responseText);
       scrollToTop();
     })
     .done(function (response) {
@@ -302,7 +326,7 @@ function postContact(form) {
       scrollToTop();
       replaceState(url);
     });
-  enableLoader(drop);
+  enableLoader(drop, url);
 };
 function postSettings(form) {
   var method = form.method;
@@ -317,7 +341,7 @@ function postSettings(form) {
     url: url,
   })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
+      drop.html(xhr.responseText);
       scrollToTop();
     })
     .done(function(response) {
@@ -328,13 +352,14 @@ function postSettings(form) {
       scrollToTop();
       replaceState(url);
     });
-  enableLoader(drop);
+  enableLoader(drop, url);
 };
 function postLogin(form) {
   var method = form.method;
   var url = form.action;
   var form = $(form);
   var data = form.serialize();
+  var drop = $("#center-stage");
   form.find("button[type=submit].btn-dope").html(getButtonLoading());
   $.ajax({
       data: data,
@@ -343,51 +368,52 @@ function postLogin(form) {
     })
     // returns errors
     .fail(function(xhr, ajaxOptions, thrownError) {
-      $("#center-stage").html(xhr.responseText);
+      drop.html(xhr.responseText);
       scrollToTop();
     })
     // returns splashboard
     .done(function(response) {
-      $("#center-stage").html(response);
+      drop.html(response);
+      scrollToTop();
       // if not password reset, refresh page
       if (form.hasClass("login-form") || form.hasClass("tryout-form")) {
         refreshCookie();
         refreshPage();
       }
-      scrollToTop();
     });
 };
-function postSubscriptions(podids, button) {
+function postSubscriptions(podid, button) {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
-    var drop = $("#center-stage");
+    var drop = $("#subscriptions");
     $.ajax({
       method: "POST",
       url: "/subscriptions/",
       data: {
-        "podids": podids,
+        "podid": podid,
       },
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
-      drop.html(xhr.responseText);
-      replaceState("/");
     })
     .done(function(response) {
-      drop.html(response);
-      if (drop.children().hasClass("showpod")) {
-        var url = "/episodes/" + podids + "/";
-        drop = drop.find(".episodes-content");
-        getResults([url, drop, false]);
+      if (drop.children().length) {
+        drop.find(".results-collapse").html($(response).find(".results-collapse").children());
+      } else {
+        drop.html(response);
       }
-      else {
-        scrollTo(drop);
+      drop.trigger("sticky_kit:recalc");
+      var current_podid = $(".results.showpod").data("podid");
+      if (podid == current_podid) {
+        var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
+        getResults(["/showpod/" + podid, "#center-stage", false, getResults, args], false, true); 
       }
+      getResults(["/charts/", "#charts", false]);
     });
     button.html(getButtonLoading());    
   }, 250);
 };
-function postPlaylist(data, mode, button) {
-  var drop = $("#center-stage");
+function postPlaylist(data, mode, button, pos) {
+  var drop = $("#playlist");
   try {
     var text = button[0].innerHTML;
   } catch (e) {
@@ -398,9 +424,10 @@ function postPlaylist(data, mode, button) {
     if (wrapper.length) {
       wrapper.removeClass("minimize");
       wrapper.find("audio")[0].preload = "none";
-      enableLoader($("#player-wrapper"));
+      enableLoader($("#player"));
     }
   }
+  console.log(pos)
   $.ajax({
     method: "POST",
     url: url,
@@ -408,13 +435,17 @@ function postPlaylist(data, mode, button) {
   })
     // nothing to continue
     .fail(function(xhr, ajaxOptions, thrownError) {
-      button.html(text);
+      try {
+        button.html(text);
+      } catch (e) {
+      }
       $("#player").empty();
       // TODO if playlist fails
     })
     .done(function (response) {
       if (mode == "play") {
-        $("#player").html(response);
+        var player = $("#player");
+        player.html(response);
         titleUpdater();
         try {
           button.html(text);
@@ -422,11 +453,11 @@ function postPlaylist(data, mode, button) {
         }
         // gotta wait a sec here
         setTimeout(function() {
-          var box = $("#player-wrapper h1");
-          var text = $("#player-wrapper h1 span");
+          var box = player.find("h1");
+          var text = player.find("h1 span");
           scrollText(box, text);
         }, 1000);
-        if (drop.children(".playlist").length) {
+        if (pos && drop.children().length) {
           getResults([url, drop, false]);
         }
       }
@@ -434,9 +465,8 @@ function postPlaylist(data, mode, button) {
         if (mode == "add") {
           button.html(text);
         }
-        if (drop.children(".playlist").length) {
-          drop.html(response);
-        }
+        drop.find(".results-collapse").html($(response).find(".results-collapse").children());
+        drop.trigger("sticky_kit:recalc");
       }
     });
   try {
@@ -454,7 +484,7 @@ function playNext() {
   if (wrapper.length) {
     wrapper.removeClass("minimize");
     wrapper.find("audio")[0].preload = "none";
-    enableLoader($("#player-wrapper"));
+    enableLoader($("#player"));
   }
   // wait a sec here
   timeout = setTimeout(function() {
@@ -499,36 +529,42 @@ function hoverDisabler() {
     $("html").addClass("no-touch");
   }
 };
-function initSlick() {
-  $(".slick").slick({
-    autoplay: true,
-    adaptiveHeight: true,
-    prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-    nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-  });
+function initPopular() {
+  $(".popular-carousel")
+    .slick({
+      autoplay: true,
+      infinite: true,
+      lazyload: "ondemand",
+      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+    })
+    .show()
+    .slick("refresh");
 };
-function initSlickListen() {
-  timeout = setTimeout(function() {
-    $(".logo").toggleClass("d-none");
-    // shuffle all except first (logo)
-    var slides = $(".slick-listen .slick-slide").toArray();
-    var first = slides.shift();
-    for (var i = slides.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = slides[i];
-      slides[i] = slides[j];
-      slides[j] = temp;
-    }
-    slides.unshift(first);
-    $(".slick-listen").html(slides);
-    $(".slick-listen").slick({
+function initListen() {
+  $(".logo").toggleClass("d-none");
+  // shuffle all except first (logo)
+  var slides = $(".listen-carousel>*").toArray();
+  var first = slides.shift();
+  for (var i = slides.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = slides[i];
+    slides[i] = slides[j];
+    slides[j] = temp;
+  }
+  slides.unshift(first);
+  $(".listen-carousel")
+    .html(slides)
+    .slick({
       autoplay: true,
       fade: true,
       initialSlide: 1,
+      lazyLoad: "ondemand",
       prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
       nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
-    });
-  }, 2000);
+    })
+    .show()
+    .slick("refresh");
 };
 function removeErrors() {
   $(".errors").remove();
@@ -538,22 +574,34 @@ function lazyload() {
     elements_selector: ".lazyload"
   });
 };
+function toggleButtons(buttons) {
+  // change icons on both buttons
+  buttons.each(function() {
+    $(this).children().slice(-2).toggleClass("d-none");
+  });
+};
+function togglePopular() {
+  var carousel = $(".popular-carousel");
+  var index = carousel.slick("slickCurrentSlide");
+  var cut = 16;
+  if (index >= cut) {
+    carousel.slick("slickGoTo", 0);
+  } else if (index < cut) {
+    carousel.slick("slickGoTo", cut);
+  }
+}
 
 $(document)
   .ready(function() {
-    refreshCookie();
-    dateLocalizer();
-    lazyload();
     replaceState(window.location.href);
-    scrollToTop();
-    scrollUp();
     scrollSpy();
-    hoverDisabler();
-    initSlick();
-    initSlickListen();
-    playerUnfixer();
+    initListen();
+    initPopular();
     previousUpdater();
     chartsUpdater();
+  })
+  .scroll(function() {
+    scrollSpy();
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -573,6 +621,27 @@ $(document)
         scrollTo(drop);
       }
     }
+  })
+  .on("click", ".reload-button", function(e) {
+    e.preventDefault();
+    var url = this.href;
+    var button = $(this);
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var drop = button.parents(".loader").parent();
+      if (drop.is("episodes-content")) {
+        url = url.replace("showpod", "episodes");
+        getResults([url, drop, false]);
+      } else if (drop.length) {
+        var podid = drop.children(".results.showpod").data("podid");
+        if (podid) {
+          var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
+          getResults([url, drop, false, getResults, args]);          
+        } else {
+          getResults([url, drop, false]);
+        }
+      }
+    }, 250);
   })
   .on("click", ".options-button", function(e) {
     e.preventDefault();
@@ -599,7 +668,7 @@ $(document)
     var button = $(this);
     clearTimeout(timeout);
     timeout = setTimeout(function() {
-      var drop = button.parents(".episodes-content");
+      var drop = button.parents("#episodes-content");
       getResults([url, drop, false]);
     }, 250);
   })
@@ -611,7 +680,7 @@ $(document)
     var podid = button.data("podid");
     var drop = $("#center-stage");
     if (!(drop.children(".results").data("podid") == podid)) {
-      var args = ["/episodes/" + podid + "/", ".showpod .episodes-content", false];
+      var args = ["/episodes/" + podid + "/", ".showpod #episodes-content", false];
       getResults([url, drop, true, getResults, args]);
     }
     else {
@@ -668,7 +737,7 @@ $(document)
   .on("click", ".subscriptions-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");
+    var drop = $("#subscriptions");
     drop.find(".results-collapse").collapse("show");
     if (!drop.children(".subscriptions").length) {
       getResults([url, drop, true]);
@@ -692,7 +761,7 @@ $(document)
   .on("click", ".playlist-link", function(e) {
     e.preventDefault();
     var url = this.href;
-    var drop = $("#center-stage");
+    var drop = $("#playlist");
     drop.find(".results-collapse").collapse("show");
     if (!drop.children(".playlist").length) {
       getResults([url, drop, true]);
@@ -709,7 +778,7 @@ $(document)
     e.preventDefault();
     scrollTo($("#previous"));
   })
-  .on("click", ".privacy-link", function (e) {
+  .on("click", ".privacy-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -720,7 +789,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".terms-link", function (e) {
+  .on("click", ".terms-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -731,7 +800,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".api-link", function (e) {
+  .on("click", ".api-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -742,7 +811,7 @@ $(document)
       scrollTo(drop);
     }
   })
-  .on("click", ".contact-link", function (e) {
+  .on("click", ".contact-link", function(e) {
     e.preventDefault();
     var url = this.href;
     var drop = $("#center-stage");
@@ -758,13 +827,9 @@ $(document)
     e.preventDefault();
     var form = $(this);
     var button = form.children("button[type=submit]");
-    var podids = form.children("input[name=podid]").val();
-    if (!podids) {
-      podids = [];
-      podids[0] = form.children("input[name^=podids]").val();
-    }
-    if (podids) {
-      postSubscriptions(podids, button);
+    var podid = form.children("input[name^=podid]").val();
+    if (podid) {
+      postSubscriptions(podid, button);
     }
   })
   // unsubscribe one or more podcasts
@@ -774,18 +839,18 @@ $(document)
     var button = $(this);
     var selected = button.parents(".results-collapse").find(".selectable.selected");
     if (selected.length) {
-      // array of all selected podids
-      var podids = [];
-      selected.each(function (i, subscription) {
-        podids[i] = $(subscription).data("podid");
+      // array of all selected podid
+      var podid = [];
+      selected.each(function(i, subscription) {
+        podid[i] = $(subscription).data("podid");
       })
     }
     // if nothing selected, do nothing
     else {
       return;
     }
-    if (podids) {
-      postSubscriptions(podids, button);
+    if (podid) {
+      postSubscriptions(podid, button);
     }
   })
   // playlist - play, add, move, or delete episode
@@ -794,11 +859,12 @@ $(document)
     var form = $(this);
     if (!form.find(".button-loading").length) {
       clearTimeout(timeout);
-      timeout = setTimeout(function () {
+      timeout = setTimeout(function() {
         var data = form.serialize();
         var mode = form.children("input[name=mode]").val();
+        var pos = form.children("input[name=pos]").val();
         var button = form.children("button[type=submit]");
-        postPlaylist(data, mode, button);
+        postPlaylist(data, mode, button, pos);
       }, 250);
     }
   })
@@ -817,11 +883,11 @@ $(document)
     })
     .parents("#player-wrapper").toggleClass("minimize");
   })
-  .on("click", ".theme-button[type=submit]", function () {
+  .on("click", ".theme-button[type=submit]", function() {
     var theme = $(this).children().text().toLowerCase();
     $(this).siblings("input[name=theme]").val(theme);
   })
-  .on("submit", ".contact-form", function (e) {
+  .on("submit", ".contact-form", function(e) {
     e.preventDefault();
     postContact(this);
   })  
@@ -830,7 +896,7 @@ $(document)
     e.preventDefault();
     postSettings(this);
   })
-  .on("submit", ".convert-form", function (e) {
+  .on("submit", ".convert-form", function(e) {
     e.preventDefault();
     alert("Oops, this doesn't actually work yet. Sorry!");
   })  
@@ -839,18 +905,32 @@ $(document)
     e.preventDefault();
     postLogin(this);
   })
+  .on("click", ".showpod-button", function (e) {
+    e.preventDefault();
+
+    // if button not pressed
+    if ($(this).children(".d-none.active").length) {
+      $(".showpod-content").toggleClass("d-none");
+      toggleButtons($(".showpod-button"));
+    }
+    scrollTo($(".showpod-content:not(.d-none)"));
+  })
+  .on("click", ".popular-button", function(e) {
+    e.preventDefault();
+
+    // if button not pressed
+    if ($(this).children(".d-none.active").length) {
+      togglePopular();
+    }
+  })
   // toggle view icon & view collapse on click
   .on("click", ".view-button", function(e) {
     e.preventDefault();
-    var button = $(this).children(".btn-dope-toggle");
-    var view = button.children(".d-none").data("view");
-    button.parents(".results").attr("data-view", view)
-    button.children().toggleClass("d-none");
+    var icons = $(this).children().slice(-2);
+    var view = icons.filter(".d-none").data("view");
+    icons.parents(".results").attr("data-view", view)
+    icons.toggleClass("d-none");
     $(".view-collapse").collapse("toggle");
-  })
-  // toggle button icon on hover
-  .on("mouseenter mouseleave", ".no-touch .btn-dope", function () {
-    $(this).children(".btn-dope-toggle").children().toggleClass("d-none");
   })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function(e) {
@@ -866,42 +946,69 @@ $(document)
     e.stopPropagation();
     $(".previous-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".splash-play-collapse", function (e) {
+  .on("show.bs.collapse", ".splash-play-collapse", function(e) {
     e.stopPropagation();
-    $(".slick-listen").slick("slickPause");
+    $(".listen-carousel").slick("slickPause");
   })
-  .on("hide.bs.collapse", ".splash-play-collapse", function (e) {
+  .on("hide.bs.collapse", ".splash-play-collapse", function(e) {
     e.stopPropagation();
-    $(".slick-listen").slick("slickPlay");
+    $(".listen-carousel").slick("slickPlay");
   })  
-  .on("show.bs.collapse", "#splash-collapse", function () {
-    if ($(".slick-listen.slick-initialized").length) {
-      $(".slick-listen").slick("slickPlay");
-      $(".slick-listen").slick("slickGoTo", 0);
+  .on("show.bs.collapse", "#splash-collapse", function() {
+    if ($(".listen-carousel.slick-initialized").length) {
+      $(".listen-carousel").slick("slickPlay");
+      $(".listen-carousel").slick("slickGoTo", 0);
     }
   })
-  .on("hide.bs.collapse", "#splash-collapse", function () {
+  .on("hide.bs.collapse", "#splash-collapse", function() {
     $(".splash-play-collapse.show").collapse("hide");
-    if ($(".slick-listen.slick-initialized").length) {
-      $(".slick-listen").slick("slickPause");
+    if ($(".listen-carousel.slick-initialized").length) {
+      $(".listen-carousel").slick("slickPause");
     }
   })
-  .on("beforeChange", ".slick-listen", function () {
+  .on("beforeChange", ".listen-carousel", function() {
     $("#splash-play-result.expanded").removeClass("expanded");
     $(".splash-play-collapse.show").collapse("hide");
+  })
+  .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
+    // halfway point
+    var carousel = $(this);
+    var half = carousel.find(".slick-slide").length - 1;
+    if (currentSlide < half) {
+      // cut-off point after 16 genres
+      var cut = 16;
+      if (currentSlide < cut && nextSlide >= cut ||
+          currentSlide >= cut && nextSlide < cut) {
+        toggleButtons($(".popular-button"));
+        $(".popular .results-bar span").toggleClass("d-none");
+      }
+    } else {
+      // cut-off point + halfway point
+      cut = cut + half;
+      if (currentSlide < cut && nextSlide >= cut ||
+        currentSlide >= cut && nextSlide < cut) {
+        toggleButtons($(".popular-button"));
+        $(".popular .results-bar span").toggleClass("d-none");
+      }
+    }
   })
   .on("show.bs.collapse", ".options-collapse", function(e) {
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".settings-collapse", function (e) {
+  .on("shown.bs.collapse hidden.bs.collapse", ".collapse", function (e) {
+    $(".is_stuck").trigger("sticky_kit:recalc");
+  })  
+  .on("show.bs.collapse", ".settings-collapse", function(e) {
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
     removeErrors();
   })
-  .on("show.bs.collapse", ".showpod-collapse", function (e) {
-    e.stopPropagation();
-    $(".showpod-collapse.show").collapse("hide");
+  // if all settings-collapses are hidden, show first one
+  .on("hidden.bs.collapse", ".settings-collapse", function(e) {
+    if (!$(".settings .dope-options .btn-dope[aria-expanded=true]").length) {
+      $(".settings-collapse:first").collapse("show");
+    }
   })
   .on("click", ".select-theme", function(e) {
     e.preventDefault();
@@ -915,7 +1022,7 @@ $(document)
     }
     themeChanger(theme);
   })
-  .on("click", ".expandable .exp", function () {
+  .on("click", ".expandable .exp", function() {
     var button = $(this);
     button.parents(".results").find(".expandable.expanded").removeClass("expanded");
     if (button.attr("aria-expanded") === "true") {
@@ -931,14 +1038,14 @@ $(document)
     $(".q").val("");
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dope-link, .search-button", function () {
+  .on("click", "body, .dope-link, .search-button", function() {
     $("#dopebar-collapse.show").collapse("hide");
   })
   // ...except when dopebar-collapose is clicked
-  .on("click", "#dopebar-collapse", function (e) {
+  .on("click", "#dopebar-collapse", function(e) {
     e.stopPropagation();
   })
-  .on("click", ".scroll-up", function() {
+  .on("click", "#scroll-up", function() {
     scrollToTop();
   })
   .on("click", ".select", function() {
@@ -966,9 +1073,6 @@ $(document)
       button.toggleClass("active");
     }
   })
-  .on("click", ".cookie-banner-close", function() {
-    $("#player").empty();
-  })
   .on("click", ".errors .btn-dope", function() {
     removeErrors();
   });
@@ -979,17 +1083,23 @@ $(window)
     if (state) {
       // if url in urls, reload results (and don't push)
       var url = state.url;
-      var urls = ["settings", "playlist", "subscriptions"];
+      var urls = ["settings"];
+      var context = $(state.context);
       for (var i = 0; i < urls.length; i++) {
-        if (url.includes(urls[i])) {
+        if (url.includes(urls[i]) ||
+            context.hasClass("splash") ||
+            context.hasClass("dashboard")) {
           var drop = $("#center-stage");
-          getResults([url, drop, false], false, true);
-          return;
+          return getResults([url, drop, false], false, true);
         }
       }
       $("#center-stage").html(state.context);
       titleUpdater();
-      //TODO load episodes (if not loaded) on back button
+      if (context.hasClass("showpod")) {
+        drop = $("#episodes-content");
+        url = url.replace("showpod", "episodes");
+        getResults([url, drop, false]);
+      }
     }
   })
   .on("blur", function() {
@@ -1000,6 +1110,6 @@ $(window)
     previousUpdater();
     chartsUpdater();
   })
-  .on("resize", function () {
+  .on("resize", function() {
     hoverDisabler();
-  });
+  })

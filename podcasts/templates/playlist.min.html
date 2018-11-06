@@ -1,1 +1,1 @@
-<div class="row">{% if results.episodes %}<div class="col-12 px-0">{% include "episodes-table.min.html" %}</div>{% else %}<div class="col-12 dope-wrapper"><p>No episodes.</p><p><a class="browse-link" href="{% url 'search' %}?view=grid">Find podcasts!</a></p></div>{% endif %}</div>
+<div class="row">{% if results.episodes %}<div class="col-12 px-0">{% include "episodes-table.min.html" %}</div>{% else %}<div class="col-12 dope-wrapper"><p>No episodes.</p><p><a class="browse-link" href="{% url 'search' %}">Find podcasts!</a></p></div>{% endif %}</div>

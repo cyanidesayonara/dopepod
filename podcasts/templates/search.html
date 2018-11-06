@@ -1,15 +1,13 @@
 <div class="row">
   {% if results.podcasts1 %}
-    <div class="col-12 px-0">
-      {% include "pagination.min.html" %}
-    </div>
+    {% include "pagination.min.html" %}
     <div class="col-12 collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
       <div class="row dope-results">
         {% for podcast in results.podcasts1 %}
           <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-                alt="{{ podcast.object.title }}" width="auto" height="auto" />
+              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
+                title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
               <h1>
                 {{ podcast.object.title }}
               </h1>
@@ -25,8 +23,8 @@
         {% for podcast in results.podcasts2 %}
           <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-                alt="{{ podcast.object.title }}" width="auto" height="auto" />
+              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
+                title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
               <h1>
                 {{ podcast.object.title }}
               </h1>
@@ -42,8 +40,8 @@
         {% for podcast in results.podcasts3 %}
           <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-                alt="{{ podcast.object.title }}" width="auto" height="auto" />
+              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
+                title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
               <h1>
                 {{ podcast.object.title }}
               </h1>
@@ -59,8 +57,8 @@
         {% for podcast in results.podcasts4 %}
           <div class="col-4 col-md-3 col-lg-2 dope-result">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
-              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}200x200bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}200x200bb.jpg'"
-                alt="{{ podcast.object.title }}" width="auto" height="auto" />
+              <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
+                title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
               <h1>
                 {{ podcast.object.title }}
               </h1>
@@ -131,10 +129,9 @@
         </div>
       </div>
     </div>
-    <div class="col-12 px-0">
-      {% include "pagination.min.html" %}
-    </div>
+    {% include "pagination.min.html" %}
   {% else %}
+    {% include "pagination.min.html" %}
     <div class="col-12 dope-wrapper">
       <p>
         No results.
@@ -146,5 +143,6 @@
         </p>
       {% endif %}
     </div>
+    {% include "pagination.min.html" %}
   {% endif %}
 </div>

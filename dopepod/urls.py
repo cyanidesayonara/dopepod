@@ -13,25 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.urls import include, path  # For django versions from 2.0 and up
 from django.contrib import admin
 from django.conf import settings
-from django.urls import include, path  # For django versions from 2.0 and up
 
 urlpatterns = [
-    url(r'^', include('index.urls')),
-    url(r'^account/', include('allauth.urls')),
-    # url(r'^convert/', include('lazysignup.urls')),
-    url(r'^intergalac/', admin.site.urls),
-    # url(r'^blog/', include('blog.urls')),
+    path("", include("index.urls")),
+    path("account/", include("allauth.urls")),
+    # path("convert/", include("lazysignup.urls")),
+    path("intergalac/", admin.site.urls),
+    # path("blog/", include("blog.urls")),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-
-        # For django versions before 2.0:
-        # url(r'^__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
 
     ] + urlpatterns
