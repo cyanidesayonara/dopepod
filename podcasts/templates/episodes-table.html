@@ -29,7 +29,7 @@
     <tbody>
       {% for episode in results.episodes %}
         <tr class="episode-header exp{% if forloop.counter0|divisibleby:2 %} color-3{% endif %}" tabindex="0" data-toggle="collapse"
-          data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
+          data-target="#more-collapse-{{ results.view }}-{{ episode.position }}" aria-expanded="false">
           <th data-label="#" class="order color-3 clearfix" scope="row">
             <span>{{ episode.position }}</span>
           </th>
@@ -58,14 +58,14 @@
             <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
           </td>
           <td class="clearfix">
-            <span class="exp-icon" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
+            <span class="exp-icon" data-toggle="collapse" data-target="#more-collapse-{{ results.view }}-{{ episode.position }}" aria-expanded="false">
               <i class="fas fa-ellipsis-v"></i>
             </span>
           </td>
         </tr>
         <tr class="{% if not results.pages %}{% if forloop.last %}noborder{% endif %}{% endif %}">
-          <td colspan="6" class="episode-hidden{% if forloop.counter0|divisibleby:2 %} color-3{% endif %}">
-            <div class="collapse fade more-collapse" id="more-collapse{{ episode.position }}">
+          <td colspan="{% if results.view == 'playlist' %}7{% else %}6{% endif %}" class="episode-hidden{% if forloop.counter0|divisibleby:2 %} color-3{% endif %}">
+            <div class="collapse fade more-collapse" id="more-collapse-{{ results.view }}-{{ episode.position }}">
               <div class="dope-result">
                 <p>
                   Description:

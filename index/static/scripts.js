@@ -940,7 +940,7 @@ $(document)
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
-    $(".more-collapse.show").collapse("hide");
+    $(this).parents(".results").find(".more-collapse.show").collapse("hide");
   })
   .on("show.bs.collapse", ".previous-collapse", function(e) {
     e.stopPropagation();
