@@ -1,22 +1,22 @@
 <table class="table episodes-table">
   <thead>
     <tr>
-      <th class="order">
+      <th scope="col" class="order">
         <span>#</span>
       </th>
-      <th>
+      <th scope="col">
         <span>Title</span>
       </th>
-      <th class="released">
+      <th scope="col" class="released">
         <span>Released</span>
       </th>
-      <th class="size">
+      <th scope="col" class="size">
         <span>Size</span>
       </th>
-      <th class="length">
+      <th scope="col" class="length">
         <span>Length</span>
       </th>
-      <th class="expand">
+      <th scope="col" class="expand">
       </th>
     </tr>
   </thead>
@@ -24,10 +24,10 @@
     {% for episode in results.episodes %}
     <tr class="episode-header exp{% if forloop.counter0|divisibleby:2 %} color-3{% endif %}" tabindex="0" data-toggle="collapse"
       data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
-      <th class="order" scope="row">
+      <th data-label="#" class="order" scope="row">
         <span>{{ episode.position }}</span>
       </th>
-      <td class="title">
+      <td data-label="Title" class="title">
         {% if results.view == "playlist" %}
         <strong>{{ episode.podcast.title }} - </strong>
         {% endif %}
@@ -36,17 +36,17 @@
         <span class="new">NEW</span>
         {% endif %}
       </td>
-      <td>
+      <td data-label="Released">
         {% if episode.pubDate %}
         <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d M Y H:i" }}</span>
         {% else %}
         <span>N/A</span>
         {% endif %}
       </td>
-      <td>
+      <td data-label="Size">
         <span>{% if episode.size %}{{ episode.size }}{% else %}N/A{% endif %}</span>
       </td>
-      <td>
+      <td data-label="Length">
         <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
       </td>
       <td>
