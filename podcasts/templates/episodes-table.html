@@ -1,12 +1,15 @@
 <div class="col-12 px-0">
-
-</div>
   <table class="table episodes-table">
     <thead>
       <tr>
         <th scope="col" class="order">
           <span>#</span>
         </th>
+        {% if results.view == "playlist" %}
+          <th scope="col">
+            <span>Podcast</span>
+          </th>
+        {% endif %}
         <th scope="col">
           <span>Title</span>
         </th>
@@ -27,32 +30,34 @@
       {% for episode in results.episodes %}
         <tr class="episode-header exp{% if forloop.counter0|divisibleby:2 %} color-3{% endif %}" tabindex="0" data-toggle="collapse"
           data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
-          <th data-label="#" class="order" scope="row">
+          <th data-label="#" class="order color-3 clearfix" scope="row">
             <span>{{ episode.position }}</span>
           </th>
-          <td data-label="Title" class="title">
-            {% if results.view == "playlist" %}
-            <strong>{{ episode.podcast.title }} - </strong>
-            {% endif %}
+          {% if results.view == "playlist" %}
+            <td data-label="Podcast" class="title clearfix">
+              {{ episode.podcast.title }}
+            </td>
+          {% endif %}
+          <td data-label="Title" class="title clearfix">
             <span>{{ episode.title }}</span>
             {% if episode.is_new %}
             <span class="new">NEW</span>
             {% endif %}
           </td>
-          <td data-label="Released">
+          <td data-label="Released" class="clearfix">
             {% if episode.pubDate %}
             <span class="date" data-utc="{{ episode.pubDate|date:'U' }}">{{ episode.pubDate|date:"d M Y H:i" }}</span>
             {% else %}
             <span>N/A</span>
             {% endif %}
           </td>
-          <td data-label="Size">
+          <td data-label="Size" class="clearfix">
             <span>{% if episode.size %}{{ episode.size }}{% else %}N/A{% endif %}</span>
           </td>
-          <td data-label="Length">
+          <td data-label="Length" class="clearfix">
             <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
           </td>
-          <td>
+          <td class="clearfix">
             <span class="exp-icon" data-toggle="collapse" data-target="#more-collapse{{ episode.position }}" aria-expanded="false">
               <i class="fas fa-ellipsis-v"></i>
             </span>

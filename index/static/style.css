@@ -237,7 +237,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 #splash {
   padding: 0;
   min-height: 330px;
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 #splash h1 {
   font-size: 2rem;
@@ -245,7 +245,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 #splash .dope-result {
   border-radius: .25rem;
-  border: 2px solid rgba(0, 191, 165, .3);
+  border: 2px solid rgba(0, 191, 165, .2);
 }
 #splash .dope-result h1,
 #splash .dope-result h2 {
@@ -514,7 +514,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   margin-bottom: 10px;
 }
 #showpod-r ul li:not(:last-child) {
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
   margin-bottom: 10px;
 }
 #showpod-c h1 {
@@ -538,24 +538,24 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   margin: 0;
 }
 .episodes-table {
+  position: relative;
   table-layout: fixed;
   margin: 50px 0 0;
 }
 .episodes-table th,
-.episodes-table th,
 .episodes-table td {
-  padding: .3em;
+  padding: 5px;
   border: none;
 }
 .episodes-table tr:not(.episode-header),
 .episodes-table thead th {
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 .episode-header {
   cursor: pointer;
 }
-.episode-header td,
-.episode-header th {
+.episode-header th,
+.episode-header td {
   min-height: 30px;
 }
 .episodes-table .order {
@@ -580,6 +580,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   border: 2px solid rgb(0, 191, 165);
 }
 
+
 /* RESULTS BASE */
 .results {
   margin-top: 20px;
@@ -590,8 +591,8 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 .results-bar {
   padding: 0;
-  border-top: 2px solid rgba(0, 191, 165, .3);
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-top: 2px solid rgba(0, 191, 165, .2);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 .results-bar h1 {
   text-align: center;
@@ -627,7 +628,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 /* DOPE-OPTIONS */
 .dope-options {
   padding: 0;
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 
 /* DOPE-RESULT */
@@ -672,7 +673,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 #charts .dope-result:not(:first-of-type),
 #previous .dope-result:not(:first-of-type),
 #subscriptions .dope-result:not(:first-of-type) {
-  border-top: 2px solid rgba(0, 191, 165, .3);
+  border-top: 2px solid rgba(0, 191, 165, .2);
 }
 #splash .dope-result img,
 #charts .dope-result img {
@@ -790,7 +791,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   border-bottom: 2px solid rgba(0, 191, 165, 0);
 }
 .dope-results ul li a:hover {
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+  border-bottom: 2px solid rgba(0, 191, 165, .2);
 }
 
 /* SUBSCRIPTIONS */
@@ -877,7 +878,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   display: none;
 }
 .blurred {
-  min-height: 200px;
   pointer-events: none;
   -webkit-filter: blur(10px);
   filter: blur(10px);
@@ -1107,21 +1107,47 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   body {
     font-size: 12px;
   }
-  .episodes-table .order {
-    width: 40px;
+  .episodes-table thead {
+    height: 2px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 100%;
   }
-  .episodes-table .released {
-    width: 65px;
+  .episodes-table thead tr {
+    border-top: 2px solid rgba(0, 191, 165, .2);
   }
-  .episodes-table .size {
-    width: 60px;
+  .episodes-table tr {
+    display: block;
   }
-  .episodes-table .length {
-    width: 60px;
+  .episode-header {
+    padding: 5px;
   }
-  .episodes-table .expand {
-    width: 20px;
+  .episode-header td,
+  .episode-header th {
+    display: block;
+    text-align: right;
   }
+  .episode-header td {
+    border-top: 2px solid rgba(255, 255, 255, 0);
+  }
+  .episode-header[aria-expanded="true"] td,
+  .episode-header:hover td {
+    border-top: 2px solid rgba(255, 255, 255, .2);
+  }
+  .episode-header td::before,
+  .episode-header th::before {
+    content: attr(data-label);
+    float: left;
+    margin-right: 10px;
+    font-weight: 600;
+  }
+  .episode-header .order {
+    text-align: right;
+    width: auto;
+    background: none;
+  }    
   #player-wrapper {
     border-radius: 0;
   }
@@ -1151,38 +1177,49 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   }
   .episodes-table .expand {
     width: 20px;
-  }
+  }  
 }
-
-@media screen and (max-width: 600px) {
-  table thead {
-    border: none;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
+@media (min-width: 1200px) {
+  #playlist .episodes-table thead {
+    height: 2px;
+    min-height: 0;
     overflow: hidden;
     padding: 0;
     position: absolute;
-    width: 1px;
+    width: 100%;
+    bottom: 100%;
   }
-  
-  table tr {
+  #playlist .episodes-table thead tr {
+    border-top: 2px solid rgba(0, 191, 165, .2);
+  }
+  #playlist .episodes-table tr {
     display: block;
   }
-  
-  table td,
-  table th {
+  #playlist .episode-header {
+    padding: 5px;
+  }
+  #playlist .episode-header td,
+  #playlist .episode-header th {
     display: block;
     text-align: right;
   }
-  
-  table td::before,
-  table th::before {
+  #playlist .episode-header td {
+    border-top: 2px solid rgba(255, 255, 255, 0);
+  }
+  #playlist .episode-header[aria-expanded="true"] td,
+  #playlist .episode-header:hover td {
+    border-top: 2px solid rgba(255, 255, 255, .2);
+  }
+  #playlist .episode-header td::before,
+  #playlist .episode-header th::before {
     content: attr(data-label);
     float: left;
+    margin-right: 10px;
+    font-weight: 600;
   }
-  .episodes-table .order {
-    width: auto;
+  #playlist .episode-header .order {
     text-align: right;
+    width: auto;
+    background: none;
   }
 }
