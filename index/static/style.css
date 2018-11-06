@@ -1130,7 +1130,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     border-top: 2px solid rgba(255, 255, 255, 0);
   }
   .episode-header[aria-expanded="true"] td,
-  .episode-header:hover td {
+  .no-touch .episode-header:hover td {
     border-top: 2px solid rgba(255, 255, 255, .2);
   }
   .episode-header td::before,
@@ -1204,7 +1204,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     border-top: 2px solid rgba(255, 255, 255, 0);
   }
   #playlist .episode-header[aria-expanded="true"] td,
-  #playlist .episode-header:hover td {
+  .no-touch #playlist .episode-header:hover td {
     border-top: 2px solid rgba(255, 255, 255, .2);
   }
   #playlist .episode-header td::before,
