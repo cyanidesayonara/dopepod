@@ -427,7 +427,6 @@ function postPlaylist(data, mode, button, pos) {
       enableLoader($("#player"));
     }
   }
-  console.log(pos)
   $.ajax({
     method: "POST",
     url: url,
@@ -474,12 +473,16 @@ function postPlaylist(data, mode, button, pos) {
   } catch (e) {
   }
 };
-function playNext() {
-  var data = {
-    "pos": "1",
-    "mode": "play",
-  };
+function playNext(button) {
+  if (button) {
+    button = $(button);
+  }
+  var pos = 1;
   var mode = "play";
+  var data = {
+    "pos": pos,
+    "mode": mode,
+  };
   var wrapper = $("#player-wrapper");
   if (wrapper.length) {
     wrapper.removeClass("minimize");
@@ -488,7 +491,7 @@ function playNext() {
   }
   // wait a sec here
   timeout = setTimeout(function() {
-    postPlaylist(data, mode);
+    postPlaylist(data, mode, button, pos);
   }, 500);
 };
 function closePlayer() {
@@ -940,7 +943,11 @@ $(document)
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
-    $(this).parents(".results").find(".more-collapse.show").collapse("hide");
+    var results = $(this).parents(".results");
+    results.find(".more-collapse.show").collapse("hide");
+    if (results.hasClass("playlist")) {
+      results.trigger("sticky_kit:recalc");
+    }
   })
   .on("show.bs.collapse", ".previous-collapse", function(e) {
     e.stopPropagation();
