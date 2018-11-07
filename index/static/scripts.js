@@ -465,8 +465,8 @@ function postPlaylist(data, mode, button, pos) {
           button.html(text);
         }
         drop.find(".results-collapse").html($(response).find(".results-collapse").children());
-        drop.trigger("sticky_kit:recalc");
       }
+      drop.trigger("sticky_kit:recalc");
     });
   try {
     button.html(getButtonLoading());
