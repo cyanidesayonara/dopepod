@@ -1,6 +1,12 @@
 <div class="row">
   {% for episode in results.episodes %}
-    <div class="col-12 expandable dope-result{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
+    <div class="col-12 expandable dope-result dope-result-l{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
+      <button class="dope-dot exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
+        aria-expanded="false" title="Show More">
+        <span class="exp-icon exp-nix">
+          <i class="fas fa-ellipsis-v"></i>
+        </span>
+      </button>
       <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
         {% if episode.length %}
           <span class="result-length">{{ episode.length }}</span>
@@ -9,12 +15,6 @@
           onerror="this.src='//dopepod.me/img/{{ episode.podcast.artworkUrl }}100x100bb.jpg'" title="{{ episode.podcast.title }}"
           width="auto" height="auto" alt="Podcast artwork" />
       </a>
-      <button class="dope-toggle exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
-      aria-expanded="false" title="Show More">
-        <span class="exp-icon exp-nix">
-          <i class="fas fa-ellipsis-v"></i>
-        </span>
-      </button>
       <h1>
         <a class="showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}" title="{{ episode.podcast.title }}">
           {{ episode.podcast.title }}
@@ -37,41 +37,22 @@
           <span>{{ episode.played_ago }}</span>
         </li>
       </ul>
-      <div class="collapse fade previous-collapse" id="previous-collapse{{ forloop.counter }}">
-        <ul class="dope-list">
-          <li>
-            <span>Length</span>
-            <span>{% if episode.length %}{{ episode.length }}{% else %}N/A{% endif %}</span>
-          </li>
-          <li>
-            <span>Size</span>
-            <span>{% if episode.size %}{{ episode.size }}{% else %}N/A{% endif %}</span>
-          </li>
-          <li>
-            <span>Genre</span>
-            <span>{{ episode.podcast.get_primary_genre }}</span>
-          </li>
-          <li>
-            <span>Language</span>
-            <span>{{ episode.podcast.language }}</span>
-          </li>
-          <li>
-            <span>Subscribers</span>
-            <span>{{ episode.podcast.get_n_subscribers }}</span>
-          </li>
-        </ul>
-        <p>
-          Description:
-        </p>
-        <p>
-          {% if episode.description %}
-            {{ episode.description }}
-          {% else %}
-            No description
-          {% endif %}
-        </p>
-      </div>
-      <div class="dope-buttons dope-buttons-r px-0">
+      <div class="dope-buttons px-0">
+        {% if user.is_authenticated %}
+        <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="mode" value="add" />
+          <input type="hidden" name="signature" value="{{ episode.signature }}" />
+          <button class="btn-dope" type="submit" title="Add to Playlist">
+            <span class="active">
+              Add
+            </span>
+            <span>
+              <i class="fas fa-plus"></i>
+            </span>
+          </button>
+        </form>
+        {% endif %}
         <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
           {% csrf_token %}
           <input type="hidden" name="mode" value="play" />
@@ -94,30 +75,16 @@
           </span>
         </a>
         <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-          title="{{ episode.podcast.title }}">
+          title="Show All Episodes">
           <span class="active">
             Show
           </span>
           <span>
             <i class="fas fa-bars"></i>
-          </span>       
+          </span>
         </a>
-        {% if user.is_authenticated %}
-          <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="mode" value="add" />
-            <input type="hidden" name="signature" value="{{ episode.signature }}" />
-            <button class="btn-dope" type="submit" title="Add to Playlist">
-              <span class="active">
-                Add
-              </span>
-              <span>
-                <i class="fas fa-plus"></i>
-              </span>
-            </button>
-          </form>
-        {% endif %}
-        <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}" aria-expanded="false" title="Show More">
+        <button class="btn-dope exp" data-toggle="collapse" data-target="#previous-collapse{{ forloop.counter }}"
+          aria-expanded="false" title="Show More">
           <span class="active">
             More
           </span>
@@ -125,6 +92,94 @@
             <i class="fas fa-ellipsis-v"></i>
           </span>
         </button>
+      </div>
+      <div class="collapse fade previous-collapse" id="previous-collapse{{ forloop.counter }}">
+        <ul class="dope-list">
+          <li>
+            <span>
+              Length
+            </span>
+            <span>
+              {% if episode.length %}
+                {{ episode.length }}
+              {% else %}
+                N/A
+              {% endif %}
+            </span>
+          </li>
+          <li>
+            <span>
+              Size
+            </span>
+            <span>
+              {% if episode.size %}
+                {{ episode.size }}
+              {% else %}
+                N/A
+              {% endif %}
+            </span>
+          </li>
+          <li>
+            <span>
+              Rank
+            </span>
+            <span>
+              #{{ episode.podcast.rank }}
+            </span>
+          </li>
+          <li>
+            <span>
+              Genre
+            </span>
+            <span>
+              <a class="browse-link" href="/search/?genre={{ episode.podcast.get_primary_genre.url_format }}">
+                {{ episode.podcast.get_primary_genre }}
+              </a>
+              (#{{ episode.podcast.genre_rank }})
+            </span>
+          </li>
+          <li>
+            <span>
+              Language
+            </span>
+            <span>
+              <a class="browse-link" href="/search/?genre={{ episode.podcast.language.url_format }}">
+                {{ episode.podcast.language }}
+              </a>
+              (#{{ episode.podcast.language_rank }})
+            </span>
+          </li>
+          <li>
+            <span>
+              Subscribers
+            </span>
+            <span>
+              {{ episode.podcast.get_n_subscribers }}
+            </span>
+          </li>
+          <li>
+            <span>
+              Content
+            </span>
+            <span>
+              {% if podcast.explicit %}
+              explicit
+              {% else %}
+              clean
+              {% endif %}
+            </span>
+          </li>
+        </ul>
+        <p>
+          Description:
+        </p>
+        <p>
+          {% if episode.description %}
+            {{ episode.description }}
+          {% else %}
+            No description
+          {% endif %}
+        </p>
       </div>
     </div>
   {% endfor %}

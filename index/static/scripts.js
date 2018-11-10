@@ -465,6 +465,7 @@ function postPlaylist(data, mode, button, pos) {
           button.html(text);
         }
         drop.find(".results-collapse").html($(response).find(".results-collapse").children());
+        lazyload();
         drop.trigger("sticky_kit:recalc");
       }
     });
@@ -472,23 +473,6 @@ function postPlaylist(data, mode, button, pos) {
     button.html(getButtonLoading());
   } catch (e) {
   }
-};
-function playNext() {
-  var data = {
-    "pos": "1",
-    "mode": "play",
-  };
-  var mode = "play";
-  var wrapper = $("#player-wrapper");
-  if (wrapper.length) {
-    wrapper.removeClass("minimize");
-    wrapper.find("audio")[0].preload = "none";
-    enableLoader($("#player"));
-  }
-  // wait a sec here
-  timeout = setTimeout(function() {
-    postPlaylist(data, mode);
-  }, 500);
 };
 function closePlayer() {
   var player = $("#player");
@@ -559,8 +543,8 @@ function initListen() {
       fade: true,
       initialSlide: 1,
       lazyLoad: "ondemand",
-      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+      prevArrow: "<button type='button' class='btn-dope active slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
+      nextArrow: "<button type='button' class='btn-dope active slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
     })
     .show()
     .slick("refresh");
@@ -588,7 +572,7 @@ function togglePopular() {
   } else if (index < cut) {
     carousel.slick("slickGoTo", cut);
   }
-}
+};
 
 $(document)
   .ready(function() {
@@ -867,16 +851,11 @@ $(document)
       }, 250);
     }
   })
-  // close player
-  .on("click", ".player-close", function(e) {
-    e.preventDefault();
-    closePlayer();
-  })
   // minimize player
   .on("click", ".player-minimize", function(e) {
     e.preventDefault();
     $("#player-collapse").collapse("hide");
-    $("#player-close-collapse").collapse("hide");
+    $("#confirm-collapse-player").collapse("hide");
     $(this).attr("aria-expanded", function(i, attr) {
       return attr == "true" ? "false" : "true";
     })
@@ -1111,4 +1090,4 @@ $(window)
   })
   .on("resize", function() {
     hoverDisabler();
-  })
+  });

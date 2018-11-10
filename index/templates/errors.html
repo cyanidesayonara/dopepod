@@ -1,24 +1,24 @@
-<div class="row color-3 errors">
-  <div class="col-12 dope-wrapper">
-    <div class="dope-buttons dope-buttons-c">
+<div class="row">
+  <div class="col-12 px-0">
+    <div class="dope-buttons errors color-1">
       {% for k, v in errors.items %}
-        <button class="btn-dope" title="{{ v }}">
-          <span class="active">
-            <i class="fas fa-times"></i>
-          </span>
+        <p>
+          {{ v }}
+        </p>
+        <button class="btn-dope" title="OK">
           <span>
-            {{ v }}
+            <i class="fas fa-times"></i>
           </span>
         </button>
       {% endfor %}
       
       {% if message %}
-        <button class="btn-dope" title="{{ message }}">
-          <span class="active">
-            <i class="fas fa-times"></i>
-          </span>
+        <p>
+          {{ message }}
+        </p>
+        <button class="btn-dope" title="OK">
           <span>
-            {{ message }}
+            <i class="fas fa-times"></i>
           </span>
         </button>
       {% endif %}

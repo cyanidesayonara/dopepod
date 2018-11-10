@@ -507,7 +507,7 @@ def subscriptions(request):
                     "results": results,
                 }
                 return render(request, template, context)
-        return redirect("/")
+    raise Http404()
 
     if request.method == "POST":
         template = "results_base.min.html"
@@ -647,6 +647,9 @@ def playlist(request):
                 elif mode == "down":
                     pos = int(request.POST["pos"])
                     Episode.down(pos, user)
+                elif mode == "empty":
+                    episodes = Episode.objects.filter(user=user)
+                    episodes.delete()
                 else:
                     raise Http404()
 
@@ -806,9 +809,9 @@ def login(request):
         context = get_splash(context)
         context = get_form_errors(context, response)
         if request.is_ajax():
-            return render(request, template, context)
+            return render(request, template, context, status=404)
         return render_non_ajax(request, template, context)
-    return redirect("/?view=login")
+    raise Http404()
 
 def signup(request):
     if request.method == "POST":
@@ -834,9 +837,9 @@ def signup(request):
         context = get_splash(context)
         context = get_form_errors(context, response)
         if request.is_ajax():
-            return render(request, template, context)
+            return render(request, template, context, status=404)
         return render_non_ajax(request, template, context)
-    return redirect("/?view=signup")
+    raise Http404()
 
 def logout(request):
     if request.method == "POST":
@@ -867,7 +870,7 @@ def change_password(request):
                     "message": "Password Changed!"
                 })
                 return render(request, template, context)
-            return render(request, template, context)
+            return render(request, template, context, status=404)
         context = get_splash(context)
         return render(request, template, context)
     return redirect("/settings/")

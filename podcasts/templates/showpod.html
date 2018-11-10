@@ -81,25 +81,25 @@
               {{ podcast.copyrighttext }}
             </em>
           </li>
-          <li>
-            <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.url_format_description }}&url={{ podcast.get_absolute_url }}" title="Share on Twitter">
-              <span class="active">
-                Tweet
-              </span>
-              <span>
-                <i class="fab fa-twitter"></i>
-              </span>
-            </a>
-            <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ podcast.get_absolute_url }}" title="Share on Facebook">
-              <span class="active">
-                Share
-              </span>
-              <span>
-                <i class="fab fa-facebook-f"></i>
-              </span>
-            </a>    
-          </li>
         </ul>
+        <div class="dope-buttons">
+          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.url_format_description }}&url={{ podcast.get_absolute_url }}" title="Share on Twitter">
+            <span class="active">
+              Tweet
+            </span>
+            <span>
+              <i class="fab fa-twitter"></i>
+            </span>
+          </a>
+          <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ podcast.get_absolute_url }}" title="Share on Facebook">
+            <span class="active">
+              Share
+            </span>
+            <span>
+              <i class="fab fa-facebook-f"></i>
+            </span>
+          </a>    
+        </div>
       </div>
     {% endwith %}
   </div>

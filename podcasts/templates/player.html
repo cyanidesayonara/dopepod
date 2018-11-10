@@ -1,17 +1,17 @@
 <div class="container position-relative">
   <div class="col-12 col-lg-4 color-1" id="player-wrapper"{% if user.is_authenticated %} data-auth="true"{% endif %}>
     <div class="player-content">
-      <div class="collapse fade" id="player-close-collapse">
-        <div class="dope-buttons dope-buttons-c pt-0">
+      <div class="collapse fade confirm-collapse color-1" id="confirm-collapse-player">
+        <div class="dope-buttons">
           <p>
             Close player?
           </p>
-          <button class="btn-dope player-close">
+          <button class="btn-dope" onclick="closePlayer()">
             <span>
               Yes
             </span>
           </button>
-          <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false">
+          <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-player" aria-expanded="false">
             <span>
               No
             </span>
@@ -29,7 +29,7 @@
             <i class="fas fa-plus"></i>
           </span>
         </button>
-        <button class="btn-dope" data-toggle="collapse" data-target="#player-close-collapse" aria-expanded="false" title="Close">
+        <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-player" aria-expanded="false" title="Close">
           <span>
             <i class="fas fa-times"></i>
           </span>

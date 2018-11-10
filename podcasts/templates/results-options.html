@@ -1,8 +1,52 @@
 {% load i18n lazysignup_tags %}
 {% if results.options %}
+  {% if errors or message %}
+    {% include "errors.min.html" %}
+  {% endif %}
   <div class="row">
     <div class="col-12 color-3 dope-options">
-      <div class="dope-buttons dope-buttons-r">
+      {% if results.view == "playlist" %}
+        <div class="collapse fade confirm-collapse color-1" id="confirm-collapse-{{ results.view }}">
+          <div class="dope-buttons">
+            <p>
+              Are you sure?
+            </p>
+            <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="mode" value="empty" />
+              <button class="btn-dope" type="submit" title="Yes">
+                <span>
+                  Yes
+                </span>
+              </button>
+            </form>
+            <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false" title="No">
+              <span>
+                No
+              </span>
+            </button>
+          </div>
+        </div>
+      {% elif results.view == "subscriptions" %}
+        <div class="collapse fade confirm-collapse color-1" id="confirm-collapse-{{ results.view }}">
+          <div class="dope-buttons">
+            <p>
+              Are you sure?
+            </p>
+            <button class="btn-dope unsubscribe-button" title="Unsubscribe">
+              <span>
+                Yes
+              </span>
+            </button>
+            <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false">
+              <span>
+                No
+              </span>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+      <div class="dope-buttons">
         {% if results.view == "showpod" %}
           {% if user.is_authenticated %}
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
@@ -52,29 +96,42 @@
             </span>
           </button>
         {% elif results.view == "subscriptions" %}
-          <a class="btn-dope unsubscribe-button" href="{% url 'subscriptions' %}" title="Unsubscribe">
+          <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false" title="Unsubscribe">
             <span class="active">
               Unsubscribe
             </span>
             <span>
               <i class="fas fa-times"></i>
             </span>
-          </a>
-          <a class="btn-dope select-all" href="#" title="Select All">
+          </button>
+          <button class="btn-dope select-all" title="Select All">
             <span class="active">
               Select All
             </span>
             <span>
               <i class="fas fa-check"></i>
             </span>
-          </a>
+          </button>
         {% elif results.view == "playlist" %}
-          <button class="btn-dope" onclick="playNext()">
+          <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="mode" value="play" />
+            <input type="hidden" name="pos" value="1" />
+            <button class="btn-dope" type="submit">
+              <span class="active">
+                Play next
+              </span>
+              <span>
+                <i class="fas fa-play"></i>
+              </span>
+            </button>
+          </form>
+          <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false">
             <span class="active">
-              Play next
+              Empty
             </span>
             <span>
-              <i class="fas fa-play"></i>
+              <i class="fas fa-trash-alt"></i>
             </span>
           </button>
         {% elif results.view == "settings" %}
@@ -248,7 +305,7 @@
       {% if results.view == "charts" or results.view == "list" or results.view == "grid" %}
         {% if results.alphabet %}
           <div class="collapse fade options-collapse" id="alphabet-collapse-{{ results.view }}">
-            <div class="dope-buttons dope-buttons-r">
+            <div class="dope-buttons">
               {% if results.alphabet_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.alphabet_nix_url }}" title="Undo Selection">
                   <span>
@@ -276,7 +333,7 @@
         {% endif %}
         {% if results.genres %}
           <div class="collapse fade options-collapse" id="genre-collapse-{{ results.view }}">
-            <div class="dope-buttons dope-buttons-r">
+            <div class="dope-buttons">
               {% if results.genre_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.genre_nix_url }}" title="Undo Selection">
                   <span>
@@ -304,7 +361,7 @@
         {% endif %}
         {% if results.languages %}
           <div class="collapse fade options-collapse" id="language-collapse-{{ results.view }}">
-            <div class="dope-buttons dope-buttons-r">
+            <div class="dope-buttons">
               {% if results.language_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.language_nix_url }}" title="Undo Selection">
                   <span>
@@ -332,7 +389,7 @@
         {% endif %}
         {% if results.provider %}
           <div class="collapse fade options-collapse" id="provider-collapse-{{ results.view }}">
-            <div class="dope-buttons dope-buttons-r">
+            <div class="dope-buttons">
               {% if results.provider == "dopepod" %}
                 <button class="btn-dope" title="dopepod">
                   <span class="active">
