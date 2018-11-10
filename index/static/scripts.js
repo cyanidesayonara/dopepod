@@ -934,11 +934,11 @@ $(document)
     e.stopPropagation();
     $(".previous-collapse.show").collapse("hide");
   })
-  .on("show.bs.collapse", ".splash-play-collapse", function(e) {
+  .on("show.bs.collapse", ".listen-collapse", function(e) {
     e.stopPropagation();
     $(".listen-carousel").slick("slickPause");
   })
-  .on("hide.bs.collapse", ".splash-play-collapse", function(e) {
+  .on("hide.bs.collapse", ".listen-collapse", function(e) {
     e.stopPropagation();
     $(".listen-carousel").slick("slickPlay");
   })  
@@ -949,14 +949,14 @@ $(document)
     }
   })
   .on("hide.bs.collapse", "#splash-collapse", function() {
-    $(".splash-play-collapse.show").collapse("hide");
+    $(".listen-collapse.show").collapse("hide");
     if ($(".listen-carousel.slick-initialized").length) {
       $(".listen-carousel").slick("slickPause");
     }
   })
   .on("beforeChange", ".listen-carousel", function() {
-    $("#splash-play-result.expanded").removeClass("expanded");
-    $(".splash-play-collapse.show").collapse("hide");
+    $(this).find(".dope-result.expanded").removeClass("expanded");
+    $(".listen-collapse.show").collapse("hide");
   })
   .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
     // halfway point
