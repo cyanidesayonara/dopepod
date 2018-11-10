@@ -31,15 +31,6 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
-def get_donuts(results, user):
-    subscriptions_count = Subscription.objects.filter(user=user).count()
-    playlist_count = Episode.objects.filter(user=user).count()
-    results.update({
-        "subscriptions_count": subscriptions_count,
-        "playlist_count": playlist_count,
-    })
-    return results
-
 def get_splash(context):
     results = {
         "view": "splash",
@@ -54,19 +45,6 @@ def get_splash(context):
     context.update({
         "listen": listen,
         "results": results,   
-    })
-    return context
-
-
-def get_dashboard(context, user):
-    results = {
-        "view": "dashboard",
-        "extra_options": "all",
-        "header": "Dashboard",
-    }
-    results = get_donuts(results, user)
-    context.update({
-        "results": results,
     })
     return context
 
@@ -507,7 +485,6 @@ def subscriptions(request):
                     "results": results,
                 }
                 return render(request, template, context)
-    raise Http404()
 
     if request.method == "POST":
         template = "results_base.min.html"
