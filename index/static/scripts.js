@@ -475,6 +475,16 @@ function postPlaylist(data, mode, button, pos) {
   } catch (e) {
   }
 };
+function playNext() {
+  var mode = "play";
+  var pos = "1";
+  var data = {
+    "mode": mode,
+    "pos": pos,
+  };
+  var button = undefined;
+  postPlaylist(data, mode, button, pos);
+}
 function closePlayer() {
   var player = $("#player");
   player.find("audio")[0].preload = "none";
