@@ -46,7 +46,7 @@
           </div>
         </div>
       {% endif %}
-      <div class="dope-buttons">
+      <div class="dope-buttons dope-buttons-r">
         {% if results.view == "showpod" %}
           {% if user.is_authenticated %}
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
@@ -96,20 +96,20 @@
             </span>
           </button>
         {% elif results.view == "subscriptions" %}
-          <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false" title="Unsubscribe">
-            <span class="active">
-              Unsubscribe
-            </span>
-            <span>
-              <i class="fas fa-times"></i>
-            </span>
-          </button>
           <button class="btn-dope select-all" title="Select All">
             <span class="active">
               Select All
             </span>
             <span>
               <i class="fas fa-check"></i>
+            </span>
+          </button>
+          <button class="btn-dope exp" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false" title="Unsubscribe">
+            <span class="active">
+              Unsubscribe
+            </span>
+            <span>
+              <i class="fas fa-times"></i>
             </span>
           </button>
         {% elif results.view == "playlist" %}
@@ -126,7 +126,7 @@
               </span>
             </button>
           </form>
-          <button class="btn-dope" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false">
+          <button class="btn-dope exp" data-toggle="collapse" data-target="#confirm-collapse-{{ results.view }}" aria-expanded="false">
             <span class="active">
               Empty
             </span>
@@ -178,7 +178,7 @@
             </span>
           </a>
         {% elif results.view == "popular" %}
-          <button class="btn-dope popular-button">
+          <button class="btn-dope popular-button" title="Most Popular by Genre">
             <span class="active">
               Genre
             </span>
@@ -189,7 +189,7 @@
               <i class="fas fa-arrow-down"></i>
             </span>
           </button>
-          <button class="btn-dope popular-button">
+          <button class="btn-dope popular-button" title="Most Popular by Language">
             <span class="active">
               Language
             </span>
@@ -305,7 +305,7 @@
       {% if results.view == "charts" or results.view == "list" or results.view == "grid" %}
         {% if results.alphabet %}
           <div class="collapse fade options-collapse" id="alphabet-collapse-{{ results.view }}">
-            <div class="dope-buttons">
+            <div class="dope-buttons dope-buttons-r">
               {% if results.alphabet_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.alphabet_nix_url }}" title="Undo Selection">
                   <span>
@@ -333,7 +333,7 @@
         {% endif %}
         {% if results.genres %}
           <div class="collapse fade options-collapse" id="genre-collapse-{{ results.view }}">
-            <div class="dope-buttons">
+            <div class="dope-buttons dope-buttons-r">
               {% if results.genre_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.genre_nix_url }}" title="Undo Selection">
                   <span>
@@ -361,7 +361,7 @@
         {% endif %}
         {% if results.languages %}
           <div class="collapse fade options-collapse" id="language-collapse-{{ results.view }}">
-            <div class="dope-buttons">
+            <div class="dope-buttons dope-buttons-r">
               {% if results.language_nix_url %}
                 <a class="btn-dope options-button nix-button" href="{{ results.language_nix_url }}" title="Undo Selection">
                   <span>
@@ -389,7 +389,7 @@
         {% endif %}
         {% if results.provider %}
           <div class="collapse fade options-collapse" id="provider-collapse-{{ results.view }}">
-            <div class="dope-buttons">
+            <div class="dope-buttons dope-buttons-r">
               {% if results.provider == "dopepod" %}
                 <button class="btn-dope" title="dopepod">
                   <span class="active">

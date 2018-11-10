@@ -47,7 +47,7 @@
               </span>
             </li>
           </ul>
-          <div class="dope-buttons px-0">
+          <div class="dope-buttons dope-buttons-r px-0">
             <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="podids[]" value="{{ podcast.podid }}" />

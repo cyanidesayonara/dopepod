@@ -44,7 +44,7 @@
           </span>
         </li>
       </ul>
-      <div class="dope-buttons px-0">
+      <div class="dope-buttons dope-buttons-l px-0">
         {% if user.is_authenticated %}
         <form class="subscriptions-form" action="{% url 'subscriptions' %}" method="POST">
           {% csrf_token %}

@@ -37,7 +37,7 @@
           <span>{{ episode.played_ago }}</span>
         </li>
       </ul>
-      <div class="dope-buttons px-0">
+      <div class="dope-buttons dope-buttons-r px-0">
         {% if user.is_authenticated %}
         <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
           {% csrf_token %}

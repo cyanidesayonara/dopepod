@@ -72,7 +72,7 @@
                   No description
                   {% endif %}
                 </p>
-                <div class="dope-buttons">
+                <div class="dope-buttons dope-buttons-r">
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="play" />

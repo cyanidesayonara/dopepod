@@ -24,7 +24,7 @@
         {% endif %}
         <div class="col-12 dope-form-group">
           <label for="theme">Theme</label>
-          <div class="dope-buttons">
+          <div class="dope-buttons dope-buttons-l px-0">
             {% if user.profile.theme == "dark" %}
               <input class="theme" type="hidden" name="theme" value="dark" />
               <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
@@ -116,7 +116,7 @@
       Delete account? Your playlist and subscriptions will be lost forever.
     </p>
     <form class="solong-form" action="{% url 'solong' %}" method="POST">
-      <div class="dope-buttons dope-buttons-c">
+      <div class="dope-buttons">
         {% csrf_token %}
         <button class="btn-dope" type="submit">
           <span class="active">

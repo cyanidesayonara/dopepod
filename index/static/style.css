@@ -96,8 +96,8 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .no-touch .btn-dope:hover,
 .episode-header:focus,
 .no-touch .episode-header:hover,
-.no-touch .dope-dot:hover,
 .dope-dot:focus,
+.no-touch .dope-dot:hover,
 .exp[aria-expanded="true"] {
   color: #fff;
   outline: none;
@@ -155,11 +155,11 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .dope-form-group label {
   margin-bottom: 0;
 }
-.dope-wrapper{
+.dope-wrapper {
   margin: auto;
   padding: 20px 10px;
   text-align: center;
-  max-width: 550px;
+  max-width: 555px;
 }
 .dope-wrapper > form {
   margin: auto;
@@ -658,6 +658,18 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .dope-buttons > * {
   margin: 0 2.5px 5px;
 }
+.dope-buttons-l {
+  justify-content: flex-start;
+}
+.dope-buttons-r {
+  justify-content: flex-end;
+}
+.dope-buttons-l > * {
+  margin: 0 5px 5px 0;
+}
+.dope-buttons-r > * {
+  margin: 0 0 5px 5px;
+}
 .nix-button {
   margin-right: auto;
 }
@@ -717,6 +729,12 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .selectable.selected .select {
   background: rgb(0, 191, 165);
   color: #fff;
+}
+.select-all {
+  order: 2;
+}
+.select-all:not(.active)~.exp {
+  display: none;
 }
 
 .errors p,

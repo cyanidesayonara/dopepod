@@ -820,9 +820,14 @@ $(document)
   // POST ajax request, data is array of podids
   .on("click", ".unsubscribe-button", function(e) {
     e.preventDefault();
+    e.stopPropagation();
     var button = $(this);
     var selected = button.parents(".results-collapse").find(".selectable.selected");
     if (selected.length) {
+      if (button.hasClass("exp")) {
+        console.log("asasd")
+        return
+      }
       // array of all selected podid
       var podid = [];
       selected.each(function(i, subscription) {
@@ -1013,7 +1018,7 @@ $(document)
     }
   })
   // removes focus from buttons when clicked
-  .on("click", ".btn-dope, .dope-link, .dope-toggle, .episode-header, .search-button", function() {
+  .on("click", ".btn-dope, .dope-link, .dope-dot, .episode-header, .search-button", function() {
     $(this).blur();
   })
   // empties search field when link or button is clicked
