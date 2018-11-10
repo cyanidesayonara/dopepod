@@ -10,5 +10,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Podcast.set_charts()
         Filterable.count_n_podcasts()
-        call_command('update_index', verbosity=3)
+        call_command('rebuild_index', verbosity=3)
         cache.clear()

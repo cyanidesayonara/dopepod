@@ -468,6 +468,7 @@ function postPlaylist(data, mode, button, pos) {
         lazyload();
         drop.trigger("sticky_kit:recalc");
       }
+      drop.trigger("sticky_kit:recalc");
     });
   try {
     button.html(getButtonLoading());
@@ -919,6 +920,10 @@ $(document)
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
     $(this).parents(".results").find(".more-collapse.show").collapse("hide");
+  })
+  .on("shown.bs.collapse hidden.bs.collapse", "#playlist .more-collapse", function (e) {
+    e.stopPropagation();
+    $(this).parents(".results").trigger("sticky_kit:recalc");
   })
   .on("show.bs.collapse", ".previous-collapse", function(e) {
     e.stopPropagation();
