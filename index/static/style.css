@@ -583,6 +583,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   padding: 10px 10px 0;
 }
 .dope-result img {
+  max-height: 100px;
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
 }
@@ -690,6 +691,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   padding: 0 10px 0 0;
 }
 .dope-results img {
+  max-height: unset;
   margin-bottom: 10px;
 }
 .dope-results img:hover {
@@ -766,6 +768,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   box-shadow: rgba(0,0,0,.5) 0 0 5px;
 }
 #player-wrapper img {
+  max-height: 100px;
   float: left;
   margin-right: 5px;
   border-radius: .25rem;
@@ -788,7 +791,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   font-size: 14px;
   height: 40px;
   overflow: hidden;
-  margin: 0 0 5px;
+  margin: 0 0 3px;
 }
 .player-date {
   margin: 0 0 10px;
