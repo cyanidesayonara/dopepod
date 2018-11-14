@@ -3,7 +3,7 @@
 {% cache 86400 popular %}
 <div class="row">
   <div class="col-12 px-0">
-    <div class="popular-carousel">
+    <div id="popular-carousel">
       {% with results.genres as genres %}
         {% for genre in genres %}
           <div>

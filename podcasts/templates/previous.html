@@ -1,7 +1,7 @@
 <div class="row">
   {% for episode in results.episodes %}
     <div class="col-12 expandable dope-result dope-result-l{% if forloop.counter|divisibleby:2 %} color-3{% endif %}">
-      <button class="dope-dot exp" data-toggle="collapse" data-target="#{{ results.view }}-collapse{{ forloop.counter }}"
+      <button class="dope-dot exp" data-toggle="collapse" data-target="#more-collapse-{{ results.view }}{{ forloop.counter }}"
         aria-expanded="false" title="Show More">
         <span class="exp-icon exp-nix">
           <i class="fas fa-ellipsis-v"></i>
@@ -83,7 +83,7 @@
             <i class="fas fa-bars"></i>
           </span>
         </a>
-        <button class="btn-dope exp" data-toggle="collapse" data-target="#{{ results.view }}-collapse{{ forloop.counter }}"
+        <button class="btn-dope exp" data-toggle="collapse" data-target="#more-collapse-{{ results.view }}{{ forloop.counter }}"
           aria-expanded="false" title="Show More">
           <span class="active">
             More
@@ -93,7 +93,7 @@
           </span>
         </button>
       </div>
-      <div class="collapse fade {{ results.view }}-collapse" id="{{ results.view }}-collapse{{ forloop.counter }}">
+      <div class="collapse fade more-collapse" id="more-collapse-{{ results.view }}{{ forloop.counter }}">
         <ul class="dope-list">
           <li>
             <span>

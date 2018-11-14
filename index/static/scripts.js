@@ -294,7 +294,7 @@ function playerUnfixer() {
   }
 };
 function columnFixer() {
-  $("#subscriptions, #playlist").stick_in_parent({
+  $("#subscriptions, #playlist, #charts, #previous").stick_in_parent({
     offset_top: 44
   });
 };
@@ -466,7 +466,6 @@ function postPlaylist(data, mode, button, pos) {
         }
         drop.find(".results-collapse").html($(response).find(".results-collapse").children());
         lazyload();
-        drop.trigger("sticky_kit:recalc");
       }
       drop.trigger("sticky_kit:recalc");
     });
@@ -524,7 +523,7 @@ function hoverDisabler() {
   }
 };
 function initPopular() {
-  $(".popular-carousel")
+  $("#popular-carousel")
     .slick({
       autoplay: true,
       infinite: true,
@@ -538,7 +537,7 @@ function initPopular() {
 function initListen() {
   $(".logo").toggleClass("d-none");
   // shuffle all except first (logo)
-  var slides = $(".listen-carousel>*").toArray();
+  var slides = $("#listen-carousel>*").toArray();
   var first = slides.shift();
   for (var i = slides.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -547,7 +546,7 @@ function initListen() {
     slides[j] = temp;
   }
   slides.unshift(first);
-  $(".listen-carousel")
+  $("#listen-carousel")
     .html(slides)
     .slick({
       autoplay: true,
@@ -575,7 +574,7 @@ function toggleButtons(buttons) {
   });
 };
 function togglePopular() {
-  var carousel = $(".popular-carousel");
+  var carousel = $("#popular-carousel");
   var index = carousel.slick("slickCurrentSlide");
   var cut = 16;
   if (index >= cut) {
@@ -929,46 +928,48 @@ $(document)
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".login-collapse", function(e) {
     e.stopPropagation();
-    $(".login-collapse.show").collapse("hide");
+    $(this).siblings(".login-collapse.show").collapse("hide");
     removeErrors();
   })
   .on("show.bs.collapse", ".more-collapse", function(e) {
     e.stopPropagation();
     $(this).parents(".results").find(".more-collapse.show").collapse("hide");
   })
-  .on("shown.bs.collapse hidden.bs.collapse", "#playlist .more-collapse", function (e) {
+  // for cols that use sticky kit
+  .on("shown.bs.collapse hidden.bs.collapse", "#subscriptions .collapse, #playlist .collapse", function (e) {
     e.stopPropagation();
-    $(this).parents(".results").trigger("sticky_kit:recalc");
+    var drop = $(this).parents(".drop");
+    // wait for height to settle
+    setTimeout(function() {
+      console.log(drop)
+      drop.trigger("sticky_kit:recalc");
+    }, 500);
   })
-  .on("show.bs.collapse", ".previous-collapse", function(e) {
+  .on("show.bs.collapse", "#listen-carousel .more-collapse", function(e) {
     e.stopPropagation();
-    $(".previous-collapse.show").collapse("hide");
+    $("#listen-carousel").slick("slickPause");
   })
-  .on("show.bs.collapse", ".listen-collapse", function(e) {
+  .on("hide.bs.collapse", "#listen-carousel .more-collapse", function(e) {
     e.stopPropagation();
-    $(".listen-carousel").slick("slickPause");
-  })
-  .on("hide.bs.collapse", ".listen-collapse", function(e) {
-    e.stopPropagation();
-    $(".listen-carousel").slick("slickPlay");
+    $("#listen-carousel").slick("slickPlay");
   })  
   .on("show.bs.collapse", "#splash-collapse", function() {
-    if ($(".listen-carousel.slick-initialized").length) {
-      $(".listen-carousel").slick("slickPlay");
-      $(".listen-carousel").slick("slickGoTo", 0);
+    if ($("#listen-carousel.slick-initialized").length) {
+      $("#listen-carousel").slick("slickPlay");
+      $("#listen-carousel").slick("slickGoTo", 0);
     }
   })
   .on("hide.bs.collapse", "#splash-collapse", function() {
-    $(".listen-collapse.show").collapse("hide");
-    if ($(".listen-carousel.slick-initialized").length) {
-      $(".listen-carousel").slick("slickPause");
+    $(this).find(".more-collapse.show").collapse("hide");
+    if ($("#listen-carousel.slick-initialized").length) {
+      $("#listen-carousel").slick("slickPause");
     }
   })
-  .on("beforeChange", ".listen-carousel", function() {
+  .on("beforeChange", "#listen-carousel", function() {
     $(this).find(".dope-result.expanded").removeClass("expanded");
-    $(".listen-collapse.show").collapse("hide");
+    $(this).find(".more-collapse.show").collapse("hide");
   })
-  .on("beforeChange", ".popular-carousel", function (e, slick, currentSlide, nextSlide) {
+  .on("beforeChange", "#popular-carousel", function (e, slick, currentSlide, nextSlide) {
     // halfway point
     var carousel = $(this);
     var half = carousel.find(".slick-slide").length - 1;
@@ -994,9 +995,6 @@ $(document)
     e.stopPropagation();
     $(".options-collapse.show").collapse("hide");
   })
-  .on("shown.bs.collapse hidden.bs.collapse", ".collapse", function (e) {
-    $(".is_stuck").trigger("sticky_kit:recalc");
-  })  
   .on("show.bs.collapse", ".settings-collapse", function(e) {
     e.stopPropagation();
     $(".settings-collapse.show").collapse("hide");
