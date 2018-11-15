@@ -4,7 +4,7 @@
     <div class="col-12 collapse fade view-collapse {% if results.view == 'grid' %}show{% endif %}">
       <div class="row dope-results">
         {% for podcast in results.podcasts1 %}
-          <div class="col-4 col-sm-3 col-md-2 dope-result">
+          <div class="col-4 col-sm-3 col-md-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
                 title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
@@ -21,7 +21,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts2 %}
-          <div class="col-4 col-sm-3 col-md-2 dope-result">
+          <div class="col-4 col-sm-3 col-md-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
                 title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
@@ -38,7 +38,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts3 %}
-          <div class="col-4 col-sm-3 col-md-2 dope-result">
+          <div class="col-4 col-sm-3 col-md-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
                 title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
@@ -55,7 +55,7 @@
           </div>
         {% endfor %}
         {% for podcast in results.podcasts4 %}
-          <div class="col-4 col-sm-3 col-md-2 dope-result">
+          <div class="col-4 col-sm-3 col-md-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}">
               <img class="img-fluid lazyload" data-src="//{{ podcast.object.artworkUrl }}150x150bb.jpg" onerror="this.data-src='//dopepod.me/img/{{ podcast.object.artworkUrl }}150x150bb.jpg'"
                 title="{{ podcast.object.title }}" width="auto" height="auto" alt="Podcast artwork" />
@@ -75,7 +75,7 @@
     </div>
     <div class="col-12 collapse fade view-collapse {% if results.view == 'list' %}show{% endif %}">
       <div class="row dope-results">
-        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result noborder">
           {% if results.podcasts1 %}
             <ul>
               {% for podcast in results.podcasts1 %}
@@ -88,7 +88,7 @@
             </ul>
           {% endif %}
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result noborder">
           {% if results.podcasts2 %}
             <ul>
               {% for podcast in results.podcasts2 %}
@@ -101,7 +101,7 @@
             </ul>
           {% endif %}
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result noborder">
           {% if results.podcasts3 %}
             <ul>
               {% for podcast in results.podcasts3 %}
@@ -114,7 +114,7 @@
             </ul>
           {% endif %}      
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 dope-result">
+        <div class="col-lg-3 col-md-6 col-sm-12 dope-result noborder">
           {% if results.podcasts4 %}
             <ul>
               {% for podcast in results.podcasts4 %}
