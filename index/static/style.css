@@ -574,7 +574,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 /* DOPE-RESULT */
-:not(#center-stage) .dope-result:not(:first-of-type) {
+.dope-result:not(:first-of-type) {
   border-top: 2px solid rgba(0, 191, 165, .2);
 }
 .dope-result {
@@ -812,7 +812,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 /* OVERRIDER */
 .noborder {
-  border-bottom: none!important;
+  border: none!important;
 }
 
 /* LOADERS */
