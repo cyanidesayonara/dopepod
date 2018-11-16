@@ -162,10 +162,10 @@
               Content
             </span>
             <span>
-              {% if podcast.explicit %}
-              explicit
+              {% if episode.podcast.explicit %}
+                explicit
               {% else %}
-              clean
+                clean
               {% endif %}
             </span>
           </li>
