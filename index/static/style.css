@@ -847,6 +847,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   animation: fadeIn .5s ease 15s forwards;
   -webkit-animation: fadeIn .5s ease 15s forwards;
 }
+#episodes-content .reload-button {
+  left: calc(50% - 42px);
+}
 @-webkit-keyframes fadeIn {
   0% {
     opacity: 0;
@@ -876,6 +879,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   left: calc(50% - 85px);
   animation: spin 1.5s ease-in-out .25s infinite;
   -webkit-animation: spin 1.5s ease-in-out .25s infinite;
+}
+#episodes-content .spinner {
+  left: calc(50% - 65px);
 }
 .spinner .char {
   left: 47px;

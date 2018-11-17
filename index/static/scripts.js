@@ -1090,12 +1090,13 @@ $(window)
         }
       }
       $("#center-stage").html(state.context);
-      titleUpdater();
       if (context.hasClass("showpod")) {
         drop = $("#episodes-content");
         url = url.replace("showpod", "episodes");
         getResults([url, drop, false]);
       }
+      titleUpdater();
+      lazyload();
     }
   })
   .on("blur", function() {
