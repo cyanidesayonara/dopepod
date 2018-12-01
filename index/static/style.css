@@ -191,7 +191,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 /* MAIN */
 #main-wrapper {
   padding-top: 44px;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
   min-height: 100vh;
 }
 .drop {
@@ -389,7 +389,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 /* SLICK */
-#listen-carousel {
+#play-carousel {
   display: none;
 }
 #popular-carousel {

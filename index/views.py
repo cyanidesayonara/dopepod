@@ -36,14 +36,14 @@ def get_splash(context):
         "view": "splash",
     }
 
-    if cache.get("listen"):
-        listen = {}
-        listen["view"] = "listen"
+    if cache.get("play"):
+        play = {}
+        play["view"] = "play"
     else:
-        listen = Episode.get_previous()
+        play = Episode.get_previous()
     
     context.update({
-        "listen": listen,
+        "play": play,
         "results": results,   
     })
     return context
@@ -60,11 +60,11 @@ def render_non_ajax(request, template, context):
         for podcast in charts["podcasts"]:
             podcast.object.is_subscribed(user)
 
-    if cache.get("listen"):
-        listen = {}
-        listen["view"] = "listen"
+    if cache.get("play"):
+        play = {}
+        play["view"] = "play"
     else:
-        listen = previous
+        play = previous
 
     if cache.get("popular"):
         popular = {}

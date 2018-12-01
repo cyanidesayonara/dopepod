@@ -537,7 +537,7 @@ function initPopular() {
 function initListen() {
   $(".logo").toggleClass("d-none");
   // shuffle all except first (logo)
-  var slides = $("#listen-carousel>*").toArray();
+  var slides = $("#play-carousel>*").toArray();
   var first = slides.shift();
   for (var i = slides.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -546,7 +546,7 @@ function initListen() {
     slides[j] = temp;
   }
   slides.unshift(first);
-  $("#listen-carousel")
+  $("#play-carousel")
     .html(slides)
     .slick({
       autoplay: true,
@@ -945,27 +945,27 @@ $(document)
       drop.trigger("sticky_kit:recalc");
     }, 500);
   })
-  .on("show.bs.collapse", "#listen-carousel .more-collapse", function(e) {
+  .on("show.bs.collapse", "#play-carousel .more-collapse", function(e) {
     e.stopPropagation();
-    $("#listen-carousel").slick("slickPause");
+    $("#play-carousel").slick("slickPause");
   })
-  .on("hide.bs.collapse", "#listen-carousel .more-collapse", function(e) {
+  .on("hide.bs.collapse", "#play-carousel .more-collapse", function(e) {
     e.stopPropagation();
-    $("#listen-carousel").slick("slickPlay");
+    $("#play-carousel").slick("slickPlay");
   })  
   .on("show.bs.collapse", "#splash-collapse", function() {
-    if ($("#listen-carousel.slick-initialized").length) {
-      $("#listen-carousel").slick("slickPlay");
-      $("#listen-carousel").slick("slickGoTo", 0);
+    if ($("#play-carousel.slick-initialized").length) {
+      $("#play-carousel").slick("slickPlay");
+      $("#play-carousel").slick("slickGoTo", 0);
     }
   })
   .on("hide.bs.collapse", "#splash-collapse", function() {
     $(this).find(".more-collapse.show").collapse("hide");
-    if ($("#listen-carousel.slick-initialized").length) {
-      $("#listen-carousel").slick("slickPause");
+    if ($("#play-carousel.slick-initialized").length) {
+      $("#play-carousel").slick("slickPause");
     }
   })
-  .on("beforeChange", "#listen-carousel", function() {
+  .on("beforeChange", "#play-carousel", function() {
     $(this).find(".dope-result.expanded").removeClass("expanded");
     $(this).find(".more-collapse.show").collapse("hide");
   })
