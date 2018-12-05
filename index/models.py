@@ -14,11 +14,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     LIGHT = "light"
     DARK = "dark"
-    CHRISTMAS = "christmas"
     THEME_CHOICES = (
         (LIGHT, "Light"),
         (DARK, "Dark"),
-        (CHRISTMAS, "Christmas"),
     )
     theme = models.CharField(choices=THEME_CHOICES, default=LIGHT, max_length=10)
 

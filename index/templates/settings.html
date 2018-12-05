@@ -27,19 +27,12 @@
           <div class="dope-buttons dope-buttons-l px-0">
             {% if user.profile.theme == "dark" %}
               <input class="theme" type="hidden" name="theme" value="dark" />
-              <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
+              <button type="submit" data-theme="light" class="btn-dope theme-button"><span>Light</span></button>
               <button type="button" class="btn-dope theme-button"><span class="active">Dark</span></button>
-              <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
             {% elif user.profile.theme == "light" %}
               <input class="theme" type="hidden" name="theme" value="light" />
               <button type="button" class="btn-dope theme-button"><span class="active">Light</span></button>
-              <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
-              <button type="submit" class="btn-dope theme-button"><span>Christmas</span></button>
-            {% elif user.profile.theme == "christmas" %}
-              <input class="theme" type="hidden" name="theme" value="christmas" />
-              <button type="submit" class="btn-dope theme-button"><span>Light</span></button>
-              <button type="submit" class="btn-dope theme-button"><span>Dark</span></button>
-              <button type="button" class="btn-dope theme-button"><span class="active">Christmas</span></button>
+              <button type="submit" data-theme="dark" class="btn-dope theme-button"><span>Dark</span></button>
             {% endif %}
           </div>
         </div>

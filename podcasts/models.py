@@ -380,14 +380,14 @@ class Podcast(models.Model):
             # charts header
             if provider:
                 results_header = "Top " + str(count)
-                if language:
-                    results_header += " " + str(language)
                 if count == 1:
                     results_header += " podcast"
                 else:
                     results_header += " podcasts"
                 if genre:
                     results_header += " about " + str(genre)
+                if language:
+                    results_header += " in " + str(language)
                 results_header += " on " + provider
                 results["podcasts"] = podcasts
                 results["header"] = results_header
@@ -426,16 +426,16 @@ class Podcast(models.Model):
                     results_header += str(count) + " result for"
                 else:
                     results_header += str(count) + " results for"
-                if language:
-                    results_header += " " + str(language)
                 results_header += " podcasts"
                 if genre:
                     results_header += " about " + str(genre)
+                if language:
+                    results_header += " in " + str(language)
                 if q:
                     if len(q) == 1:
                         results_header += ' starting with "' + q + '"'
                     else:
-                        results_header += ' with "' + q + '"'
+                        results_header += ' for "' + q + '"'
                 if num_pages > 1:
                     results_header += " (page " + str(page) + " of " + str(num_pages) + ")"
                 

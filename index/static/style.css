@@ -44,12 +44,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   background-attachment: fixed;
   transition: all .25s ease;
 }
-.christmas {
-  color: rgb(46, 46, 46);
-  background: repeating-linear-gradient( 135deg, rgba(213, 0, 0, .2), rgba(213, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 10px, rgba(0, 0, 0, .2) 20px);
-  background-attachment: fixed;
-  transition: all .25s ease;
-}
 
 /* COOKIE BANNER */
 .cookie-wrapper {
