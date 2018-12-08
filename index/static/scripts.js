@@ -162,7 +162,7 @@ function checkForXHR(url) {
 function enableLoader(el, url) {
   if (el.id == "player") {
     // blur player
-    addClass(el.getElementById("player-content"), "blurred");
+    addClass(el.querySelector("#player-content"), "blurred");
   } else if (el.id == "episodes-content") {
     // blur all children except loader
     let blurrables = children(el, ":not(.loader)");
@@ -184,7 +184,9 @@ function enableLoader(el, url) {
   // show loader
   addClass(loader, "d-block");
   // set url for reload button
-  loader.querySelector(".reload-button").setAttribute("href", url);
+  if (url) {
+    loader.querySelector(".reload-button").setAttribute("href", url);
+  }
 };
 // RESULTS
 function getResults(args, noLoader, noPush) {
@@ -239,10 +241,12 @@ function getResults(args, noLoader, noPush) {
       }
       // if page refresh, apply theme
       else if (drop.id == "dopebar-wrapper") {
-        let response = drop.getElementById("dopebar");
+        let response = drop.querySelector("#dopebar");
         const theme = response.getAttribute("data-theme");
         response.removeAttribute("data-theme");
         themeChanger(theme);
+      } else if (children(drop, ".splash").length) {
+        initPlay();
       }
       if (scroll) {
         if ((url.includes("/charts/") || url.includes("/previous/")) && $(window).width() < 992) {
@@ -303,12 +307,12 @@ function parents(node, className) {
   }
 };
 
-function children(node, className) {
+function children(node, name) {
   let array = [];
   const nodes = node.childNodes;
   if (nodes) {
     Array.prototype.forEach.call(nodes, function (node, i) {
-      if (selectorMatches(node, className)) {
+      if (selectorMatches(node, name)) {
         array.push(node);
       }
     });
@@ -329,7 +333,7 @@ function selectorMatches(element, selector) {
       }
     })
   }
-}
+};
 // NOSHOW
 function noshow(podid) {
   $.ajax({
@@ -425,7 +429,7 @@ function postContact(form) {
       url: url,
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
-      $(drop).html(xhr.responseText);
+      drop.innerHTML = xhr.responseText;
       scrollToTop();
     })
     .done(function (response) {
@@ -470,7 +474,9 @@ function postLogin(form) {
   const data = $(form).serialize();
   const drop = document.getElementById("center-stage");
   const button = form.querySelector("button[type=submit].btn-dope");
-  button.innerHTML = getButtonLoading();
+  if (button) {
+    button.innerHTML = getButtonLoading();
+  }
   $.ajax({
       data: data,
       method: method,
@@ -478,23 +484,27 @@ function postLogin(form) {
     })
     // returns errors
     .fail(function (xhr, ajaxOptions, thrownError) {
-      drop.html(xhr.responseText);
+      drop.innerHTML = xhr.responseText;
       scrollToTop();
     })
     // returns splashboard
     .done(function (response) {
       getResults(["/", drop, true], false, true);
       // if not password reset, refresh page
-      if (form.hasClass("login-form") || form.hasClass("tryout-form")) {
+      if (hasClass(form, "login-form") || hasClass(form, "tryout-form")) {
         refreshCookie();
         refreshPage();
       }
     });
 };
 
-function postSubscriptions(form) {
-  const button = form.querySelector("button[type=submit]");
-  const podid = form.querySelector("input[name^=podid]").value;
+function postSubscriptions(form, origPodid, origButton) {
+  let button = origButton;
+  let podid = origPodid;
+  if (form) {
+    button = form.querySelector("button[type=submit]");
+    podid = form.querySelector("input[name^=podid]").value;
+  }
   if (podid) {
     const drop = document.getElementById("subscriptions");
     $.ajax({
@@ -506,19 +516,14 @@ function postSubscriptions(form) {
       })
       .fail(function (xhr, ajaxOptions, thrownError) {})
       .done(function (response) {
-        if (drop.childNodes.length) {
-          const div = document.createElement("div")
-          div.innerHTML = response;
-          const rc = div.querySelector(".results-collapse");
-          drop.querySelector(".results-collapse").parentNode.innerHTML = rc;
-        } else {
-          drop.innerHTML = response;
-        }
+        drop.innerHTML = response;
         const el = document.querySelector(".results.showpod");
-        const current_podid = el.getAttribute("data-podid");
-        if (podid == current_podid) {
-          const args = ["/episodes/" + podid + "/", "episodes-content", false];
-          getResults(["/showpod/" + podid, drop, false, getResults, args], false, true);
+        if (el) {
+          const current_podid = el.getAttribute("data-podid");
+          if (podid == current_podid) {
+            const args = ["/episodes/" + podid + "/", "episodes-content", false];
+            getResults(["/showpod/" + podid, "center-stage", false, getResults, args], false, true);
+          }
         }
         getResults(["/charts/", "charts", false]);
         lazyload();
@@ -528,19 +533,31 @@ function postSubscriptions(form) {
   }
 };
 
-function postPlaylist(form) {
-  const data = $(form).serialize();
-  const mode = form.querySelector("input[name=mode]").value;
-  const pos = form.querySelector("input[name=pos]").value;
-  const button = form.querySelector("button[type=submit]");
+function postPlaylist(form, origData, origMode, origButton, origPos) {
+  let data = origData;
+  let mode = origMode;
+  let button = origButton;
+  let pos = origPos;
+  let text = undefined;
+  if (form) {
+    data = $(form).serialize();
+    mode = form.querySelector("input[name=mode]").value;
+    button = form.querySelector("button[type=submit]");
+    pos = form.querySelector("input[name=pos]");
+  }
+  if (pos && !origPos) {
+    pos = pos.value;
+  }
   const drop = document.getElementById("playlist");
-  const text = button.innerText;
+  if (button) {
+    text = button.innerHTML;
+  }
   const url = "/playlist/";
   if (mode == "play") {
     const wrapper = document.getElementById("player-wrapper");
     if (wrapper) {
       removeClass(wrapper, "minimize");
-      const audio = wrapper.getElementById("audio");
+      const audio = document.getElementById("audio");
       audio.preload = "none";
       enableLoader(document.getElementById("player"));
     }
@@ -552,39 +569,41 @@ function postPlaylist(form) {
     })
     // nothing to continue
     .fail(function (xhr, ajaxOptions, thrownError) {
-      button.innerText = text;
+      if (button) {
+        button.innerHTML = text;
+      }      
       document.getElementById("player").innerHTML = "";
       // TODO if playlist fails
     })
     .done(function (response) {
       if (mode == "play") {
-        document.getElementById("player").innerHTML = response;
+        let player = document.getElementById("player");
+        player.innerHTML = response;
         titleUpdater();
-        try {
-          button.innerText = text;
-        } catch (e) {}
+        if (button) {
+          button.innerHTML = text;
+        }
         // gotta wait a sec here
         setTimeout(function () {
-          const box = player.querySelector("h1");
-          const text = player.querySelector("h1 span");
+          const box = $(player).find("h1");
+          const text = $(player).find("h1 span");
           scrollText(box, text);
         }, 1000);
         if (pos && drop.childNodes.length) {
           getResults([url, drop, false]);
         }
       } else {
-        if (mode == "add") {
-          button.innerText = text;
+        if (button && mode == "add") {
+          button.innerHTML = text;
         }
-        let div = document.createElement("div")
-        div.innerHTML = response;
-        const rc = div.querySelector(".results-collapse");
-        drop.querySelector(".results-collapse").parentNode.innerHTML = rc;
+        drop.innerHTML = response;
         lazyload();
       }
-      drop.trigger("sticky_kit:recalc");
+      $(drop).trigger("sticky_kit:recalc");
     });
-  button.innerHTML = getButtonLoading();
+  if (button) {
+    button.innerHTML = getButtonLoading();
+  }
 };
 
 function playNext() {
@@ -595,7 +614,7 @@ function playNext() {
     "pos": pos,
   };
   const button = undefined;
-  postPlaylist(data, mode, button, pos);
+  postPlaylist(undefined, data, mode, button, pos);
 };
 
 function closePlayer() {
@@ -618,7 +637,7 @@ function getButtonLoading() {
 function previousUpdater() {
   previous = setInterval(function () {
     const drop = document.getElementById("previous");
-    if (!drop.querySelectorAll(".previous .expandable.expanded").length) {
+    if (!drop.querySelectorAll(".expandable.expanded").length) {
       getResults(["/previous/", "previous", false], true);
     }
   }, 1000 * 60);
@@ -626,9 +645,9 @@ function previousUpdater() {
 
 function chartsUpdater() {
   charts = setInterval(function () {
-    const drop = document.getElementById("playlist");
-    if (!drop.querySelectorAll(".previous .expandable.expanded").length) {
-      getResults(["/charts/", "playlist", false], true);
+    const drop = document.getElementById("charts");
+    if (!drop.querySelectorAll(".expandable.expanded").length) {
+      getResults(["/charts/", "charts", false], true);
     }
   }, 1000 * 60 * 60 * 24);
 };
@@ -772,30 +791,30 @@ $(document)
   .on("click", ".unsubscribe-button", function (e) {
     e.preventDefault();
     const button = this;
-    const selected = parents(button, "results-collapse").querySelectorAll(".selectable.selected");
-    if (selected.length) {
+    const selecteds = parents(button, "results").querySelectorAll(".selectable.selected");
+    const podids = [];
+    if (selecteds.length) {
       if (hasClass(button, "exp")) {
         return;
       }
       // array of all selected podid
-      const podid = [];
-      Array.prototype.forEach.call(selected, function (el, i) {
-        podid[i] = el.getAttribute("data-podid");
+      Array.prototype.forEach.call(selecteds, function (selected, i) {
+        podids[i] = selected.getAttribute("data-podid");
       });
     }
     // if nothing selected, do nothing
     else {
       return;
     }
-    if (podid) {
-      postSubscriptions(podid, button);
+    if (podids.length) {
+      postSubscriptions(undefined, podids, button);
     }
   })
   // playlist - play, add, move, or delete episode
   .on("submit", ".playlist-form", function (e) {
     e.preventDefault();
+    const form = this;
     if (!form.querySelector(".button-loading")) {
-      const form = this;
       clearTimeout(timeout);
       timeout = setTimeout(function () {
         postPlaylist(form);
@@ -830,7 +849,7 @@ $(document)
   })
   .on("submit", ".convert-form", function (e) {
     e.preventDefault();
-    alert("Oops, this doesn't work yet. Sorry!");
+    alert("This feature doesn't work yet. Sorry!");
   })
   .on("click", ".subscriptions-link", function (e) {
     scrollTo(document.getElementById("subscriptions"));
@@ -1083,7 +1102,7 @@ $(document)
     if (expanded) {
       removeClass(expanded, "expanded");
     }
-    if (button.getAttribute("aria-expanded") === "false") {
+    if (button.getAttribute("aria-expanded") === "true") {
       addClass(parents(button, "expandable"), "expanded");
     }
   })
@@ -1110,13 +1129,11 @@ $(document)
     scrollToTop();
   })
   .on("click", ".select", function () {
+    toggleClass(parents(this, "selectable"), "selected");
     const container = parents(this, "results");
     const selectables = container.querySelectorAll(".selectable");
     const selected = container.querySelectorAll(".selectable.selected");
-    Array.prototype.forEach.call(selectables, function (selectable, i) {
-      toggleClass(selectable, "selected");
-    })
-    if (buttons.length == selected.length) {
+    if (selectables.length == selected.length) {
       addClass(container.querySelector(".select-all"), "active");
     } else {
       removeClass(container.querySelector(".select-all"), "active");
@@ -1128,7 +1145,7 @@ $(document)
     const container = parents(this, "results");
     const selectables = container.querySelectorAll(".selectable");
     if (selectables.length) {
-      if (button.hasClass("active")) {
+      if (hasClass(button, "active")) {
         Array.prototype.forEach.call(selectables, function (selectable, i) {
           removeClass(selectable, "selected");
         })
@@ -1137,10 +1154,10 @@ $(document)
           addClass(selectable, "selected");
         })
       }
-      button.toggleClass("active");
+      toggleClass(button, "active");
     }
   })
-  .on("click", ".errors .btn-dope", function () {
+  .on("click", "#errors .btn-dope", function () {
     removeErrors();
   })
   // BOOTSTRAP COLLAPSES
@@ -1185,7 +1202,7 @@ $(document)
     }
   })
   .on("beforeChange", "#play-carousel", function () {
-    $(this).find(".dope-result.expanded").removeClass("expanded");
+    $(this).find(".expandable.expanded").removeClass("expanded");
     $(this).find(".more-collapse.show").collapse("hide");
   })
   .on("beforeChange", "#popular-carousel", function (e, slick, currentSlide, nextSlide) {
@@ -1237,7 +1254,7 @@ $(window)
     const state = e.originalEvent.state;
     if (state) {
       // if url in urls, reload results (and don't push)
-      const url = state.url;
+      let url = state.url;
       const urls = ["settings"];
       const drop = document.getElementById("center-stage");
       for (let i = 0; i < urls.length; i++) {
@@ -1247,8 +1264,7 @@ $(window)
       }
       drop.innerHTML = state.context;
       if (hasClass(drop.querySelector(".results"), "splash")) {
-        getResults([url, drop, false], false, true);
-        return initPlay();
+        return getResults([url, drop, false], false, true);
       } 
       if (hasClass(drop.querySelector(".results"), "showpod")) {
         url = url.replace("showpod", "episodes");

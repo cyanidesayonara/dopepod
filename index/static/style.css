@@ -733,7 +733,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   display: none;
 }
 
-.errors p,
+#errors p,
 .confirm-collapse p {
   display: inline-block;
   font-size: 14px;
@@ -926,7 +926,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     transform: rotate(-360deg);
   }
 }
-.button-loading {
+#button-loading {
   position: relative;
   width: 65px;
   height: 27px;

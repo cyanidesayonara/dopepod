@@ -312,7 +312,7 @@ class Podcast(models.Model):
                 f = furl(url)
                 if provider == "dopepod":
                     f.args["provider"] = "itunes"
-                else:
+                elif provider == "itunes":
                     f.args["provider"] = "dopepod"
                 results["provider_url"] = f.url
                 results["provider"] = provider
@@ -388,7 +388,10 @@ class Podcast(models.Model):
                     results_header += " about " + str(genre)
                 if language:
                     results_header += " in " + str(language)
-                results_header += " on " + provider
+                if provider == "dopepod":
+                    results_header += " on dopepod"
+                elif provider == "itunes":
+                    results_header += " on iTunes"
                 results["podcasts"] = podcasts
                 results["header"] = results_header
                 results["options"] = True
@@ -435,7 +438,7 @@ class Podcast(models.Model):
                     if len(q) == 1:
                         results_header += ' starting with "' + q + '"'
                     else:
-                        results_header += ' for "' + q + '"'
+                        results_header += ' with "' + q + '"'
                 if num_pages > 1:
                     results_header += " (page " + str(page) + " of " + str(num_pages) + ")"
                 
@@ -776,7 +779,7 @@ class Subscription(models.Model):
         subscriptions = Subscription.objects.filter(user=user)
         results = {
             "podcasts": subscriptions,
-            "header": "Subscriptions",
+            "header": "Subscriptions " + str(subscriptions.count()) + "/50",
             "view": "subscriptions",
             "extra_options": "min",
         }
@@ -1196,7 +1199,7 @@ class Episode(models.Model):
             # get position of last episode
             position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
             if position:
-                if position == 20:
+                if position == 50:
                     user = None
                     position = None
                 else:
@@ -1287,7 +1290,7 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(user=user).order_by("position")
         results = {
             "episodes": episodes,
-            "header": "Playlist",
+            "header": "Playlist " + str(episodes.count()) + "/50",
             "view": "playlist",
             "extra_options": "min",
         }
