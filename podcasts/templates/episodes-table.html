@@ -73,6 +73,21 @@
                   {% endif %}
                 </p>
                 <div class="dope-buttons dope-buttons-r px-0">
+                  {% if user.is_authenticated and results.view == "showpod" %}
+                  <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="mode" value="add" />
+                    <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                    <button class="btn-dope" type="submit" title="Add to Playlist">
+                      <span class="active">
+                        Add
+                      </span>
+                      <span>
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </form>
+                  {% endif %}                
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="play" />
@@ -94,21 +109,6 @@
                       <i class="fas fa-download"></i>
                     </span>
                   </a>
-                  {% if user.is_authenticated and results.view == "showpod" %}
-                  <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="mode" value="add" />
-                    <input type="hidden" name="signature" value="{{ episode.signature }}" />
-                    <button class="btn-dope" type="submit" title="Add to Playlist">
-                      <span class="active">
-                        Add
-                      </span>
-                      <span>
-                        <i class="fas fa-plus"></i>
-                      </span>
-                    </button>
-                  </form>
-                  {% endif %}
                 </div>
               </div>
             </div>

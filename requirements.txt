@@ -47,13 +47,11 @@ PyDispatcher==2.0.5
 PyHamcrest==1.9.0
 pylint==2.2.2
 pyOpenSSL==18.0.0
-pypiwin32==223
 python-dateutil==2.7.5
 python-http-client==3.1.0
 python-memcached==1.59
 python3-openid==3.1.0
 pytz==2018.7
-pywin32==224
 queuelib==1.5.0
 requests==2.20.1
 requests-oauthlib==1.0.0
