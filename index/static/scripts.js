@@ -247,6 +247,8 @@ function getResults(args, noLoader, noPush) {
         themeChanger(theme);
       } else if (children(drop, ".splash").length) {
         initPlay();
+      } else if (drop.id == "subscriptions" || drop.id == "playlist") {
+        $(drop).trigger("sticky_kit:recalc");
       }
       if (scroll) {
         if ((url.includes("/charts/") || url.includes("/previous/")) && $(window).width() < 992) {
@@ -526,7 +528,6 @@ function postSubscriptions(form, origPodid, origButton) {
           }
         }
         getResults(["/charts/", "charts", false]);
-        lazyload();
         $(drop).trigger("sticky_kit:recalc");
       });
     button.innerHTML = getButtonLoading();
@@ -852,6 +853,7 @@ $(document)
     alert("This feature doesn't work yet. Sorry!");
   })
   .on("click", ".subscriptions-link", function (e) {
+    e.preventDefault();
     scrollTo(document.getElementById("subscriptions"));
   })
   .on("click", ".playlist-link", function (e) {
