@@ -643,6 +643,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 /* DOPE-BUTTONS */
 .dope-buttons {
+  width: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
