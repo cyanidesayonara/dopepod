@@ -530,15 +530,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   font-weight: 600;
   margin: 13px 0;
 }
-.results-bar .dope-buttons {
-  width: 92px;
-}
-.results-bar .dope-buttons:nth-child(1) {
-  float: left;
-}
-.results-bar .dope-buttons:nth-child(2) {
-  float: right;
-}
 
 /* DOPE-LIST */
 .dope-list {
@@ -665,6 +656,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 .dope-buttons-r > * {
   margin: 0 0 5px 5px;
+}
+.dope-buttons-shorty {
+  width: 92px;
 }
 .nix-button {
   margin-right: auto;
