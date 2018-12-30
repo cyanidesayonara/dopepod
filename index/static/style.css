@@ -589,9 +589,8 @@ form {
 }
 .dope-result h2 {
   overflow: hidden;
-  margin-bottom: 2px;
-  height: 34px;
-  line-height: 17px;
+  margin-bottom: 4px;
+  height: 32px;
   font-size: 14px;
 }
 .dope-result .result-length {
@@ -692,15 +691,16 @@ form {
 .dope-results h1,
 .dope-results h2 {
   font-size: 14px;
-  margin: 0 0 10px 0;
-  overflow: hidden;
+  margin: 0 0 10px;
   height: 32px;
+  text-overflow: unset;
+  white-space: unset;
 }
 .dope-results ul {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0;
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 .dope-results ul li {

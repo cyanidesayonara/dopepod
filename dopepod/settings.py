@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 # pip upgrade line for windows: for /F "delims===" %i in ('pip freeze -l') do pip install -U %i
-# (not needed) pip install git+https://github.com/LaundroMat/django-lazysignup@master
 # pip install elasticsearch==5.5.2
 
 import os
