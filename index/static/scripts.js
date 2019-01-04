@@ -46,9 +46,21 @@ function dateLocalizer() {
     date.innerText = dateString;
   });
 };
+function giveConsent() {
+  _paq.push(["rememberConsentGiven"]);
+};
+function denyConsent() {
+  _paq.push(["forgetConsentGiven"]);
+};
 // send page view data to be analyzed
-function trackMe(url) {
-  _paq.push(['trackPageView', url]);
+function trackView(url) {
+  _paq.push(['requireConsent']);
+  _paq.push(["trackPageView", url]);
+};
+// send search data to be analyzed
+function trackSearch(q) {
+  _paq.push(['requireConsent']);
+  _paq.push(["trackSiteSearch", q]);
 };
 // push current state & url into browser history
 function pushState(url) {
@@ -66,7 +78,7 @@ function pushState(url) {
     "url": url,
   };
   history.pushState(state, "", url);
-  trackMe(url);
+  trackView(url);
 };
 // replace current state & url in browser history
 function replaceState(url) {
@@ -773,6 +785,7 @@ $(document)
       if (!(drop.querySelector(".results").getAttribute("data-q") == q)) {
         url = url + "?q=" + q;
         getResults([url, drop, true]);
+        trackSearch(q);
       } else {
         scrollTo(drop);
       }
