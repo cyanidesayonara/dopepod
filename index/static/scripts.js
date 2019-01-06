@@ -8,6 +8,9 @@ let charts = 0;
 refreshCookie();
 dateLocalizer();
 hoverDisabler();
+// consent is given by default when entering site
+// user may choose to deny it later
+_paq.push(["rememberConsentGiven"]);
 
 // post user's local time zone to server
 // give new datestring to date-elements
