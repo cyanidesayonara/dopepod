@@ -450,7 +450,7 @@ function postContact(form) {
       scrollToTop();
     })
     .done(function (response) {
-      $(drop).html(response);
+      drop.innerHTML = response;
       scrollToTop();
       replaceState(url);
     });
@@ -458,13 +458,11 @@ function postContact(form) {
 };
 
 function postSettings(form) {
-  const button = form.querySelector("button[type=submit]");
-  const theme = button.getAttribute("data-theme");
-  button.parentNode.querySelector("input[name=theme]").value = theme;
   const method = form.method;
   const url = form.action;
   const data = $(form).serialize();
   const drop = document.getElementById("center-stage");
+  const theme = form.querySelector("input[name=theme]").value;
   $.ajax({
       data: data,
       method: method,
@@ -478,7 +476,7 @@ function postSettings(form) {
       if (theme) {
         themeChanger(theme);
       }
-      $(drop).html(response);
+      drop.innerHTML = response;
       scrollToTop();
       replaceState(url);
     });
@@ -1071,8 +1069,10 @@ $(document)
   })
   .on("click", ".theme-button[type=submit]", function () {
     const button = this;
-    const theme = button.querySelector("span").innerText.toLowerCase();
-    button.parentNode.querySelector("input[name=theme]").value = theme;
+    const theme = button.getAttribute("data-theme");
+    if (theme) {
+      button.parentNode.querySelector("input[name=theme]").value = theme;
+    }
   })
   .on("click", ".showpod-button", function (e) {
     const button = this;
