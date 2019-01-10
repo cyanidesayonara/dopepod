@@ -360,6 +360,16 @@ def dopebar(request):
     if request.method == "GET" and request.is_ajax():
         return render(request, "dopebar.min.html", {})
 
+def autocomplete(request):
+    if request.method == "GET" and request.is_ajax():
+        q = request.GET.get("q", None)
+        if q:
+            template = "autocomplete.min.html"
+            context = {
+                "podcasts": Podcast.autocomplete(q)
+            }
+            return render(request, template, context)
+
 @vary_on_headers("Accept")
 def api(request):
     if request.method == "GET":

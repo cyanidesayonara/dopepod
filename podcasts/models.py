@@ -145,6 +145,20 @@ class Podcast(models.Model):
     def get_absolute_url(self):
         return "https://dopepod.me" + reverse("showpod", args=[self.podid])
 
+    def autocomplete(q):
+        """ 
+        returns name of podcast matching search term
+        """
+        # filter by title
+        if q:
+            results = cache.get("autocomplete" + q)
+            if (results):
+                return results
+            else:
+                results = SearchQuerySet().autocomplete(content=q)[:10]
+                cache.set("autocomplete" + q, results, 60 * 60 * 24)
+                return results
+            
     def search(url, provider=None, q=None, genre=None, language=None, show=None, order=None, page=None, view=None, api=None, force_cache=False):
         """
         returns podcasts matching search terms

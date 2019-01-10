@@ -68,7 +68,7 @@ function trackSearch(q) {
 // push current state & url into browser history
 function pushState(url) {
   // return if url in urls
-  const urls = ["episodes", "dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
+  const urls = ["episodes", "dopebar", "subscriptions", "playlist", "charts", "previous", "change-password", "autocomplete"];
   for (let i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -87,7 +87,7 @@ function pushState(url) {
 function replaceState(url) {
   url = url.replace("episodes", "showpod");
   // return if url in urls
-  const urls = ["dopebar", "subscriptions", "playlist", "charts", "previous", "change-password"];
+  const urls = ["dopebar", "subscriptions", "playlist", "charts", "previous", "change-password", "autocomplete"];
   for (let i = 0; i < urls.length; i++) {
     if (url.includes(urls[i])) {
       return;
@@ -316,8 +316,8 @@ function hasClass(el, className) {
 
 function parents(node, className) {
   let current = node;
-  while (current.parentElement != null) {
-    current = current.parentElement;
+  while (current.parentNode != null) {
+    current = current.parentNode;
     if (current.classList.contains(className)) {
       return current;
     }
@@ -348,7 +348,7 @@ function selectorMatches(element, selector) {
       if (match == element) {
         return match;
       }
-    })
+    });
   }
 };
 // NOSHOW
@@ -695,7 +695,7 @@ function initPlay() {
   const elements = document.querySelectorAll(".logo");
   Array.prototype.forEach.call(elements, function (el, i) {
     toggleClass(el, "d-none")
-  })
+  });
   // shuffle all except first (logo)
   const carousel = document.getElementById("play-carousel");
   if (carousel) {
@@ -772,6 +772,22 @@ $(document)
   })
   .scroll(function () {
     scrollSpy();
+  })
+  .on("keyup focus", ".q", function (e) {
+    const input = this;
+    const form = parents(input, "search-form");
+    const drop = form.querySelector(".autocomplete");
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      let q = input.value;
+      if (q) {
+        q = cleanString(q);
+        let url = "/autocomplete/?q=" + q;
+        getResults([url, drop, true], true, true);
+      } else {
+        drop.innerHTML = "";
+      }
+    }, 250);
   })
   // SEARCH
   // search when user types into search field (with min "delay" between keypresses)
@@ -1133,11 +1149,15 @@ $(document)
     let qs = document.querySelectorAll(".q");
     Array.prototype.forEach.call(qs, function (q, i) {
       q.value = "";
-    })
+    });
   })
   // hides dopebar-collapse...
-  .on("click", "body, .dope-link, .search-button", function () {
+  .on("click", "body, .dope-link, .search-button, .autocomplete-wrapper > a", function () {
     $("#dopebar-collapse.show").collapse("hide");
+    const autocompletes = document.querySelectorAll(".autocomplete");
+    Array.prototype.forEach.call(autocompletes, function (autocomplete, i) {
+      autocomplete.innerHTML = "";
+    });
   })
   // ...except when dopebar-collapose is clicked
   .on("click", "#dopebar-collapse", function (e) {
@@ -1166,11 +1186,11 @@ $(document)
       if (hasClass(button, "active")) {
         Array.prototype.forEach.call(selectables, function (selectable, i) {
           removeClass(selectable, "selected");
-        })
+        });
       } else {
         Array.prototype.forEach.call(selectables, function (selectable, i) {
           addClass(selectable, "selected");
-        })
+        });
       }
       toggleClass(button, "active");
     }
@@ -1219,8 +1239,17 @@ $(document)
       $(carousel).slick("slickPause");
     }
   })
-  .on("beforeChange", "#play-carousel", function () {
-    $(this).find(".expandable.expanded").removeClass("expanded");
+  .on("afterChange", "#play-carousel", function (e, slick, currentSlide, nextSlide) {
+    console.log(nextSlide)
+    if (nextSlide === 0) {
+      console.log("sdsf")
+    }
+  })
+  .on("beforeChange", "#play-carousel", function (e, slick, currentSlide, nextSlide) {
+    const expanded = this.querySelector(".expandable.expanded");
+    if (expanded) {
+      removeClass(expanded, "expanded");
+    }
     $(this).find(".more-collapse.show").collapse("hide");
   })
   .on("beforeChange", "#popular-carousel", function (e, slick, currentSlide, nextSlide) {
@@ -1236,7 +1265,7 @@ $(document)
         const labels = document.querySelectorAll(".popular .results-bar span");
         Array.prototype.forEach.call(labels, function (label, i) {
           toggleClass(label, "d-none");
-        })
+        });
       }
     } else {
       // cut-off point + halfway point
@@ -1247,7 +1276,7 @@ $(document)
         const labels = document.querySelectorAll("popular .results-bar span");
         Array.prototype.forEach.call(labels, function (icon, i) {
           toggleClass(label, "d-none");
-        })
+        });
       }
     }
   })

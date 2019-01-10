@@ -29,4 +29,5 @@ urlpatterns = [
     path("tz/", views.tz, name="tz"),
     path("solong/", views.solong, name="solong"),
     path("tryout/", views.tryout, name="tryout"),
+    path("autocomplete/", views.autocomplete, name="autocomplete"),
 ]

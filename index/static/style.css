@@ -283,7 +283,6 @@ form {
   border: none;
   color: rgb(46, 46, 46);
   font-size: 16px;
-  transition: all .25s ease-in-out;
 }
 .no-touch .dope-link:hover,
 .dope-link:focus,
@@ -296,6 +295,8 @@ form {
 .search-form {
   position: relative;
   display: inline-block;
+  width: 200px;
+  padding: 0 10px;
 }
 .search-button {
   padding: 0 4px;
@@ -320,12 +321,56 @@ form {
   outline: none;
 }
 .q {
-  width: 200px;
   font-size: 16px;
-  margin: 0 10px;
+  margin: 0;
   padding-right: 30px;
   border: 2px solid rgb(0, 191, 165)
 }
+.autocomplete-wrapper {
+  text-align: left;
+  position: absolute;
+  background: rgba(0, 191, 165, .95);
+  top: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  border: 2px solid #00bfa5;
+  border-radius: .25rem;
+  z-index: 9001;
+}
+.autocomplete img {
+  float: right;
+}
+.autocomplete a {
+  color: #000;
+  display: block;
+  padding: 2px;
+  overflow: hidden;
+}
+.autocomplete p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 15px 6px;
+  margin: 0;
+  font-weight: 600;
+}
+.autocomplete a:hover,
+.autocomplete a:focus,
+.autocomplete > p {
+  background: rgba(150, 150, 150, .2);
+  color: #fff;
+}
+.results .autocomplete-wrapper {
+  background: #fff;
+}
+.results .autocomplete-wrapper a {
+  color: unset;
+}
+.results .autocomplete-wrapper a:hover,
+.results .autocomplete-wrapper a:focus {
+  color: unset;
+}
+
 
 /* CHECKBOX */
 [type=checkbox] {
@@ -517,7 +562,6 @@ form {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border: 2px solid rgb(0, 191, 165);
-  overflow: hidden;
 }
 .results-bar {
   padding: 0;

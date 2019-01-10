@@ -137,6 +137,18 @@
           <ul class="dope-list">
             <li>
               <span>
+                Released
+              </span>
+              <span>
+                {% if episode.pubDate %}
+                  {{ episode.pubDate|date:"d M Y H:i" }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </span>
+            </li>
+            <li>
+              <span>
                 Rank
               </span>
               <span>
