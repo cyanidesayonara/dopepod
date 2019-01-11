@@ -150,12 +150,13 @@ class Podcast(models.Model):
         returns name of podcast matching search term
         """
         # filter by title
-        if q:
+        if q and len(q) > 1:
             results = cache.get("autocomplete" + q)
             if (results):
                 return results
             else:
-                results = SearchQuerySet().autocomplete(content=q)[:10]
+                results = SearchQuerySet().all().load_all().filter(
+                    content__contains=q).order_by("rank")[:10]
                 cache.set("autocomplete" + q, results, 60 * 60 * 24)
                 return results
             
