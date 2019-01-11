@@ -760,6 +760,31 @@ function togglePopular() {
   }
 };
 
+function controlAudio(attr, value) {
+  const audio = document.getElementById("audio");
+  const currentAttr = audio[attr];
+  let newAttr;
+  if (attr === "muted") {
+    newAttr = !audio[attr];
+  } else if (attr === "play") {
+    if (audio.paused) {
+      audio.play();
+    }
+  } else if (attr === "pause") {
+    if (!audio.paused) {
+      audio.pause();
+    }
+  } else {
+    newAttr = +currentAttr + +value;
+  }
+  if (newAttr < 0) {
+    newAttr = 0;
+  } else if (attr === "volume" && newAttr > 1) {
+    newAttr = 1;
+  }
+  audio[attr] = newAttr;
+};
+
 $(document)
   .ready(function () {
     lazyload();
@@ -1237,12 +1262,6 @@ $(document)
     const carousel = document.getElementById("play-carousel");
     if (hasClass(carousel, "slick-initialized")) {
       $(carousel).slick("slickPause");
-    }
-  })
-  .on("afterChange", "#play-carousel", function (e, slick, currentSlide, nextSlide) {
-    console.log(nextSlide)
-    if (nextSlide === 0) {
-      console.log("sdsf")
     }
   })
   .on("beforeChange", "#play-carousel", function (e, slick, currentSlide, nextSlide) {

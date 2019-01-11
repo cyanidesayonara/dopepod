@@ -828,11 +828,11 @@ form {
   margin: 0 0 3px;
 }
 .player-date {
-  margin: 0 0 10px;
+  margin: 0;
   font-size: 12px;
 }
 #player-wrapper .player-description {
-  margin: 0;
+  margin: 0 0 10px;
   max-height: calc(100vh - 500px);
   overflow-y: auto;
 }

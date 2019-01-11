@@ -53,23 +53,62 @@
           N/A
         {% endif %}
       </p>
+      <div class="dope-buttons dope-buttons-l px-0">
+        <a class="btn-dope" href="{{ episode.url }}" title="Download Episode" download>
+          <span>
+            <i class="fas fa-download"></i>
+          </span>
+        </a>
+        <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
+          title="Episodes of {{ episode.podcast.title }}">
+          <span>
+            <i class="fas fa-bars"></i>
+          </span>       
+        </a>
+        <button class="btn-dope" onclick="controlAudio('currentTime', '-15');" title="Skip Backward">
+          <span>
+            <i class="fas fa-backward"></i>
+          </span>
+        </button>
+        <button class="d-none btn-dope" onclick="controlAudio('play');" title="Play">
+          <span>
+            <i class="fas fa-play"></i>
+          </span>
+        </button>
+        <button class="d-none btn-dope" onclick="controlAudio('pause');" title="Pause">
+          <span>
+            <i class="fas fa-pause"></i>
+          </span>
+        </button>          
+        <button class="btn-dope" onclick="controlAudio('currentTime', '15');" title="Skip Forward">
+          <span>
+            <i class="fas fa-forward"></i>
+          </span>
+        </button>
+        <button class="btn-dope" onclick="controlAudio('volume', '-0.2');" title="Lower Volume">
+          <span>
+            <i class="fas fa-volume-off"></i>
+          </span>
+        </button>
+        <button class="btn-dope" onclick="controlAudio('volume', '0.2');" title="Raise Volume">
+          <span>
+            <i class="fas fa-volume-up"></i>
+          </span>
+        </button>
+        <button class="btn-dope" onclick="controlAudio('muted');" title="Mute Volume">
+          <span>
+            <i class="fas fa-volume-mute"></i>
+          </span>
+        </button>          
+      </div>      
       <div class="collapse fade player-collapse" id="player-collapse">
         <p class="player-description">
-          {{ episode.description }}
+          {% if episode.description %}
+            {{ episode.description }}
+          {% else %}
+            No description
+          {% endif %}        
         </p>
-        <div class="dope-buttons dope-buttons-l px-0">
-          <a class="btn-dope" href="{{ episode.url }}" title="Download Episode" download>
-            <span>
-              <i class="fas fa-download"></i>
-            </span>
-          </a>
-          <a class="btn-dope showpod-link" data-podid="{{ episode.podcast.podid }}" href="{% url 'showpod' podid=episode.podcast.podid %}"
-            title="Episodes of {{ episode.podcast.title }}">
-            <span>
-              <i class="fas fa-bars"></i>
-            </span>       
-          </a>
-        </div>
       </div>
       <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false" title="Show More">
         <span class="exp-icon exp-nix">
