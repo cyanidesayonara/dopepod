@@ -347,6 +347,7 @@ form {
   overflow: hidden;
 }
 .autocomplete p {
+  height: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -356,21 +357,18 @@ form {
 }
 .autocomplete a:hover,
 .autocomplete a:focus,
-.autocomplete > p {
+.autocomplete-wrapper > p {
   background: rgba(150, 150, 150, .2);
   color: #fff;
 }
 .results .autocomplete-wrapper {
   background: #fff;
 }
-.results .autocomplete-wrapper a {
-  color: unset;
+.results .autocomplete a:hover,
+.results .autocomplete a:focus,
+.results .autocomplete-wrapper > p {
+  color: #000;
 }
-.results .autocomplete-wrapper a:hover,
-.results .autocomplete-wrapper a:focus {
-  color: unset;
-}
-
 
 /* CHECKBOX */
 [type=checkbox] {

@@ -805,7 +805,7 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function () {
       let q = input.value;
-      if (q) {
+      if (q && q.length > 1) {
         q = cleanString(q);
         let url = "/autocomplete/?q=" + q;
         getResults([url, drop, true], true, true);
