@@ -218,14 +218,14 @@
               </span>
             </a>
           {% else %}
-            <button class="btn-dope view-button">
+            <button class="btn-dope view-button" title="Toggle View">
               <span class="active">
-                Display
+                View
               </span>
-              <span class="d-none" data-view="grid">
+              <span data-view="grid">
                 <i class="fas fa-th"></i>
               </span>
-              <span data-view="list">
+              <span class="d-none" data-view="list">
                 <i class="fas fa-bars"></i>
               </span>
             </button>
@@ -315,7 +315,7 @@
               {% endif %}
               {% for alphabet in results.alphabet %}
                 {% if alphabet.1 %}
-                  <a class="btn-dope options-button" href="{{ alphabet.1 }}" title="{{ alphabet.0 }}">
+                  <a class="btn-dope options-button" href="{{ alphabet.1 }}">
                     <span>
                       {{ alphabet.0 }}
                     </span>

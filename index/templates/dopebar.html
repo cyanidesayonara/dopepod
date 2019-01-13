@@ -40,7 +40,7 @@
           </button>
         </div>
         <div class="col-6 col-md-2" id="dopebar-c">
-          <a class="dope-link index-link" href="/">
+          <a class="dope-link index-link" href="{% url 'index' %}">
             <h1>dopepod</h1>
           </a>
         </div>
@@ -53,7 +53,7 @@
               </button>
             </form>
           {% else %}
-            <a class="dope-link login-link d-lg-none" href="/?view=login" title="Login">
+            <a class="dope-link login-link d-lg-none" href="{% url 'login' %}" title="Login">
               <i class="fas fa-sign-in-alt"></i>
             </a>
           {% endif %}
@@ -72,12 +72,12 @@
               </li>
             {% else %}
               <li>
-                <a class="dope-link login-link" href="/?view=login">
+                <a class="dope-link login-link" href="{% url 'login' %}">
                   Login
                 </a>
               </li>
               <li>
-                <a class="dope-link signup-link" href="/?view=signup">
+                <a class="dope-link signup-link" href="{% url 'signup' %}">
                   Signup
                 </a>
               </li>
@@ -145,12 +145,12 @@
         </form>
       </li>
       <li>
-        <a class="dope-link login-link" href="/?view=login">
+        <a class="dope-link login-link" href="{% url 'login' %}">
           Login
         </a>
       </li>
       <li>
-        <a class="dope-link signup-link" href="/?view=signup">
+        <a class="dope-link signup-link" href="{% url 'signup' %}">
           Signup
         </a>
       </li>

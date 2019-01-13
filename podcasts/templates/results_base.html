@@ -3,6 +3,8 @@
 {% block title %}
   {% if results.view == "showpod" %}
     Listen to episodes of {{ results.header }} | dopepod
+  {% elif results.view == "splash" %}
+    dopepod
   {% elif results.header %}
     {{ results.header }} | dopepod
   {% else %}
@@ -18,7 +20,13 @@
       {% include "results-options.min.html" %}
       {% include "showpod.min.html" %}
       {% if results.view == "splash" %}
-        {% include "splashboard.min.html" %}
+        {% include "splash.min.html" %}
+      {% elif results.view == "login" %}
+        {% include "login.min.html" %}
+      {% elif results.view == "signup" %}
+        {% include "signup.min.html" %}
+      {% elif results.view == "forgot_password" %}
+        {% include "forgot_password.min.html" %}
       {% elif results.view == "grid" or results.view == "list" %}
         {% include "search.min.html" %}
       {% elif results.view == "charts" %}
@@ -49,11 +57,11 @@
       {% elif results.view == "contact" %}
         {% include "contact.min.html" %}                    
       {% elif results.view == "password_reset" %}
-        {% include "password-reset.min.html" %}
+        {% include "password_reset.min.html" %}
       {% elif results.view == "reset_password" %}
-        {% include "reset-password.min.html" %}
+        {% include "reset_password.min.html" %}
       {% elif results.view == "confirm_email" %}
-        {% include "confirm-email.min.html" %}
+        {% include "confirm_email.min.html" %}
       {% endif %}
     </div>
   </div>

@@ -1,0 +1,86 @@
+{% if not user.is_authenticated %}
+  <div class="row color-3" id="splash-buttons">
+    <div class="dope-wrapper col-12 col-lg-4 order-lg-2">
+      <p>
+        Login or signup for an account now.
+        <br />
+        Subscribe to your favorite podcasts.
+        <br />
+        Create your personal playlist.
+      </p>
+      <div class="dope-buttons">
+        {% if results.view == "login" %}
+          <a class="btn-dope index-link" href="{% url 'index' %}">
+            <span class="active">
+              Login
+            </span>
+            <span class="active">
+              <i class="fas fa-times"></i>
+            </span>
+          </a>
+        {% else %}
+          <a class="btn-dope login-link" href="{% url 'login' %}">
+            <span class="active">
+              Login
+            </span>
+            <span>
+              <i class="fas fa-sign-in-alt"></i>
+            </span>
+          </a>
+        {% endif %}
+        {% if results.view == "signup" %}
+          <a class="btn-dope index-link" href="{% url 'index' %}">
+            <span class="active">
+              Signup
+            </span>
+            <span class="active">
+              <i class="fas fa-times"></i>
+            </span>
+          </a>        
+        {% else %}
+          <a class="btn-dope signup-link" href="{% url 'signup' %}">
+            <span class="active">
+              Signup
+            </span>
+            <span>
+              <i class="fas fa-user-plus"></i>
+            </span>
+          </a>
+        {% endif %}          
+      </div>
+      <div class="dope-buttons">
+        <a class="privacy-link" href="{% url 'privacy' %}">
+          Privacy
+        </a>
+        ●
+        <a class="terms-link" href="{% url 'terms' %}">
+          Terms
+        </a>
+      </div>
+    </div>
+    <div class="dope-wrapper col-12 col-lg-4 order-lg-1">
+      <p>Sign in with a social media account.</p>
+      {% include "social-login.min.html" %}
+    </div>
+    <div class="dope-wrapper col-12 col-lg-4 order-lg-3">
+      <p>
+        Activate a temporary user account.
+        <br />
+        Try out all the features.
+      </p>
+      <form class="tryout-form" method="POST" action="{% url 'tryout' %}">
+        {% csrf_token %}
+        <div class="dope-buttons">
+          <button type="submit" class="btn-dope">
+            <span class="active">
+              Activate
+            </span>
+            <span>
+              <i class="fas fa-check"></i>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endif %}

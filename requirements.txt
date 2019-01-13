@@ -51,10 +51,10 @@ python-dateutil==2.7.5
 python-http-client==3.1.0
 python-memcached==1.59
 python3-openid==3.1.0
-pytz==2018.7
+pytz==2018.9
 queuelib==1.5.0
 requests==2.21.0
-requests-oauthlib==1.0.0
+requests-oauthlib==1.1.0
 Scrapy==1.5.1
 scrapy-random-useragent==0.2
 sendgrid==3.6.5
@@ -67,6 +67,6 @@ Twisted==18.9.0
 typed-ast==1.1.1
 typing==3.6.6
 urllib3==1.24.1
-w3lib==1.19.0
-wrapt==1.10.11
+w3lib==1.20.0
+wrapt==1.11.0
 zope.interface==4.6.0

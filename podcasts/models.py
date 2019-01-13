@@ -453,7 +453,11 @@ class Podcast(models.Model):
                     if len(q) == 1:
                         results_header += ' starting with "' + q + '"'
                     else:
-                        results_header += ' with "' + q + '"'
+                        results_header += ' containing "' + q + '"'
+                if order == "rank":
+                    results_header += " in order of popularity"
+                elif order == "rank":
+                    results_header += " in alphabetical order"
                 if num_pages > 1:
                     results_header += " (page " + str(page) + " of " + str(num_pages) + ")"
                 
@@ -757,6 +761,7 @@ class Podcast(models.Model):
             "genres": genres,
             "languages": languages,
             "options": True,
+            "extra_options": "arrows",
         }
         return results
 
@@ -1147,22 +1152,14 @@ class Episode(models.Model):
 
     def get_previous():
         """ 
-        returns all previouslylast played episodes
+        returns all previously played episodes
         """
 
-        results = cache.get("previous")
-        if results:
-            return results
-        else:
+        episodes = cache.get("previous")
+        if not episodes:
             episodes = Episode.objects.filter(position=None).order_by("-played_at",)
-            results = {
-                "episodes": episodes,
-                "header": "Previously played",
-                "view": "previous",
-                "options": True,
-            }
-            cache.set("previous", results, 60 * 60 * 24)
-            return results
+            cache.set("previous", episodes, 60 * 60 * 24)
+        return episodes
 
     def play(self):
         episodes = Episode.objects.filter(user=self.user).order_by("position")
@@ -1200,13 +1197,7 @@ class Episode(models.Model):
 
         # let's cache those bad boys
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
-        results = {
-            "episodes": episodes,
-            "header": "Previously played",
-            "view": "previous",
-            "options": True,
-        }
-        cache.set("previous", results, 60 * 60 * 24)
+        cache.set("previous", episodes, 60 * 60 * 24)
     
     def add(signature, user):
         # max 20 episodes for now

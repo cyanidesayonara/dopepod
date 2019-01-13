@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, Http404, HttpResponse
+from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from index.forms import ProfileForm, UserForm
@@ -8,7 +9,7 @@ from django.db.models import F
 from django.utils import timezone
 from datetime import datetime
 from allauth.account import views as allauth
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core import serializers
@@ -31,49 +32,63 @@ def get_last_seen(session):
     session["last_seen"] = datetime.strftime(timezone.now(), "%b %d %Y %X %z")
     return (last_seen, cookie) 
 
-def get_splash(context):
+def get_splash_results():
+    episodes = Episode.get_previous()
     results = {
+        "episodes": episodes,
+        "header": "Welcome",
         "view": "splash",
+        "extra_options": "arrows",
     }
+    return results
 
-    if cache.get("play"):
-        play = {}
-        play["view"] = "play"
-    else:
-        play = Episode.get_previous()
-    
-    context.update({
-        "play": play,
-        "results": results,   
-    })
-    return context
+def get_login_results():
+    results = {
+        "header": "Login",
+        "view": "login",
+        "extra_options": "all",
+    }
+    return results
+
+def get_signup_results():
+    results = {
+        "header": "Signup",
+        "view": "signup",
+        "extra_options": "all",
+    }
+    return results
+
+def get_forgot_password_results():
+    results = {
+        "header": "Forgot Password",
+        "view": "forgot_password",
+        "extra_options": "all",
+    }
+    return results    
+
+def get_previous_results():
+    episodes = Episode.get_previous()
+    results = {
+        "episodes": episodes,
+        "header": "Previously played",
+        "view": "previous",
+        "options": True,
+    }
+    return results
 
 def render_non_ajax(request, template, context):
     user = request.user
     last_seen, cookie = get_last_seen(request.session)
     url = request.get_full_path()
 
-    previous = Episode.get_previous()
+    previous = get_previous_results()
     charts = Podcast.search(url=url, provider="dopepod", view="charts")
 
     if user.is_authenticated:
         for podcast in charts["podcasts"]:
             podcast.object.is_subscribed(user)
 
-    if cache.get("play"):
-        play = {}
-        play["view"] = "play"
-    else:
-        play = previous
-
-    if cache.get("popular"):
-        popular = {}
-        popular["view"] = "popular"
-    else:
-        popular = Podcast.get_popular()
-    
-    if not context["results"]:
-        context = get_splash(context)
+    popular = Podcast.get_popular()
 
     context.update({
         "popular": popular,
@@ -99,7 +114,6 @@ def get_settings_errors(context, user_form, profile_form):
         if message:
             errors[key] = message
     data = json.loads(profile_form.errors.as_json())
-    print(data)
     keys = data.keys()
     for key in keys:
         message = data[key][0]["message"]
@@ -169,7 +183,10 @@ def post_contact_form(context, request):
     email = request.POST.get("email", "no@email.com")
     try:
         validate_email(email)
-        send_mail(title, message, email, ['cyanidesayonara@gmail.com'])
+        mail = EmailMessage(title,
+                            "message:\n" + message + "\n\nby: " + email,
+                            to=['cyanidesayonara@gmail.com'])
+        mail.send()
         context.update({
             "message": "Sent!",
         })
@@ -250,7 +267,7 @@ def get_showpod_results(podid, user=None, count=None, api=None):
     try:
         podcast = Podcast.objects.get(podid=podid)
     except Podcast.DoesNotExist:
-        raise Http404
+        raise Http404()
     if api:
         podcasts = serializers.serialize(api, [podcast], fields=(
             "podid", "feedUrl", "title", "artist", "genre", "explicit", "language", "ccopyrighttext", "description", "reviewsUrl", "podcastUrl", "artworkUrl"
@@ -390,7 +407,7 @@ def api(request):
             if request.is_ajax():
                 return render(request, template, context)
             return render_non_ajax(request, template, context)
-    return redirect("/api/")
+    raise Http404()
 
 @vary_on_headers("Accept")
 def index(request):
@@ -401,12 +418,10 @@ def index(request):
 
     if request.method == "GET":
         template = "results_base.min.html"
-        user = request.user
-        view = request.GET.get("view" , None)
+        results = get_splash_results()
         context = {
-            "view": view,
+            "results": results,
         }
-        context = get_splash(context)
         if request.is_ajax():
             return render(request, template, context)
         return render_non_ajax(request, template, context)
@@ -454,7 +469,7 @@ def charts(request):
                 "results": results,
             })
             return render(request, template, context)
-        return redirect("/")
+    raise Http404()
 
 @vary_on_headers("Accept")
 def search(request):
@@ -478,7 +493,6 @@ def search(request):
             return render(request, template, context)
         return render_non_ajax(request, template, context)
 
-@vary_on_headers("Accept")
 def subscriptions(request):
     """
     returns subscriptions for user
@@ -538,7 +552,7 @@ def privacy(request):
         if request.is_ajax():
             return render(request, template, context)
         return render_non_ajax(request, template, context)
-    return redirect("/privacy/")
+    raise Http404()
 
 @vary_on_headers("Accept")
 def terms(request):
@@ -551,7 +565,7 @@ def terms(request):
         if request.is_ajax():
             return render(request, template, context)
         return render_non_ajax(request, template, context)
-    return redirect("/terms/")
+    raise Http404()
 
 @vary_on_headers("Accept")
 def contact(request):
@@ -574,9 +588,8 @@ def contact(request):
             if request.is_ajax:
                 return render(request, template, context, status=400)
             return render_non_ajax(request, template, context)
-    return redirect("/contact/")
+    raise Http404()
 
-@vary_on_headers("Accept")
 def playlist(request):
     if request.method == "GET":
         template = "results_base.min.html"
@@ -715,7 +728,7 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, template, context, status=400)
                 return render_non_ajax(request, template, context)
-    return redirect("/")
+    raise Http404()
 
 def episodes(request, podid):
     """
@@ -757,13 +770,12 @@ def previous(request):
     if request.method == "GET":
         if request.is_ajax():
             template = "results_base.min.html"
-            previous = Episode.get_previous()
+            results = get_previous_results()
             context = {
-                "results": previous,
+                "results": results,
             }
             return render(request, template, context)
-        else:
-            return redirect("/")
+    raise Http404()
 
 # allauth stuff
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac
@@ -774,6 +786,19 @@ def login(request):
     kinda dumb but it works ¯\_(ツ)_/¯
     """
 
+    if request.method == "GET":
+        user = request.user
+        if user.is_authenticated:
+            return redirect(reverse("index"))
+        template = "results_base.min.html"
+        results = get_login_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+
     if request.method == "POST":
         template = "results_base.min.html"
         # request sent to allauth is always ajax so the output is json
@@ -781,19 +806,22 @@ def login(request):
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.login(request)
         request.META["HTTP_X_REQUESTED_WITH"] = ajax
-        context = {
-            "view": "login",
-        }
-
+        context = {}
         user = request.user
         if response.status_code == 200:
             if user.is_authenticated:
-                context = get_splash(context)
+                results = get_splash_results()
+                context.update({
+                    "results": results,
+                })
                 return render(request, template, context)
             context.update({
                 "message": "You must confirm your email before logging in."
             })
-        context = get_splash(context)
+        results = get_login_results()
+        context.update({
+            "results": results,
+        })        
         context = get_form_errors(context, response)
         if request.is_ajax():
             return render(request, template, context, status=404)
@@ -801,6 +829,19 @@ def login(request):
     raise Http404()
 
 def signup(request):
+    if request.method == "GET":
+        user = request.user
+        if user.is_authenticated:
+            return redirect(reverse("index"))
+        template = "results_base.min.html"
+        results = get_signup_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+
     if request.method == "POST":
         template = "results_base.min.html"
         try:
@@ -813,18 +854,20 @@ def signup(request):
         context = {}
         if response.status_code == 200:
             context.update({
-                "view": "login",
                 "message": "We have sent a confirmation link to your email address. Please contact us if you do not receive it within a few minutes."
             })
-            context = get_splash(context)
+            results = get_login_results()
+            context.update({
+                "results": results,
+            })
             return render(request, template, context)
+        results = get_signup_results()
         context.update({
-            "view": "signup",
+            "results": results,
         })
-        context = get_splash(context)
         context = get_form_errors(context, response)
         if request.is_ajax():
-            return render(request, template, context, status=404)
+            return render(request, template, context, status=400)
         return render_non_ajax(request, template, context)
     raise Http404()
 
@@ -858,38 +901,49 @@ def change_password(request):
                 })
                 return render(request, template, context)
             return render(request, template, context, status=404)
-        context = get_splash(context)
+        results = get_forgot_password_results()
+        context.update({
+            "results": results,
+        })
         return render(request, template, context)
-    return redirect("/settings/")
+    raise Http404()
 
-def password_reset(request):
+def forgot_password(request):
+    if request.method == "GET":
+        user = request.user
+        if user.is_authenticated:
+            return redirect(reverse("index"))
+        template = "results_base.min.html"
+        results = get_forgot_password_results()
+        context = {
+            "results": results,
+        }
+        if request.is_ajax():
+            return render(request, template, context)
+        return render_non_ajax(request, template, context)
+
     if request.method == "POST":
         template = "results_base.min.html"
         ajax = request.META["HTTP_X_REQUESTED_WITH"]
         request.META["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
         response = allauth.password_reset(request)
         request.META["HTTP_X_REQUESTED_WITH"] = ajax
-
-        results = {
-            "view": "splash",
-        }
-        context = {
-            "results": results,
-        }
+        context = {}
         
         if response.status_code == 200:
+            results = get_login_results()
             context.update({
-                "view": "login",
+                "results": results,
                 "message": "We have sent you an email. Please contact us if you do not receive it within a few minutes.",
             })
         else:
             context = get_form_errors(context, response)
+            results = get_forgot_password_results()
             context.update({
-                "view": "password",
+                "results": results,
             })
-        context = get_splash(context)
-        return render(request, template, context)
-    return redirect("/?view=password")
+        return render(request, template, context, status=400)
+    raise Http404()
 
 def password_reset_from_key(request, uidb36, key):
     template = "results_base.min.html"
@@ -936,7 +990,7 @@ def password_reset_from_key(request, uidb36, key):
             if request.is_ajax():
                 return render(request, template, context, status=400)
             return render_non_ajax(request, template, context)
-    return redirect("/")
+    return Http404
 
 def confirm_email(request, key):
     if request.method == "GET":
@@ -950,7 +1004,7 @@ def confirm_email(request, key):
         }
         if response.status_code == 302:
             return render_non_ajax(request, template, context)
-    return redirect("/")
+    return redirect(reverse("index"))
 
 def noshow(request):
     podid = request.POST.get("podid", None)
@@ -975,14 +1029,8 @@ def solong(request):
         if user.is_authenticated:
             allauth.logout(request)
             user.delete()
-    return redirect("/")
+    return redirect(reverse("index"))
 
 @allow_lazy_user
 def tryout(request):
-    if request.method == "POST":
-        template = "results_base.min.html"
-        user = request.user
-        context = {}
-        context = get_splash(context)
-        return render(request, template, context)
-    return redirect("/")
+    return redirect(reverse("index"))

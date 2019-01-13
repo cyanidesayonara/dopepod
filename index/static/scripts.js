@@ -447,11 +447,11 @@ function postContact(form) {
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
       drop.innerHTML = xhr.responseText;
-      scrollToTop();
+      scrollTo(drop);
     })
     .done(function (response) {
       drop.innerHTML = response;
-      scrollToTop();
+      scrollTo(drop);
       replaceState(url);
     });
   enableLoader(drop, url);
@@ -470,14 +470,14 @@ function postSettings(form) {
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
       drop.innerHTML = xhr.responseText;
-      scrollToTop();
+      scrollTo(drop);
     })
     .done(function (response) {
       if (theme) {
         themeChanger(theme);
       }
       drop.innerHTML = response;
-      scrollToTop();
+      scrollTo(drop);
       replaceState(url);
     });
   enableLoader(drop, url);
@@ -500,12 +500,16 @@ function postLogin(form) {
     // returns errors
     .fail(function (xhr, ajaxOptions, thrownError) {
       drop.innerHTML = xhr.responseText;
-      scrollToTop();
+      scrollTo(drop);
     })
-    // returns splashboard
+    // returns splash
     .done(function (response) {
-      getResults(["/", drop, true], false, true);
-      // if not password reset, refresh page
+      drop.innerHTML = response;
+      if (children(drop, ".splash").length) {
+        initPlay();
+      }
+      scrollTo(drop);
+      // if logged in, refresh page
       if (hasClass(form, "login-form") || hasClass(form, "tryout-form")) {
         refreshCookie();
         refreshPage();
@@ -679,13 +683,15 @@ function hoverDisabler() {
 };
 
 function initPopular() {
+  const carousel = document.getElementById("popular-carousel");
+  const results = parents(carousel, "results");
   $("#popular-carousel")
     .slick({
       autoplay: true,
       infinite: true,
       lazyload: "ondemand",
-      prevArrow: "<button type='button' class='btn-dope slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-      nextArrow: "<button type='button' class='btn-dope slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+      prevArrow: results.querySelector(".slick-prev"),
+      nextArrow: results.querySelector(".slick-next"),
     })
     .show()
     .slick("refresh");
@@ -708,6 +714,7 @@ function initPlay() {
       slides[j] = temp;
     }
     slides.unshift(first);
+    const results = parents(carousel, "results");
     $("#play-carousel")
       .html(slides)
       .slick({
@@ -715,8 +722,8 @@ function initPlay() {
         fade: true,
         initialSlide: 1,
         lazyLoad: "ondemand",
-        prevArrow: "<button type='button' class='btn-dope active slick-prev' title='Previous'><span><i class='fas fa-angle-left'></i></span></button>",
-        nextArrow: "<button type='button' class='btn-dope active slick-next' title='Next'><span><i class='fas fa-angle-right'></i></span></button>",
+        prevArrow: results.querySelector(".slick-prev"),
+        nextArrow: results.querySelector(".slick-next"),
       })
       .show()
       .slick("refresh");
@@ -805,10 +812,12 @@ $(document)
     clearTimeout(timeout);
     timeout = setTimeout(function () {
       let q = input.value;
-      if (q && q.length > 1) {
-        q = cleanString(q);
-        let url = "/autocomplete/?q=" + q;
-        getResults([url, drop, true], true, true);
+      if (q) {
+        if (q.length > 1) {
+          q = cleanString(q);
+          let url = "/autocomplete/?q=" + q;
+          getResults([url, drop, true], true, true);
+        }
       } else {
         drop.innerHTML = "";
       }
@@ -978,9 +987,7 @@ $(document)
       }
     }, 250);
   })
-  // LOGIN & SIGNUP
-  // show splash / dashboard / login / register / password reset
-  .on("click", ".login-link, .signup-link, .password-link, .index-link", function (e) {
+  .on("click", ".index-link", function (e) {
     e.preventDefault();
     const button = this;
     clearTimeout(timeout);
@@ -991,15 +998,51 @@ $(document)
       if (!children(drop, ".splash").length) {
         getResults([url, drop, true]);
       } else {
-        if (hasClass(button, "index-link") || hasClass(button, "collapsed")) {
-          $(drop).find("#splash-collapse").collapse("show");
-        } else if (hasClass(button, "login-link")) {
-          $(drop).find("#login-collapse").collapse("show");
-        } else if (hasClass(button, "signup-link")) {
-          $(drop).find("#signup-collapse").collapse("show");
-        } else if (hasClass(button, "password-link")) {
-          $(drop).find("#password-collapse").collapse("show");
-        }
+        scrollTo(drop);
+      }
+    }, 250);
+  })
+  .on("click", ".login-link", function (e) {
+    e.preventDefault();
+    const button = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      const url = button.href;
+      const drop = document.getElementById("center-stage");
+      $(drop).find(".results-collapse").collapse("show");
+      if (!children(drop, ".login").length) {
+        getResults([url, drop, true]);
+      } else {
+        scrollTo(drop);
+      }
+    }, 250);
+  })
+  .on("click", ".signup-link", function (e) {
+    e.preventDefault();
+    const button = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      const url = button.href;
+      const drop = document.getElementById("center-stage");
+      $(drop).find(".results-collapse").collapse("show");
+      if (!children(drop, ".signup").length) {
+        getResults([url, drop, true]);
+      } else {
+        scrollTo(drop);
+      }
+    }, 250);
+  })
+  .on("click", ".password-link", function (e) {
+    e.preventDefault();
+    const button = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      const url = button.href;
+      const drop = document.getElementById("center-stage");
+      $(drop).find(".results-collapse").collapse("show");
+      if (!children(drop, ".forgot_password").length) {
+        getResults([url, drop, true]);
+      } else {
         scrollTo(drop);
       }
     }, 250);
@@ -1012,7 +1055,8 @@ $(document)
       const url = button.href;
       const drop = document.getElementById("center-stage");
       $(drop).find(".results-collapse").collapse("show");
-      if (!drop.querySelector(".list, .grid")) {
+      if (!children(drop, ".list").length &&
+          !children(drop, ".grid").length) {
         getResults([url, drop, true]);
       } else {
         if (window.location.href.includes("?")) {
@@ -1141,7 +1185,7 @@ $(document)
     const view = button.querySelector(".d-none").getAttribute("data-view");
     let results = parents(button, "results");
     results.setAttribute("data-view", view);
-    toggleButtons(button);
+    toggleButtons([button]);
     $(results).find(".view-collapse").collapse("toggle");
   })
   .on("click", ".select-theme", function (e) {
@@ -1224,11 +1268,6 @@ $(document)
     removeErrors();
   })
   // BOOTSTRAP COLLAPSES
-  .on("show.bs.collapse", ".login-collapse", function (e) {
-    e.stopPropagation();
-    $(children(this.parentNode, ".login-collapse.show")).collapse("hide");
-    removeErrors();
-  })
   .on("show.bs.collapse", ".more-collapse", function (e) {
     e.stopPropagation();
     $(parents(this, "results")).find(".more-collapse.show").collapse("hide");
@@ -1281,7 +1320,7 @@ $(document)
       if (currentSlide < cut && nextSlide >= cut ||
         currentSlide >= cut && nextSlide < cut) {
         toggleButtons(document.querySelectorAll(".popular-button"));
-        const labels = document.querySelectorAll(".popular .results-bar span");
+        const labels = document.querySelectorAll(".popular .results-bar h1 span");
         Array.prototype.forEach.call(labels, function (label, i) {
           toggleClass(label, "d-none");
         });
@@ -1292,7 +1331,7 @@ $(document)
       if (currentSlide < cut && nextSlide >= cut ||
         currentSlide >= cut && nextSlide < cut) {
         toggleButtons(document.querySelectorAll(".popular-button"));
-        const labels = document.querySelectorAll("popular .results-bar span");
+        const labels = document.querySelectorAll("popular .results-bar h1 span");
         Array.prototype.forEach.call(labels, function (icon, i) {
           toggleClass(label, "d-none");
         });

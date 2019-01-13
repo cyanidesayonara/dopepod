@@ -16,7 +16,7 @@
             <i class="fas fa-plus"></i>
           </span>
         </button>
-        <a class="btn-dope index-link" href="/" title="Close">
+        <a class="btn-dope index-link" href="{% url 'index' %}" title="Close">
           <span>
             <i class="fas fa-times"></i>
           </span>
@@ -29,6 +29,21 @@
           aria-controls="results-collapse" title="Minimize">
           <span class="exp-icon exp-minus exp-nix">
             <i class="fas fa-plus"></i>
+          </span>
+        </button>
+      </div>
+    {% elif results.extra_options == "arrows" %}
+      <div class="dope-buttons dope-buttons-l dope-buttons-shorty float-left">
+        <button type='button' class='btn-dope slick-prev' title='Previous'>
+          <span>
+            <i class='fas fa-angle-left'></i>
+          </span>
+        </button>
+      </div>
+      <div class="dope-buttons dope-buttons-r dope-buttons-shorty float-right">
+        <button type='button' class='btn-dope slick-next' title='Next'>
+          <span>
+            <i class='fas fa-angle-right'></i>
           </span>
         </button>
       </div>

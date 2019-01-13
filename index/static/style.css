@@ -196,14 +196,8 @@ form {
 .drop+div:not(.drop) {
   z-index: -1;
 }
-#splash {
-  padding: 0;
-  min-height: 330px;
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
-}
-#splash .dope-wrapper>h1 {
-  font-size: 2rem;
-  margin-bottom: 40px;
+#splash-buttons {
+  border-top: 2px solid rgba(0, 191, 165, .3);
 }
 #splash .dope-result {
   border-radius: .25rem;
@@ -323,7 +317,7 @@ form {
 .q {
   font-size: 16px;
   margin: 0;
-  padding-right: 30px;
+  padding-right: 28px;
   border: 2px solid rgb(0, 191, 165)
 }
 .autocomplete-wrapper {
@@ -335,6 +329,7 @@ form {
   right: 0;
   border: 2px solid #00bfa5;
   border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   z-index: 9001;
 }
 .autocomplete img {
@@ -361,14 +356,7 @@ form {
   background: rgba(150, 150, 150, .2);
   color: #fff;
 }
-.results .autocomplete-wrapper {
-  background: #fff;
-}
-.results .autocomplete a:hover,
-.results .autocomplete a:focus,
-.results .autocomplete-wrapper > p {
-  color: #000;
-}
+
 
 /* CHECKBOX */
 [type=checkbox] {
@@ -449,25 +437,6 @@ form {
   color: #fff;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   transition: all .25s ease-in-out;
-}
-.slick-prev,
-.slick-next {
-  position: absolute;
-  top: -50px;
-  z-index: 2000;
-  -webkit-transform: translate(0, -50%);
-  -ms-transform: translate(0, -50%);
-  transform: translate(0, -50%);
-}
-#popular-carousel .slick-prev,
-#popular-carousel .slick-next {
-  top: -80px;
-}
-.slick-prev {
-  left: 10px;
-}
-.slick-next {
-  right: 10px;
 }
 
 .list-result {
@@ -563,14 +532,16 @@ form {
 }
 .results-bar {
   padding: 0;
-  border-top: 2px solid rgba(0, 191, 165, .3);
-  border-bottom: 2px solid rgba(0, 191, 165, .3);
+}
+.results-content .results-bar {
+  border-top: 2px solid rgb(0, 191, 165, .3);
+  border-bottom: 2px solid rgb(0, 191, 165, .3);
 }
 .results-bar h1 {
   text-align: center;
   font-size: 18px;
   font-weight: 600;
-  margin: 13px 0;
+  margin: 14px 0;
 }
 
 /* DOPE-LIST */
