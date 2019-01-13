@@ -52,6 +52,7 @@ form {
   right: 0;
   width: 100%;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  color: #000;
 }
 .cookie-wrapper h1 {
   margin-bottom: 10px;
