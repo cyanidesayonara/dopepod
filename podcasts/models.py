@@ -456,7 +456,7 @@ class Podcast(models.Model):
                         results_header += ' containing "' + q + '"'
                 if order == "rank":
                     results_header += " in order of popularity"
-                elif order == "rank":
+                elif order == "name":
                     results_header += " in alphabetical order"
                 if num_pages > 1:
                     results_header += " (page " + str(page) + " of " + str(num_pages) + ")"
