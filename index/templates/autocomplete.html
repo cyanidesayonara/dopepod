@@ -2,9 +2,15 @@
   {% for podcast in podcasts %}
     <a class="showpod-link clearfix" data-podid="{{ podcast.object.podid }}" href="{% url 'showpod' podid=podcast.object.podid %}" title="{{ podcast.object.title }}">
       <img src="//{{ podcast.object.artworkUrl }}50x50bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.object.artworkUrl }}50x50bb.jpg'" width="50" height="50" title="{{ episode.podcast.title }}" alt="Podcast artwork" />
-      <p>
+      <h1>
         {{ podcast.object.title }}
-      </p>
+      </h1>
+      <h2>
+        <span class="by">
+          by
+        </span>      
+        {{ podcast.object.artist }}
+      </h2>      
     </a>
   {% empty %}
     <p>

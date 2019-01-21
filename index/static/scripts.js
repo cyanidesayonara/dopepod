@@ -80,7 +80,11 @@ function pushState(url) {
     "context": context,
     "url": url,
   };
-  history.pushState(state, "", url);
+  try {
+    history.pushState(state, "", url);
+  } catch (e) {
+    console.log("State is too big to save", context.length, e);
+  }
   trackView(url);
 };
 // replace current state & url in browser history
@@ -103,7 +107,11 @@ function replaceState(url) {
     "context": context,
     "url": url,
   };
-  history.replaceState(state, "", url);
+  try {
+    history.replaceState(state, "", url);
+  } catch (e) {
+    console.log("State is too big to save", context.length, e);
+  }
 };
 // updates page title
 function titleUpdater() {
@@ -829,17 +837,18 @@ $(document)
     e.preventDefault();
     const form = this;
     let url = form.action;
-    let q = form.querySelector(".q").value;
+    let q = form.querySelector(".q");
     if (q) {
-      q = cleanString(q);
+      const querystring = cleanString(q.value);
       const drop = document.getElementById("center-stage");
-      if (!(drop.querySelector(".results").getAttribute("data-q") == q)) {
-        url = url + "?q=" + q;
+      if (!(drop.querySelector(".results").getAttribute("data-q") == querystring)) {
+        url = url + "?q=" + querystring;
         getResults([url, drop, true]);
-        trackSearch(q);
+        trackSearch(querystring);
       } else {
         scrollTo(drop);
       }
+      q.value = "";
     }
   })
   // sub or unsub

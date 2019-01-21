@@ -342,14 +342,18 @@ form {
   padding: 2px;
   overflow: hidden;
 }
-.autocomplete p {
-  height: 50px;
+.autocomplete a:not(:last-child) {
+  border-bottom: 1px solid black;
+}
+.autocomplete h1,
+.autocomplete h2 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 15px 6px;
+  padding: 5px;
   margin: 0;
   font-weight: 600;
+  font-size: 12px;
 }
 .autocomplete a:hover,
 .autocomplete a:focus,
