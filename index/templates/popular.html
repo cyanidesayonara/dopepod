@@ -14,7 +14,7 @@
         </a>
         <div class="dope-results">
           {% for podcast in genre.podcasts %}
-          <div class="col-4 col-lg-2 dope-result">
+          <div class="col-4 col-lg-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
               <img class="img-fluid" data-lazy="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'"
                 width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
@@ -50,7 +50,7 @@
         </a>
         <div class="dope-results">
           {% for podcast in language.podcasts %}
-          <div class="col-4 col-lg-2 dope-result">
+          <div class="col-4 col-lg-2 dope-result noborder">
             <a class="showpod-link" data-podid="{{ podcast.podid }}" href="{% url 'showpod' podid=podcast.podid %}">
               <img class="img-fluid" data-lazy="//{{ podcast.artworkUrl }}150x150bb.jpg" onerror="this.src='//dopepod.me/img/{{ podcast.artworkUrl }}150x150bb.jpg'"
                 width="auto" height="auto" title="{{ podcast.title }}" alt="Podcast artwork" />
