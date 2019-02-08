@@ -1161,6 +1161,50 @@ class Episode(models.Model):
             cache.set("previous", episodes, 60 * 60 * 24)
         return episodes
 
+    def parse_signature(signature, user=None, position=None):
+        try:
+            data = signing.loads(signature)
+            podid = data["podid"]
+            podcast = Podcast.objects.get(podid=podid)
+            url = data["url"]
+            kind = data["type"]
+            title = data["title"]
+            description = data["description"]
+        except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
+            return None
+
+        try:
+            pubDate = datetime.strptime(data["date_string"], "%b %d %Y %X %z")
+        except:
+            pubDate = None
+
+        try:
+            length = data["length"]
+            t = datetime.strptime(length, "%H:%M:%S")
+            length = timedelta(
+                hours=t.hour, minutes=t.minute, seconds=t.second)
+        except (KeyError, ValueError):
+            length = None
+
+        try:
+            size = data["size"]
+        except KeyError:
+            size = None
+        
+        return Episode(
+            user=user,
+            url=url,
+            kind=kind,
+            title=title,
+            pubDate=pubDate,
+            podcast=podcast,
+            length=length,
+            size=size,
+            description=description,
+            signature=signature,
+            position=position
+        )
+
     def play(self):
         episodes = Episode.objects.filter(user=self.user).order_by("position")
         try:
@@ -1177,7 +1221,7 @@ class Episode(models.Model):
         self.position = None
         self.user = None
         self.save()
-
+    
         # if list is longer than 50, delete excess
         # if played in previous, delete first occurrence then break
         with transaction.atomic():
@@ -1199,64 +1243,25 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         cache.set("previous", episodes, 60 * 60 * 24)
     
-    def add(signature, user):
+    def add(episode, user=None, position=None):
         # max 20 episodes for now
-        if user.is_authenticated:
+        if user and user.is_authenticated:
             # get position of last episode
-            position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
-            if position:
-                if position == 50:
-                    user = None
-                    position = None
+            episode.position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
+            if episode.position:
+                if episode.position == 50:
+                    episode.user = None
+                    episode.position = None
                 else:
-                    position += 1
+                    episode.position += 1
             else:
-                position = 1
+                episode.position = 1
         else:
-            user = None
-            position = None
-
-        try:
-            data = signing.loads(signature)
-            podid = data["podid"]
-            podcast = Podcast.objects.get(podid=podid)
-            url = data["url"]
-            kind = data["type"]
-            title = data["title"]
-            description = data["description"]
-        except (KeyError, ValueError, Podcast.DoesNotExist, signing.BadSignature):
-            return
-        
-        try:
-            pubDate = datetime.strptime(data["date_string"],"%b %d %Y %X %z")
-        except:
-            pubDate = None
-
-        try:
-            length = data["length"]
-            t = datetime.strptime(length,"%H:%M:%S")
-            length = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-        except (KeyError, ValueError):
-            length = None
-
-        try:
-            size = data["size"]
-        except KeyError:
-            size = None
+            episode.user = None
+            episode.position = None
             
-        return Episode.objects.create(
-            user=user,
-            url=url,
-            kind=kind,
-            title=title,
-            pubDate=pubDate,
-            podcast=podcast,
-            length=length,
-            size=size,
-            description=description,
-            signature=signature,
-            position=position,
-        )
+        episode.save()
+        return episode
 
     def remove(pos, user):
         episodes = Episode.objects.filter(user=user).order_by("position")

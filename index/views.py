@@ -410,7 +410,7 @@ def api(request):
     raise Http404()
 
 @vary_on_headers("Accept")
-def index(request):
+def index(request, signature=None):
     """
     returns index page
     with chart & search bar for non-ajax
@@ -422,8 +422,23 @@ def index(request):
         context = {
             "results": results,
         }
+
         if request.is_ajax():
             return render(request, template, context)
+
+        try:
+            signature = request.GET["episode"]
+            episode = Episode.parse_signature(signature)
+            if not episode:
+                raise Http404()
+            episode = Episode.add(episode)
+            episode.play()
+
+            context.update({
+                "episode": episode,
+            })
+        except KeyError:
+            pass
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -594,7 +609,7 @@ def playlist(request):
     if request.method == "GET":
         template = "results_base.min.html"
         user = request.user
-        
+
         if user.is_authenticated:
             if request.is_ajax():
                 results = Episode.get_playlist(user)
@@ -602,6 +617,7 @@ def playlist(request):
                     "results": results,
                 }
                 return render(request, template, context)
+        
         raise Http404()
 
     if request.method == "POST":
@@ -616,7 +632,10 @@ def playlist(request):
 
                 try:
                     signature = request.POST["signature"]
-                    episode = Episode.add(signature, user)
+                    episode = Episode.parse_signature(signature, user)
+                    if not episode:
+                        raise Http404()
+                    episode = Episode.add(episode, user)
                 except KeyError:
                     try:
                         position = int(request.POST["pos"])
