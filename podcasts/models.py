@@ -1161,7 +1161,9 @@ class Episode(models.Model):
             cache.set("previous", episodes, 60 * 60 * 24)
         return episodes
 
-    def parse_signature(signature, user=None, position=None):
+    def parse_signature(signature, user):
+        if not user.is_authenticated:
+            user = None
         try:
             data = signing.loads(signature)
             podid = data["podid"]
@@ -1202,7 +1204,7 @@ class Episode(models.Model):
             size=size,
             description=description,
             signature=signature,
-            position=position
+            position=None
         )
 
     def play(self):
@@ -1243,11 +1245,11 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         cache.set("previous", episodes, 60 * 60 * 24)
     
-    def add(episode, user=None, position=None):
+    def add(episode):
         # max 20 episodes for now
-        if user and user.is_authenticated:
+        if episode.user.is_authenticated:
             # get position of last episode
-            episode.position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
+            episode.position = Episode.objects.filter(user=episode.user).aggregate(Max("position"))["position__max"]
             if episode.position:
                 if episode.position == 50:
                     episode.user = None
