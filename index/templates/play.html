@@ -114,7 +114,7 @@
             <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="mode" value="add" />
-              <input type="hidden" name="signature" value="{{ episode.signature }}" />
+              <input type="hidden" name="episode" value="{{ episode.signature }}" />
               <button class="btn-dope" type="submit" title="Add to Playlist">
                 <span class="active">
                   Add
@@ -128,7 +128,7 @@
           <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
             {% csrf_token %}
             <input type="hidden" name="mode" value="play" />
-            <input type="hidden" name="signature" value="{{ episode.signature }}" />
+            <input type="hidden" name="episode" value="{{ episode.signature }}" />
             <button class="btn-dope" type="submit" title="Play Episode">
               <span class="active">
                 Play

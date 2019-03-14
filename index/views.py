@@ -17,6 +17,7 @@ from django.core.cache import cache
 from lazysignup.decorators import allow_lazy_user
 from lazysignup.utils import is_lazy_user
 from lazysignup import views as lazysignup
+from furl import furl
 import json
 import logging
 
@@ -410,7 +411,7 @@ def api(request):
     raise Http404()
 
 @vary_on_headers("Accept")
-def index(request, signature=None):
+def index(request):
     """
     returns index page
     with chart & search bar for non-ajax
@@ -426,19 +427,19 @@ def index(request, signature=None):
         if request.is_ajax():
             return render(request, template, context)
 
-        try:
-            signature = request.GET["episode"]
+        signature = request.GET.get("episode", None)
+        if signature:
             episode = Episode.parse_signature(signature)
-            if not episode:
-                raise Http404()
-            episode = Episode.add(episode)
-            episode.play()
+            if episode:
+                user = request.user
+                episode = Episode.add(episode, user)
+                episode.play()
 
-            context.update({
-                "episode": episode,
-            })
-        except KeyError:
-            pass
+                context.update({
+                    "episode": episode,
+                })
+            else:
+                return redirect(reverse("index"))
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -617,8 +618,6 @@ def playlist(request):
                     "results": results,
                 }
                 return render(request, template, context)
-        
-        raise Http404()
 
     if request.method == "POST":
         user = request.user
@@ -631,7 +630,7 @@ def playlist(request):
                 # POST ajax request
 
                 try:
-                    signature = request.POST["signature"]
+                    signature = request.POST["episode"]
                     episode = Episode.parse_signature(signature)
                     if not episode:
                         raise Http404()
@@ -655,7 +654,10 @@ def playlist(request):
             if user.is_authenticated:
                 template = "results_base.min.html"
                 if mode == "add":
-                    signature = request.POST["signature"]
+                    signature = request.POST.get("episode", None)
+                    episode = Episode.parse_signature(signature)
+                    if not episode:
+                        raise Http404()
                     Episode.add(signature, user)
                 elif mode == "remove":
                     pos = int(request.POST["pos"])
@@ -681,6 +683,7 @@ def playlist(request):
                 return render_non_ajax(request, template, context)
         except (KeyError, TypeError):
             raise Http404()
+    raise Http404()
 
 @vary_on_headers("Accept")
 def showpod(request, podid):
@@ -710,10 +713,28 @@ def showpod(request, podid):
 
         podcast = results["podcast"]
         url = request.get_full_path()
+
+        url = furl(url)
+        url.remove(['episode'])
+
         episodes = Episode.get_episodes(url, podcast, page)
         for page in episodes:
             results.update(page)
         Episode.set_new(user, podcast, results["episodes"])
+
+        signature = request.GET.get("episode", None)
+        if signature:
+            episode = Episode.parse_signature(signature)
+            if episode:
+                user = request.user
+                episode = Episode.add(episode, user)
+                episode.play()
+
+                context.update({
+                    "episode": episode,
+                })
+            else:
+                return redirect(reverse("showpod", args=[podid]))
         return render_non_ajax(request, template, context)
 
 @vary_on_headers("Accept")
@@ -747,7 +768,7 @@ def settings(request):
                 if request.is_ajax:
                     return render(request, template, context, status=400)
                 return render_non_ajax(request, template, context)
-    raise Http404()
+    return redirect(reverse("index"))
 
 def episodes(request, podid):
     """
@@ -794,7 +815,7 @@ def previous(request):
                 "results": results,
             }
             return render(request, template, context)
-    raise Http404()
+    return redirect(reverse("index"))
 
 # allauth stuff
 # https://stackoverflow.com/questions/26889178/how-to-redirect-all-the-views-in-django-allauth-to-homepage-index-instead-of-ac

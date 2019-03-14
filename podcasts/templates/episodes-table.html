@@ -73,11 +73,11 @@
                   {% endif %}
                 </p>
                 <div class="dope-buttons dope-buttons-r px-0">
-                  {% if user.is_authenticated and results.view == "showpod" %}
+                  {% if user.is_authenticated and results.view == "showpod" %}       
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="add" />
-                    <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                    <input type="hidden" name="episode" value="{{ episode.signature }}" />
                     <button class="btn-dope" type="submit" title="Add to Playlist">
                       <span class="active">
                         Add
@@ -87,11 +87,19 @@
                       </span>
                     </button>
                   </form>
-                  {% endif %}                
+                  {% endif %}
+                  <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ episode.url_format_description }}&url={{ episode.podcast }}?episode={{ episode.signature }}" title="Share on Twitter">
+                    <span class="active">
+                      Tweet
+                    </span>
+                    <span>
+                      <i class="fab fa-twitter"></i>
+                    </span>
+                  </a>                              
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="play" />
-                    <input type="hidden" name="signature" value="{{ episode.signature }}" />
+                    <input type="hidden" name="episode" value="{{ episode.signature }}" />
                     <button class="btn-dope playlist-play" type="submit" title="Play Episode">
                       <span class="active">
                         Play

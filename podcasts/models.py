@@ -830,6 +830,9 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
+    def url_format_description(self):
+        return quote_plus("Listen to episode " + self.title + " by " + self.podcast + " on dopepod")
+
     def get_episodes(url, podcast, selected_page=None):
         """
         returns a list of episodes using requests and lxml etree
@@ -899,7 +902,9 @@ class Episode(models.Model):
                     
                 # TODO sort by pubDate (but how ?!?!?)
                 for item in items:
-                    episode = {}
+                    episode = {
+                        "podcast": podcast.title
+                    }
 
                     # try to get pubdate + parse & convert it to datetime
                     try:
@@ -1161,9 +1166,7 @@ class Episode(models.Model):
             cache.set("previous", episodes, 60 * 60 * 24)
         return episodes
 
-    def parse_signature(signature, user):
-        if not user.is_authenticated:
-            user = None
+    def parse_signature(signature):
         try:
             data = signing.loads(signature)
             podid = data["podid"]
@@ -1194,7 +1197,7 @@ class Episode(models.Model):
             size = None
         
         return Episode(
-            user=user,
+            user=None,
             url=url,
             kind=kind,
             title=title,
@@ -1216,17 +1219,17 @@ class Episode(models.Model):
         except (IndexError, AssertionError):
             return
 
-        self.podcast.plays = F("plays") + 1
-        self.podcast.save()
-        self.played_at = timezone.now()
-        self.added_at = None
-        self.position = None
-        self.user = None
-        self.save()
-    
         # if list is longer than 50, delete excess
         # if played in previous, delete first occurrence then break
         with transaction.atomic():
+            self.podcast.plays = F("plays") + 1
+            self.podcast.save()
+            self.played_at = timezone.now()
+            self.added_at = None
+            self.position = None
+            self.user = None
+            self.save()
+    
             previous = Episode.objects.select_related(None).select_for_update().filter(position=None).order_by("-played_at")
             if previous.count() > 1:
                 # split off last part of signature
@@ -1245,11 +1248,11 @@ class Episode(models.Model):
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         cache.set("previous", episodes, 60 * 60 * 24)
     
-    def add(episode):
+    def add(episode, user):
         # max 20 episodes for now
-        if episode.user.is_authenticated:
+        if user.is_authenticated:
             # get position of last episode
-            episode.position = Episode.objects.filter(user=episode.user).aggregate(Max("position"))["position__max"]
+            episode.position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
             if episode.position:
                 if episode.position == 50:
                     episode.user = None
