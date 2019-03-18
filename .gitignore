@@ -10,3 +10,4 @@ logs.txt
 local_settings.py
 manage.py
 /venv
+.vscode
