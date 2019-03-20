@@ -8,5 +8,4 @@ __pycache__
 logs.txt
 /.vscode
 local_settings.py
-manage.py
 /venv

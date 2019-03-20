@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 # pip upgrade line for windows: for /F "delims===" %i in ('pip freeze -l') do pip install -U %i
+# for linux: pip install -U `pip list --outdated | tail -n +3 | awk '{print $1}'`
 # pip install elasticsearch==5.5.3
 
 import os

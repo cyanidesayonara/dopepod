@@ -722,7 +722,7 @@ class Podcast(models.Model):
 
                 if podid:
                     # slow down scraping so as to not get blocked
-                    time.sleep(5)
+                    time.sleep(1)
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
