@@ -635,19 +635,17 @@ def playlist(request):
                     if not episode:
                         raise Http404()
                     episode = Episode.add(episode, user)
-                    episode.play()
-
-                    context = {
-                        "episode": episode,
-                    }
                 except KeyError:
                     try:
                         position = int(request.POST["pos"])
                         episode = Episode.objects.get(user=user, position=position)
                     except (KeyError, Episode.DoesNotExist):
                         raise Http404()
-                
 
+                episode.play()
+                context = {
+                    "episode": episode,
+                }
                 if request.is_ajax():
                     return render(request, template, context)
                 return render_non_ajax(request, template, context)
@@ -658,7 +656,7 @@ def playlist(request):
                     episode = Episode.parse_signature(signature)
                     if not episode:
                         raise Http404()
-                    Episode.add(signature, user)
+                    Episode.add(episode, user)
                 elif mode == "remove":
                     pos = int(request.POST["pos"])
                     Episode.remove(pos, user)

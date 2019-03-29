@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 # pip upgrade line for windows: for /F "delims===" %i in ('pip freeze -l') do pip install -U %i
-# for linux: pip install -U `pip list --outdated | tail -n +3 | awk '{print $1}'`
+# for linux: pip install `pip freeze -l | cut --fields=1 -d = -` --upgrade
 # pip install elasticsearch==5.5.3
 
 import os
@@ -171,7 +171,7 @@ LOGOUT_URL = "/account/logout/"
 ROOT_URLCONF = "dopepod.urls"
 
 SESSION_COOKIE_NAME = "sessionid"
-#SESSION_COOKIE_DOMAIN = local_settings.SESSION_COOKIE_DOMAIN
+#SESSION_COOKIE_DOMAIN = local_settings.SESSION_COOKIE_DOMAIN"
 
 SESSION_COOKIE_SECURE = False
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
@@ -246,7 +246,6 @@ WSGI_APPLICATION = "dopepod.wsgi.application"
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = local_settings.DATABASES
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

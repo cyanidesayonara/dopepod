@@ -722,7 +722,7 @@ class Podcast(models.Model):
 
                 if podid:
                     # slow down scraping so as to not get blocked
-                    time.sleep(1)
+                    time.sleep(5)
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
@@ -830,8 +830,8 @@ class Episode(models.Model):
 
     objects = EpisodeManager()
 
-    def url_format_description(self):
-        return quote_plus("Listen to episode " + self.title + " by " + self.podcast + " on dopepod")
+    def url_format_title(self):
+        return quote_plus("Listen to episode " + self + " by " + self.podcast + " on dopepod")
 
     def get_episodes(url, podcast, selected_page=None):
         """
@@ -1243,16 +1243,16 @@ class Episode(models.Model):
                     excess = previous[50:]
                     for episode in excess:
                         episode.delete()
-
         # let's cache those bad boys
         episodes = Episode.objects.filter(position=None).order_by("-played_at")
         cache.set("previous", episodes, 60 * 60 * 24)
     
     def add(episode, user):
-        # max 20 episodes for now
+        # max 50 episodes for now
         if user.is_authenticated:
             # get position of last episode
             episode.position = Episode.objects.filter(user=user).aggregate(Max("position"))["position__max"]
+            episode.user = user
             if episode.position:
                 if episode.position == 50:
                     episode.user = None

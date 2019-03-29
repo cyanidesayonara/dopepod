@@ -7,5 +7,5 @@ __pycache__
 /logs
 logs.txt
 /.vscode
-local_settings.py
 /venv
+local_settings.py
