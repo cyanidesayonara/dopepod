@@ -30,6 +30,8 @@ import idna
 import copy
 logger = logging.getLogger(__name__)
 
+print(Retry)
+
 ua = UserAgent()
 
 # https://www.peterbe.com/plog/best-practice-with-retries-with-requests
