@@ -131,7 +131,7 @@ class Podcast(models.Model):
         else:
             return "<1k"
 
-    def url_format_description(self):
+    def url_format_title(self):
         return quote_plus("Listen to episodes of " + self.title + " on dopepod")
 
     def set_discriminated(self):
@@ -521,7 +521,7 @@ class Podcast(models.Model):
         headers = {
             "User-Agent": str(ua.random)
         }
-        logger.error("scraping", podid)
+        logger.info("scraping", podid)
         feedUrl = "nada"
         try:
             # get data from itunes lookup
@@ -606,9 +606,9 @@ class Podcast(models.Model):
                     }
                 )
                 if created:
-                    logger.error("created podcast", title, feedUrl)
+                    logger.info("created podcast", title, feedUrl)
                 else:
-                    logger.error("updated podcast", title, feedUrl)
+                    logger.info("updated podcast", title, feedUrl)
                 podcast.set_discriminated()
                 return podcast
 
@@ -831,7 +831,7 @@ class Episode(models.Model):
     objects = EpisodeManager()
 
     def url_format_title(self):
-        return quote_plus("Listen to episode " + self + " by " + self.podcast + " on dopepod")
+        return quote_plus("Listen to episode " + self.title + " by " + self.podcast.title + " on dopepod")
 
     def get_episodes(url, podcast, selected_page=None):
         """
@@ -1012,6 +1012,8 @@ class Episode(models.Model):
                         # datetime date
                         episode["pubDate"] = pubdate
                         episode["position"] = count - i + 1
+                        episode["podcast_url"] = podcast.get_absolute_url
+                        episode["url_format_title"] = quote_plus("Listen to episode " + episode["title"] + " by " + podcast.title + " on dopepod")
 
                         episodes.append(episode)
 
@@ -1207,7 +1209,7 @@ class Episode(models.Model):
             size=size,
             description=description,
             signature=signature,
-            position=None
+            position=None          
         )
 
     def play(self):

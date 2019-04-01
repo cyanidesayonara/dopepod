@@ -73,6 +73,22 @@
                   {% endif %}
                 </p>
                 <div class="dope-buttons dope-buttons-r px-0">
+                  <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ episode.url_format_title }}&url={{ episode.podcast_url }}?episode={{ episode.signature }}" title="Share on Twitter">
+                    <span class="active">
+                      Tweet
+                    </span>
+                    <span>
+                      <i class="fab fa-twitter"></i>
+                    </span>
+                  </a>
+                  <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ episode.podcast_url }}?episode={{ episode.signature }}&quote={{ episode.url_format_title }}" title="Share on Facebook">
+                    <span class="active">
+                      Share
+                    </span>
+                    <span>
+                      <i class="fab fa-facebook-f"></i>
+                    </span>
+                  </a>
                   {% if user.is_authenticated and results.view == "showpod" %}       
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
                     {% csrf_token %}
@@ -87,15 +103,7 @@
                       </span>
                     </button>
                   </form>
-                  {% endif %}
-                  <!--<a class="btn-dope" href="//twitter.com/intent/tweet?text=tweet-text&url=tweet-url?episode={{ episode.signature }}" title="Share on Twitter">
-                    <span class="active">
-                      Tweet
-                    </span>
-                    <span>
-                      <i class="fab fa-twitter"></i>
-                    </span>
-                  </a>-->                          
+                  {% endif %}                  
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST" target="_blank">
                     {% csrf_token %}
                     <input type="hidden" name="mode" value="play" />
