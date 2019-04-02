@@ -227,6 +227,32 @@
           <p>
             {% if episode.description %} {{ episode.description }} {% else %} No description {% endif %}
           </p>
+          <div class="dope-buttons px-0">
+            <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ episode.url_format_title }}&url={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Tweet on Twitter">
+              <span class="active">
+                Tweet
+              </span>
+              <span>
+                <i class="fab fa-twitter"></i>
+              </span>
+            </a>
+            <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}&quote={{ episode.url_format_title }}" title="Share on Facebook">
+              <span class="active">
+                Share
+              </span>
+              <span>
+                <i class="fab fa-facebook-f"></i>
+              </span>
+            </a>
+            <a class="btn-dope copy-link" href="{{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Copy Link">
+              <span class="active">
+                Copy Link
+              </span>
+              <span>
+                <i class="fas fa-copy"></i>
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -421,6 +421,12 @@ form {
   background: rgb(0, 191, 165);
 }
 
+.link-to-copy {
+  position: absolute;
+  z-index: -999;
+  opacity: 0;
+}
+
 /* SLICK */
 #play-carousel {
   display: none;

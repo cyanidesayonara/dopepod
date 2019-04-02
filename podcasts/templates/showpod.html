@@ -83,7 +83,7 @@
           </li>
         </ul>
         <div class="dope-buttons dope-buttons-r px-0">
-          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.url_format_title }}&url={{ podcast.get_absolute_url }}" title="Share on Twitter">
+          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.url_format_title }}&url={{ podcast.get_absolute_url }}" title="Tweet on Twitter">
             <span class="active">
               Tweet
             </span>
@@ -98,7 +98,15 @@
             <span>
               <i class="fab fa-facebook-f"></i>
             </span>
-          </a>    
+          </a>
+          <a class="btn-dope copy-link" href="{{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Copy Link">
+            <span class="active">
+              Copy Link
+            </span>
+            <span>
+              <i class="fas fa-copy"></i>
+            </span>
+          </a>          
         </div>
       </div>
     {% endwith %}

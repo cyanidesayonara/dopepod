@@ -1276,6 +1276,11 @@ $(document)
   .on("click", "#errors .btn-dope", function () {
     removeErrors();
   })
+  .on("click", ".copy-link", function () {
+    e.stopPropagation();
+    $(this).siblings('input.linkToCopy').select();
+    document.execCommand("copy");
+  })
   // BOOTSTRAP COLLAPSES
   .on("show.bs.collapse", ".more-collapse", function (e) {
     e.stopPropagation();
