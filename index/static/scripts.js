@@ -838,7 +838,8 @@ $(document)
     const form = this;
     let url = form.action;
     let q = form.querySelector(".q");
-    if (q) {
+    console.log(q)
+    if (q.value) {
       const querystring = cleanString(q.value);
       const drop = document.getElementById("center-stage");
       if (!(drop.querySelector(".results").getAttribute("data-q") == querystring)) {
@@ -1218,6 +1219,14 @@ $(document)
       addClass(parents(button, "expandable"), "expanded");
     }
   })
+  // click effect
+  .on("click", ".btn-dope, .dope-dot, .search-button", function () {
+    const button = this;
+    addClass(button, "clicked");
+    setTimeout(function () {
+      removeClass(button, "clicked");
+    }, 500)
+  })
   // removes focus from buttons when clicked
   .on("click", ".btn-dope, .dope-link, .dope-dot, .episode-header, .search-button", function () {
     this.blur();
@@ -1276,9 +1285,9 @@ $(document)
   .on("click", "#errors .btn-dope", function () {
     removeErrors();
   })
-  .on("click", ".copy-link", function () {
-    e.stopPropagation();
-    $(this).siblings('input.linkToCopy').select();
+  .on("click", ".copy-link", function (e) {
+    e.preventDefault();
+    this.querySelector('.link-to-copy').select();
     document.execCommand("copy");
   })
   // BOOTSTRAP COLLAPSES

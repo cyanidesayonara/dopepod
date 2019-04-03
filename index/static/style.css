@@ -165,6 +165,36 @@ form {
 .logo {
   padding: 50px 0;
 }
+.clicked:after {
+  content: '';
+  background-color: rgba(0, 0, 0, .5);
+  display: block;
+  position: absolute;
+  border-radius: inherit;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scale(0.001, 0.001);
+  transition: all .15s ease-in-out;
+  animation: effect_dylan 0.8s ease-out;
+}
+@keyframes effect_dylan {
+  50% {
+    transform: scale(1.5, 1.5);
+    opacity: 0;
+  }
+
+  99% {
+    transform: scale(0.001, 0.001);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(0.001, 0.001);
+    opacity: 1;
+  }
+}
 
 /* BOOTSTRAP COLLAPSE */
 .collapsing {
@@ -335,15 +365,18 @@ form {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   z-index: 1;
+  font-weight: 600;
 }
 .autocomplete img {
   float: right;
 }
-.autocomplete a {
-  color: #000;
+.autocomplete-wrapper > * {
   display: block;
   padding: 2px;
   overflow: hidden;
+}
+.autocomplete a {
+  color: #000;
 }
 .autocomplete a:not(:last-child) {
   border-bottom: 1px solid black;
@@ -355,12 +388,11 @@ form {
   text-overflow: ellipsis;
   padding: 5px;
   margin: 0;
-  font-weight: 600;
   font-size: 12px;
 }
 .autocomplete a:hover,
 .autocomplete a:focus,
-.autocomplete-wrapper > p {
+.autocomplete-wrapper > span {
   background: rgba(150, 150, 150, .2);
   color: #fff;
 }
@@ -419,12 +451,6 @@ form {
 }
 [type=checkbox]:checked+span {
   background: rgb(0, 191, 165);
-}
-
-.link-to-copy {
-  position: absolute;
-  z-index: -999;
-  opacity: 0;
 }
 
 /* SLICK */
@@ -636,6 +662,7 @@ form {
   right: 15px;
 }
 .dope-dot {
+  position: relative;
   display: block;
   text-align: center;
   height: 34px;
@@ -814,10 +841,12 @@ form {
   margin: 0;
   font-size: 12px;
 }
-#player-wrapper .player-description {
-  margin: 0 0 10px;
+#player-collapse {
   max-height: calc(100vh - 500px);
   overflow-y: auto;
+}
+#player-collapse p {
+  margin: 0;
 }
 #player-wrapper.minimize {
   height: 50px;

@@ -89,13 +89,14 @@
                       <i class="fab fa-facebook-f"></i>
                     </span>
                   </a>
-                  <a class="btn-dope copy-link" href="{{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Copy Link">
+                  <a class="btn-dope copy-link" href="{{ episode.podcast_url }}?episode={{ episode.signature }}" title="Copy Link">
                     <span class="active">
                       Copy Link
                     </span>
                     <span>
                       <i class="fas fa-copy"></i>
                     </span>
+                    <input class="link-to-copy d-none" value="{{ episode.podcast_url }}?episode={{ episode.signature }}" />
                   </a>                  
                   {% if user.is_authenticated and results.view == "showpod" %}       
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST">
