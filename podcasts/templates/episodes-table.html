@@ -96,7 +96,7 @@
                     <span>
                       <i class="fas fa-copy"></i>
                     </span>
-                    <input class="link-to-copy d-none" value="{{ episode.podcast_url }}?episode={{ episode.signature }}" />
+                    <input class="link-to-copy" value="{{ episode.podcast_url }}?episode={{ episode.signature }}" />
                   </a>                  
                   {% if user.is_authenticated and results.view == "showpod" %}       
                   <form class="playlist-form" action="{% url 'playlist' %}" method="POST">

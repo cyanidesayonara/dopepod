@@ -1287,7 +1287,7 @@ $(document)
   })
   .on("click", ".copy-link", function (e) {
     e.preventDefault();
-    this.querySelector('.link-to-copy').select();
+    this.querySelector(".link-to-copy").select();
     document.execCommand("copy");
   })
   // BOOTSTRAP COLLAPSES
