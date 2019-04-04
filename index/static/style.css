@@ -196,13 +196,14 @@ form {
   }
 }
 .link-to-copy {
+  width: 27px;
   opacity: 0;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   position: absolute;
-  z-index: 999;
+  z-index: -999;
   cursor: pointer;
 }
 
@@ -579,6 +580,7 @@ form {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
   border: 2px solid rgb(0, 191, 165);
+  overflow: hidden;
 }
 .results-bar {
   padding: 0;
