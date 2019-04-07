@@ -49,9 +49,11 @@ function dateLocalizer() {
     date.innerText = dateString;
   });
 };
+
 function giveConsent() {
   _paq.push(["rememberConsentGiven"]);
 };
+
 function denyConsent() {
   _paq.push(["forgetConsentGiven"]);
 };
@@ -597,7 +599,7 @@ function postPlaylist(form, origData, origMode, origButton, origPos) {
     .fail(function (xhr, ajaxOptions, thrownError) {
       if (button) {
         button.innerHTML = text;
-      }      
+      }
       document.getElementById("player").innerHTML = "";
       // TODO if playlist fails
     })
@@ -1066,7 +1068,7 @@ $(document)
       const drop = document.getElementById("center-stage");
       $(drop).find(".results-collapse").collapse("show");
       if (!children(drop, ".list").length &&
-          !children(drop, ".grid").length) {
+        !children(drop, ".grid").length) {
         getResults([url, drop, true]);
       } else {
         if (window.location.href.includes("?")) {
@@ -1285,8 +1287,7 @@ $(document)
   .on("click", "#errors .btn-dope", function () {
     removeErrors();
   })
-  .on("click", ".copy-link", function (e) {
-    e.preventDefault();
+  .on("click", ".copy-link", function () {
     this.querySelector(".link-to-copy").select();
     document.execCommand("copy");
   })
@@ -1393,7 +1394,7 @@ $(window)
       drop.innerHTML = state.context;
       if (hasClass(drop.querySelector(".results"), "splash")) {
         return getResults([url, drop, false], false, true);
-      } 
+      }
       if (hasClass(drop.querySelector(".results"), "showpod")) {
         url = url.replace("showpod", "episodes");
         return getResults([url, "episodes-content", false]);

@@ -131,7 +131,7 @@
           {% endif %}
         </p>
         <div class="dope-buttons dope-buttons-l px-0">
-          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.object.url_format_title }}&url={{ podcast.object.get_absolute_url }}" title="Tweet on Twitter">
+          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ podcast.object.url_format_title }}&url={{ podcast.object.get_absolute_url }}" title="Tweet on Twitter" target="_blank">
             <span class="active">
               Tweet
             </span>
@@ -139,7 +139,7 @@
               <i class="fab fa-twitter"></i>
             </span>
           </a>
-          <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ podcast.object.get_absolute_url }}" title="Share on Facebook">
+          <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ podcast.object.get_absolute_url }}" title="Share on Facebook" target="_blank">
             <span class="active">
               Share
             </span>
@@ -147,7 +147,7 @@
               <i class="fab fa-facebook-f"></i>
             </span>
           </a>
-          <a class="btn-dope copy-link" href="{{ podcast.object.get_absolute_url }}" title="Copy Link">
+          <button class="btn-dope copy-link" title="Copy Link">
             <span class="active">
               Copy Link
             </span>
@@ -155,7 +155,7 @@
               <i class="fas fa-copy"></i>
             </span>
             <input class="link-to-copy" value="{{ podcast.object.get_absolute_url }}" />
-          </a>
+          </button>
         </div>
       </div>
     </div>

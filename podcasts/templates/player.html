@@ -113,25 +113,25 @@
           {% endif %}        
         </p>
         <div class="dope-buttons dope-buttons-l px-0">
-          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ episode.url_format_title }}&url={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Tweet on Twitter">
+          <a class="btn-dope" href="//twitter.com/intent/tweet?text={{ episode.url_format_title }}&url={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Tweet on Twitter" target="_blank">
             <span>Tweet</span>
             <span>
               <i class="fab fa-twitter"></i>
             </span>
           </a>
-          <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}&quote={{ episode.url_format_title }}" title="Share on Facebook">
+          <a class="btn-dope" href="//www.facebook.com/sharer/sharer.php?u={{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}&quote={{ episode.url_format_title }}" title="Share on Facebook" target="_blank">
             <span>Share</span>
             <span>
               <i class="fab fa-facebook-f"></i>
             </span>
           </a>
-          <a class="btn-dope copy-link" href="{{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" title="Copy Link">
+          <button class="btn-dope copy-link" title="Copy Link">
             <span>Copy Link</span>
             <span>
               <i class="fas fa-copy"></i>
             </span>
             <input class="link-to-copy" value="{{ episode.podcast.get_absolute_url }}?episode={{ episode.signature }}" />
-          </a>            
+          </button>
         </div>        
       </div>
       <button class="btn-dope float-right" data-toggle="collapse" data-target="#player-collapse" aria-expanded="false" title="Show More">
