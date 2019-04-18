@@ -49,9 +49,11 @@ function dateLocalizer() {
     date.innerText = dateString;
   });
 };
+
 function giveConsent() {
   _paq.push(["rememberConsentGiven"]);
 };
+
 function denyConsent() {
   _paq.push(["forgetConsentGiven"]);
 };
@@ -374,6 +376,39 @@ function scrollSpy() {
   scrollUp();
   playerUnfixer();
   columnFixer();
+  dopebarBottomShower();
+};
+
+function dopebarBottomShower() {
+  const results = document.querySelectorAll(".results");
+  const dopebarBottomLinks = document.getElementById("dopebar-bottom").querySelectorAll("ul li > :first-child");
+  const dopebarCollapseLinks = document.getElementById("dopebar-collapse").querySelectorAll("ul li > :first-child");
+  Array.prototype.forEach.call(dopebarBottomLinks, function (dopebarBottomLink, j) {
+    addClass(dopebarBottomLink, "d-active");
+  })
+  Array.prototype.forEach.call(dopebarCollapseLinks, function (dopebarCollapseLink, j) {
+    removeClass(dopebarCollapseLink, "active");
+  })
+  Array.prototype.forEach.call(results, function (result, i) {
+    if (result.getBoundingClientRect().top < 0) {
+      result.classList.forEach(function (a, b, c) {
+        Array.prototype.forEach.call(dopebarBottomLinks, function (dopebarBottomLink, j) {
+          dopebarBottomLink.classList.forEach(function (x, y, z) {
+            if (a + "-link" === x) {
+              removeClass(dopebarBottomLink, "d-none");
+            }
+          })
+        })
+        Array.prototype.forEach.call(dopebarCollapseLinks, function (dopebarCollapseLink, j) {
+          dopebarCollapseLink.classList.forEach(function (x, y, z) {
+            if (a + "-link" === x) {
+              addClass(dopebarCollapseLink, "d-none");
+            }
+          })
+        })
+      })
+    }
+  });
 };
 
 function scrollUp() {
@@ -597,7 +632,7 @@ function postPlaylist(form, origData, origMode, origButton, origPos) {
     .fail(function (xhr, ajaxOptions, thrownError) {
       if (button) {
         button.innerHTML = text;
-      }      
+      }
       document.getElementById("player").innerHTML = "";
       // TODO if playlist fails
     })
@@ -942,6 +977,10 @@ $(document)
     e.preventDefault();
     scrollTo(document.getElementById("previous"));
   })
+  .on("click", ".popular-link", function (e) {
+    e.preventDefault();
+    scrollTo(document.getElementById("popular"));
+  })
   .on("click", ".reload-button", function (e) {
     e.preventDefault();
     const button = this;
@@ -1066,7 +1105,7 @@ $(document)
       const drop = document.getElementById("center-stage");
       $(drop).find(".results-collapse").collapse("show");
       if (!children(drop, ".list").length &&
-          !children(drop, ".grid").length) {
+        !children(drop, ".grid").length) {
         getResults([url, drop, true]);
       } else {
         if (window.location.href.includes("?")) {
@@ -1285,9 +1324,8 @@ $(document)
   .on("click", "#errors .btn-dope", function () {
     removeErrors();
   })
-  .on("click", ".copy-link", function (e) {
-    e.preventDefault();
-    this.querySelector('.link-to-copy').select();
+  .on("click", ".copy-link", function () {
+    this.querySelector(".link-to-copy").select();
     document.execCommand("copy");
   })
   // BOOTSTRAP COLLAPSES
@@ -1393,7 +1431,7 @@ $(window)
       drop.innerHTML = state.context;
       if (hasClass(drop.querySelector(".results"), "splash")) {
         return getResults([url, drop, false], false, true);
-      } 
+      }
       if (hasClass(drop.querySelector(".results"), "showpod")) {
         url = url.replace("showpod", "episodes");
         return getResults([url, "episodes-content", false]);
