@@ -222,10 +222,8 @@ form {
     opacity: 1;
   }
 }
-<<<<<<< Updated upstream
-=======
 
-.link-to-copy {
+<<<<<<< Updated upstream=======.link-to-copy {
   width: 27px;
   opacity: 0;
   top: 0;
@@ -236,7 +234,8 @@ form {
   z-index: -999;
   cursor: pointer;
 }
->>>>>>> Stashed changes
+
+>>>>>>>Stashed changes
 
 /* BOOTSTRAP COLLAPSE */
 .collapsing {
@@ -275,10 +274,6 @@ form {
 /* sticky-kit creates this sibling div which blocks pointer-events */
 .drop+div:not(.drop) {
   z-index: -1;
-}
-
-.index-link {
-  padding: 5px 0;
 }
 
 #splash-buttons {
@@ -331,6 +326,10 @@ form {
 
 #dopebar-r>* {
   float: right;
+}
+
+#dopebar-c .dope-link {
+  padding: 5px 0;
 }
 
 #dopebar-c h1 {
