@@ -558,8 +558,9 @@ class Podcast(models.Model):
                 podcast = Podcast.objects.get(podid=podid)
                 language = podcast.language
             except Podcast.DoesNotExist:
-                language = tree.xpath("//li[@class='language']/text()")[0]
-                if not language:
+                try:
+                    language = tree.xpath("//li[@class='language']/text()")[0]
+                except IndexError:
                     language = "English"
 
             podcastUrl = tree.xpath("//div[@class='extra-list']/ul[@class='list']/li/a/@href")[0]
