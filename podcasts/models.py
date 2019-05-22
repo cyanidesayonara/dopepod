@@ -553,8 +553,15 @@ class Podcast(models.Model):
             response = requests.get(itunesUrl, headers=headers, timeout=10)
             response.raise_for_status()
             tree = lxml_html.fromstring(response.text)
-            language = tree.xpath("//li[@class='language']/text()")[0]
-            
+
+            try:
+                podcast = Podcast.objects.get(podid=podid)
+                language = podcast.language
+            except Podcast.DoesNotExist:
+                language = tree.xpath("//li[@class='language']/text()")[0]
+                if not language:
+                    language = "English"
+
             podcastUrl = tree.xpath("//div[@class='extra-list']/ul[@class='list']/li/a/@href")[0]
             try:
                 if podcastUrl[:2] == "//" or podcastUrl[:4] == "http":
@@ -722,7 +729,7 @@ class Podcast(models.Model):
 
                 if podid:
                     # slow down scraping so as to not get blocked
-                    time.sleep(5)
+                    time.sleep(2)
                     Podcast.scrape_podcast(podid)
                     try:
                         podcast = Podcast.objects.get(podid=podid)
