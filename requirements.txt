@@ -14,7 +14,7 @@ cryptography==2.6.1
 cssselect==1.0.3
 decorator==4.4.0
 defusedxml==0.6.0
-Django==2.2.1
+Django==2.2.24
 django-allauth==0.39.1
 django-debug-toolbar==1.11
 django-extensions==2.1.7
